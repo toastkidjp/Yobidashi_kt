@@ -220,6 +220,7 @@
     <string name="title_search_history">Search history</string>
     <string name="title_use_search_history">Use search history</string>
     <string name="title_tab_list">Tab list</string>
+    <string name="link_open_history">Open history</string>
     <string name="new_tab">New tab</string>
     <string name="message_tutorial_remove_tab">You could delete tab by swiping upper.</string>
 
@@ -433,7 +434,7 @@
     <string name="title_context_editor_convert_to_table">To table</string>
     <string name="title_context_editor_add_quote">Add quote</string>
     <string name="title_context_editor_double_quote">Double quote</string>
-    <string name="title_context_editor_set_default_search_cagegiry">Set default search category</string>
+    <string name="title_context_editor_set_default_search_category">Set default search category</string>
     <string name="title_reset_camera_button_position">Reset camera position</string>
     <string name="title_search_suggestion">Search suggestion</string>
     <string name="search_category">Search category</string>

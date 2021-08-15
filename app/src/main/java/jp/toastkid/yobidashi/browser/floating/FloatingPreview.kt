@@ -13,7 +13,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -229,11 +228,7 @@ class FloatingPreview(context: Context) {
             binding.progress.isVisible = true
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            binding.progress.setProgress(newProgress, true)
-        } else {
-            binding.progress.progress = newProgress
-        }
+        binding.progress.setProgress(newProgress, true)
     }
 
     private fun isVisible() = popupWindow.isShowing

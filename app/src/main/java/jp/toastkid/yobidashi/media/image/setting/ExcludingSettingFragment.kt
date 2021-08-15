@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -59,7 +58,7 @@ class ExcludingSettingFragment : BottomSheetDialogFragment() {
         val viewModel = ViewModelProvider(this)
                 .get(ExcludingSettingFragmentViewModel::class.java)
 
-        viewModel.dismiss.observe(this, Observer {
+        viewModel.dismiss.observe(this, {
             dismiss()
         })
 

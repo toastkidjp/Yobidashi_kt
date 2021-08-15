@@ -12,7 +12,6 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
@@ -179,9 +178,7 @@ class SearchFragment : Fragment() {
 
         initSearchInput()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            headerBinding?.searchBar?.transitionName = "share"
-        }
+        headerBinding?.searchBar?.transitionName = "share"
 
         contentViewModel?.snackShort(R.string.message_search_on_background)
 
@@ -255,6 +252,16 @@ class SearchFragment : Fragment() {
             val queryOrEmpty = headerBinding?.searchInput?.text?.toString()
             if (queryOrEmpty?.isNotBlank() == true) {
                 setTextAndMoveCursorToEnd("\"$queryOrEmpty\"")
+            }
+            true
+        }
+        R.id.set_default_search_category -> {
+            val categoryName = preferenceApplier.getDefaultSearchEngine()
+                ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
+            val index = (headerBinding?.searchCategories?.adapter as? SearchCategoryAdapter)
+                ?.findIndex(categoryName) ?: -1
+            if (index != -1) {
+                headerBinding?.searchCategories?.setSelection(index)
             }
             true
         }

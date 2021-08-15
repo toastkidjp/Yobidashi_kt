@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
-import android.os.Build
 import android.webkit.WebView
 import androidx.annotation.ColorInt
 import androidx.collection.LruCache
@@ -9,11 +8,6 @@ import androidx.collection.LruCache
 /**
  * [WebView] pool.
  *
- * // TODO clean up comments
- * @param context Use for make [WebViewFactory] instance.
- * @param webViewClientSupplier
- * @param webChromeClientSupplier
- * @param scrollCallback Use for implementing action on scroll
  * @param poolSize (Optional) Count of containing [WebView] instance. If you don't passed it,
  * it use default size.
  *
@@ -86,9 +80,7 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
             return
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            pool.resize(newSize)
-        }
+        pool.resize(newSize)
     }
 
     fun applyNewAlpha(@ColorInt newAlphaBackground: Int) {

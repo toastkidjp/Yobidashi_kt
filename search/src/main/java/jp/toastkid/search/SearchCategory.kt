@@ -215,6 +215,11 @@ enum class SearchCategory(
             R.drawable.ic_twitter,
             "https://mobile.twitter.com/search?src=typd&q="
     ),
+    REDDIT(
+        R.string.search_category_reddit,
+        R.drawable.ic_reddit,
+        "https://www.reddit.com/search/?q="
+    ),
     FACEBOOK(
             R.string.search_category_facebook,
             R.drawable.ic_facebook,
@@ -326,11 +331,6 @@ enum class SearchCategory(
                 "https://techcrunch.com/search/" + Uri.encode(q)
             }
     ),
-    REDDIT(
-            R.string.search_category_reddit,
-            R.drawable.ic_reddit,
-            "https://www.reddit.com/search/?q="
-    ),
     GITHUB(
             R.string.search_category_github,
             R.drawable.ic_github,
@@ -340,6 +340,11 @@ enum class SearchCategory(
             R.string.search_category_mvnrepository,
             R.drawable.ic_mvn,
             "https://mvnrepository.com/search?q="
+    ),
+    ANDROID_DEVELOPER(
+        R.string.search_category_android_developer,
+        R.drawable.ic_android_developer,
+        "https://developer.android.com/s/results?q="
     ),
     MEDIUM(
             R.string.medium,
@@ -471,7 +476,7 @@ enum class SearchCategory(
          */
         fun findByCategory(category: String?): SearchCategory {
             val locale = Locale.getDefault()
-            val target = category?.toUpperCase(locale) ?: ""
+            val target = category?.uppercase(locale) ?: ""
             return values().find { it.name == target } ?: getDefault()
         }
 
@@ -484,7 +489,7 @@ enum class SearchCategory(
          */
         fun findIndex(category: String): Int {
             val locale = Locale.getDefault()
-            return values().find { it.name == category.toUpperCase(locale) } ?.ordinal
+            return values().find { it.name == category.uppercase(locale) } ?.ordinal
                     ?: getDefault().ordinal
         }
 

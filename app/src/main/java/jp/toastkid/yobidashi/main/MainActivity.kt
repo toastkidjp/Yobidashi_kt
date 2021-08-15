@@ -516,18 +516,14 @@ class MainActivity : AppCompatActivity(),
     private fun refresh() {
         val colorPair = preferenceApplier.colorPair()
         ToolbarColorApplier()(binding.toolbar, colorPair)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            WindowOptionColorApplier()(window, colorPair)
-        }
+        WindowOptionColorApplier()(window, colorPair)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            RecentAppColoringUseCase(
-                    ::getString,
-                    { resources },
-                    ::setTaskDescription,
-                    Build.VERSION.SDK_INT
-            ).invoke(preferenceApplier.color)
-        }
+        RecentAppColoringUseCase(
+                ::getString,
+                { resources },
+                ::setTaskDescription,
+                Build.VERSION.SDK_INT
+        ).invoke(preferenceApplier.color)
 
         menuSwitchColorApplier(colorPair)
 

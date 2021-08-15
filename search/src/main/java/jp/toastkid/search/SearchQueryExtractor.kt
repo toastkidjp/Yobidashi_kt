@@ -18,6 +18,7 @@ class SearchQueryExtractor {
             host.startsWith("www.google.")
                     or host.startsWith("play.google.")
                     or host.startsWith("www.bing.")
+                    or host.endsWith("developer.android.com")
                     or host.endsWith("scholar.google.com")
                     or host.endsWith("www.aolsearch.com")
                     or host.endsWith("www.ask.com")

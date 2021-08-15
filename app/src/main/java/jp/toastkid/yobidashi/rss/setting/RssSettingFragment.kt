@@ -58,7 +58,7 @@ class RssSettingFragment : Fragment(), CommonFragmentAction {
         if (rssReaderTargets.isEmpty()) {
             // TODO Use ContentViewModel.
             Toaster.tShort(fragmentActivity, R.string.message_rss_reader_launch_failed)
-            fragmentActivity.supportFragmentManager?.popBackStack()
+            fragmentActivity.supportFragmentManager.popBackStack()
             return
         }
 
