@@ -133,10 +133,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_count -> {
-                val count = editText.text.substring(editText.selectionStart, editText.selectionEnd).length
-                contentViewModel?.snackShort(
-                    context.getString(R.string.message_character_count, count)
-                )
+                TextCountUseCase().invoke(editText, contentViewModel)
                 return true
             }
             else -> Unit
