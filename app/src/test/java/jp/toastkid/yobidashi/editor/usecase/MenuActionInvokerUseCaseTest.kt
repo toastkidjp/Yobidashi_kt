@@ -356,4 +356,16 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { anyConstructed<CurrentLineDeletionUseCase>().invoke(any()) }
     }
 
+    @Test
+    fun test() {
+        mockkConstructor(TextCountUseCase::class)
+        every { anyConstructed<TextCountUseCase>().invoke(any(), any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_count, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { anyConstructed<TextCountUseCase>().invoke(any(), any()) }
+    }
+
 }
