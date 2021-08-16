@@ -43,16 +43,16 @@ class LinkFormInsertionUseCase(
                 linkTitleFetcherUseCase(primary)
             }
             editText.text.insert(editText.selectionStart, linkWithTitle)
-        }
 
-        contentViewModel
-            .snackWithAction(
-                context.getString(R.string.paste_as_quotation),
-                context.getString(R.string.undo)
-            ) {
-                editText.setText(currentText)
-                editText.setSelection(currentCursor)
-            }
+            contentViewModel
+                .snackWithAction(
+                    context.getString(R.string.paste_as_quotation),
+                    context.getString(R.string.undo)
+                ) {
+                    editText.setText(currentText)
+                    editText.setSelection(currentCursor)
+                }
+        }
     }
 
 }
