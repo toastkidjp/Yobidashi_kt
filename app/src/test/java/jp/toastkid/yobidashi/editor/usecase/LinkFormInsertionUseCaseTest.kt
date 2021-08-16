@@ -79,7 +79,7 @@ class LinkFormInsertionUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testSuccessfulCase() {
         linkFormInsertionUseCase.invoke()
 
         verify(atLeast = 1) { editText.getText() }
