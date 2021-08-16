@@ -70,4 +70,5 @@ class TextCountUseCaseTest {
         verify(exactly = 1) { context.getString(any(), any()) }
         verify(exactly = 1) { contentViewModel.snackShort(any<String>()) }
     }
+
 }
