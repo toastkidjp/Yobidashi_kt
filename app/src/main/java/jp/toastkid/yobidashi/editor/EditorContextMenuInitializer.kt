@@ -110,18 +110,6 @@ class EditorContextMenuInitializer {
         }
     }
 
-    private fun invokeMenuAction(
-        itemId: Int,
-        editText: EditText,
-        speechMaker: SpeechMaker?,
-        browserViewModel: BrowserViewModel?,
-        contentViewModel: ContentViewModel?
-    ): Boolean {
-        val text = extractSelectedText(editText)
-
-        return MenuActionInvokerUseCase(editText, speechMaker, browserViewModel, contentViewModel).invoke(itemId, text)
-    }
-
     private fun extractSelectedText(editText: EditText): String {
         return editText.text
             .subSequence(editText.selectionStart, editText.selectionEnd)
