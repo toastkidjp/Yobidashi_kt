@@ -63,7 +63,7 @@ class LinkFormInsertionUseCaseTest {
         coEvery { editable.toString() }.returns("Too long text is good.")
         every { editText.getContext() }.returns(context)
         every { context.getString(any()) }.returns("test")
-        every { contentViewModel.snackWithAction(any(), any(), any()) }.returns(Unit)
+        coEvery { contentViewModel.snackWithAction(any(), any(), any()) }.returns(Unit)
         coEvery { linkTitleFetcherUseCase.invoke(any()) }.returns("title")
 
         mockkObject(Urls)
@@ -89,7 +89,7 @@ class LinkFormInsertionUseCaseTest {
         verify(atLeast = 1) { Urls.isInvalidUrl(any()) }
         verify(atLeast = 1) { editText.getContext() }
         verify(atLeast = 1) { context.getString(any()) }
-        verify(exactly = 1) { contentViewModel.snackWithAction(any(), any(), any()) }
+        coVerify(exactly = 1) { contentViewModel.snackWithAction(any(), any(), any()) }
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         coVerify(exactly = 1) { linkTitleFetcherUseCase.invoke(any()) }
     }
