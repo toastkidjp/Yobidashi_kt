@@ -43,6 +43,7 @@ class LinkFormInsertionUseCaseTest {
     @MockK
     private lateinit var linkTitleFetcherUseCase: LinkTitleFetcherUseCase
 
+    @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
