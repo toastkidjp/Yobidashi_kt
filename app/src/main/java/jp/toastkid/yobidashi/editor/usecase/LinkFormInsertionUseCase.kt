@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.editor.usecase
 
 import android.widget.EditText
+import androidx.annotation.VisibleForTesting
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.R
@@ -23,8 +24,8 @@ class LinkFormInsertionUseCase(
     private val editText: EditText,
     private val contentViewModel: ContentViewModel,
     private val linkTitleFetcherUseCase: LinkTitleFetcherUseCase = LinkTitleFetcherUseCase(),
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    @VisibleForTesting private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    @VisibleForTesting private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     operator fun invoke() {
