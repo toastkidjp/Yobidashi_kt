@@ -44,6 +44,9 @@ class EditorContextMenuInitializer {
         val browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
         val contentViewModel = viewModelProvider?.get(ContentViewModel::class.java)
 
+        val menuActionInvokerUseCase =
+            MenuActionInvokerUseCase(editText, speechMaker, browserViewModel, contentViewModel)
+
         editText.customInsertionActionModeCallback = object : ActionMode.Callback {
 
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
@@ -60,11 +63,9 @@ class EditorContextMenuInitializer {
             }
 
             override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
-                val handled = invokeMenuAction(
+                val handled = menuActionInvokerUseCase(
                     menu?.itemId ?: -1,
-                    editText, speechMaker,
-                    browserViewModel,
-                    contentViewModel
+                    extractSelectedText(editText)
                 )
                 if (handled) {
                     actionMode?.finish()
@@ -92,12 +93,9 @@ class EditorContextMenuInitializer {
             }
 
             override fun onActionItemClicked(actionMode: ActionMode?, menuItem: MenuItem?): Boolean {
-                val handled = invokeMenuAction(
+                val handled = menuActionInvokerUseCase(
                     menuItem?.itemId ?: -1,
-                    editText,
-                    speechMaker,
-                    browserViewModel,
-                    contentViewModel
+                    extractSelectedText(editText)
                 )
                 if (handled) {
                     actionMode?.finish()
