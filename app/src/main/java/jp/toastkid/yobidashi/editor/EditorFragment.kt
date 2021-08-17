@@ -609,7 +609,7 @@ class EditorFragment :
         /**
          * Request code of specifying file.
          */
-        const val REQUEST_CODE_LOAD: Int = 10111
+        private const val REQUEST_CODE_LOAD: Int = 10111
 
     }
 }
