@@ -111,6 +111,8 @@ class EditorFragment :
 
     private var loadAs: ActivityResultLauncher<Intent>? = null
 
+    private var loadResultLauncher: ActivityResultLauncher<Intent>? = null
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -220,6 +222,7 @@ class EditorFragment :
         speechMaker?.dispose()
 
         loadAs?.unregister()
+        loadResultLauncher?.unregister()
 
         super.onDetach()
     }
@@ -429,7 +432,11 @@ class EditorFragment :
      * Load content from file with Storage Access Framework.
      */
     fun load() {
-        startActivityForResult(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD)
+        loadResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+            { it.data?.data?.let { readFromFileUri(it) } }
+        )
+        loadResultLauncher?.launch(IntentFactory.makeGetContent("text/plain"))
     }
 
     /**
