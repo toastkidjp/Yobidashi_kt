@@ -611,10 +611,5 @@ class EditorFragment :
          */
         const val REQUEST_CODE_LOAD: Int = 10111
 
-        /**
-         * Request code for 'Load as'.
-         */
-        const val REQUEST_CODE_LOAD_AS: Int = 10112
-
     }
 }
