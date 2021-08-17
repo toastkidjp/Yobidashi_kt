@@ -10,6 +10,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -137,6 +139,8 @@ class MainActivity : AppCompatActivity(),
     private var tabListUseCase: TabListUseCase? = null
 
     private lateinit var menuSwitchColorApplier: MenuSwitchColorApplier
+
+    private var activityResultLauncher: ActivityResultLauncher<Intent>? = null
 
     /**
      * Disposables.
@@ -553,10 +557,19 @@ class MainActivity : AppCompatActivity(),
                             return@collect
                         }
 
-                        startActivityForResult(
-                                IntentFactory.makeOpenDocument("application/pdf"),
-                                REQUEST_CODE_OPEN_PDF
-                        )
+                        activityResultLauncher =
+                            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                                val data = it.data ?: return@registerForActivityResult
+                                val uri = data.data ?: return@registerForActivityResult
+                                val takeFlags: Int =
+                                    data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                contentResolver?.takePersistableUriPermission(uri, takeFlags)
+
+                                tabs.openNewPdfTab(uri)
+                                replaceToCurrentTab(true)
+                                tabListUseCase?.dismiss()
+                            }
+                        activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
                     }
         }
     }
@@ -733,6 +746,7 @@ class MainActivity : AppCompatActivity(),
         pageSearchPresenter.dispose()
         floatingPreview?.dispose()
         GlobalWebViewPool.dispose()
+        activityResultLauncher?.unregister()
         super.onDestroy()
     }
 
