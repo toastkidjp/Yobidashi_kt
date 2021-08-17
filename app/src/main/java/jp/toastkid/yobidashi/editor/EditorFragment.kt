@@ -598,10 +598,5 @@ class EditorFragment :
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_editor
 
-        /**
-         * Request code of specifying file.
-         */
-        private const val REQUEST_CODE_LOAD: Int = 10111
-
     }
 }
