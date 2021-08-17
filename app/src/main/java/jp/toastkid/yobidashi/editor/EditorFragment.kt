@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.editor
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.MediaScannerConnection
@@ -592,17 +591,6 @@ class EditorFragment :
 
     override fun onClickInputName(fileName: String) {
         assignNewFile(fileName)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-
-        if (resultCode != Activity.RESULT_OK || intent == null) {
-            return
-        }
-
-        when (requestCode) {
-        }
     }
 
     companion object {
