@@ -598,12 +598,6 @@ class EditorFragment :
             REQUEST_CODE_LOAD -> {
                 intent.data?.let { readFromFileUri(it) }
             }
-            REQUEST_CODE_LOAD_AS -> {
-                intent.data?.let {
-                    readFromFileUri(it)
-                    saveAs()
-                }
-            }
         }
     }
 
