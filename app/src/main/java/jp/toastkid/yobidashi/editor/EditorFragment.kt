@@ -22,6 +22,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Dimension
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -106,6 +108,8 @@ class EditorFragment :
     private var tabListViewModel: TabListViewModel? = null
 
     private var contentViewModel: ContentViewModel? = null
+
+    private var loadAs: ActivityResultLauncher<Intent>? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -214,6 +218,9 @@ class EditorFragment :
             saveToFile(path)
         }
         speechMaker?.dispose()
+
+        loadAs?.unregister()
+
         super.onDetach()
     }
 
@@ -331,7 +338,13 @@ class EditorFragment :
      * Load text as other file.
      */
     fun loadAs() {
-        startActivityForResult(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD_AS)
+        loadAs = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            it.data?.data?.let { uri ->
+                readFromFileUri(uri)
+                saveAs()
+            }
+        }
+        loadAs?.launch(IntentFactory.makeGetContent("text/plain"))
     }
 
     fun exportToArticleViewer() {
