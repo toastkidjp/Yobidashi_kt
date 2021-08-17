@@ -602,9 +602,6 @@ class EditorFragment :
         }
 
         when (requestCode) {
-            REQUEST_CODE_LOAD -> {
-                intent.data?.let { readFromFileUri(it) }
-            }
         }
     }
 
