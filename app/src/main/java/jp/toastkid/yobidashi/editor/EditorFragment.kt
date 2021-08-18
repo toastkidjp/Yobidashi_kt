@@ -108,9 +108,18 @@ class EditorFragment :
 
     private var contentViewModel: ContentViewModel? = null
 
-    private var loadAs: ActivityResultLauncher<Intent>? = null
+    private var loadAs: ActivityResultLauncher<Intent>? =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            it.data?.data?.let { uri ->
+                readFromFileUri(uri)
+                saveAs()
+            }
+        }
 
-    private var loadResultLauncher: ActivityResultLauncher<Intent>? = null
+    private var loadResultLauncher: ActivityResultLauncher<Intent>? = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+        { it.data?.data?.let { readFromFileUri(it) } }
+    )
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -340,12 +349,6 @@ class EditorFragment :
      * Load text as other file.
      */
     fun loadAs() {
-        loadAs = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            it.data?.data?.let { uri ->
-                readFromFileUri(uri)
-                saveAs()
-            }
-        }
         loadAs?.launch(IntentFactory.makeGetContent("text/plain"))
     }
 
@@ -431,10 +434,6 @@ class EditorFragment :
      * Load content from file with Storage Access Framework.
      */
     fun load() {
-        loadResultLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-            { it.data?.data?.let { readFromFileUri(it) } }
-        )
         loadResultLauncher?.launch(IntentFactory.makeGetContent("text/plain"))
     }
 
