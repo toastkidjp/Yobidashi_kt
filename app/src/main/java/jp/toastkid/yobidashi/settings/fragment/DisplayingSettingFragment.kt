@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -179,16 +178,6 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
             resultCode: Int,
             data: Intent?
     ) {
-        if (requestCode == IMAGE_READ_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            LoadedAction(
-                    data.data,
-                    binding.fabParent,
-                    preferenceApplier.colorPair(),
-                    { adapter?.notifyDataSetChanged() },
-                    BACKGROUND_DIR
-            )
-                    .invoke()
-        }
         super.onActivityResult(requestCode, resultCode, data)
     }
 
