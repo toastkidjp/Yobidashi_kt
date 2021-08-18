@@ -16,6 +16,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
@@ -66,6 +67,20 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
      * Wrapper of FilesDir.
      */
     private lateinit var filesDir: FilesDir
+
+    private val addingLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+        {
+            LoadedAction(
+                it.data?.data,
+                binding.fabParent,
+                preferenceApplier.colorPair(),
+                { adapter?.notifyDataSetChanged() },
+                BACKGROUND_DIR
+            )
+                .invoke()
+        }
+    )
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -140,7 +155,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
      * Launch Adding action.
      */
     fun launchAdding() {
-        startActivityForResult(IntentFactory.makePickImage(), IMAGE_READ_REQUEST)
+        addingLauncher.launch(IntentFactory.makePickImage())
     }
 
     /**
@@ -202,6 +217,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
 
     override fun onDetach() {
         contentViewModel?.refresh()
+        addingLauncher.unregister()
         super.onDetach()
     }
 
