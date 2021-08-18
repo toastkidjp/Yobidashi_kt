@@ -748,11 +748,6 @@ class MainActivity : AppCompatActivity(),
         @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_main
 
-        /**
-         * Request code of opening PDF.
-         */
-        private const val REQUEST_CODE_OPEN_PDF: Int = 7
-
     }
 
 }
