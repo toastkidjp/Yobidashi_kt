@@ -140,7 +140,18 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var menuSwitchColorApplier: MenuSwitchColorApplier
 
-    private var activityResultLauncher: ActivityResultLauncher<Intent>? = null
+    private var activityResultLauncher: ActivityResultLauncher<Intent>? =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val data = it.data ?: return@registerForActivityResult
+            val uri = data.data ?: return@registerForActivityResult
+            val takeFlags: Int =
+                data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+            contentResolver?.takePersistableUriPermission(uri, takeFlags)
+
+            tabs.openNewPdfTab(uri)
+            replaceToCurrentTab(true)
+            tabListUseCase?.dismiss()
+        }
 
     /**
      * Disposables.
@@ -557,18 +568,6 @@ class MainActivity : AppCompatActivity(),
                             return@collect
                         }
 
-                        activityResultLauncher =
-                            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                                val data = it.data ?: return@registerForActivityResult
-                                val uri = data.data ?: return@registerForActivityResult
-                                val takeFlags: Int =
-                                    data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                contentResolver?.takePersistableUriPermission(uri, takeFlags)
-
-                                tabs.openNewPdfTab(uri)
-                                replaceToCurrentTab(true)
-                                tabListUseCase?.dismiss()
-                            }
                         activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
                     }
         }
