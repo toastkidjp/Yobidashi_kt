@@ -116,10 +116,10 @@ class EditorFragment :
             }
         }
 
-    private var loadResultLauncher: ActivityResultLauncher<Intent>? = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-        { it.data?.data?.let { readFromFileUri(it) } }
-    )
+    private var loadResultLauncher: ActivityResultLauncher<Intent>? =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            it.data?.data?.let { readFromFileUri(it) }
+        }
 
     override fun onCreateView(
             inflater: LayoutInflater,
