@@ -720,15 +720,6 @@ class MainActivity : AppCompatActivity(),
                     preferenceApplier.colorPair()
                 )
             }
-            REQUEST_CODE_OPEN_PDF -> {
-                val uri = data.data ?: return
-                val takeFlags: Int = data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                contentResolver?.takePersistableUriPermission(uri, takeFlags)
-
-                tabs.openNewPdfTab(uri)
-                replaceToCurrentTab(true)
-                tabListUseCase?.dismiss()
-            }
         }
     }
 
