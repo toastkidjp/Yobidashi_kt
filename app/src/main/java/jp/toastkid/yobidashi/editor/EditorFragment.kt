@@ -118,7 +118,7 @@ class EditorFragment :
 
     private var loadResultLauncher: ActivityResultLauncher<Intent>? =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            it.data?.data?.let { readFromFileUri(it) }
+            it.data?.data?.let { uri -> readFromFileUri(uri) }
         }
 
     override fun onCreateView(
