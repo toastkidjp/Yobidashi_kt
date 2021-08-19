@@ -1,8 +1,6 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.Manifest
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -287,18 +285,6 @@ class BookmarkFragment: Fragment(),
 
     override fun toBottom() {
         RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        if (intent == null || resultCode != Activity.RESULT_OK) {
-            return
-        }
-
-        val data = intent.data ?: return
-
-        when (requestCode) {
-        }
     }
 
     /**
