@@ -292,7 +292,6 @@ class BookmarkFragment: Fragment(),
         val data = intent.data ?: return
 
         when (requestCode) {
-            REQUEST_CODE_IMPORT_BOOKMARK -> importBookmark(data)
             REQUEST_CODE_EXPORT_BOOKMARK -> exportBookmark(data)
         }
     }
