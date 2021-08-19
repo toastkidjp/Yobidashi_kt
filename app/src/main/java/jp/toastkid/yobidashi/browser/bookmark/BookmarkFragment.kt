@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.Manifest
+import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -74,6 +75,10 @@ class BookmarkFragment: Fragment(),
     private val getContentLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
         {
+            if (it.data == null || it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
             val uri = it.data?.data ?: return@registerForActivityResult
             importBookmark(uri)
         }
@@ -82,6 +87,10 @@ class BookmarkFragment: Fragment(),
     private val exportLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
         {
+            if (it.data == null || it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
             val uri = it.data?.data ?: return@registerForActivityResult
             exportBookmark(uri)
         }
