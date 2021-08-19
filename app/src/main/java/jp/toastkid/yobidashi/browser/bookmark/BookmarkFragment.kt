@@ -11,6 +11,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -71,6 +72,14 @@ class BookmarkFragment: Fragment(),
     private var contentViewModel: ContentViewModel? = null
 
     private val disposables: Job by lazy { Job() }
+
+    private val getContentLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+        {
+            val uri = it.data?.data ?: return@registerForActivityResult
+            importBookmark(uri)
+        }
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -202,10 +211,7 @@ class BookmarkFragment: Fragment(),
                                     return@collect
                                 }
 
-                                startActivityForResult(
-                                        IntentFactory.makeGetContent("text/html"),
-                                        REQUEST_CODE_IMPORT_BOOKMARK
-                                )
+                                getContentLauncher.launch(IntentFactory.makeGetContent("text/html"))
                             }
                 }
                 true
@@ -330,6 +336,8 @@ class BookmarkFragment: Fragment(),
     override fun onDetach() {
         adapter.dispose()
         disposables.cancel()
+        getContentLauncher.unregister()
+
         super.onDetach()
     }
 
