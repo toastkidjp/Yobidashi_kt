@@ -81,6 +81,14 @@ class BookmarkFragment: Fragment(),
         }
     )
 
+    private val exportLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+        {
+            val uri = it.data?.data ?: return@registerForActivityResult
+            exportBookmark(uri)
+        }
+    )
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
@@ -228,10 +236,8 @@ class BookmarkFragment: Fragment(),
                                     return@collect
                                 }
 
-                                startActivityForResult(
-                                        IntentFactory.makeDocumentOnStorage(
-                                                "text/html", "bookmark.html"),
-                                        REQUEST_CODE_EXPORT_BOOKMARK
+                                exportLauncher.launch(
+                                    IntentFactory.makeDocumentOnStorage("text/html", "bookmark.html")
                                 )
                             }
                 }
