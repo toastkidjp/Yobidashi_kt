@@ -348,10 +348,5 @@ class BookmarkFragment: Fragment(),
         @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.fragment_bookmark
 
-        /**
-         * Request code of exporting bookmarks.
-         */
-        private const val REQUEST_CODE_EXPORT_BOOKMARK = 12212
-
     }
 }
