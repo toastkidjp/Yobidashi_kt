@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.editor
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.MediaScannerConnection
@@ -110,6 +111,10 @@ class EditorFragment :
 
     private var loadAs: ActivityResultLauncher<Intent>? =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
             it.data?.data?.let { uri ->
                 readFromFileUri(uri)
                 saveAs()
@@ -118,6 +123,10 @@ class EditorFragment :
 
     private var loadResultLauncher: ActivityResultLauncher<Intent>? =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
             it.data?.data?.let { uri -> readFromFileUri(uri) }
         }
 
