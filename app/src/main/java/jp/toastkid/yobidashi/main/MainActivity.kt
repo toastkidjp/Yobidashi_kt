@@ -142,6 +142,10 @@ class MainActivity : AppCompatActivity(),
 
     private var activityResultLauncher: ActivityResultLauncher<Intent>? =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
             val data = it.data ?: return@registerForActivityResult
             val uri = data.data ?: return@registerForActivityResult
             val takeFlags: Int =
