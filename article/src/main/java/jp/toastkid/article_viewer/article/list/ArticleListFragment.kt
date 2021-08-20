@@ -22,6 +22,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
@@ -116,6 +117,18 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     private var searchUseCase: ArticleSearchUseCase? = null
 
     private val inputChannel = Channel<String>()
+
+    private val setTargetLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+        {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            val uri = it.data?.data ?: return@registerForActivityResult
+            updateIfNeed(uri)
+        }
+    )
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -304,7 +317,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 true
             }
             R.id.action_set_target -> {
-                startActivityForResult(ZipFileChooserIntentFactory()(), REQUEST_CODE)
+                setTargetLauncher.launch(ZipFileChooserIntentFactory()())
                 true
             }
             R.id.action_sort -> {
@@ -361,6 +374,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         searchUseCase?.dispose()
         inputChannel.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
+        setTargetLauncher.unregister()
         super.onDetach()
     }
 
