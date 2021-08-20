@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -69,6 +70,10 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
     private val addingLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
         {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
             LoadedAction(
                 it.data?.data,
                 binding.fabParent,
