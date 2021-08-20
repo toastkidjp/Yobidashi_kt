@@ -136,6 +136,9 @@ class SearchFragment : Fragment() {
     private val voiceSearchLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
         { activityResult ->
+            if (activityResult.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
             val result = activityResult?.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             if (result == null || result.size == 0) {
                 return@registerForActivityResult
