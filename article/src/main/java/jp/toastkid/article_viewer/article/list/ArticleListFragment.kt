@@ -342,14 +342,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val uri = data?.data ?: return
-            updateIfNeed(uri)
-        }
-    }
-
     private fun updateIfNeed(target: Uri?) {
         if (target == null) {
             return
