@@ -553,26 +553,6 @@ class SearchFragment : Fragment() {
         if (resultCode != Activity.RESULT_OK) {
             return
         }
-
-        when (requestCode) {
-            VoiceSearch.REQUEST_CODE -> {
-                val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (result == null || result.size == 0) {
-                    return
-                }
-                suggestionModule?.clear()
-                suggestionModule?.addAll(result)
-                suggestionModule?.show()
-
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    delay(200)
-                    withContext(Dispatchers.Main) {
-                        val top = binding?.suggestionModule?.root?.top ?: 0
-                        binding?.scroll?.smoothScrollTo(0, top)
-                    }
-                }
-            }
-        }
     }
 
     override fun onPause() {
