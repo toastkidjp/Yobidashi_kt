@@ -193,12 +193,10 @@ class BookmarkFragment: Fragment(),
         return when (item.itemId) {
             R.id.clear -> {
                 BookmarkClearDialogFragment()
-                        .also {
-                            it.show(
-                                    fragmentManager,
-                                    BookmarkClearDialogFragment::class.java.simpleName
-                            )
-                        }
+                    .show(
+                        fragmentManager,
+                        BookmarkClearDialogFragment::class.java.simpleName
+                    )
                 true
             }
             R.id.add_default -> {
