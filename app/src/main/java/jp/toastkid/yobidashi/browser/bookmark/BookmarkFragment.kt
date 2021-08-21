@@ -156,6 +156,17 @@ class BookmarkFragment: Fragment(),
                 adapter.clearAll{ contentViewModel?.snackShort(R.string.done_clear) }
             }
         )
+        parentFragmentManager.setFragmentResultListener(
+            "import_default",
+            viewLifecycleOwner,
+            { key, results ->
+                val currentContext = binding.root.context
+                BookmarkInitializer(
+                    FaviconFolderProviderService().invoke(currentContext)
+                )(currentContext) { adapter.showRoot() }
+                contentViewModel?.snackShort(R.string.done_addition)
+            }
+        )
 
         return binding.root
     }
@@ -202,7 +213,6 @@ class BookmarkFragment: Fragment(),
             R.id.add_default -> {
                 DefaultBookmarkDialogFragment()
                         .also {
-                            it.setTargetFragment(this, 2)
                             it.show(
                                     fragmentManager,
                                     DefaultBookmarkDialogFragment::class.java.simpleName
