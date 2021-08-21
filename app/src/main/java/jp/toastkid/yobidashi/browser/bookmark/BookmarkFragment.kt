@@ -147,6 +147,17 @@ class BookmarkFragment: Fragment(),
 
         setHasOptionsMenu(true)
 
+        parentFragmentManager.setFragmentResultListener(
+            "clear_bookmark",
+            viewLifecycleOwner,
+            { key, results ->
+                if (results[key] != true) {
+                    return@setFragmentResultListener
+                }
+                adapter.clearAll{ contentViewModel?.snackShort(R.string.done_clear) }
+            }
+        )
+
         return binding.root
     }
 
