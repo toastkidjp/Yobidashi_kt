@@ -194,7 +194,6 @@ class BookmarkFragment: Fragment(),
             R.id.clear -> {
                 BookmarkClearDialogFragment()
                         .also {
-                            it.setTargetFragment(this, 1)
                             it.show(
                                     fragmentManager,
                                     BookmarkClearDialogFragment::class.java.simpleName
