@@ -22,13 +22,6 @@ import jp.toastkid.yobidashi.R
  */
 class BookmarkClearDialogFragment : DialogFragment() {
 
-    /**
-     * Callback interface.
-     */
-    interface OnClickBookmarkClearCallback {
-        fun onClickBookmarkClear()
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
         return AlertDialog.Builder(activityContext)
