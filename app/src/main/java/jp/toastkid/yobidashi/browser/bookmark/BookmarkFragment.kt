@@ -47,7 +47,6 @@ import okio.sink
  * @author toastkidjp
  */
 class BookmarkFragment: Fragment(),
-        BookmarkClearDialogFragment.OnClickBookmarkClearCallback,
         DefaultBookmarkDialogFragment.OnClickDefaultBookmarkCallback,
         AddingFolderDialogFragment.OnClickAddingFolder,
         CommonFragmentAction,
@@ -270,10 +269,6 @@ class BookmarkFragment: Fragment(),
             return true
         }
         return super.pressBack()
-    }
-
-    override fun onClickBookmarkClear() {
-        adapter.clearAll{ contentViewModel?.snackShort(R.string.done_clear) }
     }
 
     override fun onClickAddDefaultBookmark() {
