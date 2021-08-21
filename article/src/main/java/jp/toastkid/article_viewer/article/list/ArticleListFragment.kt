@@ -118,9 +118,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
     private val inputChannel = Channel<String>()
 
-    private val setTargetLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-        {
+    private val setTargetLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode != Activity.RESULT_OK) {
                 return@registerForActivityResult
             }
@@ -128,7 +127,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             val uri = it.data?.data ?: return@registerForActivityResult
             updateIfNeed(uri)
         }
-    )
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
