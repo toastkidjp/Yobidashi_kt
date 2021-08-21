@@ -16,7 +16,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
-import android.util.SparseArray
 import android.webkit.SslErrorHandler
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -34,6 +33,7 @@ import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorDialogFragment
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
+import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
@@ -43,18 +43,15 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class WebViewClientFactory(
-        private val contentViewModel: ContentViewModel?,
-        private val adRemover: AdRemover,
-        private val faviconApplier: FaviconApplier,
-        private val preferenceApplier: PreferenceApplier,
-        private val browserHeaderViewModel: BrowserHeaderViewModel? = null,
-        private val rssAddingSuggestion: RssAddingSuggestion? = null,
-        private val loadingViewModel: LoadingViewModel? = null,
-        private val currentView: () -> WebView? = { null },
-        private val lastId: () -> String = { "" }
+    private val contentViewModel: ContentViewModel?,
+    private val adRemover: AdRemover,
+    private val faviconApplier: FaviconApplier,
+    private val preferenceApplier: PreferenceApplier,
+    private val browserHeaderViewModel: BrowserHeaderViewModel? = null,
+    private val rssAddingSuggestion: RssAddingSuggestion? = null,
+    private val loadingViewModel: LoadingViewModel? = null,
+    private val currentView: () -> WebView? = { null }
 ) {
-
-    private val tabIds = SparseArray<String>()
 
     /**
      * Add onPageFinished and onPageStarted.
@@ -63,8 +60,6 @@ class WebViewClientFactory(
 
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-
-            tabIds.put(view.hashCode(), lastId())
 
             browserHeaderViewModel?.updateProgress(0)
             browserHeaderViewModel?.nextUrl(url)
@@ -79,13 +74,11 @@ class WebViewClientFactory(
             val title = view.title ?: ""
             val urlStr = url ?: ""
 
-            val key = view.hashCode()
-            val tabId = tabIds.get(key)
+            val tabId = GlobalWebViewPool.getTabId(view)
             if (tabId?.isNotBlank() == true) {
                 CoroutineScope(Dispatchers.Main).launch {
                     loadingViewModel?.finished(tabId, History.make(title, urlStr))
                 }
-                tabIds.remove(key)
             }
 
             browserHeaderViewModel?.updateProgress(100)

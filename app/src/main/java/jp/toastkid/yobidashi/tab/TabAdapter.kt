@@ -84,10 +84,10 @@ class TabAdapter(
 
             webViewFactory = WebViewFactoryUseCase(
                     webViewClientFactory = WebViewClientFactory(
-                            viewModelProvider.get(ContentViewModel::class.java),
-                            AdRemover.make(viewContext.assets),
-                            FaviconApplier(viewContext),
-                            preferenceApplier
+                        viewModelProvider.get(ContentViewModel::class.java),
+                        AdRemover.make(viewContext.assets),
+                        FaviconApplier(viewContext),
+                        preferenceApplier
                     )
             )
         }

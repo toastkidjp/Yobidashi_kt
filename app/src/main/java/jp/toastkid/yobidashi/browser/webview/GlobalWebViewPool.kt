@@ -26,6 +26,8 @@ object GlobalWebViewPool {
 
     fun put(tabId: String, webView: WebView) = pool.put(tabId, webView)
 
+    fun getTabId(webView: WebView) = pool.getTabId(webView)
+
     fun containsKey(tabId: String?) = pool.containsKey(tabId)
 
     fun remove(tabId: String?) = pool.remove(tabId)
