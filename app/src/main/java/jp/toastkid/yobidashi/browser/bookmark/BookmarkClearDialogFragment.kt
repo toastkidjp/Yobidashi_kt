@@ -29,11 +29,6 @@ class BookmarkClearDialogFragment : DialogFragment() {
         fun onClickBookmarkClear()
     }
 
-    /**
-     * Callback instance, this is initialized with context.
-     */
-    private var onClickBookmarkClear: OnClickBookmarkClearCallback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
         return AlertDialog.Builder(activityContext)
