@@ -116,6 +116,8 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
 
         FavoriteSearchInsertion(binding.root.context, category, query).invoke()
 
+        reload()
+
         val message = MessageFormat.format(
                 getString(R.string.favorite_search_addition_successful_format),
                 query
