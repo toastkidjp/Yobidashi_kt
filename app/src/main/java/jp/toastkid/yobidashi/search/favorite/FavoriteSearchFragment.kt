@@ -121,7 +121,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
 
         val viewModel =
                 ViewModelProvider(this).get(FavoriteSearchFragmentViewModel::class.java)
-        viewModel.reload.observe(viewLifecycleOwner, Observer { adapter?.refresh() })
+        viewModel.reload.observe(viewLifecycleOwner, { adapter?.refresh() })
         viewModel.clear.observe(viewLifecycleOwner, Observer { clear() })
     }
 
