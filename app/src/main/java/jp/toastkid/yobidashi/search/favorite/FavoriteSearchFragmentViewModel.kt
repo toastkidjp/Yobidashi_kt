@@ -10,11 +10,12 @@ package jp.toastkid.yobidashi.search.favorite
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.io.Serializable
 
 /**
  * @author toastkidjp
  */
-class FavoriteSearchFragmentViewModel : ViewModel() {
+class FavoriteSearchFragmentViewModel : ViewModel(), Serializable {
 
     private val _reload = MutableLiveData<Unit>()
 
