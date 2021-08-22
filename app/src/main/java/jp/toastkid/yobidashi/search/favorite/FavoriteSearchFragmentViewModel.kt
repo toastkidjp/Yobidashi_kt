@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.search.favorite
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.lifecycle.Event
 import java.io.Serializable
 
 /**
@@ -17,19 +18,19 @@ import java.io.Serializable
  */
 class FavoriteSearchFragmentViewModel : ViewModel(), Serializable {
 
-    private val _reload = MutableLiveData<Unit>()
+    private val _reload = MutableLiveData<Event<Unit>>()
 
-    val reload: LiveData<Unit> = _reload
+    val reload: LiveData<Event<Unit>> = _reload
 
     fun reload() {
-        _reload.postValue(Unit)
+        _reload.postValue(Event(Unit))
     }
 
-    private val _clear = MutableLiveData<Unit>()
+    private val _clear = MutableLiveData<Event<Unit>>()
 
-    val clear: LiveData<Unit> = _clear
+    val clear: LiveData<Event<Unit>> = _clear
 
     fun clear() {
-        _clear.postValue(Unit)
+        _clear.postValue(Event(Unit))
     }
 }
