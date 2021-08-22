@@ -23,8 +23,6 @@ class DefaultBookmarkDialogFragment : DialogFragment() {
         fun onClickAddDefaultBookmark()
     }
 
-    private var onClick: OnClickDefaultBookmarkCallback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
