@@ -120,8 +120,14 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
 
         val viewModel =
                 ViewModelProvider(this).get(FavoriteSearchFragmentViewModel::class.java)
-        viewModel.reload.observe(viewLifecycleOwner, { adapter?.refresh() })
-        viewModel.clear.observe(viewLifecycleOwner, { clear() })
+        viewModel.reload.observe(viewLifecycleOwner, {
+            it?.getContentIfNotHandled() ?: return@observe
+            adapter?.refresh()
+        })
+        viewModel.clear.observe(viewLifecycleOwner, {
+            it?.getContentIfNotHandled() ?: return@observe
+            clear()
+        })
     }
 
     /**
