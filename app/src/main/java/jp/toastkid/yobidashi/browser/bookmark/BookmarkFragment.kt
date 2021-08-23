@@ -48,7 +48,6 @@ import okio.sink
  */
 class BookmarkFragment: Fragment(),
         DefaultBookmarkDialogFragment.OnClickDefaultBookmarkCallback,
-        AddingFolderDialogFragment.OnClickAddingFolder,
         CommonFragmentAction,
         ContentScrollable
 {
@@ -168,6 +167,28 @@ class BookmarkFragment: Fragment(),
             }
         )
 
+        parentFragmentManager.setFragmentResultListener(
+            "adding_folder",
+            viewLifecycleOwner,
+            { key, results ->
+                val title = results.getString(key)
+                if (title.isNullOrEmpty()) {
+                    return@setFragmentResultListener
+                }
+
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
+                    BookmarkInsertion(
+                        binding.root.context,
+                        title,
+                        parent = adapter.currentFolderName(),
+                        folder = true
+                    ).insert()
+
+                    adapter.reload()
+                }
+            }
+        )
+
         return binding.root
     }
 
@@ -220,7 +241,6 @@ class BookmarkFragment: Fragment(),
             }
             R.id.add_folder -> {
                 AddingFolderDialogFragment().also {
-                    it.setTargetFragment(this, 3)
                     it.show(
                             fragmentManager,
                             AddingFolderDialogFragment::class.java.simpleName
@@ -282,23 +302,6 @@ class BookmarkFragment: Fragment(),
         contentViewModel?.snackShort(R.string.done_addition)
     }
 
-    override fun onClickAddFolder(title: String?) {
-        if (title.isNullOrEmpty()) {
-            return
-        }
-
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            BookmarkInsertion(
-                    binding.root.context,
-                    title,
-                    parent = adapter.currentFolderName(),
-                    folder = true
-            ).insert()
-
-            adapter.reload()
-        }
-    }
-
     override fun toTop() {
         RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
     }
@@ -351,6 +354,7 @@ class BookmarkFragment: Fragment(),
 
         parentFragmentManager.clearFragmentResultListener("clear_bookmark")
         parentFragmentManager.clearFragmentResultListener("import_default")
+        parentFragmentManager.clearFragmentResultListener("adding_folder")
 
         super.onDetach()
     }
