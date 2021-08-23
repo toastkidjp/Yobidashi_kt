@@ -6,7 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.text.EmptyAlertSetter
@@ -130,6 +133,18 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
     }
 
     companion object {
+
+        fun show(parentFragment: Fragment) {
+            val fragment = FavoriteSearchAdditionDialogFragment()
+            fragment.arguments = bundleOf(
+                "view_model" to
+                        ViewModelProvider(parentFragment).get(FavoriteSearchFragmentViewModel::class.java)
+            )
+            fragment.show(
+                parentFragment.parentFragmentManager,
+                fragment::class.java.canonicalName
+            )
+        }
 
         /**
          * Layout ID.

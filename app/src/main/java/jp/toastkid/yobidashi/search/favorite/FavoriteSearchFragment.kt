@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -198,9 +197,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
      * Invoke addition.
      */
     private fun invokeAddition() {
-        FavoriteSearchAdditionDialogFragment()
-                .also { it.arguments = bundleOf("view_model" to ViewModelProvider(this).get(FavoriteSearchFragmentViewModel::class.java)) }
-                .show(parentFragmentManager, "addition")
+        FavoriteSearchAdditionDialogFragment.show(this)
     }
 
     private fun colorPair() = preferenceApplier.colorPair()
