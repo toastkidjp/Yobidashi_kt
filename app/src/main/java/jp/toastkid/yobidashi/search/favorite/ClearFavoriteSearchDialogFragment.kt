@@ -37,7 +37,7 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    (arguments?.getSerializable("view_model") as? FavoriteSearchFragmentViewModel)
+                    (arguments?.getSerializable(KEY_VIEW_MODEL) as? FavoriteSearchFragmentViewModel)
                             ?.clear()
                     d.dismiss()
                 }
@@ -46,9 +46,11 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
 
     companion object {
 
+        private const val KEY_VIEW_MODEL = "view_model"
+
         fun show(fragmentManager: FragmentManager, viewModel: FavoriteSearchFragmentViewModel) {
             val dialogFragment = ClearFavoriteSearchDialogFragment()
-            dialogFragment.arguments = bundleOf("view_model" to viewModel)
+            dialogFragment.arguments = bundleOf(KEY_VIEW_MODEL to viewModel)
             dialogFragment.show(
                     fragmentManager,
                     ClearFavoriteSearchDialogFragment::class.java.canonicalName
