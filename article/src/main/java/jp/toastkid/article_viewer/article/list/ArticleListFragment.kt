@@ -37,6 +37,7 @@ import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogFragment
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.menu.MenuPopup
+import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
 import jp.toastkid.article_viewer.bookmark.BookmarkFragment
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
@@ -274,6 +275,15 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             searchUseCase?.filter(keyword, true)
         })
 
+        parentFragmentManager.setFragmentResultListener(
+            "sorting",
+            viewLifecycleOwner,
+            { key, result ->
+                val sort = result[key] as? Sort ?: return@setFragmentResultListener
+                viewModel?.sort(sort)
+            }
+        )
+
         searchUseCase = ArticleSearchUseCase(
                 ListLoaderUseCase(adapter),
                 articleRepository,
@@ -320,7 +330,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             }
             R.id.action_sort -> {
                 val dialogFragment = SortSettingDialogFragment()
-                dialogFragment.setTargetFragment(this, REQUEST_CODE)
                 dialogFragment.show(parentFragmentManager, "")
                 true
             }

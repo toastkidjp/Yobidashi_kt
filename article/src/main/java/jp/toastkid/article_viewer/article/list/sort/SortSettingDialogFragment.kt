@@ -14,11 +14,10 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.annotation.LayoutRes
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
 import jp.toastkid.article_viewer.databinding.DialogSortSettingBinding
 import jp.toastkid.lib.preference.PreferenceApplier
 
@@ -61,10 +60,8 @@ class SortSettingDialogFragment : BottomSheetDialogFragment() {
         binding.list.setOnItemClickListener { _, _, position, _ ->
             val sort = Sort.values()[position]
             preferenceApplier.setArticleSort(sort.name)
-            targetFragment?.let {
-                ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
-                        .sort(sort)
-            }
+            parentFragmentManager
+                .setFragmentResult("sorting", bundleOf("sorting" to sort))
             dismiss()
         }
         return binding.root
