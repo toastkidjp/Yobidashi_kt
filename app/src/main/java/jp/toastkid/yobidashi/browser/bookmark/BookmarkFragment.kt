@@ -349,6 +349,9 @@ class BookmarkFragment: Fragment(),
         getContentLauncher.unregister()
         exportLauncher.unregister()
 
+        parentFragmentManager.clearFragmentResultListener("clear_bookmark")
+        parentFragmentManager.clearFragmentResultListener("import_default")
+
         super.onDetach()
     }
 
