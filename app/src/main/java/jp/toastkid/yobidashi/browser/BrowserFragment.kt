@@ -58,7 +58,6 @@ import kotlinx.coroutines.launch
 class BrowserFragment : Fragment(),
         OnBackCloseableTabUiFragment,
         CommonFragmentAction,
-        UserAgentDialogFragment.Callback,
         ContentScrollable
 {
 
@@ -121,6 +120,18 @@ class BrowserFragment : Fragment(),
         initializeHeaderViewModels(activity)
 
         contentViewModel = ViewModelProvider(activity).get(ContentViewModel::class.java)
+
+        parentFragmentManager.setFragmentResultListener(
+            "user_agent_setting",
+            viewLifecycleOwner,
+            { key, results ->
+                val userAgent = results[key] as? UserAgent ?: return@setFragmentResultListener
+                browserModule.resetUserAgent(userAgent.text())
+                contentViewModel?.snackShort(
+                    getString(R.string.format_result_user_agent, userAgent.title())
+                )
+            }
+        )
     }
 
     private fun initializeHeaderViewModels(activity: FragmentActivity) {
@@ -336,7 +347,6 @@ class BrowserFragment : Fragment(),
 
     fun showUserAgentSetting() {
         val dialogFragment = UserAgentDialogFragment()
-        dialogFragment.setTargetFragment(this, 1)
         dialogFragment.show(
                 parentFragmentManager,
                 UserAgentDialogFragment::class.java.simpleName
@@ -485,11 +495,6 @@ class BrowserFragment : Fragment(),
                     .get(ContentViewModel::class.java)
                     .nextFragment(fragment)
         }
-    }
-
-    override fun onClickUserAgent(userAgent: UserAgent) {
-        browserModule.resetUserAgent(userAgent.text())
-        contentViewModel?.snackShort(getString(R.string.format_result_user_agent, userAgent.title()))
     }
 
     fun stopSwipeRefresherLoading() {
