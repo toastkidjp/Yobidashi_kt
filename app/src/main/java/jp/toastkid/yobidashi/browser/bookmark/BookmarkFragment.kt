@@ -212,12 +212,10 @@ class BookmarkFragment: Fragment(),
             }
             R.id.add_default -> {
                 DefaultBookmarkDialogFragment()
-                        .also {
-                            it.show(
-                                    fragmentManager,
-                                    DefaultBookmarkDialogFragment::class.java.simpleName
-                            )
-                        }
+                    .show(
+                        fragmentManager,
+                        DefaultBookmarkDialogFragment::class.java.simpleName
+                    )
                 true
             }
             R.id.add_folder -> {
