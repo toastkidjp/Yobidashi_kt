@@ -155,7 +155,10 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     override fun onOptionsItemSelected(item: MenuItem) =
             when (item.itemId) {
                 R.id.favorite_toolbar_menu_clear -> {
-                    ClearFavoriteSearchDialogFragment.show(parentFragmentManager, this)
+                    ClearFavoriteSearchDialogFragment.show(
+                        parentFragmentManager,
+                        ViewModelProvider(this).get(FavoriteSearchFragmentViewModel::class.java)
+                    )
                     true
                 }
                 R.id.favorite_toolbar_menu_add -> {

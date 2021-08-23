@@ -11,10 +11,9 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 
 /**
@@ -38,9 +37,8 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    ViewModelProvider(targetFragment)
-                            .get(FavoriteSearchFragmentViewModel::class.java)
-                            .clear()
+                    (arguments?.getSerializable("view_model") as? FavoriteSearchFragmentViewModel)
+                            ?.clear()
                     d.dismiss()
                 }
                 .create()
@@ -48,9 +46,9 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
 
     companion object {
 
-        fun show(fragmentManager: FragmentManager, target: Fragment) {
+        fun show(fragmentManager: FragmentManager, viewModel: FavoriteSearchFragmentViewModel) {
             val dialogFragment = ClearFavoriteSearchDialogFragment()
-            dialogFragment.setTargetFragment(target, 1)
+            dialogFragment.arguments = bundleOf("view_model" to viewModel)
             dialogFragment.show(
                     fragmentManager,
                     ClearFavoriteSearchDialogFragment::class.java.canonicalName
