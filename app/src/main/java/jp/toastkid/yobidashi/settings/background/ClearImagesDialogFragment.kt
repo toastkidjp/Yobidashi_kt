@@ -12,9 +12,6 @@ import jp.toastkid.yobidashi.R
  */
 internal class ClearImagesDialogFragment : DialogFragment() {
 
-    interface Callback {
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
