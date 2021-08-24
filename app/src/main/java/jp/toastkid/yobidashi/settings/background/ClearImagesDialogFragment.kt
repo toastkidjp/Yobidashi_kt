@@ -39,7 +39,7 @@ internal class ClearImagesDialogFragment : DialogFragment() {
                 )
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    onClick?.onClickClearImages()
+                    parentFragmentManager.setFragmentResult("clear_images", Bundle.EMPTY)
                     d.dismiss()
                 }
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
