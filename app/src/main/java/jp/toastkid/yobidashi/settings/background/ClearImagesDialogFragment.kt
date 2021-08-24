@@ -19,14 +19,6 @@ internal class ClearImagesDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-        if (activityContext is Callback) {
-            onClick = activityContext
-        }
-
-        val target = targetFragment
-        if (target is Callback) {
-            onClick = target
-        }
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.clear_all)
