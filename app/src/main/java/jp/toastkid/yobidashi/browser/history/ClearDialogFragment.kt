@@ -20,7 +20,6 @@ import jp.toastkid.yobidashi.R
 class ClearDialogFragment : DialogFragment() {
 
     interface Callback {
-        fun onClickClear()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
