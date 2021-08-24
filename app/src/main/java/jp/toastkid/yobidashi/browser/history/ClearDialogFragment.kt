@@ -26,11 +26,6 @@ class ClearDialogFragment : DialogFragment() {
     private var onClick: Callback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val target = targetFragment
-        if (target is Callback) {
-            onClick = target
-        }
-
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
         return AlertDialog.Builder(activityContext)
@@ -44,7 +39,6 @@ class ClearDialogFragment : DialogFragment() {
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
                     parentFragmentManager.setFragmentResult("clear_items", Bundle.EMPTY)
-                    onClick?.onClickClear()
                     d.dismiss()
                 }
                 .create()
