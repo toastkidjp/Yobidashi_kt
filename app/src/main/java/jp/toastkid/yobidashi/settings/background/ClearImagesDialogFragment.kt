@@ -13,7 +13,6 @@ import jp.toastkid.yobidashi.R
 internal class ClearImagesDialogFragment : DialogFragment() {
 
     interface Callback {
-        fun onClickClearImages()
     }
 
     private var onClick: Callback? = null
