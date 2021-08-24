@@ -43,6 +43,7 @@ class ClearDialogFragment : DialogFragment() {
                 )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
+                    parentFragmentManager.setFragmentResult("clear_items", Bundle.EMPTY)
                     onClick?.onClickClear()
                     d.dismiss()
                 }
