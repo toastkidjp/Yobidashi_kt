@@ -15,8 +15,6 @@ internal class ClearImagesDialogFragment : DialogFragment() {
     interface Callback {
     }
 
-    private var onClick: Callback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
