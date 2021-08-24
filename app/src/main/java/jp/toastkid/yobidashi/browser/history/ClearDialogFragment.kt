@@ -23,8 +23,6 @@ class ClearDialogFragment : DialogFragment() {
         fun onClickClear()
     }
 
-    private var onClick: Callback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
