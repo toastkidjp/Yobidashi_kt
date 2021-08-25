@@ -49,7 +49,7 @@ class ClearTextDialogFragment : DialogFragment() {
                 )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    callback?.onClickClearInput()
+                    parentFragmentManager.setFragmentResult("clear_input", Bundle.EMPTY)
                     d.dismiss()
                 }
                 .create()
@@ -64,7 +64,6 @@ class ClearTextDialogFragment : DialogFragment() {
          */
         fun show(target: Fragment) {
             val dialogFragment = ClearTextDialogFragment()
-            dialogFragment.setTargetFragment(target, 1)
             dialogFragment.show(
                     target.parentFragmentManager,
                     dialogFragment::class.java.canonicalName

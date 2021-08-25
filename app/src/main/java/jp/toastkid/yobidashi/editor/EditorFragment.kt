@@ -65,7 +65,6 @@ import java.util.Calendar
 class EditorFragment :
         Fragment(),
         TabUiFragment,
-        ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
         CommonFragmentAction,
         ContentScrollable
@@ -205,6 +204,14 @@ class EditorFragment :
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
 
+        parentFragmentManager.setFragmentResultListener(
+            "clear_input",
+            viewLifecycleOwner,
+            { key, result ->
+                clearInput()
+            }
+        )
+
         reload()
     }
 
@@ -240,6 +247,8 @@ class EditorFragment :
 
         loadAs?.unregister()
         loadResultLauncher?.unregister()
+
+        parentFragmentManager.clearFragmentResultListener("clear_input")
 
         super.onDetach()
     }
@@ -591,10 +600,6 @@ class EditorFragment :
      */
     fun insert(text: CharSequence?) {
         binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
-    }
-
-    override fun onClickClearInput() {
-        clearInput()
     }
 
     override fun onClickInputName(fileName: String) {
