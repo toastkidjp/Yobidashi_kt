@@ -321,6 +321,11 @@ class BrowserSettingFragment : Fragment() {
         )
     }
 
+    override fun onDetach() {
+        parentFragmentManager.clearFragmentResultListener("user_agent_setting")
+        super.onDetach()
+    }
+
     companion object : TitleIdSupplier {
 
         @LayoutRes
