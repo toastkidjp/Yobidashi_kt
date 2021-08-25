@@ -26,18 +26,8 @@ class ClearTextDialogFragment : DialogFragment() {
         fun onClickClearInput()
     }
 
-    /**
-     * Callback of clicked positive button.
-     */
-    private var callback: Callback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-
-        val targetFragment = targetFragment
-        if (targetFragment is Callback) {
-            callback = targetFragment
-        }
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(activityContext.getString(R.string.title_clear_text))
