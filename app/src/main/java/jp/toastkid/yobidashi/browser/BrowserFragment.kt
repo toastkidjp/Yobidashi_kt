@@ -524,6 +524,7 @@ class BrowserFragment : Fragment(),
     override fun onDetach() {
         appBarViewModel?.show()
         browserModule.onDestroy()
+        parentFragmentManager.clearFragmentResultListener("user_agent_setting")
         super.onDetach()
     }
 
