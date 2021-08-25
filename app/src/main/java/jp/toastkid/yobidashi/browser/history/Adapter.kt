@@ -51,9 +51,9 @@ internal class Adapter(
         val viewHistory: ViewHistory = items[position]
 
         holder.setText(
-                viewHistory.title,
-                viewHistory.url,
-                DateFormat.format(context.getString(R.string.date_format), viewHistory.lastViewed).toString() ?: ""
+            viewHistory.title,
+            viewHistory.url,
+            DateFormat.format(context.getString(R.string.date_format), viewHistory.lastViewed).toString()
         )
         holder.itemView.setOnClickListener { onClick(viewHistory) }
         holder.setOnClickAdd(viewHistory) { history ->
@@ -68,10 +68,11 @@ internal class Adapter(
             ViewModelProvider(it).get(BrowserViewModel::class.java)
         }
 
-        holder.itemView.setOnLongClickListener { v ->
+        holder.itemView.setOnLongClickListener { _ ->
             browserViewModel?.openBackground(viewHistory.title, Uri.parse(viewHistory.url))
             true
         }
+        holder.hideButton()
     }
 
     override fun getItemCount(): Int = items.size

@@ -197,6 +197,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 searchUseCase?.search(searchInput)
                 if (appBarBinding.input.text.isNullOrEmpty()) {
                     appBarBinding.input.setText(searchInput)
+                    appBarBinding.searchClear.isVisible = searchInput?.length != 0
                 }
             })
 

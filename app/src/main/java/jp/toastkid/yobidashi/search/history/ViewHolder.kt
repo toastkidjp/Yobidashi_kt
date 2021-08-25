@@ -28,8 +28,9 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
     private val buttonMargin = binding.root.resources
             .getDimensionPixelSize(R.dimen.button_margin)
 
-    fun setText(text: String?) {
+    fun setText(text: String?, time: CharSequence?) {
         binding.searchHistoryText.text = text
+        binding.time.text = time
     }
 
     fun setImageRes(@DrawableRes iconId: Int) {

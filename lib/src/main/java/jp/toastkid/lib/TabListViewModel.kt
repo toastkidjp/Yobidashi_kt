@@ -10,6 +10,7 @@ package jp.toastkid.lib
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.lifecycle.Event
 import java.io.File
 
 /**
@@ -31,6 +32,19 @@ class TabListViewModel : ViewModel() {
 
     fun tabCount(count: Int) {
         _tabCount.postValue(count)
+    }
+
+    private val _openNewTab = MutableLiveData<Event<Unit>>()
+
+    val openNewTab: LiveData<Event<Unit>> = _openNewTab
+
+    fun openNewTab() {
+        _openNewTab.postValue(Event(Unit))
+    }
+
+    fun openNewTabForLongTap(): Boolean {
+        _openNewTab.postValue(Event(Unit))
+        return true
     }
 
 }

@@ -8,7 +8,6 @@
 package jp.toastkid.lib.permission
 
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.fragment.app.FragmentActivity
 import kotlinx.coroutines.channels.Channel
 
@@ -24,11 +23,7 @@ class RuntimePermissions(private val activity: FragmentActivity) {
     }
 
     fun isGranted(permission: String): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
-        } else {
-            true
-        }
+        return activity.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
     }
 
     fun isRevoked(permission: String): Boolean {

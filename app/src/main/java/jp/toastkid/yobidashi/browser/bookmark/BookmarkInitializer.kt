@@ -29,16 +29,17 @@ class BookmarkInitializer(
      */
     private val defaultBookmarks: Map<String, Map<String, String>> = mapOf(
             "Recommended" to mapOf(
-                    "Google Translate" to "https://translate.google.com/",
-                    "YouTube" to "https://www.youtube.com/",
-                    "AccuWeather" to "https://www.accuweather.com/",
-                    "Wikipedia" to "https://${Locale.getDefault().language}.wikipedia.org/",
-                    "Google Map" to "https://www.google.co.jp/maps/",
-                    "Yelp" to "https://www.yelp.com/",
-                    "Amazon" to "https://www.amazon.com/",
-                    "Project Gutenberg" to "http://www.gutenberg.org/",
-                    "Expedia" to "https://www.expedia.com",
-                    "Slashdot" to "https://m.slashdot.org"
+                "Google Translate" to "https://translate.google.com/",
+                "DeepL" to "https://www.deepl.com/translator",
+                "YouTube" to "https://www.youtube.com/",
+                "AccuWeather" to "https://www.accuweather.com/",
+                "Wikipedia" to "https://${Locale.getDefault().language}.wikipedia.org/",
+                "Google Map" to "https://www.google.co.jp/maps/",
+                "Yelp" to "https://www.yelp.com/",
+                "Amazon" to "https://www.amazon.com/",
+                "Project Gutenberg" to "http://www.gutenberg.org/",
+                "Expedia" to "https://www.expedia.com",
+                "Slashdot" to "https://m.slashdot.org"
             ),
             "Search" to mapOf(
                     "Google" to "https://www.google.com/",

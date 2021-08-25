@@ -19,7 +19,6 @@ import androidx.annotation.UiThread
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
@@ -61,11 +60,28 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
     private val disposables = Job()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_content, container, false)
-        appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_content_viewer, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_content,
+            container,
+            false
+        )
+        appBarBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.app_bar_content_viewer,
+            container,
+            false
+        )
         appBarBinding.fragment = this
+        appBarBinding.tabListViewModel = activity?.let {
+            ViewModelProvider(it).get(TabListViewModel::class.java)
+        }
         textViewHighlighter = TextViewHighlighter(binding.content)
         repository = AppDatabase.find(binding.root.context).articleRepository()
 
@@ -103,7 +119,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         ViewModelProvider(this)
                 .get(SubheadDialogFragmentViewModel::class.java)
                 .subhead
-                .observe(viewLifecycleOwner, Observer { })
+                .observe(viewLifecycleOwner, { })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -118,7 +134,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         val activity = activity ?: return
         ViewModelProvider(activity).get(TabListViewModel::class.java)
                 .tabCount
-                .observe(activity, Observer { appBarBinding.tabCount.text = it.toString() })
+                .observe(activity, { appBarBinding.tabCount.text = it.toString() })
     }
 
     override fun onResume() {
