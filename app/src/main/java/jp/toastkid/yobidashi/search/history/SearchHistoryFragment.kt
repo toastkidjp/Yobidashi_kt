@@ -28,8 +28,7 @@ import kotlinx.coroutines.withContext
  *
  * @author toastkidjp
  */
-class SearchHistoryFragment : Fragment(),
-        SearchHistoryClearDialogFragment.OnClickSearchHistoryClearCallback {
+class SearchHistoryFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchHistoryBinding
 
@@ -67,6 +66,25 @@ class SearchHistoryFragment : Fragment(),
         setHasOptionsMenu(true)
 
         binding.historiesView.scheduleLayoutAnimation()
+
+        parentFragmentManager.setFragmentResultListener(
+            "clear_items",
+            viewLifecycleOwner,
+            { key, results ->
+                val currentContext = context ?: return@setFragmentResultListener
+                CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.IO) {
+                        DatabaseFinder().invoke(currentContext).searchHistoryRepository().deleteAll()
+                    }
+
+                    adapter.clearAll {
+                        Toaster.snackShort(binding.root, R.string.settings_color_delete, preferenceApplier.colorPair())
+                    }
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            }
+        )
+
         return binding.root
     }
 
@@ -98,18 +116,9 @@ class SearchHistoryFragment : Fragment(),
         }
     }
 
-    override fun onClickSearchHistoryClear() {
-        val context = context ?: return
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                DatabaseFinder().invoke(context).searchHistoryRepository().deleteAll()
-            }
-
-            adapter.clearAll {
-                Toaster.snackShort(binding.root, R.string.settings_color_delete, preferenceApplier.colorPair())
-            }
-            activity?.supportFragmentManager?.popBackStack()
-        }
+    override fun onDetach() {
+        parentFragmentManager.clearFragmentResultListener("clear_items")
+        super.onDetach()
     }
 
     companion object {

@@ -52,7 +52,7 @@ class SearchHistoryClearDialogFragment : DialogFragment() {
                 )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    onClick?.onClickSearchHistoryClear()
+                    parentFragmentManager.setFragmentResult("clear_items", Bundle.EMPTY)
                     d.dismiss()
                 }
                 .setCancelable(true)
@@ -62,7 +62,6 @@ class SearchHistoryClearDialogFragment : DialogFragment() {
     companion object {
         fun show(fragmentManager: FragmentManager, targetFragment: Fragment) {
             val dialogFragment = SearchHistoryClearDialogFragment()
-            dialogFragment.setTargetFragment(targetFragment, 1)
             dialogFragment.show(
                     fragmentManager,
                     SearchHistoryClearDialogFragment::class.java.canonicalName
