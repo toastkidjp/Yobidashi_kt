@@ -374,6 +374,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         inputChannel.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
         setTargetLauncher.unregister()
+        parentFragmentManager.clearFragmentResultListener("sorting")
         super.onDetach()
     }
 
