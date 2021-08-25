@@ -30,18 +30,9 @@ class SearchHistoryClearDialogFragment : DialogFragment() {
         fun onClickSearchHistoryClear()
     }
 
-    /**
-     * Received callback.
-     */
-    private var onClick: OnClickSearchHistoryClearCallback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
-        val target = targetFragment
-        if (target is OnClickSearchHistoryClearCallback) {
-            onClick = target
-        }
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_search_history)
                 .setMessage(
