@@ -22,9 +22,6 @@ import jp.toastkid.yobidashi.R
  */
 class ClearTextDialogFragment : DialogFragment() {
 
-    interface Callback {
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
