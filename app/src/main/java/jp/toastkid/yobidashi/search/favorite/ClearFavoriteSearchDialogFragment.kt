@@ -24,8 +24,6 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
-        val targetFragment = targetFragment ?: return super.onCreateDialog(savedInstanceState)
-
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_delete_all)
                 .setMessage(
