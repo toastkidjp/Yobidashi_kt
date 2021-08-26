@@ -97,7 +97,7 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
     }
 
     private fun reload() {
-        (arguments?.get("view_model") as? FavoriteSearchFragmentViewModel)?.reload()
+        (arguments?.get(KEY_VIEW_MODEL) as? FavoriteSearchFragmentViewModel)?.reload()
     }
 
     /**
@@ -134,10 +134,12 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
 
     companion object {
 
+        private const val KEY_VIEW_MODEL = "view_model"
+
         fun show(parentFragment: Fragment) {
             val fragment = FavoriteSearchAdditionDialogFragment()
             fragment.arguments = bundleOf(
-                "view_model" to
+                KEY_VIEW_MODEL to
                         ViewModelProvider(parentFragment).get(FavoriteSearchFragmentViewModel::class.java)
             )
             fragment.show(
