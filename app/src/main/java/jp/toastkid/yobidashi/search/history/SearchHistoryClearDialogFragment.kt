@@ -23,13 +23,6 @@ import jp.toastkid.yobidashi.R
  */
 class SearchHistoryClearDialogFragment : DialogFragment() {
 
-    /**
-     * Callback.
-     */
-    interface OnClickSearchHistoryClearCallback {
-        fun onClickSearchHistoryClear()
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
