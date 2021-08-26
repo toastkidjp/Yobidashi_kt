@@ -107,8 +107,7 @@ class SearchHistoryFragment : Fragment() {
             R.id.clear -> {
                 val fragmentManager = parentFragmentManager
                 SearchHistoryClearDialogFragment.show(
-                        fragmentManager,
-                        this
+                    fragmentManager
                 )
                 true
             }
