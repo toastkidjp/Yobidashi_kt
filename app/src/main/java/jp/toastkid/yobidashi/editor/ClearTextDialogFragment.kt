@@ -12,7 +12,7 @@ import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import jp.toastkid.yobidashi.R
 
 /**
@@ -48,10 +48,10 @@ class ClearTextDialogFragment : DialogFragment() {
          *
          * @param target [androidx.fragment.app.Fragment]
          */
-        fun show(target: Fragment) {
+        fun show(fragmentManager: FragmentManager) {
             val dialogFragment = ClearTextDialogFragment()
             dialogFragment.show(
-                    target.parentFragmentManager,
+                    fragmentManager,
                     dialogFragment::class.java.canonicalName
             )
         }

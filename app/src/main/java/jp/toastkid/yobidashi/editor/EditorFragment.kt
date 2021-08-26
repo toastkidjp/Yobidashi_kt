@@ -317,7 +317,7 @@ class EditorFragment :
     }
 
     fun clear() {
-        ClearTextDialogFragment.show(this)
+        ClearTextDialogFragment.show(parentFragmentManager)
     }
 
     /**
