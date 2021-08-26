@@ -132,7 +132,7 @@ class DisplayingSettingFragment : Fragment() {
         parentFragmentManager.setFragmentResultListener(
             "clear_images",
             viewLifecycleOwner,
-            { key, result ->
+            { _, _ ->
                 filesDir.clean()
                 contentViewModel?.snackShort(R.string.message_success_image_removal)
                 adapter?.notifyDataSetChanged()
