@@ -46,7 +46,7 @@ class ClearTextDialogFragment : DialogFragment() {
         /**
          * Show this dialog.
          *
-         * @param target [androidx.fragment.app.Fragment]
+         * @param fragmentManager Use for showing dialog
          */
         fun show(fragmentManager: FragmentManager) {
             val dialogFragment = ClearTextDialogFragment()
