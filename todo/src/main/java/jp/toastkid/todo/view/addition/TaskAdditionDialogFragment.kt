@@ -123,9 +123,7 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
             task: TodoTask? = null,
             taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel
         ): DialogFragment = TaskAdditionDialogFragment().also {
-            it.arguments = bundleOf(
-                KEY_VIEW_MODEL to taskAdditionDialogFragmentViewModel
-            )
+            it.arguments = bundleOf(KEY_VIEW_MODEL to taskAdditionDialogFragmentViewModel)
             if (task != null) {
                 it.arguments?.putSerializable(KEY_EXTRA, task)
             }
