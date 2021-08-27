@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -67,7 +68,10 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
     }
 
     fun filterByMonth() {
-        filterByMonthUseCase?.invoke(binding.datePicker.year, binding.datePicker.month)
+        parentFragmentManager.setFragmentResult(
+            "date_filter",
+            bundleOf("year" to binding.datePicker.year, "month" to binding.datePicker.month)
+        )
 
         dismiss()
     }

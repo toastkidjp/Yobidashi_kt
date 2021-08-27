@@ -35,6 +35,7 @@ import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogFragment
+import jp.toastkid.article_viewer.article.list.date.FilterByMonthUseCase
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.menu.MenuPopup
 import jp.toastkid.article_viewer.article.list.sort.Sort
@@ -284,6 +285,18 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             }
         )
 
+        parentFragmentManager.setFragmentResultListener(
+            "date_filter",
+            viewLifecycleOwner,
+            { key, result ->
+                val year = result.getInt("year")
+                val month = result.getInt("month")
+                FilterByMonthUseCase(
+                    ViewModelProvider(this).get(ArticleListFragmentViewModel::class.java)
+                ).invoke(year, month)
+            }
+        )
+
         searchUseCase = ArticleSearchUseCase(
                 ListLoaderUseCase(adapter),
                 articleRepository,
@@ -335,7 +348,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             }
             R.id.action_date_filter -> {
                 val dateFilterDialogFragment = DateFilterDialogFragment()
-                dateFilterDialogFragment.setTargetFragment(this, 0)
                 dateFilterDialogFragment.show(parentFragmentManager, "")
                 true
             }
@@ -375,6 +387,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         context?.unregisterReceiver(progressBroadcastReceiver)
         setTargetLauncher.unregister()
         parentFragmentManager.clearFragmentResultListener("sorting")
+        parentFragmentManager.clearFragmentResultListener("date_filter")
         super.onDetach()
     }
 
