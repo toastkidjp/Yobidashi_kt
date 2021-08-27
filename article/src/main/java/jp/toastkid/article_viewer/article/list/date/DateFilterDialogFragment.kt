@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.article_viewer.databinding.DialogDateFilterBinding
 import jp.toastkid.lib.ContentViewModel
@@ -49,12 +48,6 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
                 today.get(Calendar.DAY_OF_MONTH)
         ) { _, year, monthOfYear, dayOfMonth ->
             date = Triple(year, monthOfYear, dayOfMonth)
-        }
-
-        targetFragment?.let {
-            filterByMonthUseCase = FilterByMonthUseCase(
-                    ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
-            )
         }
 
         activity?.let {
