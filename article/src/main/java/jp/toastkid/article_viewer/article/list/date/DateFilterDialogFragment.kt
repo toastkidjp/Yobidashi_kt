@@ -27,8 +27,6 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogDateFilterBinding
 
-    private var filterByMonthUseCase: FilterByMonthUseCase? = null
-
     private var dateSelectedActionUseCase: DateSelectedActionUseCase? = null
 
     private var date: Triple<Int, Int, Int>? = null
