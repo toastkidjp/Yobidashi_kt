@@ -119,7 +119,10 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
         private const val KEY_VIEW_MODEL = "view_model"
 
-        fun make(task: TodoTask? = null, taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel): DialogFragment = TaskAdditionDialogFragment().also {
+        fun make(
+            task: TodoTask? = null,
+            taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel
+        ): DialogFragment = TaskAdditionDialogFragment().also {
             it.arguments = bundleOf(
                 KEY_VIEW_MODEL to taskAdditionDialogFragmentViewModel
             )
