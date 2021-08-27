@@ -21,8 +21,7 @@ class TaskAdditionDialogFragmentUseCase(
 ) {
 
     operator fun invoke(currentTask: TodoTask? = null) {
-        val taskAdditionDialogFragment = TaskAdditionDialogFragment.make(currentTask)
-        taskAdditionDialogFragment.setTargetFragment(viewLifecycleOwner, 1)
+        val taskAdditionDialogFragment = TaskAdditionDialogFragment.make(currentTask, viewModel)
         viewModel
                 .refresh
                 .observe(viewLifecycleOwner, Observer {

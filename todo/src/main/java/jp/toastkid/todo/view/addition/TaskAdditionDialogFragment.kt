@@ -19,7 +19,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.todo.R
 import jp.toastkid.todo.databinding.DialogTaskAdditionBinding
@@ -61,9 +60,7 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
             date = Triple(year, monthOfYear, dayOfMonth)
         }
 
-        viewModel = targetFragment?.let {
-            ViewModelProvider(it).get(TaskAdditionDialogFragmentViewModel::class.java)
-        }
+        viewModel = arguments?.getSerializable(KEY_VIEW_MODEL) as? TaskAdditionDialogFragmentViewModel
 
         task?.let {
             binding.additionQueryInput.setText(it.description)
@@ -120,9 +117,14 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
         private const val KEY_EXTRA = "task"
 
-        fun make(task: TodoTask? = null): DialogFragment = TaskAdditionDialogFragment().also {
+        private const val KEY_VIEW_MODEL = "view_model"
+
+        fun make(task: TodoTask? = null, taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel): DialogFragment = TaskAdditionDialogFragment().also {
+            it.arguments = bundleOf(
+                KEY_VIEW_MODEL to taskAdditionDialogFragmentViewModel
+            )
             if (task != null) {
-                it.arguments = bundleOf(KEY_EXTRA to task)
+                it.arguments?.putSerializable(KEY_EXTRA, task)
             }
         }
     }
