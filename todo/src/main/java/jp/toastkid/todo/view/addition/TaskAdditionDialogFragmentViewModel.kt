@@ -12,11 +12,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.todo.model.TodoTask
+import java.io.Serializable
 
 /**
  * @author toastkidjp
  */
-class TaskAdditionDialogFragmentViewModel : ViewModel() {
+class TaskAdditionDialogFragmentViewModel : ViewModel(), Serializable {
 
     private val _refresh = MutableLiveData<Event<TodoTask>>()
 
