@@ -37,8 +37,7 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class ColorSettingFragment : Fragment(),
-        CommonFragmentAction,
-        ClearColorsDialogFragment.Callback {
+        CommonFragmentAction {
 
     /**
      * Initial background color.
@@ -108,6 +107,14 @@ class ColorSettingFragment : Fragment(),
 
         binding?.ok?.setOnClickListener { ok() }
         binding?.prev?.setOnClickListener { reset() }
+
+        parentFragmentManager.setFragmentResultListener(
+            "clear_color",
+            viewLifecycleOwner,
+            { key, result ->
+                adapter?.clear()
+            }
+        )
     }
 
     /**
@@ -153,16 +160,11 @@ class ColorSettingFragment : Fragment(),
                 GridLayoutManager(activityContext, 3, LinearLayoutManager.VERTICAL, false)
         binding?.clearSavedColor?.setOnClickListener{
             val clearColorsDialogFragment = ClearColorsDialogFragment()
-            clearColorsDialogFragment.setTargetFragment(this, 1)
             clearColorsDialogFragment.show(
                     parentFragmentManager,
                     ClearColorsDialogFragment::class.java.simpleName
             )
         }
-    }
-
-    override fun onClickClearColor() {
-        adapter?.clear()
     }
 
     override fun onResume() {
@@ -264,6 +266,7 @@ class ColorSettingFragment : Fragment(),
 
     override fun onDetach() {
         disposables.cancel()
+        parentFragmentManager.clearFragmentResultListener("clear_color")
         super.onDetach()
     }
 
