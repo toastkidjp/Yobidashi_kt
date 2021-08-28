@@ -211,6 +211,17 @@ class EditorFragment :
                 clearInput()
             }
         )
+        parentFragmentManager.setFragmentResultListener(
+            "input_text",
+            viewLifecycleOwner,
+            { key, result ->
+                val fileName = result.getString(key)
+                if (fileName.isNullOrBlank()) {
+                    return@setFragmentResultListener
+                }
+                assignNewFile(fileName)
+            }
+        )
 
         reload()
     }
@@ -249,6 +260,7 @@ class EditorFragment :
         loadResultLauncher?.unregister()
 
         parentFragmentManager.clearFragmentResultListener("clear_input")
+        parentFragmentManager.clearFragmentResultListener("input_text")
 
         super.onDetach()
     }

@@ -15,6 +15,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
@@ -92,7 +93,10 @@ class InputNameDialogFragment : DialogFragment() {
             return
         }
 
-        callback?.onClickInputName("${editText?.text.toString()}.txt")
+        parentFragmentManager.setFragmentResult(
+            "input_text",
+            bundleOf("input_text" to "${editText?.text.toString()}.txt")
+        )
         d.dismiss()
     }
 
@@ -115,7 +119,6 @@ class InputNameDialogFragment : DialogFragment() {
          */
         fun show(target: Fragment) {
             val dialogFragment = InputNameDialogFragment()
-            dialogFragment.setTargetFragment(target, 1)
             dialogFragment.show(
                     target.parentFragmentManager,
                     InputNameDialogFragment::class.java.canonicalName
