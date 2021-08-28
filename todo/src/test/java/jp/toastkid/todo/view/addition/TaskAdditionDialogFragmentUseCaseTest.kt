@@ -55,8 +55,7 @@ class TaskAdditionDialogFragmentUseCaseTest {
         every { viewModel.refresh }.returns(refresh)
 
         mockkObject(TaskAdditionDialogFragment)
-        every { TaskAdditionDialogFragment.make(any()) }.returns(taskAdditionDialogFragment)
-        every { taskAdditionDialogFragment.setTargetFragment(any(), any()) }.answers { Unit }
+        every { TaskAdditionDialogFragment.make(any(), any()) }.returns(taskAdditionDialogFragment)
         every { taskAdditionDialogFragment.show(any<FragmentManager>(), any<String>()) }.answers { Unit }
     }
 
