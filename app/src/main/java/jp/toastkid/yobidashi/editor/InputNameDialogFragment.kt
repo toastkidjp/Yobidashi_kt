@@ -41,11 +41,6 @@ class InputNameDialogFragment : DialogFragment() {
         fun onClickInputName(fileName: String)
     }
 
-    /**
-     * Callback.
-     */
-    private var callback: Callback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
