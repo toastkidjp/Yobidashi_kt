@@ -206,7 +206,7 @@ class EditorFragment :
         parentFragmentManager.setFragmentResultListener(
             "clear_input",
             viewLifecycleOwner,
-            { key, result ->
+            { _, _ ->
                 clearInput()
             }
         )
