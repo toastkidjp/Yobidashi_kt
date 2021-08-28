@@ -27,7 +27,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -151,7 +150,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(
                 inflater, LAYOUT_ID, container, false)
@@ -193,7 +192,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         activity?.let {
             val activityViewModel = ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
-            activityViewModel.search.observe(it, Observer { searchInput ->
+            activityViewModel.search.observe(it, { searchInput ->
                 searchUseCase?.search(searchInput)
                 if (appBarBinding.input.text.isNullOrEmpty()) {
                     appBarBinding.input.setText(searchInput)
@@ -239,28 +238,28 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         }
 
         viewModel = ViewModelProvider(this).get(ArticleListFragmentViewModel::class.java)
-        viewModel?.progressVisibility?.observe(viewLifecycleOwner, Observer {
+        viewModel?.progressVisibility?.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled()?.let { isVisible ->
                 binding.progressCircular.isVisible = isVisible
             }
         })
-        viewModel?.progress?.observe(viewLifecycleOwner, Observer {
+        viewModel?.progress?.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled()?.let { message ->
                 appBarBinding.searchResult.text = message
             }
         })
-        viewModel?.messageId?.observe(viewLifecycleOwner, Observer {
+        viewModel?.messageId?.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled()?.let { messageId ->
                 appBarBinding.searchResult.setText(messageId)
             }
         })
-        viewModel?.sort?.observe(viewLifecycleOwner, Observer {
+        viewModel?.sort?.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled()?.let {
                 searchUseCase?.all()
             }
         })
-        viewModel?.filter?.observe(viewLifecycleOwner, Observer {
-            val keyword = it ?: return@Observer
+        viewModel?.filter?.observe(viewLifecycleOwner, {
+            val keyword = it ?: return@observe
             searchUseCase?.filter(keyword, true)
         })
 
@@ -290,7 +289,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater)
         menuInflater.inflate(R.menu.menu_article_list, menu)
-        menu.findItem(R.id.action_switch_title_filter)?.isChecked = preferencesWrapper.useTitleFilter()
+        menu.findItem(R.id.action_switch_title_filter)?.isChecked =
+            preferencesWrapper.useTitleFilter()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

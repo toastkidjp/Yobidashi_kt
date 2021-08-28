@@ -136,7 +136,10 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         showAllBookmark(activityContext)
     }
 
-    private fun closeOnEmpty(bookmarkRepository: BookmarkRepository, contentViewModel: ContentViewModel) {
+    private fun closeOnEmpty(
+        bookmarkRepository: BookmarkRepository,
+        contentViewModel: ContentViewModel
+    ) {
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             val count = withContext(Dispatchers.IO) {
                 bookmarkRepository.count()
@@ -159,7 +162,8 @@ class BookmarkFragment : Fragment(), ContentScrollable {
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater)
         menuInflater.inflate(R.menu.menu_article_list, menu)
-        menu.findItem(R.id.action_switch_title_filter)?.isChecked = preferencesWrapper.useTitleFilter()
+        menu.findItem(R.id.action_switch_title_filter)?.isChecked =
+            preferencesWrapper.useTitleFilter()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

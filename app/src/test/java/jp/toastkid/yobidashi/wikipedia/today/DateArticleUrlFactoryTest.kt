@@ -6,7 +6,9 @@ import android.content.res.Resources
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import jp.toastkid.yobidashi.main.LocaleWrapper
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -33,6 +35,8 @@ class DateArticleUrlFactoryTest {
 
         every { resources.configuration }.answers { configuration }
         every { context.resources }.answers { resources }
+
+        mockkConstructor(LocaleWrapper::class)
     }
 
     @Test
@@ -64,6 +68,7 @@ class DateArticleUrlFactoryTest {
     @Test
     fun testJapanese() {
         configuration.locale = Locale.JAPANESE
+        every { anyConstructed<LocaleWrapper>().isJa(any()) }.returns(true)
         every { context.getString(any()) }.answers { "https://ja.wikipedia.org/wiki/{0}月{1}日" }
 
         assertEquals(
@@ -75,6 +80,7 @@ class DateArticleUrlFactoryTest {
     @Test
     fun testEnglish() {
         configuration.locale = Locale.ENGLISH
+        every { anyConstructed<LocaleWrapper>().isJa(any()) }.returns(false)
         every { context.getString(any()) }.answers { "https://en.wikipedia.org/wiki/{0}_{1}" }
 
         assertEquals(
