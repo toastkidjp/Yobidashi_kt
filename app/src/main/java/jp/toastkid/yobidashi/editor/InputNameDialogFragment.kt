@@ -29,13 +29,6 @@ import jp.toastkid.yobidashi.libs.Inputs
  */
 class InputNameDialogFragment : DialogFragment() {
 
-    /**
-     * Callback interface.
-     */
-    interface Callback {
-
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
