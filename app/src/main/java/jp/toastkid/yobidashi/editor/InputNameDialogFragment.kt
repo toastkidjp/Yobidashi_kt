@@ -34,11 +34,6 @@ class InputNameDialogFragment : DialogFragment() {
      */
     interface Callback {
 
-        /**
-         * Action using input name.
-         * @param fileName
-         */
-        fun onClickInputName(fileName: String)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
