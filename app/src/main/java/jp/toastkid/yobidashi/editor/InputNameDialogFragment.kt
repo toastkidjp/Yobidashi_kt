@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Inputs
 
@@ -117,10 +118,10 @@ class InputNameDialogFragment : DialogFragment() {
          *
          * @param target [Fragment]
          */
-        fun show(target: Fragment) {
+        fun show(fragmentManager: FragmentManager) {
             val dialogFragment = InputNameDialogFragment()
             dialogFragment.show(
-                    target.parentFragmentManager,
+                fragmentManager,
                     InputNameDialogFragment::class.java.canonicalName
             )
         }

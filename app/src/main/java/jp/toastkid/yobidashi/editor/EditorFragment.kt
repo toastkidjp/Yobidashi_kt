@@ -364,14 +364,14 @@ class EditorFragment :
             return
         }
 
-        InputNameDialogFragment.show(this)
+        InputNameDialogFragment.show(parentFragmentManager)
     }
 
     /**
      * Save current text as other file.
      */
     fun saveAs() {
-        InputNameDialogFragment.show(this)
+        InputNameDialogFragment.show(parentFragmentManager)
     }
 
     /**
