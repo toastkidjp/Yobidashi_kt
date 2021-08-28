@@ -49,11 +49,6 @@ class InputNameDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
-        val targetFragment = targetFragment
-        if (targetFragment is Callback) {
-            callback = targetFragment
-        }
-
         val input = EditText(activityContext).also {
             it.maxLines   = 1
             it.inputType  = InputType.TYPE_CLASS_TEXT
