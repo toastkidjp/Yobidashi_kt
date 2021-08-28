@@ -65,7 +65,6 @@ import java.util.Calendar
 class EditorFragment :
         Fragment(),
         TabUiFragment,
-        InputNameDialogFragment.Callback,
         CommonFragmentAction,
         ContentScrollable
 {
@@ -612,10 +611,6 @@ class EditorFragment :
      */
     fun insert(text: CharSequence?) {
         binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
-    }
-
-    override fun onClickInputName(fileName: String) {
-        assignNewFile(fileName)
     }
 
     companion object {
