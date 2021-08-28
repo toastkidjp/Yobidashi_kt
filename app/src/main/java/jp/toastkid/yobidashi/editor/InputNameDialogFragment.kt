@@ -122,7 +122,7 @@ class InputNameDialogFragment : DialogFragment() {
             val dialogFragment = InputNameDialogFragment()
             dialogFragment.show(
                 fragmentManager,
-                    InputNameDialogFragment::class.java.canonicalName
+                InputNameDialogFragment::class.java.canonicalName
             )
         }
     }
