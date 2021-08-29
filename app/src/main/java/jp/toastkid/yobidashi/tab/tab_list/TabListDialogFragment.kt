@@ -18,7 +18,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
@@ -193,8 +192,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         val context = v.context
         if (context is FragmentActivity) {
             val fragmentManager = context.supportFragmentManager
-            val targetFragment =
-                    fragmentManager.findFragmentByTag(BrowserFragment::class.java.canonicalName)
             val dialogFragment = TabListClearDialogFragment()
             dialogFragment.show(
                     fragmentManager,
