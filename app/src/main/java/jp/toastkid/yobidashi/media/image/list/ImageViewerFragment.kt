@@ -90,7 +90,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         adapter = Adapter(parentFragmentManager, viewModel)
 
         val viewLifecycleOwner = viewLifecycleOwner
-        viewModel.onClick.observe(viewLifecycleOwner, Observer {
+        viewModel.onClick.observe(viewLifecycleOwner, {
             CoroutineScope(Dispatchers.IO).launch(disposables) { imageLoaderUseCase(it) }
         })
 
