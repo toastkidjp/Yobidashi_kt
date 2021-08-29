@@ -196,7 +196,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
             val targetFragment =
                     fragmentManager.findFragmentByTag(BrowserFragment::class.java.canonicalName)
             val dialogFragment = TabListClearDialogFragment()
-            dialogFragment.setTargetFragment(targetFragment, 1)
             dialogFragment.show(
                     fragmentManager,
                     TabListClearDialogFragment::class.java.canonicalName
