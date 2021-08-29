@@ -99,7 +99,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
             imageLoaderUseCase()
         })
 
-        viewModel.refresh.observe(viewLifecycleOwner, Observer {
+        viewModel.refresh.observe(viewLifecycleOwner, {
             attemptLoad()
         })
 
