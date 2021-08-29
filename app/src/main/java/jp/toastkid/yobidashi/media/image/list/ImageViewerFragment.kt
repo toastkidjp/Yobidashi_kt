@@ -94,7 +94,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
             CoroutineScope(Dispatchers.IO).launch(disposables) { imageLoaderUseCase(it) }
         })
 
-        viewModel.onLongClick.observe(viewLifecycleOwner, Observer {
+        viewModel.onLongClick.observe(viewLifecycleOwner, {
             preferenceApplier.addExcludeItem(it)
             imageLoaderUseCase()
         })
