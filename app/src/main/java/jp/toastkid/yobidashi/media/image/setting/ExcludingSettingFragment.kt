@@ -77,4 +77,5 @@ class ExcludingSettingFragment : BottomSheetDialogFragment() {
         ViewModelProvider(targetFragment).get(ImageViewerFragmentViewModel::class.java)
                 .refresh()
     }
+
 }
