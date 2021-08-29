@@ -124,6 +124,14 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                 imageLoader,
                 this::refreshContent
         )
+
+        parentFragmentManager.setFragmentResultListener(
+            "excluding",
+            viewLifecycleOwner,
+            { key, results ->
+                refreshContent()
+            }
+        )
     }
 
     private fun observePageSearcherViewModel() {
@@ -205,7 +213,6 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         when (item.itemId) {
             R.id.excluding_items_setting -> {
                 val fragment = ExcludingSettingFragment()
-                fragment.setTargetFragment(this, 1)
                 fragment.show(parentFragmentManager, "setting")
             }
             R.id.sort_by_date -> {
@@ -226,6 +233,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     override fun onDetach() {
         disposables.cancel()
+        parentFragmentManager.clearFragmentResultListener("excluding")
         super.onDetach()
     }
 
