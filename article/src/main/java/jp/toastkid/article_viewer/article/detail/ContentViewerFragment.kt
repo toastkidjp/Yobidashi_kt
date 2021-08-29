@@ -193,7 +193,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         }
 
         val dialogFragment = SubheadDialogFragment.make(subheads)
-        dialogFragment.setTargetFragment(this, 1)
         dialogFragment.show(parentFragmentManager, SubheadDialogFragment::class.java.canonicalName)
     }
 
