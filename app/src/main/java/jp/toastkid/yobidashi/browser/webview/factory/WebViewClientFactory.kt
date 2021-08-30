@@ -162,6 +162,19 @@ class WebViewClientFactory(
                 url?.let {
                     val context: Context? = view?.context
                     val uri: Uri = Uri.parse(url)
+
+                    if (uri.host == "app.adjust.com") {
+                        val redirectTo = Uri.decode(uri.getQueryParameter("redirect"))
+                        view?.loadUrl(redirectTo)
+                        return@let false
+                    }
+
+                    if (uri.host == "approach.yahoo.co.jp") {
+                        val redirectTo = Uri.decode(uri.getQueryParameter("src"))
+                        view?.loadUrl(redirectTo)
+                        return@let false
+                    }
+
                     when (uri.scheme) {
                         "market", "intent" -> {
                             try {
