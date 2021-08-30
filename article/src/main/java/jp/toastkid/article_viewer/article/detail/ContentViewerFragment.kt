@@ -192,8 +192,8 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
             return
         }
 
-        val dialogFragment = SubheadDialogFragment.make(subheads)
-        dialogFragment.show(parentFragmentManager, SubheadDialogFragment::class.java.canonicalName)
+        SubheadDialogFragment.make(subheads)
+            .show(parentFragmentManager, SubheadDialogFragment::class.java.canonicalName)
     }
 
     override fun toBottom() {
