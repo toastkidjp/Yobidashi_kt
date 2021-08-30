@@ -192,8 +192,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         val context = v.context
         if (context is FragmentActivity) {
             val fragmentManager = context.supportFragmentManager
-            val dialogFragment = TabListClearDialogFragment()
-            dialogFragment.show(
+            TabListClearDialogFragment().show(
                     fragmentManager,
                     TabListClearDialogFragment::class.java.canonicalName
             )
