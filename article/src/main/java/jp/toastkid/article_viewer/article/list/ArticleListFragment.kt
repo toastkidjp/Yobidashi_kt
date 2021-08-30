@@ -97,7 +97,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         private fun showFeedback() {
             contentViewModel?.snackShort(
-                    getString(R.string.message_done_import)
+                R.string.message_done_import
             )
         }
     }
