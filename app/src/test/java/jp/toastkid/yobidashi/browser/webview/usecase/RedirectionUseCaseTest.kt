@@ -65,7 +65,7 @@ class RedirectionUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testInvoke() {
         redirectionUseCase.invoke(webView, uri)
 
         verify(exactly = 1) { uri.getQueryParameter(any()) }
