@@ -41,6 +41,11 @@ class RedirectionUseCaseTest {
         MockKAnnotations.init(this)
 
         every { uri.host }.returns("app.adjust.com")
+        every { uri.getQueryParameter(any()) }.returns("https://www.yahoo.co.jp")
+        every { webView.loadUrl(any()) }.just(Runs)
+
+        mockkStatic(Uri::class)
+        every { Uri.decode(any()) }.returns("https://www.yahoo.co.jp")
     }
 
     @After
@@ -61,11 +66,6 @@ class RedirectionUseCaseTest {
 
     @Test
     fun test() {
-        mockkStatic(Uri::class)
-        every { uri.getQueryParameter(any()) }.returns("https://www.yahoo.co.jp")
-        every { Uri.decode(any()) }.returns("https://www.yahoo.co.jp")
-        every { webView.loadUrl(any()) }.just(Runs)
-
         redirectionUseCase.invoke(webView, uri)
 
         verify(exactly = 1) { uri.getQueryParameter(any()) }
