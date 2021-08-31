@@ -43,7 +43,7 @@ class SwipeActionAttachment {
                     }
                     val adapter = recyclerView.adapter
                     if (adapter is Removable) {
-                        adapter.removeAt(viewHolder.adapterPosition)
+                        adapter.removeAt(viewHolder.bindingAdapterPosition)
                         holder?.hideButton()
                     }
                 }
