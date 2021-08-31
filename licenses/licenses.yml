@@ -401,26 +401,6 @@
   license: Apache License 2.0
   licenseUrl: https://api.github.com/licenses/apache-2.0
   url: https://baseflow.com
-- artifact: com.google.android.gms:play-services-base:+
-  name: play-services-base
-  copyrightHolder: Google Inc.
-  license: Android Software Development Kit License
-  licenseUrl: https://developer.android.com/studio/terms.html
-- artifact: com.google.android.gms:play-services-basement:+
-  name: play-services-basement
-  copyrightHolder: Google Inc.
-  license: Android Software Development Kit License
-  licenseUrl: https://developer.android.com/studio/terms.html
-- artifact: com.google.android.gms:play-services-oss-licenses:+
-  name: play-services-oss-licenses
-  copyrightHolder: Google Inc.
-  license: Android Software Development Kit License
-  licenseUrl: https://developer.android.com/studio/terms.html
-- artifact: com.google.android.gms:play-services-tasks:+
-  name: play-services-tasks
-  copyrightHolder: Google Inc.
-  license: Android Software Development Kit License
-  licenseUrl: https://developer.android.com/studio/terms.html
 - artifact: com.google.android.material:material:+
   name: material
   copyrightHolder: Google Inc.
@@ -562,6 +542,12 @@
   url: https://kotlinlang.org/
 - artifact: org.jetbrains.kotlin:kotlin-stdlib-jdk7:+
   name: kotlin-stdlib-jdk7
+  copyrightHolder: JetBrains s.r.o.
+  license: The Apache License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://kotlinlang.org/
+- artifact: org.jetbrains.kotlin:kotlin-stdlib-jdk8:+
+  name: kotlin-stdlib-jdk8
   copyrightHolder: JetBrains s.r.o.
   license: The Apache License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
