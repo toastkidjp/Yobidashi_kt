@@ -74,7 +74,7 @@ class RedirectionUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testNotTargetCase() {
         every { uri.host }.returns("www.yahoo.co.jp")
 
         redirectionUseCase.invoke(webView, uri)
