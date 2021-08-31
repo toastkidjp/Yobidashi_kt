@@ -73,4 +73,15 @@ class RedirectionUseCaseTest {
         verify(exactly = 1) { webView.loadUrl(any()) }
     }
 
+    @Test
+    fun test() {
+        every { uri.host }.returns("www.yahoo.co.jp")
+
+        redirectionUseCase.invoke(webView, uri)
+
+        verify(exactly = 0) { uri.getQueryParameter(any()) }
+        verify(exactly = 0) { Uri.decode(any()) }
+        verify(exactly = 0) { webView.loadUrl(any()) }
+    }
+
 }
