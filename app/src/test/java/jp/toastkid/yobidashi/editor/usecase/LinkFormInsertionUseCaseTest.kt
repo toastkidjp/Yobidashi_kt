@@ -114,4 +114,22 @@ class LinkFormInsertionUseCaseTest {
         coVerify(exactly = 0) { linkTitleFetcherUseCase.invoke(any()) }
     }
 
+    @Test
+    fun test() {
+        every { Clipboard.getPrimary(any()) }.returns("")
+
+        linkFormInsertionUseCase.invoke()
+
+        verify(exactly = 0) { editText.getText() }
+        coVerify(exactly = 0) { editText.getSelectionStart() }
+        coVerify(exactly = 0) { editable.insert(any(), any()) }
+        coVerify(exactly = 0) { editable.toString() }
+        verify(exactly = 0) { Urls.isInvalidUrl(any()) }
+        verify(atLeast = 1) { editText.getContext() }
+        verify(exactly = 0) { context.getString(any()) }
+        verify(exactly = 0) { contentViewModel.snackWithAction(any(), any(), any()) }
+        verify(exactly = 1) { Clipboard.getPrimary(any()) }
+        coVerify(exactly = 0) { linkTitleFetcherUseCase.invoke(any()) }
+    }
+
 }
