@@ -46,8 +46,8 @@ class SearchHistoryClearDialogFragment : DialogFragment() {
         fun show(fragmentManager: FragmentManager) {
             val dialogFragment = SearchHistoryClearDialogFragment()
             dialogFragment.show(
-                    fragmentManager,
-                    SearchHistoryClearDialogFragment::class.java.canonicalName
+                fragmentManager,
+                SearchHistoryClearDialogFragment::class.java.canonicalName
             )
         }
     }
