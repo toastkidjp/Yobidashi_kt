@@ -95,9 +95,9 @@ class LinkFormInsertionUseCaseTest {
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         coVerify(exactly = 1) { linkTitleFetcherUseCase.invoke(any()) }
     }
-    
+
     @Test
-    fun test() {
+    fun testClipIsNullCase() {
         every { Clipboard.getPrimary(any()) }.returns(null)
 
         linkFormInsertionUseCase.invoke()
