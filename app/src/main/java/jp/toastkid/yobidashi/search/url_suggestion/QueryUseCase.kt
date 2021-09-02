@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.search.url_suggestion
 
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,21 +22,23 @@ class QueryUseCase(
     private val adapter: Adapter,
     private val bookmarkRepository: BookmarkRepository,
     private val viewHistoryRepository: ViewHistoryRepository,
-    private val switchVisibility: (Boolean) -> Unit
+    private val switchVisibility: (Boolean) -> Unit,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     operator fun invoke(q: CharSequence) {
         adapter.clear()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
+        CoroutineScope(mainDispatcher).launch {
+            withContext(ioDispatcher) {
                 if (q.isBlank()) {
                     return@withContext
                 }
                 bookmarkRepository.search("%$q%", ITEM_LIMIT).forEach { adapter.add(it) }
             }
 
-            withContext(Dispatchers.IO) {
+            withContext(ioDispatcher) {
                 viewHistoryRepository.search("%$q%", ITEM_LIMIT).forEach { adapter.add(it) }
             }
 

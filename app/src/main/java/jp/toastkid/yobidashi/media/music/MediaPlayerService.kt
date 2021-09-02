@@ -82,7 +82,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaPlayer.start()
             setNewState(PlaybackStateCompat.STATE_PLAYING)
             startService(Intent(baseContext, MediaPlayerService::class.java))
-            notificationManager.notify(NOTIFICATION_ID, notificationFactory())
+            val notification = notificationFactory() ?: return
+            notificationManager.notify(NOTIFICATION_ID, notification)
             startForeground(NOTIFICATION_ID, notificationFactory())
         }
 
@@ -97,7 +98,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaSession.isActive = true
             mediaPlayer.start()
             setNewState(PlaybackStateCompat.STATE_PLAYING)
-            notificationManager.notify(NOTIFICATION_ID, notificationFactory())
+            val notification = notificationFactory() ?: return
+            notificationManager.notify(NOTIFICATION_ID, notification)
             startForeground(NOTIFICATION_ID, notificationFactory())
         }
 
@@ -110,7 +112,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaSession.isActive = false
             mediaPlayer.pause()
             setNewState(PlaybackStateCompat.STATE_PAUSED)
-            notificationManager.notify(NOTIFICATION_ID, notificationFactory())
+            val notification = notificationFactory() ?: return
+            notificationManager.notify(NOTIFICATION_ID, notification)
             stopForeground(false)
         }
 

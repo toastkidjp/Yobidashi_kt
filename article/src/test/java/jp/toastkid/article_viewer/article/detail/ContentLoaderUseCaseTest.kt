@@ -2,16 +2,17 @@ package jp.toastkid.article_viewer.article.detail
 
 import android.widget.TextView
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
 import io.noties.markwon.Markwon
 import jp.toastkid.article_viewer.article.ArticleRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -39,13 +40,21 @@ class ContentLoaderUseCaseTest {
     @MockK
     private lateinit var linkGeneratorService: LinkGeneratorService
 
+    @Suppress("unused")
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
+    @Suppress("unused")
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
+    @Suppress("unused")
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        coEvery { markwon.setMarkdown(any(), any()) }.answers { Unit }
-        coEvery { linkGeneratorService.invoke(any()) }.answers { Unit }
-        Dispatchers.setMain(Dispatchers.Unconfined)
+        coEvery { markwon.setMarkdown(any(), any()) }.just(Runs)
+        coEvery { linkGeneratorService.invoke(any()) }.just(Runs)
     }
 
     @Test
@@ -72,7 +81,6 @@ class ContentLoaderUseCaseTest {
     @After
     fun tearDown() {
         unmockkAll()
-        Dispatchers.resetMain()
     }
 
 }

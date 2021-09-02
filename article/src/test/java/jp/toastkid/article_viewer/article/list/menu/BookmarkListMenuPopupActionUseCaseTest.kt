@@ -1,14 +1,16 @@
 package jp.toastkid.article_viewer.article.list.menu
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -18,6 +20,7 @@ import org.junit.Test
  */
 class BookmarkListMenuPopupActionUseCaseTest {
 
+    @InjectMockKs
     private lateinit var useCase: BookmarkListMenuPopupActionUseCase
 
     @MockK
@@ -26,14 +29,17 @@ class BookmarkListMenuPopupActionUseCaseTest {
     @MockK
     private lateinit var deleted: () -> Unit
 
+    @Suppress("unused")
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
+    @Suppress("unused")
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        useCase = BookmarkListMenuPopupActionUseCase(bookmarkRepository, deleted)
-        coEvery { deleted() }.answers { Unit }
-        coEvery { bookmarkRepository.delete(any()) }.answers { Unit }
-
-        Dispatchers.setMain(Dispatchers.Unconfined)
+        coEvery { deleted() }.just(Runs)
+        coEvery { bookmarkRepository.delete(any()) }.just(Runs)
     }
 
     @Test
@@ -55,7 +61,6 @@ class BookmarkListMenuPopupActionUseCaseTest {
     @After
     fun tearDown() {
         unmockkAll()
-        Dispatchers.resetMain()
     }
 
 }

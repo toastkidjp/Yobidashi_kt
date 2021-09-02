@@ -5,7 +5,6 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-
 package jp.toastkid.yobidashi.notification.widget
 
 import android.app.Notification
@@ -55,7 +54,8 @@ class NotificationWidgetTest {
         every { anyConstructed<RemoteViewsFactory>().invoke(any()) }.returns(mockk())
 
         mockkConstructor(NotificationCompat.Builder::class)
-        every { anyConstructed<NotificationCompat.Builder>().setSmallIcon(any()) }.returns(builder)
+        @Suppress("RemoveExplicitTypeArguments")
+        every { anyConstructed<NotificationCompat.Builder>().setSmallIcon(any<Int>()) }.returns(builder)
         every { builder.setCustomContentView(any()) }.returns(builder)
         every { builder.setOngoing(any()) }.returns(builder)
         every { builder.setAutoCancel(any()) }.returns(builder)
@@ -78,7 +78,8 @@ class NotificationWidgetTest {
         verify(exactly = 1) { notificationManagerCompat.cancel(any()) }
         verify(exactly = 1) { notificationManagerCompat.notify(any(), any()) }
         verify(exactly = 1) { anyConstructed<RemoteViewsFactory>().invoke(any()) }
-        verify(exactly = 1) { anyConstructed<NotificationCompat.Builder>().setSmallIcon(any()) }
+        @Suppress("RemoveExplicitTypeArguments")
+        verify(exactly = 1) { anyConstructed<NotificationCompat.Builder>().setSmallIcon(any<Int>()) }
         verify(exactly = 1) { builder.setCustomContentView(any()) }
         verify(exactly = 1) { builder.setOngoing(any()) }
         verify(exactly = 1) { builder.setAutoCancel(any()) }

@@ -69,7 +69,10 @@ internal class ModuleAdapter(
         val searchHistory = selected[position]
         holder.hideButton()
         val context = holder.itemView.context
-        holder.setText(searchHistory.query, DateFormat.format(context.getString(R.string.date_format), searchHistory.timestamp))
+        holder.setText(
+            searchHistory.query,
+            DateFormat.format(context.getString(R.string.date_format), searchHistory.timestamp)
+        )
         holder.itemView.setOnClickListener {
             try {
                 onClick(searchHistory)

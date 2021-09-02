@@ -12,6 +12,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.main.MainActivity
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,12 +24,14 @@ import kotlin.random.Random
  */
 class RandomWikipedia(
         private val wikipediaApi: WikipediaApi = WikipediaApi(),
-        private val urlDecider: UrlDecider = UrlDecider()
+        private val urlDecider: UrlDecider = UrlDecider(),
+        private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     fun fetchWithAction(titleAndLinkConsumer: (String, Uri) -> Unit) {
-        CoroutineScope(Dispatchers.Main).launch {
-            val title = withContext(Dispatchers.IO) {
+        CoroutineScope(mainDispatcher).launch {
+            val title = withContext(ioDispatcher) {
                 val titles = wikipediaApi.invoke()?.filter { it.ns == 0 } ?: return@withContext null
                 titles[Random.nextInt(titles.size)].title
             } ?: return@launch

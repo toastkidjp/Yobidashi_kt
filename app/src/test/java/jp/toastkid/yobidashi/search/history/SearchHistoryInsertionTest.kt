@@ -9,16 +9,19 @@
 package jp.toastkid.yobidashi.search.history
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -40,7 +43,7 @@ class SearchHistoryInsertionTest {
         mockkConstructor(DatabaseFinder::class)
         every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
         every { appDatabase.searchHistoryRepository() }.returns(repository)
-        coEvery { repository.insert(any()) }.answers { Unit }
+        coEvery { repository.insert(any()) }.just(Runs)
     }
 
     @After
@@ -53,7 +56,8 @@ class SearchHistoryInsertionTest {
         searchHistoryInsertion = SearchHistoryInsertion.make(
                 mockk(),
                 "test-category",
-                "test-query"
+                "test-query",
+            Dispatchers.Unconfined
         )
 
         searchHistoryInsertion.insert()
@@ -68,7 +72,8 @@ class SearchHistoryInsertionTest {
         searchHistoryInsertion = SearchHistoryInsertion.make(
                 mockk(),
                 "",
-                "test-query"
+                "test-query",
+            Dispatchers.Unconfined
         )
 
         searchHistoryInsertion.insert()
@@ -83,7 +88,8 @@ class SearchHistoryInsertionTest {
         searchHistoryInsertion = SearchHistoryInsertion.make(
                 mockk(),
                 "test-category",
-                ""
+                "",
+            Dispatchers.Unconfined
         )
 
         searchHistoryInsertion.insert()

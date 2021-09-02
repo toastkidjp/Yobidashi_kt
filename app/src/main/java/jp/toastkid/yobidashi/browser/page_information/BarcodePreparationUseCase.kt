@@ -18,6 +18,7 @@ import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageCache
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,14 +28,17 @@ import timber.log.Timber
 /**
  * @author toastkidjp
  */
-class BarcodePreparationUseCase {
+class BarcodePreparationUseCase(
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
 
     private val imageCache = ImageCache()
 
     operator fun invoke(contentView: View, url: String?) {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(mainDispatcher).launch {
             val imageView = contentView.findViewById<ImageView>(R.id.barcode)
-            val bitmap = withContext(Dispatchers.IO) {
+            val bitmap = withContext(ioDispatcher) {
                 BarcodeEncoder()
                         .encodeBitmap(url, BarcodeFormat.QR_CODE, BARCODE_SIZE, BARCODE_SIZE)
             }

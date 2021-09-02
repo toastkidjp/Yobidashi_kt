@@ -109,10 +109,13 @@ class BookmarkFragment : Fragment(), ContentScrollable {
 
         val menuPopup = MenuPopup(
                 activityContext,
-                BookmarkListMenuPopupActionUseCase(bookmarkRepository) {
-                    adapter.refresh()
-                    closeOnEmpty(bookmarkRepository, contentViewModel)
-                },
+                BookmarkListMenuPopupActionUseCase(
+                    bookmarkRepository,
+                    {
+                        adapter.refresh()
+                        closeOnEmpty(bookmarkRepository, contentViewModel)
+                    }
+                ),
                 false
         )
 

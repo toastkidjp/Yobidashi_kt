@@ -57,9 +57,12 @@ class UrlSuggestionModule(
         binding.urlSuggestions.adapter = adapter
         binding.module = this
         SwipeActionAttachment().invoke(binding.urlSuggestions)
-        queryUseCase = QueryUseCase(adapter, bookmarkRepository, viewHistoryRepository) {
-            if (it) show() else hide()
-        }
+        queryUseCase = QueryUseCase(
+            adapter,
+            bookmarkRepository,
+            viewHistoryRepository,
+            { if (it) show() else hide() }
+        )
     }
 
     private fun remove(item: UrlItem) {

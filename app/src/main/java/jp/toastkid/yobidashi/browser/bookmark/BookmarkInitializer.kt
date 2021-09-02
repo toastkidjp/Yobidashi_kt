@@ -7,6 +7,7 @@ import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,8 +21,10 @@ import java.util.Locale
  * @author toastkidjp
  */
 class BookmarkInitializer(
-        private val favicons: FilesDir,
-        private val databaseFinder: DatabaseFinder = DatabaseFinder()
+    private val favicons: FilesDir,
+    private val databaseFinder: DatabaseFinder = DatabaseFinder(),
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     /**
@@ -70,8 +73,8 @@ class BookmarkInitializer(
     operator fun invoke(context: Context, onComplete: () -> Unit = {}): Job {
         val bookmarkRepository = databaseFinder.invoke(context).bookmarkRepository()
 
-        return CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
+        return CoroutineScope(mainDispatcher).launch {
+            withContext(ioDispatcher) {
                 addBookmarks(bookmarkRepository, favicons)
             }
 

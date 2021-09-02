@@ -20,8 +20,6 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -52,19 +50,16 @@ class FavoriteSearchInsertionTest {
 
         mockkObject(Toaster)
         every { Toaster.tShort(any(), any<String>()) }.answers { Unit }
-
-        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
     fun tearDown() {
         unmockkAll()
-        Dispatchers.resetMain()
     }
 
     @Test
     fun testInvoke() {
-        favoriteSearchInsertion = FavoriteSearchInsertion(context, "category", "query")
+        favoriteSearchInsertion = FavoriteSearchInsertion(context, "category", "query", Dispatchers.Unconfined, Dispatchers.Unconfined)
         favoriteSearchInsertion.invoke()
 
         verify(exactly = 1) { context.getString(any(), any()) }

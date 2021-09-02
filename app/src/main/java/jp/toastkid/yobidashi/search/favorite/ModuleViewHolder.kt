@@ -29,6 +29,7 @@ internal class ModuleViewHolder(private val binding: ItemSearchHistoryBinding)
 
     init {
         binding.searchHistoryBookmark.visibility = View.GONE
+        binding.time.visibility = View.GONE
     }
 
     fun setText(text: String?) {

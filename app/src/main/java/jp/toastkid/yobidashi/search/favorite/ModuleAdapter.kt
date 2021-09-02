@@ -77,7 +77,7 @@ internal class ModuleAdapter(
         holder.setAddIcon(R.drawable.ic_add_circle_search)
         holder.setIconColor(IconColorFinder.from(holder.itemView).invoke())
 
-        holder.setImageRes(jp.toastkid.search.SearchCategory.findByCategory(favorite.category as String).iconId)
+        holder.setImageRes(jp.toastkid.search.SearchCategory.findByCategory(favorite.category).iconId)
         holder.itemView.setOnLongClickListener { v ->
             SearchAction(
                     v.context,

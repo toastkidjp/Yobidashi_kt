@@ -20,8 +20,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.rss.extractor.RssUrlValidator
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -37,6 +35,10 @@ class RssAddingSuggestionTest {
     @MockK
     private lateinit var rssUrlValidator: RssUrlValidator
 
+    private val mainDispatcher = Dispatchers.Unconfined
+
+    private val backgroundDispatcher = Dispatchers.Unconfined
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -44,15 +46,11 @@ class RssAddingSuggestionTest {
         mockkObject(Toaster)
         every { Toaster.snackLong(any(), any<Int>(), any(), any(), any()) }.answers { mockk() }
         every { preferenceApplier.colorPair() }.returns(mockk())
-
-        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
     fun tearDown() {
         unmockkAll()
-
-        Dispatchers.resetMain()
     }
 
     @Test

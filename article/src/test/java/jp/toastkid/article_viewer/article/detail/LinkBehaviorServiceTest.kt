@@ -2,11 +2,13 @@ package jp.toastkid.article_viewer.article.detail
 
 import android.net.Uri
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
@@ -14,8 +16,6 @@ import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -40,16 +40,21 @@ class LinkBehaviorServiceTest {
     @MockK
     private lateinit var internalLinkScheme: InternalLinkScheme
 
+    @Suppress("unused")
+    private val mainDispatcher = Dispatchers.Unconfined
+
+    @Suppress("unused")
+    private val ioDispatcher = Dispatchers.Unconfined
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        Dispatchers.setMain(Dispatchers.Unconfined)
 
-        every { browserViewModel.open(any()) }.answers { Unit }
+        every { browserViewModel.open(any()) }.just(Runs)
         every { internalLinkScheme.isInternalLink(any()) }.returns(true)
         every { internalLinkScheme.extract(any()) }.returns("yahoo")
-        coEvery { contentViewModel.newArticle(any()) }.answers { Unit }
-        coEvery { contentViewModel.snackShort(any<String>()) }.answers { Unit }
+        coEvery { contentViewModel.newArticle(any()) }.just(Runs)
+        coEvery { contentViewModel.snackShort(any<String>()) }.just(Runs)
     }
 
     @Test
@@ -104,7 +109,6 @@ class LinkBehaviorServiceTest {
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain()
         unmockkAll()
     }
 

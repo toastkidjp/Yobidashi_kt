@@ -12,14 +12,15 @@ import android.view.View
 import android.widget.ImageView
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -41,8 +42,8 @@ class BarcodePreparationUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
         coEvery { contentView.findViewById<ImageView>(any()) }.returns(imageView)
-        coEvery { imageView.setImageBitmap(any()) }.returns(Unit)
-        coEvery { imageView.setVisibility(any()) }.returns(Unit)
+        coEvery { imageView.setImageBitmap(any()) }.just(Runs)
+        coEvery { imageView.setVisibility(any()) }.just(Runs)
         coEvery { imageView.getContext() }.returns(mockk())
         coEvery { imageView.setOnClickListener(any()) }.returns(mockk())
 
@@ -50,14 +51,13 @@ class BarcodePreparationUseCaseTest {
         coEvery { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), any(), any(), any()) }
             .returns(mockk())
 
-        barcodePreparationUseCase = BarcodePreparationUseCase()
-
-        Dispatchers.setMain(Dispatchers.Unconfined)
+        barcodePreparationUseCase =
+            BarcodePreparationUseCase(Dispatchers.Unconfined, Dispatchers.Unconfined)
     }
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain()
+        unmockkAll()
     }
 
     @Test

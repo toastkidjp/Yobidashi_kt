@@ -52,7 +52,7 @@
                 <TextView
                     android:id="@+id/search_history_text"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     tools:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajyaaaaaaaaa"
                     android:layout_marginStart="8dp"
                     android:maxLines="3"
@@ -61,17 +61,21 @@
                     app:layout_constraintStart_toEndOf="@id/search_history_image"
                     app:layout_constraintEnd_toStartOf="@id/search_history_bookmark"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/time"
+                    app:layout_constraintVertical_weight="0.7"
                     />
                 <TextView
                     android:id="@+id/time"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:maxLines="1"
                     android:gravity="center_vertical"
                     android:textSize="12sp"
                     app:layout_constraintTop_toBottomOf="@id/search_history_text"
                     app:layout_constraintStart_toStartOf="@id/search_history_text"
-                    app:layout_constraintEnd_toEndOf="@id/search_history_text"
+                    app:layout_constraintEnd_toStartOf="@id/search_history_bookmark"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintVertical_weight="0.5"
                     tools:text="@string/sample_date_time"
                     />
                 <ImageView

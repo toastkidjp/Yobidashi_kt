@@ -2,16 +2,15 @@ package jp.toastkid.yobidashi.main.launch
 
 import android.net.Uri
 import io.mockk.MockKAnnotations
-import io.mockk.coEvery
-import io.mockk.coVerify
+import io.mockk.Runs
+import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -40,26 +39,19 @@ class RandomWikipediaUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        Dispatchers.setMain(Dispatchers.Unconfined)
-
-        coEvery { randomWikipedia.fetchWithAction(any()) }.answers { Unit }
-
-        coEvery { openNewWebTab.invoke(any()) }.answers { Unit }
-        coEvery { contentViewModel.snackShort(any<String>()) }.answers { Unit }
-        coEvery { stringFinder(any(), any()) }.answers { "test" }
+        every { randomWikipedia.fetchWithAction(any()) }.just(Runs)
     }
 
     @Test
     fun test() {
         randomWikipediaUseCase.invoke()
 
-        coVerify (exactly = 1) { randomWikipedia.fetchWithAction(any()) }
+        verify (exactly = 1) { randomWikipedia.fetchWithAction(any()) }
     }
 
     @After
     fun tearDown() {
         unmockkAll()
-        Dispatchers.resetMain()
     }
 
 }

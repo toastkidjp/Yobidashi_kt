@@ -10,6 +10,7 @@ package jp.toastkid.article_viewer.article.list
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,13 +20,16 @@ import kotlinx.coroutines.launch
 /**
  * @author toastkidjp
  */
-class ListLoaderUseCase(private val adapter: Adapter) {
+class ListLoaderUseCase(
+    private val adapter: Adapter,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
 
     private var lastJob: Job? = null
 
     operator fun invoke(pagingSourceFactory: () -> PagingSource<Int, SearchResult>) {
         lastJob?.cancel()
-        lastJob = CoroutineScope(Dispatchers.IO).launch {
+        lastJob = CoroutineScope(ioDispatcher).launch {
             Pager(
                     PagingConfig(pageSize = 10, enablePlaceholders = true),
                     pagingSourceFactory = pagingSourceFactory
