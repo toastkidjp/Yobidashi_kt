@@ -157,6 +157,17 @@ class MainActivity : AppCompatActivity(),
             tabListUseCase?.dismiss()
         }
 
+    private val requestPermissionForOpenPdfTab = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+        {
+            if (!it) {
+                return@registerForActivityResult
+            }
+
+            activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
+        }
+    )
+
     /**
      * Disposables.
      */
@@ -563,18 +574,7 @@ class MainActivity : AppCompatActivity(),
      * Open PDF from storage.
      */
     private fun openPdfTabFromStorage() {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            runtimePermissions
-                    ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    ?.receiveAsFlow()
-                    ?.collect { permission ->
-                        if (!permission.granted) {
-                            return@collect
-                        }
-
-                        activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
-                    }
-        }
+        requestPermissionForOpenPdfTab.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
     /**
@@ -741,6 +741,7 @@ class MainActivity : AppCompatActivity(),
         floatingPreview?.dispose()
         GlobalWebViewPool.dispose()
         activityResultLauncher?.unregister()
+        requestPermissionForOpenPdfTab.unregister()
         super.onDestroy()
     }
 
