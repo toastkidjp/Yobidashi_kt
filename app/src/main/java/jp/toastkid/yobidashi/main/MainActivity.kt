@@ -45,6 +45,7 @@ import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
+import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
@@ -73,7 +74,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -164,6 +164,16 @@ class MainActivity : AppCompatActivity(),
             }
 
             activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
+        }
+
+    private val requestPermissionForOpenEditorTab =
+        registerForActivityResult(WriteStoragePermissionRequestContract()) {
+            if (it.first.not()) {
+                return@registerForActivityResult
+            }
+
+            tabs.openNewEditorTab(it.second)
+            replaceToCurrentTab()
         }
 
     /**
@@ -579,19 +589,7 @@ class MainActivity : AppCompatActivity(),
      * Open Editor tab.
      */
     private fun openEditorTab(path: String? = null) {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            runtimePermissions
-                    ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    ?.receiveAsFlow()
-                    ?.collect { permission ->
-                        if (!permission.granted) {
-                            return@collect
-                        }
-
-                        tabs.openNewEditorTab(path)
-                        replaceToCurrentTab()
-                    }
-        }
+        requestPermissionForOpenEditorTab.launch(path)
     }
 
     /**
@@ -740,6 +738,7 @@ class MainActivity : AppCompatActivity(),
         GlobalWebViewPool.dispose()
         activityResultLauncher?.unregister()
         requestPermissionForOpenPdfTab.unregister()
+        requestPermissionForOpenEditorTab.unregister()
         super.onDestroy()
     }
 
