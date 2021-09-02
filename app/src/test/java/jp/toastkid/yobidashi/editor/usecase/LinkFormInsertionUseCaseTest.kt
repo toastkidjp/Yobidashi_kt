@@ -115,7 +115,7 @@ class LinkFormInsertionUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testClipIsEmptyCase() {
         every { Clipboard.getPrimary(any()) }.returns("")
 
         linkFormInsertionUseCase.invoke()
