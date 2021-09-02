@@ -158,15 +158,14 @@ class MainActivity : AppCompatActivity(),
         }
 
     private val requestPermissionForOpenPdfTab = registerForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-        {
-            if (!it) {
-                return@registerForActivityResult
-            }
-
-            activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
+        ActivityResultContracts.RequestPermission()
+    ) {
+        if (!it) {
+            return@registerForActivityResult
         }
-    )
+
+        activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
+    }
 
     /**
      * Disposables.
