@@ -19,8 +19,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.zxing.integration.android.IntentIntegrator
-import com.google.zxing.integration.android.IntentResult
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
@@ -48,7 +46,6 @@ import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -703,23 +700,6 @@ class MainActivity : AppCompatActivity(),
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK || data == null) {
             return
-        }
-        when (requestCode) {
-            IntentIntegrator.REQUEST_CODE -> {
-                val result: IntentResult? =
-                        IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-                if (result?.contents == null) {
-                    Toaster.snackShort(binding.content, "Cancelled", preferenceApplier.colorPair())
-                    return
-                }
-                Toaster.snackLong(
-                    binding.content,
-                    "Scanned: ${result.contents}",
-                    R.string.clip,
-                    { Clipboard.clip(this, result.contents) },
-                    preferenceApplier.colorPair()
-                )
-            }
         }
     }
 
