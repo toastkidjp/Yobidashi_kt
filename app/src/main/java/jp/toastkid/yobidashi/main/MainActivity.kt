@@ -696,13 +696,6 @@ class MainActivity : AppCompatActivity(),
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK || data == null) {
-            return
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         floatingPreview?.onPause()
