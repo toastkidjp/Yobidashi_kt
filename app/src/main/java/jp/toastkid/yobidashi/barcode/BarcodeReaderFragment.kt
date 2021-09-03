@@ -19,6 +19,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -30,7 +31,6 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.SourceData
 import com.journeyapps.barcodescanner.camera.PreviewCallback
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.view.DraggableTouchListener
@@ -40,9 +40,6 @@ import jp.toastkid.yobidashi.databinding.FragmentBarcodeReaderBinding
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.search.SearchAction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.FileOutputStream
 
@@ -71,6 +68,16 @@ class BarcodeReaderFragment : Fragment() {
     private lateinit var resultPopup: BarcodeReaderResultPopup
 
     private var contentViewModel: ContentViewModel? = null
+
+    private val permissionRequestLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it == true) {
+                invokeRequest()
+                return@registerForActivityResult
+            }
+
+            contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+        }
 
     /**
      * Required permission for this fragment(and function).
@@ -223,18 +230,7 @@ class BarcodeReaderFragment : Fragment() {
     }
 
     private fun camera() {
-        val activity = activity ?: return
-        CoroutineScope(Dispatchers.Main).launch {
-            val result =
-                    RuntimePermissions(activity).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    ?.receive()
-            if (result?.granted == true) {
-                invokeRequest()
-                return@launch
-            }
-
-            contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-        }
+        permissionRequestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     private fun invokeRequest() {
