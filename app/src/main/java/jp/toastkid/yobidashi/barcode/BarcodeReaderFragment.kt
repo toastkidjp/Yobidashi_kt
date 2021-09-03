@@ -308,6 +308,11 @@ class BarcodeReaderFragment : Fragment() {
         parentFragmentManager.popBackStack()
     }
 
+    override fun onDetach() {
+        permissionRequestLauncher.unregister()
+        super.onDetach()
+    }
+
     companion object {
 
         /**
