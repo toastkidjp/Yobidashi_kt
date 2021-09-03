@@ -25,7 +25,6 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
-import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.TabUiFragment
@@ -92,11 +91,6 @@ class MainActivity : AppCompatActivity(),
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
-
-    /**
-     * Runtime permission.
-     */
-    private var runtimePermissions: RuntimePermissions? = null
 
     private lateinit var tabs: TabAdapter
 
@@ -187,8 +181,6 @@ class MainActivity : AppCompatActivity(),
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
         setSupportActionBar(binding.toolbar)
-
-        runtimePermissions = RuntimePermissions(this)
 
         fragmentReplacingUseCase = FragmentReplacingUseCase(supportFragmentManager)
 
