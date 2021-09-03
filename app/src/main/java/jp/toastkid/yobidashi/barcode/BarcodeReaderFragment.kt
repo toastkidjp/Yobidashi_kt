@@ -69,6 +69,17 @@ class BarcodeReaderFragment : Fragment() {
 
     private var contentViewModel: ContentViewModel? = null
 
+    private val cameraPermissionRequestLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                startDecode()
+                return@registerForActivityResult
+            }
+
+            contentViewModel?.snackShort(R.string.message_requires_permission_camera)
+            parentFragmentManager.popBackStack()
+        }
+
     private val permissionRequestLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it == true) {
@@ -105,7 +116,7 @@ class BarcodeReaderFragment : Fragment() {
         binding?.fragment = this
 
         if (isNotGranted()) {
-            requestPermissions(arrayOf(permission), 1)
+            cameraPermissionRequestLauncher.launch(permission)
             return
         }
 
@@ -310,6 +321,7 @@ class BarcodeReaderFragment : Fragment() {
 
     override fun onDetach() {
         permissionRequestLauncher.unregister()
+        cameraPermissionRequestLauncher.unregister()
         super.onDetach()
     }
 
