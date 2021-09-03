@@ -11,11 +11,13 @@ package jp.toastkid.yobidashi.editor.permission
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 
 class WriteStoragePermissionRequestContract
-    : ActivityResultContract<String, Pair<Boolean, String?>>() {
+    : ActivityResultContract<String?, Pair<Boolean, String?>>() {
 
     private var filePath: String? = null
 
@@ -25,15 +27,15 @@ class WriteStoragePermissionRequestContract
         return Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
             .putExtra(
                 ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSIONS,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Pair<Boolean, String?> {
-        val granted = intent?.getBooleanExtra(
-            ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS,
-            false
-        ) ?: false
+        if (resultCode != AppCompatActivity.RESULT_OK) return false to filePath
+        val granted = intent
+            ?.getIntArrayExtra(ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
+            ?.getOrNull(0) == PackageManager.PERMISSION_GRANTED
         return granted to filePath
     }
 
