@@ -117,7 +117,6 @@ class BarcodeReaderFragment : Fragment() {
 
         if (isNotGranted()) {
             cameraPermissionRequestLauncher.launch(permission)
-            return
         }
 
         viewModel = ViewModelProvider(this).get(BarcodeReaderResultPopupViewModel::class.java)
@@ -149,9 +148,14 @@ class BarcodeReaderFragment : Fragment() {
         contentViewModel = activity?.let { ViewModelProvider(it).get(ContentViewModel::class.java) }
 
         initializeFab()
-        startDecode()
 
         setHasOptionsMenu(true)
+
+        if (isNotGranted()) {
+            return
+        }
+
+        startDecode()
     }
 
     /**
