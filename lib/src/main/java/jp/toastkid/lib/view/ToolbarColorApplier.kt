@@ -20,7 +20,7 @@ class ToolbarColorApplier {
 
     operator fun invoke(toolbar: Toolbar, colorPair: ColorPair) {
         toolbar.let {
-            it.setBackgroundColor(colorPair.bgColor())
+            it.backgroundTintList = ColorStateList.valueOf(colorPair.bgColor())
 
             val fontColor = colorPair.fontColor()
             it.setTitleTextColor(fontColor)
