@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.media.music.popup
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
@@ -33,21 +32,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.SlidingTapListener
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.media.music.MediaPlayerService
+import jp.toastkid.yobidashi.media.music.popup.permission.ReadStoragePermissionRequestContractWithParentView
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlaybackSpeedAdapter
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlayingSpeed
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -293,6 +287,22 @@ class MediaPlayerPopup(private val context: Context) {
         binding.header.setOnTouchListener(slidingTouchListener)
     }
 
+    private val permissionRequestLauncher = attemptExtractActivity()
+        ?.registerForActivityResult(ReadStoragePermissionRequestContractWithParentView()) {
+            if (it.first && !mediaBrowser.isConnected) {
+                mediaBrowser.connect()
+                return@registerForActivityResult
+            }
+
+            val view = it.second ?: return@registerForActivityResult
+            Toaster.snackShort(
+                view,
+                R.string.message_requires_permission_storage,
+                PreferenceApplier(binding.root.context).colorPair()
+            )
+            popupWindow.dismiss()
+        }
+
     fun show(parent: View) {
         if (popupWindow.isShowing) {
             hide()
@@ -301,25 +311,7 @@ class MediaPlayerPopup(private val context: Context) {
 
         popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, -600)
 
-        val attemptExtractActivity = attemptExtractActivity() ?: return
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            RuntimePermissions(attemptExtractActivity)
-                    .request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    ?.receiveAsFlow()
-                    ?.collect {
-                        if (it.granted && !mediaBrowser.isConnected) {
-                            mediaBrowser.connect()
-                            return@collect
-                        }
-
-                        Toaster.snackShort(
-                                parent,
-                                R.string.message_requires_permission_storage,
-                                PreferenceApplier(binding.root.context).colorPair()
-                        )
-                        popupWindow.dismiss()
-                    }
-        }
+        permissionRequestLauncher?.launch(parent)
     }
 
     private fun initializeViewModels() {
