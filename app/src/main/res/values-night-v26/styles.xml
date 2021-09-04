@@ -34,4 +34,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
+
 </resources>
