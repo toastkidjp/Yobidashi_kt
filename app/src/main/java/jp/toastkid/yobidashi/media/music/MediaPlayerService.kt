@@ -44,19 +44,9 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     private val mediaPlayer = MediaPlayer()
 
-    private val audioNoisyReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            mediaSession.controller.transportControls.pause()
-        }
-    }
+    private var audioNoisyReceiver: BroadcastReceiver? = null
 
-    private val playbackSpeedReceiver = object : BroadcastReceiver() {
-
-        override fun onReceive(context: Context, intent: Intent) {
-            val speed = intent.getFloatExtra(KEY_EXTRA_SPEED, 1f)
-            mediaPlayer.playbackParams = PlaybackParams().setSpeed(speed)
-        }
-    }
+    private var playbackSpeedReceiver: BroadcastReceiver? = null
 
     private val callback = object : MediaSessionCompat.Callback() {
         @PlaybackStateCompat.State
@@ -64,6 +54,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
         override fun onPlayFromUri(uri: Uri?, extras: Bundle?) {
             super.onPlayFromUri(uri, extras)
+            initializeReceiversIfNeed()
             registerReceiver(audioNoisyReceiver, audioNoisyFilter)
             registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
 
@@ -92,6 +83,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                 return
             }
 
+            initializeReceiversIfNeed()
             registerReceiver(audioNoisyReceiver, audioNoisyFilter)
             registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
 
@@ -104,9 +96,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         }
 
         override fun onPause() {
-            if (audioNoisyReceiver.isOrderedBroadcast) {
-                unregisterReceivers()
-            }
+            unregisterReceivers()
 
             mediaSession.isActive = false
             mediaPlayer.pause()
@@ -167,6 +157,24 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         }
     }
 
+    private fun initializeReceiversIfNeed() {
+        if (audioNoisyReceiver == null) {
+            audioNoisyReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context, intent: Intent) {
+                    mediaSession.controller.transportControls.pause()
+                }
+            }
+        }
+        if (playbackSpeedReceiver == null) {
+            playbackSpeedReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context, intent: Intent) {
+                    val speed = intent.getFloatExtra(KEY_EXTRA_SPEED, 1f)
+                    mediaPlayer.playbackParams = PlaybackParams().setSpeed(speed)
+                }
+            }
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
 
@@ -211,8 +219,12 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
     }
 
     private fun unregisterReceivers() {
-        unregisterReceiver(audioNoisyReceiver)
-        unregisterReceiver(playbackSpeedReceiver)
+        if (audioNoisyReceiver != null) {
+            unregisterReceiver(audioNoisyReceiver)
+        }
+        if (playbackSpeedReceiver != null) {
+            unregisterReceiver(playbackSpeedReceiver)
+        }
     }
 
     companion object {
