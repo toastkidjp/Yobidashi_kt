@@ -298,7 +298,7 @@ class MediaPlayerPopup(private val context: Context) {
             Toaster.snackShort(
                 view,
                 R.string.message_requires_permission_storage,
-                PreferenceApplier(binding.root.context).colorPair()
+                PreferenceApplier(view.context).colorPair()
             )
             popupWindow.dismiss()
         }
