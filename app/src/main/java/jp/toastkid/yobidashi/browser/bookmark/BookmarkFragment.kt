@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -34,8 +33,6 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okio.buffer
@@ -102,6 +99,18 @@ class BookmarkFragment: Fragment(),
             }
 
             getContentLauncher.launch(IntentFactory.makeGetContent("text/html"))
+        }
+
+    private val exportRequestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it.not()) {
+                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                return@registerForActivityResult
+            }
+
+            exportLauncher.launch(
+                IntentFactory.makeDocumentOnStorage("text/html", "bookmark.html")
+            )
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -263,22 +272,7 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.export_bookmark -> {
-                val activity = activity ?: return true
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    RuntimePermissions(activity)
-                            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            ?.receiveAsFlow()
-                            ?.collect { permissionResult ->
-                                if (!permissionResult.granted) {
-                                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                    return@collect
-                                }
-
-                                exportLauncher.launch(
-                                    IntentFactory.makeDocumentOnStorage("text/html", "bookmark.html")
-                                )
-                            }
-                }
+                exportRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -348,6 +342,7 @@ class BookmarkFragment: Fragment(),
         getContentLauncher.unregister()
         exportLauncher.unregister()
         importRequestPermissionLauncher.unregister()
+        exportRequestPermissionLauncher.unregister()
 
         parentFragmentManager.clearFragmentResultListener("clear_bookmark")
         parentFragmentManager.clearFragmentResultListener("import_default")
