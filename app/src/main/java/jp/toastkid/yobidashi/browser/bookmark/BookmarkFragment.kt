@@ -94,6 +94,16 @@ class BookmarkFragment: Fragment(),
         }
     )
 
+    private val importRequestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                return@registerForActivityResult
+            }
+
+            getContentLauncher.launch(IntentFactory.makeGetContent("text/html"))
+        }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
@@ -249,21 +259,7 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.import_bookmark -> {
-                val activity = activity ?: return true
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    RuntimePermissions(activity)
-                            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            ?.receiveAsFlow()
-                            ?.collect {
-                                permissionResult ->
-                                if (!permissionResult.granted) {
-                                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                    return@collect
-                                }
-
-                                getContentLauncher.launch(IntentFactory.makeGetContent("text/html"))
-                            }
-                }
+                importRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 true
             }
             R.id.export_bookmark -> {
@@ -351,6 +347,7 @@ class BookmarkFragment: Fragment(),
         disposables.cancel()
         getContentLauncher.unregister()
         exportLauncher.unregister()
+        importRequestPermissionLauncher.unregister()
 
         parentFragmentManager.clearFragmentResultListener("clear_bookmark")
         parentFragmentManager.clearFragmentResultListener("import_default")
