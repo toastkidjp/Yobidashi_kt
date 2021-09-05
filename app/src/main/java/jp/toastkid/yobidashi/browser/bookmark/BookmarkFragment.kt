@@ -176,7 +176,7 @@ class BookmarkFragment: Fragment(),
         parentFragmentManager.setFragmentResultListener(
             "import_default",
             viewLifecycleOwner,
-            { key, results ->
+            { _, _ ->
                 val currentContext = binding.root.context
                 BookmarkInitializer(
                     FaviconFolderProviderService().invoke(currentContext)
