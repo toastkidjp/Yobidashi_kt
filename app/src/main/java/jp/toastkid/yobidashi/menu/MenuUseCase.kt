@@ -97,9 +97,15 @@ class MenuUseCase(
                 nextFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
-                val parent = extractContentView() ?: return
-                mediaPlayerPopup.show(parent)
-                menuViewModel?.close()
+                (activitySupplier() as? MainActivity)?.requestPermissionForMediaPlayer {
+                    if (it.not()) {
+                        return@requestPermissionForMediaPlayer
+                    }
+
+                    val parent = extractContentView() ?: return@requestPermissionForMediaPlayer
+                    mediaPlayerPopup.show(parent)
+                    menuViewModel?.close()
+                }
             }
             Menu.BOOKMARK-> {
                 nextFragment(BookmarkFragment::class.java)

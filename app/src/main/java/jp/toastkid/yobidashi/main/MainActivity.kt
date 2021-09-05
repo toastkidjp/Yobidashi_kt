@@ -52,6 +52,7 @@ import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
 import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
 import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.main.usecase.BackgroundTabOpenerUseCase
+import jp.toastkid.yobidashi.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuSwitchColorApplier
 import jp.toastkid.yobidashi.menu.MenuUseCase
@@ -165,6 +166,11 @@ class MainActivity : AppCompatActivity(),
 
             tabs.openNewEditorTab(it.second)
             replaceToCurrentTab()
+        }
+
+    private val mediaPermissionRequestLauncher =
+        registerForActivityResult(ReadAudioPermissionRequestContract()) {
+            it.second?.invoke(it.first)
         }
 
     /**
@@ -346,6 +352,10 @@ class MainActivity : AppCompatActivity(),
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
         MenuUseCase({ this }, menuViewModel).observe()
+    }
+
+    fun requestPermissionForMediaPlayer(function: (Boolean) -> Unit) {
+        mediaPermissionRequestLauncher.launch(function)
     }
 
     private fun initializeContentViewModel() {
