@@ -19,10 +19,6 @@ import jp.toastkid.yobidashi.R
  */
 class DefaultBookmarkDialogFragment : DialogFragment() {
 
-    interface OnClickDefaultBookmarkCallback {
-        fun onClickAddDefaultBookmark()
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
