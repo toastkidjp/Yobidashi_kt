@@ -12,18 +12,17 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 
-class ReadStoragePermissionRequestContractWithParentView
-    : ActivityResultContract<View?, Pair<Boolean, View?>>() {
+class ReadAudioPermissionRequestContract
+    : ActivityResultContract<((Boolean) -> Unit)?, Pair<Boolean, ((Boolean) -> Unit)?>>() {
 
-    private var parent: View? = null
+    private var onResultCallback: ((Boolean) -> Unit)? = null
 
-    override fun createIntent(context: Context, input: View?): Intent {
-        parent = input
+    override fun createIntent(context: Context, input: ((Boolean) -> Unit)?): Intent {
+        onResultCallback = input
 
         return Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
             .putExtra(
@@ -32,12 +31,12 @@ class ReadStoragePermissionRequestContractWithParentView
             )
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): Pair<Boolean, View?> {
-        if (resultCode != AppCompatActivity.RESULT_OK) return false to parent
+    override fun parseResult(resultCode: Int, intent: Intent?): Pair<Boolean, ((Boolean) -> Unit)?> {
+        if (resultCode != AppCompatActivity.RESULT_OK) return false to onResultCallback
         val granted = intent
             ?.getIntArrayExtra(ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
             ?.getOrNull(0) == PackageManager.PERMISSION_GRANTED
-        return granted to parent
+        return granted to onResultCallback
     }
 
 }
