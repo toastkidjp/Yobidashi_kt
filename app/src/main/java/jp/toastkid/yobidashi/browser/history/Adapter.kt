@@ -68,7 +68,7 @@ internal class Adapter(
             ViewModelProvider(it).get(BrowserViewModel::class.java)
         }
 
-        holder.itemView.setOnLongClickListener { _ ->
+        holder.itemView.setOnLongClickListener {
             browserViewModel?.openBackground(viewHistory.title, Uri.parse(viewHistory.url))
             true
         }

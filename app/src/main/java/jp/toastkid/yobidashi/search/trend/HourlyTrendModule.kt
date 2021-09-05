@@ -105,7 +105,8 @@ class HourlyTrendModule(
 
     companion object {
 
-        private val fullContentUri = "https://trends.google.co.jp/trends/trendingsearches/realtime".toUri()
+        private val fullContentUri =
+            "https://trends.google.co.jp/trends/trendingsearches/realtime".toUri()
 
     }
 }

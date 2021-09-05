@@ -35,8 +35,10 @@ class RssAddingSuggestionTest {
     @MockK
     private lateinit var rssUrlValidator: RssUrlValidator
 
+    @Suppress("unused")
     private val mainDispatcher = Dispatchers.Unconfined
 
+    @Suppress("unused")
     private val backgroundDispatcher = Dispatchers.Unconfined
 
     @Before
