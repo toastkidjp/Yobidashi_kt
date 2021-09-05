@@ -44,7 +44,6 @@ import okio.sink
  * @author toastkidjp
  */
 class BookmarkFragment: Fragment(),
-        DefaultBookmarkDialogFragment.OnClickDefaultBookmarkCallback,
         CommonFragmentAction,
         ContentScrollable
 {
@@ -284,12 +283,6 @@ class BookmarkFragment: Fragment(),
             return true
         }
         return super.pressBack()
-    }
-
-    override fun onClickAddDefaultBookmark() {
-        val context = binding.root.context
-        BookmarkInitializer(FaviconFolderProviderService().invoke(context))(context) { adapter.showRoot() }
-        contentViewModel?.snackShort(R.string.done_addition)
     }
 
     override fun toTop() {
