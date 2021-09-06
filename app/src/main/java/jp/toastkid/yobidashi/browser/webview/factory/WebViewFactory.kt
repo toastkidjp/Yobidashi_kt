@@ -20,6 +20,8 @@ import android.webkit.WebView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
@@ -28,7 +30,6 @@ import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragm
 import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageAnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
-import jp.toastkid.yobidashi.libs.network.DownloadAction
 
 /**
  * [WebView] factory.
@@ -145,7 +146,9 @@ internal class WebViewFactory {
                     webView.context.startActivity(intent)
                 }
                 else -> {
-                    DownloadAction(context).invoke(url)
+                    (context as? FragmentActivity)?.let {
+                        ViewModelProvider(it).get(BrowserViewModel::class.java).download(url)
+                    }
                 }
             }
         }
