@@ -215,6 +215,9 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
     override fun onDestroy() {
         unregisterReceivers()
 
+        audioNoisyReceiver = null
+        playbackSpeedReceiver = null
+
         super.onDestroy()
     }
 
