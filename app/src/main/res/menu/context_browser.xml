@@ -22,4 +22,10 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_search"
         />
+    <item
+        android:id="@+id/count"
+        android:title="@string/title_count"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
 </menu>
