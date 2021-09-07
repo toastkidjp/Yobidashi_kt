@@ -205,7 +205,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     private fun countSelectedCharacters() {
         selectedTextExtractor.withAction(this) { word ->
-            val codePointCount = word.length
+            val codePointCount = word.codePointCount(1, word.length - 1)
             val message = context.getString(R.string.message_character_count, codePointCount)
             (context as? FragmentActivity)?.let {
                 ViewModelProvider(it).get(ContentViewModel::class.java).snackShort(message)
