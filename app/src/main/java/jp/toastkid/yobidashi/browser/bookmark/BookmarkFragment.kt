@@ -79,16 +79,15 @@ class BookmarkFragment: Fragment(),
     )
 
     private val exportLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-        {
-            if (it.data == null || it.resultCode != Activity.RESULT_OK) {
-                return@registerForActivityResult
-            }
-
-            val uri = it.data?.data ?: return@registerForActivityResult
-            exportBookmark(uri)
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.data == null || it.resultCode != Activity.RESULT_OK) {
+            return@registerForActivityResult
         }
-    )
+
+        val uri = it.data?.data ?: return@registerForActivityResult
+        exportBookmark(uri)
+    }
 
     private val importRequestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
