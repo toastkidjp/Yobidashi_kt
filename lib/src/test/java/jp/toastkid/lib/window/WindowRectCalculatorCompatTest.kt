@@ -70,7 +70,7 @@ class WindowRectCalculatorCompatTest {
     }
 
     @Test
-    fun test() {
+    fun testUnderR() {
         windowRectCalculatorCompat.invoke(activity, 29)
 
         verify(exactly = 1) { activity.windowManager }
