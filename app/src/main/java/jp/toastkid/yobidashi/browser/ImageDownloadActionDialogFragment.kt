@@ -14,11 +14,12 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import coil.load
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 
 /**
@@ -54,7 +55,9 @@ class ImageDownloadActionDialogFragment : DialogFragment() {
                 .setView(contentView)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    DownloadAction(activityContext)(url)
+                    activity?.let {
+                        ViewModelProvider(it).get(BrowserViewModel::class.java).download(url)
+                    }
                     d.dismiss()
                 }
                 .create()
