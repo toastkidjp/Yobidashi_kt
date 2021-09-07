@@ -69,4 +69,15 @@ class WindowRectCalculatorCompatTest {
         verify(exactly = 0) { defaultDisplay.getRectSize(any()) }
     }
 
+    @Test
+    fun test() {
+        windowRectCalculatorCompat.invoke(activity, 29)
+
+        verify(exactly = 1) { activity.windowManager }
+        verify(exactly = 0) { windowManager.currentWindowMetrics }
+        verify(exactly = 0) { windowMetrics.bounds }
+        verify(exactly = 1) { windowManager.defaultDisplay }
+        verify(exactly = 1) { defaultDisplay.getRectSize(any()) }
+    }
+
 }
