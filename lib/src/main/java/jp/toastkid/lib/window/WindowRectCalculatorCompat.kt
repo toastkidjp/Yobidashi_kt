@@ -11,12 +11,14 @@ package jp.toastkid.lib.window
 import android.app.Activity
 import android.graphics.Rect
 import android.os.Build
+import androidx.annotation.RequiresApi
 
 class WindowRectCalculatorCompat {
 
+    @RequiresApi(Build.VERSION_CODES.R)
     @Suppress("DEPRECATION")
-    operator fun invoke(activity: Activity?): Rect? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    operator fun invoke(activity: Activity?, sdkVersion: Int = Build.VERSION.SDK_INT): Rect? {
+        return if (sdkVersion >= Build.VERSION_CODES.R) {
             activity?.windowManager?.currentWindowMetrics?.bounds
         } else {
             val rect = Rect()
