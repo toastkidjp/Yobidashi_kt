@@ -37,7 +37,6 @@ class MenuActionInvokerUseCase(
     private val listHeadAdder: ListHeadAdder = ListHeadAdder()
 ) {
 
-    //         val text = extractSelectedText(editText)
     operator fun invoke(
         itemId: Int,
         text: String
