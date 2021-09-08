@@ -37,10 +37,7 @@ class MenuActionInvokerUseCase(
     private val listHeadAdder: ListHeadAdder = ListHeadAdder()
 ) {
 
-    operator fun invoke(
-        itemId: Int,
-        text: String
-    ): Boolean {
+    operator fun invoke(itemId: Int, text: String): Boolean {
         val context = editText.context
 
         when (itemId) {
