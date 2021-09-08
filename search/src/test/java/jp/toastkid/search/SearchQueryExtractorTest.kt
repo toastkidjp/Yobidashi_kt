@@ -72,7 +72,7 @@ class SearchQueryExtractorTest {
         "curry" to "http://search.sify.com/search.php?q=curry&cx=partner-pub-0910144482339723:8",
         "Intent" to "https://developer.android.com/s/results?q=Intent",
         "ramen" to "https://www.ebay.com/sch/i.html?_nkw=ramen",
-        "voo" to "https://forbes.com/search?q=voo"
+        "voo" to "https://www.forbes.com/search?q=voo"
     )
 
     @Before
