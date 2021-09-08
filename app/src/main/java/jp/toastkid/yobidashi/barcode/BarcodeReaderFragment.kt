@@ -81,7 +81,7 @@ class BarcodeReaderFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-    private val permissionRequestLauncher =
+    private val storagePermissionRequestLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it == true) {
                 invokeRequest()
@@ -246,7 +246,7 @@ class BarcodeReaderFragment : Fragment() {
     }
 
     private fun camera() {
-        permissionRequestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        storagePermissionRequestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     private fun invokeRequest() {
@@ -308,7 +308,7 @@ class BarcodeReaderFragment : Fragment() {
     }
 
     override fun onDetach() {
-        permissionRequestLauncher.unregister()
+        storagePermissionRequestLauncher.unregister()
         cameraPermissionRequestLauncher.unregister()
         super.onDetach()
     }
