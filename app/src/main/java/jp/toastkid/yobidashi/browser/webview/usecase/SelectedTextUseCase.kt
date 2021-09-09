@@ -60,8 +60,8 @@ class SelectedTextUseCase(
                 val viewModelProvider = ViewModelProvider(activity)
                 return SelectedTextUseCase(
                     stringResolver = { resource, additional -> context.getString(resource, additional) },
-                        contentViewModel = viewModelProvider.get(ContentViewModel::class.java),
-                        browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
+                    contentViewModel = viewModelProvider.get(ContentViewModel::class.java),
+                    browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
                 )
             }
         }
