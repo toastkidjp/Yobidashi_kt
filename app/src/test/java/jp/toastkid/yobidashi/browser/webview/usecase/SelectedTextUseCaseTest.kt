@@ -28,6 +28,9 @@ class SelectedTextUseCaseTest {
     private lateinit var selectedTextUseCase: SelectedTextUseCase
 
     @MockK
+    private lateinit var stringResolver: (Int, Any) -> String
+
+    @MockK
     private lateinit var urlFactory: UrlFactory
 
     @MockK
