@@ -211,6 +211,7 @@
     <string name="message_cannot_draw_overlay">If you want to use color filter, you should permit overlay.</string>
     <string name="message_enable_color_filter">It has be enabled to display color filter.</string>
     <string name="message_stop_color_filter">It has turn off color filter.</string>
+    <string name="content_description_alpha">This slider modify alpha for display color filter.</string>
     <string name="title_color_filter">Overlay Color Filter</string>
     <string name="title_clear_form_data">Clear form data</string>
     <string name="title_voice_search">Voice Search</string>

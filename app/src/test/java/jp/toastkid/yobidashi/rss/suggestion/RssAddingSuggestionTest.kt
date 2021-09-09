@@ -56,7 +56,7 @@ class RssAddingSuggestionTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         every { rssUrlValidator.invoke(any()) }.returns(true)
         every { preferenceApplier.containsRssTarget(any()) }.returns(false)
 
@@ -66,6 +66,32 @@ class RssAddingSuggestionTest {
         verify(exactly = 1) { preferenceApplier.containsRssTarget(any()) }
         verify(exactly = 1) { Toaster.snackLong(any(), any<Int>(), any(), any(), any()) }
         verify(exactly = 1) { preferenceApplier.colorPair() }
+    }
+
+    @Test
+    fun testValidatorReturnsFalseCase() {
+        every { rssUrlValidator.invoke(any()) }.returns(false)
+        every { preferenceApplier.containsRssTarget(any()) }.returns(false)
+
+        rssAddingSuggestion.invoke(mockk(), "https://www.yahoo.co.jp")
+
+        verify(exactly = 1) { rssUrlValidator.invoke(any()) }
+        verify(exactly = 0) { preferenceApplier.containsRssTarget(any()) }
+        verify(exactly = 0) { Toaster.snackLong(any(), any<Int>(), any(), any(), any()) }
+        verify(exactly = 0) { preferenceApplier.colorPair() }
+    }
+
+    @Test
+    fun testContainsRssTargetReturnsTrueCase() {
+        every { rssUrlValidator.invoke(any()) }.returns(true)
+        every { preferenceApplier.containsRssTarget(any()) }.returns(true)
+
+        rssAddingSuggestion.invoke(mockk(), "https://www.yahoo.co.jp")
+
+        verify(exactly = 1) { rssUrlValidator.invoke(any()) }
+        verify(exactly = 1) { preferenceApplier.containsRssTarget(any()) }
+        verify(exactly = 0) { Toaster.snackLong(any(), any<Int>(), any(), any(), any()) }
+        verify(exactly = 0) { preferenceApplier.colorPair() }
     }
 
 }
