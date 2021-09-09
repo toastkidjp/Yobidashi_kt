@@ -54,6 +54,20 @@ class SelectedTextUseCaseTest {
     }
 
     @Test
+    fun countCharacters() {
+        every { stringResolver.invoke(any(), any()) }.returns("Count: 4")
+        every { contentViewModel.snackShort(any<String>()) }.answers { Unit }
+
+        selectedTextUseCase.countCharacters("\"test\"")
+
+        verify(exactly = 1) { contentViewModel.snackShort(any<String>()) }
+        verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 0) { browserViewModel.open(any()) }
+        verify(exactly = 0) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { urlFactory.invoke(any(), any()) }
+    }
+
+    @Test
     fun search() {
         selectedTextUseCase.search("test", "test")
 
