@@ -9,9 +9,11 @@
 package jp.toastkid.yobidashi.browser.webview.usecase
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -56,7 +58,7 @@ class SelectedTextUseCaseTest {
     @Test
     fun countCharacters() {
         every { stringResolver.invoke(any(), any()) }.returns("Count: 4")
-        every { contentViewModel.snackShort(any<String>()) }.answers { Unit }
+        every { contentViewModel.snackShort(any<String>()) }.just(Runs)
 
         selectedTextUseCase.countCharacters("\"test\"")
 
