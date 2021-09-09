@@ -58,6 +58,7 @@ class WindowRectCalculatorCompatTest {
         unmockkAll()
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun testRAndOver() {
         windowRectCalculatorCompat.invoke(activity, 30)
