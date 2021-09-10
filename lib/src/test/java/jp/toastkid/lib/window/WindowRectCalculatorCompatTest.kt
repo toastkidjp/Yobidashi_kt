@@ -70,6 +70,7 @@ class WindowRectCalculatorCompatTest {
         verify(exactly = 0) { defaultDisplay.getRectSize(any()) }
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun testUnderR() {
         windowRectCalculatorCompat.invoke(activity, 29)
