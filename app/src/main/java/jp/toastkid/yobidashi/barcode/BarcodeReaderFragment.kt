@@ -83,7 +83,7 @@ class BarcodeReaderFragment : Fragment() {
 
     private val storagePermissionRequestLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it == true) {
+            if (it) {
                 invokeRequest()
                 return@registerForActivityResult
             }
