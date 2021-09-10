@@ -44,6 +44,8 @@ class SelectedTextUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+        every { stringResolver.invoke(any(), any()) }.returns("Count: 4")
+        every { contentViewModel.snackShort(any<String>()) }.just(Runs)
         every { contentViewModel.snackShort(any<Int>()) }.answers { Unit }
         every { browserViewModel.open(any()) }.answers { Unit }
         every { browserViewModel.preview(any()) }.answers { Unit }
@@ -57,9 +59,6 @@ class SelectedTextUseCaseTest {
 
     @Test
     fun countCharacters() {
-        every { stringResolver.invoke(any(), any()) }.returns("Count: 4")
-        every { contentViewModel.snackShort(any<String>()) }.just(Runs)
-
         selectedTextUseCase.countCharacters("\"test\"")
 
         verify(exactly = 1) { contentViewModel.snackShort(any<String>()) }
