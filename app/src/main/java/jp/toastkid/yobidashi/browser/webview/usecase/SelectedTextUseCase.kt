@@ -55,8 +55,8 @@ class SelectedTextUseCase(
 
     companion object {
 
-        fun make(context: Context?): SelectedTextUseCase? {
-            return (context as? FragmentActivity)?.let { activity ->
+        fun make(context: Context?): SelectedTextUseCase? =
+            (context as? FragmentActivity)?.let { activity ->
                 val viewModelProvider = ViewModelProvider(activity)
                 return SelectedTextUseCase(
                     stringResolver = { resource, additional -> context.getString(resource, additional) },
@@ -64,7 +64,6 @@ class SelectedTextUseCase(
                     browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
                 )
             }
-        }
 
     }
 
