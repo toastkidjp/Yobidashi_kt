@@ -13,9 +13,6 @@ import androidx.core.net.toUri
 import androidx.core.view.NestedScrollingChild3
 import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.webview.usecase.SelectedTextUseCase
@@ -205,11 +202,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     private fun countSelectedCharacters() {
         selectedTextExtractor.withAction(this) { word ->
-            val codePointCount = word.codePointCount(1, word.length - 1)
-            val message = context.getString(R.string.message_character_count, codePointCount)
-            (context as? FragmentActivity)?.let {
-                ViewModelProvider(it).get(ContentViewModel::class.java).snackShort(message)
-            }
+            SelectedTextUseCase.make(context)?.countCharacters(word)
         }
     }
 
