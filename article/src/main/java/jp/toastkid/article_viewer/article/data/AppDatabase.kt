@@ -8,6 +8,7 @@
 package jp.toastkid.article_viewer.article.data
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -28,14 +29,30 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun bookmarkRepository(): BookmarkRepository
 
     companion object {
+
+        private var instance: AppDatabase? = null
+
         fun find(activityContext: Context): AppDatabase {
-            return Room.databaseBuilder(
-                    activityContext.applicationContext,
-                    AppDatabase::class.java,
-                    "article_db"
-            )
-                    .fallbackToDestructiveMigration()
-                    .build()
+            instance = synchronized(this) {
+                if (instance != null) instance
+                else makeAppDatabase(activityContext)
+            }
+
+            return instance ?: makeAppDatabase(activityContext)
         }
+
+        private fun makeAppDatabase(activityContext: Context) = Room.databaseBuilder(
+            activityContext.applicationContext,
+            AppDatabase::class.java,
+            "article_db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+
+        @VisibleForTesting
+        fun clearInstance() {
+            instance = null
+        }
+
     }
 }

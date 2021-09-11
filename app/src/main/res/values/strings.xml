@@ -15,6 +15,7 @@
     <string name="share">Share</string>
     <string name="select">Select</string>
     <string name="check_all">Check all</string>
+    <string name="edit">Edit</string>
 
     <string name="title_search_action">Search</string>
     <string name="action_settings">Settings</string>
@@ -478,5 +479,6 @@
 
     <string name="message_clipping_url_open">Would you like to open "%s"?</string>
     <string name="hourly_trends">Hourly trends</string>
+    <string name="sample_text_color_filter">A</string>
 
 </resources>

@@ -50,6 +50,7 @@ class DatabaseFinderTest {
     @After
     fun tearDown() {
         unmockkAll()
+        DatabaseFinder.clearInstance()
     }
 
     @Test
