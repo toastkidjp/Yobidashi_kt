@@ -17,14 +17,13 @@ class WindowRectCalculatorCompat {
 
     @TargetApi(Build.VERSION_CODES.R)
     @Suppress("DEPRECATION")
-    operator fun invoke(activity: Activity?, sdkVersion: Int = Build.VERSION.SDK_INT): Rect? {
-        return if (sdkVersion >= Build.VERSION_CODES.R) {
+    operator fun invoke(activity: Activity?, sdkVersion: Int = Build.VERSION.SDK_INT): Rect? =
+        if (sdkVersion >= Build.VERSION_CODES.R) {
             activity?.windowManager?.currentWindowMetrics?.bounds
         } else {
             val rect = Rect()
             activity?.windowManager?.defaultDisplay?.getRectSize(rect)
             rect
         }
-    }
 
 }
