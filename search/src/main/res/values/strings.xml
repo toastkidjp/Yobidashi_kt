@@ -27,6 +27,7 @@
     <string name="search_category_yahoo_japan">Yahoo! JAPAN</string>
     <string name="search_category_ask_com">Ask.com</string>
     <string name="google">Google</string>
+    <string name="google_news">Google News</string>
     <string name="bing">Bing</string>
     <string name="yelp">Yelp</string>
     <string name="gutenberg">Gutenberg</string>
