@@ -46,6 +46,9 @@ buildscript {
             mockk: '1.10.6',
             coroutines_test: '1.5.1'
     ]
+    ext.pluginVersions = [
+            jacoco: '0.8.7'
+    ]
 }
 
 plugins {
@@ -56,7 +59,7 @@ plugins {
 apply plugin: "jacoco"
 
 jacoco {
-    toolVersion = "0.8.7"
+    toolVersion = pluginVersions.jacoco
 }
 
 allprojects {
