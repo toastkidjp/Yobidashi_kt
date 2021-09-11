@@ -41,7 +41,7 @@ android {
 }
 
 jacoco {
-    toolVersion = "0.8.5"
+    toolVersion = pluginVersions.jacoco
 }
 
 dependencies {
