@@ -127,8 +127,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 progressBroadcastReceiver,
                 ZipLoaderService.makeProgressBroadcastIntentFilter()
         )
-
-        retainInstance = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
