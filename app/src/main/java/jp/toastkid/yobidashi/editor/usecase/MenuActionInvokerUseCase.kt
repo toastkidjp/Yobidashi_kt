@@ -104,6 +104,10 @@ class MenuActionInvokerUseCase(
                 StringSurroundingUseCase()(editText, '"')
                 return true
             }
+            R.id.context_edit_strikethrough -> {
+                StringSurroundingUseCase()(editText, "~~")
+                return true
+            }
             R.id.context_edit_url_open_new -> {
                 browserViewModel?.open(text.toUri())
                 return true
