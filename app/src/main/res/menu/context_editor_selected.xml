@@ -38,6 +38,12 @@
         app:showAsAction="always"
         />
     <item
+        android:id="@+id/context_edit_bold"
+        android:title="@string/title_context_editor_strikethrough"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+    <item
         android:id="@+id/context_edit_strikethrough"
         android:title="@string/title_context_editor_strikethrough"
         android:orderInCategory="100"

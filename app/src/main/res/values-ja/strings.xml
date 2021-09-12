@@ -431,6 +431,7 @@
     <string name="title_context_editor_convert_to_table">テーブルに変換</string>
     <string name="title_context_editor_add_quote">引用符</string>
     <string name="title_context_editor_double_quote">ダブルクォート</string>
+    <string name="title_context_editor_bold">太字</string>
     <string name="title_context_editor_strikethrough">取り消し線</string>
     <string name="title_context_editor_set_default_search_category">デフォルトの検索種別</string>
     <string name="title_reset_camera_button_position">カメラボタンの位置を戻す</string>

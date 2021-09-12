@@ -104,6 +104,10 @@ class MenuActionInvokerUseCase(
                 StringSurroundingUseCase()(editText, '"')
                 return true
             }
+            R.id.context_edit_bold -> {
+                StringSurroundingUseCase()(editText, "**")
+                return true
+            }
             R.id.context_edit_strikethrough -> {
                 StringSurroundingUseCase()(editText, "~~")
                 return true
