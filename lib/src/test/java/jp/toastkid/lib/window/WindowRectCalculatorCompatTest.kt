@@ -42,6 +42,7 @@ class WindowRectCalculatorCompatTest {
     @MockK
     private lateinit var defaultDisplay: Display
 
+    @Suppress("DEPRECATION")
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
