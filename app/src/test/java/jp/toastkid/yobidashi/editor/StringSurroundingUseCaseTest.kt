@@ -5,6 +5,7 @@ import android.widget.EditText
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Before
@@ -18,6 +19,12 @@ class StringSurroundingUseCaseTest {
     @InjectMockKs
     private lateinit var useCase: StringSurroundingUseCase
 
+    @MockK
+    private lateinit var text: Editable
+
+    @MockK
+    private lateinit var editText: EditText
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -25,11 +32,9 @@ class StringSurroundingUseCaseTest {
 
     @Test
     fun testInvoke() {
-        val text = mockk<Editable>()
         every { text.subSequence(any(), any()) }.returns("tomato")
         every { text.replace(any(), any(), any<String>()) }.returns(mockk())
 
-        val editText = mockk<EditText>()
         every { editText.text }.returns(text)
         every { editText.selectionStart }.returns(2)
         every { editText.selectionEnd }.returns(3)
@@ -41,11 +46,9 @@ class StringSurroundingUseCaseTest {
 
     @Test
     fun test() {
-        val text = mockk<Editable>()
         every { text.subSequence(any(), any()) }.returns("tomato")
         every { text.replace(any(), any(), any<String>()) }.returns(mockk())
 
-        val editText = mockk<EditText>()
         every { editText.text }.returns(text)
         every { editText.selectionStart }.returns(2)
         every { editText.selectionEnd }.returns(3)
