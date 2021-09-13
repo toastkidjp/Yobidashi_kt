@@ -39,7 +39,7 @@ class CurrentLineSelectionUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { editText.getSelectionStart() }.returns(2)
+        every { editText.selectionStart }.returns(2)
         every { editText.layout }.returns(layout)
         every { editText.post(any()) }.returns(true)
 
