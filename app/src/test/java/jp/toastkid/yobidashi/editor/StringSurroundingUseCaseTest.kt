@@ -30,6 +30,13 @@ class StringSurroundingUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+
+        every { text.subSequence(any(), any()) }.returns("tomato")
+        every { text.replace(any(), any(), any<String>()) }.returns(mockk())
+
+        every { editText.text }.returns(text)
+        every { editText.selectionStart }.returns(2)
+        every { editText.selectionEnd }.returns(3)
     }
 
     @After
@@ -39,13 +46,6 @@ class StringSurroundingUseCaseTest {
 
     @Test
     fun testInvoke() {
-        every { text.subSequence(any(), any()) }.returns("tomato")
-        every { text.replace(any(), any(), any<String>()) }.returns(mockk())
-
-        every { editText.text }.returns(text)
-        every { editText.selectionStart }.returns(2)
-        every { editText.selectionEnd }.returns(3)
-
         useCase.invoke(editText, '"')
 
         verify(atLeast = 1) { text.replace(2, 3, any<String>()) }
@@ -53,13 +53,6 @@ class StringSurroundingUseCaseTest {
 
     @Test
     fun test() {
-        every { text.subSequence(any(), any()) }.returns("tomato")
-        every { text.replace(any(), any(), any<String>()) }.returns(mockk())
-
-        every { editText.text }.returns(text)
-        every { editText.selectionStart }.returns(2)
-        every { editText.selectionEnd }.returns(3)
-
         useCase.invoke(editText, "~~")
 
         verify(atLeast = 1) { text.replace(2, 3, any<String>()) }
