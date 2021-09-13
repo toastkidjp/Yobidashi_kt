@@ -7,7 +7,9 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -28,6 +30,11 @@ class StringSurroundingUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test
