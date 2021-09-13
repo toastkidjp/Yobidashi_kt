@@ -105,8 +105,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
         override fun onPause() {
             if (audioNoisyReceiver.isOrderedBroadcast) {
-                unregisterReceiver(audioNoisyReceiver)
-                unregisterReceiver(playbackSpeedReceiver)
+                unregisterReceivers()
             }
 
             mediaSession.isActive = false
@@ -120,8 +119,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         override fun onStop() {
             super.onStop()
             try {
-                unregisterReceiver(audioNoisyReceiver)
-                unregisterReceiver(playbackSpeedReceiver)
+                unregisterReceivers()
             } catch (e: IllegalArgumentException) {
                 Timber.w(e)
             }
@@ -206,6 +204,17 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         )
     }
 
+    override fun onDestroy() {
+        unregisterReceivers()
+
+        super.onDestroy()
+    }
+
+    private fun unregisterReceivers() {
+        unregisterReceiver(audioNoisyReceiver)
+        unregisterReceiver(playbackSpeedReceiver)
+    }
+
     companion object {
         private val audioNoisyFilter = IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
 
@@ -234,10 +243,4 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                         .also { it.putExtra(KEY_EXTRA_SPEED, speed) }
     }
 
-    override fun onDestroy() {
-        unregisterReceiver(audioNoisyReceiver)
-        unregisterReceiver(playbackSpeedReceiver)
-
-        super.onDestroy()
-    }
 }

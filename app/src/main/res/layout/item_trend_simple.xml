@@ -44,7 +44,7 @@
             android:text="@string/plus"
             android:textSize="20dp"
             android:textColor="@color/white"
-            android:background="@color/search_add_background"
+            android:background="@color/pre4_ripple"
             tools:ignore="SpUsage"
             />
     </androidx.cardview.widget.CardView>

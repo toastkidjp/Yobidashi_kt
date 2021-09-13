@@ -50,8 +50,10 @@ class RssUrlFinderTest {
     @MockK
     private lateinit var htmlApi: HtmlApi
 
+    @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
+    @Suppress("unused")
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     @SpyK(recordPrivateCalls = true)
@@ -84,7 +86,7 @@ class RssUrlFinderTest {
     }
 
     @Test
-    fun invoke() {
+    fun testSuccessfulCase() {
         rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
 
         verify(exactly = 1) { preferenceApplier.colorPair() }
@@ -96,8 +98,82 @@ class RssUrlFinderTest {
         coVerify(exactly = 1) { response getProperty "body" }
         coVerify(exactly = 1) { body.string() }
 
-        mockkObject(Toaster)
+        verify(exactly = 1) { Toaster.snackShort(any(), any<Int>(), any()) }
+        verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
+    }
+
+    @Test
+    fun testBlankInputCase() {
+        rssUrlFinder.invoke(" ") { mockk() }
+
+        verify(exactly = 0) { preferenceApplier.colorPair() }
+        verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
+        verify(exactly = 0) { urlValidator.invoke(any()) }
+        coVerify(exactly = 0) { htmlApi.invoke(any()) }
+        coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
+        coVerify(exactly = 0) { response getProperty "isSuccessful" }
+        coVerify(exactly = 0) { response getProperty "body" }
+        coVerify(exactly = 0) { body.string() }
+
         verify(exactly = 0) { Toaster.snackShort(any(), any<Int>(), any()) }
+        verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
+    }
+
+    @Test
+    fun testInputUrlIsValidCase() {
+        every { urlValidator.invoke(any()) }.returns(true)
+
+        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
+
+        verify(exactly = 1) { preferenceApplier.colorPair() }
+        verify(exactly = 1) { preferenceApplier.saveNewRssReaderTargets(any()) }
+        verify(exactly = 1) { urlValidator.invoke(any()) }
+        coVerify(exactly = 0) { htmlApi.invoke(any()) }
+        coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
+        coVerify(exactly = 0) { response getProperty "isSuccessful" }
+        coVerify(exactly = 0) { response getProperty "body" }
+        coVerify(exactly = 0) { body.string() }
+
+        verify(exactly = 0) { Toaster.snackShort(any(), any<Int>(), any()) }
+        verify(exactly = 1) { Toaster.snackShort(any(), any<String>(), any()) }
+    }
+
+
+    @Test
+    fun testHtmlApiReturnsNullCase() {
+        coEvery { htmlApi.invoke(any()) }.returns(null)
+
+        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
+
+        verify(exactly = 1) { preferenceApplier.colorPair() }
+        verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
+        verify(exactly = 1) { urlValidator.invoke(any()) }
+        coVerify(exactly = 1) { htmlApi.invoke(any()) }
+        coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
+        coVerify(exactly = 0) { response getProperty "isSuccessful" }
+        coVerify(exactly = 0) { response getProperty "body" }
+        coVerify(exactly = 0) { body.string() }
+
+        verify(exactly = 1) { Toaster.snackShort(any(), any<Int>(), any()) }
+        verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
+    }
+
+    @Test
+    fun testIsNotSuccessfulCase() {
+        coEvery { response getProperty "isSuccessful" }.returns(false)
+
+        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
+
+        verify(exactly = 1) { preferenceApplier.colorPair() }
+        verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
+        verify(exactly = 1) { urlValidator.invoke(any()) }
+        coVerify(exactly = 1) { htmlApi.invoke(any()) }
+        coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
+        coVerify(exactly = 1) { response getProperty "isSuccessful" }
+        coVerify(exactly = 0) { response getProperty "body" }
+        coVerify(exactly = 0) { body.string() }
+
+        verify(exactly = 1) { Toaster.snackShort(any(), any<Int>(), any()) }
         verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
     }
 
