@@ -52,7 +52,7 @@ class StringSurroundingUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testStringCase() {
         useCase.invoke(editText, "~~")
 
         verify(atLeast = 1) { text.replace(2, 3, any<String>()) }
