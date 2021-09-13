@@ -31,6 +31,14 @@
         />
 
     <item
+        android:id="@+id/context_edit_select_current_line"
+        android:title="@string/select_current_line"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"
+        />
+
+    <item
         android:id="@+id/context_edit_horizontal_rule"
         android:title="@string/horizontal_rule"
         android:orderInCategory="100"
