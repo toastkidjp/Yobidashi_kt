@@ -68,7 +68,7 @@ class CurrentLineSelectionUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testStartUnderZero() {
         every { layout.getLineStart(any()) }.returns(-1)
 
         currentLineSelectionUseCase.invoke(editText)
