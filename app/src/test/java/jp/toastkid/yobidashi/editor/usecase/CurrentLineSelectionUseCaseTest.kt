@@ -57,7 +57,7 @@ class CurrentLineSelectionUseCaseTest {
     fun testInvoke() {
         currentLineSelectionUseCase.invoke(editText)
 
-        verify(exactly = 1) { editText.getSelectionStart() }
+        verify(exactly = 1) { editText.selectionStart }
         verify(atLeast = 1) { editText.layout }
 
         verify(exactly = 1) { layout.getLineForOffset(any()) }
