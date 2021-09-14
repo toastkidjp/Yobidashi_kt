@@ -83,4 +83,20 @@ class CurrentLineSelectionUseCaseTest {
         verify(exactly = 0) { editText.post(any()) }
     }
 
+    @Test
+    fun test() {
+        every { layout.getLineEnd(any()) }.returns(-1)
+
+        currentLineSelectionUseCase.invoke(editText)
+
+        verify(exactly = 1) { editText.selectionStart }
+        verify(atLeast = 1) { editText.layout }
+
+        verify(exactly = 1) { layout.getLineForOffset(any()) }
+        verify(exactly = 1) { layout.getLineStart(any()) }
+        verify(exactly = 1) { layout.getLineEnd(any()) }
+
+        verify(exactly = 0) { editText.post(any()) }
+    }
+
 }
