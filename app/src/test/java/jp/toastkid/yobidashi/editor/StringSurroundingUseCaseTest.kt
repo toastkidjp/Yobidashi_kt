@@ -45,7 +45,7 @@ class StringSurroundingUseCaseTest {
     }
 
     @Test
-    fun testInvoke() {
+    fun testCharacterCase() {
         useCase.invoke(editText, '"')
 
         verify(atLeast = 1) { text.replace(2, 3, any<String>()) }
