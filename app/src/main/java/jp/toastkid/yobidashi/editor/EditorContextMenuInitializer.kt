@@ -15,9 +15,11 @@ import android.widget.EditText
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.usecase.MenuActionInvokerUseCase
+import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
 /**
@@ -35,14 +37,23 @@ class EditorContextMenuInitializer {
 
         val context = editText.context
 
-        val browserViewModel = (context as? FragmentActivity)?.let { fragmentActivity ->
-            ViewModelProvider(fragmentActivity).get(BrowserViewModel::class.java)
+        val viewModelProvider = (context as? FragmentActivity)?.let { fragmentActivity ->
+            ViewModelProvider(fragmentActivity)
         }
+
+        val browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
+        val contentViewModel = viewModelProvider?.get(ContentViewModel::class.java)
 
         editText.customInsertionActionModeCallback = object : ActionMode.Callback {
 
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
                 val menuInflater = MenuInflater(context)
+
+                val text = Clipboard.getPrimary(context)?.toString()
+                if (Urls.isValidUrl(text)) {
+                    menuInflater.inflate(R.menu.context_editor_clipping_url, menu)
+                }
+
                 menuInflater.inflate(R.menu.context_editor, menu)
                 menuInflater.inflate(R.menu.context_speech, menu)
                 return true
@@ -52,7 +63,8 @@ class EditorContextMenuInitializer {
                 val handled = invokeMenuAction(
                     menu?.itemId ?: -1,
                     editText, speechMaker,
-                    browserViewModel
+                    browserViewModel,
+                    contentViewModel
                 )
                 if (handled) {
                     actionMode?.finish()
@@ -84,7 +96,8 @@ class EditorContextMenuInitializer {
                     menuItem?.itemId ?: -1,
                     editText,
                     speechMaker,
-                    browserViewModel
+                    browserViewModel,
+                    contentViewModel
                 )
                 if (handled) {
                     actionMode?.finish()
@@ -103,11 +116,12 @@ class EditorContextMenuInitializer {
         itemId: Int,
         editText: EditText,
         speechMaker: SpeechMaker?,
-        browserViewModel: BrowserViewModel?
+        browserViewModel: BrowserViewModel?,
+        contentViewModel: ContentViewModel?
     ): Boolean {
         val text = extractSelectedText(editText)
 
-        return MenuActionInvokerUseCase(editText, speechMaker, browserViewModel).invoke(itemId, text)
+        return MenuActionInvokerUseCase(editText, speechMaker, browserViewModel, contentViewModel).invoke(itemId, text)
     }
 
     private fun extractSelectedText(editText: EditText): String {

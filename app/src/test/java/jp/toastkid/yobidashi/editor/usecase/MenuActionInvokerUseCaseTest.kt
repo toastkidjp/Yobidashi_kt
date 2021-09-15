@@ -137,6 +137,17 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
+    fun testPasteUrlWithTitle() {
+        mockkConstructor(LinkFormInsertionUseCase::class)
+        every { anyConstructed<LinkFormInsertionUseCase>().invoke() }.just(Runs)
+
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_paste_url_with_title, "https://www.yahoo.co.jp")
+
+        assertTrue(handled)
+        verify(exactly = 0) { anyConstructed<LinkFormInsertionUseCase>().invoke() }
+    }
+
+    @Test
     fun testHorizontalRule() {
         val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_horizontal_rule, "test")
 

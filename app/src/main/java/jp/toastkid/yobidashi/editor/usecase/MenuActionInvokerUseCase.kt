@@ -11,8 +11,6 @@ import android.content.Context
 import android.net.Uri
 import android.widget.EditText
 import androidx.core.net.toUri
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -35,6 +33,7 @@ class MenuActionInvokerUseCase(
     private val editText: EditText,
     private val speechMaker: SpeechMaker?,
     private val browserViewModel: BrowserViewModel?,
+    private val contentViewModel: ContentViewModel?,
     private val listHeadAdder: ListHeadAdder = ListHeadAdder()
 ) {
 
@@ -56,7 +55,15 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_paste_as_quotation -> {
-                pasteAsQuotation(context, editText)
+                pasteAsQuotation(editText, contentViewModel)
+                return true
+            }
+            R.id.context_edit_paste_url_with_title -> {
+                contentViewModel ?: return true
+                LinkFormInsertionUseCase(
+                    editText,
+                    contentViewModel
+                ).invoke()
                 return true
             }
             R.id.context_edit_horizontal_rule -> {
@@ -129,13 +136,10 @@ class MenuActionInvokerUseCase(
         return false
     }
 
-    private fun pasteAsQuotation(context: Context, editText: EditText) {
-        val fragmentActivity = (context as? FragmentActivity) ?: return
+    private fun pasteAsQuotation(editText: EditText, contentViewModel: ContentViewModel?) {
+        contentViewModel ?: return
 
-        PasteAsQuotationUseCase(
-            editText,
-            ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
-        ).invoke()
+        PasteAsQuotationUseCase(editText, contentViewModel).invoke()
     }
 
     private fun makeSearchResultUrl(context: Context, text: String): Uri = UrlFactory().invoke(
