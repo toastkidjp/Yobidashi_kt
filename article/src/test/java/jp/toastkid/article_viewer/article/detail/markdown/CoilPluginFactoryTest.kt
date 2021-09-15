@@ -55,7 +55,7 @@ class CoilPluginFactoryTest {
     }
 
     @org.junit.Test
-    fun invoke() {
+    fun testInvoke() {
         coilPluginFactory.invoke(context)
 
         verify(exactly = 1) { context.applicationContext }
