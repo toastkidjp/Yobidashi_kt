@@ -381,7 +381,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testItalic() {
         mockkConstructor(StringSurroundingUseCase::class)
         every { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }.just(Runs)
 
