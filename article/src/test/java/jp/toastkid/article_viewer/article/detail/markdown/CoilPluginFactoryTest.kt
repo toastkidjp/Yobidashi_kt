@@ -21,6 +21,9 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import io.noties.markwon.image.coil.CoilImagesPlugin
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class CoilPluginFactoryTest {
 
@@ -36,7 +39,7 @@ class CoilPluginFactoryTest {
     @MockK
     private lateinit var activityManager: ActivityManager
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { context.applicationContext }.returns(context)
@@ -49,12 +52,12 @@ class CoilPluginFactoryTest {
         every { CoilImagesPlugin.create(any<CoilImagesPlugin.CoilStore>(), any()) }.returns(mockk())
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun testInvoke() {
         coilPluginFactory.invoke(context)
 
