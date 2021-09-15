@@ -274,7 +274,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         parentFragmentManager.setFragmentResultListener(
             "date_filter",
             viewLifecycleOwner,
-            { key, result ->
+            { _, result ->
                 val year = result.getInt("year")
                 val month = result.getInt("month")
                 FilterByMonthUseCase(
