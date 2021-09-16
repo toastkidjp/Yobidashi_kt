@@ -73,4 +73,15 @@ class UpdateUseCaseTest {
         verify(exactly = 0) { ZipLoaderService.start(any(), any()) }
     }
 
+    @Test
+    fun invokeIfNotNeedContextIsNull() {
+        every { contextProvider.invoke() }.returns(null)
+
+        updateUseCase.invokeIfNeed(uri)
+
+        verify(exactly = 1) { viewModel.showProgress() }
+        verify(exactly = 1) { contextProvider.invoke() }
+        verify(exactly = 0) { ZipLoaderService.start(any(), any()) }
+    }
+
 }
