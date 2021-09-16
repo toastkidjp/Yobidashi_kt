@@ -34,7 +34,7 @@ class FaviconFolderProviderServiceTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         faviconFolderProviderService.invoke(mockk())
 
         verify(exactly = 1) { filesDirProvider.invoke(any()) }
