@@ -56,7 +56,7 @@ class UpdateUseCaseTest {
     }
 
     @Test
-    fun invokeIfNeed() {
+    fun testInvokeIfNeed() {
         updateUseCase.invokeIfNeed(uri)
 
         verify(exactly = 1) { viewModel.showProgress() }
