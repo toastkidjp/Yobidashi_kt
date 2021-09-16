@@ -74,7 +74,7 @@ class UpdateUseCaseTest {
     }
 
     @Test
-    fun invokeIfNotNeedContextIsNull() {
+    fun testInvokeIfNotNeedContextIsNull() {
         every { contextProvider.invoke() }.returns(null)
 
         updateUseCase.invokeIfNeed(uri)
