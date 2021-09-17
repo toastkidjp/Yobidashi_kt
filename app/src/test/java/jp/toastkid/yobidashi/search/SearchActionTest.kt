@@ -106,7 +106,7 @@ class SearchActionTest {
     }
 
     @Test
-    fun invoke() {
+    fun testOpenSearchByNewTabOnForeground() {
         searchAction.invoke()
 
         verify(exactly = 1) { browserViewModel.open(any()) }
