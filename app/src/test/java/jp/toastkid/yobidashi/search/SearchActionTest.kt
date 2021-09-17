@@ -116,7 +116,7 @@ class SearchActionTest {
     }
 
     @Test
-    fun test() {
+    fun testOpenSearchOnBackground() {
         searchAction = SearchAction(
             activityContext,
             category,
