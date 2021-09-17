@@ -115,4 +115,26 @@ class SearchActionTest {
         verify(exactly = 1) { searchHistoryInsertion.insert() }
     }
 
+    @Test
+    fun test() {
+        searchAction = SearchAction(
+            activityContext,
+            category,
+            query,
+            currentUrl,
+            true,
+            saveHistory,
+            viewModelSupplier,
+            preferenceApplierSupplier,
+            urlFactory
+        )
+
+        searchAction.invoke()
+
+        verify(exactly = 0) { browserViewModel.open(any()) }
+        verify(exactly = 1) { browserViewModel.openBackground(any(), any()) }
+        verify(exactly = 1) { urlFactory.invoke(any(), any(), any()) }
+        verify(exactly = 1) { searchHistoryInsertion.insert() }
+    }
+
 }
