@@ -138,7 +138,7 @@ class SearchActionTest {
     }
 
     @Test
-    fun test() {
+    fun testOpenUrlOnForeground() {
         searchAction = SearchAction(
             activityContext,
             category,
