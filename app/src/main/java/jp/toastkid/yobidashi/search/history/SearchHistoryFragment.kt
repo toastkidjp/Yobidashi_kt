@@ -70,7 +70,7 @@ class SearchHistoryFragment : Fragment() {
         parentFragmentManager.setFragmentResultListener(
             "clear_items",
             viewLifecycleOwner,
-            { _, results ->
+            { _, _ ->
                 val currentContext = context ?: return@setFragmentResultListener
                 CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
