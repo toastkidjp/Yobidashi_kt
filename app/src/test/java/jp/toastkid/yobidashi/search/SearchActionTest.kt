@@ -159,7 +159,7 @@ class SearchActionTest {
     }
 
     @Test
-    fun test() {
+    fun testIsNotEnableSearchHistory() {
         every { preferenceApplier getProperty "isEnableSearchHistory"  }.returns(false)
 
         searchAction.invoke()
