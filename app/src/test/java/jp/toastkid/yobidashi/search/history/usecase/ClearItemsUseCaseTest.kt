@@ -84,7 +84,7 @@ class ClearItemsUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testPassedNull() {
         clearItemsUseCase.invoke(null)
 
         coVerify(exactly = 0) { adapterClearAll.invoke() }
