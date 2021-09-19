@@ -26,6 +26,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.UrlFactory
@@ -60,6 +61,9 @@ class MenuActionInvokerUseCaseTest {
 
     @MockK
     private lateinit var browserViewModel: BrowserViewModel
+
+    @MockK
+    private lateinit var contentViewModel: ContentViewModel
 
     @MockK
     private lateinit var listHeadAdder: ListHeadAdder
@@ -133,7 +137,7 @@ class MenuActionInvokerUseCaseTest {
         val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_paste_as_quotation, "test")
 
         assertTrue(handled)
-        verify(exactly = 0) { anyConstructed<PasteAsQuotationUseCase>().invoke() }
+        verify(exactly = 1) { anyConstructed<PasteAsQuotationUseCase>().invoke() }
     }
 
     @Test
@@ -144,7 +148,7 @@ class MenuActionInvokerUseCaseTest {
         val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_paste_url_with_title, "https://www.yahoo.co.jp")
 
         assertTrue(handled)
-        verify(exactly = 0) { anyConstructed<LinkFormInsertionUseCase>().invoke() }
+        verify(exactly = 1) { anyConstructed<LinkFormInsertionUseCase>().invoke() }
     }
 
     @Test
@@ -350,6 +354,18 @@ class MenuActionInvokerUseCaseTest {
 
         assertTrue(handled)
         verify(exactly = 1) { anyConstructed<CurrentLineDeletionUseCase>().invoke(any()) }
+    }
+
+    @Test
+    fun testCount() {
+        mockkConstructor(TextCountUseCase::class)
+        every { anyConstructed<TextCountUseCase>().invoke(any(), any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_count, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { anyConstructed<TextCountUseCase>().invoke(any(), any()) }
     }
 
 }

@@ -55,7 +55,8 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_paste_as_quotation -> {
-                pasteAsQuotation(editText, contentViewModel)
+                contentViewModel ?: return true
+                PasteAsQuotationUseCase(editText, contentViewModel).invoke()
                 return true
             }
             R.id.context_edit_paste_url_with_title -> {
@@ -131,15 +132,13 @@ class MenuActionInvokerUseCase(
                 CurrentLineDeletionUseCase().invoke(editText)
                 return true
             }
+            R.id.context_edit_count -> {
+                TextCountUseCase().invoke(editText, contentViewModel)
+                return true
+            }
             else -> Unit
         }
         return false
-    }
-
-    private fun pasteAsQuotation(editText: EditText, contentViewModel: ContentViewModel?) {
-        contentViewModel ?: return
-
-        PasteAsQuotationUseCase(editText, contentViewModel).invoke()
     }
 
     private fun makeSearchResultUrl(context: Context, text: String): Uri = UrlFactory().invoke(
