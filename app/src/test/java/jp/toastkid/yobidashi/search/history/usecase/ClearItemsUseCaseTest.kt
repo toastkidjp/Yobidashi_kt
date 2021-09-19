@@ -35,6 +35,7 @@ class ClearItemsUseCaseTest {
     @MockK
     private lateinit var adapterClearAll: () -> Unit
 
+    @Suppress("unused")
     private val mainDispatcher = Dispatchers.Unconfined
 
     private val ioDispatcher = Dispatchers.Unconfined
