@@ -11,6 +11,10 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
 import android.widget.TextView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -22,25 +26,36 @@ class TextViewHighlighter(private val textView: TextView) {
             textView.text = textView.text.toString()
             return
         }
-        val tvt = textView.text.toString()
-        var ofe = tvt.indexOf(textToHighlight, 0)
-        val wordToSpan = SpannableString(textView.text)
-        var ofs = 0
-        while (ofs < tvt.length && ofe != -1) {
-            ofe = tvt.indexOf(textToHighlight, ofs)
-            if (ofe == -1)
-                break
-            else {
-                // set color here
-                wordToSpan.setSpan(
-                        BackgroundColorSpan(-0x100),
-                        ofe,
-                        ofe + textToHighlight.length,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                textView.setText(wordToSpan, TextView.BufferType.SPANNABLE)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val tvt = withContext(Dispatchers.Default) {
+                textView.text.toString()
             }
-            ofs = ofe + 1
+            var ofe = withContext(Dispatchers.Default) {
+                tvt.indexOf(textToHighlight, 0)
+            }
+            val wordToSpan = withContext(Dispatchers.Default) {
+                SpannableString(textView.text)
+            }
+            var ofs = 0
+            while (ofs < tvt.length && ofe != -1) {
+                ofe = tvt.indexOf(textToHighlight, ofs)
+                if (ofe == -1)
+                    break
+                else {
+                    // set color here
+                    withContext(Dispatchers.Default) {
+                        wordToSpan.setSpan(
+                            BackgroundColorSpan(-0x100),
+                            ofe,
+                            ofe + textToHighlight.length,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                    textView.setText(wordToSpan, TextView.BufferType.SPANNABLE)
+                }
+                ofs = ofe + 1
+            }
         }
     }
 }
