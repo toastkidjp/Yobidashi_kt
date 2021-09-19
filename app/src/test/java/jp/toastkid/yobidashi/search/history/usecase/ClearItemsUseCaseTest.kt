@@ -83,4 +83,16 @@ class ClearItemsUseCaseTest {
         coVerify(exactly = 1) { searchHistoryRepository.deleteAll() }
     }
 
+    @Test
+    fun test() {
+        clearItemsUseCase.invoke(null)
+
+        coVerify(exactly = 0) { adapterClearAll.invoke() }
+        coVerify(exactly = 0) { activity.supportFragmentManager }
+        coVerify(exactly = 0) { fragmentManager.popBackStack() }
+        coVerify(exactly = 0) { anyConstructed<DatabaseFinder>().invoke(any()) }
+        coVerify(exactly = 0) { appDatabase.searchHistoryRepository() }
+        coVerify(exactly = 0) { searchHistoryRepository.deleteAll() }
+    }
+
 }
