@@ -41,6 +41,12 @@ import jp.toastkid.lib.view.TextViewHighlighter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -57,6 +63,8 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
     private lateinit var repository: ArticleRepository
 
     private val subheads = mutableListOf<String>()
+
+    private val inputChannel: Channel<String> = Channel()
 
     private val disposables = Job()
 
@@ -119,7 +127,22 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         binding.content.linksClickable = true
 
         appBarBinding.input.addTextChangedListener {
-            search(it.toString())
+            CoroutineScope(Dispatchers.Default).launch {
+                val element = it.toString()
+                if (element.isBlank()) {
+                    return@launch
+                }
+                inputChannel.send(element)
+            }
+        }
+
+        CoroutineScope(Dispatchers.Default).launch {
+            inputChannel
+                .receiveAsFlow()
+                .distinctUntilChanged()
+                .debounce(1000)
+                .flowOn(Dispatchers.Main)
+                .collect { search(it) }
         }
 
         ViewModelProvider(this)
@@ -176,6 +199,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
     }
 
     private fun search(keyword: String?) {
+        println("tomato search $keyword")
         textViewHighlighter(keyword)
     }
 
