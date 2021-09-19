@@ -78,7 +78,7 @@ class ClearItemsUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         clearItemsUseCase.invoke(activity, Job())
 
         coVerify(exactly = 1) { adapter.clear() }
