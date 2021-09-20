@@ -52,7 +52,7 @@ class ContentTextSearchUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         contentTextSearchUseCase.invoke("test")
 
         coVerify(exactly = 1) { inputChannel.send(any()) }
