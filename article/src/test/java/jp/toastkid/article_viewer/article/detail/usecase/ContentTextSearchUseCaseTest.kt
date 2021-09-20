@@ -35,6 +35,7 @@ class ContentTextSearchUseCaseTest {
     @MockK
     private lateinit var inputChannel: Channel<String>
 
+    @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
