@@ -66,7 +66,7 @@ class ContentTextSearchUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testStartObserve() {
         contentTextSearchUseCase.startObserve()
     }
 
