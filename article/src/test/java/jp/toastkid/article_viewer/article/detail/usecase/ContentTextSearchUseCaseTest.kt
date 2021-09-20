@@ -65,4 +65,9 @@ class ContentTextSearchUseCaseTest {
         coVerify(exactly = 0) { inputChannel.send(any()) }
     }
 
+    @Test
+    fun test() {
+        contentTextSearchUseCase.startObserve()
+    }
+
 }
