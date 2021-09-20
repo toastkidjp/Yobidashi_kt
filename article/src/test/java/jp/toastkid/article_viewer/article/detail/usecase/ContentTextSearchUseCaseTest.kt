@@ -59,7 +59,7 @@ class ContentTextSearchUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testBlankCase() {
         contentTextSearchUseCase.invoke(" ")
 
         coVerify(exactly = 0) { inputChannel.send(any()) }
