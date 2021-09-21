@@ -80,4 +80,14 @@ class ImageLoaderUseCaseTest {
         verify(exactly = 1) { adapter.add(any()) }
     }
 
+    @Test
+    fun test() {
+        imageLoaderUseCase.invoke("test-bucket")
+
+        verify(exactly = 1) { adapter.clear() }
+        verify(exactly = 0) { bucketLoader.invoke(any()) }
+        verify(exactly = 1) { imageLoader.invoke(any(), any()) }
+        verify(exactly = 1) { adapter.add(any()) }
+    }
+
 }
