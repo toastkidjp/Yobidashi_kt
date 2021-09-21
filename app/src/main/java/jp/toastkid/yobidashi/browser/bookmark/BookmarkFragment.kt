@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.Manifest
 import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +10,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -71,6 +71,30 @@ class BookmarkFragment: Fragment(),
     private var contentViewModel: ContentViewModel? = null
 
     private val disposables: Job by lazy { Job() }
+
+    private val getContentLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+        {
+            if (it.data == null || it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            val uri = it.data?.data ?: return@registerForActivityResult
+            importBookmark(uri)
+        }
+    )
+
+    private val exportLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+        {
+            if (it.data == null || it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            val uri = it.data?.data ?: return@registerForActivityResult
+            exportBookmark(uri)
+        }
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -202,10 +226,7 @@ class BookmarkFragment: Fragment(),
                                     return@collect
                                 }
 
-                                startActivityForResult(
-                                        IntentFactory.makeGetContent("text/html"),
-                                        REQUEST_CODE_IMPORT_BOOKMARK
-                                )
+                                getContentLauncher.launch(IntentFactory.makeGetContent("text/html"))
                             }
                 }
                 true
@@ -222,10 +243,8 @@ class BookmarkFragment: Fragment(),
                                     return@collect
                                 }
 
-                                startActivityForResult(
-                                        IntentFactory.makeDocumentOnStorage(
-                                                "text/html", "bookmark.html"),
-                                        REQUEST_CODE_EXPORT_BOOKMARK
+                                exportLauncher.launch(
+                                    IntentFactory.makeDocumentOnStorage("text/html", "bookmark.html")
                                 )
                             }
                 }
@@ -277,20 +296,6 @@ class BookmarkFragment: Fragment(),
         RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        if (intent == null || resultCode != Activity.RESULT_OK) {
-            return
-        }
-
-        val data = intent.data ?: return
-
-        when (requestCode) {
-            REQUEST_CODE_IMPORT_BOOKMARK -> importBookmark(data)
-            REQUEST_CODE_EXPORT_BOOKMARK -> exportBookmark(data)
-        }
-    }
-
     /**
      * Import bookmark from selected HTML file.
      *
@@ -330,6 +335,8 @@ class BookmarkFragment: Fragment(),
     override fun onDetach() {
         adapter.dispose()
         disposables.cancel()
+        getContentLauncher.unregister()
+
         super.onDetach()
     }
 
@@ -340,16 +347,6 @@ class BookmarkFragment: Fragment(),
          */
         @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.fragment_bookmark
-
-        /**
-         * Request code of importing bookmarks.
-         */
-        private const val REQUEST_CODE_IMPORT_BOOKMARK = 12211
-
-        /**
-         * Request code of exporting bookmarks.
-         */
-        private const val REQUEST_CODE_EXPORT_BOOKMARK = 12212
 
     }
 }

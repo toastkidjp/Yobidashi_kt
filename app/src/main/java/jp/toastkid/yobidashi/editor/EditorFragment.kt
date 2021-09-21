@@ -22,6 +22,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Dimension
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -106,6 +108,27 @@ class EditorFragment :
     private var tabListViewModel: TabListViewModel? = null
 
     private var contentViewModel: ContentViewModel? = null
+
+    private var loadAs: ActivityResultLauncher<Intent>? =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            it.data?.data?.let { uri ->
+                readFromFileUri(uri)
+                saveAs()
+            }
+        }
+
+    private var loadResultLauncher: ActivityResultLauncher<Intent>? =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            it.data?.data?.let { uri -> readFromFileUri(uri) }
+        }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -214,6 +237,10 @@ class EditorFragment :
             saveToFile(path)
         }
         speechMaker?.dispose()
+
+        loadAs?.unregister()
+        loadResultLauncher?.unregister()
+
         super.onDetach()
     }
 
@@ -331,7 +358,7 @@ class EditorFragment :
      * Load text as other file.
      */
     fun loadAs() {
-        startActivityForResult(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD_AS)
+        loadAs?.launch(IntentFactory.makeGetContent("text/plain"))
     }
 
     fun exportToArticleViewer() {
@@ -416,7 +443,7 @@ class EditorFragment :
      * Load content from file with Storage Access Framework.
      */
     fun load() {
-        startActivityForResult(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD)
+        loadResultLauncher?.launch(IntentFactory.makeGetContent("text/plain"))
     }
 
     /**
@@ -574,40 +601,10 @@ class EditorFragment :
         assignNewFile(fileName)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-
-        if (resultCode != Activity.RESULT_OK || intent == null) {
-            return
-        }
-
-        when (requestCode) {
-            REQUEST_CODE_LOAD -> {
-                intent.data?.let { readFromFileUri(it) }
-            }
-            REQUEST_CODE_LOAD_AS -> {
-                intent.data?.let {
-                    readFromFileUri(it)
-                    saveAs()
-                }
-            }
-        }
-    }
-
     companion object {
 
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_editor
-
-        /**
-         * Request code of specifying file.
-         */
-        const val REQUEST_CODE_LOAD: Int = 10111
-
-        /**
-         * Request code for 'Load as'.
-         */
-        const val REQUEST_CODE_LOAD_AS: Int = 10112
 
     }
 }

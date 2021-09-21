@@ -130,8 +130,15 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
      */
     private fun load(uri: Uri) {
         adapter.load(uri)
+
+        if (adapter.itemCount == 0) {
+            activity?.supportFragmentManager?.popBackStack()
+            return@load
+        }
+
+        val to = if (adapter.itemCount == 1) 1 else adapter.itemCount - 1
+        appBarBinding.seek.valueTo = to.toFloat()
         binding.pdfImages.scheduleLayoutAnimation()
-        appBarBinding.seek.valueTo = (adapter.itemCount - 1).toFloat()
     }
 
     /**

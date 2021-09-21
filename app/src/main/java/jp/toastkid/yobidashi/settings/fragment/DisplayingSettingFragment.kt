@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.settings.fragment
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -16,6 +15,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
@@ -66,6 +66,24 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
      * Wrapper of FilesDir.
      */
     private lateinit var filesDir: FilesDir
+
+    private val addingLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+        {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            LoadedAction(
+                it.data?.data,
+                binding.fabParent,
+                preferenceApplier.colorPair(),
+                { adapter?.notifyDataSetChanged() },
+                BACKGROUND_DIR
+            )
+                .invoke()
+        }
+    )
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -140,7 +158,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
      * Launch Adding action.
      */
     fun launchAdding() {
-        startActivityForResult(IntentFactory.makePickImage(), IMAGE_READ_REQUEST)
+        addingLauncher.launch(IntentFactory.makePickImage())
     }
 
     /**
@@ -157,24 +175,6 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
         filesDir.clean()
         contentViewModel?.snackShort(R.string.message_success_image_removal)
         adapter?.notifyDataSetChanged()
-    }
-
-    override fun onActivityResult(
-            requestCode: Int,
-            resultCode: Int,
-            data: Intent?
-    ) {
-        if (requestCode == IMAGE_READ_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            LoadedAction(
-                    data.data,
-                    binding.fabParent,
-                    preferenceApplier.colorPair(),
-                    { adapter?.notifyDataSetChanged() },
-                    BACKGROUND_DIR
-            )
-                    .invoke()
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -202,6 +202,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
 
     override fun onDetach() {
         contentViewModel?.refresh()
+        addingLauncher.unregister()
         super.onDetach()
     }
 

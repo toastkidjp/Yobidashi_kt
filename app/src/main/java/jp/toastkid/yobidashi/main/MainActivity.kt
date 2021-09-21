@@ -10,6 +10,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -137,6 +139,23 @@ class MainActivity : AppCompatActivity(),
     private var tabListUseCase: TabListUseCase? = null
 
     private lateinit var menuSwitchColorApplier: MenuSwitchColorApplier
+
+    private var activityResultLauncher: ActivityResultLauncher<Intent>? =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            val data = it.data ?: return@registerForActivityResult
+            val uri = data.data ?: return@registerForActivityResult
+            val takeFlags: Int =
+                data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+            contentResolver?.takePersistableUriPermission(uri, takeFlags)
+
+            tabs.openNewPdfTab(uri)
+            replaceToCurrentTab(true)
+            tabListUseCase?.dismiss()
+        }
 
     /**
      * Disposables.
@@ -553,10 +572,7 @@ class MainActivity : AppCompatActivity(),
                             return@collect
                         }
 
-                        startActivityForResult(
-                                IntentFactory.makeOpenDocument("application/pdf"),
-                                REQUEST_CODE_OPEN_PDF
-                        )
+                        activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
                     }
         }
     }
@@ -708,15 +724,6 @@ class MainActivity : AppCompatActivity(),
                     preferenceApplier.colorPair()
                 )
             }
-            REQUEST_CODE_OPEN_PDF -> {
-                val uri = data.data ?: return
-                val takeFlags: Int = data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                contentResolver?.takePersistableUriPermission(uri, takeFlags)
-
-                tabs.openNewPdfTab(uri)
-                replaceToCurrentTab(true)
-                tabListUseCase?.dismiss()
-            }
         }
     }
 
@@ -733,6 +740,7 @@ class MainActivity : AppCompatActivity(),
         pageSearchPresenter.dispose()
         floatingPreview?.dispose()
         GlobalWebViewPool.dispose()
+        activityResultLauncher?.unregister()
         super.onDestroy()
     }
 
@@ -743,11 +751,6 @@ class MainActivity : AppCompatActivity(),
          */
         @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_main
-
-        /**
-         * Request code of opening PDF.
-         */
-        private const val REQUEST_CODE_OPEN_PDF: Int = 7
 
     }
 

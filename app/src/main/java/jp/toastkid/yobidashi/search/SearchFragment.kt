@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -131,6 +132,30 @@ class SearchFragment : Fragment() {
      * Disposables.
      */
     private val disposables: Job by lazy { Job() }
+
+    private val voiceSearchLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+        { activityResult ->
+            if (activityResult.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+            val result = activityResult?.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            if (result == null || result.size == 0) {
+                return@registerForActivityResult
+            }
+            suggestionModule?.clear()
+            suggestionModule?.addAll(result)
+            suggestionModule?.show()
+
+            CoroutineScope(Dispatchers.Default).launch(disposables) {
+                delay(200)
+                withContext(Dispatchers.Main) {
+                    val top = binding?.suggestionModule?.root?.top ?: 0
+                    binding?.scroll?.smoothScrollTo(0, top)
+                }
+            }
+        }
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
@@ -471,7 +496,7 @@ class SearchFragment : Fragment() {
     private fun invokeVoiceSearch() {
         try {
             context?.let {
-                startActivityForResult(VoiceSearch().makeIntent(it), VoiceSearch.REQUEST_CODE)
+                voiceSearchLauncher.launch(VoiceSearch().makeIntent(it))
             }
         } catch (e: ActivityNotFoundException) {
             Timber.e(e)
@@ -531,26 +556,6 @@ class SearchFragment : Fragment() {
         if (resultCode != Activity.RESULT_OK) {
             return
         }
-
-        when (requestCode) {
-            VoiceSearch.REQUEST_CODE -> {
-                val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (result == null || result.size == 0) {
-                    return
-                }
-                suggestionModule?.clear()
-                suggestionModule?.addAll(result)
-                suggestionModule?.show()
-
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    delay(200)
-                    withContext(Dispatchers.Main) {
-                        val top = binding?.suggestionModule?.root?.top ?: 0
-                        binding?.scroll?.smoothScrollTo(0, top)
-                    }
-                }
-            }
-        }
     }
 
     override fun onPause() {
@@ -566,6 +571,7 @@ class SearchFragment : Fragment() {
         historyModule?.dispose()
         suggestionModule?.dispose()
         hourlyTrendModule?.dispose()
+        voiceSearchLauncher.unregister()
         super.onDetach()
     }
 
