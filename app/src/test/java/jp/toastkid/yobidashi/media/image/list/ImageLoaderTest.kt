@@ -54,7 +54,7 @@ class ImageLoaderTest {
     }
 
     @Test
-    fun filterBy() {
+    fun testFilterBy() {
         imageLoader.filterBy("test-filter")
 
         verify(exactly = 1) { contentResolver.query(any(), any(), any(), any(), any()) }
