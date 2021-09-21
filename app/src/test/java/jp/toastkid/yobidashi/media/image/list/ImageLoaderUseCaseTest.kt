@@ -71,7 +71,7 @@ class ImageLoaderUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         imageLoaderUseCase.invoke()
 
         verify(exactly = 1) { adapter.clear() }
