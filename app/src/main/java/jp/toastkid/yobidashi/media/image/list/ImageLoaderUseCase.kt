@@ -17,10 +17,9 @@ internal class ImageLoaderUseCase(
         private val adapter: Adapter?,
         private val bucketLoader: BucketLoader,
         private val imageLoader: ImageLoader,
-        private val refreshContent: () -> Unit
+        private val refreshContent: () -> Unit,
+        private val parentExtractor: ParentExtractor = ParentExtractor()
 ) {
-
-    private val parentExtractor = ParentExtractor()
 
     private var currentBucket: String? = null
 
