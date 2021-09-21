@@ -45,7 +45,7 @@ class ImageLoaderTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         imageLoader.invoke(Sort.DATE, "test-bucket")
 
         verify(exactly = 1) { contentResolver.query(any(), any(), any(), any(), any()) }
