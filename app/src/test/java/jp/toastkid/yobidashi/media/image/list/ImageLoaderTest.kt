@@ -53,4 +53,13 @@ class ImageLoaderTest {
         verify(exactly = 1) { cursor.moveToNext() }
     }
 
+    @Test
+    fun filterBy() {
+        imageLoader.filterBy("test-filter")
+
+        verify(exactly = 1) { contentResolver.query(any(), any(), any(), any(), any()) }
+        verify(atLeast = 1) { cursor.getColumnIndex(any()) }
+        verify(exactly = 1) { cursor.moveToNext() }
+    }
+
 }
