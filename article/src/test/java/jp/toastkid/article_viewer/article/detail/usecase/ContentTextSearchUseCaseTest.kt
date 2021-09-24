@@ -38,6 +38,7 @@ class ContentTextSearchUseCaseTest {
     @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
+    @Suppress("unused")
     private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     @Before
