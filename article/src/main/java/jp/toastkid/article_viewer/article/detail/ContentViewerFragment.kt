@@ -26,6 +26,7 @@ import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.markdown.MarkdownConverterProviderUseCase
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragmentViewModel
+import jp.toastkid.article_viewer.article.detail.usecase.ContentTextSearchUseCase
 import jp.toastkid.article_viewer.bookmark.Bookmark
 import jp.toastkid.article_viewer.databinding.AppBarContentViewerBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
@@ -41,12 +42,6 @@ import jp.toastkid.lib.view.TextViewHighlighter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -58,13 +53,9 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
     private lateinit var appBarBinding: AppBarContentViewerBinding
 
-    private lateinit var textViewHighlighter: TextViewHighlighter
-
     private lateinit var repository: ArticleRepository
 
     private val subheads = mutableListOf<String>()
-
-    private val inputChannel: Channel<String> = Channel()
 
     private val disposables = Job()
 
@@ -90,7 +81,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         appBarBinding.tabListViewModel = activity?.let {
             ViewModelProvider(it).get(TabListViewModel::class.java)
         }
-        textViewHighlighter = TextViewHighlighter(binding.content)
         repository = AppDatabase.find(binding.root.context).articleRepository()
 
         activity?.let {
@@ -126,24 +116,15 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
         binding.content.linksClickable = true
 
+        val contentTextSearchUseCase = ContentTextSearchUseCase(
+            TextViewHighlighter(binding.content)
+        )
+
         appBarBinding.input.addTextChangedListener {
-            CoroutineScope(Dispatchers.Default).launch {
-                val element = it.toString()
-                if (element.isBlank()) {
-                    return@launch
-                }
-                inputChannel.send(element)
-            }
+            contentTextSearchUseCase.invoke(it.toString())
         }
 
-        CoroutineScope(Dispatchers.Default).launch {
-            inputChannel
-                .receiveAsFlow()
-                .distinctUntilChanged()
-                .debounce(1000)
-                .flowOn(Dispatchers.Main)
-                .collect { search(it) }
-        }
+        contentTextSearchUseCase.startObserve()
 
         ViewModelProvider(this)
             .get(SubheadDialogFragmentViewModel::class.java)
@@ -196,11 +177,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         activity?.let {
             ViewModelProvider(it).get(ContentViewModel::class.java).switchTabList()
         }
-    }
-
-    private fun search(keyword: String?) {
-        println("tomato search $keyword")
-        textViewHighlighter(keyword)
     }
 
     override fun toTop() {
