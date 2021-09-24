@@ -43,6 +43,7 @@ class ClearItemsUseCaseTest {
     @Suppress("unused")
     private val mainDispatcher = Dispatchers.Unconfined
 
+    @Suppress("unused")
     private val ioDispatcher = Dispatchers.Unconfined
 
     @MockK
