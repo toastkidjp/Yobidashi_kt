@@ -21,14 +21,13 @@ class ArticleLoadStateListener(
     override fun invoke(p1: CombinedLoadStates) {
         val newCount = countSupplier()
         contentViewModel?.snackShort(
-            if (newCount != 0) {
+            if (newCount != 0)
                 String.format(
                     stringResolver(R.string.message_done_article_search),
                     newCount
                 )
-            } else {
+            else
                 stringResolver(R.string.message_not_found_article_search)
-            }
         )
     }
 
