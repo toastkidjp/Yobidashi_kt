@@ -8,6 +8,7 @@
 
 package jp.toastkid.article_viewer.article.detail.usecase
 
+import androidx.annotation.VisibleForTesting
 import jp.toastkid.lib.view.TextViewHighlighter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -22,9 +23,9 @@ import kotlinx.coroutines.launch
 
 class ContentTextSearchUseCase(
     private val textViewHighlighter: TextViewHighlighter,
-    private val inputChannel: Channel<String> = Channel(),
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
+    @VisibleForTesting private val inputChannel: Channel<String> = Channel(),
+    @VisibleForTesting private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    @VisibleForTesting private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
     operator fun invoke(keyword: String?) {
