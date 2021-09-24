@@ -287,6 +287,18 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 articleRepository,
                 preferencesWrapper
         )
+        adapter.addLoadStateListener {
+            contentViewModel?.snackShort(
+                if (adapter.itemCount != 0) {
+                    String.format(
+                        getString(R.string.message_done_article_search),
+                        adapter.itemCount
+                    )
+                } else {
+                    getString(R.string.message_not_found_article_search)
+                }
+            )
+        }
 
         searchUseCase?.search(appBarBinding.input.text?.toString())
     }

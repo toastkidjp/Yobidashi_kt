@@ -30,4 +30,6 @@
     <string name="button_open_date">Open date</string>
     <string name="action_date_filter">Date filter</string>
     <string name="title_sort_setting">Sort setting</string>
+    <string name="message_done_article_search">Found %d articles.</string>
+    <string name="message_not_found_article_search">Not found.</string>
 </resources>
