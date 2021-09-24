@@ -92,4 +92,17 @@ class ClearItemsUseCaseTest {
         coVerify(exactly = 1) { favoriteSearchRepository.deleteAll() }
     }
 
+    @Test
+    fun test() {
+        clearItemsUseCase.invoke(null, Job())
+
+        coVerify(exactly = 0) { adapter.clear() }
+        coVerify(exactly = 0) { showSnackbar.invoke(any()) }
+        coVerify(exactly = 0) { activity.supportFragmentManager }
+        coVerify(exactly = 0) { fragmentManager.popBackStack() }
+        coVerify(exactly = 0) { anyConstructed<DatabaseFinder>().invoke(any()) }
+        coVerify(exactly = 0) { appDatabase.favoriteSearchRepository() }
+        coVerify(exactly = 0) { favoriteSearchRepository.deleteAll() }
+    }
+
 }
