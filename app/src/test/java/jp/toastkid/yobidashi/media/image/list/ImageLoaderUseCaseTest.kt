@@ -90,4 +90,9 @@ class ImageLoaderUseCaseTest {
         verify(exactly = 1) { adapter.add(any()) }
     }
 
+    @Test
+    fun clearCurrentBucket() {
+        imageLoaderUseCase.clearCurrentBucket()
+    }
+
 }
