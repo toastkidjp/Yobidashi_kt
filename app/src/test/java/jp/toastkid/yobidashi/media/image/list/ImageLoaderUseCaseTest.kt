@@ -91,7 +91,7 @@ class ImageLoaderUseCaseTest {
     }
 
     @Test
-    fun clearCurrentBucket() {
+    fun testClearCurrentBucket() {
         imageLoaderUseCase.clearCurrentBucket()
     }
 
