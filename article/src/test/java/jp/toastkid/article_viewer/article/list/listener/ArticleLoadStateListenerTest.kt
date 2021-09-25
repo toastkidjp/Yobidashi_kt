@@ -61,6 +61,7 @@ class ArticleLoadStateListenerTest {
             ),
             null
         )
+
         articleLoadStateListener.invoke(combinedLoadStates)
 
         verify(exactly = 0) { countSupplier.invoke() }
@@ -75,6 +76,7 @@ class ArticleLoadStateListenerTest {
             ),
             null
         )
+
         articleLoadStateListener.invoke(completeLoadStates)
 
         verify(exactly = 1) { countSupplier.invoke() }
@@ -92,6 +94,7 @@ class ArticleLoadStateListenerTest {
             ),
             null
         )
+
         articleLoadStateListener.invoke(combinedLoadStates)
 
         verify(exactly = 0) { countSupplier.invoke() }
@@ -106,6 +109,7 @@ class ArticleLoadStateListenerTest {
             ),
             null
         )
+
         articleLoadStateListener.invoke(completeLoadStates)
 
         verify(exactly = 0) { countSupplier.invoke() }
