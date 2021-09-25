@@ -336,6 +336,7 @@ class BookmarkFragment: Fragment(),
         adapter.dispose()
         disposables.cancel()
         getContentLauncher.unregister()
+        exportLauncher.unregister()
 
         super.onDetach()
     }
