@@ -9,6 +9,7 @@
 package jp.toastkid.article_viewer.article.list.listener
 
 import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
 import jp.toastkid.article_viewer.R
 import jp.toastkid.lib.ContentViewModel
 
@@ -18,7 +19,16 @@ class ArticleLoadStateListener(
     private val stringResolver: (Int) -> String
 ) : (CombinedLoadStates) -> Unit {
 
+    private var shouldShowNextTime = false
+
     override fun invoke(p1: CombinedLoadStates) {
+        if (!shouldShowNextTime) {
+            shouldShowNextTime = p1.refresh is LoadState.Loading
+            return
+        }
+
+        shouldShowNextTime = false
+
         val newCount = countSupplier()
         contentViewModel?.snackShort(
             if (newCount != 0)
