@@ -82,4 +82,35 @@ class ArticleLoadStateListenerTest {
         verify(exactly = 1) { stringResolver.invoke(any()) }
     }
 
+    @Test
+    fun test() {
+        val combinedLoadStates = CombinedLoadStates(
+            LoadStates(
+                LoadState.NotLoading(false),
+                LoadState.Loading,
+                LoadState.NotLoading(false)
+            ),
+            null
+        )
+        articleLoadStateListener.invoke(combinedLoadStates)
+
+        verify(exactly = 0) { countSupplier.invoke() }
+        verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
+        verify(exactly = 0) { stringResolver.invoke(any()) }
+
+        val completeLoadStates = CombinedLoadStates(
+            LoadStates(
+                LoadState.NotLoading(false),
+                LoadState.NotLoading(false),
+                LoadState.NotLoading(false)
+            ),
+            null
+        )
+        articleLoadStateListener.invoke(completeLoadStates)
+
+        verify(exactly = 0) { countSupplier.invoke() }
+        verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
+        verify(exactly = 0) { stringResolver.invoke(any()) }
+    }
+
 }
