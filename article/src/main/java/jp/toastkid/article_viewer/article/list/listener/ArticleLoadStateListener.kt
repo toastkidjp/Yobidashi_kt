@@ -21,9 +21,9 @@ class ArticleLoadStateListener(
 
     private var shouldShowNextTime = false
 
-    override fun invoke(p1: CombinedLoadStates) {
+    override fun invoke(combinedLoadStates: CombinedLoadStates) {
         if (!shouldShowNextTime) {
-            shouldShowNextTime = p1.refresh is LoadState.Loading
+            shouldShowNextTime = combinedLoadStates.refresh is LoadState.Loading
             return
         }
 
