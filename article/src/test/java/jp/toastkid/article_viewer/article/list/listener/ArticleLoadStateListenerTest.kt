@@ -52,7 +52,7 @@ class ArticleLoadStateListenerTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         val combinedLoadStates = CombinedLoadStates(
             LoadStates(
                 LoadState.Loading,
