@@ -83,7 +83,7 @@ class ArticleLoadStateListenerTest {
     }
 
     @Test
-    fun test() {
+    fun testCannotInvokedCase() {
         val combinedLoadStates = CombinedLoadStates(
             LoadStates(
                 LoadState.NotLoading(false),
