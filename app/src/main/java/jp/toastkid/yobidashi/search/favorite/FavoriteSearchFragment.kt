@@ -21,11 +21,8 @@ import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchAction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import jp.toastkid.yobidashi.search.favorite.usecase.ClearItemsUseCase
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * Favorite search fragment.
@@ -168,22 +165,10 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
             }
 
     private fun clear() {
-        val context = context ?: return
-        val repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
-
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            withContext(Dispatchers.IO) {
-                repository.deleteAll()
-                adapter?.clear()
-            }
-
-            Toaster.snackShort(
-                    binding?.root as View,
-                    R.string.settings_color_delete,
-                    colorPair()
-            )
-            activity?.supportFragmentManager?.popBackStack()
+        val showSnackbar: (Int) -> Unit = {
+            Toaster.snackShort(binding?.root as View, it, colorPair())
         }
+        ClearItemsUseCase(adapter, showSnackbar).invoke(activity, disposables)
     }
 
     /**
