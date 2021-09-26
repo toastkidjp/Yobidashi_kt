@@ -2,8 +2,10 @@ package jp.toastkid.yobidashi.main.launch
 
 import androidx.fragment.app.Fragment
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -35,7 +37,7 @@ class ElseCaseUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { openNewTab.invoke() }.answers { Unit }
+        every { openNewTab.invoke() }.just(Runs)
         every { replaceToCurrentTab.invoke(any()) }.answers { Unit }
 
         elseCaseUseCase = ElseCaseUseCase(
