@@ -17,6 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
+ *
+ * @param context For obtaining data-access object
+ * @param ioDispatcher For switching dispatcher on test
  * @author toastkidjp
  */
 class ArticleInsertion(
