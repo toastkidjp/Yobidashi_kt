@@ -93,7 +93,7 @@ class ClearItemsUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testPassNullCase() {
         clearItemsUseCase.invoke(null, Job())
 
         coVerify(exactly = 0) { adapter.clear() }
