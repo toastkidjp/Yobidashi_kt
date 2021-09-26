@@ -58,7 +58,6 @@ class ElseCaseUseCaseTest {
     @Test
     fun testTabIsNotEmptyAndCurrentIsNull() {
         every { tabIsEmpty.invoke() }.answers { false }
-        val fragment = mockk<Fragment>()
         every { findCurrentFragment.invoke() }.answers { null }
 
         elseCaseUseCase.invoke()
