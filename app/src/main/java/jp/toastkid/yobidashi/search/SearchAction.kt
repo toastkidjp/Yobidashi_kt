@@ -21,6 +21,9 @@ import kotlinx.coroutines.Job
  * @param currentUrl Current URL for site-search
  * @param onBackground
  * @param saveHistory
+ * @param viewModelSupplier
+ * @param preferenceApplierSupplier
+ * @param urlFactory
  * @author toastkidjp
  */
 class SearchAction(
