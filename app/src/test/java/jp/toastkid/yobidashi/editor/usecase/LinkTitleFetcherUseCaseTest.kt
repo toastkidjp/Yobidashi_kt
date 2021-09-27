@@ -14,7 +14,7 @@ import org.junit.Ignore
 class LinkTitleFetcherUseCaseTest {
 
     @Ignore("Because this function is used network connection.")
-    fun invoke() {
+    fun testWithRealNetwork() {
         assertEquals(
             "投資信託のモーニングスター｜投資信託・株式・国内/海外ＥＴＦ（上場投資信託）・為替/指数　マーケット情報サイト",
             LinkTitleFetcherUseCase()
