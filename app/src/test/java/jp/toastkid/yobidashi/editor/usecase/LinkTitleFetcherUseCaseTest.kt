@@ -8,10 +8,48 @@
 
 package jp.toastkid.yobidashi.editor.usecase
 
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockkStatic
+import io.mockk.unmockkAll
+import io.mockk.verify
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Ignore
+import org.junit.Test
+import java.net.URL
 
 class LinkTitleFetcherUseCaseTest {
+
+    @MockK
+    private lateinit var document: Document
+
+    @Before
+    fun setUp() {
+        MockKAnnotations.init(this)
+        every { document.title() }.returns("title")
+
+        mockkStatic(Jsoup::class)
+        every { Jsoup.parse(any<URL>(), any()) }.returns(document)
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
+    }
+
+    @Test
+    fun test() {
+        val title = LinkTitleFetcherUseCase().invoke("https://www.yahoo.co.jp")
+
+        assertEquals("title", title)
+        verify(exactly = 1) { Jsoup.parse(any<URL>(), any()) }
+        verify(exactly = 1) { document.title() }
+    }
 
     @Ignore("Because this function is used network connection.")
     fun testWithRealNetwork() {
