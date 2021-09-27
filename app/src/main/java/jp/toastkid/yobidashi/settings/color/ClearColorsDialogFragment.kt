@@ -43,7 +43,7 @@ class ClearColorsDialogFragment : DialogFragment() {
                 )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    onClick?.onClickClearColor()
+                    parentFragmentManager.setFragmentResult("clear_color", Bundle.EMPTY)
                     d.dismiss()
                 }
                 .create()

@@ -29,7 +29,7 @@ import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 /**
  * @author toastkidjp
  */
-class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScrollable {
+class ViewHistoryFragment: Fragment(), ContentScrollable {
 
     private lateinit var binding: FragmentViewHistoryBinding
 
@@ -81,6 +81,15 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
                     val text = it?.getContentIfNotHandled() ?: return@Observer
                     adapter.filter(text)
                 })
+
+        parentFragmentManager.setFragmentResultListener(
+            "clear_items",
+            viewLifecycleOwner,
+            { _, _ ->
+                adapter.clearAll{ contentViewModel?.snackShort(R.string.done_clear)}
+                popBackStack()
+            }
+        )
     }
 
     private fun finishWithResult(uri: Uri?) {
@@ -122,7 +131,6 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         return when (item.itemId) {
             R.id.clear -> {
                 val clearDialogFragment = ClearDialogFragment()
-                clearDialogFragment.setTargetFragment(this, clearDialogFragment.id)
                 clearDialogFragment.show(
                         parentFragmentManager,
                         ClearDialogFragment::class.java.simpleName
@@ -131,11 +139,6 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onClickClear() {
-        adapter.clearAll{ contentViewModel?.snackShort(R.string.done_clear)}
-        popBackStack()
     }
 
     override fun toTop() {
@@ -147,6 +150,8 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
     }
 
     override fun onDetach() {
+        parentFragmentManager.clearFragmentResultListener("clear_items")
+
         super.onDetach()
         adapter.dispose()
     }

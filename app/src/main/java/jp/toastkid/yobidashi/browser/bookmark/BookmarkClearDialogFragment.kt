@@ -11,6 +11,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 
@@ -21,24 +22,7 @@ import jp.toastkid.yobidashi.R
  */
 class BookmarkClearDialogFragment : DialogFragment() {
 
-    /**
-     * Callback interface.
-     */
-    interface OnClickBookmarkClearCallback {
-        fun onClickBookmarkClear()
-    }
-
-    /**
-     * Callback instance, this is initialized with context.
-     */
-    private var onClickBookmarkClear: OnClickBookmarkClearCallback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val target = targetFragment ?: return super.onCreateDialog(savedInstanceState)
-        if (target is OnClickBookmarkClearCallback) {
-            onClickBookmarkClear = target
-        }
-
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_bookmark)
@@ -50,7 +34,10 @@ class BookmarkClearDialogFragment : DialogFragment() {
                 )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    onClickBookmarkClear?.onClickBookmarkClear()
+                    parentFragmentManager.setFragmentResult(
+                        "clear_bookmark",
+                        bundleOf("clear_bookmark" to true)
+                    )
                     d.dismiss()
                 }
                 .create()

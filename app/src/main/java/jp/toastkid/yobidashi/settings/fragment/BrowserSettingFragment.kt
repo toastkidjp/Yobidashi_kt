@@ -36,7 +36,7 @@ import jp.toastkid.yobidashi.libs.Toaster
  *
  * @author toastkidjp
  */
-class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
+class BrowserSettingFragment : Fragment() {
 
     /**
      * Data Binding object.
@@ -66,6 +66,16 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
             it.fragment = this
             EmptyAlertSetter().invoke(it.homeInputLayout)
         }
+
+        parentFragmentManager.setFragmentResultListener(
+            "user_agent_setting",
+            viewLifecycleOwner,
+            { key, results ->
+                val userAgent = results[key] as? UserAgent ?: return@setFragmentResultListener
+                binding.userAgentValue.text = userAgent.title()
+            }
+        )
+
         initBrowserExpandable()
     }
 
@@ -305,15 +315,15 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
      */
     fun userAgent() {
         val dialogFragment = UserAgentDialogFragment()
-        dialogFragment.setTargetFragment(this, 1)
         dialogFragment.show(
                 parentFragmentManager,
                 UserAgentDialogFragment::class.java.simpleName
         )
     }
 
-    override fun onClickUserAgent(userAgent: UserAgent) {
-        binding.userAgentValue.text = userAgent.title()
+    override fun onDetach() {
+        parentFragmentManager.clearFragmentResultListener("user_agent_setting")
+        super.onDetach()
     }
 
     companion object : TitleIdSupplier {

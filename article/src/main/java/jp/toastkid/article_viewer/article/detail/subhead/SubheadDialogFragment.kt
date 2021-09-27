@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 
 /**
  * @author toastkidjp
@@ -27,11 +28,13 @@ class SubheadDialogFragment : BottomSheetDialogFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val target = targetFragment ?: return null
         val context = context ?: return null
         val recyclerView = RecyclerView(context)
-        val viewModel =
-                ViewModelProvider(target).get(SubheadDialogFragmentViewModel::class.java)
+        val findFragmentByTag =
+            parentFragmentManager.findFragmentByTag(ContentViewerFragment::class.java.canonicalName)
+                ?: return null
+        val viewModel = ViewModelProvider(findFragmentByTag)
+            .get(SubheadDialogFragmentViewModel::class.java)
         recyclerView.adapter =
                 Adapter(layoutInflater, viewModel)
                         .also { it.addAll(arguments?.getStringArrayList(KEY_EXTRA_ITEM)) }

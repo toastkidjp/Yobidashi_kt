@@ -21,7 +21,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
@@ -183,10 +182,6 @@ internal class WebViewFactory {
             dialogFragment: DialogFragment,
             supportFragmentManager: FragmentManager?
     ) {
-        dialogFragment.setTargetFragment(
-                supportFragmentManager?.findFragmentByTag(BrowserFragment::class.java.canonicalName),
-                1
-        )
         val fragmentManager = supportFragmentManager ?: return
         if (fragmentManager.isDestroyed) {
             return

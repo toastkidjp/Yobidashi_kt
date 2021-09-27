@@ -15,8 +15,10 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Inputs
 
@@ -27,30 +29,8 @@ import jp.toastkid.yobidashi.libs.Inputs
  */
 class InputNameDialogFragment : DialogFragment() {
 
-    /**
-     * Callback interface.
-     */
-    interface Callback {
-
-        /**
-         * Action using input name.
-         * @param fileName
-         */
-        fun onClickInputName(fileName: String)
-    }
-
-    /**
-     * Callback.
-     */
-    private var callback: Callback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-
-        val targetFragment = targetFragment
-        if (targetFragment is Callback) {
-            callback = targetFragment
-        }
 
         val input = EditText(activityContext).also {
             it.maxLines   = 1
@@ -92,7 +72,10 @@ class InputNameDialogFragment : DialogFragment() {
             return
         }
 
-        callback?.onClickInputName("${editText?.text.toString()}.txt")
+        parentFragmentManager.setFragmentResult(
+            "input_text",
+            bundleOf("input_text" to "${editText?.text.toString()}.txt")
+        )
         d.dismiss()
     }
 
@@ -113,12 +96,11 @@ class InputNameDialogFragment : DialogFragment() {
          *
          * @param target [Fragment]
          */
-        fun show(target: Fragment) {
+        fun show(fragmentManager: FragmentManager) {
             val dialogFragment = InputNameDialogFragment()
-            dialogFragment.setTargetFragment(target, 1)
             dialogFragment.show(
-                    target.parentFragmentManager,
-                    InputNameDialogFragment::class.java.canonicalName
+                fragmentManager,
+                InputNameDialogFragment::class.java.canonicalName
             )
         }
     }

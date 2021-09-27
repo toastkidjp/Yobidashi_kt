@@ -12,22 +12,8 @@ import jp.toastkid.yobidashi.R
  */
 internal class ClearImagesDialogFragment : DialogFragment() {
 
-    interface Callback {
-        fun onClickClearImages()
-    }
-
-    private var onClick: Callback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-        if (activityContext is Callback) {
-            onClick = activityContext
-        }
-
-        val target = targetFragment
-        if (target is Callback) {
-            onClick = target
-        }
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.clear_all)
@@ -39,7 +25,7 @@ internal class ClearImagesDialogFragment : DialogFragment() {
                 )
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    onClick?.onClickClearImages()
+                    parentFragmentManager.setFragmentResult("clear_images", Bundle.EMPTY)
                     d.dismiss()
                 }
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }

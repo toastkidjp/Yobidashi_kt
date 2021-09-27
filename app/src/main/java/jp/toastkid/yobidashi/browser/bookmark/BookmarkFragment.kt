@@ -47,9 +47,7 @@ import okio.sink
  * @author toastkidjp
  */
 class BookmarkFragment: Fragment(),
-        BookmarkClearDialogFragment.OnClickBookmarkClearCallback,
         DefaultBookmarkDialogFragment.OnClickDefaultBookmarkCallback,
-        AddingFolderDialogFragment.OnClickAddingFolder,
         CommonFragmentAction,
         ContentScrollable
 {
@@ -147,6 +145,50 @@ class BookmarkFragment: Fragment(),
 
         setHasOptionsMenu(true)
 
+        parentFragmentManager.setFragmentResultListener(
+            "clear_bookmark",
+            viewLifecycleOwner,
+            { key, results ->
+                if (results[key] != true) {
+                    return@setFragmentResultListener
+                }
+                adapter.clearAll{ contentViewModel?.snackShort(R.string.done_clear) }
+            }
+        )
+        parentFragmentManager.setFragmentResultListener(
+            "import_default",
+            viewLifecycleOwner,
+            { key, results ->
+                val currentContext = binding.root.context
+                BookmarkInitializer(
+                    FaviconFolderProviderService().invoke(currentContext)
+                )(currentContext) { adapter.showRoot() }
+                contentViewModel?.snackShort(R.string.done_addition)
+            }
+        )
+
+        parentFragmentManager.setFragmentResultListener(
+            "adding_folder",
+            viewLifecycleOwner,
+            { key, results ->
+                val title = results.getString(key)
+                if (title.isNullOrEmpty()) {
+                    return@setFragmentResultListener
+                }
+
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
+                    BookmarkInsertion(
+                        binding.root.context,
+                        title,
+                        parent = adapter.currentFolderName(),
+                        folder = true
+                    ).insert()
+
+                    adapter.reload()
+                }
+            }
+        )
+
         return binding.root
     }
 
@@ -183,29 +225,22 @@ class BookmarkFragment: Fragment(),
         return when (item.itemId) {
             R.id.clear -> {
                 BookmarkClearDialogFragment()
-                        .also {
-                            it.setTargetFragment(this, 1)
-                            it.show(
-                                    fragmentManager,
-                                    BookmarkClearDialogFragment::class.java.simpleName
-                            )
-                        }
+                    .show(
+                        fragmentManager,
+                        BookmarkClearDialogFragment::class.java.simpleName
+                    )
                 true
             }
             R.id.add_default -> {
                 DefaultBookmarkDialogFragment()
-                        .also {
-                            it.setTargetFragment(this, 2)
-                            it.show(
-                                    fragmentManager,
-                                    DefaultBookmarkDialogFragment::class.java.simpleName
-                            )
-                        }
+                    .show(
+                        fragmentManager,
+                        DefaultBookmarkDialogFragment::class.java.simpleName
+                    )
                 true
             }
             R.id.add_folder -> {
                 AddingFolderDialogFragment().also {
-                    it.setTargetFragment(this, 3)
                     it.show(
                             fragmentManager,
                             AddingFolderDialogFragment::class.java.simpleName
@@ -261,31 +296,10 @@ class BookmarkFragment: Fragment(),
         return super.pressBack()
     }
 
-    override fun onClickBookmarkClear() {
-        adapter.clearAll{ contentViewModel?.snackShort(R.string.done_clear) }
-    }
-
     override fun onClickAddDefaultBookmark() {
         val context = binding.root.context
         BookmarkInitializer(FaviconFolderProviderService().invoke(context))(context) { adapter.showRoot() }
         contentViewModel?.snackShort(R.string.done_addition)
-    }
-
-    override fun onClickAddFolder(title: String?) {
-        if (title.isNullOrEmpty()) {
-            return
-        }
-
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            BookmarkInsertion(
-                    binding.root.context,
-                    title,
-                    parent = adapter.currentFolderName(),
-                    folder = true
-            ).insert()
-
-            adapter.reload()
-        }
     }
 
     override fun toTop() {
@@ -337,6 +351,10 @@ class BookmarkFragment: Fragment(),
         disposables.cancel()
         getContentLauncher.unregister()
         exportLauncher.unregister()
+
+        parentFragmentManager.clearFragmentResultListener("clear_bookmark")
+        parentFragmentManager.clearFragmentResultListener("import_default")
+        parentFragmentManager.clearFragmentResultListener("adding_folder")
 
         super.onDetach()
     }

@@ -65,8 +65,6 @@ import java.util.Calendar
 class EditorFragment :
         Fragment(),
         TabUiFragment,
-        ClearTextDialogFragment.Callback,
-        InputNameDialogFragment.Callback,
         CommonFragmentAction,
         ContentScrollable
 {
@@ -205,6 +203,23 @@ class EditorFragment :
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
 
+        parentFragmentManager.setFragmentResultListener(
+            "clear_input",
+            viewLifecycleOwner,
+            { _, _ -> clearInput() }
+        )
+        parentFragmentManager.setFragmentResultListener(
+            "input_text",
+            viewLifecycleOwner,
+            { key, result ->
+                val fileName = result.getString(key)
+                if (fileName.isNullOrBlank()) {
+                    return@setFragmentResultListener
+                }
+                assignNewFile(fileName)
+            }
+        )
+
         reload()
     }
 
@@ -240,6 +255,9 @@ class EditorFragment :
 
         loadAs?.unregister()
         loadResultLauncher?.unregister()
+
+        parentFragmentManager.clearFragmentResultListener("clear_input")
+        parentFragmentManager.clearFragmentResultListener("input_text")
 
         super.onDetach()
     }
@@ -308,7 +326,7 @@ class EditorFragment :
     }
 
     fun clear() {
-        ClearTextDialogFragment.show(this)
+        ClearTextDialogFragment.show(parentFragmentManager)
     }
 
     /**
@@ -344,14 +362,14 @@ class EditorFragment :
             return
         }
 
-        InputNameDialogFragment.show(this)
+        InputNameDialogFragment.show(parentFragmentManager)
     }
 
     /**
      * Save current text as other file.
      */
     fun saveAs() {
-        InputNameDialogFragment.show(this)
+        InputNameDialogFragment.show(parentFragmentManager)
     }
 
     /**
@@ -591,14 +609,6 @@ class EditorFragment :
      */
     fun insert(text: CharSequence?) {
         binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
-    }
-
-    override fun onClickClearInput() {
-        clearInput()
-    }
-
-    override fun onClickInputName(fileName: String) {
-        assignNewFile(fileName)
     }
 
     companion object {

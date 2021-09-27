@@ -65,7 +65,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
         setHasOptionsMenu(true)
@@ -90,16 +90,16 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         adapter = Adapter(parentFragmentManager, viewModel)
 
         val viewLifecycleOwner = viewLifecycleOwner
-        viewModel.onClick.observe(viewLifecycleOwner, Observer {
+        viewModel.onClick.observe(viewLifecycleOwner, {
             CoroutineScope(Dispatchers.IO).launch(disposables) { imageLoaderUseCase(it) }
         })
 
-        viewModel.onLongClick.observe(viewLifecycleOwner, Observer {
+        viewModel.onLongClick.observe(viewLifecycleOwner, {
             preferenceApplier.addExcludeItem(it)
             imageLoaderUseCase()
         })
 
-        viewModel.refresh.observe(viewLifecycleOwner, Observer {
+        viewModel.refresh.observe(viewLifecycleOwner, {
             attemptLoad()
         })
 
@@ -123,6 +123,14 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                 imageLoaderUseCase,
                 imageLoader,
                 this::refreshContent
+        )
+
+        parentFragmentManager.setFragmentResultListener(
+            "excluding",
+            viewLifecycleOwner,
+            { key, results ->
+                refreshContent()
+            }
         )
     }
 
@@ -205,7 +213,6 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         when (item.itemId) {
             R.id.excluding_items_setting -> {
                 val fragment = ExcludingSettingFragment()
-                fragment.setTargetFragment(this, 1)
                 fragment.show(parentFragmentManager, "setting")
             }
             R.id.sort_by_date -> {
@@ -226,6 +233,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     override fun onDetach() {
         disposables.cancel()
+        parentFragmentManager.clearFragmentResultListener("excluding")
         super.onDetach()
     }
 

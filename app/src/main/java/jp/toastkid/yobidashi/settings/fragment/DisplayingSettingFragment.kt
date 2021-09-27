@@ -43,7 +43,7 @@ import jp.toastkid.yobidashi.settings.background.load.LoadedAction
  *
  * @author toastkidjp
  */
-class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback {
+class DisplayingSettingFragment : Fragment() {
 
     /**
      * View binding.
@@ -128,6 +128,16 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
                 preferenceApplier.colorPair()
             )
         }
+
+        parentFragmentManager.setFragmentResultListener(
+            "clear_images",
+            viewLifecycleOwner,
+            { _, _ ->
+                filesDir.clean()
+                contentViewModel?.snackShort(R.string.message_success_image_removal)
+                adapter?.notifyDataSetChanged()
+            }
+        )
     }
 
     override fun onResume() {
@@ -166,15 +176,8 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
      */
     private fun clearImages() {
         ClearImagesDialogFragment().also {
-            it.setTargetFragment(this, IMAGE_READ_REQUEST)
             it.show(parentFragmentManager, ClearImagesDialogFragment::class.java.simpleName)
         }
-    }
-
-    override fun onClickClearImages() {
-        filesDir.clean()
-        contentViewModel?.snackShort(R.string.message_success_image_removal)
-        adapter?.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -203,6 +206,9 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
     override fun onDetach() {
         contentViewModel?.refresh()
         addingLauncher.unregister()
+
+        parentFragmentManager.clearFragmentResultListener("clear_images")
+
         super.onDetach()
     }
 

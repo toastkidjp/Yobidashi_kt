@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -97,8 +96,8 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
                             viewHolder: RecyclerView.ViewHolder,
                             target: RecyclerView.ViewHolder
                     ): Boolean {
-                        val fromPos = viewHolder.adapterPosition
-                        val toPos = target.adapterPosition
+                        val fromPos = viewHolder.bindingAdapterPosition
+                        val toPos = target.bindingAdapterPosition
                         adapter?.notifyItemMoved(fromPos, toPos)
                         return true
                     }
@@ -120,8 +119,14 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
 
         val viewModel =
                 ViewModelProvider(this).get(FavoriteSearchFragmentViewModel::class.java)
-        viewModel.reload.observe(viewLifecycleOwner, Observer { adapter?.refresh() })
-        viewModel.clear.observe(viewLifecycleOwner, Observer { clear() })
+        viewModel.reload.observe(viewLifecycleOwner, {
+            it?.getContentIfNotHandled() ?: return@observe
+            adapter?.refresh()
+        })
+        viewModel.clear.observe(viewLifecycleOwner, {
+            it?.getContentIfNotHandled() ?: return@observe
+            clear()
+        })
     }
 
     /**
@@ -149,7 +154,10 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     override fun onOptionsItemSelected(item: MenuItem) =
             when (item.itemId) {
                 R.id.favorite_toolbar_menu_clear -> {
-                    ClearFavoriteSearchDialogFragment.show(parentFragmentManager, this)
+                    ClearFavoriteSearchDialogFragment.show(
+                        parentFragmentManager,
+                        ViewModelProvider(this).get(FavoriteSearchFragmentViewModel::class.java)
+                    )
                     true
                 }
                 R.id.favorite_toolbar_menu_add -> {
@@ -189,9 +197,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
      * Invoke addition.
      */
     private fun invokeAddition() {
-        FavoriteSearchAdditionDialogFragment()
-                .also { it.setTargetFragment(this, 0) }
-                .show(parentFragmentManager, "addition")
+        FavoriteSearchAdditionDialogFragment.show(this)
     }
 
     private fun colorPair() = preferenceApplier.colorPair()

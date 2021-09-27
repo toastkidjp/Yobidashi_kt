@@ -550,14 +550,6 @@ class SearchFragment : Fragment() {
     private fun extractCurrentSearchCategory() =
             headerBinding?.searchCategories?.selectedItem.toString()
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         hideKeyboard()

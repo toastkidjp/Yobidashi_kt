@@ -12,7 +12,7 @@ import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import jp.toastkid.yobidashi.R
 
 /**
@@ -22,22 +22,8 @@ import jp.toastkid.yobidashi.R
  */
 class ClearTextDialogFragment : DialogFragment() {
 
-    interface Callback {
-        fun onClickClearInput()
-    }
-
-    /**
-     * Callback of clicked positive button.
-     */
-    private var callback: Callback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-
-        val targetFragment = targetFragment
-        if (targetFragment is Callback) {
-            callback = targetFragment
-        }
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(activityContext.getString(R.string.title_clear_text))
@@ -49,7 +35,7 @@ class ClearTextDialogFragment : DialogFragment() {
                 )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    callback?.onClickClearInput()
+                    parentFragmentManager.setFragmentResult("clear_input", Bundle.EMPTY)
                     d.dismiss()
                 }
                 .create()
@@ -60,13 +46,12 @@ class ClearTextDialogFragment : DialogFragment() {
         /**
          * Show this dialog.
          *
-         * @param target [androidx.fragment.app.Fragment]
+         * @param fragmentManager Use for showing dialog
          */
-        fun show(target: Fragment) {
+        fun show(fragmentManager: FragmentManager) {
             val dialogFragment = ClearTextDialogFragment()
-            dialogFragment.setTargetFragment(target, 1)
             dialogFragment.show(
-                    target.parentFragmentManager,
+                    fragmentManager,
                     dialogFragment::class.java.canonicalName
             )
         }

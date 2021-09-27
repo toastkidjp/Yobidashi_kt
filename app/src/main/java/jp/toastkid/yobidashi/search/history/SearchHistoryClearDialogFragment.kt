@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import jp.toastkid.yobidashi.R
 
@@ -23,25 +22,9 @@ import jp.toastkid.yobidashi.R
  */
 class SearchHistoryClearDialogFragment : DialogFragment() {
 
-    /**
-     * Callback.
-     */
-    interface OnClickSearchHistoryClearCallback {
-        fun onClickSearchHistoryClear()
-    }
-
-    /**
-     * Received callback.
-     */
-    private var onClick: OnClickSearchHistoryClearCallback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
-        val target = targetFragment
-        if (target is OnClickSearchHistoryClearCallback) {
-            onClick = target
-        }
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_search_history)
                 .setMessage(
@@ -52,7 +35,7 @@ class SearchHistoryClearDialogFragment : DialogFragment() {
                 )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    onClick?.onClickSearchHistoryClear()
+                    parentFragmentManager.setFragmentResult("clear_items", Bundle.EMPTY)
                     d.dismiss()
                 }
                 .setCancelable(true)
@@ -60,9 +43,8 @@ class SearchHistoryClearDialogFragment : DialogFragment() {
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, targetFragment: Fragment) {
+        fun show(fragmentManager: FragmentManager) {
             val dialogFragment = SearchHistoryClearDialogFragment()
-            dialogFragment.setTargetFragment(targetFragment, 1)
             dialogFragment.show(
                     fragmentManager,
                     SearchHistoryClearDialogFragment::class.java.canonicalName

@@ -19,18 +19,7 @@ import jp.toastkid.yobidashi.R
  */
 class ClearDialogFragment : DialogFragment() {
 
-    interface Callback {
-        fun onClickClear()
-    }
-
-    private var onClick: Callback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val target = targetFragment
-        if (target is Callback) {
-            onClick = target
-        }
-
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
         return AlertDialog.Builder(activityContext)
@@ -43,7 +32,7 @@ class ClearDialogFragment : DialogFragment() {
                 )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    onClick?.onClickClear()
+                    parentFragmentManager.setFragmentResult("clear_items", Bundle.EMPTY)
                     d.dismiss()
                 }
                 .create()

@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.browser.bookmark
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.lib.view.text.SingleLineTextInputLayoutFactory
 import jp.toastkid.yobidashi.R
@@ -42,7 +43,10 @@ class AddingFolderDialogFragment : DialogFragment() {
                 .setView(inputLayout)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    onClick?.onClickAddFolder(inputLayout.editText?.text?.toString())
+                    parentFragmentManager.setFragmentResult(
+                        "adding_folder",
+                        bundleOf("adding_folder" to inputLayout.editText?.text?.toString())
+                    )
                     d.dismiss()
                 }
                 .setCancelable(true)

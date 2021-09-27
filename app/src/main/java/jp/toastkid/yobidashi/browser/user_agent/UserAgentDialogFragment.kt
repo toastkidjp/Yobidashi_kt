@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.annotation.LayoutRes
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.lib.color.IconColorFinder
@@ -40,11 +41,6 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
     ): View? {
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
-
-        val targetFragment = targetFragment
-        if (targetFragment is Callback) {
-            onClick = targetFragment
-        }
 
         val preferenceApplier = PreferenceApplier(activityContext)
 
@@ -75,7 +71,10 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
         binding.list.setOnItemClickListener { _, _, position, _ ->
             val userAgent = UserAgent.values()[position]
             preferenceApplier.setUserAgent(userAgent.name)
-            onClick?.onClickUserAgent(userAgent)
+            parentFragmentManager.setFragmentResult(
+                "user_agent_setting",
+                bundleOf("user_agent_setting" to userAgent)
+            )
             dismiss()
         }
         return binding.root
@@ -84,7 +83,7 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
     companion object {
 
         @LayoutRes
-        private val LAYOUT_ID = R.layout.dialog_user_agent
+        private const val LAYOUT_ID = R.layout.dialog_user_agent
 
     }
 }

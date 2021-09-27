@@ -12,12 +12,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.article_viewer.databinding.DialogDateFilterBinding
 import jp.toastkid.lib.ContentViewModel
@@ -26,8 +26,6 @@ import java.util.Calendar
 class DateFilterDialogFragment  : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogDateFilterBinding
-
-    private var filterByMonthUseCase: FilterByMonthUseCase? = null
 
     private var dateSelectedActionUseCase: DateSelectedActionUseCase? = null
 
@@ -50,12 +48,6 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
             date = Triple(year, monthOfYear, dayOfMonth)
         }
 
-        targetFragment?.let {
-            filterByMonthUseCase = FilterByMonthUseCase(
-                    ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
-            )
-        }
-
         activity?.let {
             dateSelectedActionUseCase = DateSelectedActionUseCase(
                     AppDatabase.find(it).articleRepository(),
@@ -67,7 +59,10 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
     }
 
     fun filterByMonth() {
-        filterByMonthUseCase?.invoke(binding.datePicker.year, binding.datePicker.month)
+        parentFragmentManager.setFragmentResult(
+            "date_filter",
+            bundleOf("year" to binding.datePicker.year, "month" to binding.datePicker.month)
+        )
 
         dismiss()
     }

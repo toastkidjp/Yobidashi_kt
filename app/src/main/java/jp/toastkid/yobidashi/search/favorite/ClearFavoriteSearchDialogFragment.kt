@@ -11,10 +11,9 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 
 /**
@@ -24,8 +23,6 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-
-        val targetFragment = targetFragment ?: return super.onCreateDialog(savedInstanceState)
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_delete_all)
@@ -38,9 +35,8 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    ViewModelProvider(targetFragment)
-                            .get(FavoriteSearchFragmentViewModel::class.java)
-                            .clear()
+                    (arguments?.getSerializable(KEY_VIEW_MODEL) as? FavoriteSearchFragmentViewModel)
+                            ?.clear()
                     d.dismiss()
                 }
                 .create()
@@ -48,9 +44,11 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
 
     companion object {
 
-        fun show(fragmentManager: FragmentManager, target: Fragment) {
+        private const val KEY_VIEW_MODEL = "view_model"
+
+        fun show(fragmentManager: FragmentManager, viewModel: FavoriteSearchFragmentViewModel) {
             val dialogFragment = ClearFavoriteSearchDialogFragment()
-            dialogFragment.setTargetFragment(target, 1)
+            dialogFragment.arguments = bundleOf(KEY_VIEW_MODEL to viewModel)
             dialogFragment.show(
                     fragmentManager,
                     ClearFavoriteSearchDialogFragment::class.java.canonicalName

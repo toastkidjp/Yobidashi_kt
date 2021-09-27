@@ -11,7 +11,6 @@ import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabaseLockedException
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -35,8 +34,10 @@ import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogFragment
+import jp.toastkid.article_viewer.article.list.date.FilterByMonthUseCase
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.menu.MenuPopup
+import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
 import jp.toastkid.article_viewer.bookmark.BookmarkFragment
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
@@ -58,7 +59,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 /**
  * Article list fragment.
@@ -96,17 +96,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         }
 
         private fun showFeedback() {
-            contentViewModel?.snackWithAction(
-                    getString(R.string.message_done_import),
-                    getString(R.string.reload)
-            ) {
-                try {
-                    searchUseCase?.all()
-                } catch (e: SQLiteDatabaseLockedException) {
-                    Timber.e(e)
-                    showFeedback()
-                }
-            }
+            contentViewModel?.snackShort(R.string.message_done_import)
         }
     }
 
@@ -274,6 +264,27 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             searchUseCase?.filter(keyword, true)
         })
 
+        parentFragmentManager.setFragmentResultListener(
+            "sorting",
+            viewLifecycleOwner,
+            { key, result ->
+                val sort = result[key] as? Sort ?: return@setFragmentResultListener
+                viewModel?.sort(sort)
+            }
+        )
+
+        parentFragmentManager.setFragmentResultListener(
+            "date_filter",
+            viewLifecycleOwner,
+            { key, result ->
+                val year = result.getInt("year")
+                val month = result.getInt("month")
+                FilterByMonthUseCase(
+                    ViewModelProvider(this).get(ArticleListFragmentViewModel::class.java)
+                ).invoke(year, month)
+            }
+        )
+
         searchUseCase = ArticleSearchUseCase(
                 ListLoaderUseCase(adapter),
                 articleRepository,
@@ -320,13 +331,11 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             }
             R.id.action_sort -> {
                 val dialogFragment = SortSettingDialogFragment()
-                dialogFragment.setTargetFragment(this, REQUEST_CODE)
                 dialogFragment.show(parentFragmentManager, "")
                 true
             }
             R.id.action_date_filter -> {
                 val dateFilterDialogFragment = DateFilterDialogFragment()
-                dateFilterDialogFragment.setTargetFragment(this, 0)
                 dateFilterDialogFragment.show(parentFragmentManager, "")
                 true
             }
@@ -365,6 +374,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         inputChannel.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
         setTargetLauncher.unregister()
+        parentFragmentManager.clearFragmentResultListener("sorting")
+        parentFragmentManager.clearFragmentResultListener("date_filter")
         super.onDetach()
     }
 

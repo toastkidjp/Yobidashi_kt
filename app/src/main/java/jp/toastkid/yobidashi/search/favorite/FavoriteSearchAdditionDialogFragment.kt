@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -35,7 +37,7 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = DataBindingUtil.inflate(
@@ -95,10 +97,7 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
     }
 
     private fun reload() {
-        val target = targetFragment ?: return
-        ViewModelProvider(target)
-                .get(FavoriteSearchFragmentViewModel::class.java)
-                .reload()
+        (arguments?.get(KEY_VIEW_MODEL) as? FavoriteSearchFragmentViewModel)?.reload()
     }
 
     /**
@@ -120,6 +119,8 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
 
         FavoriteSearchInsertion(binding.root.context, category, query).invoke()
 
+        reload()
+
         val message = MessageFormat.format(
                 getString(R.string.favorite_search_addition_successful_format),
                 query
@@ -132,6 +133,20 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
     }
 
     companion object {
+
+        private const val KEY_VIEW_MODEL = "view_model"
+
+        fun show(parentFragment: Fragment) {
+            val fragment = FavoriteSearchAdditionDialogFragment()
+            fragment.arguments = bundleOf(
+                KEY_VIEW_MODEL to
+                        ViewModelProvider(parentFragment).get(FavoriteSearchFragmentViewModel::class.java)
+            )
+            fragment.show(
+                parentFragment.parentFragmentManager,
+                fragment::class.java.canonicalName
+            )
+        }
 
         /**
          * Layout ID.
