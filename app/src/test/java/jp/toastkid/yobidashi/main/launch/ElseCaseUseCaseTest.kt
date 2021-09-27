@@ -38,7 +38,7 @@ class ElseCaseUseCaseTest {
         MockKAnnotations.init(this)
 
         every { openNewTab.invoke() }.just(Runs)
-        every { replaceToCurrentTab.invoke(any()) }.answers { Unit }
+        every { replaceToCurrentTab.invoke(any()) }.just(Runs)
 
         elseCaseUseCase = ElseCaseUseCase(
                 tabIsEmpty, openNewTab, findCurrentFragment, replaceToCurrentTab
