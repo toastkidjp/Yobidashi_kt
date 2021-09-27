@@ -43,7 +43,7 @@ class LinkTitleFetcherUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testWithMock() {
         val title = LinkTitleFetcherUseCase().invoke("https://www.yahoo.co.jp")
 
         assertEquals("title", title)
