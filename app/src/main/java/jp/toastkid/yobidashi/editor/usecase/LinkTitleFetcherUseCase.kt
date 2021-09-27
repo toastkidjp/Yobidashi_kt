@@ -16,8 +16,7 @@ class LinkTitleFetcherUseCase {
 
     @WorkerThread
     operator fun invoke(url: String): String {
-        val document = Jsoup.parse(URL(url), 1000)
-        return document.title() ?: url
+        return Jsoup.parse(URL(url), 1000).title() ?: url
     }
 
 }
