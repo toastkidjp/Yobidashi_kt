@@ -11,6 +11,7 @@ import coil.request.ImageRequest
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.lib.window.WindowRectCalculatorCompat
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.settings.background.ImageDialogFragment
@@ -64,10 +65,11 @@ internal class LoadedAction (
 
                     val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
                     fixedImage?.let {
+                        val displaySize = WindowRectCalculatorCompat().invoke(context as? Activity) ?: return@let
                         ImageStoreService(
                                 FilesDir(context, fileDir),
                                 PreferenceApplier(context)
-                        )(it, uri, (context as? Activity)?.windowManager?.defaultDisplay)
+                        )(it, uri, displaySize)
                     }
                     fixedImage
                 }

@@ -14,6 +14,7 @@ import android.net.Uri
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.lib.window.WindowRectCalculatorCompat
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.background.load.ImageStoreService
 import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
@@ -28,11 +29,13 @@ class AttachToThisAppBackgroundUseCase(
             FilesDir(it, DisplayingSettingFragment.getBackgroundDirectory()),
             PreferenceApplier(it)
         )
-    }
+    },
+    private val windowRectCalculatorCompat: WindowRectCalculatorCompat = WindowRectCalculatorCompat()
 ) {
 
     operator fun invoke(context: Context, uri: Uri, image: Bitmap) {
-        imageStoreServiceFactory(context)(image, uri, (context as? Activity)?.windowManager?.defaultDisplay)
+        val displaySize = windowRectCalculatorCompat.invoke(context as? Activity) ?: return
+        imageStoreServiceFactory(context)(image, uri, displaySize)
         contentViewModel.refresh()
         contentViewModel.snackShort(R.string.done_addition)
     }
