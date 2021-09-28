@@ -60,7 +60,7 @@ class ArticleListMenuPopupActionUseCaseTest {
     }
 
     @Test
-    fun addToBookmark() {
+    fun testAddToBookmark() {
         articleListMenuPopupActionUseCase.addToBookmark(1)
 
         coVerify(exactly = 1) { bookmarkRepository.add(any()) }
