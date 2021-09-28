@@ -40,6 +40,7 @@ class ArticleListMenuPopupActionUseCaseTest {
     @MockK
     private lateinit var deleted: (Article) -> Unit
 
+    @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
