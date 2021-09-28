@@ -66,4 +66,13 @@ class ArticleListMenuPopupActionUseCaseTest {
         coVerify(exactly = 1) { bookmarkRepository.add(any()) }
     }
 
+    @Test
+    fun delete() {
+        articleListMenuPopupActionUseCase.delete(1)
+
+        coVerify(exactly = 1) { articleRepository.findArticleById(any()) }
+        coVerify(exactly = 1) { articleRepository.delete(any()) }
+        coVerify(exactly = 1) { deleted(any()) }
+    }
+
 }
