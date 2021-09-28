@@ -67,7 +67,7 @@ class ArticleListMenuPopupActionUseCaseTest {
     }
 
     @Test
-    fun delete() {
+    fun testDelete() {
         articleListMenuPopupActionUseCase.delete(1)
 
         coVerify(exactly = 1) { articleRepository.findArticleById(any()) }
