@@ -23,6 +23,7 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.window.WindowRectCalculatorCompat
 import jp.toastkid.yobidashi.settings.background.load.ImageStoreService
 import org.junit.After
 import org.junit.Before
@@ -41,6 +42,9 @@ class AttachToThisAppBackgroundUseCaseTest {
 
     @MockK
     private lateinit var imageStoreServiceFactory: (Context) -> ImageStoreService
+
+    @MockK
+    private lateinit var windowRectCalculatorCompat: WindowRectCalculatorCompat
 
     @MockK
     private lateinit var imageStoreService: ImageStoreService
@@ -63,10 +67,9 @@ class AttachToThisAppBackgroundUseCaseTest {
 
         every { contentViewModel.refresh() }.just(Runs)
         every { contentViewModel.snackShort(any<Int>()) }.just(Runs)
-        every { context.windowManager }.returns(windowManager)
-        every { windowManager.defaultDisplay }.returns(mockk())
         every { imageStoreServiceFactory.invoke(any()) }.returns(imageStoreService)
         every { imageStoreService.invoke(any(), any(), any()) }.just(Runs)
+        every { windowRectCalculatorCompat.invoke(any()) }.returns(mockk())
     }
 
     @After
@@ -80,8 +83,7 @@ class AttachToThisAppBackgroundUseCaseTest {
 
         verify(exactly = 1) { contentViewModel.refresh() }
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 1) { context.windowManager }
-        verify(exactly = 1) { windowManager.defaultDisplay }
+        verify(exactly = 1) { windowRectCalculatorCompat.invoke(any()) }
         verify(exactly = 1) { imageStoreServiceFactory.invoke(any()) }
         verify(exactly = 1) { imageStoreService.invoke(any(), any(), any()) }
     }
