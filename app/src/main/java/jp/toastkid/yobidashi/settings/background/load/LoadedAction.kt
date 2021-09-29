@@ -101,7 +101,7 @@ internal class LoadedAction (
                 parent,
                 R.string.message_done_set_image,
                 R.string.display,
-                View.OnClickListener{ v ->
+                { v ->
                     val viewContext = v.context
                     if (viewContext is FragmentActivity) {
                         ImageDialogFragment.withBitmap(image)
