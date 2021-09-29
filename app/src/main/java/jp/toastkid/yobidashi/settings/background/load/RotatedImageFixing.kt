@@ -22,6 +22,10 @@ class RotatedImageFixing(
 ) {
 
     operator fun invoke(contentResolver: ContentResolver, bitmap: Bitmap?, imageUri: Uri): Bitmap? {
+        if (bitmap == null) {
+            return null
+        }
+
         val openFileDescriptor = contentResolver.openFileDescriptor(imageUri, "r") ?: return bitmap
         val exifInterface = exifInterfaceFactory(openFileDescriptor.fileDescriptor)
         val orientation = exifInterface.getAttributeInt(
@@ -37,11 +41,7 @@ class RotatedImageFixing(
         }
     }
 
-    private fun rotate(bitmap: Bitmap?, degree: Float): Bitmap? {
-        if (bitmap == null) {
-            return null
-        }
-
+    private fun rotate(bitmap: Bitmap, degree: Float): Bitmap? {
         val matrix = Matrix()
         matrix.postRotate(degree)
         val rotatedBitmap = Bitmap.createBitmap(
