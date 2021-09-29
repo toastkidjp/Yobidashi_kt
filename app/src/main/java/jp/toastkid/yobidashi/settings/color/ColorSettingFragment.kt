@@ -111,7 +111,7 @@ class ColorSettingFragment : Fragment(),
         parentFragmentManager.setFragmentResultListener(
             "clear_color",
             viewLifecycleOwner,
-            { key, result ->
+            { _, _ ->
                 adapter?.clear()
             }
         )

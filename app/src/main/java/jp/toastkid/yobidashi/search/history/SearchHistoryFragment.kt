@@ -105,10 +105,7 @@ class SearchHistoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.clear -> {
-                val fragmentManager = parentFragmentManager
-                SearchHistoryClearDialogFragment.show(
-                    fragmentManager
-                )
+                SearchHistoryClearDialogFragment.show(parentFragmentManager)
                 true
             }
             else -> super.onOptionsItemSelected(item)

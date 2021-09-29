@@ -34,6 +34,7 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorDialogFragment
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
@@ -162,6 +163,12 @@ class WebViewClientFactory(
                 url?.let {
                     val context: Context? = view?.context
                     val uri: Uri = Uri.parse(url)
+
+                    if (RedirectionUseCase.isTarget(uri)) {
+                        RedirectionUseCase().invoke(view, uri)
+                        return@let false
+                    }
+
                     when (uri.scheme) {
                         "market", "intent" -> {
                             try {

@@ -59,11 +59,11 @@ class LinkFormInsertionUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { editText.getText() }.returns(editable)
-        coEvery { editText.getSelectionStart() }.returns(2)
+        every { editText.text }.returns(editable)
+        coEvery { editText.selectionStart }.returns(2)
         coEvery { editable.insert(any(), any()) }.returns(editable)
         coEvery { editable.toString() }.returns("Too long text is good.")
-        every { editText.getContext() }.returns(context)
+        every { editText.context }.returns(context)
         every { context.getString(any()) }.returns("test")
         coEvery { contentViewModel.snackWithAction(any(), any(), any()) }.returns(Unit)
         coEvery { linkTitleFetcherUseCase.invoke(any()) }.returns("title")
@@ -84,16 +84,52 @@ class LinkFormInsertionUseCaseTest {
     fun testSuccessfulCase() {
         linkFormInsertionUseCase.invoke()
 
-        verify(atLeast = 1) { editText.getText() }
-        coVerify(atLeast = 1) { editText.getSelectionStart() }
+        verify(atLeast = 1) { editText.text }
+        coVerify(atLeast = 1) { editText.selectionStart }
         coVerify(exactly = 1) { editable.insert(any(), any()) }
         coVerify(exactly = 1) { editable.toString() }
         verify(atLeast = 1) { Urls.isInvalidUrl(any()) }
-        verify(atLeast = 1) { editText.getContext() }
+        verify(atLeast = 1) { editText.context }
         verify(atLeast = 1) { context.getString(any()) }
         coVerify(exactly = 1) { contentViewModel.snackWithAction(any(), any(), any()) }
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         coVerify(exactly = 1) { linkTitleFetcherUseCase.invoke(any()) }
+    }
+
+    @Test
+    fun testClipIsNullCase() {
+        every { Clipboard.getPrimary(any()) }.returns(null)
+
+        linkFormInsertionUseCase.invoke()
+
+        verify(exactly = 0) { editText.getText() }
+        coVerify(exactly = 0) { editText.getSelectionStart() }
+        coVerify(exactly = 0) { editable.insert(any(), any()) }
+        coVerify(exactly = 0) { editable.toString() }
+        verify(exactly = 0) { Urls.isInvalidUrl(any()) }
+        verify(atLeast = 1) { editText.getContext() }
+        verify(exactly = 0) { context.getString(any()) }
+        verify(exactly = 0) { contentViewModel.snackWithAction(any(), any(), any()) }
+        verify(exactly = 1) { Clipboard.getPrimary(any()) }
+        coVerify(exactly = 0) { linkTitleFetcherUseCase.invoke(any()) }
+    }
+
+    @Test
+    fun test() {
+        every { Clipboard.getPrimary(any()) }.returns("")
+
+        linkFormInsertionUseCase.invoke()
+
+        verify(exactly = 0) { editText.getText() }
+        coVerify(exactly = 0) { editText.getSelectionStart() }
+        coVerify(exactly = 0) { editable.insert(any(), any()) }
+        coVerify(exactly = 0) { editable.toString() }
+        verify(exactly = 0) { Urls.isInvalidUrl(any()) }
+        verify(atLeast = 1) { editText.getContext() }
+        verify(exactly = 0) { context.getString(any()) }
+        verify(exactly = 0) { contentViewModel.snackWithAction(any(), any(), any()) }
+        verify(exactly = 1) { Clipboard.getPrimary(any()) }
+        coVerify(exactly = 0) { linkTitleFetcherUseCase.invoke(any()) }
     }
 
 }

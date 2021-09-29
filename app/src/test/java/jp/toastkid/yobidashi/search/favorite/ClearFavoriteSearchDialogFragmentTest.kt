@@ -26,7 +26,7 @@ class ClearFavoriteSearchDialogFragmentTest {
         MockKAnnotations.init(this)
 
         mockkConstructor(ClearFavoriteSearchDialogFragment::class)
-        every { anyConstructed<ClearFavoriteSearchDialogFragment>().setTargetFragment(any(), any()) }.answers { Unit }
+        every { anyConstructed<ClearFavoriteSearchDialogFragment>().arguments = any() }.answers { Unit }
         every { anyConstructed<ClearFavoriteSearchDialogFragment>().show(any<FragmentManager>(), any()) }.answers { Unit }
     }
 
@@ -39,7 +39,7 @@ class ClearFavoriteSearchDialogFragmentTest {
     fun test() {
         ClearFavoriteSearchDialogFragment.show(mockk(), mockk())
 
-        verify(exactly = 1) { anyConstructed<ClearFavoriteSearchDialogFragment>().setTargetFragment(any(), any())  }
+        verify(exactly = 1) { anyConstructed<ClearFavoriteSearchDialogFragment>().arguments = any() }
         verify(exactly = 1) { anyConstructed<ClearFavoriteSearchDialogFragment>().show(any<FragmentManager>(), any())  }
     }
 
