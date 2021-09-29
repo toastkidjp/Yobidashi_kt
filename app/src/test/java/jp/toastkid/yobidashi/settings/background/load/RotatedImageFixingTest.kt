@@ -80,7 +80,7 @@ class RotatedImageFixingTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         rotatedImageFixing.invoke(contentResolver, bitmap, imageUri)
 
         verify(exactly = 1) { Bitmap.createBitmap(any<Bitmap>(), any(), any(), any(), any(), any(), any()) }
