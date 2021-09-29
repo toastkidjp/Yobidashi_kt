@@ -86,4 +86,11 @@ class RotatedImageFixingTest {
         verify(exactly = 1) { Bitmap.createBitmap(any<Bitmap>(), any(), any(), any(), any(), any(), any()) }
     }
 
+    @Test
+    fun test() {
+        rotatedImageFixing.invoke(contentResolver, null, imageUri)
+
+        verify(exactly = 0) { Bitmap.createBitmap(any<Bitmap>(), any(), any(), any(), any(), any(), any()) }
+    }
+
 }
