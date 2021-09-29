@@ -10,13 +10,20 @@ package jp.toastkid.yobidashi.editor.usecase
 
 import androidx.annotation.WorkerThread
 import org.jsoup.Jsoup
+import timber.log.Timber
+import java.net.SocketTimeoutException
 import java.net.URL
 
 class LinkTitleFetcherUseCase {
 
     @WorkerThread
     operator fun invoke(url: String): String {
-        val title = Jsoup.parse(URL(url), 1000).title() ?: return url
+        val title = try {
+            Jsoup.parse(URL(url), 3000).title()
+        } catch (e: SocketTimeoutException) {
+            Timber.e(e)
+            null
+        } ?: return url
         return "[$title]($url)"
     }
 
