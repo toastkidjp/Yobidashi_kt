@@ -94,7 +94,7 @@ class RotatedImageFixingTest {
     }
 
     @Test
-    fun test() {
+    fun testCannotGetFileDescriptor() {
         every { contentResolver.openFileDescriptor(any(), any()) }.returns(null)
 
         rotatedImageFixing.invoke(contentResolver, bitmap, imageUri)
