@@ -102,4 +102,14 @@ class RotatedImageFixingTest {
         verify(exactly = 0) { Bitmap.createBitmap(any<Bitmap>(), any(), any(), any(), any(), any(), any()) }
     }
 
+    @Test
+    fun test() {
+        every { exifInterface.getAttributeInt(any(), any()) }
+            .returns(ExifInterface.ORIENTATION_TRANSVERSE)
+
+        rotatedImageFixing.invoke(contentResolver, bitmap, imageUri)
+
+        verify(exactly = 0) { Bitmap.createBitmap(any<Bitmap>(), any(), any(), any(), any(), any(), any()) }
+    }
+
 }
