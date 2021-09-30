@@ -21,6 +21,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
+import java.net.SocketTimeoutException
 import java.net.URL
 
 class LinkTitleFetcherUseCaseTest {
@@ -49,6 +50,16 @@ class LinkTitleFetcherUseCaseTest {
         assertEquals("[title](https://www.yahoo.co.jp)", title)
         verify(exactly = 1) { Jsoup.parse(any<URL>(), any()) }
         verify(exactly = 1) { document.title() }
+    }
+
+    @Test
+    fun test() {
+        every { Jsoup.parse(any<URL>(), any()) }.throws(SocketTimeoutException())
+
+        val title = LinkTitleFetcherUseCase().invoke("https://www.yahoo.co.jp")
+
+        assertEquals("https://www.yahoo.co.jp", title)
+        verify(exactly = 1) { Jsoup.parse(any<URL>(), any()) }
     }
 
     @Ignore("Because this function is used network connection.")
