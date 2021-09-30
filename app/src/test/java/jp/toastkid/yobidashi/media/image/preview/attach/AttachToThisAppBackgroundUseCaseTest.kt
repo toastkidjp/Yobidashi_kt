@@ -88,4 +88,17 @@ class AttachToThisAppBackgroundUseCaseTest {
         verify(exactly = 1) { imageStoreService.invoke(any(), any(), any()) }
     }
 
+    @Test
+    fun test() {
+        every { windowRectCalculatorCompat.invoke(any()) }.returns(null)
+
+        attachToThisAppBackgroundUseCase.invoke(context, uri, image)
+
+        verify(exactly = 1) { windowRectCalculatorCompat.invoke(any()) }
+        verify(exactly = 0) { contentViewModel.refresh() }
+        verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 0) { imageStoreServiceFactory.invoke(any()) }
+        verify(exactly = 0) { imageStoreService.invoke(any(), any(), any()) }
+    }
+
 }
