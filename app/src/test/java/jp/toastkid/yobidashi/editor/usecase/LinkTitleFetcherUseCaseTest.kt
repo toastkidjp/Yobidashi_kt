@@ -46,7 +46,7 @@ class LinkTitleFetcherUseCaseTest {
     fun testWithMock() {
         val title = LinkTitleFetcherUseCase().invoke("https://www.yahoo.co.jp")
 
-        assertEquals("title", title)
+        assertEquals("[title](https://www.yahoo.co.jp)", title)
         verify(exactly = 1) { Jsoup.parse(any<URL>(), any()) }
         verify(exactly = 1) { document.title() }
     }
