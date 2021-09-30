@@ -53,7 +53,7 @@ class LinkTitleFetcherUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testOccurredSocketTimeoutExceptionCase() {
         every { Jsoup.parse(any<URL>(), any()) }.throws(SocketTimeoutException())
 
         val title = LinkTitleFetcherUseCase().invoke("https://www.yahoo.co.jp")
