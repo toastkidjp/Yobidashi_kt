@@ -7,6 +7,7 @@
  */
 package jp.toastkid.article_viewer.article.list.menu
 
+import androidx.annotation.VisibleForTesting
 import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.bookmark.Bookmark
@@ -21,11 +22,11 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class ArticleListMenuPopupActionUseCase(
-        private val articleRepository: ArticleRepository,
-        private val bookmarkRepository: BookmarkRepository,
-        private val deleted: (Article) -> Unit,
-        private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val articleRepository: ArticleRepository,
+    private val bookmarkRepository: BookmarkRepository,
+    private val deleted: (Article) -> Unit,
+    @VisibleForTesting private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    @VisibleForTesting private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MenuPopupActionUseCase {
 
     override fun addToBookmark(id: Int) {
