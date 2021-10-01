@@ -4,6 +4,7 @@ import android.app.Application
 import android.webkit.WebView
 import androidx.core.content.ContextCompat
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
@@ -58,6 +59,8 @@ class ExtendedApplication : Application() {
         DefaultBackgroundImagePreparation()(this) {
             preferenceApplier.backgroundImagePath = it.absolutePath
         }
+
+        preferenceApplier.setDefaultSearchEngine(SearchCategory.getDefaultCategoryName())
     }
 
 }
