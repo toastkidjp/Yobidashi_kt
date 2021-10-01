@@ -111,6 +111,21 @@ class SelectedTextUseCaseTest {
     }
 
     @Test
+    fun searchWithPreviewUrl() {
+        every { Urls.isValidUrl(any()) }.returns(true)
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) }.returns(mockk())
+
+        selectedTextUseCase.searchWithPreview("https://www.yahoo.co.jp", "test")
+
+        verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 0) { browserViewModel.open(any()) }
+        verify(exactly = 1) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { urlFactory.invoke(any(), any()) }
+        verify(exactly = 1) { Uri.parse(any()) }
+    }
+
+    @Test
     fun searchWithEmptyWord() {
         selectedTextUseCase.search("", "test")
 
