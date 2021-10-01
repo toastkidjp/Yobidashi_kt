@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.browser.webview.usecase
 
+import android.net.Uri
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -15,10 +16,13 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.Urls
 import jp.toastkid.search.UrlFactory
 import org.junit.After
 import org.junit.Before
@@ -50,6 +54,9 @@ class SelectedTextUseCaseTest {
         every { browserViewModel.open(any()) }.answers { Unit }
         every { browserViewModel.preview(any()) }.answers { Unit }
         every { urlFactory.invoke(any(), any()) }.returns(mockk())
+
+        mockkObject(Urls)
+        every { Urls.isValidUrl(any()) }.returns(false)
     }
 
     @After
@@ -86,6 +93,21 @@ class SelectedTextUseCaseTest {
         verify(exactly = 0) { browserViewModel.open(any()) }
         verify(exactly = 1) { browserViewModel.preview(any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any()) }
+    }
+
+    @Test
+    fun searchUrl() {
+        every { Urls.isValidUrl(any()) }.returns(true)
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) }.returns(mockk())
+
+        selectedTextUseCase.search("https://www.yahoo.co.jp", "test")
+
+        verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 0) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { urlFactory.invoke(any(), any()) }
+        verify(exactly = 1) { Uri.parse(any()) }
     }
 
     @Test
