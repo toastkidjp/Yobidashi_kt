@@ -109,7 +109,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
                         if (direction != ItemTouchHelper.RIGHT) {
                             return
                         }
-                        adapter?.removeAt(viewHolder.adapterPosition)
+                        adapter?.removeAt(viewHolder.bindingAdapterPosition)
                     }
                 }).attachToRecyclerView(binding?.favoriteSearchView)
     }

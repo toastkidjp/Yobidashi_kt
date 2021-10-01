@@ -19,8 +19,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.zxing.integration.android.IntentIntegrator
-import com.google.zxing.integration.android.IntentResult
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
@@ -45,9 +43,9 @@ import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
+import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -73,7 +71,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -155,6 +152,25 @@ class MainActivity : AppCompatActivity(),
             tabs.openNewPdfTab(uri)
             replaceToCurrentTab(true)
             tabListUseCase?.dismiss()
+        }
+
+    private val requestPermissionForOpenPdfTab =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                return@registerForActivityResult
+            }
+
+            activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
+        }
+
+    private val requestPermissionForOpenEditorTab =
+        registerForActivityResult(WriteStoragePermissionRequestContract()) {
+            if (it.first.not()) {
+                return@registerForActivityResult
+            }
+
+            tabs.openNewEditorTab(it.second)
+            replaceToCurrentTab()
         }
 
     /**
@@ -563,37 +579,14 @@ class MainActivity : AppCompatActivity(),
      * Open PDF from storage.
      */
     private fun openPdfTabFromStorage() {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            runtimePermissions
-                    ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    ?.receiveAsFlow()
-                    ?.collect { permission ->
-                        if (!permission.granted) {
-                            return@collect
-                        }
-
-                        activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
-                    }
-        }
+        requestPermissionForOpenPdfTab.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
     /**
      * Open Editor tab.
      */
     private fun openEditorTab(path: String? = null) {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            runtimePermissions
-                    ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    ?.receiveAsFlow()
-                    ?.collect { permission ->
-                        if (!permission.granted) {
-                            return@collect
-                        }
-
-                        tabs.openNewEditorTab(path)
-                        replaceToCurrentTab()
-                    }
-        }
+        requestPermissionForOpenEditorTab.launch(path)
     }
 
     /**
@@ -703,30 +696,6 @@ class MainActivity : AppCompatActivity(),
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK || data == null) {
-            return
-        }
-        when (requestCode) {
-            IntentIntegrator.REQUEST_CODE -> {
-                val result: IntentResult? =
-                        IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-                if (result?.contents == null) {
-                    Toaster.snackShort(binding.content, "Cancelled", preferenceApplier.colorPair())
-                    return
-                }
-                Toaster.snackLong(
-                    binding.content,
-                    "Scanned: ${result.contents}",
-                    R.string.clip,
-                    { Clipboard.clip(this, result.contents) },
-                    preferenceApplier.colorPair()
-                )
-            }
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         floatingPreview?.onPause()
@@ -741,6 +710,8 @@ class MainActivity : AppCompatActivity(),
         floatingPreview?.dispose()
         GlobalWebViewPool.dispose()
         activityResultLauncher?.unregister()
+        requestPermissionForOpenPdfTab.unregister()
+        requestPermissionForOpenEditorTab.unregister()
         super.onDestroy()
     }
 
