@@ -50,9 +50,9 @@ class SelectedTextUseCaseTest {
         MockKAnnotations.init(this)
         every { stringResolver.invoke(any(), any()) }.returns("Count: 4")
         every { contentViewModel.snackShort(any<String>()) }.just(Runs)
-        every { contentViewModel.snackShort(any<Int>()) }.answers { Unit }
-        every { browserViewModel.open(any()) }.answers { Unit }
-        every { browserViewModel.preview(any()) }.answers { Unit }
+        every { contentViewModel.snackShort(any<Int>()) }.just(Runs)
+        every { browserViewModel.open(any()) }.just(Runs)
+        every { browserViewModel.preview(any()) }.just(Runs)
         every { urlFactory.invoke(any(), any()) }.returns(mockk())
 
         mockkObject(Urls)
