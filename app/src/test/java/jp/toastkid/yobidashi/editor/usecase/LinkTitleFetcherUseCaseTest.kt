@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.editor.usecase
 
 import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
@@ -25,6 +26,9 @@ import java.net.SocketTimeoutException
 import java.net.URL
 
 class LinkTitleFetcherUseCaseTest {
+
+    @InjectMockKs
+    private lateinit var linkTitleFetcherUseCase: LinkTitleFetcherUseCase
 
     @MockK
     private lateinit var document: Document
@@ -45,7 +49,7 @@ class LinkTitleFetcherUseCaseTest {
 
     @Test
     fun testWithMock() {
-        val title = LinkTitleFetcherUseCase().invoke("https://www.yahoo.co.jp")
+        val title = linkTitleFetcherUseCase.invoke("https://www.yahoo.co.jp")
 
         assertEquals("[title](https://www.yahoo.co.jp)", title)
         verify(exactly = 1) { Jsoup.parse(any<URL>(), any()) }
@@ -56,7 +60,7 @@ class LinkTitleFetcherUseCaseTest {
     fun testOccurredSocketTimeoutExceptionCase() {
         every { Jsoup.parse(any<URL>(), any()) }.throws(SocketTimeoutException())
 
-        val title = LinkTitleFetcherUseCase().invoke("https://www.yahoo.co.jp")
+        val title = linkTitleFetcherUseCase.invoke("https://www.yahoo.co.jp")
 
         assertEquals("https://www.yahoo.co.jp", title)
         verify(exactly = 1) { Jsoup.parse(any<URL>(), any()) }
