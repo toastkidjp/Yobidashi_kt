@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.libs
+package jp.toastkid.lib.input
 
 import android.app.Activity
 import android.view.Window

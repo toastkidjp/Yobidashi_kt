@@ -19,7 +19,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.lib.input.Inputs
 
 /**
  * Dialog for input name dialog.

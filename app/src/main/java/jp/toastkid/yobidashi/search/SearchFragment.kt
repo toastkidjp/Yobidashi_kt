@@ -44,7 +44,7 @@ import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
-import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment

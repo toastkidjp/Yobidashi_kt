@@ -36,7 +36,7 @@ import jp.toastkid.yobidashi.editor.ListHeadAdder
 import jp.toastkid.yobidashi.editor.OrderedListHeadAdder
 import jp.toastkid.yobidashi.editor.StringSurroundingUseCase
 import jp.toastkid.yobidashi.editor.TableConverter
-import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import org.junit.After

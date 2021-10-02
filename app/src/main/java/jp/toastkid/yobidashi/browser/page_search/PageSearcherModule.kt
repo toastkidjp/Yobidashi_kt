@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
-import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.lib.input.Inputs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
