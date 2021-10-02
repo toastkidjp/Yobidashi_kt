@@ -118,6 +118,11 @@ enum class SearchCategory(
             R.drawable.ic_privacywall,
             "https://www.privacywall.org/search/secure/?q="
     ),
+    BRAVE(
+        R.string.search_category_brave,
+        R.drawable.ic_brave,
+        "https://search.brave.com/search?source=web&q="
+    ),
     ALOHA_FIND(
             R.string.search_category_aloha_find,
             R.drawable.ic_alohafind,
