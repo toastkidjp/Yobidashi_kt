@@ -42,8 +42,8 @@ class InputsTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { view.getContext() }.returns(context)
-        every { view.getWindowToken() }.returns(mockk())
+        every { view.context }.returns(context)
+        every { view.windowToken }.returns(mockk())
         every { context.getSystemService(any()) }.returns(inputMethodManager)
         every { inputMethodManager.isActive }.returns(true)
         every { inputMethodManager.showSoftInput(any(), any()) }.returns(true)
