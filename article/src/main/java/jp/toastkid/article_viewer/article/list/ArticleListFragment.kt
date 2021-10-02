@@ -291,7 +291,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         )
 
         adapter.addLoadStateListener(
-            ArticleLoadStateListener(contentViewModel, { adapter.itemCount }, { getString(it) })
+            ArticleLoadStateListener(contentViewModel, { adapter.itemCount }, { activityContext.getString(it) })
         )
 
         searchUseCase?.search(appBarBinding.input.text?.toString())
