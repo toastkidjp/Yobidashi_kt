@@ -45,7 +45,7 @@ class InputsTest {
         every { view.getContext() }.returns(context)
         every { view.getWindowToken() }.returns(mockk())
         every { context.getSystemService(any()) }.returns(inputMethodManager)
-        every { inputMethodManager.isActive() }.returns(true)
+        every { inputMethodManager.isActive }.returns(true)
         every { inputMethodManager.showSoftInput(any(), any()) }.returns(true)
         every { inputMethodManager.hideSoftInputFromWindow(any(), any()) }.returns(true)
         every { window.setSoftInputMode(any()) }.returns(Unit)
@@ -61,7 +61,7 @@ class InputsTest {
         Inputs.showKeyboard(context, view)
 
         verify(exactly = 1) { context.getSystemService(any()) }
-        verify(exactly = 1) { inputMethodManager.isActive() }
+        verify(exactly = 1) { inputMethodManager.isActive }
         verify(exactly = 1) { inputMethodManager.showSoftInput(any(), any()) }
     }
 
@@ -71,7 +71,7 @@ class InputsTest {
 
         verify(exactly = 1) { context.getSystemService(any()) }
         verify(exactly = 1) { view.getWindowToken() }
-        verify(exactly = 1) { inputMethodManager.isActive() }
+        verify(exactly = 1) { inputMethodManager.isActive }
         verify(exactly = 1) { inputMethodManager.hideSoftInputFromWindow(any(), any()) }
     }
 
@@ -89,7 +89,7 @@ class InputsTest {
         Inputs.showKeyboard(context, view)
 
         verify(exactly = 1) { context.getSystemService(any()) }
-        verify(exactly = 0) { inputMethodManager.isActive() }
+        verify(exactly = 0) { inputMethodManager.isActive }
         verify(exactly = 0) { inputMethodManager.showSoftInput(any(), any()) }
     }
 
@@ -100,7 +100,7 @@ class InputsTest {
         Inputs.showKeyboard(context, view)
 
         verify(exactly = 1) { context.getSystemService(any()) }
-        verify(exactly = 1) { inputMethodManager.isActive() }
+        verify(exactly = 1) { inputMethodManager.isActive }
         verify(exactly = 0) { inputMethodManager.showSoftInput(any(), any()) }
     }
 
