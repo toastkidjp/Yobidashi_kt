@@ -102,7 +102,7 @@ class FirstLaunchInitializerTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         firstLaunchInitializer.invoke()
 
         verify(exactly = 1) { preferenceApplier.isFirstLaunch() }
