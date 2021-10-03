@@ -70,7 +70,7 @@ class InputsTest {
         Inputs.hideKeyboard(view)
 
         verify(exactly = 1) { context.getSystemService(any()) }
-        verify(exactly = 1) { view.getWindowToken() }
+        verify(exactly = 1) { view.windowToken }
         verify(exactly = 1) { inputMethodManager.isActive }
         verify(exactly = 1) { inputMethodManager.hideSoftInputFromWindow(any(), any()) }
     }
