@@ -19,6 +19,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -30,7 +31,6 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.SourceData
 import com.journeyapps.barcodescanner.camera.PreviewCallback
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.view.DraggableTouchListener
@@ -40,9 +40,6 @@ import jp.toastkid.yobidashi.databinding.FragmentBarcodeReaderBinding
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.search.SearchAction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.FileOutputStream
 
@@ -72,6 +69,27 @@ class BarcodeReaderFragment : Fragment() {
 
     private var contentViewModel: ContentViewModel? = null
 
+    private val cameraPermissionRequestLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                startDecode()
+                return@registerForActivityResult
+            }
+
+            contentViewModel?.snackShort(R.string.message_requires_permission_camera)
+            parentFragmentManager.popBackStack()
+        }
+
+    private val permissionRequestLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it == true) {
+                invokeRequest()
+                return@registerForActivityResult
+            }
+
+            contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+        }
+
     /**
      * Required permission for this fragment(and function).
      */
@@ -98,8 +116,7 @@ class BarcodeReaderFragment : Fragment() {
         binding?.fragment = this
 
         if (isNotGranted()) {
-            requestPermissions(arrayOf(permission), 1)
-            return
+            cameraPermissionRequestLauncher.launch(permission)
         }
 
         viewModel = ViewModelProvider(this).get(BarcodeReaderResultPopupViewModel::class.java)
@@ -131,9 +148,14 @@ class BarcodeReaderFragment : Fragment() {
         contentViewModel = activity?.let { ViewModelProvider(it).get(ContentViewModel::class.java) }
 
         initializeFab()
-        startDecode()
 
         setHasOptionsMenu(true)
+
+        if (isNotGranted()) {
+            return
+        }
+
+        startDecode()
     }
 
     /**
@@ -223,18 +245,7 @@ class BarcodeReaderFragment : Fragment() {
     }
 
     private fun camera() {
-        val activity = activity ?: return
-        CoroutineScope(Dispatchers.Main).launch {
-            val result =
-                    RuntimePermissions(activity).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    ?.receive()
-            if (result?.granted == true) {
-                invokeRequest()
-                return@launch
-            }
-
-            contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-        }
+        permissionRequestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     private fun invokeRequest() {
@@ -297,19 +308,10 @@ class BarcodeReaderFragment : Fragment() {
         resultPopup.hide()
     }
 
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>,
-            grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startDecode()
-            return
-        }
-
-        contentViewModel?.snackShort(R.string.message_requires_permission_camera)
-        parentFragmentManager.popBackStack()
+    override fun onDetach() {
+        permissionRequestLauncher.unregister()
+        cameraPermissionRequestLauncher.unregister()
+        super.onDetach()
     }
 
     companion object {

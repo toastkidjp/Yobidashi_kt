@@ -6,37 +6,38 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.editor.permission
+package jp.toastkid.yobidashi.media.music.popup.permission
 
 import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 
-class WriteStoragePermissionRequestContract
-    : ActivityResultContract<String?, Pair<Boolean, String?>>() {
+class ReadStoragePermissionRequestContractWithParentView
+    : ActivityResultContract<View?, Pair<Boolean, View?>>() {
 
-    private var filePath: String? = null
+    private var parent: View? = null
 
-    override fun createIntent(context: Context, input: String?): Intent {
-        filePath = input
+    override fun createIntent(context: Context, input: View?): Intent {
+        parent = input
 
         return Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
             .putExtra(
                 ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSIONS,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
             )
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): Pair<Boolean, String?> {
-        if (resultCode != AppCompatActivity.RESULT_OK) return false to filePath
+    override fun parseResult(resultCode: Int, intent: Intent?): Pair<Boolean, View?> {
+        if (resultCode != AppCompatActivity.RESULT_OK) return false to parent
         val granted = intent
             ?.getIntArrayExtra(ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
             ?.getOrNull(0) == PackageManager.PERMISSION_GRANTED
-        return granted to filePath
+        return granted to parent
     }
 
 }
