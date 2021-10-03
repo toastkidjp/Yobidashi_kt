@@ -24,6 +24,7 @@ class HtmlSourceExtractionUseCaseTest {
 
     @Test
     fun test() {
+        every { webView.url }.returns("https://www.yahoo.co.jp")
         every { webView.evaluateJavascript(any(), any()) }.answers { Unit }
 
         HtmlSourceExtractionUseCase().invoke(webView, mockk())
