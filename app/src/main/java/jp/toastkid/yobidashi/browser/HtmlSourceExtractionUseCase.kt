@@ -13,6 +13,10 @@ class HtmlSourceExtractionUseCase {
     @UiThread
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     operator fun invoke(webView: WebView?, callback: ValueCallback<String>) {
+        if (webView?.url?.startsWith("https://accounts.google.com/signin") == true) {
+            return
+        }
+
         webView?.evaluateJavascript(script, callback)
     }
 }
