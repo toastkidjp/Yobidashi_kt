@@ -33,6 +33,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.EditTextColorSetter
@@ -44,7 +45,6 @@ import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
-import jp.toastkid.lib.input.Inputs
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
@@ -245,6 +245,7 @@ class SearchFragment : Fragment() {
 
         val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
         setInitialQuery(query)
+        arguments?.remove(EXTRA_KEY_QUERY)
     }
 
     private fun setInitialQuery(query: String?) {
