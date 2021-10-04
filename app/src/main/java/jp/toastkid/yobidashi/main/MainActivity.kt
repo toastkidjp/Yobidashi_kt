@@ -79,9 +79,7 @@ import kotlinx.coroutines.launch
  *
  * @author toastkidjp
  */
-class MainActivity : AppCompatActivity(),
-        TabListDialogFragment.Callback
-{
+class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
     /**
      * Data binding object.
