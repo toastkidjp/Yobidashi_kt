@@ -11,6 +11,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 
@@ -28,10 +29,6 @@ class TabListClearDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
-        if (activityContext is Callback) {
-            onClick = activityContext
-        }
-
         return AlertDialog.Builder(activityContext)
                 .setTitle(getString(R.string.title_clear_all_tabs))
                 .setMessage(
@@ -43,7 +40,9 @@ class TabListClearDialogFragment : DialogFragment() {
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    onClick?.onClickClear()
+                    parentFragmentManager.setFragmentResult(
+                        "clear_tabs", bundleOf("clear_tabs" to true)
+                    )
                     d.dismiss()
                 }
                 .create()
