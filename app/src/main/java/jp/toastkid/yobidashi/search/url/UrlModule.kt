@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.search.url
 
+import android.content.Intent
 import android.view.View
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -14,7 +15,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,7 +61,21 @@ class UrlModule(
      * @param view [View]
      */
     fun shareUrl(view: View) {
-        view.context.startActivity(IntentFactory.makeShareUrl(getCurrentText()))
+        view.context.startActivity(makeShareUrl(getCurrentText()))
+    }
+
+    /**
+     * Make sharing URL intent.
+     *
+     * @param url URL
+     */
+    private fun makeShareUrl(url: String): Intent {
+        val share = Intent(Intent.ACTION_SEND)
+        share.type = "text/plain"
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        share.putExtra(Intent.EXTRA_SUBJECT, "Share link")
+        share.putExtra(Intent.EXTRA_TEXT, url)
+        return Intent.createChooser(share, "Share link $url")
     }
 
     /**
