@@ -21,7 +21,6 @@ import jp.toastkid.yobidashi.R
 class TabListClearDialogFragment : DialogFragment() {
 
     interface Callback {
-        fun onClickClear()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
