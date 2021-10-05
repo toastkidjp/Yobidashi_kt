@@ -115,20 +115,4 @@ object IntentFactory {
         return intent
     }
 
-    /**
-     * Make create document intent on Storage Access Framework.
-     *
-     * @param type mime type
-     * @param fileName File name
-     * @return [Intent]
-     */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    fun makeDocumentOnStorage(type: String, fileName: String): Intent {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-        intent.type = type
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.putExtra(Intent.EXTRA_TITLE, fileName)
-        return intent
-    }
-
 }
