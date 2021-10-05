@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.CalendarContract
-import android.provider.MediaStore
 
 /**
  * Common [android.content.Intent] factory.
@@ -131,11 +130,6 @@ object IntentFactory {
         intent.putExtra(Intent.EXTRA_TITLE, fileName)
         return intent
     }
-
-    /**
-     * Make camera launching intent.
-     */
-    fun camera(): Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
     /**
      * Make dial intent.
