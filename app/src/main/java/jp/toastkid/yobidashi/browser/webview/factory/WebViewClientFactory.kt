@@ -35,7 +35,6 @@ import jp.toastkid.yobidashi.browser.tls.TlsErrorDialogFragment
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
 import kotlinx.coroutines.CoroutineScope
@@ -184,12 +183,12 @@ class WebViewClientFactory(
                             }
                         }
                         "tel" -> {
-                            context?.startActivity(IntentFactory.dial(uri))
+                            context?.startActivity(Intent(Intent.ACTION_DIAL, uri))
                             view?.reload()
                             true
                         }
                         "mailto" -> {
-                            context?.startActivity(IntentFactory.mailTo(uri))
+                            context?.startActivity(Intent(Intent.ACTION_SENDTO, uri))
                             view?.reload()
                             true
                         }
