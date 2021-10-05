@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.settings.fragment
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -31,7 +32,6 @@ import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingDisplayBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.Adapter
 import jp.toastkid.yobidashi.settings.background.ClearImagesDialogFragment
@@ -168,7 +168,18 @@ class DisplayingSettingFragment : Fragment() {
      * Launch Adding action.
      */
     fun launchAdding() {
-        addingLauncher.launch(IntentFactory.makePickImage())
+        addingLauncher.launch(makePickImage())
+    }
+
+    /**
+     * Make pick image intent.
+     * @return Intent
+     */
+    private fun makePickImage(): Intent {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "image/*"
+        return intent
     }
 
     /**
