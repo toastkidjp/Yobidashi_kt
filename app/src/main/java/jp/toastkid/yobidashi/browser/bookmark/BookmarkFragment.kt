@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -34,8 +33,6 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okio.buffer
@@ -47,7 +44,6 @@ import okio.sink
  * @author toastkidjp
  */
 class BookmarkFragment: Fragment(),
-        DefaultBookmarkDialogFragment.OnClickDefaultBookmarkCallback,
         CommonFragmentAction,
         ContentScrollable
 {
@@ -83,16 +79,37 @@ class BookmarkFragment: Fragment(),
     )
 
     private val exportLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-        {
-            if (it.data == null || it.resultCode != Activity.RESULT_OK) {
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.data == null || it.resultCode != Activity.RESULT_OK) {
+            return@registerForActivityResult
+        }
+
+        val uri = it.data?.data ?: return@registerForActivityResult
+        exportBookmark(uri)
+    }
+
+    private val importRequestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
                 return@registerForActivityResult
             }
 
-            val uri = it.data?.data ?: return@registerForActivityResult
-            exportBookmark(uri)
+            getContentLauncher.launch(IntentFactory.makeGetContent("text/html"))
         }
-    )
+
+    private val exportRequestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it.not()) {
+                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                return@registerForActivityResult
+            }
+
+            exportLauncher.launch(
+                IntentFactory.makeDocumentOnStorage("text/html", "bookmark.html")
+            )
+        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -158,7 +175,7 @@ class BookmarkFragment: Fragment(),
         parentFragmentManager.setFragmentResultListener(
             "import_default",
             viewLifecycleOwner,
-            { key, results ->
+            { _, _ ->
                 val currentContext = binding.root.context
                 BookmarkInitializer(
                     FaviconFolderProviderService().invoke(currentContext)
@@ -249,40 +266,11 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.import_bookmark -> {
-                val activity = activity ?: return true
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    RuntimePermissions(activity)
-                            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            ?.receiveAsFlow()
-                            ?.collect {
-                                permissionResult ->
-                                if (!permissionResult.granted) {
-                                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                    return@collect
-                                }
-
-                                getContentLauncher.launch(IntentFactory.makeGetContent("text/html"))
-                            }
-                }
+                importRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 true
             }
             R.id.export_bookmark -> {
-                val activity = activity ?: return true
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    RuntimePermissions(activity)
-                            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            ?.receiveAsFlow()
-                            ?.collect { permissionResult ->
-                                if (!permissionResult.granted) {
-                                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                    return@collect
-                                }
-
-                                exportLauncher.launch(
-                                    IntentFactory.makeDocumentOnStorage("text/html", "bookmark.html")
-                                )
-                            }
-                }
+                exportRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -294,12 +282,6 @@ class BookmarkFragment: Fragment(),
             return true
         }
         return super.pressBack()
-    }
-
-    override fun onClickAddDefaultBookmark() {
-        val context = binding.root.context
-        BookmarkInitializer(FaviconFolderProviderService().invoke(context))(context) { adapter.showRoot() }
-        contentViewModel?.snackShort(R.string.done_addition)
     }
 
     override fun toTop() {
@@ -351,6 +333,8 @@ class BookmarkFragment: Fragment(),
         disposables.cancel()
         getContentLauncher.unregister()
         exportLauncher.unregister()
+        importRequestPermissionLauncher.unregister()
+        exportRequestPermissionLauncher.unregister()
 
         parentFragmentManager.clearFragmentResultListener("clear_bookmark")
         parentFragmentManager.clearFragmentResultListener("import_default")

@@ -40,6 +40,7 @@ import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
@@ -48,10 +49,12 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
 import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
 import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.main.usecase.BackgroundTabOpenerUseCase
+import jp.toastkid.yobidashi.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuSwitchColorApplier
 import jp.toastkid.yobidashi.menu.MenuUseCase
@@ -167,6 +170,21 @@ class MainActivity : AppCompatActivity(),
             replaceToCurrentTab()
         }
 
+    private val mediaPermissionRequestLauncher =
+        registerForActivityResult(ReadAudioPermissionRequestContract()) {
+            it.second?.invoke(it.first)
+        }
+
+    private val downloadPermissionRequestLauncher =
+        registerForActivityResult(DownloadPermissionRequestContract()) {
+            if (it.first.not()) {
+                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                return@registerForActivityResult
+            }
+            val url = it.second ?: return@registerForActivityResult
+            DownloadAction(this).invoke(url)
+        }
+
     /**
      * Disposables.
      */
@@ -227,6 +245,10 @@ class MainActivity : AppCompatActivity(),
         browserViewModel?.openBackgroundWithTitle?.observe(this, Observer {
             val pair = it?.getContentIfNotHandled() ?: return@Observer
             backgroundTabOpenerUseCase(pair.first, pair.second.toString(), preferenceApplier.colorPair())
+        })
+        browserViewModel?.download?.observe(this, Observer {
+            val url = it?.getContentIfNotHandled() ?: return@Observer
+            downloadPermissionRequestLauncher.launch(url)
         })
 
         invokeSearchWithClip(colorPair)
@@ -346,6 +368,10 @@ class MainActivity : AppCompatActivity(),
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
         MenuUseCase({ this }, menuViewModel).observe()
+    }
+
+    fun requestPermissionForMediaPlayer(function: (Boolean) -> Unit) {
+        mediaPermissionRequestLauncher.launch(function)
     }
 
     private fun initializeContentViewModel() {
@@ -704,6 +730,7 @@ class MainActivity : AppCompatActivity(),
         activityResultLauncher?.unregister()
         requestPermissionForOpenPdfTab.unregister()
         requestPermissionForOpenEditorTab.unregister()
+        downloadPermissionRequestLauncher.unregister()
         super.onDestroy()
     }
 

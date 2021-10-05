@@ -50,4 +50,13 @@ class BrowserViewModel : ViewModel() {
     fun openBackground(title: String, uri: Uri) {
         _openBackgroundWithTitle.postValue(Event(title to uri))
     }
+
+    private val _download = MutableLiveData<Event<String>>()
+
+    val download: LiveData<Event<String>> = _download
+
+    fun download(url: String) {
+        _download.postValue(Event(url))
+    }
+
 }

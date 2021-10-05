@@ -16,6 +16,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -24,7 +25,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.ContentScrollable
-import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -36,8 +36,6 @@ import jp.toastkid.yobidashi.media.image.setting.ExcludingSettingFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -58,6 +56,21 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     private lateinit var imageFilterUseCase: ImageFilterUseCase
 
     private var adapter: Adapter? = null
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                imageLoaderUseCase()
+                return@registerForActivityResult
+            }
+
+            Toaster.snackShort(
+                binding.root,
+                R.string.message_audio_file_is_not_found,
+                PreferenceApplier(binding.root.context).colorPair()
+            )
+            activity?.supportFragmentManager?.popBackStack()
+        }
 
     private val disposables: Job by lazy { Job() }
 
@@ -168,25 +181,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     private fun attemptLoad() {
-        val activity = activity ?: return
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            RuntimePermissions(activity)
-                    .request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    ?.receiveAsFlow()
-                    ?.collect {
-                        if (it.granted) {
-                            imageLoaderUseCase()
-                            return@collect
-                        }
-
-                        Toaster.snackShort(
-                                binding.root,
-                                R.string.message_audio_file_is_not_found,
-                                PreferenceApplier(binding.root.context).colorPair()
-                        )
-                        activity.supportFragmentManager.popBackStack()
-                    }
-        }
+        requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
     private fun refreshContent() {
@@ -234,6 +229,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     override fun onDetach() {
         disposables.cancel()
         parentFragmentManager.clearFragmentResultListener("excluding")
+        requestPermissionLauncher.unregister()
         super.onDetach()
     }
 

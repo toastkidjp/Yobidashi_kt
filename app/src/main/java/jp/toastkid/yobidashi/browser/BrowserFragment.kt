@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.browser
 
+import android.Manifest
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.ValueCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
@@ -41,6 +43,7 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
+import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
@@ -83,6 +86,17 @@ class BrowserFragment : Fragment(),
     private var appBarViewModel: AppBarViewModel? = null
 
     private var contentViewModel: ContentViewModel? = null
+
+    private val storagePermissionRequestLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                val context = context ?: return@registerForActivityResult
+                Toaster.tShort(context, R.string.message_requires_permission_storage)
+                return@registerForActivityResult
+            }
+
+            browserModule.downloadAllImages()
+        }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -242,7 +256,7 @@ class BrowserFragment : Fragment(),
                 TranslatedPageOpenerUseCase(browserViewModel).invoke(browserModule.currentUrl())
             }
             R.id.download_all_images -> {
-                browserModule.downloadAllImages()
+                storagePermissionRequestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
             R.id.add_to_home -> {
                 val uri = browserModule.currentUrl()?.toUri() ?: return true
@@ -525,6 +539,7 @@ class BrowserFragment : Fragment(),
         appBarViewModel?.show()
         browserModule.onDestroy()
         parentFragmentManager.clearFragmentResultListener("user_agent_setting")
+        storagePermissionRequestLauncher.unregister()
         super.onDetach()
     }
 

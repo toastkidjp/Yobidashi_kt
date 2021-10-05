@@ -36,9 +36,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.SlidingTapListener
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.media.music.MediaPlayerService
-import jp.toastkid.yobidashi.media.music.popup.permission.ReadStoragePermissionRequestContractWithParentView
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlaybackSpeedAdapter
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlayingSpeed
 import kotlinx.coroutines.Job
@@ -287,31 +285,17 @@ class MediaPlayerPopup(private val context: Context) {
         binding.header.setOnTouchListener(slidingTouchListener)
     }
 
-    private val permissionRequestLauncher = attemptExtractActivity()
-        ?.registerForActivityResult(ReadStoragePermissionRequestContractWithParentView()) {
-            if (it.first && !mediaBrowser.isConnected) {
-                mediaBrowser.connect()
-                return@registerForActivityResult
-            }
-
-            val view = it.second ?: return@registerForActivityResult
-            Toaster.snackShort(
-                view,
-                R.string.message_requires_permission_storage,
-                PreferenceApplier(view.context).colorPair()
-            )
-            popupWindow.dismiss()
-        }
-
     fun show(parent: View) {
         if (popupWindow.isShowing) {
             hide()
             return
         }
 
-        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, -600)
+        if (mediaBrowser.isConnected.not()) {
+            mediaBrowser.connect()
+        }
 
-        permissionRequestLauncher?.launch(parent)
+        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, -600)
     }
 
     private fun initializeViewModels() {

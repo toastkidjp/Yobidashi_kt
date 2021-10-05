@@ -5,16 +5,9 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import androidx.core.net.toUri
-import androidx.fragment.app.FragmentActivity
-import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 
 
 /**
@@ -35,20 +28,7 @@ class DownloadAction(private val context: Context) {
             return
         }
 
-        val activity = context as? FragmentActivity ?: return
-
-        CoroutineScope(Dispatchers.Main).launch {
-            RuntimePermissions(activity)
-                    .request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    ?.receiveAsFlow()
-                    ?.collect { permission ->
-                        if (!permission.granted) {
-                            Toaster.tShort(activity, R.string.message_requires_permission_storage)
-                            return@collect
-                        }
-                        enqueue(urls)
-                    }
-        }
+        enqueue(urls)
     }
 
     private fun enqueue(urls: Collection<String>) {
