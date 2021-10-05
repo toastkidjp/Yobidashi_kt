@@ -136,9 +136,4 @@ object IntentFactory {
      */
     fun dial(uri: Uri): Intent = Intent(Intent.ACTION_DIAL, uri)
 
-    /**
-     * Make dial intent.
-     */
-    fun mailTo(uri: Uri): Intent = Intent(Intent.ACTION_SENDTO, uri)
-
 }
