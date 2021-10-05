@@ -131,9 +131,4 @@ object IntentFactory {
         return intent
     }
 
-    /**
-     * Make dial intent.
-     */
-    fun dial(uri: Uri): Intent = Intent(Intent.ACTION_DIAL, uri)
-
 }
