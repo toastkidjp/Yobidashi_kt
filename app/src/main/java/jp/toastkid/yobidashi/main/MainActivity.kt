@@ -153,8 +153,21 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
                 return@registerForActivityResult
             }
 
-            activityResultLauncher?.launch(IntentFactory.makeOpenDocument("application/pdf"))
+            activityResultLauncher?.launch(makeOpenDocument("application/pdf"))
         }
+
+    /**
+     * Make Storage Access Framework intent.
+     * TODO Move other class
+     * @param type mime type
+     * @return [Intent]
+     */
+    private fun makeOpenDocument(type: String): Intent {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.type = type
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+        return intent
+    }
 
     private val requestPermissionForOpenEditorTab =
         registerForActivityResult(WriteStoragePermissionRequestContract()) {
