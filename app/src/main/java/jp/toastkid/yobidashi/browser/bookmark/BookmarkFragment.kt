@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -30,7 +31,6 @@ import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -97,7 +97,7 @@ class BookmarkFragment: Fragment(),
                 return@registerForActivityResult
             }
 
-            getContentLauncher.launch(IntentFactory.makeGetContent("text/html"))
+            getContentLauncher.launch(GetContentIntentFactory()("text/html"))
         }
 
     private val exportRequestPermissionLauncher =
