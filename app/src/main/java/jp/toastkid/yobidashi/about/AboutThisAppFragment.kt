@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi.about
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -71,7 +73,10 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
     }
 
     fun aboutAuthorApp() {
-        startActivity(IntentFactory.authorsApp())
+        startActivity(
+            Intent(Intent.ACTION_VIEW)
+                .also { it.data = Uri.parse("market://search?q=pub:toastkidjp") }
+        )
     }
 
     private fun popBackStack() {
