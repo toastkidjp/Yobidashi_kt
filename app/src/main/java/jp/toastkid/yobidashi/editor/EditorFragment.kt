@@ -41,6 +41,7 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.tab.TabUiFragment
@@ -385,7 +386,7 @@ class EditorFragment :
      * Load text as other file.
      */
     fun loadAs() {
-        loadAs?.launch(IntentFactory.makeGetContent("text/plain"))
+        loadAs?.launch(GetContentIntentFactory()("text/plain"))
     }
 
     fun exportToArticleViewer() {
@@ -475,7 +476,7 @@ class EditorFragment :
      * Load content from file with Storage Access Framework.
      */
     fun load() {
-        loadResultLauncher?.launch(IntentFactory.makeGetContent("text/plain"))
+        loadResultLauncher?.launch(GetContentIntentFactory()("text/plain"))
     }
 
     /**
