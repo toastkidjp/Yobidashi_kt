@@ -25,6 +25,7 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.search.SearchQueryExtractor
@@ -44,7 +45,6 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
@@ -485,7 +485,7 @@ class BrowserFragment : Fragment(),
 
     override fun share() {
         startActivity(
-                IntentFactory.makeShare(browserModule.makeShareMessage())
+            ShareIntentFactory()(browserModule.makeShareMessage())
         )
     }
 
