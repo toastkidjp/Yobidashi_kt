@@ -42,6 +42,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.intent.GetContentIntentFactory
+import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.tab.TabUiFragment
@@ -53,7 +54,6 @@ import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.MainActivity
 import okio.buffer
@@ -416,7 +416,7 @@ class EditorFragment :
         val title =
                 if (path.contains("/")) path.substring(path.lastIndexOf("/") + 1)
                 else path
-        startActivity(IntentFactory.makeShare(content(), title))
+        startActivity(ShareIntentFactory()(content(), title))
     }
 
     /**
