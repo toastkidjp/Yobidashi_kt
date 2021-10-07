@@ -54,4 +54,14 @@ class ShareIntentFactoryTest {
         verify(exactly = 1) { anyConstructed<Intent>().putExtra(Intent.EXTRA_SUBJECT, any<String>()) }
     }
 
+    @Test
+    fun test() {
+        intentFactory.invoke("jp.toastkid.yobidashi")
+
+        verify(exactly = 1) { anyConstructed<Intent>().setAction(any()) }
+        verify(exactly = 1) { anyConstructed<Intent>().setType(any()) }
+        verify(exactly = 1) { anyConstructed<Intent>().putExtra(Intent.EXTRA_TEXT, any<String>()) }
+        verify(exactly = 0) { anyConstructed<Intent>().putExtra(Intent.EXTRA_SUBJECT, any<String>()) }
+    }
+
 }
