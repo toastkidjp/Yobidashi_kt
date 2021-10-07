@@ -9,9 +9,11 @@
 package jp.toastkid.yobidashi.browser.webview.usecase
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -28,6 +30,9 @@ class SelectedTextUseCaseTest {
     private lateinit var selectedTextUseCase: SelectedTextUseCase
 
     @MockK
+    private lateinit var stringResolver: (Int, Any) -> String
+
+    @MockK
     private lateinit var urlFactory: UrlFactory
 
     @MockK
@@ -39,6 +44,8 @@ class SelectedTextUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+        every { stringResolver.invoke(any(), any()) }.returns("Count: 4")
+        every { contentViewModel.snackShort(any<String>()) }.just(Runs)
         every { contentViewModel.snackShort(any<Int>()) }.answers { Unit }
         every { browserViewModel.open(any()) }.answers { Unit }
         every { browserViewModel.preview(any()) }.answers { Unit }
@@ -48,6 +55,17 @@ class SelectedTextUseCaseTest {
     @After
     fun tearDown() {
         unmockkAll()
+    }
+
+    @Test
+    fun countCharacters() {
+        selectedTextUseCase.countCharacters("\"test\"")
+
+        verify(exactly = 1) { contentViewModel.snackShort(any<String>()) }
+        verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 0) { browserViewModel.open(any()) }
+        verify(exactly = 0) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { urlFactory.invoke(any(), any()) }
     }
 
     @Test

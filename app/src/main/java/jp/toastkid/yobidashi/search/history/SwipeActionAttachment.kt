@@ -65,7 +65,7 @@ class SwipeActionAttachment {
                         actionState: Int,
                         isCurrentlyActive: Boolean
                 ) {
-                    if (viewHolder.adapterPosition == -1) {
+                    if (viewHolder.bindingAdapterPosition == -1) {
                         return
                     }
 

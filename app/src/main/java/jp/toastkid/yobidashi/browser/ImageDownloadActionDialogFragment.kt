@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -28,11 +26,6 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
  * @author toastkidjp
  */
 class ImageDownloadActionDialogFragment : DialogFragment() {
-
-    /**
-     * Use for setting image file.
-     */
-    private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)

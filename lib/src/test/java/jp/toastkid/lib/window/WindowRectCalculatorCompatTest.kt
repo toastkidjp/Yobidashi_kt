@@ -58,6 +58,7 @@ class WindowRectCalculatorCompatTest {
         unmockkAll()
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun testRAndOver() {
         windowRectCalculatorCompat.invoke(activity, 30)
@@ -69,6 +70,7 @@ class WindowRectCalculatorCompatTest {
         verify(exactly = 0) { defaultDisplay.getRectSize(any()) }
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun testUnderR() {
         windowRectCalculatorCompat.invoke(activity, 29)

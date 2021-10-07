@@ -391,6 +391,11 @@ enum class SearchCategory(
             R.drawable.ic_morningstar,
             "https://www.morningstar.com/search?query="
     ),
+    FORBES(
+        R.string.forbes,
+        R.drawable.ic_forbes,
+        "https://www.forbes.com/search?q="
+    ),
     MY_INDEX(
             R.string.my_index,
             R.drawable.ic_myindex,

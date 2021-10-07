@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.editor.usecase
 import android.content.Context
 import android.net.Uri
 import android.widget.EditText
+import androidx.annotation.IdRes
 import androidx.core.net.toUri
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -37,11 +38,7 @@ class MenuActionInvokerUseCase(
     private val listHeadAdder: ListHeadAdder = ListHeadAdder()
 ) {
 
-    //         val text = extractSelectedText(editText)
-    operator fun invoke(
-        itemId: Int,
-        text: String
-    ): Boolean {
+    operator fun invoke(@IdRes itemId: Int, text: String): Boolean {
         val context = editText.context
 
         when (itemId) {

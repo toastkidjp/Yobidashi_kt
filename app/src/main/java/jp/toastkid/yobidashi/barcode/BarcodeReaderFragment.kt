@@ -34,6 +34,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.view.DraggableTouchListener
+import jp.toastkid.lib.window.WindowRectCalculatorCompat
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentBarcodeReaderBinding
@@ -80,9 +81,9 @@ class BarcodeReaderFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-    private val permissionRequestLauncher =
+    private val storagePermissionRequestLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it == true) {
+            if (it) {
                 invokeRequest()
                 return@registerForActivityResult
             }
@@ -245,7 +246,7 @@ class BarcodeReaderFragment : Fragment() {
     }
 
     private fun camera() {
-        permissionRequestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        storagePermissionRequestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     private fun invokeRequest() {
@@ -271,10 +272,8 @@ class BarcodeReaderFragment : Fragment() {
                 contentViewModel?.snackShort("Camera saved: ${output.absolutePath}")
             }
 
-            private fun getRect(): Rect {
-                val rect = Rect()
-                activity?.windowManager?.defaultDisplay?.getRectSize(rect)
-                return rect
+            private fun getRect(): Rect? {
+                return WindowRectCalculatorCompat().invoke(activity)
             }
 
             override fun onPreviewError(e: Exception?) {
@@ -309,7 +308,7 @@ class BarcodeReaderFragment : Fragment() {
     }
 
     override fun onDetach() {
-        permissionRequestLauncher.unregister()
+        storagePermissionRequestLauncher.unregister()
         cameraPermissionRequestLauncher.unregister()
         super.onDetach()
     }

@@ -20,9 +20,16 @@ import jp.toastkid.yobidashi.R
 
 class SelectedTextUseCase(
         private val urlFactory: UrlFactory = UrlFactory(),
+        private val stringResolver: (Int, Any) -> String,
         private val contentViewModel: ContentViewModel,
         private val browserViewModel: BrowserViewModel
 ) {
+
+    fun countCharacters(word: String) {
+        val codePointCount = word.codePointCount(1, word.length - 1)
+        val message = stringResolver(R.string.message_character_count, codePointCount)
+        contentViewModel.snackShort(message)
+    }
 
     fun search(word: String, searchEngine: String?) {
         val url = makeUrl(word, searchEngine) ?: return
@@ -48,15 +55,15 @@ class SelectedTextUseCase(
 
     companion object {
 
-        fun make(context: Context?): SelectedTextUseCase? {
-            return (context as? FragmentActivity)?.let { activity ->
+        fun make(context: Context?): SelectedTextUseCase? =
+            (context as? FragmentActivity)?.let { activity ->
                 val viewModelProvider = ViewModelProvider(activity)
                 return SelectedTextUseCase(
-                        contentViewModel = viewModelProvider.get(ContentViewModel::class.java),
-                        browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
+                    stringResolver = { resource, additional -> context.getString(resource, additional) },
+                    contentViewModel = viewModelProvider.get(ContentViewModel::class.java),
+                    browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
                 )
             }
-        }
 
     }
 
