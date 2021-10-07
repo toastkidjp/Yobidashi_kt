@@ -55,7 +55,7 @@ class ShareIntentFactoryTest {
     }
 
     @Test
-    fun test() {
+    fun testWithoutSubjectCase() {
         intentFactory.invoke("jp.toastkid.yobidashi")
 
         verify(exactly = 1) { anyConstructed<Intent>().setAction(any()) }
