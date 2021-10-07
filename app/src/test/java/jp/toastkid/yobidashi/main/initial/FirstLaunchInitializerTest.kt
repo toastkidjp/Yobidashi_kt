@@ -111,4 +111,16 @@ class FirstLaunchInitializerTest {
         verify(exactly = 1) { preferenceApplier.setDefaultSearchEngine(any()) }
     }
 
+    @Test
+    fun test() {
+        every { preferenceApplier.isFirstLaunch() }.returns(false)
+
+        firstLaunchInitializer.invoke()
+
+        verify(exactly = 1) { preferenceApplier.isFirstLaunch() }
+        verify(exactly = 0) { defaultColorInsertion.insert(any()) }
+        verify(exactly = 0) { defaultBackgroundImagePreparation.invoke(any(), any()) }
+        verify(exactly = 0) { preferenceApplier.setDefaultSearchEngine(any()) }
+    }
+
 }
