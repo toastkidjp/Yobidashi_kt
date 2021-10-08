@@ -14,17 +14,6 @@ import android.provider.CalendarContract
 object IntentFactory {
 
     /**
-     * Make pick image intent.
-     * @return Intent
-     */
-    fun makePickImage(): Intent {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "image/*"
-        return intent
-    }
-
-    /**
      * Make launching calendar intent.
      *
      * @return Intent
