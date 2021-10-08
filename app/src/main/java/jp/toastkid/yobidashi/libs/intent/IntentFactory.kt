@@ -4,7 +4,6 @@ import android.annotation.TargetApi
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.provider.CalendarContract
 
 /**
  * Common [android.content.Intent] factory.
@@ -12,16 +11,6 @@ import android.provider.CalendarContract
  * @author toastkidjp
  */
 object IntentFactory {
-
-    /**
-     * Make launching calendar intent.
-     *
-     * @return Intent
-     */
-    fun makeCalendar() = Intent(
-            Intent.ACTION_VIEW,
-            CalendarContract.CONTENT_URI.buildUpon().appendPath("time").build()
-    )
 
     /**
      * Make launching Google Play intent.
