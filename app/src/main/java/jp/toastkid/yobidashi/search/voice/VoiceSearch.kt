@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import android.view.View
+import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 
 /**
  * Voice search use case.
@@ -60,7 +60,7 @@ class VoiceSearch {
      * Make Google App [Intent].
      */
     private fun makeGoogleAppInstallIntent() =
-            IntentFactory.googlePlay("com.google.android.googlequicksearchbox")
+        GooglePlayIntentFactory()("com.google.android.googlequicksearchbox")
 
     companion object {
 
