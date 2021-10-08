@@ -13,12 +13,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.license.LicenseHtmlLoaderUseCase
 import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 
 /**
  * About this app.
@@ -61,7 +61,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
     }
 
     fun checkUpdate() {
-        startActivity(IntentFactory.googlePlay(BuildConfig.APPLICATION_ID))
+        startActivity(GooglePlayIntentFactory()(BuildConfig.APPLICATION_ID))
     }
 
     fun privacyPolicy() {
