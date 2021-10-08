@@ -14,24 +14,6 @@ import android.provider.CalendarContract
 object IntentFactory {
 
     /**
-     * Make sharing message intent.
-     *
-     * @param message
-     * @return Intent
-     */
-    fun makeShare(message: String, subject: String? = null): Intent {
-        val intent = Intent().also {
-            it.action = Intent.ACTION_SEND
-            it.type = "text/plain"
-            it.putExtra(Intent.EXTRA_TEXT, message)
-            subject?.also { subject ->
-                it.putExtra(Intent.EXTRA_SUBJECT, subject);
-            }
-        }
-        return Intent.createChooser(intent, "Select app for share")
-    }
-
-    /**
      * Make pick image intent.
      * @return Intent
      */
