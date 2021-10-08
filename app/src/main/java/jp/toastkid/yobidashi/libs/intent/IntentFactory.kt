@@ -11,18 +11,6 @@ import android.net.Uri
 object IntentFactory {
 
     /**
-     * Make launching Google Play intent.
-     *
-     * @param packageName
-     * @return Google play intent.
-     */
-    fun googlePlay(packageName: String): Intent {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse("market://details?id=" + packageName)
-        return intent
-    }
-
-    /**
      * Share image uri.
      *
      * @param uri
