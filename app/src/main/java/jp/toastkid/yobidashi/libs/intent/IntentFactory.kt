@@ -1,9 +1,7 @@
 package jp.toastkid.yobidashi.libs.intent
 
-import android.annotation.TargetApi
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 
 /**
  * Common [android.content.Intent] factory.
@@ -56,20 +54,6 @@ object IntentFactory {
      */
     fun makeGetContent(type: String): Intent {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = type
-        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
-        return intent
-    }
-
-    /**
-     * Make Storage Access Framework intent.
-     *
-     * @param type mime type
-     * @return [Intent]
-     */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    fun makeOpenDocument(type: String): Intent {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.type = type
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         return intent
