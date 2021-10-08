@@ -23,15 +23,6 @@ object IntentFactory {
     }
 
     /**
-     * Make author app intent.
-     *
-     * @return Intent of opening author apps.
-     */
-    fun authorsApp(): Intent =
-            Intent(Intent.ACTION_VIEW)
-                    .also { it.data = Uri.parse("market://search?q=pub:toastkidjp") }
-
-    /**
      * Share image uri.
      *
      * @param uri
