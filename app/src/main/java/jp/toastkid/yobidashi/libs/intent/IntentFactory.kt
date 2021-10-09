@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.libs.intent
 
 import android.content.Intent
-import android.net.Uri
 
 /**
  * Common [android.content.Intent] factory.
@@ -9,21 +8,6 @@ import android.net.Uri
  * @author toastkidjp
  */
 object IntentFactory {
-
-    /**
-     * Share image uri.
-     *
-     * @param uri
-     * @return
-     */
-    fun shareImage(uri: Uri): Intent {
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.setDataAndType(uri, "image/*")
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        return intent
-    }
 
     /**
      * Make Storage Access Framework intent.
