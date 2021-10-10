@@ -17,7 +17,7 @@ import androidx.databinding.DataBindingUtil
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
+import jp.toastkid.yobidashi.databinding.ViewSearchCardUrlBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +37,7 @@ constructor(
 
     private val preferenceApplier = PreferenceApplier(context)
 
-    private var binding: ModuleSearchUrlBinding? = null
+    private var binding: ViewSearchCardUrlBinding? = null
 
     private var insertAction: ((String) -> Unit)? = null
 
@@ -45,7 +45,7 @@ constructor(
 
     init {
         val inflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(inflater, R.layout.module_search_url, this, true)
+        binding = DataBindingUtil.inflate(inflater, R.layout.view_search_card_url, this, true)
         binding?.module = this
     }
 
