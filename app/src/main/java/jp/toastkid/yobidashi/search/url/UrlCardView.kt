@@ -8,13 +8,13 @@
 package jp.toastkid.yobidashi.search.url
 
 import android.content.Context
-import android.content.Intent
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.lib.color.IconColorFinder
+import jp.toastkid.lib.intent.UrlShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ViewSearchCardUrlBinding
@@ -75,25 +75,11 @@ constructor(
 
     /**
      * This function is called from data-binding.
-     *TODO delete useless argument
+     *
      * @param view [View]
      */
     fun shareUrl(view: View) {
-        view.context.startActivity(makeShareUrl(getCurrentText()))
-    }
-
-    /**
-     * Make sharing URL intent.
-     *
-     * @param url URL
-     */
-    private fun makeShareUrl(url: String): Intent {
-        val share = Intent(Intent.ACTION_SEND)
-        share.type = "text/plain"
-        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        share.putExtra(Intent.EXTRA_SUBJECT, "Share link")
-        share.putExtra(Intent.EXTRA_TEXT, url)
-        return Intent.createChooser(share, "Share link $url")
+        view.context.startActivity(UrlShareIntentFactory()(getCurrentText()))
     }
 
     /**
