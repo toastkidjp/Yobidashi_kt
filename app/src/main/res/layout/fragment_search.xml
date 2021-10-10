@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scroll"
@@ -16,8 +17,17 @@
             android:layout_marginRight="@dimen/search_horizontal_margin"
             >
 
-            <include android:id="@+id/url_module"
-                layout="@layout/module_search_url" />
+            <jp.toastkid.yobidashi.search.url.UrlModule
+                android:id="@+id/url_module"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/search_vertical_margin"
+                android:padding="8dp"
+                android:background="@color/filter_white_bb"
+                app:cardElevation="4dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
 
             <include android:id="@+id/url_suggestion_module"
                 layout="@layout/module_url_suggestion" />

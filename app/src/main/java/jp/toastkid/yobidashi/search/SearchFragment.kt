@@ -43,7 +43,6 @@ import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
@@ -53,7 +52,6 @@ import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 import jp.toastkid.yobidashi.search.trend.HourlyTrendModule
-import jp.toastkid.yobidashi.search.url.UrlModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import kotlinx.coroutines.CoroutineScope
@@ -93,11 +91,6 @@ class SearchFragment : Fragment() {
      * Suggestion module.
      */
     private var suggestionModule: SuggestionModule? = null
-
-    /**
-     * Current URL module.
-     */
-    private var urlModule: UrlModule? = null
 
     /**
      * Suggestion module.
@@ -194,10 +187,7 @@ class SearchFragment : Fragment() {
 
         applyColor()
 
-        urlModule = UrlModule(
-                binding?.urlModule as ModuleSearchUrlBinding,
-                this::setTextAndMoveCursorToEnd
-        )
+        binding?.urlModule?.setInsertAction(this::setTextAndMoveCursorToEnd)
 
         setListenerForKeyboardHiding()
 
@@ -366,14 +356,14 @@ class SearchFragment : Fragment() {
         suggestionModule?.enable = preferenceApplier.isEnableSuggestion
         historyModule?.enable = preferenceApplier.isEnableSearchHistory
         favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
-        urlModule?.enable = preferenceApplier.isEnableUrlModule()
+        binding?.urlModule?.enable = preferenceApplier.isEnableUrlModule()
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         hourlyTrendModule?.setEnable(preferenceApplier.isEnableTrendModule())
 
         val headerView = headerBinding?.root ?: return
         appBarViewModel?.replace(headerView)
 
-        urlModule?.onResume()
+        binding?.urlModule?.onResume()
 
         showKeyboard()
     }
@@ -435,9 +425,9 @@ class SearchFragment : Fragment() {
 
     private fun suggest(key: String) {
         if (key.isEmpty()|| key == currentUrl) {
-            urlModule?.switch(currentTitle, currentUrl)
+            binding?.urlModule?.switch(currentTitle, currentUrl)
         } else {
-            urlModule?.hide()
+            binding?.urlModule?.hide()
         }
 
         setActionButtonState(key.isEmpty())
