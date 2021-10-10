@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 /**
  * @author toastkidjp
  */
-class UrlModule
+class UrlCardView
 @JvmOverloads
 constructor(
     context: Context,

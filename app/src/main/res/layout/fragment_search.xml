@@ -17,7 +17,7 @@
             android:layout_marginRight="@dimen/search_horizontal_margin"
             >
 
-            <jp.toastkid.yobidashi.search.url.UrlModule
+            <jp.toastkid.yobidashi.search.url.UrlCardView
                 android:id="@+id/url_module"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
