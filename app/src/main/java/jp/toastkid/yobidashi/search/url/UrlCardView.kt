@@ -111,7 +111,7 @@ constructor(
      * Hide this module.
      */
     fun hide() {
-        if (this.visibility == View.VISIBLE) {
+        if (isVisible()) {
             runOnMainThread { this.visibility = View.GONE }
         }
     }
