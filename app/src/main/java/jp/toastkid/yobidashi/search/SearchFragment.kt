@@ -51,7 +51,6 @@ import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
-import jp.toastkid.yobidashi.search.trend.HourlyTrendModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import kotlinx.coroutines.CoroutineScope
@@ -96,8 +95,6 @@ class SearchFragment : Fragment() {
      * Suggestion module.
      */
     private var urlSuggestionModule: UrlSuggestionModule? = null
-
-    private var hourlyTrendModule: HourlyTrendModule? = null
 
     /**
      * Does use voice search?
@@ -227,11 +224,8 @@ class SearchFragment : Fragment() {
                 viewModel
         )
 
-        hourlyTrendModule = HourlyTrendModule(
-                binding?.hourlyTrendModule,
-                viewModel
-        )
-        hourlyTrendModule?.request()
+        binding?.hourlyTrendCard?.setViewModel(viewModel)
+        binding?.hourlyTrendCard?.request()
 
         val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
         setInitialQuery(query)
@@ -358,7 +352,7 @@ class SearchFragment : Fragment() {
         favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
         binding?.urlModule?.enable = preferenceApplier.isEnableUrlModule()
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
-        hourlyTrendModule?.setEnable(preferenceApplier.isEnableTrendModule())
+        binding?.hourlyTrendCard?.setEnable(preferenceApplier.isEnableTrendModule())
 
         val headerView = headerBinding?.root ?: return
         appBarViewModel?.replace(headerView)
@@ -553,7 +547,7 @@ class SearchFragment : Fragment() {
         favoriteModule?.dispose()
         historyModule?.dispose()
         suggestionModule?.dispose()
-        hourlyTrendModule?.dispose()
+        binding?.hourlyTrendCard?.dispose()
         voiceSearchLauncher.unregister()
         super.onDetach()
     }

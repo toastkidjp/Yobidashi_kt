@@ -17,9 +17,11 @@ import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 /**
  * @author toastkidjp
  */
-class Adapter(private val viewModel: SearchFragmentViewModel) : RecyclerView.Adapter<ViewHolder>() {
+class Adapter : RecyclerView.Adapter<ViewHolder>() {
 
     private val items = mutableListOf<Trend>()
+
+    private var viewModel: SearchFragmentViewModel? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -30,13 +32,15 @@ class Adapter(private val viewModel: SearchFragmentViewModel) : RecyclerView.Ada
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items.get(position))
         holder.itemView.setOnClickListener {
-            viewModel.search(items.get(position).link)
+            viewModel?.search(items.get(position).link)
         }
         holder.itemView.setOnLongClickListener {
-            viewModel.searchOnBackground(items.get(position).title)
+            viewModel?.searchOnBackground(items.get(position).title)
             true
         }
-        holder.setOnAdd(viewModel::putQuery)
+        holder.setOnAdd {
+            viewModel?.putQuery(it)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -52,6 +56,10 @@ class Adapter(private val viewModel: SearchFragmentViewModel) : RecyclerView.Ada
 
     fun isNotEmpty(): Boolean {
         return items.isNotEmpty()
+    }
+
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        this.viewModel = viewModel
     }
 
 }

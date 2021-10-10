@@ -7,8 +7,13 @@
  */
 package jp.toastkid.yobidashi.search.trend
 
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +24,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchHourlyTrendBinding
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -32,10 +38,15 @@ import java.io.IOException
 /**
  * @author toastkidjp
  */
-class HourlyTrendModule(
-        private val binding: ModuleSearchHourlyTrendBinding?,
-        viewModel: SearchFragmentViewModel
-) {
+class HourlyTrendModule
+@JvmOverloads
+constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : CardView(context, attrs, defStyleAttr) {
+
+    private var binding: ModuleSearchHourlyTrendBinding? = null
 
     private val trendApi = TrendApi()
 
@@ -46,10 +57,15 @@ class HourlyTrendModule(
     private var enable: Boolean
 
     init {
-        val context = binding?.root?.context
+        binding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.module_search_hourly_trend,
+            this,
+            true
+        )
         enable = if (context == null) false else PreferenceApplier(context).isEnableTrendModule()
 
-        adapter = Adapter(viewModel)
+        adapter = Adapter()
         binding?.trendItems?.adapter = adapter
         binding?.trendItems?.layoutManager = makeLayoutManager()
 
@@ -90,6 +106,10 @@ class HourlyTrendModule(
         this.enable = newState
 
         binding?.root?.isVisible = newState
+    }
+
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        adapter?.setViewModel(viewModel)
     }
 
     fun openMore() {
