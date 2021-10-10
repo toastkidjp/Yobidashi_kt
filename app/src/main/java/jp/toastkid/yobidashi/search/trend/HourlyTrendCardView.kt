@@ -38,7 +38,7 @@ import java.io.IOException
 /**
  * @author toastkidjp
  */
-class HourlyTrendModule
+class HourlyTrendCardView
 @JvmOverloads
 constructor(
     context: Context,

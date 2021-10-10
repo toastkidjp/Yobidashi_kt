@@ -42,7 +42,7 @@
             <include android:id="@+id/suggestion_module"
                 layout="@layout/module_search_suggestion" />
 
-            <jp.toastkid.yobidashi.search.trend.HourlyTrendModule
+            <jp.toastkid.yobidashi.search.trend.HourlyTrendCardView
                 android:id="@+id/hourly_trend_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
