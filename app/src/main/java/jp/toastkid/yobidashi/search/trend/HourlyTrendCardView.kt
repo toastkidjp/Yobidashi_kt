@@ -12,7 +12,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +25,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchHourlyTrendBinding
+import jp.toastkid.yobidashi.databinding.ViewCardHourlyTrendBinding
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +46,7 @@ constructor(
     defStyleAttr: Int = 0
 ) : CardView(context, attrs, defStyleAttr) {
 
-    private var binding: ModuleSearchHourlyTrendBinding? = null
+    private var binding: ViewCardHourlyTrendBinding? = null
 
     private val trendApi = TrendApi()
 
@@ -59,7 +59,7 @@ constructor(
     init {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.module_search_hourly_trend,
+            R.layout.view_card_hourly_trend,
             this,
             true
         )
