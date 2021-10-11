@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.search.suggestion
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -63,7 +62,7 @@ internal class Adapter (
             viewModel?.searchOnBackground(item)
             true
         }
-        holder.setOnClickAdd(View.OnClickListener{ viewModel?.putQuery("$item ") })
+        holder.setOnClickAdd({ viewModel?.putQuery("$item ") })
     }
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
