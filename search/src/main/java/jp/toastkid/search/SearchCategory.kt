@@ -416,6 +416,11 @@ enum class SearchCategory(
             R.drawable.ic_livejournal,
             "https://www.livejournal.com/gsearch/?engine=google&cx=partner-pub-5600223439108080:3711723852&q="
     ),
+    GOOGLE_NEWS(
+        R.string.google_news,
+        R.drawable.ic_google_news,
+        "https://news.google.com/search?q="
+    )
     ;
 
     /**
