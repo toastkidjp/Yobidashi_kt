@@ -39,7 +39,7 @@
             <include android:id="@+id/history_module"
                 layout="@layout/module_search_history" />
 
-            <jp.toastkid.yobidashi.search.suggestion.SuggestionModule
+            <jp.toastkid.yobidashi.search.suggestion.SuggestionCardView
                 android:id="@+id/suggestion_module"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
