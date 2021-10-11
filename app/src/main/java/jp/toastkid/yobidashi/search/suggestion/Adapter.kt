@@ -19,14 +19,15 @@ import jp.toastkid.yobidashi.search.SearchFragmentViewModel
  * @author toastkidjp
  */
 internal class Adapter (
-        private val layoutInflater: LayoutInflater,
-        private val viewModel: SearchFragmentViewModel
+        private val layoutInflater: LayoutInflater
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /**
      * Suggestion items.
      */
     private val suggestions: MutableList<String> = mutableListOf()
+
+    private var viewModel: SearchFragmentViewModel? = null
 
     /**
      * Clear suggestions.
@@ -57,14 +58,18 @@ internal class Adapter (
         val item = suggestions[position]
         holder.setText(item)
         holder.itemView.setOnClickListener {
-            viewModel.putQuery(item)
-            viewModel.search(item)
+            viewModel?.putQuery(item)
+            viewModel?.search(item)
         }
         holder.itemView.setOnLongClickListener {
-            viewModel.searchOnBackground(item)
+            viewModel?.searchOnBackground(item)
             true
         }
-        holder.setOnClickAdd(View.OnClickListener{ viewModel.putQuery("$item ") })
+        holder.setOnClickAdd(View.OnClickListener{ viewModel?.putQuery("$item ") })
+    }
+
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        this.viewModel = viewModel
     }
 
     companion object {

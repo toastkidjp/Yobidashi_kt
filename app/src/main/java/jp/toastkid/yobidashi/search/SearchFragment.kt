@@ -42,7 +42,6 @@ import jp.toastkid.yobidashi.databinding.AppBarSearchBinding
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
@@ -50,7 +49,6 @@ import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
-import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import kotlinx.coroutines.CoroutineScope
@@ -85,11 +83,6 @@ class SearchFragment : Fragment() {
      * History module.
      */
     private var historyModule: HistoryModule? = null
-
-    /**
-     * Suggestion module.
-     */
-    private var suggestionModule: SuggestionModule? = null
 
     /**
      * Suggestion module.
@@ -133,14 +126,14 @@ class SearchFragment : Fragment() {
             if (result == null || result.size == 0) {
                 return@registerForActivityResult
             }
-            suggestionModule?.clear()
-            suggestionModule?.addAll(result)
-            suggestionModule?.show()
+            binding?.suggestionModule?.clear()
+            binding?.suggestionModule?.addAll(result)
+            binding?.suggestionModule?.show()
 
             CoroutineScope(Dispatchers.Default).launch(disposables) {
                 delay(200)
                 withContext(Dispatchers.Main) {
-                    val top = binding?.suggestionModule?.root?.top ?: 0
+                    val top = binding?.suggestionModule?.top ?: 0
                     binding?.scroll?.smoothScrollTo(0, top)
                 }
             }
@@ -214,10 +207,7 @@ class SearchFragment : Fragment() {
                     setTextAndMoveCursorToEnd(query)
                 })
 
-        suggestionModule = SuggestionModule(
-                binding?.suggestionModule as ModuleSearchSuggestionBinding,
-                viewModel
-        )
+        binding?.suggestionModule?.setViewModel(viewModel)
 
         urlSuggestionModule = UrlSuggestionModule(
                 binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
@@ -347,7 +337,7 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        suggestionModule?.enable = preferenceApplier.isEnableSuggestion
+        binding?.suggestionModule?.enable = preferenceApplier.isEnableSuggestion
         historyModule?.enable = preferenceApplier.isEnableSearchHistory
         favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
         binding?.urlModule?.enable = preferenceApplier.isEnableUrlModule()
@@ -434,11 +424,11 @@ class SearchFragment : Fragment() {
         urlSuggestionModule?.query(key)
 
         if (preferenceApplier.isDisableSuggestion) {
-            suggestionModule?.clear()
+            binding?.suggestionModule?.clear()
             return
         }
 
-        suggestionModule?.request(key)
+        binding?.suggestionModule?.request(key)
     }
 
     /**
@@ -546,7 +536,7 @@ class SearchFragment : Fragment() {
         channel.cancel()
         favoriteModule?.dispose()
         historyModule?.dispose()
-        suggestionModule?.dispose()
+        binding?.suggestionModule?.dispose()
         binding?.hourlyTrendCard?.dispose()
         voiceSearchLauncher.unregister()
         super.onDetach()

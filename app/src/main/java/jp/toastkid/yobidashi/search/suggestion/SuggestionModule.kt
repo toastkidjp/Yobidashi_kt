@@ -1,7 +1,11 @@
 package jp.toastkid.yobidashi.search.suggestion
 
+import android.content.Context
+import android.util.AttributeSet
 import android.view.LayoutInflater
+import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -31,18 +35,17 @@ import kotlinx.coroutines.withContext
  *
  * @author toastkidjp
  */
-class SuggestionModule(
-        private val binding: ModuleSearchSuggestionBinding,
-        viewModel: SearchFragmentViewModel
-) {
+class SuggestionModule@JvmOverloads
+constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : CardView(context, attrs, defStyleAttr) {
 
     /**
      * Suggest ModuleAdapter.
      */
-    private val adapter: Adapter = Adapter(
-            LayoutInflater.from(binding.root.context),
-            viewModel
-    )
+    private var adapter: Adapter? = null
 
     /**
      * Suggestion API.
@@ -54,6 +57,8 @@ class SuggestionModule(
      */
     private val cache = HashMap<String, List<String>>(SUGGESTION_CACHE_CAPACITY)
 
+    private var binding: ModuleSearchSuggestionBinding? = null
+
     /**
      * Last subscription's lastSubscription.
      */
@@ -62,7 +67,18 @@ class SuggestionModule(
     var enable: Boolean = true
 
     init {
-        val layoutManager = FlexboxLayoutManager(binding.root.context)
+        val from = LayoutInflater.from(context)
+
+        binding = DataBindingUtil.inflate(
+            from,
+            R.layout.module_search_suggestion,
+            this,
+            true
+        )
+
+        adapter = Adapter(from)
+
+        val layoutManager = FlexboxLayoutManager(context)
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.flexWrap = FlexWrap.WRAP
         layoutManager.justifyContent = JustifyContent.FLEX_START
@@ -72,16 +88,16 @@ class SuggestionModule(
     }
 
     private fun initializeSearchSuggestionList(layoutManager: FlexboxLayoutManager) {
-        binding.searchSuggestions.layoutManager = layoutManager
-        binding.searchSuggestions.adapter = adapter
+        binding?.searchSuggestions?.layoutManager = layoutManager
+        binding?.searchSuggestions?.adapter = adapter
     }
 
     /**
      * Clear suggestion items.
      */
     fun clear() {
-        adapter.clear()
-        adapter.notifyDataSetChanged()
+        adapter?.clear()
+        adapter?.notifyDataSetChanged()
     }
 
     /**
@@ -98,7 +114,7 @@ class SuggestionModule(
             return
         }
 
-        val context = binding.root.context
+        val context = context
         if (NetworkChecker.isNotAvailable(context)) {
             return
         }
@@ -126,9 +142,9 @@ class SuggestionModule(
     internal fun addAll(words: List<String>) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.Default) {
-                words.forEach { adapter.add(it) }
+                words.forEach { adapter?.add(it) }
             }
-            adapter.notifyDataSetChanged()
+            adapter?.notifyDataSetChanged()
         }
     }
 
@@ -141,11 +157,11 @@ class SuggestionModule(
     private fun replace(suggestions: Iterable<String>): Job {
         return CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.Default) {
-                adapter.clear()
-                suggestions.forEach { adapter.add(it) }
+                adapter?.clear()
+                suggestions.forEach { adapter?.add(it) }
             }
             show()
-            adapter.notifyDataSetChanged()
+            adapter?.notifyDataSetChanged()
         }
     }
 
@@ -153,8 +169,8 @@ class SuggestionModule(
      * Show this module.
      */
     fun show() {
-        if (!binding.root.isVisible && enable) {
-            runOnMainThread { binding.root.isVisible = true }
+        if (!isVisible && enable) {
+            runOnMainThread { isVisible = true }
         }
     }
 
@@ -162,13 +178,17 @@ class SuggestionModule(
      * Hide this module.
      */
     fun hide() {
-        if (binding.root.isVisible) {
-            runOnMainThread { binding.root.isVisible = false }
+        if (isVisible) {
+            runOnMainThread { isVisible = false }
         }
     }
 
     private fun runOnMainThread(action: () -> Unit) =
             CoroutineScope(Dispatchers.Main).launch { action() }
+
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        adapter?.setViewModel(viewModel)
+    }
 
     /**
      * Dispose last subscription.

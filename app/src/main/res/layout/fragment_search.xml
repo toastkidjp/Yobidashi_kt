@@ -39,8 +39,16 @@
             <include android:id="@+id/history_module"
                 layout="@layout/module_search_history" />
 
-            <include android:id="@+id/suggestion_module"
-                layout="@layout/module_search_suggestion" />
+            <jp.toastkid.yobidashi.search.suggestion.SuggestionModule
+                android:id="@+id/suggestion_module"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/search_vertical_margin"
+                app:cardElevation="3dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:background="@color/filter_white_bb"
+                />
 
             <jp.toastkid.yobidashi.search.trend.HourlyTrendCardView
                 android:id="@+id/hourly_trend_card"
