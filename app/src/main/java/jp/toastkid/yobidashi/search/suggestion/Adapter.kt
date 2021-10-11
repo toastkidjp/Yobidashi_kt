@@ -13,8 +13,6 @@ import jp.toastkid.yobidashi.search.SearchFragmentViewModel
  * Suggest list adapter.
  *
  * @param layoutInflater Layout inflater
- * @param queryPutter putting function of query
- * @param suggestionsCallback Using selected suggest action
  *
  * @author toastkidjp
  */
