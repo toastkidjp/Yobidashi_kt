@@ -12,6 +12,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +25,6 @@ import com.google.android.flexbox.JustifyContent
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ModuleSearchHourlyTrendBinding
 import jp.toastkid.yobidashi.databinding.ViewCardHourlyTrendBinding
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -97,7 +97,7 @@ constructor(
                 }
                 adapter?.replace(trendItems?.take(10))
             }
-            binding?.root?.isVisible = adapter?.isNotEmpty() ?: false
+            isVisible = adapter?.isNotEmpty() ?: false
             adapter?.notifyDataSetChanged()
         }
     }
@@ -105,7 +105,7 @@ constructor(
     fun setEnable(newState: Boolean) {
         this.enable = newState
 
-        binding?.root?.isVisible = newState
+        isVisible = newState
     }
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
