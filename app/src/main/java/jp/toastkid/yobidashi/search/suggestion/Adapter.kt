@@ -62,7 +62,7 @@ internal class Adapter (
             viewModel?.searchOnBackground(item)
             true
         }
-        holder.setOnClickAdd({ viewModel?.putQuery("$item ") })
+        holder.setOnClickAdd { viewModel?.putQuery("$item ") }
     }
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
