@@ -27,12 +27,6 @@ import kotlinx.coroutines.withContext
  * Facade of search suggestion module.
  * Initialize with binding object.
  *
- * @param binding Data binding object
- * @param queryPutter Use for query inserting
- * @param searchCallback Callback on search
- * @param searchBackgroundCallback Callback for background search
- * @param onClick Callback on click
- *
  * @author toastkidjp
  */
 class SuggestionModule@JvmOverloads
