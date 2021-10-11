@@ -13,7 +13,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
+import jp.toastkid.yobidashi.databinding.ViewCardSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
@@ -51,7 +51,7 @@ constructor(
      */
     private val cache = HashMap<String, List<String>>(SUGGESTION_CACHE_CAPACITY)
 
-    private var binding: ModuleSearchSuggestionBinding? = null
+    private var binding: ViewCardSearchSuggestionBinding? = null
 
     /**
      * Last subscription's lastSubscription.
@@ -65,7 +65,7 @@ constructor(
 
         binding = DataBindingUtil.inflate(
             from,
-            R.layout.module_search_suggestion,
+            R.layout.view_card_search_suggestion,
             this,
             true
         )
