@@ -40,12 +40,10 @@ import jp.toastkid.lib.view.EditTextColorSetter
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarSearchBinding
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
-import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
-import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,11 +67,6 @@ class SearchFragment : Fragment() {
      * View binder.
      */
     private var binding: FragmentSearchBinding? = null
-
-    /**
-     * Suggestion module.
-     */
-    private var urlSuggestionModule: UrlSuggestionModule? = null
 
     /**
      * Does use voice search?
@@ -196,11 +189,7 @@ class SearchFragment : Fragment() {
         binding?.favoriteModule?.setViewModel(viewModel)
         binding?.suggestionModule?.setViewModel(viewModel)
         binding?.historyModule?.setViewModel(viewModel)
-
-        urlSuggestionModule = UrlSuggestionModule(
-                binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
-                viewModel
-        )
+        binding?.urlSuggestionModule?.setViewModel(viewModel)
 
         binding?.hourlyTrendCard?.setViewModel(viewModel)
         binding?.hourlyTrendCard?.request()
@@ -296,7 +285,7 @@ class SearchFragment : Fragment() {
         binding?.historyModule?.enable = preferenceApplier.isEnableSearchHistory
         binding?.favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
         binding?.urlModule?.enable = preferenceApplier.isEnableUrlModule()
-        urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
+        binding?.urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         binding?.hourlyTrendCard?.setEnable(preferenceApplier.isEnableTrendModule())
 
         val headerView = headerBinding?.root ?: return
@@ -376,7 +365,7 @@ class SearchFragment : Fragment() {
         }
 
         binding?.favoriteModule?.query(key)
-        urlSuggestionModule?.query(key)
+        binding?.urlSuggestionModule?.query(key)
 
         if (preferenceApplier.isDisableSuggestion) {
             binding?.suggestionModule?.clear()

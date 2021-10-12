@@ -1,10 +1,15 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
+import android.content.Context
+import android.util.AttributeSet
 import android.view.LayoutInflater
+import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
@@ -20,14 +25,17 @@ import kotlinx.coroutines.launch
 /**
  * @author toastkidjp
  */
-class UrlSuggestionModule(
-        private val binding: ModuleUrlSuggestionBinding,
-        viewModel: SearchFragmentViewModel
-) {
+class UrlSuggestionModule
+@JvmOverloads
+constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : CardView(context, attrs, defStyleAttr) {
 
     var enable = true
 
-    private val database = DatabaseFinder().invoke(binding.root.context)
+    private val database = DatabaseFinder().invoke(context)
 
     /**
      * Bookmark's database repository.
@@ -45,18 +53,25 @@ class UrlSuggestionModule(
      * Adapter.
      */
     private val adapter = Adapter(
-        LayoutInflater.from(binding.root.context),
+        LayoutInflater.from(context),
         this::remove,
-        viewModel,
         ItemDeletionUseCase(bookmarkRepository, viewHistoryRepository)
     )
 
     private val queryUseCase: QueryUseCase
 
+    private var binding: ModuleUrlSuggestionBinding? = null
+
     init {
-        binding.urlSuggestions.adapter = adapter
-        binding.module = this
-        SwipeActionAttachment().invoke(binding.urlSuggestions)
+        binding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.module_url_suggestion,
+            this,
+            true
+        )
+        binding?.urlSuggestions?.adapter = adapter
+        binding?.module = this
+        binding?.urlSuggestions?.let { SwipeActionAttachment().invoke(it) }
         queryUseCase = QueryUseCase(
             adapter,
             bookmarkRepository,
@@ -70,7 +85,7 @@ class UrlSuggestionModule(
     }
 
     fun openHistory() {
-        (binding.root.context as? FragmentActivity)?.let {
+        (context as? FragmentActivity)?.let {
             ViewModelProvider(it).get(ContentViewModel::class.java)
                 .nextFragment(ViewHistoryFragment::class.java)
         }
@@ -89,8 +104,8 @@ class UrlSuggestionModule(
      * Show this module.
      */
     fun show() {
-        if (!binding.root.isVisible && enable) {
-            runOnMainThread { binding.root.isVisible = true }
+        if (!isVisible && enable) {
+            runOnMainThread { isVisible = true }
         }
     }
 
@@ -98,9 +113,13 @@ class UrlSuggestionModule(
      * Hide this module.
      */
     fun hide() {
-        if (binding.root.isVisible) {
-            runOnMainThread { binding.root.isVisible = false }
+        if (isVisible) {
+            runOnMainThread { isVisible = false }
         }
+    }
+    
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        adapter.setViewModel(viewModel)
     }
 
     private fun runOnMainThread(action: () -> Unit) =

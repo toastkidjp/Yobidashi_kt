@@ -27,7 +27,6 @@ import kotlinx.coroutines.withContext
 class Adapter(
         private val layoutInflater: LayoutInflater,
         private val removeAt: (UrlItem) -> Unit,
-        private val viewModel: SearchFragmentViewModel,
         private val itemDeletionUseCase: ItemDeletionUseCase
 ): RecyclerView.Adapter<ViewHolder>() {
 
@@ -35,6 +34,8 @@ class Adapter(
      * Item list.
      */
     private val suggestions: MutableList<UrlItem> = mutableListOf()
+
+    private var viewModel: SearchFragmentViewModel? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate(
@@ -51,9 +52,9 @@ class Adapter(
         }
 
         item.bind(holder)
-        holder.setOnClick { viewModel.search(item.urlString()) }
+        holder.setOnClick { viewModel?.search(item.urlString()) }
         holder.setOnLongClick {
-            viewModel.searchOnBackground(item.urlString())
+            viewModel?.searchOnBackground(item.urlString())
             true
         }
         holder.setDelete { removeAt(item) }
@@ -121,6 +122,10 @@ class Adapter(
 
             notifyItemRemoved(index)
         }
+    }
+
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        this.viewModel = viewModel
     }
 
 }
