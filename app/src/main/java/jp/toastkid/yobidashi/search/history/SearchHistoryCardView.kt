@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
+import jp.toastkid.yobidashi.databinding.ViewCardSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -51,7 +51,7 @@ constructor(
 
     var enable: Boolean = true
 
-    private var binding: ModuleSearchHistoryBinding? = null
+    private var binding: ViewCardSearchHistoryBinding? = null
 
     /**
      * Last subscription.
@@ -62,7 +62,7 @@ constructor(
         val context = context
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.module_search_history,
+            R.layout.view_card_search_history,
             this,
             true
         )
