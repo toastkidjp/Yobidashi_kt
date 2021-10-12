@@ -40,12 +40,10 @@ import jp.toastkid.lib.view.EditTextColorSetter
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarSearchBinding
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
-import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
@@ -71,11 +69,6 @@ class SearchFragment : Fragment() {
      * View binder.
      */
     private var binding: FragmentSearchBinding? = null
-
-    /**
-     * Favorite search module.
-     */
-    private var favoriteModule: FavoriteSearchModule? = null
 
     /**
      * Suggestion module.
@@ -164,8 +157,6 @@ class SearchFragment : Fragment() {
             contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
         }
 
-        initFavoriteModule()
-
         applyColor()
 
         binding?.urlModule?.setInsertAction(this::setTextAndMoveCursorToEnd)
@@ -202,6 +193,7 @@ class SearchFragment : Fragment() {
                     setTextAndMoveCursorToEnd(query)
                 })
 
+        binding?.favoriteModule?.setViewModel(viewModel)
         binding?.suggestionModule?.setViewModel(viewModel)
         binding?.historyModule?.setViewModel(viewModel)
 
@@ -290,19 +282,6 @@ class SearchFragment : Fragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun initFavoriteModule() {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            favoriteModule = withContext(Dispatchers.Default) {
-                FavoriteSearchModule(
-                        binding?.favoriteModule as ModuleSearchFavoriteBinding,
-                        { fav -> search(fav.category ?: "", fav.query ?: "") },
-                        this@SearchFragment::hideKeyboard,
-                        { setTextAndMoveCursorToEnd("${it.query} ") }
-                )
-            }
-        }
-    }
-
     private fun setTextAndMoveCursorToEnd(text: String) {
         headerBinding?.searchInput?.also {
             it.setText(text)
@@ -315,7 +294,7 @@ class SearchFragment : Fragment() {
 
         binding?.suggestionModule?.enable = preferenceApplier.isEnableSuggestion
         binding?.historyModule?.enable = preferenceApplier.isEnableSearchHistory
-        favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
+        binding?.favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
         binding?.urlModule?.enable = preferenceApplier.isEnableUrlModule()
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         binding?.hourlyTrendCard?.setEnable(preferenceApplier.isEnableTrendModule())
@@ -396,7 +375,7 @@ class SearchFragment : Fragment() {
             binding?.historyModule?.query(key)
         }
 
-        favoriteModule?.query(key)
+        binding?.favoriteModule?.query(key)
         urlSuggestionModule?.query(key)
 
         if (preferenceApplier.isDisableSuggestion) {
@@ -510,7 +489,7 @@ class SearchFragment : Fragment() {
         hideKeyboard()
         disposables.cancel()
         channel.cancel()
-        favoriteModule?.dispose()
+        binding?.favoriteModule?.dispose()
         binding?.historyModule?.dispose()
         binding?.suggestionModule?.dispose()
         binding?.hourlyTrendCard?.dispose()

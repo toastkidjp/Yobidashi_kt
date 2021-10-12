@@ -1,15 +1,20 @@
 package jp.toastkid.yobidashi.search.favorite
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.AttributeSet
+import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,18 +24,23 @@ import kotlinx.coroutines.launch
 /**
  * Search history module.
  *
+ * searchCallback: (FavoriteSearch) -> Unit,
+ * onTouch: () -> Unit,
+ * onClickAdd: (FavoriteSearch) -> Unit
+ *
  * @param binding Data binding object
  * @param searchCallback
  * @param onTouch
  * @param onClickAdd
  * @author toastkidjp
  */
-class FavoriteSearchModule(
-        private val binding: ModuleSearchFavoriteBinding,
-        searchCallback: (FavoriteSearch) -> Unit,
-        onTouch: () -> Unit,
-        onClickAdd: (FavoriteSearch) -> Unit
-) {
+class FavoriteSearchModule
+@JvmOverloads
+constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : CardView(context, attrs, defStyleAttr) {
 
     /**
      * RecyclerView's moduleAdapter.
@@ -44,6 +54,8 @@ class FavoriteSearchModule(
 
     var enable: Boolean = true
 
+    private var binding: ModuleSearchFavoriteBinding? = null
+
     /**
      * Last subscription.
      */
@@ -56,34 +68,32 @@ class FavoriteSearchModule(
 
     init {
 
-        binding.module = this
+        binding?.module = this
 
-        val context = binding.root.context
         repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
 
-        binding.searchFavorites.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding?.searchFavorites?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         moduleAdapter = ModuleAdapter(
                 context,
                 repository,
-                searchCallback,
                 { visible -> if (visible) { show() } else { hide() } },
-                { history -> onClickAdd(history) },
                 5
         )
-        binding.searchFavorites.adapter = moduleAdapter
-        binding.searchFavorites.onFlingListener = object : RecyclerView.OnFlingListener() {
+        binding?.searchFavorites?.adapter = moduleAdapter
+        binding?.searchFavorites?.onFlingListener = object : RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int): Boolean {
-                onTouch()
+                Inputs.hideKeyboard(this@FavoriteSearchModule)
                 return false
             }
         }
-        uiThreadHandler.post {
-            SwipeActionAttachment().invoke(binding.searchFavorites)
+        uiThreadHandler.post { // TODO use post
+            val recyclerView = binding?.searchFavorites ?: return@post
+            SwipeActionAttachment().invoke(recyclerView)
         }
     }
 
     fun openHistory() {
-        (binding.root.context as? FragmentActivity)?.let {
+        (context as? FragmentActivity)?.let {
             ViewModelProvider(it).get(ContentViewModel::class.java)
                 .nextFragment(FavoriteSearchFragment::class.java)
         }
@@ -102,8 +112,8 @@ class FavoriteSearchModule(
      * Show this module.
      */
     fun show() {
-        if (!binding.root.isVisible && enable) {
-            runOnMainThread { binding.root.isVisible = true }
+        if (!isVisible && enable) {
+            runOnMainThread { isVisible = true }
         }
     }
 
@@ -111,9 +121,13 @@ class FavoriteSearchModule(
      * Hide this module.
      */
     fun hide() {
-        if (binding.root.isVisible) {
-            runOnMainThread { binding.root.isVisible = false }
+        if (isVisible) {
+            runOnMainThread { isVisible = false }
         }
+    }
+
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        moduleAdapter.setViewModel(viewModel)
     }
 
     private fun runOnMainThread(action: () -> Unit) =

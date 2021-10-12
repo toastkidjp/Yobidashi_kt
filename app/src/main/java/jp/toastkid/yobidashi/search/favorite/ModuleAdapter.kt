@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -39,9 +40,7 @@ import kotlin.math.min
 internal class ModuleAdapter(
         context: Context,
         private val favoriteSearchRepository: FavoriteSearchRepository,
-        private val onClick: (FavoriteSearch) -> Unit,
         private val onVisibilityChanged: (Boolean) -> Unit,
-        private val onClickAdd: (FavoriteSearch) -> Unit,
         private val maxItemCount: Int = -1
 ) : RecyclerView.Adapter<ModuleViewHolder>() {
 
@@ -55,6 +54,8 @@ internal class ModuleAdapter(
      */
     private val selected: MutableList<FavoriteSearch> = ArrayList(5)
 
+    private var viewModel: SearchFragmentViewModel? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModuleViewHolder {
         return ModuleViewHolder(DataBindingUtil.inflate(
                 inflater, LAYOUT_ID, parent, false))
@@ -65,12 +66,14 @@ internal class ModuleAdapter(
         holder.setText(favorite.query)
         holder.itemView.setOnClickListener {
             try {
-                onClick(favorite)
+                val query = favorite.query ?: return@setOnClickListener
+                val category = favorite.category ?: return@setOnClickListener
+                viewModel?.searchWithCategory(query, category)
             } catch (e: Exception) {
                 Timber.e(e)
             }
         }
-        holder.setOnClickAdd(favorite, onClickAdd)
+        holder.setOnClickAdd(favorite, { viewModel?.putQuery(it.query ?: "") })
 
         holder.setOnClickDelete { remove(favorite) }
 
@@ -171,6 +174,10 @@ internal class ModuleAdapter(
             items.forEach { selected.add(it) }
             notifyDataSetChanged()
         }
+    }
+
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        this.viewModel = viewModel
     }
 
     override fun getItemCount(): Int {
