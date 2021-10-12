@@ -41,13 +41,11 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarSearchBinding
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
-import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
@@ -78,11 +76,6 @@ class SearchFragment : Fragment() {
      * Favorite search module.
      */
     private var favoriteModule: FavoriteSearchModule? = null
-
-    /**
-     * History module.
-     */
-    private var historyModule: HistoryModule? = null
 
     /**
      * Suggestion module.
@@ -173,8 +166,6 @@ class SearchFragment : Fragment() {
 
         initFavoriteModule()
 
-        initHistoryModule()
-
         applyColor()
 
         binding?.urlModule?.setInsertAction(this::setTextAndMoveCursorToEnd)
@@ -198,8 +189,12 @@ class SearchFragment : Fragment() {
         val viewModel = ViewModelProvider(this).get(SearchFragmentViewModel::class.java)
         viewModel.search
                 .observe(viewLifecycleOwner, Observer { event ->
-                    val pair = event?.getContentIfNotHandled() ?: return@Observer
-                    search(extractCurrentSearchCategory(), pair.first, pair.second)
+                    val searchEvent = event?.getContentIfNotHandled() ?: return@Observer
+                    search(
+                        searchEvent.category ?: extractCurrentSearchCategory(),
+                        searchEvent.query,
+                        searchEvent.background
+                    )
                 })
         viewModel.putQuery
                 .observe(viewLifecycleOwner, Observer { event ->
@@ -208,6 +203,7 @@ class SearchFragment : Fragment() {
                 })
 
         binding?.suggestionModule?.setViewModel(viewModel)
+        binding?.historyModule?.setViewModel(viewModel)
 
         urlSuggestionModule = UrlSuggestionModule(
                 binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
@@ -314,31 +310,11 @@ class SearchFragment : Fragment() {
         }
     }
 
-    /**
-     * Initialize history module asynchronously.
-     */
-    @SuppressLint("SetTextI18n")
-    private fun initHistoryModule() {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            historyModule = withContext(Dispatchers.Default) {
-                HistoryModule(
-                        binding?.historyModule as ModuleSearchHistoryBinding,
-                        { history -> search(history.category as String, history.query as String) }, // TODO use elvis
-                        { searchHistory ->
-                            headerBinding?.searchInput?.setText("${searchHistory.query} ")
-                            headerBinding?.searchInput?.setSelection(
-                                    headerBinding?.searchInput?.text.toString().length)
-                        }
-                )
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
 
         binding?.suggestionModule?.enable = preferenceApplier.isEnableSuggestion
-        historyModule?.enable = preferenceApplier.isEnableSearchHistory
+        binding?.historyModule?.enable = preferenceApplier.isEnableSearchHistory
         favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
         binding?.urlModule?.enable = preferenceApplier.isEnableUrlModule()
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
@@ -417,7 +393,7 @@ class SearchFragment : Fragment() {
         setActionButtonState(key.isEmpty())
 
         if (preferenceApplier.isEnableSearchHistory) {
-            historyModule?.query(key)
+            binding?.historyModule?.query(key)
         }
 
         favoriteModule?.query(key)
@@ -535,7 +511,7 @@ class SearchFragment : Fragment() {
         disposables.cancel()
         channel.cancel()
         favoriteModule?.dispose()
-        historyModule?.dispose()
+        binding?.historyModule?.dispose()
         binding?.suggestionModule?.dispose()
         binding?.hourlyTrendCard?.dispose()
         voiceSearchLauncher.unregister()

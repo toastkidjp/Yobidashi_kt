@@ -36,8 +36,16 @@
             <include android:id="@+id/favorite_module"
                 layout="@layout/module_search_favorite" />
 
-            <include android:id="@+id/history_module"
-                layout="@layout/module_search_history" />
+            <jp.toastkid.yobidashi.search.history.HistoryModule
+                android:id="@+id/history_module"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/search_vertical_margin"
+                app:cardElevation="3dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:background="@color/filter_white_bb"
+                />
 
             <jp.toastkid.yobidashi.search.suggestion.SuggestionCardView
                 android:id="@+id/suggestion_module"

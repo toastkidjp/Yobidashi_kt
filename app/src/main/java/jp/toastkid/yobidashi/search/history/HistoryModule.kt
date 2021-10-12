@@ -7,14 +7,21 @@
  */
 package jp.toastkid.yobidashi.search.history
 
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,11 +36,13 @@ import kotlinx.coroutines.launch
  *
  * @author toastkidjp
  */
-class HistoryModule(
-        private val binding: ModuleSearchHistoryBinding,
-        searchCallback: (SearchHistory) -> Unit,
-        onClickAdd: (SearchHistory) -> Unit
-) {
+class HistoryModule
+@JvmOverloads
+constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : CardView(context, attrs, defStyleAttr) {
 
     /**
      * RecyclerView's moduleAdapter.
@@ -42,16 +51,24 @@ class HistoryModule(
 
     var enable: Boolean = true
 
+    private var binding: ModuleSearchHistoryBinding? = null
+
     /**
      * Last subscription.
      */
     private var disposable: Job? = null
 
     init {
-        binding.module = this
+        val context = context
+        binding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.module_search_history,
+            this,
+            true
+        )
+        binding?.module = this
 
-        val context = binding.root.context
-        binding.searchHistories.layoutManager =
+        binding?.searchHistories?.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         val repository = DatabaseFinder().invoke(context).searchHistoryRepository()
@@ -59,16 +76,15 @@ class HistoryModule(
         moduleAdapter = ModuleAdapter(
                 context,
                 repository,
-                searchCallback,
                 { if (it) show() else hide() },
-                { history -> onClickAdd(history) },
                 true,
                 5
         )
-        binding.searchHistories.adapter = moduleAdapter
+        binding?.searchHistories?.adapter = moduleAdapter
 
         CoroutineScope(Dispatchers.Main).launch {
-            SwipeActionAttachment().invoke(binding.searchHistories)
+            val recyclerView = binding?.searchHistories ?: return@launch
+            SwipeActionAttachment().invoke(recyclerView)
         }
     }
 
@@ -83,7 +99,7 @@ class HistoryModule(
     }
 
     fun openHistory() {
-        (binding.root.context as? FragmentActivity)?.let {
+        (context as? FragmentActivity)?.let {
             ViewModelProvider(it).get(ContentViewModel::class.java)
                 .nextFragment(SearchHistoryFragment::class.java)
         }
@@ -93,7 +109,7 @@ class HistoryModule(
      * Clear search history.
      */
     fun confirmClear() {
-        val activityContext = binding.root.context
+        val activityContext = context
         if (activityContext is FragmentActivity) {
             ClearSearchHistoryDialogFragment().show(
                     activityContext.supportFragmentManager,
@@ -111,8 +127,8 @@ class HistoryModule(
      * Show this module.
      */
     fun show() {
-        if (!binding.root.isVisible && enable) {
-            runOnMainThread { binding.root.isVisible = true }
+        if (!isVisible && enable) {
+            runOnMainThread { isVisible = true }
         }
     }
 
@@ -120,9 +136,13 @@ class HistoryModule(
      * Hide this module.
      */
     fun hide() {
-        if (binding.root.isVisible) {
-            runOnMainThread { binding.root.isVisible = false }
+        if (isVisible) {
+            runOnMainThread { isVisible = false }
         }
+    }
+
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        moduleAdapter.setViewModel(viewModel)
     }
 
     private fun runOnMainThread(action: () -> Unit) =
