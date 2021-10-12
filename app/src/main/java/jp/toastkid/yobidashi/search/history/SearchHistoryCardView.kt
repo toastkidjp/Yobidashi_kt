@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
  *
  * @author toastkidjp
  */
-class HistoryModule
+class SearchHistoryCardView
 @JvmOverloads
 constructor(
     context: Context,

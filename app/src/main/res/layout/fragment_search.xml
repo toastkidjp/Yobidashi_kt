@@ -36,7 +36,7 @@
             <include android:id="@+id/favorite_module"
                 layout="@layout/module_search_favorite" />
 
-            <jp.toastkid.yobidashi.search.history.HistoryModule
+            <jp.toastkid.yobidashi.search.history.SearchHistoryCardView
                 android:id="@+id/history_module"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
