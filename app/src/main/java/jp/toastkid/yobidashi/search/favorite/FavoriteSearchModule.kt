@@ -4,14 +4,17 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.input.Inputs
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
@@ -67,7 +70,12 @@ constructor(
     private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     init {
-
+        binding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.module_search_favorite,
+            this,
+            true
+        )
         binding?.module = this
 
         repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
