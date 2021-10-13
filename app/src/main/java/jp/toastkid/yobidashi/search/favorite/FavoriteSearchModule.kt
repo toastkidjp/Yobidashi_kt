@@ -27,10 +27,6 @@ import kotlinx.coroutines.launch
 /**
  * Search history module.
  *
- * searchCallback: (FavoriteSearch) -> Unit,
- * onTouch: () -> Unit,
- * onClickAdd: (FavoriteSearch) -> Unit
- *
  * @param binding Data binding object
  * @param searchCallback
  * @param onTouch
