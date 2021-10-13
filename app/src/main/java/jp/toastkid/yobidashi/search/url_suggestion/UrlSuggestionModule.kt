@@ -14,7 +14,7 @@ import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
-import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
+import jp.toastkid.yobidashi.databinding.ViewCardUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
@@ -60,12 +60,12 @@ constructor(
 
     private val queryUseCase: QueryUseCase
 
-    private var binding: ModuleUrlSuggestionBinding? = null
+    private var binding: ViewCardUrlSuggestionBinding? = null
 
     init {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.module_url_suggestion,
+            R.layout.view_card_url_suggestion,
             this,
             true
         )
