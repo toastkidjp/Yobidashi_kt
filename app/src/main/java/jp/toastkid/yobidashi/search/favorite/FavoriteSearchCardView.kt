@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
  * @param onClickAdd
  * @author toastkidjp
  */
-class FavoriteSearchModule
+class FavoriteSearchCardView
 @JvmOverloads
 constructor(
     context: Context,
@@ -86,7 +86,7 @@ constructor(
         binding?.searchFavorites?.adapter = moduleAdapter
         binding?.searchFavorites?.onFlingListener = object : RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int): Boolean {
-                Inputs.hideKeyboard(this@FavoriteSearchModule)
+                Inputs.hideKeyboard(this@FavoriteSearchCardView)
                 return false
             }
         }

@@ -41,7 +41,7 @@
                 android:background="@color/filter_white_bb"
                 />
 
-            <jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
+            <jp.toastkid.yobidashi.search.favorite.FavoriteSearchCardView
                 android:id="@+id/favorite_module"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
