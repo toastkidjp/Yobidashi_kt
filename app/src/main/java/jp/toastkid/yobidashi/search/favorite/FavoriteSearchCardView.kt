@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
+import jp.toastkid.yobidashi.databinding.ViewCardFavoriteSearchBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
@@ -53,7 +53,7 @@ constructor(
 
     var enable: Boolean = true
 
-    private var binding: ModuleSearchFavoriteBinding? = null
+    private var binding: ViewCardFavoriteSearchBinding? = null
 
     /**
      * Last subscription.
@@ -68,7 +68,7 @@ constructor(
     init {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.module_search_favorite,
+            R.layout.view_card_favorite_search,
             this,
             true
         )
