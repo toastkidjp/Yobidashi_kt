@@ -152,7 +152,7 @@ class SearchFragment : Fragment() {
 
         applyColor()
 
-        binding?.urlModule?.setInsertAction(this::setTextAndMoveCursorToEnd)
+        binding?.urlCard?.setInsertAction(this::setTextAndMoveCursorToEnd)
 
         setListenerForKeyboardHiding()
 
@@ -284,14 +284,14 @@ class SearchFragment : Fragment() {
         binding?.suggestionModule?.enable = preferenceApplier.isEnableSuggestion
         binding?.historyModule?.enable = preferenceApplier.isEnableSearchHistory
         binding?.favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
-        binding?.urlModule?.enable = preferenceApplier.isEnableUrlModule()
+        binding?.urlCard?.enable = preferenceApplier.isEnableUrlModule()
         binding?.urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         binding?.hourlyTrendCard?.setEnable(preferenceApplier.isEnableTrendModule())
 
         val headerView = headerBinding?.root ?: return
         appBarViewModel?.replace(headerView)
 
-        binding?.urlModule?.onResume()
+        binding?.urlCard?.onResume()
 
         showKeyboard()
     }
@@ -353,9 +353,9 @@ class SearchFragment : Fragment() {
 
     private fun suggest(key: String) {
         if (key.isEmpty()|| key == currentUrl) {
-            binding?.urlModule?.switch(currentTitle, currentUrl)
+            binding?.urlCard?.switch(currentTitle, currentUrl)
         } else {
-            binding?.urlModule?.hide()
+            binding?.urlCard?.hide()
         }
 
         setActionButtonState(key.isEmpty())

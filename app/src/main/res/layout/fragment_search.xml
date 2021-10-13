@@ -19,7 +19,7 @@
             >
 
             <jp.toastkid.yobidashi.search.url.UrlCardView
-                android:id="@+id/url_module"
+                android:id="@+id/url_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/search_vertical_margin"
