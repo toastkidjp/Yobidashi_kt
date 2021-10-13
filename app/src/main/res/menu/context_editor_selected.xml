@@ -38,6 +38,24 @@
         app:showAsAction="always"
         />
     <item
+        android:id="@+id/context_edit_bold"
+        android:title="@string/title_context_editor_bold"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/context_edit_italic"
+        android:title="@string/title_context_editor_italic"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/context_edit_strikethrough"
+        android:title="@string/title_context_editor_strikethrough"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+    <item
         android:id="@+id/context_edit_preview_search"
         android:title="@string/preview_search"
         android:orderInCategory="100"

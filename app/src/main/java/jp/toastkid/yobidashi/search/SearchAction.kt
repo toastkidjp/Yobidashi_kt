@@ -29,15 +29,17 @@ class SearchAction(
         private val query: String,
         private val currentUrl: String? = null,
         private val onBackground: Boolean = false,
-        private val saveHistory: Boolean = true
+        private val saveHistory: Boolean = true,
+        private val viewModelSupplier: (Context) -> BrowserViewModel? = {
+            (activityContext as? FragmentActivity)?.let {
+                ViewModelProvider(it).get(BrowserViewModel::class.java)
+            }
+        },
+        private val preferenceApplierSupplier: (Context) -> PreferenceApplier = {
+            PreferenceApplier(activityContext)
+        },
+        private val urlFactory: UrlFactory = UrlFactory()
 ) {
-
-    /**
-     * Preferences wrapper.
-     */
-    private val preferenceApplier: PreferenceApplier = PreferenceApplier(activityContext)
-
-    private val urlFactory = UrlFactory()
 
     /**
      * Invoke action.
@@ -54,7 +56,8 @@ class SearchAction(
     }
 
     private fun insertToSearchHistory(): Job =
-            if (preferenceApplier.isEnableSearchHistory && isNotUrl(query) && saveHistory) {
+            if (preferenceApplierSupplier(activityContext).isEnableSearchHistory
+                && isNotUrl(query) && saveHistory) {
                 SearchHistoryInsertion.make(activityContext, category, query).insert()
             } else {
                 Job()
@@ -73,9 +76,7 @@ class SearchAction(
      * @param validatedUrl passed query is URL.
      */
     private fun withInternalBrowser(validatedUrl: Boolean) {
-        val browserViewModel = (activityContext as? FragmentActivity)?.let {
-            ViewModelProvider(it).get(BrowserViewModel::class.java)
-        }
+        val browserViewModel = viewModelSupplier(activityContext)
 
         if (validatedUrl) {
             openUri(browserViewModel, Uri.parse(query))

@@ -201,8 +201,8 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             )
 
     private fun countSelectedCharacters() {
-        selectedTextExtractor.withAction(this) { word ->
-            SelectedTextUseCase.make(context)?.countCharacters(word)
+        selectedTextExtractor.withAction(this) {
+            SelectedTextUseCase.make(context)?.countCharacters(it)
         }
     }
 

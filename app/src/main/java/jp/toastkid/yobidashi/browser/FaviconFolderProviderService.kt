@@ -11,10 +11,12 @@ package jp.toastkid.yobidashi.browser
 import android.content.Context
 import jp.toastkid.lib.storage.FilesDir
 
-class FaviconFolderProviderService {
+class FaviconFolderProviderService(
+    private val filesDirProvider: (Context) -> FilesDir = { FilesDir(it, "favicons") }
+) {
 
     operator fun invoke(context: Context): FilesDir {
-        return FilesDir(context, "favicons")
+        return filesDirProvider(context)
     }
 
 }

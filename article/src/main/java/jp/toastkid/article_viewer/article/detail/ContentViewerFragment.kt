@@ -116,25 +116,21 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ViewModelProvider(this)
-                .get(SubheadDialogFragmentViewModel::class.java)
-                .subhead
-                .observe(viewLifecycleOwner, { })
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
         binding.content.linksClickable = true
 
         appBarBinding.input.addTextChangedListener {
             search(it.toString())
         }
 
+        ViewModelProvider(this)
+            .get(SubheadDialogFragmentViewModel::class.java)
+            .subhead
+            .observe(viewLifecycleOwner, { })
+
         val activity = activity ?: return
         ViewModelProvider(activity).get(TabListViewModel::class.java)
-                .tabCount
-                .observe(activity, { appBarBinding.tabCount.text = it.toString() })
+            .tabCount
+            .observe(activity, { appBarBinding.tabCount.text = it.toString() })
     }
 
     override fun onResume() {

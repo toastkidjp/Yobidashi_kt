@@ -75,6 +75,10 @@ class MenuActionInvokerUseCase(
                 CurrentLineDuplicatorUseCase().invoke(editText)
                 return true
             }
+            R.id.context_edit_select_current_line -> {
+                CurrentLineSelectionUseCase().invoke(editText)
+                return true
+            }
             R.id.context_edit_speech -> {
                 val speechText = if (text.isBlank()) editText.text.toString() else text
                 speechMaker?.invoke(speechText)
@@ -102,6 +106,18 @@ class MenuActionInvokerUseCase(
             }
             R.id.context_edit_double_quote -> {
                 StringSurroundingUseCase()(editText, '"')
+                return true
+            }
+            R.id.context_edit_bold -> {
+                StringSurroundingUseCase()(editText, "**")
+                return true
+            }
+            R.id.context_edit_italic -> {
+                StringSurroundingUseCase()(editText, "*")
+                return true
+            }
+            R.id.context_edit_strikethrough -> {
+                StringSurroundingUseCase()(editText, "~~")
                 return true
             }
             R.id.context_edit_url_open_new -> {

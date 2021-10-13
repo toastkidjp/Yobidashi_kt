@@ -431,6 +431,9 @@
     <string name="title_context_editor_convert_to_table">テーブルに変換</string>
     <string name="title_context_editor_add_quote">引用符</string>
     <string name="title_context_editor_double_quote">ダブルクォート</string>
+    <string name="title_context_editor_bold">太字</string>
+    <string name="title_context_editor_italic">斜体</string>
+    <string name="title_context_editor_strikethrough">取り消し線</string>
     <string name="title_context_editor_set_default_search_category">デフォルトの検索種別</string>
     <string name="title_reset_camera_button_position">カメラボタンの位置を戻す</string>
     <string name="title_search_suggestion">検索サジェスト</string>
@@ -443,6 +446,7 @@
     <string name="add_to_home_screen">ショートカットを設置</string>
     <string name="horizontal_rule">水平線</string>
     <string name="duplicate_current_line">行をコピー</string>
+    <string name="select_current_line">行を選択</string>
     <string name="delete_current_line">行を削除</string>
     <string name="title_add_default_background">デフォルトの背景を追加</string>
     <string name="title_article_viewer">記事</string>

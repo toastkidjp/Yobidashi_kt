@@ -14,7 +14,7 @@ import android.widget.EditText
  */
 class StringSurroundingUseCase {
 
-    operator fun invoke(editText: EditText, character: Char) {
+    operator fun invoke(editText: EditText, surrounding: Any) {
         val selectionStart = editText.selectionStart
         val selectionEnd = editText.selectionEnd
         val text = editText.text.substring(selectionStart, selectionEnd)
@@ -22,7 +22,7 @@ class StringSurroundingUseCase {
         editText.text.replace(
                 selectionStart,
                 selectionEnd,
-                "$character$text$character"
+                "$surrounding$text$surrounding"
         )
     }
 }

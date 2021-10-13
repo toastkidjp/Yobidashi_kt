@@ -11,7 +11,6 @@ import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -39,6 +38,7 @@ import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUs
 import jp.toastkid.article_viewer.article.list.menu.MenuPopup
 import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
+import jp.toastkid.article_viewer.article.list.usecase.UpdateUseCase
 import jp.toastkid.article_viewer.bookmark.BookmarkFragment
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
 import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
@@ -114,8 +114,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 return@registerForActivityResult
             }
 
-            val uri = it.data?.data ?: return@registerForActivityResult
-            updateIfNeed(uri)
+            UpdateUseCase(viewModel, { context }).invokeIfNeed(it.data?.data)
         }
 
     override fun onAttach(context: Context) {
@@ -127,8 +126,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 progressBroadcastReceiver,
                 ZipLoaderService.makeProgressBroadcastIntentFilter()
         )
-
-        retainInstance = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -276,7 +273,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         parentFragmentManager.setFragmentResultListener(
             "date_filter",
             viewLifecycleOwner,
-            { key, result ->
+            { _, result ->
                 val year = result.getInt("year")
                 val month = result.getInt("month")
                 FilterByMonthUseCase(
@@ -346,18 +343,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 true
             }
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun updateIfNeed(target: Uri?) {
-        if (target == null) {
-            return
-        }
-
-        viewModel?.showProgress()
-
-        context?.let {
-            ZipLoaderService.start(it, target)
         }
     }
 

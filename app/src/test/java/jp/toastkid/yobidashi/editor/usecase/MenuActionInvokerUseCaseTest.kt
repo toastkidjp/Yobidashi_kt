@@ -368,4 +368,40 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { anyConstructed<TextCountUseCase>().invoke(any(), any()) }
     }
 
+    @Test
+    fun testBold() {
+        mockkConstructor(StringSurroundingUseCase::class)
+        every { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_bold, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }
+    }
+
+    @Test
+    fun testItalic() {
+        mockkConstructor(StringSurroundingUseCase::class)
+        every { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_italic, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }
+    }
+
+    @Test
+    fun testStringSurrounding() {
+        mockkConstructor(StringSurroundingUseCase::class)
+        every { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_strikethrough, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }
+    }
+
 }
