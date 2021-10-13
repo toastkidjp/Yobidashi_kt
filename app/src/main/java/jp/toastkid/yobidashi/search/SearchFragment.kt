@@ -189,7 +189,7 @@ class SearchFragment : Fragment() {
         binding?.favoriteModule?.setViewModel(viewModel)
         binding?.suggestionModule?.setViewModel(viewModel)
         binding?.historyModule?.setViewModel(viewModel)
-        binding?.urlSuggestionModule?.setViewModel(viewModel)
+        binding?.urlSuggestionCard?.setViewModel(viewModel)
 
         binding?.hourlyTrendCard?.setViewModel(viewModel)
         binding?.hourlyTrendCard?.request()
@@ -285,7 +285,7 @@ class SearchFragment : Fragment() {
         binding?.historyModule?.enable = preferenceApplier.isEnableSearchHistory
         binding?.favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
         binding?.urlCard?.enable = preferenceApplier.isEnableUrlModule()
-        binding?.urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
+        binding?.urlSuggestionCard?.enable = preferenceApplier.isEnableViewHistory
         binding?.hourlyTrendCard?.setEnable(preferenceApplier.isEnableTrendModule())
 
         val headerView = headerBinding?.root ?: return
@@ -365,7 +365,7 @@ class SearchFragment : Fragment() {
         }
 
         binding?.favoriteModule?.query(key)
-        binding?.urlSuggestionModule?.query(key)
+        binding?.urlSuggestionCard?.query(key)
 
         if (preferenceApplier.isDisableSuggestion) {
             binding?.suggestionModule?.clear()

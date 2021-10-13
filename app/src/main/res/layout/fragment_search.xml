@@ -31,7 +31,7 @@
                 />
 
             <jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionCardView
-                android:id="@+id/url_suggestion_module"
+                android:id="@+id/url_suggestion_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/search_vertical_margin"
