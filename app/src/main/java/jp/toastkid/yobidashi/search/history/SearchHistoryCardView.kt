@@ -30,10 +30,6 @@ import kotlinx.coroutines.launch
 /**
  * Search history module.
  *
- * @param binding Data binding object
- * @param searchCallback
- * @param onClickAdd
- *
  * @author toastkidjp
  */
 class SearchHistoryCardView
