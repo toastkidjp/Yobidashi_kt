@@ -53,7 +53,7 @@
                 />
 
             <jp.toastkid.yobidashi.search.history.SearchHistoryCardView
-                android:id="@+id/history_module"
+                android:id="@+id/search_history_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/search_vertical_margin"

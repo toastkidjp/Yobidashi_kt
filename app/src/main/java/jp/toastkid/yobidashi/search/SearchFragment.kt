@@ -188,7 +188,7 @@ class SearchFragment : Fragment() {
 
         binding?.favoriteSearchCard?.setViewModel(viewModel)
         binding?.suggestionModule?.setViewModel(viewModel)
-        binding?.historyModule?.setViewModel(viewModel)
+        binding?.searchHistoryCard?.setViewModel(viewModel)
         binding?.urlSuggestionCard?.setViewModel(viewModel)
 
         binding?.hourlyTrendCard?.setViewModel(viewModel)
@@ -282,7 +282,7 @@ class SearchFragment : Fragment() {
         super.onResume()
 
         binding?.suggestionModule?.enable = preferenceApplier.isEnableSuggestion
-        binding?.historyModule?.enable = preferenceApplier.isEnableSearchHistory
+        binding?.searchHistoryCard?.enable = preferenceApplier.isEnableSearchHistory
         binding?.favoriteSearchCard?.enable = preferenceApplier.isEnableFavoriteSearch
         binding?.urlCard?.enable = preferenceApplier.isEnableUrlModule()
         binding?.urlSuggestionCard?.enable = preferenceApplier.isEnableViewHistory
@@ -361,7 +361,7 @@ class SearchFragment : Fragment() {
         setActionButtonState(key.isEmpty())
 
         if (preferenceApplier.isEnableSearchHistory) {
-            binding?.historyModule?.query(key)
+            binding?.searchHistoryCard?.query(key)
         }
 
         binding?.favoriteSearchCard?.query(key)
@@ -479,7 +479,7 @@ class SearchFragment : Fragment() {
         disposables.cancel()
         channel.cancel()
         binding?.favoriteSearchCard?.dispose()
-        binding?.historyModule?.dispose()
+        binding?.searchHistoryCard?.dispose()
         binding?.suggestionModule?.dispose()
         binding?.hourlyTrendCard?.dispose()
         voiceSearchLauncher.unregister()
