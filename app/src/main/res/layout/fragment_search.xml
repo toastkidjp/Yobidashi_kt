@@ -64,7 +64,7 @@
                 />
 
             <jp.toastkid.yobidashi.search.suggestion.SuggestionCardView
-                android:id="@+id/suggestion_module"
+                android:id="@+id/suggestion_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/search_vertical_margin"

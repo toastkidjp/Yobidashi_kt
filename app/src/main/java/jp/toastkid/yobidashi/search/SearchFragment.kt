@@ -105,14 +105,14 @@ class SearchFragment : Fragment() {
             if (result == null || result.size == 0) {
                 return@registerForActivityResult
             }
-            binding?.suggestionModule?.clear()
-            binding?.suggestionModule?.addAll(result)
-            binding?.suggestionModule?.show()
+            binding?.suggestionCard?.clear()
+            binding?.suggestionCard?.addAll(result)
+            binding?.suggestionCard?.show()
 
             CoroutineScope(Dispatchers.Default).launch(disposables) {
                 delay(200)
                 withContext(Dispatchers.Main) {
-                    val top = binding?.suggestionModule?.top ?: 0
+                    val top = binding?.suggestionCard?.top ?: 0
                     binding?.scroll?.smoothScrollTo(0, top)
                 }
             }
@@ -187,7 +187,7 @@ class SearchFragment : Fragment() {
                 })
 
         binding?.favoriteSearchCard?.setViewModel(viewModel)
-        binding?.suggestionModule?.setViewModel(viewModel)
+        binding?.suggestionCard?.setViewModel(viewModel)
         binding?.searchHistoryCard?.setViewModel(viewModel)
         binding?.urlSuggestionCard?.setViewModel(viewModel)
 
@@ -281,7 +281,7 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        binding?.suggestionModule?.enable = preferenceApplier.isEnableSuggestion
+        binding?.suggestionCard?.enable = preferenceApplier.isEnableSuggestion
         binding?.searchHistoryCard?.enable = preferenceApplier.isEnableSearchHistory
         binding?.favoriteSearchCard?.enable = preferenceApplier.isEnableFavoriteSearch
         binding?.urlCard?.enable = preferenceApplier.isEnableUrlModule()
@@ -368,11 +368,11 @@ class SearchFragment : Fragment() {
         binding?.urlSuggestionCard?.query(key)
 
         if (preferenceApplier.isDisableSuggestion) {
-            binding?.suggestionModule?.clear()
+            binding?.suggestionCard?.clear()
             return
         }
 
-        binding?.suggestionModule?.request(key)
+        binding?.suggestionCard?.request(key)
     }
 
     /**
@@ -480,7 +480,7 @@ class SearchFragment : Fragment() {
         channel.cancel()
         binding?.favoriteSearchCard?.dispose()
         binding?.searchHistoryCard?.dispose()
-        binding?.suggestionModule?.dispose()
+        binding?.suggestionCard?.dispose()
         binding?.hourlyTrendCard?.dispose()
         voiceSearchLauncher.unregister()
         super.onDetach()
