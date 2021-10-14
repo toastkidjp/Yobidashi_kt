@@ -73,7 +73,7 @@ internal class ModuleAdapter(
                 Timber.e(e)
             }
         }
-        holder.setOnClickAdd(favorite, { viewModel?.putQuery(it.query ?: "") })
+        holder.setOnClickAdd(favorite) { viewModel?.putQuery(it.query ?: "") }
 
         holder.setOnClickDelete { remove(favorite) }
 
