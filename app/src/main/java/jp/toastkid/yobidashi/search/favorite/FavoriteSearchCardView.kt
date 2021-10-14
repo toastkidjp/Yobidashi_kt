@@ -65,7 +65,6 @@ constructor(
 
         repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
 
-        binding?.searchFavorites?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         moduleAdapter = ModuleAdapter(
                 context,
                 repository,
@@ -74,6 +73,7 @@ constructor(
         )
 
         binding?.searchFavorites?.also {
+            it.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             it.adapter = moduleAdapter
             it.onFlingListener = object : RecyclerView.OnFlingListener() {
                 override fun onFling(velocityX: Int, velocityY: Int): Boolean {
