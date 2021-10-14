@@ -72,15 +72,15 @@ constructor(
                 { visible -> if (visible) { show() } else { hide() } },
                 5
         )
-        // TODO use also
-        binding?.searchFavorites?.adapter = moduleAdapter
-        binding?.searchFavorites?.onFlingListener = object : RecyclerView.OnFlingListener() {
-            override fun onFling(velocityX: Int, velocityY: Int): Boolean {
-                Inputs.hideKeyboard(this@FavoriteSearchCardView)
-                return false
+
+        binding?.searchFavorites?.also {
+            it.adapter = moduleAdapter
+            it.onFlingListener = object : RecyclerView.OnFlingListener() {
+                override fun onFling(velocityX: Int, velocityY: Int): Boolean {
+                    Inputs.hideKeyboard(this@FavoriteSearchCardView)
+                    return false
+                }
             }
-        }
-        binding?.searchFavorites?.let {
             SwipeActionAttachment().invoke(it)
         }
     }
