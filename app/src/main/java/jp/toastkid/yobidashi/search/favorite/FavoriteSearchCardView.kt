@@ -1,8 +1,6 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.cardview.widget.CardView
@@ -60,11 +58,6 @@ constructor(
      */
     private var disposable: Job? = null
 
-    /**
-     * For executing on UI thread.
-     */
-    private val uiThreadHandler = Handler(Looper.getMainLooper())
-
     init {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
@@ -83,6 +76,7 @@ constructor(
                 { visible -> if (visible) { show() } else { hide() } },
                 5
         )
+        // TODO use also
         binding?.searchFavorites?.adapter = moduleAdapter
         binding?.searchFavorites?.onFlingListener = object : RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int): Boolean {
@@ -90,9 +84,8 @@ constructor(
                 return false
             }
         }
-        uiThreadHandler.post { // TODO use post
-            val recyclerView = binding?.searchFavorites ?: return@post
-            SwipeActionAttachment().invoke(recyclerView)
+        binding?.searchFavorites?.let {
+            SwipeActionAttachment().invoke(it)
         }
     }
 
