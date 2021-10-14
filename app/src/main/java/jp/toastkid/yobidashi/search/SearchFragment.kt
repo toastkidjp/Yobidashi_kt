@@ -95,9 +95,8 @@ class SearchFragment : Fragment() {
      */
     private val disposables: Job by lazy { Job() }
 
-    private val voiceSearchLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-        { activityResult ->
+    private val voiceSearchLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
             if (activityResult.resultCode != Activity.RESULT_OK) {
                 return@registerForActivityResult
             }
@@ -117,7 +116,6 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
