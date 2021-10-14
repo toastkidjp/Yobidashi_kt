@@ -42,7 +42,7 @@
                 />
 
             <jp.toastkid.yobidashi.search.favorite.FavoriteSearchCardView
-                android:id="@+id/favorite_module"
+                android:id="@+id/favorite_search_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/search_vertical_margin"

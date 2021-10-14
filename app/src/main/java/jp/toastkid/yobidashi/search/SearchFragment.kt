@@ -186,7 +186,7 @@ class SearchFragment : Fragment() {
                     setTextAndMoveCursorToEnd(query)
                 })
 
-        binding?.favoriteModule?.setViewModel(viewModel)
+        binding?.favoriteSearchCard?.setViewModel(viewModel)
         binding?.suggestionModule?.setViewModel(viewModel)
         binding?.historyModule?.setViewModel(viewModel)
         binding?.urlSuggestionCard?.setViewModel(viewModel)
@@ -283,7 +283,7 @@ class SearchFragment : Fragment() {
 
         binding?.suggestionModule?.enable = preferenceApplier.isEnableSuggestion
         binding?.historyModule?.enable = preferenceApplier.isEnableSearchHistory
-        binding?.favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
+        binding?.favoriteSearchCard?.enable = preferenceApplier.isEnableFavoriteSearch
         binding?.urlCard?.enable = preferenceApplier.isEnableUrlModule()
         binding?.urlSuggestionCard?.enable = preferenceApplier.isEnableViewHistory
         binding?.hourlyTrendCard?.setEnable(preferenceApplier.isEnableTrendModule())
@@ -364,7 +364,7 @@ class SearchFragment : Fragment() {
             binding?.historyModule?.query(key)
         }
 
-        binding?.favoriteModule?.query(key)
+        binding?.favoriteSearchCard?.query(key)
         binding?.urlSuggestionCard?.query(key)
 
         if (preferenceApplier.isDisableSuggestion) {
@@ -478,7 +478,7 @@ class SearchFragment : Fragment() {
         hideKeyboard()
         disposables.cancel()
         channel.cancel()
-        binding?.favoriteModule?.dispose()
+        binding?.favoriteSearchCard?.dispose()
         binding?.historyModule?.dispose()
         binding?.suggestionModule?.dispose()
         binding?.hourlyTrendCard?.dispose()
