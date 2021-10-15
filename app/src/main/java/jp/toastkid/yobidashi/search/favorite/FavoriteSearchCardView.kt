@@ -8,7 +8,6 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.input.Inputs
@@ -73,7 +72,6 @@ constructor(
         )
 
         binding?.searchFavorites?.also {
-            it.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             it.adapter = moduleAdapter
             it.onFlingListener = object : RecyclerView.OnFlingListener() {
                 override fun onFling(velocityX: Int, velocityY: Int): Boolean {
