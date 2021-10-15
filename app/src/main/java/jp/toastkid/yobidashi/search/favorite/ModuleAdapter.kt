@@ -31,9 +31,8 @@ import kotlin.math.min
  *
  * @param context
  * @param favoriteSearchRepository Relation
- * @param onClick On click callback
  * @param onVisibilityChanged On changed visibility callback
- * @param onClickAdd
+ * @param maxItemCount default is -1 (Unlimited)
  *
  * @author toastkidjp
  */
