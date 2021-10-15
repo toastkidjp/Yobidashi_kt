@@ -38,6 +38,8 @@
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="false"
                 app:layout_constraintTop_toBottomOf="@id/link"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </merge>
