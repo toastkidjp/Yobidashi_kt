@@ -33,7 +33,7 @@ constructor(
     defStyleAttr: Int = 0
 ) : CardView(context, attrs, defStyleAttr) {
 
-    var enable = true
+    private var enable = true
 
     private val database = DatabaseFinder().invoke(context)
 
@@ -124,6 +124,10 @@ constructor(
     
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         adapter.setViewModel(viewModel)
+    }
+
+    fun setEnable(enable: Boolean) {
+        this.enable = enable
     }
 
     private fun runOnMainThread(action: () -> Unit) =

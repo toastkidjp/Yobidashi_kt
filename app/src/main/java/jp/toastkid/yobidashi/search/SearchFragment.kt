@@ -283,7 +283,7 @@ class SearchFragment : Fragment() {
         binding?.searchHistoryCard?.setEnable(preferenceApplier.isEnableSearchHistory)
         binding?.favoriteSearchCard?.setEnable(preferenceApplier.isEnableFavoriteSearch)
         binding?.urlCard?.setEnable(preferenceApplier.isEnableUrlModule())
-        binding?.urlSuggestionCard?.enable = preferenceApplier.isEnableViewHistory
+        binding?.urlSuggestionCard?.setEnable(preferenceApplier.isEnableViewHistory)
         binding?.hourlyTrendCard?.setEnable(preferenceApplier.isEnableTrendModule())
 
         val headerView = headerBinding?.root ?: return
