@@ -193,6 +193,7 @@ constructor(
      */
     fun dispose() {
         lastSubscription?.cancel()
+        binding = null
     }
 
     companion object {
