@@ -44,7 +44,7 @@ constructor(
      */
     private val repository: FavoriteSearchRepository
 
-    var enable: Boolean = true
+    private var enable: Boolean = true
 
     private var binding: ViewCardFavoriteSearchBinding? = null
 
@@ -120,6 +120,12 @@ constructor(
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         moduleAdapter.setViewModel(viewModel)
     }
+
+    fun setEnable(enable: Boolean) {
+        this.enable = enable
+    }
+
+    fun isEnable() = enable
 
     private fun runOnMainThread(action: () -> Unit) =
             CoroutineScope(Dispatchers.Main).launch { action() }
