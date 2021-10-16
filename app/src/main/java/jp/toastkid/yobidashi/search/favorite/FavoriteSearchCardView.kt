@@ -125,8 +125,6 @@ constructor(
         this.enable = enable
     }
 
-    fun isEnable() = enable
-
     private fun runOnMainThread(action: () -> Unit) =
             CoroutineScope(Dispatchers.Main).launch { action() }
 
