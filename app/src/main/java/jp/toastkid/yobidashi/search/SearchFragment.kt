@@ -282,7 +282,7 @@ class SearchFragment : Fragment() {
         binding?.suggestionCard?.setEnable(preferenceApplier.isEnableSuggestion)
         binding?.searchHistoryCard?.setEnable(preferenceApplier.isEnableSearchHistory)
         binding?.favoriteSearchCard?.setEnable(preferenceApplier.isEnableFavoriteSearch)
-        binding?.urlCard?.enable = preferenceApplier.isEnableUrlModule()
+        binding?.urlCard?.setEnable(preferenceApplier.isEnableUrlModule())
         binding?.urlSuggestionCard?.enable = preferenceApplier.isEnableViewHistory
         binding?.hourlyTrendCard?.setEnable(preferenceApplier.isEnableTrendModule())
 

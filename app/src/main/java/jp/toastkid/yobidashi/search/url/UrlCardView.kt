@@ -41,7 +41,7 @@ constructor(
 
     private var insertAction: ((String) -> Unit)? = null
 
-    var enable: Boolean = true
+    private var enable: Boolean = true
 
     init {
         val inflater = LayoutInflater.from(context)
@@ -114,6 +114,10 @@ constructor(
         if (isVisible()) {
             runOnMainThread { this.visibility = View.GONE }
         }
+    }
+
+    fun setEnable(enable: Boolean) {
+        this.enable = enable
     }
 
     /**
