@@ -58,7 +58,7 @@ constructor(
      */
     private var lastSubscription: Job? = null
 
-    var enable: Boolean = true
+    private var enable: Boolean = true
 
     init {
         val from = LayoutInflater.from(context)
@@ -182,6 +182,10 @@ constructor(
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         adapter?.setViewModel(viewModel)
+    }
+
+    fun setEnable(enable: Boolean) {
+        this.enable = enable
     }
 
     /**
