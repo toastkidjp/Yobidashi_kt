@@ -280,7 +280,7 @@ class SearchFragment : Fragment() {
         super.onResume()
 
         binding?.suggestionCard?.setEnable(preferenceApplier.isEnableSuggestion)
-        binding?.searchHistoryCard?.enable = preferenceApplier.isEnableSearchHistory
+        binding?.searchHistoryCard?.setEnable(preferenceApplier.isEnableSearchHistory)
         binding?.favoriteSearchCard?.setEnable(preferenceApplier.isEnableFavoriteSearch)
         binding?.urlCard?.enable = preferenceApplier.isEnableUrlModule()
         binding?.urlSuggestionCard?.enable = preferenceApplier.isEnableViewHistory

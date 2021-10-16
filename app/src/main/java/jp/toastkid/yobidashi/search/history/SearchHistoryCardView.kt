@@ -45,7 +45,7 @@ constructor(
      */
     private val moduleAdapter: ModuleAdapter
 
-    var enable: Boolean = true
+    private var enable: Boolean = true
 
     private var binding: ViewCardSearchHistoryBinding? = null
 
@@ -139,6 +139,10 @@ constructor(
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         moduleAdapter.setViewModel(viewModel)
+    }
+
+    fun setEnable(enable: Boolean) {
+        this.enable = enable
     }
 
     private fun runOnMainThread(action: () -> Unit) =
