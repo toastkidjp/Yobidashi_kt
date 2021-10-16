@@ -117,6 +117,10 @@ constructor(
             runOnMainThread { isVisible = false }
         }
     }
+
+    fun dispose() {
+        binding = null
+    }
     
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         adapter.setViewModel(viewModel)
