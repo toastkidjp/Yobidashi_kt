@@ -481,6 +481,7 @@ class SearchFragment : Fragment() {
         binding?.suggestionCard?.dispose()
         binding?.hourlyTrendCard?.dispose()
         binding?.urlSuggestionCard?.dispose()
+        binding?.urlCard?.dispose()
         voiceSearchLauncher.unregister()
         super.onDetach()
     }
