@@ -129,6 +129,7 @@ constructor(
      */
     fun dispose() {
         disposable?.cancel()
+        binding = null
     }
 
 }
