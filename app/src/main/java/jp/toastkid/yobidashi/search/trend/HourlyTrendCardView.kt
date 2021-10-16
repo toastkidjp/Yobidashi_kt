@@ -121,6 +121,7 @@ constructor(
 
     fun dispose() {
         lastJob.cancel()
+        binding = null
     }
 
     companion object {
