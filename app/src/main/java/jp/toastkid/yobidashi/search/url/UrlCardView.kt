@@ -128,6 +128,10 @@ constructor(
         binding?.edit?.setColorFilter(color)
     }
 
+    fun dispose() {
+        binding = null
+    }
+
     private fun getCurrentText() = binding?.text?.text.toString()
 
     private fun setTitle(title: String?) {
