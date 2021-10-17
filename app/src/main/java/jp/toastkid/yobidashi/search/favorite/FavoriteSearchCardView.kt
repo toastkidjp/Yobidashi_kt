@@ -44,8 +44,6 @@ constructor(
      */
     private val repository: FavoriteSearchRepository
 
-    private var enable: Boolean = true
-
     private var binding: ViewCardFavoriteSearchBinding? = null
 
     /**
@@ -103,7 +101,7 @@ constructor(
      * Show this module.
      */
     fun show() {
-        if (!isVisible && enable) {
+        if (!isVisible && isEnabled) {
             runOnMainThread { isVisible = true }
         }
     }
@@ -119,10 +117,6 @@ constructor(
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         moduleAdapter.setViewModel(viewModel)
-    }
-
-    fun setEnable(enable: Boolean) {
-        this.enable = enable
     }
 
     private fun runOnMainThread(action: () -> Unit) =
