@@ -306,7 +306,7 @@ class SearchFragment : Fragment() {
                             ?: return@let
 
             input.postDelayed(
-                    { inputMethodManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT) },
+                    { inputMethodManager.showSoftInput(input, InputMethodManager.SHOW_FORCED) },
                     100L
             )
         }
