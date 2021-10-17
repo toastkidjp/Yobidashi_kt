@@ -158,4 +158,26 @@ class SearchActionTest {
         verify(exactly = 0) { searchHistoryInsertion.insert() }
     }
 
+    @Test
+    fun testIsNotEnableSearchHistory() {
+        every { preferenceApplier getProperty "isEnableSearchHistory"  }.returns(false)
+
+        searchAction.invoke()
+
+        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 1) { urlFactory.invoke(any(), any(), any()) }
+        verify(exactly = 0) { searchHistoryInsertion.insert() }
+    }
+
+    @Test
+    fun test() {
+        every { Urls.isValidUrl(any()) }.returns(true)
+
+        searchAction.invoke()
+
+        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 0) { urlFactory.invoke(any(), any(), any()) }
+        verify(exactly = 1) { searchHistoryInsertion.insert() }
+    }
+
 }
