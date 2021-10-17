@@ -41,8 +41,6 @@ constructor(
 
     private var insertAction: ((String) -> Unit)? = null
 
-    private var enable: Boolean = true
-
     init {
         val inflater = LayoutInflater.from(context)
         binding = DataBindingUtil.inflate(inflater, R.layout.view_search_card_url, this, true)
@@ -89,7 +87,7 @@ constructor(
      * @param url URL
      */
     fun switch(title: String?, url: String?) =
-            if (url.isNullOrBlank() || !enable) {
+            if (url.isNullOrBlank() || !isEnabled) {
                 clearContent()
                 hide()
             } else {
@@ -102,7 +100,7 @@ constructor(
      * Show this module.
      */
     private fun show() {
-        if (this.visibility == View.GONE && enable) {
+        if (this.visibility == View.GONE && isEnabled) {
             runOnMainThread { this.visibility = View.VISIBLE }
         }
     }
@@ -114,10 +112,6 @@ constructor(
         if (isVisible()) {
             runOnMainThread { this.visibility = View.GONE }
         }
-    }
-
-    fun setEnable(enable: Boolean) {
-        this.enable = enable
     }
 
     /**
