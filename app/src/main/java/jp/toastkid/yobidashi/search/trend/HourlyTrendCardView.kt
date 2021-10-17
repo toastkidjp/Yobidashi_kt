@@ -63,7 +63,7 @@ constructor(
             this,
             true
         )
-        enable = if (context == null) false else PreferenceApplier(context).isEnableTrendModule()
+        enable = PreferenceApplier(context).isEnableTrendModule()
 
         adapter = Adapter()
         binding?.trendItems?.adapter = adapter
