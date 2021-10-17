@@ -33,8 +33,6 @@ constructor(
     defStyleAttr: Int = 0
 ) : CardView(context, attrs, defStyleAttr) {
 
-    private var enable = true
-
     private val database = DatabaseFinder().invoke(context)
 
     /**
@@ -104,7 +102,7 @@ constructor(
      * Show this module.
      */
     fun show() {
-        if (!isVisible && enable) {
+        if (!isVisible && isEnabled) {
             runOnMainThread { isVisible = true }
         }
     }
@@ -124,10 +122,6 @@ constructor(
     
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         adapter.setViewModel(viewModel)
-    }
-
-    fun setEnable(enable: Boolean) {
-        this.enable = enable
     }
 
     private fun runOnMainThread(action: () -> Unit) =
