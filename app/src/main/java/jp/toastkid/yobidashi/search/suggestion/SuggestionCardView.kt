@@ -58,8 +58,6 @@ constructor(
      */
     private var lastSubscription: Job? = null
 
-    private var enable: Boolean = true
-
     init {
         val from = LayoutInflater.from(context)
 
@@ -163,7 +161,7 @@ constructor(
      * Show this module.
      */
     fun show() {
-        if (!isVisible && enable) {
+        if (!isVisible && isEnabled) {
             runOnMainThread { isVisible = true }
         }
     }
@@ -182,10 +180,6 @@ constructor(
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         adapter?.setViewModel(viewModel)
-    }
-
-    fun setEnable(enable: Boolean) {
-        this.enable = enable
     }
 
     /**

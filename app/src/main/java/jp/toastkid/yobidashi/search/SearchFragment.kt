@@ -279,7 +279,7 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        binding?.suggestionCard?.setEnable(preferenceApplier.isEnableSuggestion)
+        binding?.suggestionCard?.isEnabled = preferenceApplier.isEnableSuggestion
         binding?.searchHistoryCard?.setEnable(preferenceApplier.isEnableSearchHistory)
         binding?.favoriteSearchCard?.setEnable(preferenceApplier.isEnableFavoriteSearch)
         binding?.urlCard?.setEnable(preferenceApplier.isEnableUrlModule())
