@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="module" type="jp.toastkid.yobidashi.search.favorite.FavoriteSearchCardView" />
     </data>
@@ -39,6 +39,8 @@
                 app:layout_constraintTop_toBottomOf="@id/link"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="vertical"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_search_history"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </merge>
