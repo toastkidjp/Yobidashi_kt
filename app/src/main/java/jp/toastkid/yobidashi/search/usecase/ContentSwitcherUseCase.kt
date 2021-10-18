@@ -39,7 +39,7 @@ class ContentSwitcherUseCase(
     private var disposables = Job()
 
     operator fun invoke(key: String) {
-        if (key.isEmpty()|| key == currentUrl) {
+        if (key.isEmpty() || key == currentUrl) {
             binding?.urlCard?.switch(currentTitle, currentUrl)
         } else {
             binding?.urlCard?.hide()
