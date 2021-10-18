@@ -23,7 +23,6 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ViewCardHourlyTrendBinding
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
@@ -54,8 +53,6 @@ constructor(
 
     private var lastJob: Job = Job()
 
-    private var enable: Boolean
-
     init {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
@@ -63,7 +60,6 @@ constructor(
             this,
             true
         )
-        enable = PreferenceApplier(context).isEnableTrendModule()
 
         adapter = Adapter()
         binding?.trendItems?.adapter = adapter
@@ -83,7 +79,7 @@ constructor(
 
     fun request() {
         lastJob.cancel()
-        if (!enable) {
+        if (!isEnabled) {
             return
         }
 
@@ -100,12 +96,6 @@ constructor(
             isVisible = adapter?.isNotEmpty() ?: false
             adapter?.notifyDataSetChanged()
         }
-    }
-
-    fun setEnable(newState: Boolean) {
-        this.enable = newState
-
-        isVisible = newState
     }
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
