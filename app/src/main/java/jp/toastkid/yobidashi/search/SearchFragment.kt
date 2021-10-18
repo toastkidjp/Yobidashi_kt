@@ -44,16 +44,12 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
+import jp.toastkid.yobidashi.search.usecase.ContentSwitcherUseCase
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -85,10 +81,7 @@ class SearchFragment : Fragment() {
 
     private var currentUrl: String? = null
 
-    /**
-     * Use for handling input action.
-     */
-    private val channel = Channel<String>()
+    private var contentSwitcherUseCase: ContentSwitcherUseCase? = null
 
     /**
      * Disposables.
@@ -200,7 +193,7 @@ class SearchFragment : Fragment() {
         headerBinding?.searchInput?.let { input ->
             input.setText(query)
             input.selectAll()
-            suggest(query ?: "")
+            contentSwitcherUseCase?.invoke(query ?: "")
         }
     }
 
@@ -329,49 +322,18 @@ class SearchFragment : Fragment() {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    CoroutineScope(Dispatchers.Default).launch(disposables) { channel.send(s.toString()) }
+                    contentSwitcherUseCase?.send(s.toString())
                 }
 
                 override fun afterTextChanged(s: Editable) = Unit
             })
 
-            invokeSuggestion()
+            contentSwitcherUseCase = ContentSwitcherUseCase(
+                binding, preferenceApplier, this::setActionButtonState, currentTitle, currentUrl
+            )
+
+            contentSwitcherUseCase?.withDebounce()
         }
-    }
-
-    private fun invokeSuggestion() {
-        CoroutineScope(Dispatchers.Default).launch(disposables) {
-            channel.receiveAsFlow()
-                    .distinctUntilChanged()
-                    .debounce(400)
-                    .collect {
-                        withContext(Dispatchers.Main) { suggest(it) }
-                    }
-        }
-    }
-
-    private fun suggest(key: String) {
-        if (key.isEmpty()|| key == currentUrl) {
-            binding?.urlCard?.switch(currentTitle, currentUrl)
-        } else {
-            binding?.urlCard?.hide()
-        }
-
-        setActionButtonState(key.isEmpty())
-
-        if (preferenceApplier.isEnableSearchHistory) {
-            binding?.searchHistoryCard?.query(key)
-        }
-
-        binding?.favoriteSearchCard?.query(key)
-        binding?.urlSuggestionCard?.query(key)
-
-        if (preferenceApplier.isDisableSuggestion) {
-            binding?.suggestionCard?.clear()
-            return
-        }
-
-        binding?.suggestionCard?.request(key)
     }
 
     /**
@@ -476,7 +438,7 @@ class SearchFragment : Fragment() {
     override fun onDetach() {
         hideKeyboard()
         disposables.cancel()
-        channel.cancel()
+        contentSwitcherUseCase?.dispose()
         binding?.favoriteSearchCard?.dispose()
         binding?.searchHistoryCard?.dispose()
         binding?.suggestionCard?.dispose()
