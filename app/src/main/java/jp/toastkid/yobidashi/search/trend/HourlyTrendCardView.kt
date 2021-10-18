@@ -77,6 +77,10 @@ constructor(
         return layoutManager
     }
 
+    fun hide() {
+        isVisible = false
+    }
+
     fun request() {
         lastJob.cancel()
         if (!isEnabled) {
