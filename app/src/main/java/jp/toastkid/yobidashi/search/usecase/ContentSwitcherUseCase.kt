@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.search.usecase
 
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -30,7 +31,9 @@ class ContentSwitcherUseCase(
     private val setActionButtonState: (Boolean) -> Unit,
     private val currentTitle: String?,
     private val currentUrl: String?,
-    private val channel: Channel<String> = Channel()
+    private val channel: Channel<String> = Channel(),
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
     private var disposables = Job()
@@ -60,16 +63,16 @@ class ContentSwitcherUseCase(
     }
 
     fun send(key: String) {
-        CoroutineScope(Dispatchers.Default).launch(disposables) { channel.send(key) }
+        CoroutineScope(backgroundDispatcher).launch(disposables) { channel.send(key) }
     }
 
     fun withDebounce() {
-        CoroutineScope(Dispatchers.Default).launch(disposables) {
+        CoroutineScope(backgroundDispatcher).launch(disposables) {
             channel.receiveAsFlow()
                 .distinctUntilChanged()
                 .debounce(400)
                 .collect {
-                    withContext(Dispatchers.Main) { invoke(it) }
+                    withContext(mainDispatcher) { invoke(it) }
                 }
         }
     }
