@@ -84,6 +84,7 @@ constructor(
     fun request() {
         lastJob.cancel()
         if (!isEnabled) {
+            isVisible = false
             return
         }
 

@@ -190,7 +190,6 @@ class SearchFragment : Fragment() {
         binding?.urlSuggestionCard?.setViewModel(viewModel)
 
         binding?.hourlyTrendCard?.setViewModel(viewModel)
-        binding?.hourlyTrendCard?.request()
 
         val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
         setInitialQuery(query)
@@ -285,6 +284,8 @@ class SearchFragment : Fragment() {
         binding?.urlCard?.isEnabled = preferenceApplier.isEnableUrlModule()
         binding?.urlSuggestionCard?.isEnabled = preferenceApplier.isEnableViewHistory
         binding?.hourlyTrendCard?.isEnabled = preferenceApplier.isEnableTrendModule()
+
+        binding?.hourlyTrendCard?.request()
 
         val headerView = headerBinding?.root ?: return
         appBarViewModel?.replace(headerView)
