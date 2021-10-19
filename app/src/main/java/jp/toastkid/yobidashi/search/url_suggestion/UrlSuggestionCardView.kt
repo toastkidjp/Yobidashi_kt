@@ -18,9 +18,6 @@ import jp.toastkid.yobidashi.databinding.ViewCardUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -125,6 +122,6 @@ constructor(
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            CoroutineScope(Dispatchers.Main).launch { action() }
+            post { action() }
 
 }
