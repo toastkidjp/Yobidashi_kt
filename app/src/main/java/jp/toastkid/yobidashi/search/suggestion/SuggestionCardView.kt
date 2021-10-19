@@ -176,7 +176,7 @@ constructor(
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            CoroutineScope(Dispatchers.Main).launch { action() }
+            post { action() }
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         adapter?.setViewModel(viewModel)
