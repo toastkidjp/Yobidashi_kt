@@ -16,10 +16,7 @@ import jp.toastkid.yobidashi.databinding.ViewCardFavoriteSearchBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 /**
  * Search history module.
@@ -120,7 +117,7 @@ constructor(
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            CoroutineScope(Dispatchers.Main).launch { action() }
+            post { action() }
 
     /**
      * Dispose last subscription.
