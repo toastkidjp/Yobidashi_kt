@@ -20,9 +20,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ViewSearchCardUrlBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -151,6 +148,6 @@ constructor(
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            CoroutineScope(Dispatchers.Main).launch { action() }
+            post { action() }
 
 }
