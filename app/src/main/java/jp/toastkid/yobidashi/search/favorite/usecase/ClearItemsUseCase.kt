@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.search.favorite.usecase
 
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
@@ -22,8 +23,8 @@ import kotlinx.coroutines.withContext
 internal class ClearItemsUseCase(
     private val adapter: ModuleAdapter?,
     private val showSnackbar: (Int) -> Unit,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    @VisibleForTesting private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    @VisibleForTesting private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     operator fun invoke(activity: FragmentActivity?, disposables: Job) {

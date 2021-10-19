@@ -34,6 +34,7 @@ import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogFragment
 import jp.toastkid.article_viewer.article.list.date.FilterByMonthUseCase
+import jp.toastkid.article_viewer.article.list.listener.ArticleLoadStateListener
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.menu.MenuPopup
 import jp.toastkid.article_viewer.article.list.sort.Sort
@@ -286,6 +287,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 ListLoaderUseCase(adapter),
                 articleRepository,
                 preferencesWrapper
+        )
+
+        adapter.addLoadStateListener(
+            ArticleLoadStateListener(contentViewModel, { adapter.itemCount }, { getString(it) })
         )
 
         searchUseCase?.search(appBarBinding.input.text?.toString())

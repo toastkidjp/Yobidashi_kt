@@ -18,10 +18,7 @@ import jp.toastkid.yobidashi.databinding.FragmentSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchAction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import jp.toastkid.yobidashi.search.history.usecase.ClearItemsUseCase
 
 /**
  * Search history list activity.
@@ -71,17 +68,14 @@ class SearchHistoryFragment : Fragment() {
             "clear_items",
             viewLifecycleOwner,
             { _, _ ->
-                val currentContext = context ?: return@setFragmentResultListener
-                CoroutineScope(Dispatchers.Main).launch {
-                    withContext(Dispatchers.IO) {
-                        DatabaseFinder().invoke(currentContext).searchHistoryRepository().deleteAll()
-                    }
-
-                    adapter.clearAll {
-                        Toaster.snackShort(binding.root, R.string.settings_color_delete, preferenceApplier.colorPair())
-                    }
-                    activity?.supportFragmentManager?.popBackStack()
+                val showToast: () -> Unit = {
+                    Toaster.snackShort(
+                        binding.root,
+                        R.string.settings_color_delete,
+                        preferenceApplier.colorPair()
+                    )
                 }
+                ClearItemsUseCase({ adapter.clearAll(showToast) }).invoke(activity)
             }
         )
 

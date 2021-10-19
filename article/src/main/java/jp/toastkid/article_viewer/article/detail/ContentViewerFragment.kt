@@ -26,6 +26,7 @@ import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.markdown.MarkdownConverterProviderUseCase
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragmentViewModel
+import jp.toastkid.article_viewer.article.detail.usecase.ContentTextSearchUseCase
 import jp.toastkid.article_viewer.bookmark.Bookmark
 import jp.toastkid.article_viewer.databinding.AppBarContentViewerBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
@@ -51,8 +52,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
     private lateinit var binding: FragmentContentBinding
 
     private lateinit var appBarBinding: AppBarContentViewerBinding
-
-    private lateinit var textViewHighlighter: TextViewHighlighter
 
     private lateinit var repository: ArticleRepository
 
@@ -82,7 +81,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         appBarBinding.tabListViewModel = activity?.let {
             ViewModelProvider(it).get(TabListViewModel::class.java)
         }
-        textViewHighlighter = TextViewHighlighter(binding.content)
         repository = AppDatabase.find(binding.root.context).articleRepository()
 
         activity?.let {
@@ -118,9 +116,15 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
         binding.content.linksClickable = true
 
+        val contentTextSearchUseCase = ContentTextSearchUseCase(
+            TextViewHighlighter(binding.content)
+        )
+
         appBarBinding.input.addTextChangedListener {
-            search(it.toString())
+            contentTextSearchUseCase.invoke(it.toString())
         }
+
+        contentTextSearchUseCase.startObserve()
 
         ViewModelProvider(this)
             .get(SubheadDialogFragmentViewModel::class.java)
@@ -173,10 +177,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         activity?.let {
             ViewModelProvider(it).get(ContentViewModel::class.java).switchTabList()
         }
-    }
-
-    private fun search(keyword: String?) {
-        textViewHighlighter(keyword)
     }
 
     override fun toTop() {

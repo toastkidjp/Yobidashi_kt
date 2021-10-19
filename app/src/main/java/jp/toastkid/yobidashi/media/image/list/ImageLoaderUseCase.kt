@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.media.image.list
 
+import androidx.annotation.VisibleForTesting
 import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
@@ -17,10 +18,9 @@ internal class ImageLoaderUseCase(
         private val adapter: Adapter?,
         private val bucketLoader: BucketLoader,
         private val imageLoader: ImageLoader,
-        private val refreshContent: () -> Unit
+        private val refreshContent: () -> Unit,
+        @VisibleForTesting private val parentExtractor: ParentExtractor = ParentExtractor()
 ) {
-
-    private val parentExtractor = ParentExtractor()
 
     private var currentBucket: String? = null
 

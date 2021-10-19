@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.search.history.usecase
 
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,8 +19,8 @@ import kotlinx.coroutines.withContext
 
 class ClearItemsUseCase(
     private val adapterClearAll: () -> Unit,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    @VisibleForTesting private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    @VisibleForTesting private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     operator fun invoke(activity: FragmentActivity?) {
