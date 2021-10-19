@@ -140,7 +140,7 @@ constructor(
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            CoroutineScope(Dispatchers.Main).launch { action() }
+            post { action() }
 
     /**
      * Dispose last subscription.
