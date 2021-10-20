@@ -29,7 +29,8 @@ import kotlinx.coroutines.withContext
  *
  * @author toastkidjp
  */
-class SuggestionCardView@JvmOverloads
+class SuggestionCardView
+@JvmOverloads
 constructor(
     context: Context,
     attrs: AttributeSet? = null,
