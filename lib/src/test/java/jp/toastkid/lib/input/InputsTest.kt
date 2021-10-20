@@ -95,7 +95,7 @@ class InputsTest {
 
     @Test
     fun testInactiveCase() {
-        every { inputMethodManager.isActive() }.returns(false)
+        every { inputMethodManager.isActive }.returns(false)
 
         Inputs.showKeyboard(context, view)
 
