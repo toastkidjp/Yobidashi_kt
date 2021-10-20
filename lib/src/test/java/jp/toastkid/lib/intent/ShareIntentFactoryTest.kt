@@ -58,8 +58,8 @@ class ShareIntentFactoryTest {
     fun testWithoutSubjectCase() {
         intentFactory.invoke("jp.toastkid.yobidashi")
 
-        verify(exactly = 1) { anyConstructed<Intent>().setAction(any()) }
-        verify(exactly = 1) { anyConstructed<Intent>().setType(any()) }
+        verify(exactly = 1) { anyConstructed<Intent>().action = any() }
+        verify(exactly = 1) { anyConstructed<Intent>().type = any() }
         verify(exactly = 1) { anyConstructed<Intent>().putExtra(Intent.EXTRA_TEXT, any<String>()) }
         verify(exactly = 0) { anyConstructed<Intent>().putExtra(Intent.EXTRA_SUBJECT, any<String>()) }
     }
