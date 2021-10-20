@@ -116,8 +116,7 @@ constructor(
         moduleAdapter.setViewModel(viewModel)
     }
 
-    private fun runOnMainThread(action: () -> Unit) =
-        post { action() }
+    private fun runOnMainThread(action: () -> Unit) = post { action() }
 
     /**
      * Dispose last subscription.
