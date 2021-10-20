@@ -122,6 +122,6 @@ constructor(
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            post { action() }
+        post { action() }
 
 }
