@@ -117,7 +117,7 @@ constructor(
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            post { action() }
+        post { action() }
 
     /**
      * Dispose last subscription.
