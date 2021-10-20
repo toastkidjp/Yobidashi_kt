@@ -176,8 +176,7 @@ constructor(
         }
     }
 
-    private fun runOnMainThread(action: () -> Unit) =
-            post { action() }
+    private fun runOnMainThread(action: () -> Unit) = post { action() }
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         adapter?.setViewModel(viewModel)
