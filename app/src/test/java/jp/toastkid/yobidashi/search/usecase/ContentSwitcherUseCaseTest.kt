@@ -41,6 +41,7 @@ class ContentSwitcherUseCaseTest {
     @MockK
     private lateinit var setActionButtonState: (Boolean) -> Unit
 
+    @Suppress("unused")
     private val currentTitle: String = "Yahoo! JAPAN"
 
     private val currentUrl: String = "https://www.yahoo.co.jp"
