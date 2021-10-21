@@ -12,6 +12,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.intent.UrlShareIntentFactory
@@ -106,15 +107,10 @@ constructor(
      * Hide this module.
      */
     fun hide() {
-        if (isVisible()) {
+        if (isVisible) {
             runOnMainThread { this.visibility = View.GONE }
         }
     }
-
-    /**
-     * Is visible this module visible.
-     */
-    fun isVisible() = this.visibility == View.VISIBLE
 
     fun onResume() {
         val color = IconColorFinder.from(this).invoke()
