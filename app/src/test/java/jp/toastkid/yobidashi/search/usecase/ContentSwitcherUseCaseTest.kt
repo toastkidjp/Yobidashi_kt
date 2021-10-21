@@ -72,4 +72,11 @@ class ContentSwitcherUseCaseTest {
         verify(exactly = 1) { channel.close() }
     }
 
+    @Test
+    fun send() {
+        contentSwitcherUseCase.send("test")
+
+        coVerify(exactly = 1) { channel.send(any()) }
+    }
+
 }
