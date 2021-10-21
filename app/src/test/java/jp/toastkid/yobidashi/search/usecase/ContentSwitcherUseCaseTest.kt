@@ -66,7 +66,7 @@ class ContentSwitcherUseCaseTest {
     }
 
     @Test
-    fun dispose() {
+    fun testDispose() {
         contentSwitcherUseCase.dispose()
 
         verify(exactly = 1) { channel.close() }
