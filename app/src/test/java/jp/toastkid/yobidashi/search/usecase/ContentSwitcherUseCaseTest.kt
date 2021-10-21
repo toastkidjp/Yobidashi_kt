@@ -50,6 +50,7 @@ class ContentSwitcherUseCaseTest {
     @MockK
     private lateinit var channel: Channel<String>
 
+    @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
