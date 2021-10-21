@@ -44,6 +44,7 @@ class ContentSwitcherUseCaseTest {
     @Suppress("unused")
     private val currentTitle: String = "Yahoo! JAPAN"
 
+    @Suppress("unused")
     private val currentUrl: String = "https://www.yahoo.co.jp"
 
     @MockK
