@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
@@ -17,6 +18,9 @@ import org.junit.Test
  * @author toastkidjp
  */
 class TabReplacingUseCaseTest {
+
+    @InjectMockKs
+    private lateinit var tabReplacingUseCase: TabReplacingUseCase
 
     @MockK
     private lateinit var tabs: TabAdapter
@@ -46,9 +50,7 @@ class TabReplacingUseCaseTest {
         every { tabs.currentTab() }.answers { mockk() }
         every { tabs.saveTabList() }.just(Runs)
 
-        TabReplacingUseCase(
-                tabs, obtainFragment, replaceFragment, browserFragmentViewModel, refreshThumbnail, runOnUiThread
-        ).invoke(false)
+        tabReplacingUseCase.invoke(false)
 
         verify(exactly = 1) { tabs.currentTab() }
         verify(exactly = 1) { tabs.saveTabList() }
