@@ -11,6 +11,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
+import jp.toastkid.yobidashi.tab.model.CalendarTab
 import org.junit.Before
 import org.junit.Test
 
@@ -46,6 +47,10 @@ class TabReplacingUseCaseTest {
 
         every { tabs.currentTab() }.answers { mockk() }
         every { tabs.saveTabList() }.just(Runs)
+        every { replaceFragment(any(), any()) }.just(Runs)
+        every { obtainFragment(any()) }.returns(mockk())
+        every { runOnUiThread(any()) }.just(Runs)
+        every { refreshThumbnail() }.returns(mockk())
     }
 
     @Test
@@ -54,6 +59,18 @@ class TabReplacingUseCaseTest {
 
         verify(exactly = 1) { tabs.currentTab() }
         verify(exactly = 1) { tabs.saveTabList() }
+    }
+
+    @Test
+    fun calendar() {
+        every { tabs.currentTab() }.answers { mockk<CalendarTab>() }
+
+        tabReplacingUseCase.invoke(false)
+
+        verify(exactly = 1) { tabs.currentTab() }
+        verify(exactly = 1) { tabs.saveTabList() }
+        verify(exactly = 1) { obtainFragment(any()) }
+        verify(exactly = 1) { replaceFragment(any(), any()) }
     }
 
 }
