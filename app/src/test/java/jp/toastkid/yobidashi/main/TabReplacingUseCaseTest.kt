@@ -62,7 +62,7 @@ class TabReplacingUseCaseTest {
     }
 
     @Test
-    fun calendar() {
+    fun testCalendarTabCase() {
         every { tabs.currentTab() }.answers { mockk<CalendarTab>() }
 
         tabReplacingUseCase.invoke(false)
