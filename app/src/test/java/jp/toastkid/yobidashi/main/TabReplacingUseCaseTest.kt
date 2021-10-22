@@ -10,7 +10,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
-import kotlinx.coroutines.Job
 import org.junit.Before
 import org.junit.Test
 
@@ -37,9 +36,6 @@ class TabReplacingUseCaseTest {
     @MockK
     private lateinit var runOnUiThread: (() -> Unit) -> Unit
 
-    @MockK
-    private lateinit var disposables: Job
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -51,10 +47,11 @@ class TabReplacingUseCaseTest {
         every { tabs.saveTabList() }.just(Runs)
 
         TabReplacingUseCase(
-                tabs, obtainFragment, replaceFragment, browserFragmentViewModel, refreshThumbnail, runOnUiThread, disposables
+                tabs, obtainFragment, replaceFragment, browserFragmentViewModel, refreshThumbnail, runOnUiThread
         ).invoke(false)
 
         verify(exactly = 1) { tabs.currentTab() }
         verify(exactly = 1) { tabs.saveTabList() }
     }
+
 }
