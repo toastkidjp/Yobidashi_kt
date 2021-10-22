@@ -2,8 +2,10 @@ package jp.toastkid.yobidashi.main
 
 import androidx.fragment.app.Fragment
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
@@ -46,7 +48,7 @@ class TabReplacingUseCaseTest {
     @Test
     fun testElseCase() {
         every { tabs.currentTab() }.answers { mockk() }
-        every { tabs.saveTabList() }.answers { Unit }
+        every { tabs.saveTabList() }.just(Runs)
 
         TabReplacingUseCase(
                 tabs, obtainFragment, replaceFragment, browserFragmentViewModel, refreshThumbnail, runOnUiThread, disposables
