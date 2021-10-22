@@ -48,7 +48,6 @@ import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestCont
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
 import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
@@ -306,8 +305,11 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
                 { fragment, animation -> replaceFragment(fragment, animation) },
                 activityViewModelProvider.get(BrowserFragmentViewModel::class.java),
                 ::refreshThumbnail,
-                { runOnUiThread(it) },
-                disposables
+                {
+                    CoroutineScope(Dispatchers.IO).launch(disposables) {
+                        runOnUiThread(it)
+                    }
+                }
         )
 
         processShortcut(intent)
