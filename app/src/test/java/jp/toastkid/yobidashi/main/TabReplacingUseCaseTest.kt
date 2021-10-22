@@ -43,13 +43,13 @@ class TabReplacingUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+
+        every { tabs.currentTab() }.answers { mockk() }
+        every { tabs.saveTabList() }.just(Runs)
     }
 
     @Test
     fun testElseCase() {
-        every { tabs.currentTab() }.answers { mockk() }
-        every { tabs.saveTabList() }.just(Runs)
-
         tabReplacingUseCase.invoke(false)
 
         verify(exactly = 1) { tabs.currentTab() }
