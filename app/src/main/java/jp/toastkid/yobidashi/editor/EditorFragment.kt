@@ -527,7 +527,7 @@ class EditorFragment :
      * @param ms
      */
     private fun setLastSaved(ms: Long) {
-        menuBinding.lastSaved.text = lastSavedTitle + DateFormat.format("HH:mm:ss", ms)
+        menuBinding.lastSaved.text = DateFormat.format("$lastSavedTitle HH:mm:ss", ms)
     }
 
     /**
