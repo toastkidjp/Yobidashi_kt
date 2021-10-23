@@ -98,19 +98,6 @@ constructor(
         }
     }
 
-    /**
-     * Clear search history.
-     */
-    fun confirmClear() {
-        val activityContext = context
-        if (activityContext is FragmentActivity) {
-            ClearSearchHistoryDialogFragment().show(
-                    activityContext.supportFragmentManager,
-                    ClearSearchHistoryDialogFragment::class.java.simpleName
-            )
-        }
-    }
-
     fun clear() {
         moduleAdapter.clear()
         hide()
