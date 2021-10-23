@@ -16,6 +16,7 @@
             android:layout_marginRight="4dp"
             android:inputType="textMultiLine"
             android:minLines="10"
+            android:typeface="monospace"
             android:hint="@string/hint_editor_input"
             tools:ignore="Autofill"
             android:imeOptions="flagNoExtractUi"
