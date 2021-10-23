@@ -53,9 +53,9 @@ constructor(
     private var disposable: Job? = null
 
     init {
-        val context = context
+        val viewContext = context
         binding = DataBindingUtil.inflate(
-            LayoutInflater.from(context),
+            LayoutInflater.from(viewContext),
             R.layout.view_card_search_history,
             this,
             true
@@ -63,12 +63,12 @@ constructor(
         binding?.module = this
 
         binding?.searchHistories?.layoutManager =
-                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                LinearLayoutManager(viewContext, RecyclerView.VERTICAL, false)
 
-        val repository = DatabaseFinder().invoke(context).searchHistoryRepository()
+        val repository = DatabaseFinder().invoke(viewContext).searchHistoryRepository()
 
         moduleAdapter = ModuleAdapter(
-                context,
+                viewContext,
                 repository,
                 { if (it) show() else hide() },
                 true,
