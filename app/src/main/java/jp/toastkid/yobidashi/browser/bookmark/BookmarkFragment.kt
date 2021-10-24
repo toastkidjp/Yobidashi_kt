@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
@@ -257,11 +259,15 @@ class BookmarkFragment: Fragment(),
         val fragmentManager = parentFragmentManager
         return when (item.itemId) {
             R.id.clear -> {
-                BookmarkClearDialogFragment()
-                    .show(
-                        fragmentManager,
-                        BookmarkClearDialogFragment::class.java.simpleName
-                    )
+                ConfirmDialogFragment.show(
+                    fragmentManager,
+                    getString(R.string.title_clear_bookmark),
+                    Html.fromHtml(
+                        getString(R.string.confirm_clear_all_settings),
+                        Html.FROM_HTML_MODE_COMPACT
+                    ),
+                    "clear_bookmark"
+                )
                 true
             }
             R.id.add_default -> {
