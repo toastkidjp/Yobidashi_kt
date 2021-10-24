@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.Manifest
 import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
@@ -24,6 +23,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
+import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
@@ -110,24 +110,9 @@ class BookmarkFragment: Fragment(),
             }
 
             exportLauncher.launch(
-                makeDocumentOnStorage("text/html", "bookmark.html")
+                CreateDocumentIntentFactory()("text/html", "bookmark.html")
             )
         }
-
-    /**
-     * Make create document intent on Storage Access Framework.
-     * TODO Move other class
-     * @param type mime type
-     * @param fileName File name
-     * @return [Intent]
-     */
-    private fun makeDocumentOnStorage(type: String, fileName: String): Intent {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-        intent.type = type
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.putExtra(Intent.EXTRA_TITLE, fileName)
-        return intent
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
