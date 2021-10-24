@@ -18,11 +18,6 @@ enum class SearchCategory(
         private val host: String,
         private val generator: (l: String, h: String, q: String) -> String = { _, h, q ->  h + q }
 ) {
-    SITE_SEARCH(
-            R.string.title_site_search_by_google,
-            R.drawable.ic_site_search,
-            "https://www.google.com/search?q="
-    ),
     GOOGLE(
             R.string.google,
             R.drawable.ic_google,
@@ -42,6 +37,11 @@ enum class SearchCategory(
             R.string.search_category_yahoo_japan,
             R.drawable.ic_yahoo_japan_logo,
             "https://search.yahoo.co.jp/search?p="
+    ),
+    SITE_SEARCH(
+        R.string.title_site_search_by_google,
+        R.drawable.ic_site_search,
+        "https://www.google.com/search?q="
     ),
     WOLFRAM_ALPHA(
             R.string.wolfram_alpha,

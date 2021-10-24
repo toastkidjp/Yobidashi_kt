@@ -170,7 +170,7 @@ class SearchActionTest {
     }
 
     @Test
-    fun test() {
+    fun testIsValidUrl() {
         every { Urls.isValidUrl(any()) }.returns(true)
 
         searchAction.invoke()

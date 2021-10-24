@@ -10,14 +10,12 @@ package jp.toastkid.yobidashi.settings.background.load
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.net.Uri
-import android.view.Display
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.StorageWrapper
 import jp.toastkid.yobidashi.libs.BitmapScaling
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.util.UUID
-import kotlin.jvm.Throws
 
 /**
  * @author toastkidjp
@@ -37,21 +35,14 @@ class ImageStoreService(
      * @throws FileNotFoundException
      */
     @Throws(FileNotFoundException::class)
-    operator fun invoke(image: Bitmap, uri: Uri, display: Display?) {
+    operator fun invoke(image: Bitmap, uri: Uri, displaySize: Rect) {
         val output = filesDir.assignNewFile(uri.lastPathSegment ?: UUID.randomUUID().toString())
         preferenceApplier.backgroundImagePath = output.path
 
-        val size = getDisplayScale(display)
         val fileOutputStream = FileOutputStream(output)
-        bitmapScaling(image, size.width().toDouble(), size.height().toDouble())
+        bitmapScaling(image, displaySize.width().toDouble(), displaySize.height().toDouble())
                 .compress(Bitmap.CompressFormat.WEBP, 100, fileOutputStream)
         fileOutputStream.close()
-    }
-
-    private fun getDisplayScale(display: Display?): Rect {
-        val size = Rect()
-        display?.getRectSize(size)
-        return size
     }
 
 }

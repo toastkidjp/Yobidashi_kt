@@ -2,8 +2,10 @@ package jp.toastkid.yobidashi.main.launch
 
 import androidx.fragment.app.Fragment
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -35,8 +37,8 @@ class ElseCaseUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { openNewTab.invoke() }.answers { Unit }
-        every { replaceToCurrentTab.invoke(any()) }.answers { Unit }
+        every { openNewTab.invoke() }.just(Runs)
+        every { replaceToCurrentTab.invoke(any()) }.just(Runs)
 
         elseCaseUseCase = ElseCaseUseCase(
                 tabIsEmpty, openNewTab, findCurrentFragment, replaceToCurrentTab
@@ -58,7 +60,6 @@ class ElseCaseUseCaseTest {
     @Test
     fun testTabIsNotEmptyAndCurrentIsNull() {
         every { tabIsEmpty.invoke() }.answers { false }
-        val fragment = mockk<Fragment>()
         every { findCurrentFragment.invoke() }.answers { null }
 
         elseCaseUseCase.invoke()

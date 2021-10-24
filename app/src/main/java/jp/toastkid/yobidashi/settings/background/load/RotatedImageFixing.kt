@@ -12,15 +12,22 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
+import java.io.FileDescriptor
 
 /**
  * @author toastkidjp
  */
-class RotatedImageFixing {
+class RotatedImageFixing(
+    private val exifInterfaceFactory: (FileDescriptor) -> ExifInterface = { ExifInterface(it) }
+) {
 
     operator fun invoke(contentResolver: ContentResolver, bitmap: Bitmap?, imageUri: Uri): Bitmap? {
+        if (bitmap == null) {
+            return null
+        }
+
         val openFileDescriptor = contentResolver.openFileDescriptor(imageUri, "r") ?: return bitmap
-        val exifInterface = ExifInterface(openFileDescriptor.fileDescriptor)
+        val exifInterface = exifInterfaceFactory(openFileDescriptor.fileDescriptor)
         val orientation = exifInterface.getAttributeInt(
                 ExifInterface.TAG_ORIENTATION,
                 ExifInterface.ORIENTATION_NORMAL
@@ -34,11 +41,7 @@ class RotatedImageFixing {
         }
     }
 
-    private fun rotate(bitmap: Bitmap?, degree: Float): Bitmap? {
-        if (bitmap == null) {
-            return null
-        }
-
+    private fun rotate(bitmap: Bitmap, degree: Float): Bitmap? {
         val matrix = Matrix()
         matrix.postRotate(degree)
         val rotatedBitmap = Bitmap.createBitmap(

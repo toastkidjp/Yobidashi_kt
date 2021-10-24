@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi.settings.background.load
 
 import android.graphics.Bitmap
+import android.graphics.Rect
 import android.net.Uri
-import android.view.Display
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -41,7 +41,7 @@ class ImageStoreServiceTest {
     private lateinit var uri: Uri
 
     @MockK
-    private lateinit var display: Display
+    private lateinit var display: Rect
 
     @MockK
     private lateinit var scaledBitmap: Bitmap
@@ -58,7 +58,6 @@ class ImageStoreServiceTest {
         file = spyk(File.createTempFile("test", "webp"))
         every { filesDir.assignNewFile(any<String>()) }.answers { file }
         every { preferenceApplier.backgroundImagePath = any() }.answers { Unit }
-        every { display.getRectSize(any()) }.answers { Unit }
 
         mockkConstructor(FileOutputStream::class)
         every { anyConstructed<FileOutputStream>().close() }.answers { Unit }
@@ -68,6 +67,9 @@ class ImageStoreServiceTest {
         every { bitmapScaling.invoke(any(), any(), any()) }.answers { scaledBitmap }
 
         every { uri.getLastPathSegment() }.returns("last")
+
+        every { display.width() }.returns(1024)
+        every { display.height() }.returns(1920)
     }
 
     @After
@@ -82,7 +84,6 @@ class ImageStoreServiceTest {
 
         verify(exactly = 2) { file.getPath() }
         verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
-        verify(exactly = 1) { display.getRectSize(any()) }
         verify(exactly = 1) { anyConstructed<FileOutputStream>().close() }
         verify(exactly = 1) { bitmapScaling.invoke(any(), any(), any()) }
         verify(exactly = 1) { uri.getLastPathSegment() }
