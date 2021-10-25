@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import jp.toastkid.yobidashi.R
 
 /**
@@ -42,13 +41,4 @@ class SearchHistoryClearDialogFragment : DialogFragment() {
                 .create()
     }
 
-    companion object {
-        fun show(fragmentManager: FragmentManager) {
-            val dialogFragment = SearchHistoryClearDialogFragment()
-            dialogFragment.show(
-                fragmentManager,
-                SearchHistoryClearDialogFragment::class.java.canonicalName
-            )
-        }
-    }
 }
