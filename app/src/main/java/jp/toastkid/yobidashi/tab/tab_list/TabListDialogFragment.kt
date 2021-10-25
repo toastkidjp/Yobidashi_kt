@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
@@ -200,9 +201,12 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                 }
                 context.onClickClear()
             })
-            TabListClearDialogFragment().show(
-                    fragmentManager,
-                    TabListClearDialogFragment::class.java.canonicalName
+
+            ConfirmDialogFragment.show(
+                fragmentManager,
+                getString(R.string.title_clear_all_tabs),
+                getString(R.string.confirm_clear_all_settings),
+                "clear_tabs"
             )
         }
     }
