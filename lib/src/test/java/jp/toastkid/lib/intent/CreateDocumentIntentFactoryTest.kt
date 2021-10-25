@@ -44,7 +44,7 @@ class CreateDocumentIntentFactoryTest {
     fun invoke() {
         createDocumentIntentFactory.invoke("text/html", "test.html")
 
-        verify(exactly = 1) { anyConstructed<Intent>().type = any() }
+        verify(exactly = 1) { anyConstructed<Intent>().type = "text/html" }
         verify(exactly = 1) { anyConstructed<Intent>().addCategory(Intent.CATEGORY_OPENABLE) }
         verify(exactly = 1) { anyConstructed<Intent>().putExtra(any(), any<String>()) }
     }
