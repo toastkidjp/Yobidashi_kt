@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.settings.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
+import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.lib.view.CompoundDrawableColorApplier
@@ -34,7 +36,6 @@ import jp.toastkid.yobidashi.databinding.FragmentSettingDisplayBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.Adapter
-import jp.toastkid.yobidashi.settings.background.ClearImagesDialogFragment
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.background.load.LoadedAction
 
@@ -130,7 +131,7 @@ class DisplayingSettingFragment : Fragment() {
         }
 
         parentFragmentManager.setFragmentResultListener(
-            "clear_images",
+            "clear_background_images",
             viewLifecycleOwner,
             { _, _ ->
                 filesDir.clean()
@@ -186,9 +187,15 @@ class DisplayingSettingFragment : Fragment() {
      * Clear all images.
      */
     private fun clearImages() {
-        ClearImagesDialogFragment().also {
-            it.show(parentFragmentManager, ClearImagesDialogFragment::class.java.simpleName)
-        }
+        ConfirmDialogFragment.show(
+            parentFragmentManager,
+            getString(R.string.clear_all),
+            Html.fromHtml(
+                getString(R.string.confirm_clear_all_settings),
+                Html.FROM_HTML_MODE_COMPACT
+            ),
+            "clear_background_images"
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -218,7 +225,7 @@ class DisplayingSettingFragment : Fragment() {
         contentViewModel?.refresh()
         addingLauncher.unregister()
 
-        parentFragmentManager.clearFragmentResultListener("clear_images")
+        parentFragmentManager.clearFragmentResultListener("clear_background_images")
 
         super.onDetach()
     }
