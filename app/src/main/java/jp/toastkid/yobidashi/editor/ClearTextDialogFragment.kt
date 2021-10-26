@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import jp.toastkid.yobidashi.R
 
 /**
@@ -41,19 +40,4 @@ class ClearTextDialogFragment : DialogFragment() {
                 .create()
     }
 
-    companion object {
-
-        /**
-         * Show this dialog.
-         *
-         * @param fragmentManager Use for showing dialog
-         */
-        fun show(fragmentManager: FragmentManager) {
-            val dialogFragment = ClearTextDialogFragment()
-            dialogFragment.show(
-                fragmentManager,
-                dialogFragment::class.java.canonicalName
-            )
-        }
-    }
 }
