@@ -19,10 +19,6 @@ import jp.toastkid.yobidashi.R
  */
 class ClearColorsDialogFragment : DialogFragment() {
 
-    interface Callback {
-        fun onClickClearColor()
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
