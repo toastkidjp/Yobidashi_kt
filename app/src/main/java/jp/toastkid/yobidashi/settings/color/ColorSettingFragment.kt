@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.settings.color
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
@@ -159,10 +161,14 @@ class ColorSettingFragment : Fragment(),
         binding?.savedColors?.layoutManager =
                 GridLayoutManager(activityContext, 3, LinearLayoutManager.VERTICAL, false)
         binding?.clearSavedColor?.setOnClickListener{
-            val clearColorsDialogFragment = ClearColorsDialogFragment()
-            clearColorsDialogFragment.show(
-                    parentFragmentManager,
-                    ClearColorsDialogFragment::class.java.simpleName
+            ConfirmDialogFragment.show(
+                parentFragmentManager,
+                getString(R.string.title_clear_saved_color),
+                Html.fromHtml(
+                    activityContext.getString(R.string.confirm_clear_all_settings),
+                    Html.FROM_HTML_MODE_COMPACT
+                ),
+                "clear_color"
             )
         }
     }
