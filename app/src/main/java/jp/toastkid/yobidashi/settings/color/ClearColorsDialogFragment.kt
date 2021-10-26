@@ -23,15 +23,8 @@ class ClearColorsDialogFragment : DialogFragment() {
         fun onClickClearColor()
     }
 
-    private var onClick: Callback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-
-        val targetFragment = targetFragment
-        if (targetFragment is Callback) {
-            onClick = targetFragment
-        }
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_saved_color)
