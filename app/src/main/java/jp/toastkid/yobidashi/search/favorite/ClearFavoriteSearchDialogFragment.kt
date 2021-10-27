@@ -11,9 +11,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import jp.toastkid.yobidashi.R
 
 /**
@@ -40,17 +38,4 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
                 .create()
     }
 
-    companion object {
-
-        private const val KEY_VIEW_MODEL = "view_model"
-
-        fun show(fragmentManager: FragmentManager, viewModel: FavoriteSearchFragmentViewModel) {
-            val dialogFragment = ClearFavoriteSearchDialogFragment()
-            dialogFragment.arguments = bundleOf(KEY_VIEW_MODEL to viewModel)
-            dialogFragment.show(
-                    fragmentManager,
-                    ClearFavoriteSearchDialogFragment::class.java.canonicalName
-            )
-        }
-    }
 }
