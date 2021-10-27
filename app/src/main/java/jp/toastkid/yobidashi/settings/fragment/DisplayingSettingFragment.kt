@@ -69,22 +69,21 @@ class DisplayingSettingFragment : Fragment() {
     private lateinit var filesDir: FilesDir
 
     private val addingLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-        {
-            if (it.resultCode != Activity.RESULT_OK) {
-                return@registerForActivityResult
-            }
-
-            LoadedAction(
-                it.data?.data,
-                binding.fabParent,
-                preferenceApplier.colorPair(),
-                { adapter?.notifyDataSetChanged() },
-                BACKGROUND_DIR
-            )
-                .invoke()
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode != Activity.RESULT_OK) {
+            return@registerForActivityResult
         }
-    )
+
+        LoadedAction(
+            it.data?.data,
+            binding.fabParent,
+            preferenceApplier.colorPair(),
+            { adapter?.notifyDataSetChanged() },
+            BACKGROUND_DIR
+        )
+            .invoke()
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
