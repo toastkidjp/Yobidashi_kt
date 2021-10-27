@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -131,6 +133,12 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
             val event = it.getContentIfNotHandled() ?: return@observe
             startSearch(SearchCategory.findByCategory(event.category), event.query ?: "")
         })
+
+        parentFragmentManager.setFragmentResultListener(
+            "clear_favorite_search_items",
+            this,
+            { _, _ -> clear() }
+        )
     }
 
     /**
@@ -158,9 +166,14 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     override fun onOptionsItemSelected(item: MenuItem) =
             when (item.itemId) {
                 R.id.favorite_toolbar_menu_clear -> {
-                    ClearFavoriteSearchDialogFragment.show(
+                    ConfirmDialogFragment.show(
                         parentFragmentManager,
-                        ViewModelProvider(this).get(FavoriteSearchFragmentViewModel::class.java)
+                        getString(R.string.title_delete_all),
+                        Html.fromHtml(
+                            getString(R.string.confirm_clear_all_settings),
+                            Html.FROM_HTML_MODE_COMPACT
+                        ),
+                        "clear_favorite_search_items"
                     )
                     true
                 }
@@ -195,6 +208,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     private fun colorPair() = preferenceApplier.colorPair()
 
     override fun onDetach() {
+        parentFragmentManager.clearFragmentResultListener("clear_favorite_search_items")
         disposables.cancel()
         super.onDetach()
     }
