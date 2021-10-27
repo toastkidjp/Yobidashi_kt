@@ -35,8 +35,6 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    (arguments?.getSerializable(KEY_VIEW_MODEL) as? FavoriteSearchFragmentViewModel)
-                            ?.clear()
                     d.dismiss()
                 }
                 .create()
