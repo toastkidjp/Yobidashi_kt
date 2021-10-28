@@ -65,7 +65,7 @@ class RemoteViewsFactoryTest {
     fun testMake() {
         RemoteViewsFactory.make(context)
 
-        verify(exactly = 1) { context.getPackageName() }
+        verify(exactly = 1) { context.packageName }
         verify(exactly = 1) { context.getSharedPreferences(any(), any()) }
         verify(atLeast = 1) { anyConstructed<RemoteViews>().setInt(any(), any(), any()) }
         verify(atLeast = 1) { anyConstructed<RemoteViews>().setTextColor(any(), any()) }
