@@ -42,7 +42,7 @@ class RemoteViewsFactoryTest {
         every { context.packageName }.returns("test")
         every { context.resources }.returns(resources)
         every { context.getSharedPreferences(any(), any()) }.returns(mockk(relaxed = true))
-        every { resources.getColor(any()) }.returns(Color.BLACK)
+        every { @Suppress("DEPRECATION") resources.getColor(any()) }.returns(Color.BLACK)
 
         mockkConstructor(RemoteViews::class)
         every { anyConstructed<RemoteViews>().setInt(any(), any(), any()) }.just(Runs)
