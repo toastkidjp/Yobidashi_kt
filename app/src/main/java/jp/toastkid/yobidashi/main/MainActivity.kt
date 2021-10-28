@@ -26,6 +26,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.input.Inputs
+import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.TabUiFragment
@@ -152,21 +153,8 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
                 return@registerForActivityResult
             }
 
-            activityResultLauncher?.launch(makeOpenDocument("application/pdf"))
+            activityResultLauncher?.launch(OpenDocumentIntentFactory()("application/pdf"))
         }
-
-    /**
-     * Make Storage Access Framework intent.
-     * TODO Move other class
-     * @param type mime type
-     * @return [Intent]
-     */
-    private fun makeOpenDocument(type: String): Intent {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        intent.type = type
-        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
-        return intent
-    }
 
     private val requestPermissionForOpenEditorTab =
         registerForActivityResult(WriteStoragePermissionRequestContract()) {
