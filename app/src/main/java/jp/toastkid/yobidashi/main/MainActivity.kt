@@ -44,7 +44,7 @@ import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContrac
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
-import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase

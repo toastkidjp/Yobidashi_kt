@@ -48,6 +48,7 @@ import jp.toastkid.article_viewer.zip.ZipLoaderService
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.view.RecyclerViewScroller
@@ -203,6 +204,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             appBarBinding.input.setOnEditorActionListener { textView, _, _ ->
                 val keyword = textView.text.toString()
                 activityViewModel.search(keyword)
+                Inputs.hideKeyboard(appBarBinding.input)
                 true
             }
         }
@@ -291,7 +293,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         )
 
         adapter.addLoadStateListener(
-            ArticleLoadStateListener(contentViewModel, { adapter.itemCount }, { getString(it) })
+            ArticleLoadStateListener(contentViewModel, { adapter.itemCount }, { activityContext.getString(it) })
         )
 
         searchUseCase?.search(appBarBinding.input.text?.toString())
