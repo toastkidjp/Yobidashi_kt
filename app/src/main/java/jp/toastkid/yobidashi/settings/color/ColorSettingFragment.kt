@@ -38,8 +38,7 @@ import kotlinx.coroutines.withContext
  *
  * @author toastkidjp
  */
-class ColorSettingFragment : Fragment(),
-    CommonFragmentAction {
+class ColorSettingFragment : Fragment(), CommonFragmentAction {
 
     /**
      * Initial background color.
