@@ -20,10 +20,6 @@ import jp.toastkid.yobidashi.R
  */
 class AddingFolderDialogFragment : DialogFragment() {
 
-    interface OnClickAddingFolder {
-        fun onClickAddFolder(title: String?)
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
