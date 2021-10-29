@@ -256,11 +256,12 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.add_default -> {
-                DefaultBookmarkDialogFragment()
-                    .show(
-                        fragmentManager,
-                        DefaultBookmarkDialogFragment::class.java.simpleName
-                    )
+                ConfirmDialogFragment.show(
+                    fragmentManager,
+                    getString(R.string.title_add_default_bookmark),
+                    getString(R.string.message_add_default_bookmark),
+                    "import_default"
+                )
                 true
             }
             R.id.add_folder -> {
