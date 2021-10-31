@@ -43,7 +43,7 @@ class OpenDocumentIntentFactoryTest {
     fun testInvoke() {
         openDocumentIntentFactory.invoke("text/html")
 
-        verify(exactly = 1) { anyConstructed<Intent>().type = any() }
+        verify(exactly = 1) { anyConstructed<Intent>().type = "text/html" }
         verify(exactly = 1) { anyConstructed<Intent>().putExtra(any(), true) }
     }
 
