@@ -10,10 +10,12 @@ class HtmlSourceExtractionUseCase {
 
     private val script = "document.documentElement.outerHTML;"
 
+    private val EXCEPTING_URL = "https://accounts.google.com/"
+
     @UiThread
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     operator fun invoke(webView: WebView?, callback: ValueCallback<String>) {
-        if (webView?.url?.startsWith("https://accounts.google.com/") == true) {
+        if (webView?.url?.startsWith(EXCEPTING_URL) == true) {
             return
         }
 
