@@ -22,7 +22,7 @@ class HtmlSourceExtractionUseCase {
 
     companion object {
 
-        private val EXCEPTING_URL = "https://accounts.google.com/"
+        private const val EXCEPTING_URL = "https://accounts.google.com/"
 
     }
 }
