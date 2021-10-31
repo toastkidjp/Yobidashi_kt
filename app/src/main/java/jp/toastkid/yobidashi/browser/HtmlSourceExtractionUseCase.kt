@@ -10,8 +10,6 @@ class HtmlSourceExtractionUseCase {
 
     private val script = "document.documentElement.outerHTML;"
 
-    private val EXCEPTING_URL = "https://accounts.google.com/"
-
     @UiThread
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     operator fun invoke(webView: WebView?, callback: ValueCallback<String>) {
@@ -20,5 +18,11 @@ class HtmlSourceExtractionUseCase {
         }
 
         webView?.evaluateJavascript(script, callback)
+    }
+
+    companion object {
+
+        private val EXCEPTING_URL = "https://accounts.google.com/"
+
     }
 }
