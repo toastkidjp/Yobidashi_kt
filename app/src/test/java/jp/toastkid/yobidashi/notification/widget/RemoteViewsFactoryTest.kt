@@ -54,7 +54,7 @@ class RemoteViewsFactoryTest {
         mockkConstructor(PreferenceApplier::class)
 
         mockkConstructor(TapActionInitializer::class)
-        every { anyConstructed<TapActionInitializer>().invoke(any(), any()) }.answers { Unit }
+        every { anyConstructed<TapActionInitializer>().invoke(any(), any()) }.just(Runs)
 
         mockkConstructor(IconInitializer::class)
         every { anyConstructed<IconInitializer>().invoke(any(), any(), any(), any()) }.answers { Unit }
