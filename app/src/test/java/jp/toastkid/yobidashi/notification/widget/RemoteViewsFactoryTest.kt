@@ -49,7 +49,7 @@ class RemoteViewsFactoryTest {
 
         mockkConstructor(RemoteViews::class)
         every { anyConstructed<RemoteViews>().setInt(any(), any(), any()) }.just(Runs)
-        every { anyConstructed<RemoteViews>().setTextColor(any(), any()) }.answers { Unit }
+        every { anyConstructed<RemoteViews>().setTextColor(any(), any()) }.just(Runs)
 
         mockkConstructor(PreferenceApplier::class)
 
