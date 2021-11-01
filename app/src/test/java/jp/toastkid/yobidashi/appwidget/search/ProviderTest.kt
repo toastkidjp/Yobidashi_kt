@@ -15,7 +15,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import io.mockk.mockkObject
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -37,8 +37,8 @@ class ProviderTest {
         MockKAnnotations.init(this)
         every { appWidgetManager.updateAppWidget(any<ComponentName>(), any()) }.answers { Unit }
 
-        mockkObject(RemoteViewsFactory)
-        every { RemoteViewsFactory.make(any()) }.returns(mockk())
+        mockkConstructor(RemoteViewsFactory::class)
+        every { anyConstructed<RemoteViewsFactory>().make(any()) }.returns(mockk())
 
         provider = Provider()
     }
@@ -52,7 +52,7 @@ class ProviderTest {
     fun test() {
         provider.onUpdate(context, appWidgetManager, intArrayOf())
 
-        verify(exactly = 1) { RemoteViewsFactory.make(any()) }
+        verify(exactly = 1) { anyConstructed<RemoteViewsFactory>().make(any()) }
         verify(exactly = 1) { appWidgetManager.updateAppWidget(any<ComponentName>(), any()) }
     }
 
