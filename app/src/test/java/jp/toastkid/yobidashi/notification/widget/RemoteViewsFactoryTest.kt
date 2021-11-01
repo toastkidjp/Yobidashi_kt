@@ -42,7 +42,7 @@ class RemoteViewsFactoryTest {
 
         remoteViewsFactory = RemoteViewsFactory()
 
-        every { context.getPackageName() }.returns("test")
+        every { context.packageName }.returns("test")
         every { context.resources }.returns(resources)
         every { context.getSharedPreferences(any(), any()) }.returns(mockk(relaxed = true))
         every { @Suppress("DEPRECATION") resources.getColor(any()) }.returns(Color.BLACK)
