@@ -21,7 +21,7 @@ internal class Updater {
         Provider.updateWidget(
                 wrapper.applicationContext,
                 AppWidgetManager.getInstance(wrapper),
-                RemoteViewsFactory.make(wrapper)
+                RemoteViewsFactory().make(wrapper)
         )
 
         if (PreferenceApplier(wrapper).useNotificationWidget()) {

@@ -17,7 +17,7 @@ class Receiver : BroadcastReceiver() {
             Provider.updateWidget(
                     context.applicationContext,
                     AppWidgetManager.getInstance(context),
-                    RemoteViewsFactory.make(context)
+                    RemoteViewsFactory().make(context)
             )
         }
     }

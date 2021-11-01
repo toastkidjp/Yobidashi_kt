@@ -18,7 +18,7 @@ internal class Provider : AppWidgetProvider() {
             appWidgetManager: AppWidgetManager,
             appWidgetIds: IntArray
     ) {
-        updateWidget(context, appWidgetManager, RemoteViewsFactory.make(context))
+        updateWidget(context, appWidgetManager, RemoteViewsFactory().make(context))
     }
 
     companion object {
