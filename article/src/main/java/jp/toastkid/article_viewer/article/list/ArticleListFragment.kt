@@ -324,6 +324,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         return when (item.itemId) {
             R.id.action_all_article -> {
                 searchUseCase?.all()
+                activity?.let {
+                    ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
+                        .search(null)
+                }
                 true
             }
             R.id.action_bookmark -> {
