@@ -16,6 +16,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
@@ -50,8 +51,8 @@ class UpdaterTest {
         mockkStatic(AppWidgetManager::class)
         every { AppWidgetManager.getInstance(any()) }.returns(mockk())
 
-        mockkObject(RemoteViewsFactory)
-        every { RemoteViewsFactory.make(any()) }.returns(mockk())
+        mockkConstructor(RemoteViewsFactory::class)
+        every { anyConstructed<RemoteViewsFactory>().make(any()) }.returns(mockk())
 
         mockkObject(Provider)
         every { Provider.updateWidget(any(), any(), any()) }.answers { Unit }
@@ -72,13 +73,13 @@ class UpdaterTest {
         verify(exactly = 1) { contextWrapper.applicationContext }
         verify(exactly = 1) { contextWrapper.getSharedPreferences(any(), any()) }
         verify(exactly = 1) { AppWidgetManager.getInstance(any()) }
-        verify(exactly = 1) { RemoteViewsFactory.make(any()) }
+        verify(exactly = 1) { anyConstructed<RemoteViewsFactory>().make(any()) }
         verify(exactly = 1) { Provider.updateWidget(any(), any(), any()) }
         verify(exactly = 1) { NotificationWidget.refresh(any()) }
     }
 
     @Test
-    fun falseCase() {
+    fun testFalseCase() {
         every { sharedPreferences.getBoolean(any(), any()) }.returns(false)
 
         updater.update(contextWrapper)
@@ -86,7 +87,7 @@ class UpdaterTest {
         verify(exactly = 1) { contextWrapper.applicationContext }
         verify(exactly = 1) { contextWrapper.getSharedPreferences(any(), any()) }
         verify(exactly = 1) { AppWidgetManager.getInstance(any()) }
-        verify(exactly = 1) { RemoteViewsFactory.make(any()) }
+        verify(exactly = 1) { anyConstructed<RemoteViewsFactory>().make(any()) }
         verify(exactly = 1) { Provider.updateWidget(any(), any(), any()) }
         verify(exactly = 0) { NotificationWidget.refresh(any()) }
     }
