@@ -15,6 +15,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
@@ -45,8 +46,8 @@ class ReceiverTest {
         mockkObject(Provider.Companion)
         every { Provider.updateWidget(any(), any(), any()) }.answers { Unit }
 
-        mockkObject(RemoteViewsFactory)
-        every { RemoteViewsFactory.make(any()) }.returns(mockk())
+        mockkConstructor(RemoteViewsFactory::class)
+        every { anyConstructed<RemoteViewsFactory>().make(any()) }.returns(mockk())
 
         mockkStatic(AppWidgetManager::class)
         every { AppWidgetManager.getInstance(any()) }.returns(appWidgetManager)
@@ -66,7 +67,7 @@ class ReceiverTest {
         verify(exactly = 1) { intent.getAction() }
         verify(exactly = 1) { context.getApplicationContext() }
         verify(exactly = 1) { Provider.updateWidget(any(), any(), any()) }
-        verify(exactly = 1) { RemoteViewsFactory.make(any()) }
+        verify(exactly = 1) { anyConstructed<RemoteViewsFactory>().make(any()) }
     }
 
 }
