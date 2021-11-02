@@ -116,7 +116,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 return@registerForActivityResult
             }
 
-            UpdateUseCase(viewModel, { context }).invokeIfNeed(it.data?.data)
+            UpdateUseCase(viewModel) { context }.invokeIfNeed(it.data?.data)
         }
 
     override fun onAttach(context: Context) {
