@@ -8,8 +8,6 @@ import androidx.annotation.UiThread
 
 class HtmlSourceExtractionUseCase {
 
-    private val script = "document.documentElement.outerHTML;"
-
     @UiThread
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     operator fun invoke(webView: WebView?, callback: ValueCallback<String>) {
@@ -21,6 +19,8 @@ class HtmlSourceExtractionUseCase {
     }
 
     companion object {
+
+        private val script = "document.documentElement.outerHTML;"
 
         private const val EXCEPTING_URL = "https://accounts.google.com/"
 
