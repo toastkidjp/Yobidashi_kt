@@ -380,7 +380,5 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         @LayoutRes
         private val LAYOUT_ID = R.layout.fragment_article_list
 
-        private const val REQUEST_CODE = 1
-
     }
 }
