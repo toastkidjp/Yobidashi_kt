@@ -20,7 +20,9 @@ class TlsErrorMessageGenerator {
         val cert: SslCertificate = error.certificate
 
         return context.getString(R.string.message_ssl_error_first_line) +
-                makeCause(error, context, cert)
+                makeCause(error, context, cert) +
+                System.lineSeparator() +
+                "URL: ${error.url}"
     }
 
     private fun makeCause(error: SslError, context: Context, cert: SslCertificate): String {
