@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.browser.tls
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 
@@ -23,17 +22,8 @@ class TlsErrorDialogFragment : DialogFragment() {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_ssl_connection_error)
-                .setMessage(arguments?.getString(KEY_MESSAGE))
                 .setPositiveButton(R.string.ok) { d, _ -> d.dismiss() }
                 .create()
     }
 
-    companion object {
-
-        private const val KEY_MESSAGE = "message"
-
-        fun make(message: String) =
-                TlsErrorDialogFragment()
-                        .also { it.arguments = bundleOf(Pair(KEY_MESSAGE, message)) }
-    }
 }
