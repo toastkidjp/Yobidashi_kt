@@ -20,7 +20,7 @@ class HtmlSourceExtractionUseCase {
 
     companion object {
 
-        private val script = "document.documentElement.outerHTML;"
+        private const val script = "document.documentElement.outerHTML;"
 
         private const val EXCEPTING_URL = "https://accounts.google.com/"
 
