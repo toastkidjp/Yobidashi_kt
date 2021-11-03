@@ -17,7 +17,7 @@ class TlsErrorMessageGeneratorTest {
     @Test
     fun testNullCase() {
         assertTrue(
-                tlsErrorMessageGenerator.invoke(RuntimeEnvironment.systemContext, null).isEmpty()
+            tlsErrorMessageGenerator.invoke(RuntimeEnvironment.systemContext, null).isEmpty()
         )
     }
 }
