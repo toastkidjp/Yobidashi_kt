@@ -130,15 +130,14 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().remove(Key.BG_IMAGE.name).apply()
     }
 
-    val isFirstLaunch: Boolean
-        get() {
-            val firstLaunch = File(context.filesDir, "firstLaunch")
-            if (firstLaunch.exists()) {
-                return false
-            }
-            firstLaunch.mkdirs()
-            return true
+    fun isFirstLaunch(): Boolean {
+        val firstLaunch = File(context.filesDir, "firstLaunch")
+        if (firstLaunch.exists()) {
+            return false
         }
+        firstLaunch.mkdirs()
+        return true
+    }
 
     fun setUseNotificationWidget(newState: Boolean) {
         preferences.edit().putBoolean(Key.USE_NOTIFICATION_WIDGET.name, newState).apply()

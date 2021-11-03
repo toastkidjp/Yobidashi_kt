@@ -11,12 +11,12 @@ package jp.toastkid.yobidashi.browser.webview.factory
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.ViewGroup
 import android.webkit.WebView
+import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -141,9 +141,12 @@ internal class WebViewFactory {
         webView.setDownloadListener { url, _, _, mimeType, _ ->
             when {
                 mimeType == "application/pdf" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
-                    val intent = Intent(Intent.ACTION_QUICK_VIEW)
-                    intent.data = Uri.parse(url)
-                    webView.context.startActivity(intent)
+                    val intent = Intent().also { it.data = url.toUri() }
+                    val currentContext = webView.context
+                    if (currentContext.packageManager.resolveActivity(intent, 0) == null) {
+                        intent.action = Intent.ACTION_VIEW
+                    }
+                    currentContext.startActivity(intent)
                 }
                 else -> {
                     (context as? FragmentActivity)?.let {
