@@ -33,7 +33,7 @@ class HtmlSourceExtractionUseCaseTest {
     }
 
     @Test
-    fun test1() {
+    fun testExceptingCase() {
         every { webView.url }.returns("https://accounts.google.com/signin")
         every { webView.evaluateJavascript(any(), any()) }.answers { Unit }
 
