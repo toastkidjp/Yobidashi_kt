@@ -89,4 +89,15 @@ class TlsErrorMessageGeneratorTest {
         verify(exactly = 1) { cert.issuedTo }
     }
 
+    @Test
+    fun test() {
+        every { error.primaryError }.returns(SslError.SSL_NOTYETVALID)
+
+        tlsErrorMessageGenerator.invoke(context, error)
+
+        verify(exactly = 1) { error.certificate }
+        verify(exactly = 1) { error.url }
+        verify(atLeast = 2) { context.getString(any()) }
+    }
+
 }
