@@ -71,7 +71,7 @@ class TlsErrorMessageGeneratorTest {
     }
 
     @Test
-    fun test() {
+    fun testSslExpiredCase() {
         every { error.primaryError }.returns(SslError.SSL_EXPIRED)
 
         tlsErrorMessageGenerator.invoke(context, error)
