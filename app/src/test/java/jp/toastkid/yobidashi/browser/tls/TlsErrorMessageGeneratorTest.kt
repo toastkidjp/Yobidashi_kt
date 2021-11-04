@@ -15,15 +15,11 @@ import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import java.util.Date
 
 /**
  * @author toastkidjp
  */
-@RunWith(RobolectricTestRunner::class)
 class TlsErrorMessageGeneratorTest {
 
     @InjectMockKs
@@ -66,7 +62,7 @@ class TlsErrorMessageGeneratorTest {
     @Test
     fun testNullCase() {
         assertTrue(
-            tlsErrorMessageGenerator.invoke(RuntimeEnvironment.systemContext, null).isEmpty()
+            tlsErrorMessageGenerator.invoke(context, null).isEmpty()
         )
     }
 
