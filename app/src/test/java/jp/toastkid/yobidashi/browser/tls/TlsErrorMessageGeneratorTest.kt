@@ -78,7 +78,7 @@ class TlsErrorMessageGeneratorTest {
     }
 
     @Test
-    fun test() {
+    fun testIdMismatchCase() {
         every { error.primaryError }.returns(SslError.SSL_IDMISMATCH)
 
         tlsErrorMessageGenerator.invoke(context, error)
