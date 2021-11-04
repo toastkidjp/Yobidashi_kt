@@ -101,7 +101,7 @@ class TlsErrorMessageGeneratorTest {
     }
 
     @Test
-    fun test() {
+    fun testUntrustedCase() {
         every { error.primaryError }.returns(SslError.SSL_UNTRUSTED)
 
         tlsErrorMessageGenerator.invoke(context, error)
