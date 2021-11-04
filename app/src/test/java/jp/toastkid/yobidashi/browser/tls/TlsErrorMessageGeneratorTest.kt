@@ -90,7 +90,7 @@ class TlsErrorMessageGeneratorTest {
     }
 
     @Test
-    fun test() {
+    fun testNotYetValidCase() {
         every { error.primaryError }.returns(SslError.SSL_NOTYETVALID)
 
         tlsErrorMessageGenerator.invoke(context, error)
