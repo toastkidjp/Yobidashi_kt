@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +20,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
+import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.model.Tab
 
 /**
@@ -113,11 +113,13 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
+        parentFragmentManager.clearFragmentResultListener("clear_tabs")
         callback?.onCloseTabListDialogFragment(lastTabId)
     }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
+        parentFragmentManager.clearFragmentResultListener("clear_tabs")
         callback?.onCloseTabListDialogFragment(lastTabId)
     }
 
@@ -190,8 +192,14 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
     fun clearTabs(v: View) {
         val context = v.context
-        if (context is FragmentActivity) {
+        if (context is MainActivity) {
             val fragmentManager = context.supportFragmentManager
+            fragmentManager.setFragmentResultListener("clear_tabs", context, { key, result ->
+                if (result.getBoolean(key).not()) {
+                    return@setFragmentResultListener
+                }
+                context.onClickClear()
+            })
             TabListClearDialogFragment().show(
                     fragmentManager,
                     TabListClearDialogFragment::class.java.canonicalName

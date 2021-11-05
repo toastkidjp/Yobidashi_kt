@@ -25,6 +25,7 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.TabUiFragment
@@ -44,7 +45,6 @@ import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContrac
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
-import jp.toastkid.lib.input.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
@@ -67,7 +67,6 @@ import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.Tab
-import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -80,10 +79,7 @@ import kotlinx.coroutines.launch
  *
  * @author toastkidjp
  */
-class MainActivity : AppCompatActivity(),
-        TabListClearDialogFragment.Callback,
-        TabListDialogFragment.Callback
-{
+class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
     /**
      * Data binding object.
@@ -625,7 +621,8 @@ class MainActivity : AppCompatActivity(),
         openNewTab()
     }
 
-    override fun onClickClear() {
+    // TODO make private
+    fun onClickClear() {
         tabs.clear()
         onEmptyTabs()
     }
