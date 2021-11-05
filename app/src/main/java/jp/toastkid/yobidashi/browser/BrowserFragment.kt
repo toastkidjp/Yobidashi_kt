@@ -402,9 +402,6 @@ class BrowserFragment : Fragment(),
         return true
     }
 
-    /**
-     * TODO implement ViewModel.
-     */
     fun getTitleAndUrl(): Pair<String?, String?> {
         val currentTitle = browserModule.currentTitle()
         val currentUrl = browserModule.currentUrl()
