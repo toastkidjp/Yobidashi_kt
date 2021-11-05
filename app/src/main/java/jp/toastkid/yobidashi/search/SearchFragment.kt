@@ -414,8 +414,7 @@ class SearchFragment : Fragment() {
 
         SearchAction(context, category, query, currentUrl, onBackground).invoke()
 
-        arguments?.remove(EXTRA_KEY_TITLE)
-        arguments?.remove(EXTRA_KEY_URL)
+        arguments?.clear()
     }
 
     fun clearInput() {
