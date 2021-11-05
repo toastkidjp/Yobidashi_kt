@@ -46,8 +46,9 @@ class TlsErrorMessageGeneratorTest {
         every { cert.issuedTo }.returns(dName)
         every { dName.cName }.returns("c_name")
         every { cert.issuedBy }.returns(dName)
-        every { dName.cName }.returns("d_name")
+        every { dName.dName }.returns("d_name")
         every { cert.validNotAfterDate }.returns(Date())
+        every { cert.validNotBeforeDate }.returns(Date())
         every { context.getString(any()) }.returns("test")
 
         mockkStatic(DateFormat::class)
