@@ -405,21 +405,10 @@ class BrowserFragment : Fragment(),
     /**
      * TODO implement ViewModel.
      */
-    fun search() {
+    fun getTitleAndUrl(): Pair<String?, String?> {
         val currentTitle = browserModule.currentTitle()
         val currentUrl = browserModule.currentUrl()
-        val query = searchQueryExtractor.invoke(currentUrl)
-        val makeIntent = if (query.isNullOrEmpty() || Urls.isValidUrl(query)) {
-            SearchFragment.makeWith(currentTitle, currentUrl)
-        } else {
-            SearchFragment.makeWithQuery(query, currentTitle, currentUrl)
-        }
-
-        activity?.also  { activity ->
-            ViewModelProvider(activity)
-                    .get(ContentViewModel::class.java)
-                    .nextFragment(makeIntent)
-        }
+        return currentTitle to currentUrl
     }
 
     /**
