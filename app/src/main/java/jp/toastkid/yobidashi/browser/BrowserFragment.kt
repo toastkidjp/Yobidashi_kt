@@ -381,12 +381,6 @@ class BrowserFragment : Fragment(),
                 )
     }
 
-    fun showHtmlSource() {
-        browserModule.invokeHtmlSourceExtraction {
-            showReaderFragment(it.replace("\\u003C", "<"))
-        }
-    }
-
     /**
      * Do browser back action.
      */
@@ -442,7 +436,6 @@ class BrowserFragment : Fragment(),
             it.tabCount.setTextColor(fontColor)
             it.pageInformation.setColorFilter(fontColor)
             it.userAgent.setColorFilter(fontColor)
-            it.htmlSource.setColorFilter(fontColor)
             it.progress.progressDrawable.colorFilter =
                     PorterDuffColorFilter(
                             preferenceApplier.fontColor,
