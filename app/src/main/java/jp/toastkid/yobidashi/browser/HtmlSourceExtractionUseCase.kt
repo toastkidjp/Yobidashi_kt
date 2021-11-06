@@ -15,12 +15,12 @@ class HtmlSourceExtractionUseCase {
             return
         }
 
-        webView?.evaluateJavascript(script, callback)
+        webView?.evaluateJavascript(SCRIPT, callback)
     }
 
     companion object {
 
-        private const val script = "document.documentElement.outerHTML;"
+        private const val SCRIPT = "document.documentElement.outerHTML;"
 
         private const val EXCEPTING_URL = "https://accounts.google.com/"
 
