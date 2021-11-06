@@ -51,8 +51,6 @@ class BrowserModule(
 
     private val readerModeUseCase by lazy { ReaderModeUseCase() }
 
-    private val htmlSourceExtractionUseCase by lazy { HtmlSourceExtractionUseCase() }
-
     private var customViewSwitcher: CustomViewSwitcher? = null
 
     private val adRemover: AdRemover = AdRemover.make(context.assets)
