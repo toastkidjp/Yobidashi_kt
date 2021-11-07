@@ -307,10 +307,6 @@ class BrowserModule(
         readerModeUseCase(currentView(), callback)
     }
 
-    fun invokeHtmlSourceExtraction(callback: ValueCallback<String>) {
-        //TODO htmlSourceExtractionUseCase(currentView(), callback)
-    }
-
     fun downloadAllImages() {
         AllImageDownloaderUseCase(DownloadAction(context)).invoke(currentView())
     }
