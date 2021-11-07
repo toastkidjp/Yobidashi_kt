@@ -25,7 +25,6 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
-import jp.toastkid.lib.Urls
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.preference.ColorPair
@@ -35,7 +34,6 @@ import jp.toastkid.lib.view.ToolbarColorApplier
 import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.lib.view.filter.color.ForegroundColorFilterUseCase
 import jp.toastkid.search.SearchCategory
-import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
@@ -64,6 +62,7 @@ import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
+import jp.toastkid.yobidashi.search.usecase.SearchFragmentFactoryUseCase
 import jp.toastkid.yobidashi.settings.SettingFragment
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
@@ -425,18 +424,9 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
             when (val fragment = findFragment()) {
                 is BrowserFragment -> {
                     val titleAndUrl = fragment.getTitleAndUrl()
-                    val currentTitle = titleAndUrl.first
-                    val currentUrl = titleAndUrl.second
-                    val query = SearchQueryExtractor().invoke(currentUrl)
-                    val makeIntent = if (query.isNullOrEmpty() || Urls.isValidUrl(query)) {
-                        SearchFragment.makeWith(currentTitle, currentUrl)
-                    } else {
-                        SearchFragment.makeWithQuery(query, currentTitle, currentUrl)
-                    }
-
                     ViewModelProvider(this)
                         .get(ContentViewModel::class.java)
-                        .nextFragment(makeIntent)
+                        .nextFragment(SearchFragmentFactoryUseCase().invoke(titleAndUrl))
                 }
                 else ->
                     contentViewModel?.nextFragment(SearchFragment::class.java)
