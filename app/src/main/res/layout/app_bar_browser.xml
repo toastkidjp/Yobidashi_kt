@@ -199,6 +199,7 @@
             app:layout_constraintBottom_toTopOf="@id/box"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/user_agent"
+            android:contentDescription="@string/title_menu_page_information"
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> fragment.showPageInformation()}"
             />
