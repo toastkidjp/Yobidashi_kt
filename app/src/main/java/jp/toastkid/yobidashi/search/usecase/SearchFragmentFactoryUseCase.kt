@@ -18,12 +18,11 @@ class SearchFragmentFactoryUseCase {
         val currentTitle = titleAndUrl.first
         val currentUrl = titleAndUrl.second
         val query = SearchQueryExtractor().invoke(currentUrl)
-        val makeIntent = if (query.isNullOrEmpty() || Urls.isValidUrl(query)) {
+        return if (query.isNullOrEmpty() || Urls.isValidUrl(query)) {
             SearchFragment.makeWith(currentTitle, currentUrl)
         } else {
             SearchFragment.makeWithQuery(query, currentTitle, currentUrl)
         }
-        return makeIntent
     }
 
 }
