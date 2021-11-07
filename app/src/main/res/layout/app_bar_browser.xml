@@ -203,5 +203,21 @@
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> fragment.showPageInformation()}"
             />
+        <ImageView
+            android:id="@+id/html_source"
+            android:layout_width="48dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            app:srcCompat="@drawable/ic_code"
+            tools:tint="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/box"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/page_information"
+            android:background="@drawable/ripple_transparent"
+            android:onClick="@{view -> fragment.showHtmlSource()}"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
