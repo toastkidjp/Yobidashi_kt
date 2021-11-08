@@ -445,7 +445,7 @@ class BrowserFragment : Fragment(),
             it.htmlSource.setColorFilter(fontColor)
             it.progress.progressDrawable.colorFilter =
                     PorterDuffColorFilter(
-                            preferenceApplier.fontColor,
+                            fontColor,
                             PorterDuff.Mode.SRC_IN
                     )
         }
