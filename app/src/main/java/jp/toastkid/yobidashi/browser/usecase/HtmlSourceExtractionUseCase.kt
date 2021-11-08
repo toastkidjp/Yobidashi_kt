@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.usecase
 
 import android.os.Build
 import android.webkit.ValueCallback
