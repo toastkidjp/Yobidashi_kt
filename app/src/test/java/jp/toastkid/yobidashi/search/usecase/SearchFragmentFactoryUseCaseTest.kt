@@ -55,7 +55,7 @@ class SearchFragmentFactoryUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testCannotExtractedQueryAndNotUrlCase() {
         every { anyConstructed<SearchQueryExtractor>().invoke(any<String>()) }.returns(null)
         every { Urls.isValidUrl(any()) }.returns(false)
 
