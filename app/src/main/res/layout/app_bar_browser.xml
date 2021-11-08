@@ -218,6 +218,7 @@
             app:layout_constraintStart_toEndOf="@id/page_information"
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> fragment.showHtmlSource()}"
+            android:contentDescription="@string/title_menu_html_source"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
