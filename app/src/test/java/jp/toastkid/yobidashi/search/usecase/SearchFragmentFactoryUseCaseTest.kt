@@ -54,4 +54,16 @@ class SearchFragmentFactoryUseCaseTest {
         verify(exactly = 0) { SearchFragment.makeWithQuery(any(), any(), any()) }
     }
 
+    @Test
+    fun test() {
+        every { anyConstructed<SearchQueryExtractor>().invoke(any<String>()) }.returns(null)
+        every { Urls.isValidUrl(any()) }.returns(false)
+
+        searchFragmentFactoryUseCase.invoke("title" to "https://www.yahoo.co.jp")
+
+        verify(exactly = 1) { anyConstructed<SearchQueryExtractor>().invoke(any<String>()) }
+        verify(exactly = 1) { SearchFragment.makeWith(any(), any()) }
+        verify(exactly = 0) { SearchFragment.makeWithQuery(any(), any(), any()) }
+    }
+
 }
