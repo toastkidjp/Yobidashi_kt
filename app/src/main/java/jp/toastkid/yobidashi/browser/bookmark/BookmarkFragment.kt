@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -29,7 +31,6 @@ import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -96,7 +97,7 @@ class BookmarkFragment: Fragment(),
                 return@registerForActivityResult
             }
 
-            getContentLauncher.launch(IntentFactory.makeGetContent("text/html"))
+            getContentLauncher.launch(GetContentIntentFactory()("text/html"))
         }
 
     private val exportRequestPermissionLauncher =
@@ -107,9 +108,24 @@ class BookmarkFragment: Fragment(),
             }
 
             exportLauncher.launch(
-                IntentFactory.makeDocumentOnStorage("text/html", "bookmark.html")
+                makeDocumentOnStorage("text/html", "bookmark.html")
             )
         }
+
+    /**
+     * Make create document intent on Storage Access Framework.
+     * TODO Move other class
+     * @param type mime type
+     * @param fileName File name
+     * @return [Intent]
+     */
+    private fun makeDocumentOnStorage(type: String, fileName: String): Intent {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        intent.type = type
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.putExtra(Intent.EXTRA_TITLE, fileName)
+        return intent
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)

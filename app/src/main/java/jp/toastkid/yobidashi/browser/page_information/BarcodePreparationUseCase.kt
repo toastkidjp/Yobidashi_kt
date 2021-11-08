@@ -8,7 +8,9 @@
 package jp.toastkid.yobidashi.browser.page_information
 
 import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.FileProvider
@@ -17,7 +19,6 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageCache
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,11 +59,26 @@ class BarcodePreparationUseCase(
                     imageCache.saveBitmap(context.cacheDir, bitmap).absoluteFile
             )
             try {
-                context.startActivity(IntentFactory.shareImage(uri))
+                context.startActivity(shareImage(uri))
             } catch (e: ActivityNotFoundException) {
                 Timber.e(e)
             }
         }
+    }
+
+    /**
+     * Share image uri.
+     *
+     * @param uri
+     * @return
+     */
+    private fun shareImage(uri: Uri): Intent {
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.setDataAndType(uri, "image/*")
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+        return intent
     }
 
     companion object {

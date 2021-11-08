@@ -31,6 +31,7 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.SourceData
 import com.journeyapps.barcodescanner.camera.PreviewCallback
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.view.DraggableTouchListener
@@ -39,7 +40,6 @@ import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentBarcodeReaderBinding
 import jp.toastkid.yobidashi.libs.clip.Clipboard
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.search.SearchAction
 import timber.log.Timber
 import java.io.FileOutputStream
@@ -129,7 +129,7 @@ class BarcodeReaderFragment : Fragment() {
             })
             it.share.observe(viewLifecycleOwner, Observer { event ->
                 val text = event?.getContentIfNotHandled() ?: return@Observer
-                startActivity(IntentFactory.makeShare(text))
+                startActivity(ShareIntentFactory()(text))
             })
             it.open.observe(viewLifecycleOwner, Observer { event ->
                 val text = event?.getContentIfNotHandled() ?: return@Observer
