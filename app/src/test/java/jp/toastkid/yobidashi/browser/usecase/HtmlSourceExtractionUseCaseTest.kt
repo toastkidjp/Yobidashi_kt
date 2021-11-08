@@ -14,7 +14,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
-import jp.toastkid.yobidashi.browser.HtmlSourceExtractionUseCase
 import org.junit.Before
 import org.junit.Test
 
