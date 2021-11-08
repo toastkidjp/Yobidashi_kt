@@ -10,8 +10,10 @@ package jp.toastkid.yobidashi.browser.usecase
 
 import android.webkit.WebView
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Before
@@ -30,7 +32,7 @@ class HtmlSourceExtractionUseCaseTest {
     @Test
     fun test() {
         every { webView.url }.returns("https://www.yahoo.co.jp")
-        every { webView.evaluateJavascript(any(), any()) }.answers { Unit }
+        every { webView.evaluateJavascript(any(), any()) }.just(Runs)
 
         HtmlSourceExtractionUseCase().invoke(webView, mockk())
 
