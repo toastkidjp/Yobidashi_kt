@@ -46,7 +46,7 @@ class SearchFragmentFactoryUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testNormalCase() {
         searchFragmentFactoryUseCase.invoke("title" to "https://www.yahoo.co.jp")
 
         verify(exactly = 1) { anyConstructed<SearchQueryExtractor>().invoke(any<String>()) }
