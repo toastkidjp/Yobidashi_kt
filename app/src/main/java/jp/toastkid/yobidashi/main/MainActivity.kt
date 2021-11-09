@@ -424,9 +424,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
             when (val fragment = findFragment()) {
                 is BrowserFragment -> {
                     val titleAndUrl = fragment.getTitleAndUrl()
-                    ViewModelProvider(this)
-                        .get(ContentViewModel::class.java)
-                        .nextFragment(SearchFragmentFactoryUseCase().invoke(titleAndUrl))
+                    replaceFragment(SearchFragmentFactoryUseCase().invoke(titleAndUrl))
                 }
                 else ->
                     contentViewModel?.nextFragment(SearchFragment::class.java)
