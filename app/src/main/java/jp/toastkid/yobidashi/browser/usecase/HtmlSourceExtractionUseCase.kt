@@ -16,6 +16,9 @@ import androidx.annotation.UiThread
 
 class HtmlSourceExtractionUseCase {
 
+    /**
+     * WebView.evaluateJavascript should be called from UI thread.
+     */
     @UiThread
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     operator fun invoke(webView: WebView?, callback: ValueCallback<String>) {
