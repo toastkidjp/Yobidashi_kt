@@ -27,12 +27,12 @@ class HtmlSourceExtractionUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+        every { webView.evaluateJavascript(any(), any()) }.just(Runs)
     }
 
     @Test
     fun test() {
         every { webView.url }.returns("https://www.yahoo.co.jp")
-        every { webView.evaluateJavascript(any(), any()) }.just(Runs)
 
         HtmlSourceExtractionUseCase().invoke(webView, mockk())
 
@@ -42,7 +42,6 @@ class HtmlSourceExtractionUseCaseTest {
     @Test
     fun testExceptingCase() {
         every { webView.url }.returns("https://accounts.google.com/signin")
-        every { webView.evaluateJavascript(any(), any()) }.just(Runs)
 
         HtmlSourceExtractionUseCase().invoke(webView, mockk())
 
