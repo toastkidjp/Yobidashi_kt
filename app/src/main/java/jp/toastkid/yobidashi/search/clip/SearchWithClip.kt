@@ -90,7 +90,6 @@ class SearchWithClip(
     /**
      * Open search result or url.
      *
-     * @param context
      * @param text
      */
     private fun searchOrBrowse(text: CharSequence) {
