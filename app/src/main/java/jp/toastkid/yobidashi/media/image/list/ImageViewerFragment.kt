@@ -141,7 +141,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         parentFragmentManager.setFragmentResultListener(
             "excluding",
             viewLifecycleOwner,
-            { _, results ->
+            { _, _ ->
                 refreshContent()
             }
         )
