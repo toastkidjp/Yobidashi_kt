@@ -55,6 +55,7 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
+import jp.toastkid.yobidashi.editor.usecase.RestoreContentUseCase
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.MainActivity
@@ -409,17 +410,12 @@ class EditorFragment :
     }
 
     fun restore() {
-        if (contentHolderService.isBlank()) {
-            contentViewModel?.snackShort("Backup is empty.")
-            return
-        }
-
-        val selectionStart = binding.editorInput.selectionStart
-        val contentStr = contentHolderService.getContent()
-        setContentText(contentStr)
-        binding.editorInput.setSelection(
-            if (contentStr.length <= selectionStart) contentStr.length else selectionStart
-        )
+        RestoreContentUseCase(
+            contentHolderService,
+            contentViewModel,
+            binding.editorInput,
+            ::setContentText
+        ).invoke()
     }
 
     /**
