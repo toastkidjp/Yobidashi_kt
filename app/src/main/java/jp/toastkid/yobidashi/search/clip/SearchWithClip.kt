@@ -20,6 +20,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
  * @param parent Use for showing snackbar.
  * @param colorPair Use for showing snackbar.
  * @param browserViewModel [BrowserViewModel].
+ * @param preferenceApplier [PreferenceApplier]
  *
  * @author toastkidjp
  */
