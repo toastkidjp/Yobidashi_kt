@@ -415,8 +415,11 @@ class EditorFragment :
         }
 
         val selectionStart = binding.editorInput.selectionStart
-        setContentText(contentHolderService.getContent())
-        binding.editorInput.setSelection(selectionStart)
+        val contentStr = contentHolderService.getContent()
+        setContentText(contentStr)
+        binding.editorInput.setSelection(
+            if (contentStr.length <= selectionStart) contentStr.length else selectionStart
+        )
     }
 
     /**
