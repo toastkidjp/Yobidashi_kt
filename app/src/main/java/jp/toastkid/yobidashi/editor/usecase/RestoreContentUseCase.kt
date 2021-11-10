@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.editor.usecase
 
 import android.widget.EditText
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.ContentHolderService
 
 class RestoreContentUseCase(
@@ -21,7 +22,7 @@ class RestoreContentUseCase(
 
     operator fun invoke() {
         if (contentHolderService.isBlank()) {
-            contentViewModel?.snackShort("Backup is empty.")
+            contentViewModel?.snackShort(editorInput.context.getString(R.string.message_backup_is_empty))
             return
         }
 
