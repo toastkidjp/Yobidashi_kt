@@ -100,7 +100,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 { findCurrentImageView()?.drawable?.toBitmap() }
         )
 
-        viewModel.bitmap.observe(this, Observer {
+        viewModel.bitmap.observe(this, {
             findCurrentImageView()?.setImageBitmap(it)
         })
 
