@@ -66,4 +66,17 @@ class RestoreContentUseCaseTest {
         verify(exactly = 1) { contentHolderService.isBlank() }
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
     }
+
+    @Test
+    fun test() {
+        every { contentHolderService.getContent() }.returns("question")
+
+        restoreContentUseCase.invoke()
+
+        verify(exactly = 1) { contentHolderService.isBlank() }
+        verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 1) { setContentText.invoke(any()) }
+        verify(exactly = 1) { editorInput.setSelection(any()) }
+    }
+
 }
