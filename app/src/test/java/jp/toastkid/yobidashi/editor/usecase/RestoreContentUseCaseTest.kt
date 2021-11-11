@@ -68,7 +68,7 @@ class RestoreContentUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testLackOfContentLengthCase() {
         every { contentHolderService.getContent() }.returns("question")
 
         restoreContentUseCase.invoke()
