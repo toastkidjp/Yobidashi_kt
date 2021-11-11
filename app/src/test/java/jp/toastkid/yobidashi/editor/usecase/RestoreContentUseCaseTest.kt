@@ -81,7 +81,7 @@ class RestoreContentUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testNormalCase() {
         restoreContentUseCase.invoke()
 
         verify(exactly = 1) { contentHolderService.isBlank() }
