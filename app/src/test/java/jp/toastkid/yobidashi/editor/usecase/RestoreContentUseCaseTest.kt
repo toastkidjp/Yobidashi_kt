@@ -69,14 +69,15 @@ class RestoreContentUseCaseTest {
 
     @Test
     fun testLackOfContentLengthCase() {
-        every { contentHolderService.getContent() }.returns("question")
+        val holdingContent = "question"
+        every { contentHolderService.getContent() }.returns(holdingContent)
 
         restoreContentUseCase.invoke()
 
         verify(exactly = 1) { contentHolderService.isBlank() }
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 1) { setContentText.invoke(any()) }
-        verify(exactly = 1) { editorInput.setSelection("question".length) }
+        verify(exactly = 1) { editorInput.setSelection(holdingContent.length) }
     }
 
 }
