@@ -22,7 +22,7 @@ class RestoreContentUseCase(
 
     operator fun invoke() {
         if (contentHolderService.isBlank()) {
-            contentViewModel?.snackShort(editorInput.context.getString(R.string.message_backup_is_empty))
+            contentViewModel?.snackShort(R.string.message_backup_is_empty)
             return
         }
 
