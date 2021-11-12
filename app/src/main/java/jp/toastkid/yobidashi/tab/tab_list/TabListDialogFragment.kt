@@ -194,16 +194,8 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
     fun clearTabs(v: View) {
         val context = v.context
         if (context is MainActivity) {
-            val fragmentManager = context.supportFragmentManager
-            fragmentManager.setFragmentResultListener("clear_tabs", context, { key, result ->
-                if (result.getBoolean(key).not()) {
-                    return@setFragmentResultListener
-                }
-                context.onClickClear()
-            })
-
             ConfirmDialogFragment.show(
-                fragmentManager,
+                parentFragmentManager,
                 getString(R.string.title_clear_all_tabs),
                 getString(R.string.confirm_clear_all_settings),
                 "clear_tabs"
