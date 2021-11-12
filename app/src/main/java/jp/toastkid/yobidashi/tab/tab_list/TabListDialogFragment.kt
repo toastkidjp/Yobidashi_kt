@@ -114,13 +114,11 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        parentFragmentManager.clearFragmentResultListener("clear_tabs")
         callback?.onCloseTabListDialogFragment(lastTabId)
     }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        parentFragmentManager.clearFragmentResultListener("clear_tabs")
         callback?.onCloseTabListDialogFragment(lastTabId)
     }
 

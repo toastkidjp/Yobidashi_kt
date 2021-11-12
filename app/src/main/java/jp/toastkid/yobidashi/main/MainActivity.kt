@@ -742,6 +742,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
         requestPermissionForOpenPdfTab.unregister()
         requestPermissionForOpenEditorTab.unregister()
         downloadPermissionRequestLauncher.unregister()
+        supportFragmentManager.clearFragmentResultListener("clear_tabs")
         super.onDestroy()
     }
 
