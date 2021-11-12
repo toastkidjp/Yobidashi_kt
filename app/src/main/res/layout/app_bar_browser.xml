@@ -146,6 +146,7 @@
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> fragment.tabList()}"
             android:onLongClick="@{view -> fragment.openNewTab()}"
+            android:contentDescription="@string/tab_list"
             >
             <ImageView
                 android:id="@+id/tab_icon"
