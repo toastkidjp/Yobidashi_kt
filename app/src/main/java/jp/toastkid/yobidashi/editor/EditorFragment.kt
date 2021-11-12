@@ -69,10 +69,10 @@ import java.util.Calendar
  * @author toastkidjp
  */
 class EditorFragment :
-        Fragment(),
-        TabUiFragment,
-        CommonFragmentAction,
-        ContentScrollable
+    Fragment(),
+    TabUiFragment,
+    CommonFragmentAction,
+    ContentScrollable
 {
 
     private lateinit var binding: FragmentEditorBinding
