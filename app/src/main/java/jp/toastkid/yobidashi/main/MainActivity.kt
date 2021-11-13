@@ -635,7 +635,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
     }
 
     // TODO make private
-    fun onClickClear() {
+    private fun onClickClear() {
         tabs.clear()
         onEmptyTabs()
     }
