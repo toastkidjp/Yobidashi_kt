@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -195,7 +196,10 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
             ConfirmDialogFragment.show(
                 parentFragmentManager,
                 getString(R.string.title_clear_all_tabs),
-                getString(R.string.confirm_clear_all_settings),
+                Html.fromHtml(
+                    getString(R.string.confirm_clear_all_settings),
+                    Html.FROM_HTML_MODE_COMPACT
+                ),
                 "clear_tabs"
             )
         }
