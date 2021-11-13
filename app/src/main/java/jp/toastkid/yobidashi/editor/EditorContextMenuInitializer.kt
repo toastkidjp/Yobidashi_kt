@@ -12,7 +12,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.EditText
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -29,17 +28,14 @@ class EditorContextMenuInitializer {
     
     operator fun invoke(
         editText: EditText?,
-        speechMaker: SpeechMaker?
+        speechMaker: SpeechMaker?,
+        viewModelProvider: ViewModelProvider
     ) {
         if (editText == null) {
             return
         }
 
         val context = editText.context
-
-        val viewModelProvider = (context as? FragmentActivity)?.let { fragmentActivity ->
-            ViewModelProvider(fragmentActivity)
-        }
 
         val browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
         val contentViewModel = viewModelProvider?.get(ContentViewModel::class.java)
