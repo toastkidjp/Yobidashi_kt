@@ -37,7 +37,7 @@ class EditorContextMenuInitializer {
 
         val context = editText.context
 
-        val browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
+        val browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
         val contentViewModel = viewModelProvider?.get(ContentViewModel::class.java)
 
         val menuActionInvokerUseCase =
