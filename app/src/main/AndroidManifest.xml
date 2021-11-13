@@ -95,15 +95,6 @@
             </intent-filter>
         </activity-alias>
 
-        <activity
-            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-            />
-        <activity
-            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            />
-
         <service android:name=".media.music.MediaPlayerService"
             android:exported="false"
             >

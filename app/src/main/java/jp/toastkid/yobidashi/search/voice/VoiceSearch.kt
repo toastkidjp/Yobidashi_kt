@@ -64,10 +64,5 @@ class VoiceSearch {
 
     companion object {
 
-        /**
-         * Request Code.
-         */
-        const val REQUEST_CODE: Int = 19001
-
     }
 }
