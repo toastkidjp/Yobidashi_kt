@@ -70,4 +70,13 @@ class EditorContextMenuInitializerTest {
         verify(exactly = 0) { editText.context }
     }
 
+    @Test
+    fun test() {
+        editorContextMenuInitializer.invoke(editText, speechMaker, viewModelProvider)
+
+        verify(exactly = 1) { editText.context }
+        verify(exactly = 1) { editText.customInsertionActionModeCallback = any() }
+        verify(exactly = 1) { editText.customSelectionActionModeCallback = any() }
+    }
+
 }
