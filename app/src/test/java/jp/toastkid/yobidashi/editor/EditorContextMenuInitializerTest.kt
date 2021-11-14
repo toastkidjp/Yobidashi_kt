@@ -71,7 +71,7 @@ class EditorContextMenuInitializerTest {
     }
 
     @Test
-    fun test() {
+    fun testCompleteInitializing() {
         editorContextMenuInitializer.invoke(editText, speechMaker, viewModelProvider)
 
         verify(exactly = 1) { editText.context }
