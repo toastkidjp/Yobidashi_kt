@@ -40,19 +40,13 @@ class EditorContextMenuInitializerTest {
     @MockK
     private lateinit var viewModelProvider: ViewModelProvider
 
-    @MockK
-    private lateinit var browserViewModel: BrowserViewModel
-
-    @MockK
-    private lateinit var contentViewModel: ContentViewModel
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
         every { editText.context }.returns(mockk())
-        every { viewModelProvider.get(BrowserViewModel::class.java) }.returns(browserViewModel)
-        every { viewModelProvider.get(ContentViewModel::class.java) }.returns(contentViewModel)
+        every { viewModelProvider.get(BrowserViewModel::class.java) }.returns(mockk())
+        every { viewModelProvider.get(ContentViewModel::class.java) }.returns(mockk())
 
         every { editText.customInsertionActionModeCallback = any() }.just(Runs)
         every { editText.customSelectionActionModeCallback = any() }.just(Runs)
