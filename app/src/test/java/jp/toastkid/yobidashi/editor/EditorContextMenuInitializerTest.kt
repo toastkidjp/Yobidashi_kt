@@ -64,7 +64,7 @@ class EditorContextMenuInitializerTest {
     }
 
     @Test
-    fun testInvoke() {
+    fun testEditTextIsNullCase() {
         editorContextMenuInitializer.invoke(null, speechMaker, viewModelProvider)
 
         verify(exactly = 0) { editText.context }
