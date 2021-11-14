@@ -147,7 +147,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
      * @param category Search category
      * @param query    Search query
      */
-    private fun startSearch(category: jp.toastkid.search.SearchCategory, query: String) {
+    private fun startSearch(category: SearchCategory, query: String) {
         activity?.let {
             SearchAction(it, category.name, query).invoke()
         }
