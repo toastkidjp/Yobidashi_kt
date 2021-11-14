@@ -24,7 +24,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -88,7 +87,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val viewModel =
                 ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
         binding.moduleEdit.colorFilterUseCase = ColorFilterUseCase(viewModel)
-        viewModel.colorFilter.observe(this, Observer {
+        viewModel.colorFilter.observe(this, {
             findCurrentImageView()?.colorFilter = it
         })
 
