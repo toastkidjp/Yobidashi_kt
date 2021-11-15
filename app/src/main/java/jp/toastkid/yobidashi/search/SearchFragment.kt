@@ -40,31 +40,16 @@ import jp.toastkid.lib.view.EditTextColorSetter
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarSearchBinding
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
-import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
-import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
-import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
-import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
-import jp.toastkid.yobidashi.search.trend.HourlyTrendModule
-import jp.toastkid.yobidashi.search.url.UrlModule
-import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
+import jp.toastkid.yobidashi.search.usecase.ContentSwitcherUseCase
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -78,33 +63,6 @@ class SearchFragment : Fragment() {
      * View binder.
      */
     private var binding: FragmentSearchBinding? = null
-
-    /**
-     * Favorite search module.
-     */
-    private var favoriteModule: FavoriteSearchModule? = null
-
-    /**
-     * History module.
-     */
-    private var historyModule: HistoryModule? = null
-
-    /**
-     * Suggestion module.
-     */
-    private var suggestionModule: SuggestionModule? = null
-
-    /**
-     * Current URL module.
-     */
-    private var urlModule: UrlModule? = null
-
-    /**
-     * Suggestion module.
-     */
-    private var urlSuggestionModule: UrlSuggestionModule? = null
-
-    private var hourlyTrendModule: HourlyTrendModule? = null
 
     /**
      * Does use voice search?
@@ -123,19 +81,15 @@ class SearchFragment : Fragment() {
 
     private var currentUrl: String? = null
 
-    /**
-     * Use for handling input action.
-     */
-    private val channel = Channel<String>()
+    private var contentSwitcherUseCase: ContentSwitcherUseCase? = null
 
     /**
      * Disposables.
      */
     private val disposables: Job by lazy { Job() }
 
-    private val voiceSearchLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-        { activityResult ->
+    private val voiceSearchLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
             if (activityResult.resultCode != Activity.RESULT_OK) {
                 return@registerForActivityResult
             }
@@ -143,19 +97,18 @@ class SearchFragment : Fragment() {
             if (result == null || result.size == 0) {
                 return@registerForActivityResult
             }
-            suggestionModule?.clear()
-            suggestionModule?.addAll(result)
-            suggestionModule?.show()
+            binding?.suggestionCard?.clear()
+            binding?.suggestionCard?.addAll(result)
+            binding?.suggestionCard?.show()
 
             CoroutineScope(Dispatchers.Default).launch(disposables) {
                 delay(200)
                 withContext(Dispatchers.Main) {
-                    val top = binding?.suggestionModule?.root?.top ?: 0
+                    val top = binding?.suggestionCard?.top ?: 0
                     binding?.scroll?.smoothScrollTo(0, top)
                 }
             }
         }
-    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
@@ -188,16 +141,9 @@ class SearchFragment : Fragment() {
             contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
         }
 
-        initFavoriteModule()
-
-        initHistoryModule()
-
         applyColor()
 
-        urlModule = UrlModule(
-                binding?.urlModule as ModuleSearchUrlBinding,
-                this::setTextAndMoveCursorToEnd
-        )
+        binding?.urlCard?.setInsertAction(this::setTextAndMoveCursorToEnd)
 
         setListenerForKeyboardHiding()
 
@@ -218,8 +164,12 @@ class SearchFragment : Fragment() {
         val viewModel = ViewModelProvider(this).get(SearchFragmentViewModel::class.java)
         viewModel.search
                 .observe(viewLifecycleOwner, Observer { event ->
-                    val pair = event?.getContentIfNotHandled() ?: return@Observer
-                    search(extractCurrentSearchCategory(), pair.first, pair.second)
+                    val searchEvent = event?.getContentIfNotHandled() ?: return@Observer
+                    search(
+                        searchEvent.category ?: extractCurrentSearchCategory(),
+                        searchEvent.query,
+                        searchEvent.background
+                    )
                 })
         viewModel.putQuery
                 .observe(viewLifecycleOwner, Observer { event ->
@@ -227,21 +177,12 @@ class SearchFragment : Fragment() {
                     setTextAndMoveCursorToEnd(query)
                 })
 
-        suggestionModule = SuggestionModule(
-                binding?.suggestionModule as ModuleSearchSuggestionBinding,
-                viewModel
-        )
+        binding?.favoriteSearchCard?.setViewModel(viewModel)
+        binding?.suggestionCard?.setViewModel(viewModel)
+        binding?.searchHistoryCard?.setViewModel(viewModel)
+        binding?.urlSuggestionCard?.setViewModel(viewModel)
 
-        urlSuggestionModule = UrlSuggestionModule(
-                binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
-                viewModel
-        )
-
-        hourlyTrendModule = HourlyTrendModule(
-                binding?.hourlyTrendModule,
-                viewModel
-        )
-        hourlyTrendModule?.request()
+        binding?.hourlyTrendCard?.setViewModel(viewModel)
 
         val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
         setInitialQuery(query)
@@ -252,7 +193,7 @@ class SearchFragment : Fragment() {
         headerBinding?.searchInput?.let { input ->
             input.setText(query)
             input.selectAll()
-            suggest(query ?: "")
+            contentSwitcherUseCase?.invoke(query ?: "")
         }
     }
 
@@ -320,19 +261,6 @@ class SearchFragment : Fragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun initFavoriteModule() {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            favoriteModule = withContext(Dispatchers.Default) {
-                FavoriteSearchModule(
-                        binding?.favoriteModule as ModuleSearchFavoriteBinding,
-                        { fav -> search(fav.category ?: "", fav.query ?: "") },
-                        this@SearchFragment::hideKeyboard,
-                        { setTextAndMoveCursorToEnd("${it.query} ") }
-                )
-            }
-        }
-    }
-
     private fun setTextAndMoveCursorToEnd(text: String) {
         headerBinding?.searchInput?.also {
             it.setText(text)
@@ -340,40 +268,22 @@ class SearchFragment : Fragment() {
         }
     }
 
-    /**
-     * Initialize history module asynchronously.
-     */
-    @SuppressLint("SetTextI18n")
-    private fun initHistoryModule() {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            historyModule = withContext(Dispatchers.Default) {
-                HistoryModule(
-                        binding?.historyModule as ModuleSearchHistoryBinding,
-                        { history -> search(history.category as String, history.query as String) }, // TODO use elvis
-                        { searchHistory ->
-                            headerBinding?.searchInput?.setText("${searchHistory.query} ")
-                            headerBinding?.searchInput?.setSelection(
-                                    headerBinding?.searchInput?.text.toString().length)
-                        }
-                )
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
 
-        suggestionModule?.enable = preferenceApplier.isEnableSuggestion
-        historyModule?.enable = preferenceApplier.isEnableSearchHistory
-        favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
-        urlModule?.enable = preferenceApplier.isEnableUrlModule()
-        urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
-        hourlyTrendModule?.setEnable(preferenceApplier.isEnableTrendModule())
+        binding?.suggestionCard?.isEnabled = preferenceApplier.isEnableSuggestion
+        binding?.searchHistoryCard?.isEnabled = preferenceApplier.isEnableSearchHistory
+        binding?.favoriteSearchCard?.isEnabled = preferenceApplier.isEnableFavoriteSearch
+        binding?.urlCard?.isEnabled = preferenceApplier.isEnableUrlModule()
+        binding?.urlSuggestionCard?.isEnabled = preferenceApplier.isEnableViewHistory
+        binding?.hourlyTrendCard?.isEnabled = preferenceApplier.isEnableTrendModule()
+
+        binding?.hourlyTrendCard?.request()
 
         val headerView = headerBinding?.root ?: return
         appBarViewModel?.replace(headerView)
 
-        urlModule?.onResume()
+        binding?.urlCard?.onResume()
 
         showKeyboard()
     }
@@ -390,7 +300,7 @@ class SearchFragment : Fragment() {
                             ?: return@let
 
             input.postDelayed(
-                    { inputMethodManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT) },
+                    { inputMethodManager.showSoftInput(input, InputMethodManager.SHOW_FORCED) },
                     100L
             )
         }
@@ -412,49 +322,18 @@ class SearchFragment : Fragment() {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    CoroutineScope(Dispatchers.Default).launch(disposables) { channel.send(s.toString()) }
+                    contentSwitcherUseCase?.send(s.toString())
                 }
 
                 override fun afterTextChanged(s: Editable) = Unit
             })
 
-            invokeSuggestion()
+            contentSwitcherUseCase = ContentSwitcherUseCase(
+                binding, preferenceApplier, this::setActionButtonState, currentTitle, currentUrl
+            )
+
+            contentSwitcherUseCase?.withDebounce()
         }
-    }
-
-    private fun invokeSuggestion() {
-        CoroutineScope(Dispatchers.Default).launch(disposables) {
-            channel.receiveAsFlow()
-                    .distinctUntilChanged()
-                    .debounce(400)
-                    .collect {
-                        withContext(Dispatchers.Main) { suggest(it) }
-                    }
-        }
-    }
-
-    private fun suggest(key: String) {
-        if (key.isEmpty()|| key == currentUrl) {
-            urlModule?.switch(currentTitle, currentUrl)
-        } else {
-            urlModule?.hide()
-        }
-
-        setActionButtonState(key.isEmpty())
-
-        if (preferenceApplier.isEnableSearchHistory) {
-            historyModule?.query(key)
-        }
-
-        favoriteModule?.query(key)
-        urlSuggestionModule?.query(key)
-
-        if (preferenceApplier.isDisableSuggestion) {
-            suggestionModule?.clear()
-            return
-        }
-
-        suggestionModule?.request(key)
     }
 
     /**
@@ -559,11 +438,13 @@ class SearchFragment : Fragment() {
     override fun onDetach() {
         hideKeyboard()
         disposables.cancel()
-        channel.cancel()
-        favoriteModule?.dispose()
-        historyModule?.dispose()
-        suggestionModule?.dispose()
-        hourlyTrendModule?.dispose()
+        contentSwitcherUseCase?.dispose()
+        binding?.favoriteSearchCard?.dispose()
+        binding?.searchHistoryCard?.dispose()
+        binding?.suggestionCard?.dispose()
+        binding?.hourlyTrendCard?.dispose()
+        binding?.urlSuggestionCard?.dispose()
+        binding?.urlCard?.dispose()
         voiceSearchLauncher.unregister()
         super.onDetach()
     }

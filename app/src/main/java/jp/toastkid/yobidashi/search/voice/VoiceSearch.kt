@@ -62,7 +62,4 @@ class VoiceSearch {
     private fun makeGoogleAppInstallIntent() =
         GooglePlayIntentFactory()("com.google.android.googlequicksearchbox")
 
-    companion object {
-
-    }
 }

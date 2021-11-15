@@ -21,17 +21,17 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class ShareIntentFactoryTest {
+class UrlShareIntentFactoryTest {
 
     @InjectMockKs
-    private lateinit var intentFactory: ShareIntentFactory
+    private lateinit var intentFactory: UrlShareIntentFactory
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
         mockkConstructor(Intent::class)
-        every { anyConstructed<Intent>().setAction(any()) }.returns(mockk())
+        every { anyConstructed<Intent>().addFlags(any()) }.returns(mockk())
         every { anyConstructed<Intent>().setType(any()) }.returns(mockk())
         every { anyConstructed<Intent>().putExtra(any(), any<String>()) }.returns(mockk())
 
@@ -45,23 +45,13 @@ class ShareIntentFactoryTest {
     }
 
     @Test
-    fun testInvoke() {
-        intentFactory.invoke("jp.toastkid.yobidashi", "test-subject")
+    fun invoke() {
+        intentFactory.invoke("https://www.yahoo.co.jp")
 
-        verify(exactly = 1) { anyConstructed<Intent>().action = any() }
         verify(exactly = 1) { anyConstructed<Intent>().type = any() }
+        verify(exactly = 1) { anyConstructed<Intent>().addFlags(any()) }
         verify(exactly = 1) { anyConstructed<Intent>().putExtra(Intent.EXTRA_TEXT, any<String>()) }
         verify(exactly = 1) { anyConstructed<Intent>().putExtra(Intent.EXTRA_SUBJECT, any<String>()) }
-    }
-
-    @Test
-    fun testWithoutSubjectCase() {
-        intentFactory.invoke("jp.toastkid.yobidashi")
-
-        verify(exactly = 1) { anyConstructed<Intent>().action = any() }
-        verify(exactly = 1) { anyConstructed<Intent>().type = any() }
-        verify(exactly = 1) { anyConstructed<Intent>().putExtra(Intent.EXTRA_TEXT, any<String>()) }
-        verify(exactly = 0) { anyConstructed<Intent>().putExtra(Intent.EXTRA_SUBJECT, any<String>()) }
     }
 
 }

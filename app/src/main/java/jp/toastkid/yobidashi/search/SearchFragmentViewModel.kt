@@ -12,19 +12,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
+import jp.toastkid.search.value.SearchEvent
 
 class SearchFragmentViewModel : ViewModel() {
 
-    private val _search = MutableLiveData<Event<Pair<String, Boolean>>>()
+    private val _search = MutableLiveData<Event<SearchEvent>>()
 
-    val search: LiveData<Event<Pair<String, Boolean>>> = _search
+    val search: LiveData<Event<SearchEvent>> = _search
 
     fun search(query: String) {
-        _search.postValue(Event(query to false))
+        _search.postValue(Event(SearchEvent(query)))
+    }
+
+    fun searchWithCategory(query: String, category: String) {
+        _search.postValue(Event(SearchEvent(query, category)))
     }
 
     fun searchOnBackground(query: String) {
-        _search.postValue(Event(query to true))
+        _search.postValue(Event(SearchEvent(query, background = true)))
     }
 
     private val _putQuery = MutableLiveData<Event<String>>()

@@ -7,8 +7,13 @@
  */
 package jp.toastkid.yobidashi.search.trend
 
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -18,8 +23,8 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.databinding.ModuleSearchHourlyTrendBinding
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.ViewCardHourlyTrendBinding
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,10 +37,15 @@ import java.io.IOException
 /**
  * @author toastkidjp
  */
-class HourlyTrendModule(
-        private val binding: ModuleSearchHourlyTrendBinding?,
-        viewModel: SearchFragmentViewModel
-) {
+class HourlyTrendCardView
+@JvmOverloads
+constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : CardView(context, attrs, defStyleAttr) {
+
+    private var binding: ViewCardHourlyTrendBinding? = null
 
     private val trendApi = TrendApi()
 
@@ -43,13 +53,15 @@ class HourlyTrendModule(
 
     private var lastJob: Job = Job()
 
-    private var enable: Boolean
-
     init {
-        val context = binding?.root?.context
-        enable = if (context == null) false else PreferenceApplier(context).isEnableTrendModule()
+        binding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.view_card_hourly_trend,
+            this,
+            true
+        )
 
-        adapter = Adapter(viewModel)
+        adapter = Adapter()
         binding?.trendItems?.adapter = adapter
         binding?.trendItems?.layoutManager = makeLayoutManager()
 
@@ -67,7 +79,8 @@ class HourlyTrendModule(
 
     fun request() {
         lastJob.cancel()
-        if (!enable) {
+        if (!isEnabled) {
+            isVisible = false
             return
         }
 
@@ -81,15 +94,13 @@ class HourlyTrendModule(
                 }
                 adapter?.replace(trendItems?.take(10))
             }
-            binding?.root?.isVisible = adapter?.isNotEmpty() ?: false
+            isVisible = adapter?.isNotEmpty() ?: false
             adapter?.notifyDataSetChanged()
         }
     }
 
-    fun setEnable(newState: Boolean) {
-        this.enable = newState
-
-        binding?.root?.isVisible = newState
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        adapter?.setViewModel(viewModel)
     }
 
     fun openMore() {
@@ -101,6 +112,7 @@ class HourlyTrendModule(
 
     fun dispose() {
         lastJob.cancel()
+        binding = null
     }
 
     companion object {

@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
-        <variable name="module" type="jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule" />
+        <variable name="module" type="jp.toastkid.yobidashi.search.history.SearchHistoryCardView" />
     </data>
-    <androidx.cardview.widget.CardView
+    <merge
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/search_vertical_margin"
-        app:cardElevation="3dp"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:background="@color/filter_white_bb"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,7 +17,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_favorite_search"
+                android:text="@string/title_search_history"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 />
@@ -32,7 +25,7 @@
                 android:id="@+id/link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/open"
+                android:text="@string/link_open_history"
                 android:textColor="@color/link_blue"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> module.openHistory()}"
@@ -40,12 +33,23 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 />
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/search_favorites"
+                android:id="@+id/search_histories"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:nestedScrollingEnabled="false"
                 app:layout_constraintTop_toBottomOf="@id/link"
+                tools:listitem="@layout/item_search_history"
+                tools:itemCount="3"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_item_height"
+                style="@style/OneLineTextMenu"
+                android:text="@string/title_clear_search_history"
+                android:onClick="@{view -> module.confirmClear()}"
+                app:layout_constraintTop_toBottomOf="@id/search_histories"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </merge>
 </layout>

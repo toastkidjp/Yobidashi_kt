@@ -7,32 +7,42 @@
  */
 package jp.toastkid.yobidashi.search.url
 
-import android.content.Intent
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
+import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import jp.toastkid.lib.color.IconColorFinder
+import jp.toastkid.lib.intent.UrlShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
+import jp.toastkid.yobidashi.databinding.ViewSearchCardUrlBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
  */
-class UrlModule(
-        private val binding: ModuleSearchUrlBinding,
-        private val insert: (String) -> Unit
-) {
+class UrlCardView
+@JvmOverloads
+constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : CardView(context, attrs, defStyleAttr) {
 
-    private val preferenceApplier = PreferenceApplier(binding.root.context)
+    private val preferenceApplier = PreferenceApplier(context)
 
-    var enable: Boolean = true
+    private var binding: ViewSearchCardUrlBinding? = null
+
+    private var insertAction: ((String) -> Unit)? = null
 
     init {
-        binding.module = this
+        val inflater = LayoutInflater.from(context)
+        binding = DataBindingUtil.inflate(inflater, R.layout.view_search_card_url, this, true)
+        binding?.module = this
     }
 
     /**
@@ -51,8 +61,12 @@ class UrlModule(
         )
     }
 
+    fun setInsertAction(action: (String) -> Unit) {
+        insertAction = action
+    }
+
     fun edit() {
-        insert(binding.text.text.toString())
+        insertAction?.invoke(binding?.text?.text.toString())
     }
 
     /**
@@ -61,21 +75,7 @@ class UrlModule(
      * @param view [View]
      */
     fun shareUrl(view: View) {
-        view.context.startActivity(makeShareUrl(getCurrentText()))
-    }
-
-    /**
-     * Make sharing URL intent.
-     *
-     * @param url URL
-     */
-    private fun makeShareUrl(url: String): Intent {
-        val share = Intent(Intent.ACTION_SEND)
-        share.type = "text/plain"
-        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        share.putExtra(Intent.EXTRA_SUBJECT, "Share link")
-        share.putExtra(Intent.EXTRA_TEXT, url)
-        return Intent.createChooser(share, "Share link $url")
+        view.context.startActivity(UrlShareIntentFactory()(getCurrentText()))
     }
 
     /**
@@ -85,7 +85,7 @@ class UrlModule(
      * @param url URL
      */
     fun switch(title: String?, url: String?) =
-            if (url.isNullOrBlank() || !enable) {
+            if (url.isNullOrBlank() || !isEnabled) {
                 clearContent()
                 hide()
             } else {
@@ -98,8 +98,8 @@ class UrlModule(
      * Show this module.
      */
     private fun show() {
-        if (binding.root.visibility == View.GONE && enable) {
-            runOnMainThread { binding.root.visibility = View.VISIBLE }
+        if (this.visibility == View.GONE && isEnabled) {
+            runOnMainThread { this.visibility = View.VISIBLE }
         }
     }
 
@@ -107,27 +107,26 @@ class UrlModule(
      * Hide this module.
      */
     fun hide() {
-        if (binding.root.visibility == View.VISIBLE) {
-            runOnMainThread { binding.root.visibility = View.GONE }
+        if (isVisible) {
+            runOnMainThread { this.visibility = View.GONE }
         }
     }
 
-    /**
-     * Is visible this module visible.
-     */
-    fun isVisible() = binding.root.visibility == View.VISIBLE
-
     fun onResume() {
-        val color = IconColorFinder.from(binding.root).invoke()
-        binding.clip.setColorFilter(color)
-        binding.share.setColorFilter(color)
-        binding.edit.setColorFilter(color)
+        val color = IconColorFinder.from(this).invoke()
+        binding?.clip?.setColorFilter(color)
+        binding?.share?.setColorFilter(color)
+        binding?.edit?.setColorFilter(color)
     }
 
-    private fun getCurrentText() = binding.text.text.toString()
+    fun dispose() {
+        binding = null
+    }
+
+    private fun getCurrentText() = binding?.text?.text.toString()
 
     private fun setTitle(title: String?) {
-        binding.title.text = title
+        binding?.title?.text = title
     }
 
     /**
@@ -136,15 +135,14 @@ class UrlModule(
      * @param link Link URL(string)
      */
     private fun setLink(link: String) {
-        binding.text.text = link
+        binding?.text?.text = link
     }
 
     private fun clearContent() {
-        binding.title.text = ""
-        binding.text.text = ""
+        binding?.title?.text = ""
+        binding?.text?.text = ""
     }
 
-    private fun runOnMainThread(action: () -> Unit) =
-            CoroutineScope(Dispatchers.Main).launch { action() }
+    private fun runOnMainThread(action: () -> Unit) = post { action() }
 
 }

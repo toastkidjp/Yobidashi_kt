@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import jp.toastkid.lib.R
 import jp.toastkid.lib.Urls
 import java.io.File
 import java.util.Locale
@@ -45,11 +47,11 @@ class PreferenceApplier(private val context: Context) {
             context.getSharedPreferences(javaClass.canonicalName, Context.MODE_PRIVATE)
 
     var color: Int
-        get() = preferences.getInt(Key.BG_COLOR.name, Color.BLUE)
+        get() = preferences.getInt(Key.BG_COLOR.name, ContextCompat.getColor(context, R.color.colorPrimaryDark))
         set(color) = preferences.edit().putInt(Key.BG_COLOR.name, color).apply()
 
     var fontColor: Int
-        get() = preferences.getInt(Key.FONT_COLOR.name, Color.WHITE)
+        get() = preferences.getInt(Key.FONT_COLOR.name, ContextCompat.getColor(context, R.color.default_text_color))
         set(color) = preferences.edit().putInt(Key.FONT_COLOR.name, color).apply()
 
     fun colorPair(): ColorPair = ColorPair(color, fontColor)

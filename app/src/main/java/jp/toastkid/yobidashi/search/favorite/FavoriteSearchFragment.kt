@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import jp.toastkid.yobidashi.search.favorite.usecase.ClearItemsUseCase
 import kotlinx.coroutines.Job
 
@@ -76,9 +78,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
         adapter = ModuleAdapter(
                 fragmentActivity,
                 repository,
-                { startSearch(jp.toastkid.search.SearchCategory.findByCategory(it.category), it.query ?: "") },
                 { },
-                { }
         )
 
         binding?.favoriteSearchView?.let {
@@ -114,8 +114,8 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel =
-                ViewModelProvider(this).get(FavoriteSearchFragmentViewModel::class.java)
+        val viewModelProvider = ViewModelProvider(this)
+        val viewModel = viewModelProvider.get(FavoriteSearchFragmentViewModel::class.java)
         viewModel.reload.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled() ?: return@observe
             adapter?.refresh()
@@ -123,6 +123,13 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
         viewModel.clear.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled() ?: return@observe
             clear()
+        })
+
+        val searchFragmentViewModel = viewModelProvider.get(SearchFragmentViewModel::class.java)
+        adapter?.setViewModel(searchFragmentViewModel)
+        searchFragmentViewModel.search.observe(viewLifecycleOwner, {
+            val event = it.getContentIfNotHandled() ?: return@observe
+            startSearch(SearchCategory.findByCategory(event.category), event.query ?: "")
         })
     }
 

@@ -15,6 +15,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,9 +39,7 @@ import kotlin.math.min
 internal class ModuleAdapter(
         context: Context,
         private val repository: SearchHistoryRepository,
-        private val onClick: (SearchHistory) -> Unit,
         private val onVisibilityChanged: (Boolean) -> Unit,
-        private val onClickAdd: (SearchHistory) -> Unit,
         private val useAddition: Boolean = true,
         private val maxItemCount: Int = -1
 ) : RecyclerView.Adapter<ViewHolder>(), Removable {
@@ -54,6 +53,8 @@ internal class ModuleAdapter(
      * Selected items.
      */
     private val selected: MutableList<SearchHistory> = ArrayList(5)
+
+    private var viewModel: SearchFragmentViewModel? = null
 
     @ColorInt
     private var iconColor = Color.TRANSPARENT
@@ -75,12 +76,17 @@ internal class ModuleAdapter(
         )
         holder.itemView.setOnClickListener {
             try {
-                onClick(searchHistory)
+                val query = searchHistory.query ?: return@setOnClickListener
+                val category = searchHistory.category ?: return@setOnClickListener
+                viewModel?.searchWithCategory(query, category)
             } catch (e: Exception) {
                 Timber.e(e)
             }
         }
-        holder.setOnClickAdd(searchHistory, onClickAdd)
+        holder.setOnClickAdd(searchHistory, {
+            val query = it.query ?: return@setOnClickAdd
+            viewModel?.putQuery(query)
+        })
 
         holder.setOnClickDelete { remove(searchHistory) }
 
@@ -200,6 +206,10 @@ internal class ModuleAdapter(
      */
     fun clear() {
         selected.clear()
+    }
+
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        this.viewModel = viewModel
     }
 
     /**

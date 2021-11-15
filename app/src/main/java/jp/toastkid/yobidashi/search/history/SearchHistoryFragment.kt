@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -18,6 +19,7 @@ import jp.toastkid.yobidashi.databinding.FragmentSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import jp.toastkid.yobidashi.search.history.usecase.ClearItemsUseCase
 
 /**
@@ -50,9 +52,6 @@ class SearchHistoryFragment : Fragment() {
         adapter = ModuleAdapter(
                 context,
                 DatabaseFinder().invoke(context).searchHistoryRepository(),
-                { SearchAction(context, it.category
-                        ?: "", it.query ?: "").invoke()},
-                { },
                 { },
                 false
         )
@@ -80,6 +79,18 @@ class SearchHistoryFragment : Fragment() {
         )
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val viewModel = ViewModelProvider(this).get(SearchFragmentViewModel::class.java)
+        viewModel.search.observe(viewLifecycleOwner, {
+            val event = it.getContentIfNotHandled() ?: return@observe
+            SearchAction(view.context, event.category
+                ?: "", event.query ?: "").invoke()
+        })
+        adapter.setViewModel(viewModel)
     }
 
     override fun onResume() {

@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.search.suggestion
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -13,20 +12,19 @@ import jp.toastkid.yobidashi.search.SearchFragmentViewModel
  * Suggest list adapter.
  *
  * @param layoutInflater Layout inflater
- * @param queryPutter putting function of query
- * @param suggestionsCallback Using selected suggest action
  *
  * @author toastkidjp
  */
 internal class Adapter (
-        private val layoutInflater: LayoutInflater,
-        private val viewModel: SearchFragmentViewModel
+        private val layoutInflater: LayoutInflater
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /**
      * Suggestion items.
      */
     private val suggestions: MutableList<String> = mutableListOf()
+
+    private var viewModel: SearchFragmentViewModel? = null
 
     /**
      * Clear suggestions.
@@ -57,14 +55,18 @@ internal class Adapter (
         val item = suggestions[position]
         holder.setText(item)
         holder.itemView.setOnClickListener {
-            viewModel.putQuery(item)
-            viewModel.search(item)
+            viewModel?.putQuery(item)
+            viewModel?.search(item)
         }
         holder.itemView.setOnLongClickListener {
-            viewModel.searchOnBackground(item)
+            viewModel?.searchOnBackground(item)
             true
         }
-        holder.setOnClickAdd(View.OnClickListener{ viewModel.putQuery("$item ") })
+        holder.setOnClickAdd { viewModel?.putQuery("$item ") }
+    }
+
+    fun setViewModel(viewModel: SearchFragmentViewModel) {
+        this.viewModel = viewModel
     }
 
     companion object {
