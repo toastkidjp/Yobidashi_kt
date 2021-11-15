@@ -59,9 +59,9 @@ import kotlinx.coroutines.launch
  * @author toastkidjp
  */
 class BrowserFragment : Fragment(),
-        OnBackCloseableTabUiFragment,
-        CommonFragmentAction,
-        ContentScrollable
+    OnBackCloseableTabUiFragment,
+    CommonFragmentAction,
+    ContentScrollable
 {
 
     /**
