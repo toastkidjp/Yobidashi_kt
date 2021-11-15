@@ -84,7 +84,7 @@ class MenuUseCase(
             }
             Menu.OVERLAY_COLOR_FILTER-> {
                 preferenceApplier.setUseColorFilter(preferenceApplier.useColorFilter().not())
-                (activitySupplier() as? MainActivity)?.let {
+                activitySupplier().let {
                     ViewModelProvider(it).get(OverlayColorFilterViewModel::class.java)
                             .update()
                 }
