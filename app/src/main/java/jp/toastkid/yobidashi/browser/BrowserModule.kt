@@ -40,8 +40,8 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class BrowserModule(
-        private val context: Context,
-        private val webViewContainer: FrameLayout?
+    private val context: Context,
+    private val webViewContainer: FrameLayout?
 ) {
 
     private val preferenceApplier = PreferenceApplier(context)
