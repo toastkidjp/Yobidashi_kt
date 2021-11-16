@@ -377,10 +377,6 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
         MenuUseCase({ this }, menuViewModel, mediaPermissionRequestLauncher).observe()
     }
 
-    fun requestPermissionForMediaPlayer(function: (Boolean) -> Unit) {
-        mediaPermissionRequestLauncher.launch(function)
-    }
-
     private fun initializeContentViewModel() {
         contentViewModel = ViewModelProvider(this).get(ContentViewModel::class.java)
         contentViewModel?.fragmentClass?.observe(this, Observer {
