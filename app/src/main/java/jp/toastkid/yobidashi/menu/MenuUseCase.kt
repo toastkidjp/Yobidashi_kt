@@ -44,11 +44,9 @@ import java.util.Calendar
 class MenuUseCase(
     private val activitySupplier: () -> FragmentActivity,
     private val menuViewModel: MenuViewModel?,
+    private val contentViewModel: ContentViewModel?,
     private val mediaPermissionRequestLauncher: ActivityResultLauncher<((Boolean) -> Unit)?>
 ) {
-
-    private val contentViewModel =
-            ViewModelProvider(activitySupplier()).get(ContentViewModel::class.java)
 
     private val preferenceApplier = PreferenceApplier(activitySupplier())
 
@@ -70,15 +68,15 @@ class MenuUseCase(
     private fun onMenuClick(menu: Menu) {
         when (menu) {
             Menu.TOP-> {
-                contentViewModel.toTop()
+                contentViewModel?.toTop()
                 return
             }
             Menu.BOTTOM-> {
-                contentViewModel.toBottom()
+                contentViewModel?.toBottom()
                 return
             }
             Menu.SHARE-> {
-                contentViewModel.share()
+                contentViewModel?.share()
             }
             Menu.CODE_READER -> {
                 nextFragment(BarcodeReaderFragment::class.java)
@@ -122,19 +120,19 @@ class MenuUseCase(
                         .open(preferenceApplier.homeUrl.toUri())
             }
             Menu.EDITOR-> {
-                contentViewModel.openEditorTab()
+                contentViewModel?.openEditorTab()
             }
             Menu.PDF-> {
-                contentViewModel.openPdf()
+                contentViewModel?.openPdf()
             }
             Menu.CALENDAR -> {
-                contentViewModel.openCalendar()
+                contentViewModel?.openCalendar()
             }
             Menu.ARTICLE_VIEWER -> {
-                contentViewModel.openArticleList()
+                contentViewModel?.openArticleList()
             }
             Menu.WEB_SEARCH -> {
-                contentViewModel.webSearch()
+                contentViewModel?.webSearch()
             }
             Menu.GESTURE_MEMO -> {
                 nextFragment(GestureMemoFragment::class.java)
@@ -166,7 +164,7 @@ class MenuUseCase(
                 val activity = activitySupplier()
                 if (preferenceApplier.wifiOnly &&
                         NetworkChecker.isUnavailableWiFi(activity)) {
-                    contentViewModel.snackShort(R.string.message_wifi_not_connecting)
+                    contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
                     return
                 }
 
@@ -175,7 +173,7 @@ class MenuUseCase(
                             ViewModelProvider(activitySupplier()).get(BrowserViewModel::class.java)
                                     .open(link)
                             val fragmentActivity = activitySupplier()
-                            contentViewModel.snackShort(
+                            contentViewModel?.snackShort(
                                     fragmentActivity.getString(R.string.message_open_random_wikipedia, title)
                             )
                         }
@@ -184,14 +182,14 @@ class MenuUseCase(
                 nextFragment(ArchivesFragment::class.java)
             }
             Menu.FIND_IN_PAGE-> {
-                contentViewModel.switchPageSearcher()
+                contentViewModel?.switchPageSearcher()
             }
         }
         menuViewModel?.close()
     }
 
     private fun nextFragment(fragmentClass: Class<out Fragment>) {
-        contentViewModel.nextFragment(fragmentClass)
+        contentViewModel?.nextFragment(fragmentClass)
     }
 
     /**

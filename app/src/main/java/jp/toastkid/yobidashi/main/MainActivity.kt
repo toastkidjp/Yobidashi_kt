@@ -207,9 +207,9 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
         initializeHeaderViewModel()
 
-        initializeMenuViewModel()
-
         initializeContentViewModel()
+
+        initializeMenuViewModel()
 
         menuSwitchColorApplier = MenuSwitchColorApplier(binding.menuSwitch)
 
@@ -374,7 +374,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
-        MenuUseCase({ this }, menuViewModel, mediaPermissionRequestLauncher).observe()
+        MenuUseCase({ this }, menuViewModel, contentViewModel, mediaPermissionRequestLauncher).observe()
     }
 
     private fun initializeContentViewModel() {
