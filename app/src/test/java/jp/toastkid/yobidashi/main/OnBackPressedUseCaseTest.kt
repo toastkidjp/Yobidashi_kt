@@ -2,8 +2,10 @@ package jp.toastkid.yobidashi.main
 
 import androidx.fragment.app.FragmentManager
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -66,7 +68,7 @@ class OnBackPressedUseCaseTest {
                 supportFragmentManager
         )
 
-        every { menuViewModel.close() }.answers { Unit }
+        every { menuViewModel.close() }.just(Runs)
     }
 
     @Test
