@@ -102,7 +102,7 @@ class OnBackPressedUseCaseTest {
         every { tabListUseCase.onBackPressed() }.returns(false)
         every { menuVisibility.invoke() }.returns(false)
         every { pageSearcherModule.isVisible() }.returns(true)
-        every { pageSearcherModule.hide() }.answers { Unit }
+        every { pageSearcherModule.hide() }.just(Runs)
         every { floatingPreview.onBackPressed() }.answers { true }
 
         onBackPressedUseCase.invoke()
