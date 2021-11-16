@@ -120,13 +120,13 @@ class OnBackPressedUseCaseTest {
         every { tabListUseCase.onBackPressed() }.returns(false)
         every { menuVisibility.invoke() }.returns(false)
         every { pageSearcherModule.isVisible() }.returns(false)
-        every { pageSearcherModule.hide() }.answers { Unit }
+        every { pageSearcherModule.hide() }.just(Runs)
         every { floatingPreview.onBackPressed() }.answers { false }
-        every { floatingPreview.hide() }.answers { Unit }
+        every { floatingPreview.hide() }.just(Runs)
         val fragment = mockk<BrowserFragment>()
         every { supportFragmentManager.findFragmentById(any()) }.answers { fragment }
         every { fragment.pressBack() }.returns(true)
-        every { tabs.closeTab(any()) }.answers { Unit }
+        every { tabs.closeTab(any()) }.just(Runs)
 
         onBackPressedUseCase.invoke()
 
