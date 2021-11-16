@@ -113,7 +113,7 @@ class TlsErrorMessageGeneratorTest {
     }
 
     @Test
-    fun test() {
+    fun testElseCase() {
         every { error.primaryError }.returns(-1)
 
         tlsErrorMessageGenerator.invoke(context, error)
