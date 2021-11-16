@@ -374,7 +374,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
-        MenuUseCase({ this }, menuViewModel).observe()
+        MenuUseCase({ this }, menuViewModel, mediaPermissionRequestLauncher).observe()
     }
 
     fun requestPermissionForMediaPlayer(function: (Boolean) -> Unit) {
