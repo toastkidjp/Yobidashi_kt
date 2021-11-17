@@ -137,7 +137,7 @@
                 android:id="@+id/load_from"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:text="Load from storage"
+                android:text="@string/load_from_storage"
                 android:textSize="@dimen/menu_font_size"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_load_as"
