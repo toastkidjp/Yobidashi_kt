@@ -282,18 +282,18 @@ class EditorFragment :
     private fun applySettings() {
         val colorPair = preferenceApplier.colorPair()
         TextViewColorApplier()(
-                colorPair.fontColor(),
-                menuBinding.save,
-                menuBinding.saveAs,
-                menuBinding.load,
+            colorPair.fontColor(),
+            menuBinding.save,
+            menuBinding.saveAs,
+            menuBinding.load,
             menuBinding.loadAs,
             menuBinding.loadFrom,
-                menuBinding.exportArticleViewer,
-                menuBinding.restore,
-                menuBinding.lastSaved,
-                menuBinding.counter,
-                menuBinding.backup,
-                menuBinding.clear
+            menuBinding.exportArticleViewer,
+            menuBinding.restore,
+            menuBinding.lastSaved,
+            menuBinding.counter,
+            menuBinding.backup,
+            menuBinding.clear
         )
 
         menuBinding.tabIcon.setColorFilter(colorPair.fontColor())
