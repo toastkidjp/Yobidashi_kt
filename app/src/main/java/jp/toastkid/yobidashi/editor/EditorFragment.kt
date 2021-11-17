@@ -271,6 +271,7 @@ class EditorFragment :
 
         parentFragmentManager.clearFragmentResultListener("clear_input")
         parentFragmentManager.clearFragmentResultListener("input_text")
+        parentFragmentManager.clearFragmentResultListener("load_from_storage")
 
         super.onDetach()
     }
@@ -407,6 +408,7 @@ class EditorFragment :
             { key, result ->
                 val file = result[key] as? File ?: return@setFragmentResultListener
                 readFromFileUri(Uri.fromFile(file))
+                parentFragmentManager.clearFragmentResultListener("load_from_storage")
             }
         )
         LoadFromStorageDialogFragment().show(parentFragmentManager, "load_from_storage")
