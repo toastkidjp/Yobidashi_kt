@@ -13,9 +13,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.article_viewer.article.list.ArticleListFragment
-import jp.toastkid.yobidashi.calendar.CalendarFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
+import jp.toastkid.yobidashi.calendar.CalendarFragment
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.tab.TabAdapter
@@ -25,10 +25,6 @@ import jp.toastkid.yobidashi.tab.model.CalendarTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.WebTab
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
@@ -40,8 +36,7 @@ class TabReplacingUseCase(
         private val replaceFragment: (Fragment, Boolean) -> Unit,
         private val browserFragmentViewModel: BrowserFragmentViewModel,
         private val refreshThumbnail: () -> Unit,
-        private val runOnUiThread: (() -> Unit) -> Unit,
-        private val disposables: Job
+        private val runOnUiThread: (() -> Unit) -> Unit
 ) {
 
     /**
@@ -55,11 +50,10 @@ class TabReplacingUseCase(
                 val browserFragment =
                         (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
                 replaceFragment(browserFragment, false)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread {
-                        browserFragmentViewModel
-                                .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
-                    }
+
+                runOnUiThread {
+                    browserFragmentViewModel
+                        .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
                 }
             }
             is EditorTab -> {
@@ -67,11 +61,9 @@ class TabReplacingUseCase(
                         obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
                 editorFragment.arguments = bundleOf("path" to currentTab.path)
                 replaceFragment(editorFragment, withAnimation)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread {
-                        editorFragment.reload()
-                        refreshThumbnail()
-                    }
+                runOnUiThread {
+                    editorFragment.reload()
+                    refreshThumbnail()
                 }
             }
             is PdfTab -> {
@@ -98,11 +90,9 @@ class TabReplacingUseCase(
             is ArticleTab -> {
                 val fragment = obtainFragment(ContentViewerFragment::class.java)
                 replaceFragment(fragment, withAnimation)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread {
-                        (fragment as? ContentViewerFragment)?.loadContent(currentTab.title())
-                        refreshThumbnail()
-                    }
+                runOnUiThread {
+                    (fragment as? ContentViewerFragment)?.loadContent(currentTab.title())
+                    refreshThumbnail()
                 }
             }
             is ArticleListTab -> {
@@ -119,9 +109,7 @@ class TabReplacingUseCase(
     }
 
     private fun takeThumbnail() {
-        CoroutineScope(Dispatchers.Default).launch(disposables) {
-            runOnUiThread { refreshThumbnail() }
-        }
+        runOnUiThread { refreshThumbnail() }
     }
 
 }
