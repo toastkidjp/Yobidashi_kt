@@ -54,6 +54,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
+import jp.toastkid.yobidashi.editor.load.LoadFromStorageDialogFragment
 import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
 import jp.toastkid.yobidashi.editor.usecase.RestoreContentUseCase
 import jp.toastkid.yobidashi.libs.Toaster
@@ -397,6 +398,18 @@ class EditorFragment :
      */
     fun loadAs() {
         loadAs?.launch(GetContentIntentFactory()("text/plain"))
+    }
+
+    fun loadFromStorage() {
+        parentFragmentManager.setFragmentResultListener(
+            "load_from_storage",
+            viewLifecycleOwner,
+            { key, result ->
+                val file = result[key] as? File ?: return@setFragmentResultListener
+                readFromFileUri(Uri.fromFile(file))
+            }
+        )
+        LoadFromStorageDialogFragment().show(parentFragmentManager, "load_from_storage")
     }
 
     fun exportToArticleViewer() {
