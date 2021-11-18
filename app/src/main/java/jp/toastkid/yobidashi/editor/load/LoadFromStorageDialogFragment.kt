@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -44,6 +45,10 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
         CompoundDrawableColorApplier().invoke(color, binding.title)
 
         binding.title.setText(R.string.load_from_storage)
+        binding.title.setCompoundDrawables(
+            ContextCompat.getDrawable(activityContext, R.drawable.ic_load),
+            null, null, null
+        )
 
         binding.list.choiceMode = ListView.CHOICE_MODE_SINGLE
         val files = context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.listFiles(
