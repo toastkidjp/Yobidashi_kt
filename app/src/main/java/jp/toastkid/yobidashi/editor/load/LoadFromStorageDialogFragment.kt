@@ -21,6 +21,7 @@ import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.lib.color.IconColorFinder
+import jp.toastkid.lib.io.TextFileFilter
 import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogUserAgentBinding
@@ -43,7 +44,9 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
         CompoundDrawableColorApplier().invoke(color, binding.title)
 
         binding.list.choiceMode = ListView.CHOICE_MODE_SINGLE
-        val files = context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.listFiles(TextFileFilter()) ?: return null
+        val files = context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.listFiles(
+            TextFileFilter()
+        ) ?: return null
         val adapter = object : ArrayAdapter<File>(
             activityContext,
             android.R.layout.simple_list_item_1,
