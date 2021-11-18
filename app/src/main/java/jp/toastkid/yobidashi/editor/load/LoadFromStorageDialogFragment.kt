@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -34,7 +35,7 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
     ): View? {
         val activityContext = context
             ?: return super.onCreateView(inflater, container, savedInstanceState)
-        
+
         val binding: DialogUserAgentBinding =
             DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
@@ -48,7 +49,13 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
             android.R.layout.simple_list_item_1,
             android.R.id.text1,
             files
-        ) {}
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                view.findViewById<TextView>(android.R.id.text1).text = files[position].name
+                return view
+            }
+        }
         binding.list.adapter = adapter
         binding.list.setOnItemClickListener { _, _, position, _ ->
             parentFragmentManager.setFragmentResult(
