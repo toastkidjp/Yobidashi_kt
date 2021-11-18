@@ -40,7 +40,7 @@ class TextFileFilterTest {
     }
 
     @Test
-    fun accept() {
+    fun testTextFileCase() {
         assertTrue(textFileFilter.accept(file))
     }
 
