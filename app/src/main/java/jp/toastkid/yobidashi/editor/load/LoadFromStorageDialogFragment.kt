@@ -43,6 +43,8 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
         val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(color, binding.title)
 
+        binding.title.setText(R.string.load_from_storage)
+
         binding.list.choiceMode = ListView.CHOICE_MODE_SINGLE
         val files = context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.listFiles(
             TextFileFilter()
