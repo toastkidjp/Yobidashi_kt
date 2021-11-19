@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.editor.load
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
@@ -44,7 +43,7 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
 
         initializeTitle(binding.title)
 
-        initializeList(activityContext, binding.list)
+        initializeList(binding.list)
 
         return binding.root
     }
@@ -60,13 +59,13 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
         )
     }
 
-    private fun initializeList(activityContext: Context, listView: ListView) {
+    private fun initializeList(listView: ListView) {
         listView.choiceMode = ListView.CHOICE_MODE_SINGLE
         val files = context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.listFiles(
             TextFileFilter()
         ) ?: return
         val adapter = object : ArrayAdapter<File>(
-            activityContext,
+            listView.context,
             android.R.layout.simple_list_item_1,
             android.R.id.text1,
             files
