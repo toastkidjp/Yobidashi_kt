@@ -42,7 +42,7 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
         val binding: DialogUserAgentBinding =
             DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        initializeTitle(binding, activityContext)
+        initializeTitle(binding, activityContext, binding.title)
 
         initializeList(activityContext, binding.list)
 
@@ -51,13 +51,14 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
 
     private fun initializeTitle(
         binding: DialogUserAgentBinding,
-        activityContext: Context
+        activityContext: Context,
+        titleView: TextView
     ) {
         val color = IconColorFinder.from(binding.root).invoke()
-        CompoundDrawableColorApplier().invoke(color, binding.title)
+        CompoundDrawableColorApplier().invoke(color, titleView)
 
-        binding.title.setText(R.string.load_from_storage)
-        binding.title.setCompoundDrawables(
+        titleView.setText(R.string.load_from_storage)
+        titleView.setCompoundDrawables(
             ContextCompat.getDrawable(activityContext, R.drawable.ic_load),
             null, null, null
         )
