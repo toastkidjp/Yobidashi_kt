@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.editor.load
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
@@ -50,10 +51,16 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
             null, null, null
         )
 
-        binding.list.choiceMode = ListView.CHOICE_MODE_SINGLE
+        initializeList(activityContext, binding.list)
+
+        return binding.root
+    }
+
+    private fun initializeList(activityContext: Context, listView: ListView) {
+        listView.choiceMode = ListView.CHOICE_MODE_SINGLE
         val files = context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.listFiles(
             TextFileFilter()
-        ) ?: return null
+        ) ?: return
         val adapter = object : ArrayAdapter<File>(
             activityContext,
             android.R.layout.simple_list_item_1,
@@ -66,15 +73,14 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
                 return view
             }
         }
-        binding.list.adapter = adapter
-        binding.list.setOnItemClickListener { _, _, position, _ ->
+        listView.adapter = adapter
+        listView.setOnItemClickListener { _, _, position, _ ->
             parentFragmentManager.setFragmentResult(
                 "load_from_storage",
                 bundleOf("load_from_storage" to files[position])
             )
             dismiss()
         }
-        return binding.root
     }
 
     companion object {
