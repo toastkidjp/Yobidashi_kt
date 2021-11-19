@@ -49,9 +49,7 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
-    private fun initializeTitle(
-        titleView: TextView
-    ) {
+    private fun initializeTitle(titleView: TextView) {
         val color = IconColorFinder.from(titleView.context).invoke()
         CompoundDrawableColorApplier().invoke(color, titleView)
 
