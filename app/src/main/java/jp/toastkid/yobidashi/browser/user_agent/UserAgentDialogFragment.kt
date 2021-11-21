@@ -45,16 +45,16 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
         val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(color, binding.title)
 
-        initializeList(binding, preferenceApplier, activityContext)
+        initializeList(preferenceApplier, activityContext, binding.list)
         return binding.root
     }
 
     private fun initializeList(
-        binding: DialogUserAgentBinding,
         preferenceApplier: PreferenceApplier,
-        activityContext: Context
+        activityContext: Context,
+        listView: ListView
     ) {
-        binding.list.choiceMode = ListView.CHOICE_MODE_SINGLE
+        listView.choiceMode = ListView.CHOICE_MODE_SINGLE
         val currentIndex = UserAgent.findCurrentIndex(preferenceApplier.userAgent())
         val adapter = object : ArrayAdapter<CharSequence>(
             activityContext,
@@ -66,13 +66,13 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
                 val view = super.getView(position, convertView, parent)
                 val isItemChecked = position == currentIndex
                 if (isItemChecked) {
-                    binding.list.setItemChecked(position, true)
+                    listView.setItemChecked(position, true)
                 }
                 return view
             }
         }
-        binding.list.adapter = adapter
-        binding.list.setOnItemClickListener { _, _, position, _ ->
+        listView.adapter = adapter
+        listView.setOnItemClickListener { _, _, position, _ ->
             val userAgent = UserAgent.values()[position]
             preferenceApplier.setUserAgent(userAgent.name)
             parentFragmentManager.setFragmentResult(
