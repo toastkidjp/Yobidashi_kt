@@ -28,9 +28,6 @@ import jp.toastkid.yobidashi.databinding.DialogUserAgentBinding
  */
 class UserAgentDialogFragment : BottomSheetDialogFragment() {
 
-    interface Callback {
-    }
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
