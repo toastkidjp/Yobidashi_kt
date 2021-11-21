@@ -31,8 +31,6 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
     interface Callback {
     }
 
-    private var onClick: Callback? = null
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
