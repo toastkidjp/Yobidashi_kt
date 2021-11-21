@@ -29,7 +29,6 @@ import jp.toastkid.yobidashi.databinding.DialogUserAgentBinding
 class UserAgentDialogFragment : BottomSheetDialogFragment() {
 
     interface Callback {
-        fun onClickUserAgent(userAgent: UserAgent)
     }
 
     private var onClick: Callback? = null
