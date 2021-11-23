@@ -60,7 +60,7 @@ class TextFileFilterTest {
     }
 
     @Test
-    fun test() {
+    fun testNullCase() {
         assertFalse(textFileFilter.accept(null))
     }
 
