@@ -142,29 +142,6 @@ class OnBackPressedUseCaseTest {
         verify (exactly = 0) { tabs.closeTab(any()) }
     }
 
-    /*
-        if (currentFragment is BrowserFragment
-                || currentFragment is PdfViewerFragment
-                || currentFragment is ContentViewerFragment
-        ) {
-            tabs.closeTab(tabs.index())
-
-            if (tabs.isEmpty()) {
-                onEmptyTabs()
-                return
-            }
-            replaceToCurrentTab(true)
-            return
-        }
-
-        val fragment = findFragment()
-        if (fragment !is EditorFragment) {
-            supportFragmentManager.popBackStackImmediate()
-            return
-        }
-
-        confirmExit()
-     */
     @After
     fun tearDown() {
         unmockkAll()
