@@ -17,7 +17,7 @@
             android:layout_marginRight="16dp"
             android:textSize="18sp"
             android:text="@string/title_user_agent"
-            android:drawableLeft="@drawable/ic_user_agent"
+            android:drawableStart="@drawable/ic_user_agent"
             android:drawablePadding="4dp"
             android:drawableTint="@color/colorPrimaryDark"
             app:layout_constraintTop_toTopOf="parent"
