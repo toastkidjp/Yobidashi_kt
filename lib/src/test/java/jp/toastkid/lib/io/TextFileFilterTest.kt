@@ -44,4 +44,11 @@ class TextFileFilterTest {
         assertTrue(textFileFilter.accept(file))
     }
 
+    @Test
+    fun acceptMd() {
+        every { file.name }.returns("test.md")
+
+        assertTrue(textFileFilter.accept(file))
+    }
+
 }
