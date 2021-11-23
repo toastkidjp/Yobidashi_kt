@@ -41,7 +41,7 @@ class CreateDocumentIntentFactoryTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         createDocumentIntentFactory.invoke("text/html", "test.html")
 
         verify(exactly = 1) { anyConstructed<Intent>().type = "text/html" }
