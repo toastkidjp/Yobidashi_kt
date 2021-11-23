@@ -30,9 +30,9 @@ import jp.toastkid.yobidashi.databinding.DialogUserAgentBinding
 class UserAgentDialogFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
