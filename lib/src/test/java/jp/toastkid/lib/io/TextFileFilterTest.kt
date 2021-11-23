@@ -14,6 +14,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import org.junit.After
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -49,6 +50,13 @@ class TextFileFilterTest {
         every { file.name }.returns("test.md")
 
         assertTrue(textFileFilter.accept(file))
+    }
+
+    @Test
+    fun acceptOther() {
+        every { file.name }.returns("test.mp3")
+
+        assertFalse(textFileFilter.accept(file))
     }
 
 }
