@@ -27,6 +27,7 @@ internal class Provider : AppWidgetProvider() {
          * Update widget.
          *
          * @param context
+         * @param appWidgetManager [AppWidgetManager]
          * @param remoteViews
          */
         fun updateWidget(
