@@ -53,7 +53,7 @@ class TextFileFilterTest {
     }
 
     @Test
-    fun acceptOther() {
+    fun testRejectFileType() {
         every { file.name }.returns("test.mp3")
 
         assertFalse(textFileFilter.accept(file))
