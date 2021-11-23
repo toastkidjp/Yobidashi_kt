@@ -59,4 +59,9 @@ class TextFileFilterTest {
         assertFalse(textFileFilter.accept(file))
     }
 
+    @Test
+    fun test() {
+        assertFalse(textFileFilter.accept(null))
+    }
+
 }
