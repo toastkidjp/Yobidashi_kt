@@ -47,10 +47,6 @@ class ZipLoaderService : JobIntentService() {
                 }
             }
 
-            // TODO PreferencesWrapper(this).setLastUpdated(file.lastModified())
-            /*progress.visibility = View.GONE
-            progress_circular.visibility = View.GONE
-            all()*/
             sendBroadcast(makeBroadcastIntent(100))
             zipLoader.dispose()
         }
