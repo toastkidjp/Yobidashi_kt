@@ -87,8 +87,7 @@ class SearchHistoryFragment : Fragment() {
         val viewModel = ViewModelProvider(this).get(SearchFragmentViewModel::class.java)
         viewModel.search.observe(viewLifecycleOwner, {
             val event = it.getContentIfNotHandled() ?: return@observe
-            SearchAction(view.context, event.category
-                ?: "", event.query ?: "").invoke()
+            SearchAction(view.context, event.category ?: "", event.query).invoke()
         })
         adapter.setViewModel(viewModel)
     }

@@ -42,14 +42,6 @@
                 tools:itemCount="3"
                 />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_item_height"
-                style="@style/OneLineTextMenu"
-                android:text="@string/title_clear_search_history"
-                android:onClick="@{view -> module.confirmClear()}"
-                app:layout_constraintTop_toBottomOf="@id/search_histories"
-                />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </merge>
 </layout>

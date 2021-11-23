@@ -53,7 +53,6 @@ constructor(
     private var disposable: Job? = null
 
     init {
-        val context = context
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
             R.layout.view_card_search_history,
@@ -63,16 +62,16 @@ constructor(
         binding?.module = this
 
         binding?.searchHistories?.layoutManager =
-                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         val repository = DatabaseFinder().invoke(context).searchHistoryRepository()
 
         moduleAdapter = ModuleAdapter(
-                context,
-                repository,
-                { if (it) show() else hide() },
-                true,
-                5
+            context,
+            repository,
+            { if (it) show() else hide() },
+            true,
+            5
         )
         binding?.searchHistories?.adapter = moduleAdapter
 
@@ -96,19 +95,6 @@ constructor(
         (context as? FragmentActivity)?.let {
             ViewModelProvider(it).get(ContentViewModel::class.java)
                 .nextFragment(SearchHistoryFragment::class.java)
-        }
-    }
-
-    /**
-     * Clear search history.
-     */
-    fun confirmClear() {
-        val activityContext = context
-        if (activityContext is FragmentActivity) {
-            ClearSearchHistoryDialogFragment().show(
-                    activityContext.supportFragmentManager,
-                    ClearSearchHistoryDialogFragment::class.java.simpleName
-            )
         }
     }
 

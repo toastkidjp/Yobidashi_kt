@@ -188,7 +188,7 @@ class EditorFragment :
 
             tabListViewModel
                     ?.tabCount
-                    ?.observe(activity, { menuBinding.tabCount.setText(it.toString()) })
+                    ?.observe(activity, { menuBinding.tabCount.text = it.toString() })
 
             (viewModelProvider.get(PageSearcherViewModel::class.java)).let { viewModel ->
                 var currentWord = ""
@@ -527,7 +527,7 @@ class EditorFragment :
      * @param ms
      */
     private fun setLastSaved(ms: Long) {
-        menuBinding.lastSaved.text = lastSavedTitle + DateFormat.format("HH:mm:ss", ms)
+        menuBinding.lastSaved.text = DateFormat.format("$lastSavedTitle HH:mm:ss", ms)
     }
 
     /**
