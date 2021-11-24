@@ -16,6 +16,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.view.LayoutInflater
@@ -41,6 +42,7 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -336,7 +338,15 @@ class EditorFragment :
     }
 
     fun clear() {
-        ClearTextDialogFragment.show(parentFragmentManager)
+        ConfirmDialogFragment.show(
+            parentFragmentManager,
+            getString(R.string.title_clear_text),
+            Html.fromHtml(
+                getString(R.string.confirm_clear_all_settings),
+                Html.FROM_HTML_MODE_COMPACT
+            ),
+            "clear_input"
+        )
     }
 
     /**

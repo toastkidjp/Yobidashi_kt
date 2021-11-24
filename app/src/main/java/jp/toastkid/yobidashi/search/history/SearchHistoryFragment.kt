@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.search.history
 
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchHistoryBinding
@@ -64,7 +66,7 @@ class SearchHistoryFragment : Fragment() {
         binding.historiesView.scheduleLayoutAnimation()
 
         parentFragmentManager.setFragmentResultListener(
-            "clear_items",
+            "clear_search_history_items",
             viewLifecycleOwner,
             { _, _ ->
                 val showToast: () -> Unit = {
@@ -109,7 +111,15 @@ class SearchHistoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.clear -> {
-                SearchHistoryClearDialogFragment.show(parentFragmentManager)
+                ConfirmDialogFragment.show(
+                    parentFragmentManager,
+                    getString(R.string.title_clear_search_history),
+                    Html.fromHtml(
+                        getString(R.string.confirm_clear_all_settings),
+                        Html.FROM_HTML_MODE_COMPACT
+                    ),
+                    "clear_search_history_items"
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -117,7 +127,7 @@ class SearchHistoryFragment : Fragment() {
     }
 
     override fun onDetach() {
-        parentFragmentManager.clearFragmentResultListener("clear_items")
+        parentFragmentManager.clearFragmentResultListener("clear_search_history_items")
         super.onDetach()
     }
 

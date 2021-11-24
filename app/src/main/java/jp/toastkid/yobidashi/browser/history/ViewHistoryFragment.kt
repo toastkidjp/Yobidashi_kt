@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.browser.history
 
 import android.net.Uri
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.R
@@ -130,10 +132,14 @@ class ViewHistoryFragment: Fragment(), ContentScrollable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.clear -> {
-                val clearDialogFragment = ClearDialogFragment()
-                clearDialogFragment.show(
-                        parentFragmentManager,
-                        ClearDialogFragment::class.java.simpleName
+                ConfirmDialogFragment.show(
+                    parentFragmentManager,
+                    getString(R.string.title_clear_view_history),
+                    Html.fromHtml(
+                        getString(R.string.confirm_clear_all_settings),
+                        Html.FROM_HTML_MODE_COMPACT
+                    ),
+                    "clear_items"
                 )
                 true
             }
