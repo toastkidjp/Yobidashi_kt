@@ -59,7 +59,7 @@ class ExternalFileAssignmentTest {
     }
 
     @Test
-    fun test() {
+    fun testCallMkdirs() {
         every { parent.exists() }.returns(false)
 
         externalFileAssignment.invoke(context, "test")
