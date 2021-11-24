@@ -58,4 +58,14 @@ class ExternalFileAssignmentTest {
         verify(exactly = 1) { fileFactory.invoke(any(), any()) }
     }
 
+    @Test
+    fun test() {
+        every { parent.exists() }.returns(false)
+
+        externalFileAssignment.invoke(context, "test")
+
+        verify(exactly = 1) { parent.mkdirs() }
+        verify(exactly = 1) { fileFactory.invoke(any(), any()) }
+    }
+
 }
