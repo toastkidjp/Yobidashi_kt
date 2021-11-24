@@ -51,7 +51,7 @@ class ExternalFileAssignmentTest {
     }
 
     @Test
-    fun invoke() {
+    fun testDirectoryExists() {
         externalFileAssignment.invoke(context, "test")
 
         verify(exactly = 0) { parent.mkdirs() }
