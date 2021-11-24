@@ -14,14 +14,16 @@ import java.io.File
 /**
  * @author toastkidjp
  */
-class ExternalFileAssignment {
+class ExternalFileAssignment(
+    private val fileFactory: (File?, String) -> File = { parent, name -> File(parent, name) }
+) {
 
     operator fun invoke(context: Context, fileName: String): File {
         val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
 
-        if (externalFilesDir?.exists() != false) {
-            externalFilesDir?.mkdirs()
+        if (externalFilesDir?.exists() == false) {
+            externalFilesDir.mkdirs()
         }
-        return File(externalFilesDir, fileName)
+        return fileFactory(externalFilesDir, fileName)
     }
 }
