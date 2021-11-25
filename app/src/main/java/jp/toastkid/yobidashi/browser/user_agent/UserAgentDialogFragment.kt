@@ -36,23 +36,21 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
 
-        val preferenceApplier = PreferenceApplier(activityContext)
-
         val binding: DialogUserAgentBinding =
                 DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
         val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(color, binding.title)
 
-        initializeList(preferenceApplier, binding.list)
+        initializeList(binding.list)
         return binding.root
     }
 
     private fun initializeList(
-        preferenceApplier: PreferenceApplier,
         listView: ListView
     ) {
         listView.choiceMode = ListView.CHOICE_MODE_SINGLE
+        val preferenceApplier = PreferenceApplier(listView.context)
         val currentIndex = UserAgent.findCurrentIndex(preferenceApplier.userAgent())
         val adapter = object : ArrayAdapter<CharSequence>(
             listView.context,
