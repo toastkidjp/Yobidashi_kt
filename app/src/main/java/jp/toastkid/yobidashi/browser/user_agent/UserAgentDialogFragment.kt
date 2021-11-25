@@ -33,9 +33,6 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val activityContext = context
-                ?: return super.onCreateView(inflater, container, savedInstanceState)
-
         val binding: DialogUserAgentBinding =
                 DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
