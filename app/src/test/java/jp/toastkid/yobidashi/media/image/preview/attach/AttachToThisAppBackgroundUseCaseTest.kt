@@ -89,7 +89,7 @@ class AttachToThisAppBackgroundUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testCannotWindowRectCase() {
         every { windowRectCalculatorCompat.invoke(any()) }.returns(null)
 
         attachToThisAppBackgroundUseCase.invoke(context, uri, image)
