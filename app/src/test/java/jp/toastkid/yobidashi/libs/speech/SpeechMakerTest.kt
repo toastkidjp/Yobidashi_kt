@@ -49,7 +49,7 @@ class SpeechMakerTest {
     }
 
     @Test
-    fun invoke() {
+    fun testSpeakCase() {
         speechMaker.invoke("test")
 
         verify(exactly = 1) { textToSpeech.speak(any(), any(), any(), any()) }
