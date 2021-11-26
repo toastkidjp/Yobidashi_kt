@@ -140,7 +140,6 @@ class BarcodeReaderFragment : Fragment() {
                                 ?: SearchCategory.getDefaultCategoryName(),
                         text
                 ).invoke()
-                activity.supportFragmentManager.popBackStack()
             })
         }
 
