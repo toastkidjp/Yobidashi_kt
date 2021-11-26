@@ -66,4 +66,12 @@ class SpeechMakerTest {
         verify(exactly = 1) { textToSpeech.stop() }
     }
 
+    @Test
+    fun dispose() {
+        speechMaker.dispose()
+
+        verify(exactly = 1) { textToSpeech.stop() }
+        verify(exactly = 1) { textToSpeech.shutdown() }
+    }
+
 }
