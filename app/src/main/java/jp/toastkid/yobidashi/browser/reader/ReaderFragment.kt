@@ -103,7 +103,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
             viewModelProvider.get(ReaderFragmentViewModel::class.java)
                     .content
-                    .observe(activity, Observer {
+                    .observe(activity, {
                         binding.title.text = it.first
                         binding.textContent.text = it.second
                     })
