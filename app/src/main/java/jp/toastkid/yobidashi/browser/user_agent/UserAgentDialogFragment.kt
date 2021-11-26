@@ -43,9 +43,7 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
-    private fun initializeList(
-        listView: ListView
-    ) {
+    private fun initializeList(listView: ListView) {
         listView.choiceMode = ListView.CHOICE_MODE_SINGLE
         val preferenceApplier = PreferenceApplier(listView.context)
         val currentIndex = UserAgent.findCurrentIndex(preferenceApplier.userAgent())
