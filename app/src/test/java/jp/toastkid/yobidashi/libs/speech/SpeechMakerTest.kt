@@ -57,7 +57,7 @@ class SpeechMakerTest {
     }
 
     @Test
-    fun stop() {
+    fun testStop() {
         every { textToSpeech.isSpeaking }.returns(true)
 
         speechMaker.invoke("test")
