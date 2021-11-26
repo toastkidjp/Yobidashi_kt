@@ -56,4 +56,14 @@ class SpeechMakerTest {
         verify(exactly = 0) { textToSpeech.stop() }
     }
 
+    @Test
+    fun stop() {
+        every { textToSpeech.isSpeaking }.returns(true)
+
+        speechMaker.invoke("test")
+
+        verify(exactly = 0) { textToSpeech.speak(any(), any(), any(), any()) }
+        verify(exactly = 1) { textToSpeech.stop() }
+    }
+
 }
