@@ -26,10 +26,7 @@ class CurrentLineSelectionUseCase {
         }
 
         editText.post {
-            editText.setSelection(
-                start,
-                end - 1
-            )
+            editText.setSelection(start, end - 1)
         }
     }
 
