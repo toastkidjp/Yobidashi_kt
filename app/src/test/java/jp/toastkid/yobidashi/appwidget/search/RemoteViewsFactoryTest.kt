@@ -9,10 +9,14 @@
 package jp.toastkid.yobidashi.appwidget.search
 
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Color
 import android.widget.RemoteViews
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -28,17 +32,22 @@ class RemoteViewsFactoryTest {
     @MockK
     private lateinit var context: Context
 
+    @MockK
+    private lateinit var resources: Resources
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { context.getPackageName() }.returns("test")
+        every { context.packageName }.returns("test")
+        every { context.resources }.returns(resources)
         every { context.getSharedPreferences(any(), any()) }.returns(mockk(relaxed = true))
+        every { @Suppress("DEPRECATION") resources.getColor(any()) }.returns(Color.BLACK)
 
         mockkConstructor(RemoteViews::class)
-        every { anyConstructed<RemoteViews>().setInt(any(), any(), any()) }.answers { Unit }
-        every { anyConstructed<RemoteViews>().setTextColor(any(), any()) }.answers { Unit }
-        every { anyConstructed<RemoteViews>().setOnClickPendingIntent(any(), any()) }.answers { Unit }
+        every { anyConstructed<RemoteViews>().setInt(any(), any(), any()) }.just(Runs)
+        every { anyConstructed<RemoteViews>().setTextColor(any(), any()) }.just(Runs)
+        every { anyConstructed<RemoteViews>().setOnClickPendingIntent(any(), any()) }.just(Runs)
 
         mockkConstructor(PreferenceApplier::class)
 
@@ -56,7 +65,7 @@ class RemoteViewsFactoryTest {
     fun testMake() {
         RemoteViewsFactory.make(context)
 
-        verify(exactly = 1) { context.getPackageName() }
+        verify(exactly = 1) { context.packageName }
         verify(exactly = 1) { context.getSharedPreferences(any(), any()) }
         verify(atLeast = 1) { anyConstructed<RemoteViews>().setInt(any(), any(), any()) }
         verify(atLeast = 1) { anyConstructed<RemoteViews>().setTextColor(any(), any()) }
