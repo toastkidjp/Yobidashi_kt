@@ -24,7 +24,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.media.MediaBrowserServiceCompat
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.media.music.notification.NotificationFactory
-import timber.log.BuildConfig
 import timber.log.Timber
 
 /**
@@ -233,7 +232,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
     companion object {
         private val audioNoisyFilter = IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
 
-        private const val ACTION_CHANGE_SPEED = "${BuildConfig.APPLICATION_ID}.audio.speed"
+        private const val ACTION_CHANGE_SPEED = "jp.toastkid.media.audio.speed"
 
         private val audioSpeedFilter = IntentFilter(ACTION_CHANGE_SPEED)
 
