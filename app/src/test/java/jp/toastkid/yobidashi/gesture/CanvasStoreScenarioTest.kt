@@ -9,8 +9,8 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.storage.ExternalFileAssignment
-import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import org.junit.After
 import org.junit.Test

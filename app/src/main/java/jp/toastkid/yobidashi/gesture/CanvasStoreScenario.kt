@@ -12,10 +12,10 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.image.BitmapCompressor
 
 /**
  * @author toastkidjp

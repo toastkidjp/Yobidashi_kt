@@ -1,7 +1,6 @@
 package jp.toastkid.lib.image
 
 import android.graphics.Bitmap
-
 import java.io.File
 
 /**

@@ -17,10 +17,10 @@ import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
-import jp.toastkid.yobidashi.libs.BitmapCompressor
 
 class WebChromeClientFactory(
         private val browserHeaderViewModel: BrowserHeaderViewModel? = null,
