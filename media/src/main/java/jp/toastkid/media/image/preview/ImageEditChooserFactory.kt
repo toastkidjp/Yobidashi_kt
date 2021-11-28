@@ -22,7 +22,7 @@ class ImageEditChooserFactory {
 
         val uriForFile = FileProvider.getUriForFile(
                 context,
-                "jp.toastkid.yobidashi.fileprovider",
+            "${context.packageName}.fileprovider",
                 File(path)
         )
         intent.setDataAndType(uriForFile, "image/*")
