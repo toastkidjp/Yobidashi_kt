@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.CommonFragmentAction
+import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentRssSettingBinding
 import jp.toastkid.yobidashi.libs.Toaster

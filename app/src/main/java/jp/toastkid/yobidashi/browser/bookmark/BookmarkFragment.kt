@@ -27,7 +27,7 @@ import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.yobidashi.CommonFragmentAction
+import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository

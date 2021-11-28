@@ -28,7 +28,7 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.yobidashi.CommonFragmentAction
+import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentRssReaderBinding
 import jp.toastkid.yobidashi.libs.Toaster

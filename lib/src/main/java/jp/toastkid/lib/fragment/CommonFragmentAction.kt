@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi
+package jp.toastkid.lib.fragment
 
 /**
  * Base fragment.

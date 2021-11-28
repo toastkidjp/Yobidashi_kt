@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.CommonFragmentAction
+import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.FragmentSettingsColorBinding
