@@ -26,7 +26,7 @@ class AttachToAnyAppUseCase(
         intent.addCategory(Intent.CATEGORY_DEFAULT)
         val uri = FileProvider.getUriForFile(
                 context,
-                AUTHORITY,
+                "${context.packageName}.fileprovider",
                 ImageCache().saveBitmap(context.cacheDir, bitmap).absoluteFile
         )
         intent.setDataAndType(uri, MIME_TYPE)
