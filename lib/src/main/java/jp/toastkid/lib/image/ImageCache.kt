@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.libs
+package jp.toastkid.lib.image
 
 import android.graphics.Bitmap
 

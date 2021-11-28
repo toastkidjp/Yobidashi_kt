@@ -18,7 +18,7 @@ import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.ImageCache
+import jp.toastkid.lib.image.ImageCache
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
