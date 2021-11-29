@@ -20,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
+import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.media.R
 import jp.toastkid.media.databinding.FragmentImageViewerBinding
 import jp.toastkid.media.image.setting.ExcludingSettingFragment
@@ -144,13 +146,13 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     private fun observePageSearcherViewModel() {
         val activity = activity ?: return
-        /*TODO ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
+        ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
                 .also { viewModel ->
-                    viewModel.find.observe(activity, Observer {
+                    viewModel.find.observe(viewLifecycleOwner, Observer {
                         val text = it?.getContentIfNotHandled() ?: return@Observer
                         imageFilterUseCase(text)
                     })
-                }*/
+                }
     }
 
     fun reset() {
