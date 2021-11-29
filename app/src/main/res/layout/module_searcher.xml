@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel"
+            type="jp.toastkid.lib.viewmodel.PageSearcherViewModel"
             />
     </data>
     <androidx.cardview.widget.CardView
