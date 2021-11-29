@@ -241,10 +241,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
         private const val KEY_EXTRA_SPEED = "speed"
 
-        private const val MEDIA_SESSION_FLAG =
-                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
-                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
-
         private const val PLAYBACK_ACTION =
                 PlaybackStateCompat.ACTION_PLAY or
                         PlaybackStateCompat.ACTION_PAUSE or
