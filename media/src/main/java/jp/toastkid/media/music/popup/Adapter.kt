@@ -59,8 +59,7 @@ class Adapter(
 
         holder.loadIcon(item.description.iconUri, iconWidth)
 
-        // TODO Use data binding
-        holder.setOnClickListener(View.OnClickListener {
+        holder.setOnClickListener({
             mediaPlayerPopupViewModel?.clickItem(item)
         })
 
