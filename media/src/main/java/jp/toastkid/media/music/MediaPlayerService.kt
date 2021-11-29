@@ -188,7 +188,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             it.setCallback(callback)
             @Suppress("UsePropertyAccessSyntax")
             setSessionToken(it.sessionToken)
-            it.setFlags(MEDIA_SESSION_FLAG)
         }
     }
 
