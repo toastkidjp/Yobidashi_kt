@@ -227,7 +227,7 @@ class BrowserFragment : Fragment(),
                 ?.observe(activity, { appBarBinding?.tabCount?.text = it.toString() })
 
         viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
-            viewModel.find.observe(activity, Observer {
+            viewModel.find.observe(viewLifecycleOwner, Observer {
                 val text = it?.getContentIfNotHandled() ?: return@Observer
                 browserModule.find(text)
             })
