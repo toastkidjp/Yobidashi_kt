@@ -232,7 +232,7 @@ class BrowserFragment : Fragment(),
                 browserModule.find(text)
             })
 
-            viewModel.upward.observe(activity, Observer {
+            viewModel.upward.observe(viewLifecycleOwner, Observer {
                 it?.getContentIfNotHandled() ?: return@Observer
                 browserModule.findUp()
             })
