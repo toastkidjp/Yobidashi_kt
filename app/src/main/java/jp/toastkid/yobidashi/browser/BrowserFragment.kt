@@ -237,7 +237,7 @@ class BrowserFragment : Fragment(),
                 browserModule.findUp()
             })
 
-            viewModel.downward.observe(activity, Observer {
+            viewModel.downward.observe(viewLifecycleOwner, Observer {
                 it?.getContentIfNotHandled() ?: return@Observer
                 browserModule.findDown()
             })
