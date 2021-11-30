@@ -20,18 +20,7 @@ import jp.toastkid.yobidashi.R
  */
 class AddingFolderDialogFragment : DialogFragment() {
 
-    interface OnClickAddingFolder {
-        fun onClickAddFolder(title: String?)
-    }
-
-    private var onClick: OnClickAddingFolder? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val target = targetFragment ?: return super.onCreateDialog(savedInstanceState)
-        if (target is OnClickAddingFolder) {
-            onClick = target
-        }
-
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
         val inputLayout = SingleLineTextInputLayoutFactory().invoke(activityContext)
