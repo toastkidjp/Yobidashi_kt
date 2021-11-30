@@ -10,7 +10,6 @@ package jp.toastkid.media.music.popup
 import android.content.res.Resources
 import android.support.v4.media.MediaBrowserCompat
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DimenRes
 import androidx.annotation.LayoutRes
@@ -63,7 +62,7 @@ class Adapter(
             mediaPlayerPopupViewModel?.clickItem(item)
         })
 
-        holder.setOnLyricsClickListener(View.OnClickListener {
+        holder.setOnLyricsClickListener({
             item.description.title?.also { lyrics ->
                 mediaPlayerPopupViewModel?.clickLyrics(lyrics.toString())
             }
