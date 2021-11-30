@@ -52,5 +52,6 @@ dependencies {
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"
+    testImplementation "org.robolectric:robolectric:$libVersions.robolectric"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$libVersions.coroutines_test"
 }
