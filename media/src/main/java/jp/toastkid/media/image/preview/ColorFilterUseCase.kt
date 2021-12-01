@@ -38,7 +38,7 @@ class ColorFilterUseCase(private val viewModel: ImagePreviewFragmentViewModel) {
     fun applyContrast(contrast: Float) {
         lastFilter = null
         val v = Math.max(contrast, 0f) + 1f
-        val o = -128 * (v - 1);
+        val o = -128 * (v - 1)
         viewModel.newColorFilter(
                 ColorMatrixColorFilter(
                         ColorMatrix().also {
