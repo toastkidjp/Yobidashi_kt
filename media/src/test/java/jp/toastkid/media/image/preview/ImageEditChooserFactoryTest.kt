@@ -37,6 +37,7 @@ class ImageEditChooserFactoryTest {
         every { Intent.createChooser(any(), any()) }.answers { mockk() }
         mockkStatic(FileProvider::class)
         every { FileProvider.getUriForFile(any(), any(), any()) }.answers { mockk() }
+        every { context.packageName }.returns("jp.toastkid.yobidashi.test")
 
         ImageEditChooserFactory().invoke(context, "test/path")
 
