@@ -9,11 +9,13 @@
 package jp.toastkid.media.image.preview
 
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -36,6 +38,9 @@ class ImageRotationUseCaseTest {
 
     @Before
     fun setUp() {
+        mockkConstructor(Matrix::class)
+        every { anyConstructed<Matrix>().preScale(any(), any()) }.returns(true)
+
         MockKAnnotations.init(this)
 
         every { currentBitmap.invoke() }.returns(mockk())
