@@ -9,11 +9,13 @@
 package jp.toastkid.media.image.preview
 
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -34,6 +36,9 @@ class RotatedBitmapFactoryTest {
 
     @Before
     fun setUp() {
+        mockkConstructor(Matrix::class)
+        every { anyConstructed<Matrix>().preScale(any(), any()) }.returns(true)
+
         MockKAnnotations.init(this)
         every { rotateMatrixFactory.invoke(any(), any(), any()) }.returns(mockk())
         every { bitmap.getWidth() }.returns(1)
