@@ -9,10 +9,14 @@
 package jp.toastkid.media.image.preview
 
 import android.graphics.ColorFilter
+import android.graphics.ColorMatrix
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -29,6 +33,10 @@ class ColorFilterUseCaseTest {
 
     @Before
     fun setUp() {
+        mockkConstructor(ColorMatrix::class)
+        every { anyConstructed<ColorMatrix>().set(any<FloatArray>()) }.just(Runs)
+        every { anyConstructed<ColorMatrix>().setSaturation(any()) }.just(Runs)
+
         MockKAnnotations.init(this)
 
         every { viewModel.newColorFilter(any<ColorFilter>()) }.answers { Unit }
