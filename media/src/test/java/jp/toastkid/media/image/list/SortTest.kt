@@ -1,15 +1,11 @@
 package jp.toastkid.media.image.list
 
-import jp.toastkid.media.image.list.Sort
 import org.junit.Assert.assertSame
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
 /**
  * @author toastkidjp
  */
-@RunWith(RobolectricTestRunner::class)
 class SortTest {
 
     @Test
