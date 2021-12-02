@@ -11,9 +11,11 @@ package jp.toastkid.media.image.preview
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -47,7 +49,7 @@ class ImageRotationUseCaseTest {
         every { rotatedBitmapFactory.rotateLeft(any()) }.returns(mockk())
         every { rotatedBitmapFactory.rotateRight(any()) }.returns(mockk())
         every { rotatedBitmapFactory.reverse(any()) }.returns(mockk())
-        every { viewModel.nextBitmap(any()) }.answers { Unit }
+        every { viewModel.nextBitmap(any()) }.just(Runs)
     }
 
     @After
