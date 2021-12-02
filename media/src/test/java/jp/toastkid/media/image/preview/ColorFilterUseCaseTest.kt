@@ -44,7 +44,7 @@ class ColorFilterUseCaseTest {
 
         MockKAnnotations.init(this)
 
-        every { viewModel.newColorFilter(any<ColorFilter>()) }.answers { Unit }
+        every { viewModel.newColorFilter(any<ColorFilter>()) }.just(Runs)
         every { viewModel.newColorFilter(any<ImageColorFilter>()) }.answers { Unit }
     }
 
