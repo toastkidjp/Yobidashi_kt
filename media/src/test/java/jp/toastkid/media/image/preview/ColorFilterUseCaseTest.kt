@@ -16,7 +16,9 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -36,6 +38,9 @@ class ColorFilterUseCaseTest {
         mockkConstructor(ColorMatrix::class)
         every { anyConstructed<ColorMatrix>().set(any<FloatArray>()) }.just(Runs)
         every { anyConstructed<ColorMatrix>().setSaturation(any()) }.just(Runs)
+
+        mockkObject(ImageColorFilter.SEPIA)
+        every { ImageColorFilter.SEPIA.filter }.returns(mockk())
 
         MockKAnnotations.init(this)
 
