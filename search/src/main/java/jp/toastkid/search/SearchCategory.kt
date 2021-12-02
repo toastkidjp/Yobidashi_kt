@@ -411,6 +411,11 @@ enum class SearchCategory(
             R.drawable.ic_myindex,
             "https://myindex.jp/search.php?w="
     ),
+    SEEKING_ALPHA(
+        R.string.seeking_alpha,
+        R.drawable.ic_seeking_alpha,
+        "https://seekingalpha.com/search?q="
+    ),
     YAHOO_JAPAN_FINANCE(
             R.string.yahoo_japan_finance,
             R.drawable.ic_yahoo_japan_finance,
