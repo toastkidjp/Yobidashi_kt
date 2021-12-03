@@ -10,6 +10,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.cookpad.android.plugin.license-tools'
+apply from: '../jacoco.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
