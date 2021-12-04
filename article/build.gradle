@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: "jacoco"
+apply from: '../jacoco.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -44,10 +44,6 @@ android {
     }
 }
 
-jacoco {
-    toolVersion = pluginVersions.jacoco
-}
-
 dependencies {
     implementation project(":lib")
     implementation project(":search")
@@ -83,18 +79,4 @@ dependencies {
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$libVersions.coroutines_test"
-}
-
-task jacocoTestReport(
-        type: JacocoReport,
-        dependsOn: "testDebugUnitTest",
-        group: "verification"
-) {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-    getSourceDirectories().from = "${projectDir}/src/main/java"
-    getClassDirectories().from = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug")
-    getExecutionData().from = "${buildDir}/jacoco/testDebugUnitTest.exec"
 }
