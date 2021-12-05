@@ -236,11 +236,6 @@ class DisplayingSettingFragment : Fragment() {
          */
         private const val BACKGROUND_DIR: String = "background_dir"
 
-        /**
-         * Request code.
-         */
-        private const val IMAGE_READ_REQUEST: Int = 136
-
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_setting_display
 

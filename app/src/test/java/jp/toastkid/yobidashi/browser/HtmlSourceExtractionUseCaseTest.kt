@@ -31,4 +31,14 @@ class HtmlSourceExtractionUseCaseTest {
 
         verify (exactly = 1) { webView.evaluateJavascript(any(), any()) }
     }
+
+    @Test
+    fun test1() {
+        every { webView.url }.returns("https://accounts.google.com/signin")
+        every { webView.evaluateJavascript(any(), any()) }.answers { Unit }
+
+        HtmlSourceExtractionUseCase().invoke(webView, mockk())
+
+        verify (exactly = 0) { webView.evaluateJavascript(any(), any()) }
+    }
 }

@@ -13,10 +13,16 @@ class HtmlSourceExtractionUseCase {
     @UiThread
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     operator fun invoke(webView: WebView?, callback: ValueCallback<String>) {
-        if (webView?.url?.startsWith("https://accounts.google.com/signin") == true) {
+        if (webView?.url?.startsWith(EXCEPTING_URL) == true) {
             return
         }
 
         webView?.evaluateJavascript(script, callback)
+    }
+
+    companion object {
+
+        private const val EXCEPTING_URL = "https://accounts.google.com/"
+
     }
 }
