@@ -29,8 +29,9 @@ class ImageStoreService(
     /**
      * Store image file.
      *
-     * @param context
      * @param image
+     * @param uri
+     * @param displaySize
      *
      * @throws FileNotFoundException
      */
