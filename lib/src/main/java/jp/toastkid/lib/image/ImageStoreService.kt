@@ -1,18 +1,17 @@
 /*
- * Copyright (c) 2019 toastkidjp.
+ * Copyright (c) 2021 toastkidjp.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.settings.background.load
+package jp.toastkid.lib.image
 
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.net.Uri
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.StorageWrapper
-import jp.toastkid.yobidashi.libs.BitmapScaling
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.util.UUID

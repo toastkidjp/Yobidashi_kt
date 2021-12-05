@@ -8,6 +8,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.FragmentActivity
 import coil.imageLoader
 import coil.request.ImageRequest
+import jp.toastkid.lib.image.ImageStoreService
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir

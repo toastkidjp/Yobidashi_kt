@@ -1,4 +1,12 @@
-package jp.toastkid.yobidashi.settings.background.load
+/*
+ * Copyright (c) 2021 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+
+package jp.toastkid.lib.image
 
 import android.graphics.Bitmap
 import android.graphics.Rect
@@ -13,7 +21,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
-import jp.toastkid.yobidashi.libs.BitmapScaling
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
