@@ -21,18 +21,14 @@ class ColorFilterUseCase(private val viewModel: ImagePreviewFragmentViewModel) {
     fun applyAlpha(alpha: Float) {
         lastFilter = null
         viewModel.newColorFilter(
-                ColorMatrixColorFilter(
-                        ColorMatrix().also {
-                            it.set(
-                                    floatArrayOf(
-                                            1f,0f,0f,alpha,000f,
-                                            0f,1f,0f,alpha,000f,
-                                            0f,0f,1f,alpha,000f,
-                                            0f,0f,0f,1f,000f
-                                    )
-                            )
-                        }
+            makeColorMatrixColorFilter(
+                floatArrayOf(
+                    1f, 0f, 0f, alpha, 000f,
+                    0f, 1f, 0f, alpha, 000f,
+                    0f, 0f, 1f, alpha, 000f,
+                    0f, 0f, 0f, 1f, 000f
                 )
+            )
         )
     }
 
@@ -55,6 +51,9 @@ class ColorFilterUseCase(private val viewModel: ImagePreviewFragmentViewModel) {
                 )
         )
     }
+
+    private fun makeColorMatrixColorFilter(floats: FloatArray) =
+        ColorMatrixColorFilter(ColorMatrix().also { it.set(floats) })
 
     fun reverseFilter() {
         applyFilter(ImageColorFilter.REVERSE)
