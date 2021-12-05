@@ -18,6 +18,7 @@ import jp.toastkid.media.image.preview.detail.ImageDetailFragment
  */
 class MenuActionUseCase(
         private val attachToAnyAppUseCase: AttachToAnyAppUseCase,
+        private val attachToThisAppBackgroundUseCase: AttachToThisAppBackgroundUseCase,
         private val uriSupplier: () -> Uri?,
         private val bitmapSupplier: () -> Bitmap?,
         private val showDialog: (DialogFragment) -> Unit
@@ -26,7 +27,7 @@ class MenuActionUseCase(
     fun thisApp(v: View) {
         val uri = uriSupplier() ?: return
         val image = bitmapSupplier() ?: return
-        // TODO attachToThisAppBackgroundUseCase.invoke(v.context, uri, image)
+        attachToThisAppBackgroundUseCase.invoke(v.context, uri, image)
     }
 
     fun otherApp(v: View) {

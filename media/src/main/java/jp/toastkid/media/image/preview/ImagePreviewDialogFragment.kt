@@ -34,6 +34,7 @@ import jp.toastkid.media.databinding.DialogImagePreviewBinding
 import jp.toastkid.media.image.Image
 import jp.toastkid.media.image.preview.attach.AttachMenuPopup
 import jp.toastkid.media.image.preview.attach.AttachToAnyAppUseCase
+import jp.toastkid.media.image.preview.attach.AttachToThisAppBackgroundUseCase
 import jp.toastkid.media.image.preview.attach.MenuActionUseCase
 
 /**
@@ -183,6 +184,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     binding.root.context,
                     MenuActionUseCase(
                             AttachToAnyAppUseCase(activityStarter = { startActivity(it) }),
+                            AttachToThisAppBackgroundUseCase(contentViewModel),
                             { pathFinder()?.toUri() },
                             { findCurrentImageView()?.drawable?.toBitmap() },
                             { it.show(parentFragmentManager, "detail") }
