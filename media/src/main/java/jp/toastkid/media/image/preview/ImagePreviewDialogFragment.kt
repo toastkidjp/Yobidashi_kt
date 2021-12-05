@@ -183,11 +183,11 @@ class ImagePreviewDialogFragment  : DialogFragment() {
             attachMenuPopup = AttachMenuPopup(
                     binding.root.context,
                     MenuActionUseCase(
-                            AttachToAnyAppUseCase(activityStarter = { startActivity(it) }),
-                            AttachToThisAppBackgroundUseCase(contentViewModel),
-                            { pathFinder()?.toUri() },
-                            { findCurrentImageView()?.drawable?.toBitmap() },
-                            { it.show(parentFragmentManager, "detail") }
+                        AttachToAnyAppUseCase(activityStarter = { startActivity(it) }),
+                        AttachToThisAppBackgroundUseCase(contentViewModel),
+                        { pathFinder()?.toUri() },
+                        { findCurrentImageView()?.drawable?.toBitmap() },
+                        { it.show(parentFragmentManager, "detail") }
                     )
             )
         }
