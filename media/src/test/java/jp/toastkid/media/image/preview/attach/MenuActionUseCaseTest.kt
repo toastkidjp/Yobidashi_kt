@@ -98,7 +98,7 @@ class MenuActionUseCaseTest {
     fun testDetail() {
         menuActionUseCase.detail()
 
-        verify (exactly = 0) { view.getContext() }
+        verify (exactly = 0) { view.context }
         verify (exactly = 0) { attachToAnyAppUseCase.invoke(any(), any()) }
         verify (exactly = 1) { uriSupplier.invoke() }
         verify (exactly = 0) { bitmapSupplier.invoke() }
