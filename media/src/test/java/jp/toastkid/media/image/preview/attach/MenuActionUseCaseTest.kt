@@ -74,7 +74,7 @@ class MenuActionUseCaseTest {
     fun testThisApp() {
         menuActionUseCase.thisApp(view)
 
-        verify (exactly = 1) { view.getContext() }
+        verify (exactly = 1) { view.context }
         verify (exactly = 0) { attachToAnyAppUseCase.invoke(any(), any()) }
         verify (exactly = 1) { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }
         verify (exactly = 1) { uriSupplier.invoke() }
