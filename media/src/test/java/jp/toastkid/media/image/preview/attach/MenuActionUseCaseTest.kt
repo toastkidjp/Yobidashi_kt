@@ -59,7 +59,7 @@ class MenuActionUseCaseTest {
         every { uriSupplier.invoke() }.returns(mockk())
         every { bitmapSupplier.invoke() }.returns(mockk())
         every { showDialog.invoke(any()) }.just(Runs)
-        every { view.getContext() }.returns(mockk())
+        every { view.context }.returns(mockk())
 
         mockkObject(ImageDetailFragment)
         every { ImageDetailFragment.withImageUri(any()) }.returns(mockk())
