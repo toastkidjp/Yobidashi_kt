@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.planning_poker
+package jp.toastkid.planning
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,8 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentPlanningPokerBinding
+import jp.toastkid.planning.databinding.FragmentPlanningPokerBinding
 
 /**
  * @author toastkidjp
@@ -43,8 +42,8 @@ class CardListFragment : Fragment() {
                                 viewHolder: RecyclerView.ViewHolder,
                                 target: RecyclerView.ViewHolder
                         ): Boolean {
-                            val fromPos = viewHolder.bindingAdapterPosition
-                            val toPos = target.bindingAdapterPosition
+                            val fromPos = viewHolder.adapterPosition
+                            val toPos = target.adapterPosition
                             it.adapter?.notifyItemMoved(fromPos, toPos)
                             (viewHolder as? ViewHolder)?.open()
                             return true

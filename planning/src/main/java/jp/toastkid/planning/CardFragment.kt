@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.planning_poker
+package jp.toastkid.planning
 
 import android.os.Bundle
 import android.util.TypedValue
@@ -9,10 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemPlanningPokerBinding
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.planning.databinding.ItemPlanningPokerBinding
 
 /**
  * Card Fragment.
@@ -33,7 +30,7 @@ class CardFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        binding.root.setOnClickListener { v ->
+        /*TODO binding.root.setOnClickListener { v ->
             Toaster.snackLong(
                     v,
                     R.string.message_confirm_back,
@@ -41,7 +38,7 @@ class CardFragment : Fragment() {
                     View.OnClickListener{ activity?.supportFragmentManager?.popBackStack() },
                     PreferenceApplier(v.context).colorPair()
             )
-        }
+        }*/
         val arguments = arguments ?: Bundle()
         if (arguments.containsKey(EXTRA_KEY_CARD_TEXT)) {
             arguments.getString(EXTRA_KEY_CARD_TEXT)
@@ -73,7 +70,7 @@ class CardFragment : Fragment() {
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.item_planning_poker
+        private val LAYOUT_ID: Int = R.layout.item_planning_poker
 
         fun makeWithNumber(text: String): Fragment =
                 CardFragment().also { it.arguments = bundleOf(EXTRA_KEY_CARD_TEXT to text) }

@@ -1,10 +1,10 @@
-package jp.toastkid.yobidashi.planning_poker
+package jp.toastkid.planning
 
 import android.util.TypedValue
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.databinding.ItemPlanningPokerBinding
+import jp.toastkid.planning.databinding.ItemPlanningPokerBinding
 
 /**
  * @author toastkidjp

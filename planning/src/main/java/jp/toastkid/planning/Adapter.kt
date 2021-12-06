@@ -1,11 +1,10 @@
-package jp.toastkid.yobidashi.planning_poker
+package jp.toastkid.planning
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
 
 /**
  * RecyclerView's adapter.
@@ -34,7 +33,7 @@ internal class Adapter : RecyclerView.Adapter<ViewHolder>() {
     companion object {
 
         @LayoutRes
-        private const val LAYOUT_ID = R.layout.item_planning_poker
+        private val LAYOUT_ID = R.layout.item_planning_poker
 
         /**
          * Maximum size.

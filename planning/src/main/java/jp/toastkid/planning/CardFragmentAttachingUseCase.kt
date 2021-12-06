@@ -6,10 +6,9 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.planning_poker
+package jp.toastkid.planning
 
 import androidx.fragment.app.FragmentManager
-import jp.toastkid.yobidashi.R
 
 class CardFragmentAttachingUseCase(private val fragmentManager: FragmentManager) {
 

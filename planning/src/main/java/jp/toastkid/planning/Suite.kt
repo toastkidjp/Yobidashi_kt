@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.planning_poker
+package jp.toastkid.planning
 
 /**
  * @author toastkidjp
