@@ -20,9 +20,9 @@ import java.util.UUID
  * @author toastkidjp
  */
 class ImageStoreService(
-        private val filesDir: StorageWrapper,
-        private val preferenceApplier: PreferenceApplier,
-        private val bitmapScaling: BitmapScaling = BitmapScaling()
+    private val filesDir: StorageWrapper,
+    private val preferenceApplier: PreferenceApplier,
+    private val bitmapScaling: BitmapScaling = BitmapScaling()
 ) {
 
     /**
