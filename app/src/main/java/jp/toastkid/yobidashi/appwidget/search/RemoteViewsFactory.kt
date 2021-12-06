@@ -12,22 +12,7 @@ import jp.toastkid.yobidashi.libs.intent.PendingIntentFactory
  *
  * @author toastkidjp
  */
-internal object RemoteViewsFactory {
-
-    /**
-     * Method name.
-     */
-    private const val METHOD_NAME_SET_COLOR_FILTER = "setColorFilter"
-
-    /**
-     * Method name.
-     */
-    private const val METHOD_NAME_SET_BACKGROUND_COLOR = "setBackgroundColor"
-
-    /**
-     * Layout ID.
-     */
-    private const val APPWIDGET_LAYOUT_ID = R.layout.appwidget_layout
+internal class RemoteViewsFactory {
 
     /**
      * Make RemoteViews.
@@ -92,6 +77,25 @@ internal object RemoteViewsFactory {
                 R.id.widget_search, pendingIntentFactory.makeSearchLauncher(context))
         remoteViews.setOnClickPendingIntent(
                 R.id.widget_barcode_reader, pendingIntentFactory.barcode(context))
+    }
+
+    companion object {
+
+        /**
+         * Method name.
+         */
+        private const val METHOD_NAME_SET_COLOR_FILTER = "setColorFilter"
+
+        /**
+         * Method name.
+         */
+        private const val METHOD_NAME_SET_BACKGROUND_COLOR = "setBackgroundColor"
+
+        /**
+         * Layout ID.
+         */
+        private const val APPWIDGET_LAYOUT_ID = R.layout.appwidget_layout
+
     }
 
 }
