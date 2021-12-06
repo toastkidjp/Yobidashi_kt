@@ -10,6 +10,7 @@ package jp.toastkid.lib.image
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.net.Uri
+import android.os.Build
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.StorageWrapper
 import java.io.FileNotFoundException
@@ -40,8 +41,14 @@ class ImageStoreService(
         preferenceApplier.backgroundImagePath = output.path
 
         val fileOutputStream = FileOutputStream(output)
+        val compressFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Bitmap.CompressFormat.WEBP_LOSSLESS
+        } else {
+            @Suppress("DEPRECATION")
+            Bitmap.CompressFormat.WEBP
+        }
         bitmapScaling(image, displaySize.width().toDouble(), displaySize.height().toDouble())
-                .compress(Bitmap.CompressFormat.WEBP, 100, fileOutputStream)
+                .compress(compressFormat, 100, fileOutputStream)
         fileOutputStream.close()
     }
 
