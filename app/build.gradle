@@ -70,6 +70,7 @@ dependencies {
     implementation project(":todo")
     implementation project(":licenses")
     implementation project(":media")
+    implementation project(":planning")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.cardview:cardview:$libVersions.cardview"
