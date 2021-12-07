@@ -11,7 +11,7 @@ import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.storage.ExternalFileAssignment
-import jp.toastkid.yobidashi.libs.ThumbnailGenerator
+import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
 import org.junit.After
 import org.junit.Test
 import java.io.File
