@@ -17,11 +17,11 @@ import jp.toastkid.media.image.preview.detail.ImageDetailFragment
  * @author toastkidjp
  */
 class MenuActionUseCase(
-        private val attachToAnyAppUseCase: AttachToAnyAppUseCase,
-        private val attachToThisAppBackgroundUseCase: AttachToThisAppBackgroundUseCase,
-        private val uriSupplier: () -> Uri?,
-        private val bitmapSupplier: () -> Bitmap?,
-        private val showDialog: (DialogFragment) -> Unit
+    private val attachToAnyAppUseCase: AttachToAnyAppUseCase,
+    private val attachToThisAppBackgroundUseCase: AttachToThisAppBackgroundUseCase,
+    private val uriSupplier: () -> Uri?,
+    private val bitmapSupplier: () -> Bitmap?,
+    private val showDialog: (DialogFragment) -> Unit
 ) {
 
     fun thisApp(v: View) {
