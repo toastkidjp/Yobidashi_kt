@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.gesture
+package jp.toastkid.gesture
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,7 +18,6 @@ import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import androidx.core.content.ContextCompat
-import jp.toastkid.yobidashi.R
 
 class DrawingCanvas
     @JvmOverloads constructor(

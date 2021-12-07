@@ -9,7 +9,7 @@
         app:cardElevation="4dp"
         >
 
-        <jp.toastkid.yobidashi.gesture.DrawingCanvas
+        <jp.toastkid.gesture.DrawingCanvas
             android:id="@+id/canvas"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

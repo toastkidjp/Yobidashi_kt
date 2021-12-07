@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.gesture
+package jp.toastkid.gesture
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,8 +18,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentGestureMemoBinding
+import jp.toastkid.gesture.databinding.FragmentGestureMemoBinding
 
 /*+
  * @author toastkidjp
@@ -63,10 +62,10 @@ class GestureMemoFragment : Fragment() {
     companion object {
 
         @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_gesture_memo
+        private val LAYOUT_ID = R.layout.fragment_gesture_memo
 
         @MenuRes
-        private const val MENU_ID = R.menu.fragment_gesture_memo
+        private val MENU_ID = R.menu.fragment_gesture_memo
 
     }
 }

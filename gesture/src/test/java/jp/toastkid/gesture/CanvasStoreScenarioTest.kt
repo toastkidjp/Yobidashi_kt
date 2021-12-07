@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.gesture
+package jp.toastkid.gesture
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
