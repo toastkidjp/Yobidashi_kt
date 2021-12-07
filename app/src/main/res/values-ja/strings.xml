@@ -426,7 +426,6 @@
     <string name="search_category">検索種別</string>
 
     <string name="title_gesture_memo">ジェスチャーメモ</string>
-    <string name="message_store_gesture_memo">Save current canvas to %s</string>
     <string name="button_clip_url">URL をコピー</string>
     <string name="button_clip_cookie">Cookie をコピー</string>
     <string name="add_to_home_screen">ショートカットを設置</string>
