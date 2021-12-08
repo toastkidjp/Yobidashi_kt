@@ -4,6 +4,7 @@
     <color name="default_text_color">#FFE8E8E8</color>
     <color name="pre4_ripple">#FFAAAAAA</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000B00</color>
     <color name="transparent">#00000000</color>
     <color name="item_background">#AAFFFFFF</color>
     <color name="popup_background">#FFF0F0F0</color>
