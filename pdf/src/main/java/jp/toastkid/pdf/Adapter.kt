@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.pdf
+package jp.toastkid.pdf
 
 import android.annotation.TargetApi
 import android.content.ContentResolver
@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
 
 /**
  * PDF Viewer's adapter.
@@ -76,7 +75,7 @@ class Adapter(
     companion object {
 
         @LayoutRes
-        private const val LAYOUT_ID = R.layout.item_pdf_content
+        private val LAYOUT_ID = R.layout.item_pdf_content
 
     }
 }

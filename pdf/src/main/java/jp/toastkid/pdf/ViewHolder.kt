@@ -1,8 +1,8 @@
-package jp.toastkid.yobidashi.pdf
+package jp.toastkid.pdf
 
 import android.graphics.Bitmap
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.databinding.ItemPdfContentBinding
+import jp.toastkid.pdf.databinding.ItemPdfContentBinding
 
 /**
  * PDF viewer's view holder

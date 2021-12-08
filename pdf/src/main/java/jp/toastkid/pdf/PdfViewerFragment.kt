@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.pdf
+package jp.toastkid.pdf
 
 import android.content.res.ColorStateList
 import android.net.Uri
@@ -26,15 +26,14 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.view.EditTextColorSetter
 import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.lib.fragment.CommonFragmentAction
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.AppBarPdfViewerBinding
-import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding
+import jp.toastkid.pdf.databinding.AppBarPdfViewerBinding
+import jp.toastkid.pdf.databinding.FragmentPdfViewerBinding
 
 /**
  * @author toastkidjp
@@ -200,10 +199,10 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
     companion object {
 
         @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_pdf_viewer
+        private val LAYOUT_ID = R.layout.fragment_pdf_viewer
 
         @LayoutRes
-        private const val APP_BAR_CONTENT_LAYOUT_ID = R.layout.app_bar_pdf_viewer
+        private val APP_BAR_CONTENT_LAYOUT_ID = R.layout.app_bar_pdf_viewer
 
         private const val KEY_URI = "uri"
 

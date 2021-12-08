@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.pdf
+package jp.toastkid.pdf
 
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
