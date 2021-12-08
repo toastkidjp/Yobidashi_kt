@@ -63,7 +63,7 @@ class RemoteViewsFactoryTest {
 
     @Test
     fun testMake() {
-        RemoteViewsFactory.make(context)
+        RemoteViewsFactory().make(context)
 
         verify(exactly = 1) { context.packageName }
         verify(exactly = 1) { context.getSharedPreferences(any(), any()) }

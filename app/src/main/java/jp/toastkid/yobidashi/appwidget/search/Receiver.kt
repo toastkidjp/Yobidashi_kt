@@ -15,9 +15,9 @@ class Receiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
             Provider.updateWidget(
-                    context.applicationContext,
-                    AppWidgetManager.getInstance(context),
-                    RemoteViewsFactory().make(context)
+                context.applicationContext,
+                AppWidgetManager.getInstance(context),
+                RemoteViewsFactory().make(context)
             )
         }
     }

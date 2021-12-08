@@ -50,15 +50,15 @@ class ArticleListFragmentViewModel : ViewModel() {
         _sort.postValue(Event(sort))
     }
 
-    private val _search = MutableLiveData<String>()
-    val search: LiveData<String> = _search
+    private val _search = MutableLiveData<String?>()
+    val search: LiveData<String?> = _search
 
     fun search(keyword: String?) {
         _search.postValue(keyword)
     }
 
-    private val _filter = MutableLiveData<String>()
-    val filter: LiveData<String> = _filter
+    private val _filter = MutableLiveData<String?>()
+    val filter: LiveData<String?> = _filter
 
     fun filter(keyword: String?) {
         _filter.postValue(keyword)

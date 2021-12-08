@@ -116,7 +116,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 return@registerForActivityResult
             }
 
-            UpdateUseCase(viewModel, { context }).invokeIfNeed(it.data?.data)
+            UpdateUseCase(viewModel) { context }.invokeIfNeed(it.data?.data)
         }
 
     override fun onAttach(context: Context) {
@@ -323,7 +323,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_all_article -> {
-                searchUseCase?.all()
+                activity?.let {
+                    ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
+                        .search(null)
+                }
                 true
             }
             R.id.action_bookmark -> {
