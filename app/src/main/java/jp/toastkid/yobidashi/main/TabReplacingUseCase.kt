@@ -13,11 +13,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.article_viewer.article.list.ArticleListFragment
+import jp.toastkid.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.calendar.CalendarFragment
 import jp.toastkid.yobidashi.editor.EditorFragment
-import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
