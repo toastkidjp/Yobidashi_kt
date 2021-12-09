@@ -41,7 +41,7 @@ dependencies {
     implementation "androidx.cardview:cardview:$libVersions.cardview"
     implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
-    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation "com.github.chrisbanes:PhotoView:$libVersions.photo_view"
 
     implementation "com.google.android.material:material:$libVersions.material"
 
