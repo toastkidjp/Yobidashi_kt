@@ -34,6 +34,7 @@ import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.ToolbarColorApplier
 import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.lib.view.filter.color.ForegroundColorFilterUseCase
+import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
@@ -54,7 +55,6 @@ import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
 import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
 import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.main.usecase.BackgroundTabOpenerUseCase
-import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuSwitchColorApplier
 import jp.toastkid.yobidashi.menu.MenuUseCase
@@ -609,7 +609,9 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
      * Open Editor tab.
      */
     private fun openEditorTab(path: String? = null) {
-        requestPermissionForOpenEditorTab.launch(path)
+        //requestPermissionForOpenEditorTab.launch(path)
+        tabs.openNewEditorTab(path)
+        replaceToCurrentTab()
     }
 
     /**
