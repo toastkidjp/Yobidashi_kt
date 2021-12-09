@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.RecyclerView
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 class Adapter(
-        private val layoutInflater: LayoutInflater,
-        private val contentResolver: ContentResolver?
+    private val layoutInflater: LayoutInflater,
+    private val contentResolver: ContentResolver?
 ): RecyclerView.Adapter<ViewHolder>() {
 
     /**
