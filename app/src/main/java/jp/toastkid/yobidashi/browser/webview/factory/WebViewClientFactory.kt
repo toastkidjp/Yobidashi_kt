@@ -24,6 +24,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.FragmentActivity
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
@@ -31,7 +32,6 @@ import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
-import jp.toastkid.yobidashi.browser.tls.TlsErrorDialogFragment
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
@@ -126,12 +126,12 @@ class WebViewClientFactory(
                 return
             }
 
-            TlsErrorDialogFragment
-                    .make(TlsErrorMessageGenerator().invoke(context, error))
-                    .show(
-                            context.supportFragmentManager,
-                            TlsErrorDialogFragment::class.java.simpleName
-                    )
+            ConfirmDialogFragment.show(
+                context.supportFragmentManager,
+                context.getString(R.string.title_ssl_connection_error),
+                TlsErrorMessageGenerator().invoke(context, error),
+                "tls_error"
+            )
         }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
