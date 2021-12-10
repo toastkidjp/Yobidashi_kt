@@ -261,7 +261,7 @@ class EditorFragment :
 
     override fun onDetach() {
         if (path.isNotEmpty()) {
-            saveToFileWithCheckingPermission(path)
+            saveToFile(path)
         }
         speechMaker?.dispose()
 
@@ -337,7 +337,7 @@ class EditorFragment :
             return
         }
         val fileName = File(path).nameWithoutExtension + "_backup.txt"
-        saveToFileWithCheckingPermission(externalFileAssignment(binding.root.context, fileName).absolutePath)
+        saveToFile(externalFileAssignment(binding.root.context, fileName).absolutePath)
     }
 
     fun clear() {
@@ -381,7 +381,7 @@ class EditorFragment :
      */
     fun save() {
         if (path.isNotEmpty()) {
-            saveToFileWithCheckingPermission(path)
+            saveToFile(path)
             return
         }
 
@@ -448,11 +448,12 @@ class EditorFragment :
      */
     private fun saveIfNeed() {
         if (path.isNotEmpty()) {
-            saveToFileWithCheckingPermission(path)
+            saveToFile(path)
         }
     }
 
     /**
+     * TODO Remove it
      * Save content to file.
      *
      * @param filePath
@@ -602,7 +603,7 @@ class EditorFragment :
         }
         path = newFile.absolutePath
         tabListViewModel?.saveEditorTab(newFile)
-        saveToFileWithCheckingPermission(path)
+        saveToFile(path)
     }
 
     /**
