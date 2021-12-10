@@ -129,16 +129,6 @@ class EditorFragment :
             it.data?.data?.let { uri -> readFromFileUri(uri) }
         }
 
-    private val permissionRequestLauncher =
-        registerForActivityResult(WriteStoragePermissionRequestContract()) {
-            if (it.first) {
-                return@registerForActivityResult
-            }
-
-            val filePath = it.second ?: return@registerForActivityResult
-            saveToFile(filePath)
-        }
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -264,7 +254,6 @@ class EditorFragment :
 
         loadAs?.unregister()
         loadResultLauncher?.unregister()
-        permissionRequestLauncher.unregister()
 
         parentFragmentManager.clearFragmentResultListener("clear_input")
         parentFragmentManager.clearFragmentResultListener("input_text")
