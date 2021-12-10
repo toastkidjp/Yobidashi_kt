@@ -7,11 +7,9 @@
  */
 package jp.toastkid.yobidashi.editor
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
@@ -29,7 +27,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Dimension
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -450,23 +447,6 @@ class EditorFragment :
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
-    }
-
-    /**
-     * TODO Remove it
-     * Save content to file.
-     *
-     * @param filePath
-     */
-    private fun saveToFileWithCheckingPermission(filePath: String) {
-        if (ActivityCompat.checkSelfPermission(binding.root.context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED) {
-            snackText(R.string.message_requires_permission_storage)
-            permissionRequestLauncher.launch(filePath)
-            return
-        }
-
-        saveToFile(filePath)
     }
 
     private fun saveToFile(filePath: String) {
