@@ -79,7 +79,7 @@ class ViewHistoryFragment: Fragment(), ContentScrollable {
         val fragmentActivity = activity ?: return
         ViewModelProvider(fragmentActivity).get(PageSearcherViewModel::class.java)
                 .find
-                .observe(fragmentActivity, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     adapter.filter(it)
                 })
 
