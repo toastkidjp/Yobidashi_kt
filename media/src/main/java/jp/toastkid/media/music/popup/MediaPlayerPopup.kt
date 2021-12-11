@@ -79,8 +79,8 @@ class MediaPlayerPopup(private val context: Context) {
     private val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
 
         override fun onChildrenLoaded(
-                parentId: String,
-                children: MutableList<MediaBrowserCompat.MediaItem>
+            parentId: String,
+            children: MutableList<MediaBrowserCompat.MediaItem>
         ) {
             if (children.isEmpty()) {
                 hide()
@@ -107,8 +107,8 @@ class MediaPlayerPopup(private val context: Context) {
                 val mediaControllerCompat = MediaControllerCompat(context, mediaBrowser.sessionToken)
                 mediaControllerCompat.registerCallback(controllerCallback)
                 MediaControllerCompat.setMediaController(
-                        it,
-                        mediaControllerCompat
+                    it,
+                    mediaControllerCompat
                 )
             }
 
@@ -142,10 +142,10 @@ class MediaPlayerPopup(private val context: Context) {
         initializeViewModels()
 
         adapter = Adapter(
-                LayoutInflater.from(context),
-                preferenceApplier,
-                resources,
-                mediaPlayerPopupViewModel
+            LayoutInflater.from(context),
+            preferenceApplier,
+            resources,
+            mediaPlayerPopupViewModel
         )
 
         observeViewModels()
@@ -164,10 +164,10 @@ class MediaPlayerPopup(private val context: Context) {
         setSlidingListener()
 
         mediaBrowser = MediaBrowserCompat(
-                context,
-                ComponentName(context, MediaPlayerService::class.java),
-                connectionCallback,
-                null
+            context,
+            ComponentName(context, MediaPlayerService::class.java),
+            connectionCallback,
+            null
         )
     }
 
@@ -175,8 +175,8 @@ class MediaPlayerPopup(private val context: Context) {
         binding.playingSpeed.isVisible = true
 
         binding.playingSpeed.adapter = PlaybackSpeedAdapter(
-                LayoutInflater.from(binding.root.context),
-                preferenceApplier.colorPair()
+            LayoutInflater.from(binding.root.context),
+            preferenceApplier.colorPair()
         )
         binding.playingSpeed.setSelection(PlayingSpeed.getDefault().findIndex())
         binding.playingSpeed.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -194,8 +194,8 @@ class MediaPlayerPopup(private val context: Context) {
         (attemptExtractActivity())?.also { activity ->
             mediaPlayerPopupViewModel?.clickItem?.observe(activity, {
                 attemptMediaController()
-                        ?.transportControls
-                        ?.playFromUri(it.description.mediaUri, bundleOf())
+                    ?.transportControls
+                    ?.playFromUri(it.description.mediaUri, bundleOf())
             })
             mediaPlayerPopupViewModel?.clickLyrics?.observe(activity, {
                 browserViewModel?.preview("https://www.google.com/search?q=$it Lyrics".toUri())
@@ -267,8 +267,8 @@ class MediaPlayerPopup(private val context: Context) {
 
     fun shuffle() {
         attemptMediaController()
-                ?.transportControls
-                ?.playFromUri(adapter?.random()?.description?.mediaUri, bundleOf())
+            ?.transportControls
+            ?.playFromUri(adapter?.random()?.description?.mediaUri, bundleOf())
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -300,7 +300,7 @@ class MediaPlayerPopup(private val context: Context) {
 
     private fun initializeViewModels() {
         val viewModelProvider = attemptExtractActivity()
-                ?.let { ViewModelProvider(it) }
+            ?.let { ViewModelProvider(it) }
         browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
         mediaPlayerPopupViewModel = viewModelProvider?.get(MediaPlayerPopupViewModel::class.java)
     }
@@ -321,7 +321,7 @@ class MediaPlayerPopup(private val context: Context) {
     }
 
     private fun attemptMediaController() =
-            attemptExtractActivity()?.let { MediaControllerCompat.getMediaController(it) }
+        attemptExtractActivity()?.let { MediaControllerCompat.getMediaController(it) }
 
     private fun attemptExtractActivity() = (context as? FragmentActivity)
 
