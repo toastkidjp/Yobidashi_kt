@@ -149,8 +149,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
                 .also { viewModel ->
                     viewModel.find.observe(viewLifecycleOwner, Observer {
-                        val text = it?.getContentIfNotHandled() ?: return@Observer
-                        imageFilterUseCase(text)
+                        imageFilterUseCase(it)
                     })
                 }
     }

@@ -228,17 +228,14 @@ class BrowserFragment : Fragment(),
 
         viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
             viewModel.find.observe(viewLifecycleOwner, Observer {
-                val text = it?.getContentIfNotHandled() ?: return@Observer
-                browserModule.find(text)
+                browserModule.find(it)
             })
 
             viewModel.upward.observe(viewLifecycleOwner, Observer {
-                it?.getContentIfNotHandled() ?: return@Observer
                 browserModule.findUp()
             })
 
             viewModel.downward.observe(viewLifecycleOwner, Observer {
-                it?.getContentIfNotHandled() ?: return@Observer
                 browserModule.findDown()
             })
         }
