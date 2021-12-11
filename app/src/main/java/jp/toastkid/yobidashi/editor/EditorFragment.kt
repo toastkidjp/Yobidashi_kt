@@ -52,7 +52,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.editor.load.LoadFromStorageDialogFragment
-import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
 import jp.toastkid.yobidashi.editor.usecase.RestoreContentUseCase
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
