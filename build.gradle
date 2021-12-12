@@ -20,7 +20,7 @@ buildscript {
     ext.versionNameValue = "${verMajor}.${verMiddle}.${verMinor}"
 
     ext.minSdk = 24
-    ext.compileSdk = 30
+    ext.compileSdk = 31
     ext.targetSdk = 30
     ext.buildTools = "30.0.3"
 
