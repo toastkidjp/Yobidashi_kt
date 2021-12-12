@@ -38,7 +38,6 @@ dependencies {
     implementation project(":lib")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
-    implementation 'com.squareup.okio:okio:1.17.5'
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"
