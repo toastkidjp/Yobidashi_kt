@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
 
 /**
- * TODO introduce LiveData.
  * @author toastkidjp
  */
 class PageSearcherViewModel : ViewModel() {
