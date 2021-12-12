@@ -413,6 +413,8 @@ class SearchFragment : Fragment() {
         }
 
         SearchAction(context, category, query, currentUrl, onBackground).invoke()
+
+        arguments?.clear()
     }
 
     fun clearInput() {
