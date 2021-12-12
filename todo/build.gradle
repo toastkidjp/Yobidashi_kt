@@ -49,7 +49,6 @@ dependencies {
     implementation "androidx.core:core-ktx:$libVersions.ktx"
     implementation "androidx.paging:paging-runtime:$libVersions.paging"
 
-    implementation 'com.squareup.okio:okio:1.17.5'
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
