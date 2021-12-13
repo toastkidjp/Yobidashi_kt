@@ -11,11 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.input.Inputs
+import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ViewCardFavoriteSearchBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
-import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 import kotlinx.coroutines.Job
 
 /**

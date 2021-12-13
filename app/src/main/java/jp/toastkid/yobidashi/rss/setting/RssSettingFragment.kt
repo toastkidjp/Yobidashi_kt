@@ -20,7 +20,7 @@ import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentRssSettingBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
+import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 
 /**
  * @author toastkidjp
