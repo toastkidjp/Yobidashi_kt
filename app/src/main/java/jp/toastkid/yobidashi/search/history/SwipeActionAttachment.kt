@@ -11,6 +11,7 @@ import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.view.SwipeViewHolder
+import jp.toastkid.lib.view.swipe.Removable
 
 /**
  * @author toastkidjp

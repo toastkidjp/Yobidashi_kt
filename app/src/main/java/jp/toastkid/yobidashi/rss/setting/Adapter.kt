@@ -11,10 +11,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.swipe.Removable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemRssSettingBinding
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.search.history.Removable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,7 +24,8 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class Adapter(private val preferenceApplier: PreferenceApplier) : RecyclerView.Adapter<ViewHolder>(), Removable {
+class Adapter(private val preferenceApplier: PreferenceApplier) : RecyclerView.Adapter<ViewHolder>(),
+    Removable {
 
     private val items = mutableListOf<String>()
 
