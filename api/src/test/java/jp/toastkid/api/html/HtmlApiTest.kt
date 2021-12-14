@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.rss.extractor
+package jp.toastkid.api.html
 
 import io.mockk.MockKAnnotations
 import io.mockk.every

@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.rss.extractor
 
 import android.view.View
 import androidx.annotation.VisibleForTesting
+import jp.toastkid.api.html.HtmlApi
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R

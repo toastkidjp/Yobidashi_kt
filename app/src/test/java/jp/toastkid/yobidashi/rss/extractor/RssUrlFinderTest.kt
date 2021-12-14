@@ -22,6 +22,7 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.api.html.HtmlApi
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.Toaster
@@ -87,7 +88,7 @@ class RssUrlFinderTest {
 
     @Test
     fun testSuccessfulCase() {
-        rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
+        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
 
         verify(exactly = 1) { preferenceApplier.colorPair() }
         verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
