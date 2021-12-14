@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi.search.suggestion
 
 import android.net.Uri
 import jp.toastkid.yobidashi.libs.MultiByteCharacterInspector
-import jp.toastkid.yobidashi.libs.network.HttpClientFactory
+import jp.toastkid.api.lib.HttpClientFactory
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -19,15 +19,15 @@ import kotlin.jvm.Throws
  * @author toastkidjp
  */
 class SuggestionApi(
-        /**
+    /**
          * HTTP client.
          */
         private val httpClient: OkHttpClient = HttpClientFactory.withTimeout(3L),
-        /**
+    /**
          * Response parser.
          */
         private val suggestionParser: SuggestionParser = SuggestionParser(),
-        private val multiByteCharacterInspector: MultiByteCharacterInspector = MultiByteCharacterInspector()
+    private val multiByteCharacterInspector: MultiByteCharacterInspector = MultiByteCharacterInspector()
 ) {
 
     /**

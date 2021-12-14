@@ -16,7 +16,7 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.Urls
-import jp.toastkid.yobidashi.libs.network.HttpClientFactory
+import jp.toastkid.api.lib.HttpClientFactory
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import org.junit.After
