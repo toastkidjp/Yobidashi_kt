@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.libs.network
 
+import jp.toastkid.api.lib.WebViewCookieHandler
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 

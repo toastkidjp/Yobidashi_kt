@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.libs.network
+package jp.toastkid.api.lib
 
 import android.webkit.CookieManager
 import io.mockk.MockKAnnotations
@@ -21,7 +21,7 @@ import org.junit.Test
  */
 class WebViewCookieHandlerTest {
 
-    private lateinit var webViewCookieHandler: WebViewCookieHandler
+    private lateinit var webViewCookieHandler: jp.toastkid.api.lib.WebViewCookieHandler
     
     @MockK
     private lateinit var cookieManager: CookieManager
@@ -35,7 +35,7 @@ class WebViewCookieHandlerTest {
         mockkStatic(CookieManager::class)
         every { CookieManager.getInstance() }.answers { cookieManager }
 
-        webViewCookieHandler = WebViewCookieHandler()
+        webViewCookieHandler = jp.toastkid.api.lib.WebViewCookieHandler()
     }
 
     @Test
