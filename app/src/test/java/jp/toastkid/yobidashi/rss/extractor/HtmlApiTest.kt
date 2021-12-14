@@ -12,11 +12,12 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.Urls
 import jp.toastkid.api.lib.HttpClientFactory
+import jp.toastkid.lib.Urls
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import org.junit.After
@@ -37,8 +38,8 @@ class HtmlApiTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        mockkObject(HttpClientFactory)
-        every { HttpClientFactory.withTimeout(any()) }.returns(httpClient)
+        mockkConstructor(HttpClientFactory::class)
+        every { anyConstructed<HttpClientFactory>().withTimeout(any()) }.returns(httpClient)
         every { httpClient.newCall(any()) }.returns(call)
         every { call.execute() }.returns(mockk())
 
@@ -57,7 +58,7 @@ class HtmlApiTest {
     fun testInvoke() {
         htmlApi.invoke("https://www.yahoo.co.jp")
 
-        verify(exactly = 1) { HttpClientFactory.withTimeout(any()) }
+        verify(exactly = 1) { anyConstructed<HttpClientFactory>().withTimeout(any()) }
         verify(exactly = 1) { httpClient.newCall(any()) }
         verify(exactly = 1) { call.execute() }
     }
@@ -66,7 +67,7 @@ class HtmlApiTest {
     fun testUrlIsBlank() {
         htmlApi.invoke(" ")
 
-        verify(exactly = 1) { HttpClientFactory.withTimeout(any()) }
+        verify(exactly = 1) { anyConstructed<HttpClientFactory>().withTimeout(any()) }
         verify(exactly = 0) { httpClient.newCall(any()) }
         verify(exactly = 0) { call.execute() }
     }
@@ -77,7 +78,7 @@ class HtmlApiTest {
 
         htmlApi.invoke("ttps://www.yahoo.co.jp")
 
-        verify(exactly = 1) { HttpClientFactory.withTimeout(any()) }
+        verify(exactly = 1) { anyConstructed<HttpClientFactory>().withTimeout(any()) }
         verify(exactly = 0) { httpClient.newCall(any()) }
         verify(exactly = 0) { call.execute() }
     }

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
  *
  * @author toastkidjp
  */
-object HttpClientFactory {
+class HttpClientFactory {
 
     fun withTimeout(seconds: Long): OkHttpClient =
             OkHttpClient.Builder()

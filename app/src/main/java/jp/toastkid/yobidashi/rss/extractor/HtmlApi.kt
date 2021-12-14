@@ -7,9 +7,9 @@
  */
 package jp.toastkid.yobidashi.rss.extractor
 
-import jp.toastkid.yobidashi.browser.user_agent.UserAgent
-import jp.toastkid.lib.Urls
 import jp.toastkid.api.lib.HttpClientFactory
+import jp.toastkid.lib.Urls
+import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import okhttp3.Request
 import okhttp3.Response
 
@@ -18,7 +18,7 @@ import okhttp3.Response
  */
 class HtmlApi {
 
-    private val httpClient = HttpClientFactory.withTimeout(3)
+    private val httpClient = HttpClientFactory().withTimeout(3)
 
     operator fun invoke(url: String?): Response? {
         if (url.isNullOrBlank() || Urls.isInvalidUrl(url)) {
