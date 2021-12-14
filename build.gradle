@@ -53,7 +53,8 @@ buildscript {
             robolectric: '4.2.1',
             mockk: '1.10.6',
             coroutines_test: '1.5.1',
-            photo_view: '2.3.0'
+            photo_view: '2.3.0',
+            okhttp: '4.9.0'
     ]
     ext.pluginVersions = [
             jacoco: '0.8.7'
