@@ -19,13 +19,13 @@ import java.util.Locale
  */
 class SuggestionApi(
     /**
-         * HTTP client.
-         */
-        private val httpClient: OkHttpClient = HttpClientFactory().withTimeout(3L),
+     * HTTP client.
+     */
+    private val httpClient: OkHttpClient = HttpClientFactory().withTimeout(3L),
     /**
-         * Response parser.
-         */
-        private val suggestionParser: SuggestionParser = SuggestionParser(),
+     * Response parser.
+     */
+    private val suggestionParser: SuggestionParser = SuggestionParser(),
     private val multiByteCharacterInspector: MultiByteCharacterInspector = MultiByteCharacterInspector()
 ) {
 
