@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ViewCardSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
