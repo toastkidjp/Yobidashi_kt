@@ -39,6 +39,9 @@ class HtmlApi {
 
         private const val HEADER_NAME_USER_AGENT = "User-Agent"
 
-        private val HEADER_VALUE_USER_AGENT = jp.toastkid.yobidashi.browser.user_agent.UserAgent.PC.text()
+        private val HEADER_VALUE_USER_AGENT =
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
+                    " AppleWebKit/537.36 (KHTML, like Gecko)" +
+                    " Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393"
     }
 }
