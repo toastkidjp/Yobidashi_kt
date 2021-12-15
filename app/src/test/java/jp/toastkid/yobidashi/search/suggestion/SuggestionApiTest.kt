@@ -16,7 +16,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi.libs.MultiByteCharacterInspector
+import jp.toastkid.api.lib.MultiByteCharacterInspector
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request

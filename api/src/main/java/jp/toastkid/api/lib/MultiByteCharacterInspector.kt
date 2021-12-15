@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.libs
+package jp.toastkid.api.lib
 
 /**
  * String utilities.
