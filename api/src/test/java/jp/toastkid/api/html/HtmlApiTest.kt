@@ -8,16 +8,16 @@
 
 package jp.toastkid.api.html
 
+import android.webkit.URLUtil
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.mockkObject
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.api.lib.HttpClientFactory
-import jp.toastkid.lib.Urls
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import org.junit.After
@@ -45,8 +45,8 @@ class HtmlApiTest {
 
         htmlApi = HtmlApi()
 
-        mockkObject(Urls)
-        every { Urls.isInvalidUrl(any()) }.returns(false)
+        mockkStatic(URLUtil::class)
+        every { URLUtil.isNetworkUrl(any()) }.returns(true)
     }
 
     @After
@@ -74,7 +74,7 @@ class HtmlApiTest {
 
     @Test
     fun testUrlIsInvalid() {
-        every { Urls.isInvalidUrl(any()) }.returns(true)
+        every { URLUtil.isNetworkUrl(any()) }.returns(false)
 
         htmlApi.invoke("ttps://www.yahoo.co.jp")
 
