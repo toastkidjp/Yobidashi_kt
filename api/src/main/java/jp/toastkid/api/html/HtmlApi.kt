@@ -21,7 +21,7 @@ class HtmlApi {
     private val httpClient = HttpClientFactory().withTimeout(3)
 
     operator fun invoke(url: String?): Response? {
-        if (url.isNullOrBlank() || (!URLUtil.isHttpUrl(url) && !URLUtil.isHttpsUrl(url))) {
+        if (url.isNullOrBlank() || (!URLUtil.isNetworkUrl(url))) {
             return null
         }
 
