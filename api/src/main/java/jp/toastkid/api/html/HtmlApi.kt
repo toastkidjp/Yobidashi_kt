@@ -8,6 +8,7 @@
 
 package jp.toastkid.api.html
 
+import android.webkit.URLUtil
 import jp.toastkid.api.lib.HttpClientFactory
 import okhttp3.Request
 import okhttp3.Response
@@ -20,7 +21,7 @@ class HtmlApi {
     private val httpClient = HttpClientFactory().withTimeout(3)
 
     operator fun invoke(url: String?): Response? {
-        if (url.isNullOrBlank() || jp.toastkid.lib.Urls.isInvalidUrl(url)) {
+        if (url.isNullOrBlank() || (!URLUtil.isHttpUrl(url) && !URLUtil.isHttpsUrl(url))) {
             return null
         }
 
