@@ -12,6 +12,17 @@ jacoco {
     toolVersion = pluginVersions.jacoco
 }
 
+android {
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
+}
+
 task jacocoTestReport(
         type: JacocoReport,
         dependsOn: "testDebugUnitTest",
