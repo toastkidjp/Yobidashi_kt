@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.search.suggestion
+package jp.toastkid.api.suggestion
 
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -17,7 +17,6 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.api.lib.MultiByteCharacterInspector
-import jp.toastkid.api.suggestion.SuggestionParser
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
