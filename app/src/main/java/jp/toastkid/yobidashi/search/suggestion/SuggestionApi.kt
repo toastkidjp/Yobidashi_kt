@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.search.suggestion
 import android.net.Uri
 import jp.toastkid.api.lib.HttpClientFactory
 import jp.toastkid.api.lib.MultiByteCharacterInspector
+import jp.toastkid.api.suggestion.SuggestionParser
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
