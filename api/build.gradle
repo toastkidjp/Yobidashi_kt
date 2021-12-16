@@ -34,6 +34,7 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "com.squareup.okhttp3:okhttp:$libVersions.okhttp"
+    implementation "com.jakewharton.timber:timber:$libVersions.timber"
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "org.robolectric:robolectric:$libVersions.robolectric"
