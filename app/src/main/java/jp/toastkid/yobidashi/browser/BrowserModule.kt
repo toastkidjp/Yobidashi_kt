@@ -310,7 +310,7 @@ class BrowserModule(
     }
 
     fun invokeHtmlSourceExtraction(callback: ValueCallback<String>) {
-        htmlSourceExtractionUseCase(currentView(), callback)
+        //TODO htmlSourceExtractionUseCase(currentView(), callback)
     }
 
     fun downloadAllImages() {

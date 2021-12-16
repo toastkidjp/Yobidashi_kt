@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
@@ -85,6 +86,8 @@ class DisplayingSettingFragment : Fragment() {
             .invoke()
     }
 
+    private var lastSnackbar: Snackbar? = null
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -120,7 +123,7 @@ class DisplayingSettingFragment : Fragment() {
         binding.imagesView.adapter = adapter
         if (adapter?.itemCount == 0) {
             val activity = activity ?: return
-            Toaster.withAction(
+            lastSnackbar = Toaster.withAction(
                 activity.findViewById(android.R.id.content),
                 R.string.message_snackbar_suggestion_select_background_image,
                 R.string.select,
@@ -220,7 +223,13 @@ class DisplayingSettingFragment : Fragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
+    override fun onPause() {
+        lastSnackbar?.dismiss()
+        super.onPause()
+    }
+
     override fun onDetach() {
+        lastSnackbar?.dismiss()
         contentViewModel?.refresh()
         addingLauncher.unregister()
 
