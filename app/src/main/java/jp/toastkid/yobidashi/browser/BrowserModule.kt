@@ -33,7 +33,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
+import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import timber.log.Timber
 
 /**
