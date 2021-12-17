@@ -8,6 +8,7 @@
 
 package jp.toastkid.api.lib
 
+import jp.toastkid.api.lib.interceptor.GzipInterceptor
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
@@ -21,6 +22,7 @@ internal class HttpClientFactory {
     fun withTimeout(seconds: Long): OkHttpClient =
             OkHttpClient.Builder()
                     .cookieJar(WebViewCookieHandler())
+                    .addInterceptor(GzipInterceptor())
                     .connectTimeout(seconds, TimeUnit.SECONDS)
                     .readTimeout(seconds, TimeUnit.SECONDS)
                     .writeTimeout(seconds, TimeUnit.SECONDS)
