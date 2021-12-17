@@ -9,9 +9,11 @@
 package jp.toastkid.api.suggestion
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -53,7 +55,7 @@ class SuggestionApiTest {
         every { builder.build() }.returns(mockk())
 
         every { httpClient.newCall(any()) }.returns(call)
-        every { call.enqueue(any()) }.answers { Unit }
+        every { call.enqueue(any()) }.just(Runs)
 
         every { multiByteCharacterInspector.invoke(any()) }.returns(true)
     }
