@@ -31,12 +31,12 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class TabReplacingUseCase(
-        private val tabs: TabAdapter,
-        private val obtainFragment: (Class<out Fragment>) -> Fragment,
-        private val replaceFragment: (Fragment, Boolean) -> Unit,
-        private val browserFragmentViewModel: BrowserFragmentViewModel,
-        private val refreshThumbnail: () -> Unit,
-        private val runOnUiThread: (() -> Unit) -> Unit
+    private val tabs: TabAdapter,
+    private val obtainFragment: (Class<out Fragment>) -> Fragment,
+    private val replaceFragment: (Fragment, Boolean) -> Unit,
+    private val browserFragmentViewModel: BrowserFragmentViewModel,
+    private val refreshThumbnail: () -> Unit,
+    private val runOnUiThread: (() -> Unit) -> Unit
 ) {
 
     /**
