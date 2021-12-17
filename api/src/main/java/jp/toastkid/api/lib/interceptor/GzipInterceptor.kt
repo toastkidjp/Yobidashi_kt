@@ -25,12 +25,12 @@ class GzipInterceptor : Interceptor {
 
         val originalRequest = chain.request()
         if (originalRequest.body == null ||
-            originalRequest.header("Content-Encoding") != null
+            originalRequest.header(KEY_HEADER) != null
         ) {
             return chain.proceed(originalRequest)
         }
         val compressedRequest = originalRequest.newBuilder()
-            .header("Content-Encoding", "gzip")
+            .header(KEY_HEADER, "gzip")
             .method(
                 originalRequest.method,
                 withContentLength(gzip(originalRequest.body!!))
@@ -81,3 +81,5 @@ class GzipInterceptor : Interceptor {
     }
 
 }
+
+private const val KEY_HEADER = "Content-Encoding"
