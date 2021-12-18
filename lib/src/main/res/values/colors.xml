@@ -11,4 +11,10 @@
     <color name="filter_white_bb">#CCFFFFFF</color>
     <color name="filter_white_aa">#AAFFFFFF</color>
     <color name="gray_500_dd">#DD9E9E9E</color>
+    <color name="link_blue">#FF4444FA</color>
+    <color name="darkgray_scale">#66000000</color>
+    <color name="search_divider">#EEE0E0E0</color>
+    <color name="soft_background">#FFF0F0F0</color>
+    <color name="deep_orange_500_dd">#DDFF5722</color>
+    <color name="lime_bg">#CCCDDC39</color>
 </resources>
