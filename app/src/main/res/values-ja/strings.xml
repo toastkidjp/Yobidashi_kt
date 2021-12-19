@@ -392,7 +392,6 @@
     <string name="message_stay_tuned">お楽しみに！</string>
     <string name="title_image_viewer">画像ビューアー</string>
 
-    <string name="title_excluding_item_setting">除外設定</string>
     <string name="title_dark_mode">ダークモードを使う</string>
     <string name="undo">戻す</string>
     <string name="title_context_editor_add_order">順序リスト</string>
@@ -424,9 +423,6 @@
     <string name="title_todo_tasks">タスクリスト</string>
     <string name="title_todo_tasks_board">タスクボード</string>
     <string name="title_search_with_map_app">地図アプリで検索</string>
-    <string name="title_sort_by_date">日付でソート</string>
-    <string name="title_sort_by_name">名前でソート</string>
-    <string name="title_sort_by_count">数でソート</string>
     <string name="title_context_editor_task_list">タスクリスト</string>
     <string name="subhead_search_category_setting">検索種別の設定</string>
     <string name="message_failed_query_extraction_from_web_view">キーワードを取得できませんでした。再度実行するか、クリップボードにコピーして検索してください。</string>

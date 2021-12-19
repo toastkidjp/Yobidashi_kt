@@ -16,6 +16,11 @@
     <string name="content_description_set_to">Set to</string>
     <string name="content_description_edit_image">Edit image</string>
     <string name="message_cannot_launch_app">It has cannot open App.</string>
+    <string name="title_excluding_item_setting">Excluding items</string>
+    <string name="title_sort_by_date">Sort by date</string>
+    <string name="title_sort_by_name">Sort by name</string>
+    <string name="title_sort_by_count">Sort by count</string>
+
     <string name="action_close">Close</string>
     <string name="title_activity_date_detail">Detail</string>
     <string name="this_app">This app</string>

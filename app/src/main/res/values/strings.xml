@@ -398,7 +398,6 @@
     <string name="insert_as_plain">Insert as plain</string>
     <string name="title_image_viewer">Image Viewer</string>
 
-    <string name="title_excluding_item_setting">Excluding items</string>
     <string name="title_dark_mode">Use dark mode</string>
     <string name="undo">undo</string>
     <string name="title_context_editor_add_order">Add order</string>
@@ -431,9 +430,6 @@
     <string name="title_todo_tasks">TODO tasks</string>
     <string name="title_todo_tasks_board">Task board</string>
     <string name="title_search_with_map_app">Search with map app</string>
-    <string name="title_sort_by_date">Sort by date</string>
-    <string name="title_sort_by_name">Sort by name</string>
-    <string name="title_sort_by_count">Sort by count</string>
     <string name="title_context_editor_task_list">Task list</string>
     <string name="subhead_search_category_setting">Search category setting</string>
     <string name="message_failed_query_extraction_from_web_view">Query extraction failed. Please would you retry or copy to clipboard?</string>
