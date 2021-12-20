@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:minHeight="@dimen/search_item_height"
+        android:minHeight="40dp"
         >
         <TextView
             android:id="@+id/delete"
