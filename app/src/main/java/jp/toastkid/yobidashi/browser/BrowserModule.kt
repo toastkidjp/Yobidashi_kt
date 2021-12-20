@@ -19,6 +19,7 @@ import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.download.image.AllImageDownloaderUseCase
 import jp.toastkid.yobidashi.browser.page_information.PageInformationExtractor
 import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
+import jp.toastkid.yobidashi.browser.usecase.HtmlSourceExtractionUseCase
 import jp.toastkid.yobidashi.browser.usecase.WebViewReplacementUseCase
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
@@ -308,7 +309,7 @@ class BrowserModule(
     }
 
     fun invokeHtmlSourceExtraction(callback: ValueCallback<String>) {
-        //TODO htmlSourceExtractionUseCase(currentView(), callback)
+        HtmlSourceExtractionUseCase()(currentView(), callback)
     }
 
     fun downloadAllImages() {

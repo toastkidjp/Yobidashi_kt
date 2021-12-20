@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.search.clip
 
 import android.content.ClipboardManager
-import android.content.Context
 import android.view.View
 import androidx.core.net.toUri
 import jp.toastkid.lib.BrowserViewModel
@@ -64,7 +63,7 @@ class SearchWithClip(
                 parent,
                 context.getString(R.string.message_clip_search, text),
                 R.string.title_search_action,
-                { searchOrBrowse(context, text) },
+                { searchOrBrowse(text) },
                 colorPair
             )
         }
@@ -91,10 +90,9 @@ class SearchWithClip(
     /**
      * Open search result or url.
      *
-     * @param context
      * @param text
      */
-    private fun searchOrBrowse(context: Context, text: CharSequence) {
+    private fun searchOrBrowse(text: CharSequence) {
         val query = text.toString()
 
         val url =
