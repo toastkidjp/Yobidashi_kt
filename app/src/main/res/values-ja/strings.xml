@@ -376,9 +376,7 @@
     <string name="title_add_to_rss_reader">RSS リーダーに追加</string>
     <string name="message_rss_reader_launch_failed">You should add any RSS link via header\'s menu if you want to use this function.</string>
     <string name="message_failure_extracting_rss">This site doesn\'t contains any RSS feeds.</string>
-    <string name="title_rss_setting">RSS 設定</string>
     <string name="clipboard">クリップボード</string>
-    <string name="message_add_rss_target">この RSS を追加しますか?</string>
     <string name="title_current_page">現在のページ</string>
     <string name="message_clip_to">%s をクリップボードにコピーしました。</string>
     <string name="title_url_module">URL モジュールを使う</string>
