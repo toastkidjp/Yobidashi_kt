@@ -12,6 +12,7 @@ import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.api.html.HtmlApi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.ColorPair
@@ -31,6 +32,9 @@ class RssUrlFinder(
     private val urlValidator: RssUrlValidator = RssUrlValidator(),
     private val rssUrlExtractor: RssUrlExtractor = RssUrlExtractor(),
     private val htmlApi: HtmlApi = HtmlApi(),
+    private val contentViewModelFactory: (ViewModelStoreOwner) -> ContentViewModel? = {
+        ViewModelProvider(it).get(ContentViewModel::class.java)
+    },
     @VisibleForTesting
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     @VisibleForTesting
@@ -87,6 +91,6 @@ class RssUrlFinder(
 
     private fun obtainContentViewModel(context: Context) =
         (context as? FragmentActivity)?.let {
-            ViewModelProvider(it).get(ContentViewModel::class.java)
+            contentViewModelFactory(it)
         }
 }
