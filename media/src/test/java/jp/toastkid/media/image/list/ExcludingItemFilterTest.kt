@@ -1,6 +1,7 @@
 package jp.toastkid.media.image.list
 
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
