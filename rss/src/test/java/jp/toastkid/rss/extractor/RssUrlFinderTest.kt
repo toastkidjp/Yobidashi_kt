@@ -9,6 +9,7 @@
 package jp.toastkid.rss.extractor
 
 import android.graphics.Color
+import androidx.lifecycle.ViewModelStoreOwner
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -19,13 +20,12 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.api.html.HtmlApi
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.Toaster
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
@@ -51,6 +51,9 @@ class RssUrlFinderTest {
     @MockK
     private lateinit var htmlApi: HtmlApi
 
+    @MockK
+    private lateinit var contentViewModelFactory: (ViewModelStoreOwner) -> ContentViewModel?
+
     @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
@@ -62,6 +65,9 @@ class RssUrlFinderTest {
 
     @MockK
     private lateinit var body: ResponseBody
+
+    @MockK
+    private lateinit var contentViewModel: ContentViewModel
 
     @Before
     fun setUp() {
@@ -76,9 +82,9 @@ class RssUrlFinderTest {
         coEvery { response getProperty "body" }.returns(body)
         coEvery { body.string() }.returns("test")
 
-        mockkObject(Toaster)
-        every { Toaster.snackShort(any(), any<Int>(), any()) }.returns(mockk())
-        every { Toaster.snackShort(any(), any<String>(), any()) }.returns(mockk())
+        every { contentViewModelFactory.invoke(any()) }.returns(contentViewModel)
+        every { contentViewModel.snackShort(any<Int>()) }.returns(mockk())
+        every { contentViewModel.snackShort(any<String>()) }.returns(mockk())
     }
 
     @After
@@ -99,8 +105,8 @@ class RssUrlFinderTest {
         coVerify(exactly = 1) { response getProperty "body" }
         coVerify(exactly = 1) { body.string() }
 
-        verify(exactly = 1) { Toaster.snackShort(any(), any<Int>(), any()) }
-        verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
+        verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
     }
 
     @Test
@@ -116,8 +122,8 @@ class RssUrlFinderTest {
         coVerify(exactly = 0) { response getProperty "body" }
         coVerify(exactly = 0) { body.string() }
 
-        verify(exactly = 0) { Toaster.snackShort(any(), any<Int>(), any()) }
-        verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
+        verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
     }
 
     @Test
@@ -135,8 +141,8 @@ class RssUrlFinderTest {
         coVerify(exactly = 0) { response getProperty "body" }
         coVerify(exactly = 0) { body.string() }
 
-        verify(exactly = 0) { Toaster.snackShort(any(), any<Int>(), any()) }
-        verify(exactly = 1) { Toaster.snackShort(any(), any<String>(), any()) }
+        verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 1) { contentViewModel.snackShort(any<String>()) }
     }
 
 
@@ -155,8 +161,8 @@ class RssUrlFinderTest {
         coVerify(exactly = 0) { response getProperty "body" }
         coVerify(exactly = 0) { body.string() }
 
-        verify(exactly = 1) { Toaster.snackShort(any(), any<Int>(), any()) }
-        verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
+        verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
     }
 
     @Test
@@ -174,8 +180,8 @@ class RssUrlFinderTest {
         coVerify(exactly = 0) { response getProperty "body" }
         coVerify(exactly = 0) { body.string() }
 
-        verify(exactly = 1) { Toaster.snackShort(any(), any<Int>(), any()) }
-        verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
+        verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
     }
 
 }
