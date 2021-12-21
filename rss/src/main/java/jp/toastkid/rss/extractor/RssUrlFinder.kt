@@ -86,10 +86,8 @@ class RssUrlFinder(
                     return
                 }
 
-        (snackbarParent.context as? FragmentActivity)?.let {
-            ViewModelProvider(it).get(ContentViewModel::class.java)
-                .snackShort(R.string.message_failure_extracting_rss)
-        }
+        obtainContentViewModel(snackbarParent.context)
+            ?.snackShort(R.string.message_failure_extracting_rss)
     }
 
     private fun obtainContentViewModel(context: Context) =
