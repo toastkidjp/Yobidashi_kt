@@ -79,10 +79,7 @@ class RssUrlFinder(
         urls?.firstOrNull { urlValidator(it) }
                 ?.let {
                     preferenceApplier.saveNewRssReaderTargets(it)
-                    (snackbarParent.context as? FragmentActivity)?.let { fragmentActivity ->
-                        ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
-                            .snackShort("Added $it")
-                    }
+                    obtainContentViewModel(snackbarParent.context)?.snackShort("Added $it")
                     return
                 }
 
