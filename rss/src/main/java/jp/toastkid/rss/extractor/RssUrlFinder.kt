@@ -51,10 +51,8 @@ class RssUrlFinder(
 
         if (urlValidator(currentUrl)) {
             preferenceApplier.saveNewRssReaderTargets(currentUrl)
-            (snackbarParent.context as? FragmentActivity)?.let {
-                ViewModelProvider(it).get(ContentViewModel::class.java)
-                    .snackShort("Added $currentUrl")
-            }
+            obtainContentViewModel(snackbarParent.context)
+                    ?.snackShort("Added $currentUrl")
             return
         }
 
