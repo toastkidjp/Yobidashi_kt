@@ -8,14 +8,15 @@
 
 package jp.toastkid.rss.suggestion
 
+import androidx.lifecycle.ViewModelStoreOwner
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.rss.extractor.RssUrlValidator
 import kotlinx.coroutines.Dispatchers
@@ -40,12 +41,18 @@ class RssAddingSuggestionTest {
     @Suppress("unused")
     private val backgroundDispatcher = Dispatchers.Unconfined
 
+    @MockK
+    private lateinit var contentViewModelFactory: (ViewModelStoreOwner) -> ContentViewModel?
+
+    @MockK
+    private lateinit var contentViewModel: ContentViewModel
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        mockkObject(Toaster)
-        every { Toaster.snackLong(any(), any<Int>(), any(), any(), any()) }.answers { mockk() }
+        every { contentViewModelFactory.invoke(any()) }.returns(contentViewModel)
+        every { contentViewModel.snackWithAction(any(), any(), any()) }.returns(mockk())
         every { preferenceApplier.colorPair() }.returns(mockk())
     }
 
@@ -63,7 +70,7 @@ class RssAddingSuggestionTest {
 
         verify(exactly = 1) { rssUrlValidator.invoke(any()) }
         verify(exactly = 1) { preferenceApplier.containsRssTarget(any()) }
-        verify(exactly = 1) { Toaster.snackLong(any(), any<Int>(), any(), any(), any()) }
+        verify(exactly = 1) { contentViewModel.snackWithAction(any(), any(), any()) }
         verify(exactly = 1) { preferenceApplier.colorPair() }
     }
 
@@ -76,7 +83,7 @@ class RssAddingSuggestionTest {
 
         verify(exactly = 1) { rssUrlValidator.invoke(any()) }
         verify(exactly = 0) { preferenceApplier.containsRssTarget(any()) }
-        verify(exactly = 0) { Toaster.snackLong(any(), any<Int>(), any(), any(), any()) }
+        verify(exactly = 0) { contentViewModel.snackWithAction(any(), any(), any()) }
         verify(exactly = 0) { preferenceApplier.colorPair() }
     }
 
@@ -89,7 +96,7 @@ class RssAddingSuggestionTest {
 
         verify(exactly = 1) { rssUrlValidator.invoke(any()) }
         verify(exactly = 1) { preferenceApplier.containsRssTarget(any()) }
-        verify(exactly = 0) { Toaster.snackLong(any(), any<Int>(), any(), any(), any()) }
+        verify(exactly = 0) { contentViewModel.snackWithAction(any(), any(), any()) }
         verify(exactly = 0) { preferenceApplier.colorPair() }
     }
 
