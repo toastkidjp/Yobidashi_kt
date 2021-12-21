@@ -7,6 +7,7 @@
  */
 package jp.toastkid.rss.extractor
 
+import android.content.Context
 import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
@@ -90,4 +91,9 @@ class RssUrlFinder(
                 .snackShort(R.string.message_failure_extracting_rss)
         }
     }
+
+    private fun obtainContentViewModel(context: Context) =
+        (context as? FragmentActivity)?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java)
+        }
 }
