@@ -8,10 +8,12 @@
 
 package jp.toastkid.media.image.preview.detail
 
+import android.util.Log
 import androidx.exifinterface.media.ExifInterface
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -30,6 +32,9 @@ class ExifInformationExtractorUseCaseTest {
 
     @Before
     fun setUp() {
+        mockkStatic(Log::class)
+        every { Log.isLoggable(any(), any()) }.returns(false)
+
         MockKAnnotations.init(this)
 
         exifInformationExtractorUseCase = ExifInformationExtractorUseCase(stringBuilder)
