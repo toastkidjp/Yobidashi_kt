@@ -131,7 +131,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
         adapter?.setViewModel(searchFragmentViewModel)
         searchFragmentViewModel.search.observe(viewLifecycleOwner, {
             val event = it.getContentIfNotHandled() ?: return@observe
-            startSearch(SearchCategory.findByCategory(event.category), event.query ?: "")
+            startSearch(SearchCategory.findByCategory(event.category), event.query)
         })
 
         parentFragmentManager.setFragmentResultListener(

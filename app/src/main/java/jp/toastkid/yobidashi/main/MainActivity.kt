@@ -286,6 +286,14 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
             ?.openNewTab
             ?.observe(this, { openNewTabFromTabList() })
 
+        val fragmentManager = supportFragmentManager
+        fragmentManager.setFragmentResultListener("clear_tabs", this, { key, result ->
+            if (result.getBoolean(key).not()) {
+                return@setFragmentResultListener
+            }
+            onClickClear()
+        })
+
         tabs = TabAdapter({ this }, this::onEmptyTabs)
 
         tabReplacingUseCase = TabReplacingUseCase(
@@ -734,6 +742,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
         requestPermissionForOpenPdfTab.unregister()
         requestPermissionForOpenEditorTab.unregister()
         downloadPermissionRequestLauncher.unregister()
+        supportFragmentManager.clearFragmentResultListener("clear_tabs")
         super.onDestroy()
     }
 

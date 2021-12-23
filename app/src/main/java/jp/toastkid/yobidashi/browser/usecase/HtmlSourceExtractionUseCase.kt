@@ -18,6 +18,9 @@ class HtmlSourceExtractionUseCase {
 
     /**
      * WebView.evaluateJavascript should be called from UI thread.
+     *
+     * @param webView [WebView]
+     * @param callback [ValueCallback<String>]
      */
     @UiThread
     @RequiresApi(Build.VERSION_CODES.KITKAT)

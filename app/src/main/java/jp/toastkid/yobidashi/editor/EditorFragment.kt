@@ -55,6 +55,7 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
+import jp.toastkid.yobidashi.editor.usecase.RestoreContentUseCase
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.MainActivity
@@ -68,10 +69,10 @@ import java.util.Calendar
  * @author toastkidjp
  */
 class EditorFragment :
-        Fragment(),
-        TabUiFragment,
-        CommonFragmentAction,
-        ContentScrollable
+    Fragment(),
+    TabUiFragment,
+    CommonFragmentAction,
+    ContentScrollable
 {
 
     private lateinit var binding: FragmentEditorBinding
@@ -409,14 +410,12 @@ class EditorFragment :
     }
 
     fun restore() {
-        if (contentHolderService.isBlank()) {
-            contentViewModel?.snackShort("Backup is empty.")
-            return
-        }
-
-        val selectionStart = binding.editorInput.selectionStart
-        setContentText(contentHolderService.getContent())
-        binding.editorInput.setSelection(selectionStart)
+        RestoreContentUseCase(
+            contentHolderService,
+            contentViewModel,
+            binding.editorInput,
+            ::setContentText
+        ).invoke()
     }
 
     /**
