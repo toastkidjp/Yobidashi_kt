@@ -23,9 +23,9 @@ class RssReaderApi {
     operator fun invoke(rssUrl: String): Rss? {
         val uri = rssUrl.toUri()
         val retrofit = Retrofit.Builder()
-                .baseUrl("${uri.scheme}://${uri.host}")
-                .addConverterFactory(converter)
-                .build()
+            .baseUrl("${uri.scheme}://${uri.host}")
+            .addConverterFactory(converter)
+            .build()
 
         val service = retrofit.create(RssService::class.java)
         val call = service.call(rssUrl)
