@@ -27,7 +27,7 @@ class PendingIntentFactory(
                     context,
                     0,
                     mainActivityIntentFactory.search(context),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
     /**
@@ -41,7 +41,7 @@ class PendingIntentFactory(
                     context,
                     8,
                     mainActivityIntentFactory.barcodeReader(context),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
     /**
@@ -55,7 +55,7 @@ class PendingIntentFactory(
                     context,
                     9,
                     mainActivityIntentFactory.browser(context, PreferenceApplier(context).homeUrl.toUri()),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
     /**
@@ -69,7 +69,7 @@ class PendingIntentFactory(
                     context,
                     10,
                     mainActivityIntentFactory.bookmark(context),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
     /**
@@ -83,7 +83,7 @@ class PendingIntentFactory(
                     context,
                     11,
                     RandomWikipedia.makeIntent(context),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
     /**
@@ -97,7 +97,7 @@ class PendingIntentFactory(
                     context,
                     12,
                     mainActivityIntentFactory.setting(context),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
 }
