@@ -17,7 +17,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.launch.MainActivityIntentFactory
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
-import java.util.*
+import java.util.Calendar
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -67,7 +67,7 @@ class RemoteViewsFactory {
                     context,
                     0,
                     mainActivityIntentFactory.browser(context, makeArticleUri(context)),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
     private fun makeArticleLinkPendingIntent(context: Context, uri: Uri): PendingIntent =
@@ -75,7 +75,7 @@ class RemoteViewsFactory {
                     context,
                     1,
                     mainActivityIntentFactory.browser(context, uri),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
     private fun makeArticleUri(context: Context): Uri {
