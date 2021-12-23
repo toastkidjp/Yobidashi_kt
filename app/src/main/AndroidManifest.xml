@@ -62,7 +62,7 @@
             android:name=".browser.BrowserActivity"
             android:targetActivity=".main.MainActivity"
             android:label="@string/title_open_url"
-            android:enabled="true"
+            android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -91,6 +91,7 @@
             android:name=".search.SearchActivity"
             android:targetActivity=".main.MainActivity"
             android:label="@string/title_search"
+            android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.WEB_SEARCH" />
@@ -102,6 +103,7 @@
             android:name=".edit.EditActivity"
             android:targetActivity=".main.MainActivity"
             android:label="@string/title_editor"
+            android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
