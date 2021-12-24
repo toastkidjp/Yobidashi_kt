@@ -6,26 +6,6 @@
     <string name="message_audio_file_is_not_found">Audio file is not found.</string>
 
     <string name="title_lyrics_search">Lyrics search</string>
-    <string name="content_description_switch_visibility">Switch visibility</string>
-    <string name="content_description_reverse_color">Reverse color</string>
-    <string name="content_description_sepia_color_filter">Sepia color filter</string>
-    <string name="content_description_gray_scale">Gray scale</string>
-    <string name="content_description_rotate_left">Rotate left</string>
-    <string name="content_description_reverse_image">Reverse image</string>
-    <string name="content_description_rotate_right">Rotate right</string>
-    <string name="content_description_set_to">Set to</string>
-    <string name="content_description_edit_image">Edit image</string>
-    <string name="message_cannot_launch_app">It has cannot open App.</string>
-    <string name="title_excluding_item_setting">Excluding items</string>
-    <string name="title_sort_by_date">Sort by date</string>
-    <string name="title_sort_by_name">Sort by name</string>
-    <string name="title_sort_by_count">Sort by count</string>
-
-    <string name="action_close">Close</string>
-    <string name="title_activity_date_detail">Detail</string>
-    <string name="this_app">This app</string>
-    <string name="other_app">Other app</string>
-    <string name="settings_color_reset">Reset</string>
 
     <string name="title_playing_speed_0_5">x0.5</string>
     <string name="title_playing_speed_0_7">x0.7</string>

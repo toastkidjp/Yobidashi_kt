@@ -6,26 +6,6 @@
     <string name="message_audio_file_is_not_found">音楽ファイルが見つかりませんでした。</string>
 
     <string name="title_lyrics_search">歌詞検索</string>
-    <string name="content_description_switch_visibility">表示切替</string>
-    <string name="content_description_reverse_color">色の反転</string>
-    <string name="content_description_sepia_color_filter">セピア</string>
-    <string name="content_description_gray_scale">灰色</string>
-    <string name="content_description_rotate_left">左に回転</string>
-    <string name="content_description_reverse_image">水平方向に反転</string>
-    <string name="content_description_rotate_right">右に回転</string>
-    <string name="content_description_set_to">画像を設定</string>
-    <string name="content_description_edit_image">画像を編集</string>
-    <string name="message_cannot_launch_app">アプリを起動できませんでした。</string>
-    <string name="title_excluding_item_setting">除外設定</string>
-    <string name="title_sort_by_date">日付でソート</string>
-    <string name="title_sort_by_name">名前でソート</string>
-    <string name="title_sort_by_count">数でソート</string>
-
-    <string name="action_close">閉じる</string>
-    <string name="title_activity_date_detail">Detail</string>
-    <string name="this_app">このアプリの背景に設定</string>
-    <string name="other_app">別のアプリで設定</string>
-    <string name="settings_color_reset">戻す</string>
 
     <string name="title_playing_speed_0_5">x0.5</string>
     <string name="title_playing_speed_0_7">x0.7</string>
