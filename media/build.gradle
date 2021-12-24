@@ -50,7 +50,6 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
-    implementation "com.github.chrisbanes:PhotoView:$libVersions.photo_view"
     implementation "io.coil-kt:coil:1.2.1"
     implementation "io.coil-kt:coil-gif:1.2.1"
 
