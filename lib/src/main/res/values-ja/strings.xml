@@ -19,6 +19,8 @@
     <string name="edit">編集</string>
     <string name="add">追加</string>
     <string name="delete">削除</string>
+    <string name="commit">決定</string>
+    <string name="reset">戻す</string>
 
     <string name="favorite_search_addition_dialog_empty_message">キーワードを入力してください。</string>
     <string name="done_addition">追加しました。</string>
