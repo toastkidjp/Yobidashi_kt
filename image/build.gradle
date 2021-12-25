@@ -51,8 +51,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
     implementation "com.github.chrisbanes:PhotoView:$libVersions.photo_view"
-    implementation "io.coil-kt:coil:1.2.1"
-    implementation "io.coil-kt:coil-gif:1.2.1"
+    implementation "io.coil-kt:coil:$libVersions.coil"
+    implementation "io.coil-kt:coil-gif:$libVersions.coil"
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"
