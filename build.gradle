@@ -24,7 +24,7 @@ buildscript {
     ext.targetSdk = 31
     ext.buildTools = "31.0.0"
 
-    ext.kotlin_version = '1.5.21'
+    ext.kotlin_version = '1.6.10'
 
     repositories {
         google()
@@ -33,7 +33,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.triplet.gradle:play-publisher:3.5.0'
     }
 
