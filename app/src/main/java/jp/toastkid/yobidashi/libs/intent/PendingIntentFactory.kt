@@ -13,7 +13,7 @@ import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
  * @author toastkidjp
  */
 class PendingIntentFactory(
-        private val mainActivityIntentFactory: MainActivityIntentFactory = MainActivityIntentFactory()
+    private val mainActivityIntentFactory: MainActivityIntentFactory = MainActivityIntentFactory()
 ) {
 
     /**
