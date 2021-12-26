@@ -22,7 +22,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
-import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.model.Tab
 
 /**
@@ -192,17 +191,15 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
     fun clearTabs(v: View) {
         val context = v.context
-        if (context is MainActivity) {
-            ConfirmDialogFragment.show(
-                parentFragmentManager,
-                getString(R.string.title_clear_all_tabs),
-                Html.fromHtml(
-                    getString(R.string.confirm_clear_all_settings),
-                    Html.FROM_HTML_MODE_COMPACT
-                ),
-                "clear_tabs"
-            )
-        }
+        ConfirmDialogFragment.show(
+            parentFragmentManager,
+            getString(R.string.title_clear_all_tabs),
+            Html.fromHtml(
+                getString(R.string.confirm_clear_all_settings),
+                Html.FROM_HTML_MODE_COMPACT
+            ),
+            "clear_tabs"
+        )
     }
 
     /**

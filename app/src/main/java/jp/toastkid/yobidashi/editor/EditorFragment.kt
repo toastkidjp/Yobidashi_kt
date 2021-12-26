@@ -182,12 +182,12 @@ class EditorFragment :
 
         lastSavedTitle = context.getString(R.string.last_saved)
 
-        EditorContextMenuInitializer().invoke(binding.editorInput, speechMaker)
-
         activity?.let { activity ->
             val viewModelProvider = ViewModelProvider(activity)
             appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
+
+            EditorContextMenuInitializer().invoke(binding.editorInput, speechMaker, viewModelProvider)
 
             tabListViewModel
                     ?.tabCount
