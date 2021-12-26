@@ -28,8 +28,6 @@
     <string name="title_licenses">ライセンス情報</string>
     <string name="title_app_version">アプリのバージョン: </string>
 
-    <string name="settings_color_commit">決定</string>
-    <string name="settings_color_reset">戻す</string>
     <string name="settings_color_background_title">背景色</string>
     <string name="settings_color_font_title">文字色</string>
     <string name="settings_color_saved_title">保存した色</string>
