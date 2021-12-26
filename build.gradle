@@ -44,7 +44,7 @@ buildscript {
             cardview: '1.0.0',
             constraintlayout: '2.0.2',
             lifecycle: '2.2.0',
-            room: '2.3.0-alpha02',
+            room: '2.4.0',
             paging: '3.1.0',
             material: '1.4.0',
             fragment: '1.2.4',
