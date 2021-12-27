@@ -76,6 +76,7 @@ dependencies {
     implementation project(":api")
     implementation project(":rss")
     implementation project(":image")
+    implementation project(":loan")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.cardview:cardview:$libVersions.cardview"
