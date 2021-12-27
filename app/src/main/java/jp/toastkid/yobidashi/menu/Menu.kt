@@ -47,6 +47,8 @@ enum class Menu(
 
     WHAT_HAPPENED_TODAY(R.string.menu_what_happened_today, R.drawable.ic_what_happened_today),
 
+    LOAN_CALCULATOR(R.string.title_loan_calculator, R.drawable.ic_loan_calculator),
+
     PLANNING_POKER(R.string.title_planning_poker, R.drawable.ic_card),
 
     GESTURE_MEMO(R.string.title_gesture_memo, R.drawable.ic_gesture_memo),
