@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 class DebouncedCalculatorUseCase(
     private val inputChannel: Channel<String>,
     private val currentFactorProvider: () -> Factor,
-    private val setText: (String) -> Unit,
+    private val setText: (Int) -> Unit,
     private val calculator: Calculator = Calculator(),
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
@@ -48,7 +48,7 @@ class DebouncedCalculatorUseCase(
                         factor.renovationReserves
                     )
 
-                    setText("Monthly payment: $payment")
+                    setText(payment)
                 }
         }
     }
