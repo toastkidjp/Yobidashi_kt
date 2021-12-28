@@ -17,17 +17,13 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import jp.toastkid.loan.Calculator
 import jp.toastkid.loan.R
 import jp.toastkid.loan.databinding.FragmentLoanCalculatorBinding
+import jp.toastkid.loan.model.Factor
+import jp.toastkid.loan.usecase.DebouncedCalculatorUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class LoanCalculatorFragment : Fragment() {
@@ -69,27 +65,21 @@ class LoanCalculatorFragment : Fragment() {
         binding?.monthlyManagementFee?.addTextChangedListener(textWatcher)
         binding?.monthlyRenovationReserves?.addTextChangedListener(textWatcher)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val calculator = Calculator()
 
-            inputChannel
-                .receiveAsFlow()
-                .distinctUntilChanged()
-                .debounce(1000)
-                .flowOn(Dispatchers.Main)
-                .collect {
-                    val payment = calculator(
-                        extractInt(binding?.loanAmount),
-                        extractInt(binding?.term),
-                        extractDouble(binding?.interestRate),
-                        extractInt(binding?.downPayment),
-                        extractInt(binding?.monthlyManagementFee),
-                        extractInt(binding?.monthlyRenovationReserves),
-                    )
-
-                    binding?.result?.text = "Monthly payment: $payment"
-                }
-        }
+        DebouncedCalculatorUseCase(
+            inputChannel,
+            {
+                Factor(
+                    extractInt(binding?.loanAmount),
+                    extractInt(binding?.term),
+                    extractDouble(binding?.interestRate),
+                    extractInt(binding?.downPayment),
+                    extractInt(binding?.monthlyManagementFee),
+                    extractInt(binding?.monthlyRenovationReserves)
+                )
+            },
+            { binding?.result?.text = it }
+        ).invoke()
     }
 
     private fun extractInt(editText: EditText?) =
