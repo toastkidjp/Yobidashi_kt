@@ -9,15 +9,23 @@
 package jp.toastkid.loan
 
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 
 class CalculatorTest {
+
+    private lateinit var calculator: Calculator
+
+    @Before
+    fun setUp() {
+        calculator = Calculator()
+    }
 
     @Test
     fun test() {
         assertEquals(
             87748,
-            Calculator().invoke(25_000_000, 35, 1.0, 1_000_000, 10000, 10000)
+            calculator.invoke(25_000_000, 35, 1.0, 1_000_000, 10000, 10000)
         )
     }
 
@@ -25,7 +33,7 @@ class CalculatorTest {
     fun testOverDownPayment() {
         assertEquals(
             20000,
-            Calculator().invoke(25_000_000, 35, 1.0, 27_000_000, 10000, 10000)
+            calculator.invoke(25_000_000, 35, 1.0, 27_000_000, 10000, 10000)
         )
     }
 
