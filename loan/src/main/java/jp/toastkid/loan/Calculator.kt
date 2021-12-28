@@ -8,10 +8,20 @@
 
 package jp.toastkid.loan
 
+import jp.toastkid.loan.model.Factor
 import kotlin.math.max
 import kotlin.math.pow
 
 class Calculator {
+
+    operator fun invoke(factor: Factor) = invoke(
+        factor.amount,
+        factor.term,
+        factor.interestRate,
+        factor.downPayment,
+        factor.managementFee,
+        factor.renovationReserves
+    )
 
     operator fun invoke(
         amount: Int,
