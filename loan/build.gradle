@@ -42,4 +42,5 @@ dependencies {
     implementation "com.google.android.material:material:$libVersions.material"
 
     testImplementation "junit:junit:$libVersions.junit"
+    testImplementation "io.mockk:mockk:$libVersions.mockk"
 }
