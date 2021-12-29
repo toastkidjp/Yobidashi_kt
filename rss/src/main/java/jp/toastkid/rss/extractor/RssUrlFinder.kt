@@ -32,6 +32,7 @@ class RssUrlFinder(
     private val urlValidator: RssUrlValidator = RssUrlValidator(),
     private val rssUrlExtractor: RssUrlExtractor = RssUrlExtractor(),
     private val htmlApi: HtmlApi = HtmlApi(),
+    @VisibleForTesting
     private val contentViewModelFactory: (ViewModelStoreOwner) -> ContentViewModel? = {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     },
