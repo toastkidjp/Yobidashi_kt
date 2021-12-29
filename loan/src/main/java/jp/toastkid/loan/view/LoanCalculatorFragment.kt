@@ -78,7 +78,7 @@ class LoanCalculatorFragment : Fragment() {
                     extractInt(binding?.monthlyRenovationReserves)
                 )
             },
-            { binding?.result?.text = "Monthly payment: $it" }
+            { binding?.result?.text = getString(R.string.message_result_montly_payment, it) }
         ).invoke()
     }
 
