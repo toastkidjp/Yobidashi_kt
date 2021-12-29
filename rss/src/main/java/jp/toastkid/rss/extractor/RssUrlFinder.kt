@@ -44,8 +44,8 @@ class RssUrlFinder(
 
 
     operator fun invoke(
-            currentUrl: String?,
-            snackbarParentSupplier: () -> View?
+        currentUrl: String?,
+        snackbarParentSupplier: () -> View?
     ) {
         if (currentUrl.isNullOrBlank()) {
             return
