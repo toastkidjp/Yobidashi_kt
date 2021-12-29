@@ -27,6 +27,7 @@ class DebouncedCalculatorUseCase(
     private val currentFactorProvider: () -> Factor,
     private val onResult: (Int) -> Unit,
     private val calculator: Calculator = Calculator(),
+    private val debounceMillis: Long = 1000,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) {
@@ -37,7 +38,7 @@ class DebouncedCalculatorUseCase(
             inputChannel
                 .receiveAsFlow()
                 .distinctUntilChanged()
-                .debounce(1000)
+                .debounce(debounceMillis)
                 .flowOn(mainDispatcher)
                 .collect {
                     val factor = currentFactorProvider()
