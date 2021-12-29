@@ -45,7 +45,6 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import kotlinx.coroutines.CoroutineScope
@@ -59,9 +58,9 @@ import kotlinx.coroutines.launch
  * @author toastkidjp
  */
 class BrowserFragment : Fragment(),
-        OnBackCloseableTabUiFragment,
-        CommonFragmentAction,
-        ContentScrollable
+    OnBackCloseableTabUiFragment,
+    CommonFragmentAction,
+    ContentScrollable
 {
 
     /**
@@ -86,6 +85,8 @@ class BrowserFragment : Fragment(),
     private var appBarViewModel: AppBarViewModel? = null
 
     private var contentViewModel: ContentViewModel? = null
+
+    private var tabListViewModel: TabListViewModel? = null
 
     private val storagePermissionRequestLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -220,9 +221,10 @@ class BrowserFragment : Fragment(),
                     browserModule.loadWithNewTab(it.first, it.second)
                 })
 
-        viewModelProvider.get(TabListViewModel::class.java)
-                .tabCount
-                .observe(activity, { appBarBinding?.tabCount?.text = it.toString() })
+        tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
+        tabListViewModel
+                ?.tabCount
+                ?.observe(activity, { appBarBinding?.tabCount?.text = it.toString() })
 
         viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
             viewModel.find.observe(activity, Observer {
@@ -323,7 +325,7 @@ class BrowserFragment : Fragment(),
     }
 
     fun openNewTab(): Boolean {
-        (activity as? MainActivity)?.openNewTabFromTabList()
+        tabListViewModel?.openNewTab()
         return true
     }
 

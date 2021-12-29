@@ -30,9 +30,9 @@ internal class Provider : AppWidgetProvider() {
          * @param remoteViews
          */
         fun updateWidget(
-                context: Context,
-                appWidgetManager: AppWidgetManager,
-                remoteViews: RemoteViews
+            context: Context,
+            appWidgetManager: AppWidgetManager,
+            remoteViews: RemoteViews
         ) {
             val componentName = ComponentName(context, Provider::class.java)
             appWidgetManager.updateAppWidget(componentName, remoteViews)

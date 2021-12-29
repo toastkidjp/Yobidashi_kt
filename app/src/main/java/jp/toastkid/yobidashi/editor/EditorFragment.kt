@@ -58,7 +58,6 @@ import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestCont
 import jp.toastkid.yobidashi.editor.usecase.RestoreContentUseCase
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import jp.toastkid.yobidashi.main.MainActivity
 import okio.buffer
 import okio.sink
 import okio.source
@@ -322,7 +321,7 @@ class EditorFragment :
     }
 
     fun openNewTab(): Boolean {
-        (activity as? MainActivity)?.openNewTabFromTabList()
+        tabListViewModel?.openNewTab()
         return true
     }
 

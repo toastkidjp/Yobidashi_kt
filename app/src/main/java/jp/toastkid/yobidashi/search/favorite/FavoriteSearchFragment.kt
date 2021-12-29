@@ -13,7 +13,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -85,7 +84,6 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
 
         binding?.favoriteSearchView?.let {
             it.adapter = adapter
-            it.layoutManager = LinearLayoutManager(fragmentActivity, RecyclerView.VERTICAL, false)
         }
 
         ItemTouchHelper(
@@ -147,7 +145,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
      * @param category Search category
      * @param query    Search query
      */
-    private fun startSearch(category: jp.toastkid.search.SearchCategory, query: String) {
+    private fun startSearch(category: SearchCategory, query: String) {
         activity?.let {
             SearchAction(it, category.name, query).invoke()
         }

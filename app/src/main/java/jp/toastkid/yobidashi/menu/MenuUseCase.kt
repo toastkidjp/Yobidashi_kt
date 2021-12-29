@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.menu
 
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -27,7 +28,6 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.gesture.GestureMemoFragment
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.CardListFragment
@@ -42,12 +42,11 @@ import java.util.Calendar
  * @author toastkidjp
  */
 class MenuUseCase(
-        private val activitySupplier: () -> FragmentActivity,
-        private val menuViewModel: MenuViewModel?
+    private val activitySupplier: () -> FragmentActivity,
+    private val menuViewModel: MenuViewModel?,
+    private val contentViewModel: ContentViewModel?,
+    private val mediaPermissionRequestLauncher: ActivityResultLauncher<((Boolean) -> Unit)?>
 ) {
-
-    private val contentViewModel =
-            ViewModelProvider(activitySupplier()).get(ContentViewModel::class.java)
 
     private val preferenceApplier = PreferenceApplier(activitySupplier())
 
@@ -69,22 +68,22 @@ class MenuUseCase(
     private fun onMenuClick(menu: Menu) {
         when (menu) {
             Menu.TOP-> {
-                contentViewModel.toTop()
+                contentViewModel?.toTop()
                 return
             }
             Menu.BOTTOM-> {
-                contentViewModel.toBottom()
+                contentViewModel?.toBottom()
                 return
             }
             Menu.SHARE-> {
-                contentViewModel.share()
+                contentViewModel?.share()
             }
             Menu.CODE_READER -> {
                 nextFragment(BarcodeReaderFragment::class.java)
             }
             Menu.OVERLAY_COLOR_FILTER-> {
                 preferenceApplier.setUseColorFilter(preferenceApplier.useColorFilter().not())
-                (activitySupplier() as? MainActivity)?.let {
+                activitySupplier().let {
                     ViewModelProvider(it).get(OverlayColorFilterViewModel::class.java)
                             .update()
                 }
@@ -97,12 +96,12 @@ class MenuUseCase(
                 nextFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
-                (activitySupplier() as? MainActivity)?.requestPermissionForMediaPlayer {
+                mediaPermissionRequestLauncher.launch {
                     if (it.not()) {
-                        return@requestPermissionForMediaPlayer
+                        return@launch
                     }
 
-                    val parent = extractContentView() ?: return@requestPermissionForMediaPlayer
+                    val parent = extractContentView() ?: return@launch
                     mediaPlayerPopup.show(parent)
                     menuViewModel?.close()
                 }
@@ -121,19 +120,19 @@ class MenuUseCase(
                         .open(preferenceApplier.homeUrl.toUri())
             }
             Menu.EDITOR-> {
-                contentViewModel.openEditorTab()
+                contentViewModel?.openEditorTab()
             }
             Menu.PDF-> {
-                contentViewModel.openPdf()
+                contentViewModel?.openPdf()
             }
             Menu.CALENDAR -> {
-                contentViewModel.openCalendar()
+                contentViewModel?.openCalendar()
             }
             Menu.ARTICLE_VIEWER -> {
-                contentViewModel.openArticleList()
+                contentViewModel?.openArticleList()
             }
             Menu.WEB_SEARCH -> {
-                contentViewModel.webSearch()
+                contentViewModel?.webSearch()
             }
             Menu.GESTURE_MEMO -> {
                 nextFragment(GestureMemoFragment::class.java)
@@ -165,7 +164,7 @@ class MenuUseCase(
                 val activity = activitySupplier()
                 if (preferenceApplier.wifiOnly &&
                         NetworkChecker.isUnavailableWiFi(activity)) {
-                    contentViewModel.snackShort(R.string.message_wifi_not_connecting)
+                    contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
                     return
                 }
 
@@ -174,7 +173,7 @@ class MenuUseCase(
                             ViewModelProvider(activitySupplier()).get(BrowserViewModel::class.java)
                                     .open(link)
                             val fragmentActivity = activitySupplier()
-                            contentViewModel.snackShort(
+                            contentViewModel?.snackShort(
                                     fragmentActivity.getString(R.string.message_open_random_wikipedia, title)
                             )
                         }
@@ -183,14 +182,14 @@ class MenuUseCase(
                 nextFragment(ArchivesFragment::class.java)
             }
             Menu.FIND_IN_PAGE-> {
-                contentViewModel.switchPageSearcher()
+                contentViewModel?.switchPageSearcher()
             }
         }
         menuViewModel?.close()
     }
 
     private fun nextFragment(fragmentClass: Class<out Fragment>) {
-        contentViewModel.nextFragment(fragmentClass)
+        contentViewModel?.nextFragment(fragmentClass)
     }
 
     /**

@@ -207,9 +207,9 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
         initializeHeaderViewModel()
 
-        initializeMenuViewModel()
-
         initializeContentViewModel()
+
+        initializeMenuViewModel()
 
         menuSwitchColorApplier = MenuSwitchColorApplier(binding.menuSwitch)
 
@@ -374,11 +374,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
-        MenuUseCase({ this }, menuViewModel).observe()
-    }
-
-    fun requestPermissionForMediaPlayer(function: (Boolean) -> Unit) {
-        mediaPermissionRequestLauncher.launch(function)
+        MenuUseCase({ this }, menuViewModel, contentViewModel, mediaPermissionRequestLauncher).observe()
     }
 
     private fun initializeContentViewModel() {
@@ -634,7 +630,6 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
         openNewTab()
     }
 
-    // TODO make private
     private fun onClickClear() {
         tabs.clear()
         onEmptyTabs()

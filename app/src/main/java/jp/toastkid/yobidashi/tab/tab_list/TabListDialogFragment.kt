@@ -190,7 +190,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
     }
 
     fun clearTabs(v: View) {
-        val context = v.context
         ConfirmDialogFragment.show(
             parentFragmentManager,
             getString(R.string.title_clear_all_tabs),

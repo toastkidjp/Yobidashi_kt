@@ -21,7 +21,7 @@ class SpeechMaker(context: Context) {
 
     private val textToSpeech = TextToSpeech(
             context,
-            TextToSpeech.OnInitListener { result -> successInitialization = result == TextToSpeech.SUCCESS }
+        { result -> successInitialization = result == TextToSpeech.SUCCESS }
     )
 
     operator fun invoke(message: String) {

@@ -2,8 +2,10 @@ package jp.toastkid.yobidashi.main
 
 import androidx.fragment.app.FragmentManager
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -66,7 +68,7 @@ class OnBackPressedUseCaseTest {
                 supportFragmentManager
         )
 
-        every { menuViewModel.close() }.answers { Unit }
+        every { menuViewModel.close() }.just(Runs)
     }
 
     @Test
@@ -100,7 +102,7 @@ class OnBackPressedUseCaseTest {
         every { tabListUseCase.onBackPressed() }.returns(false)
         every { menuVisibility.invoke() }.returns(false)
         every { pageSearcherModule.isVisible() }.returns(true)
-        every { pageSearcherModule.hide() }.answers { Unit }
+        every { pageSearcherModule.hide() }.just(Runs)
         every { floatingPreview.onBackPressed() }.answers { true }
 
         onBackPressedUseCase.invoke()
@@ -118,13 +120,13 @@ class OnBackPressedUseCaseTest {
         every { tabListUseCase.onBackPressed() }.returns(false)
         every { menuVisibility.invoke() }.returns(false)
         every { pageSearcherModule.isVisible() }.returns(false)
-        every { pageSearcherModule.hide() }.answers { Unit }
+        every { pageSearcherModule.hide() }.just(Runs)
         every { floatingPreview.onBackPressed() }.answers { false }
-        every { floatingPreview.hide() }.answers { Unit }
+        every { floatingPreview.hide() }.just(Runs)
         val fragment = mockk<BrowserFragment>()
         every { supportFragmentManager.findFragmentById(any()) }.answers { fragment }
         every { fragment.pressBack() }.returns(true)
-        every { tabs.closeTab(any()) }.answers { Unit }
+        every { tabs.closeTab(any()) }.just(Runs)
 
         onBackPressedUseCase.invoke()
 

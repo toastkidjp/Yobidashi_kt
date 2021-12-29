@@ -11,16 +11,16 @@ package jp.toastkid.yobidashi.editor
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.yobidashi.editor.usecase.MenuActionInvokerUseCase
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import org.junit.After
 import org.junit.Before
@@ -40,22 +40,16 @@ class EditorContextMenuInitializerTest {
     @MockK
     private lateinit var viewModelProvider: ViewModelProvider
 
-    @MockK
-    private lateinit var browserViewModel: BrowserViewModel
-
-    @MockK
-    private lateinit var contentViewModel: ContentViewModel
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
         every { editText.context }.returns(mockk())
-        every { viewModelProvider.get(BrowserViewModel::class.java) }.returns(browserViewModel)
-        every { viewModelProvider.get(ContentViewModel::class.java) }.returns(contentViewModel)
+        every { viewModelProvider.get(BrowserViewModel::class.java) }.returns(mockk())
+        every { viewModelProvider.get(ContentViewModel::class.java) }.returns(mockk())
 
-        mockkConstructor(MenuActionInvokerUseCase::class)
-        every { anyConstructed<MenuActionInvokerUseCase>().invoke(any(), any()) }.returns(true)
+        every { editText.customInsertionActionModeCallback = any() }.just(Runs)
+        every { editText.customSelectionActionModeCallback = any() }.just(Runs)
     }
 
     @After
@@ -64,9 +58,19 @@ class EditorContextMenuInitializerTest {
     }
 
     @Test
-    fun invoke() {
+    fun testEditTextIsNullCase() {
         editorContextMenuInitializer.invoke(null, speechMaker, viewModelProvider)
 
         verify(exactly = 0) { editText.context }
     }
+
+    @Test
+    fun testCompleteInitializing() {
+        editorContextMenuInitializer.invoke(editText, speechMaker, viewModelProvider)
+
+        verify(exactly = 1) { editText.context }
+        verify(exactly = 1) { editText.customInsertionActionModeCallback = any() }
+        verify(exactly = 1) { editText.customSelectionActionModeCallback = any() }
+    }
+
 }
