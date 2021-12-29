@@ -12,10 +12,10 @@ plugins {
     id 'kotlin-kapt'
 }
 android {
-    compileSdkVersion 31
+    compileSdkVersion rootProject.ext.compileSdk
 
     defaultConfig {
-        minSdkVersion 24
+        minSdkVersion rootProject.ext.minSdk
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
