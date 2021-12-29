@@ -8,4 +8,5 @@
 
 <resources>
     <string name="title_loan_calculator">ローン計算</string>
+    <string name="message_result_montly_payment">月々の支払額: %d</string>
 </resources>
