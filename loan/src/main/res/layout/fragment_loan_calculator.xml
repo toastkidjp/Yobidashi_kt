@@ -8,137 +8,142 @@
   -->
 
 <layout>
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/soft_background"
-        android:layout_margin="16dp"
         >
-
-        <TextView
-            android:id="@+id/result"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:textSize="18sp"
-            tools:text="Monthly payment: 20000"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/loan_amount_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/result"
-            android:layout_marginTop="16dp"
+            android:background="@color/soft_background"
+            android:layout_margin="16dp"
             >
-            <EditText
-                android:id="@+id/loan_amount"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Loan amount"
-                android:inputType="number"
-                android:maxLines="1"
-                android:text="35000000"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/term_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/loan_amount_layout"
-            android:layout_marginTop="16dp"
-            >
-            <EditText
-                android:id="@+id/term"
+            <TextView
+                android:id="@+id/result"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Loan term"
-                android:inputType="number"
-                android:maxLines="1"
-                android:text="35"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="18sp"
+                tools:text="Monthly payment: 20000"
+                app:layout_constraintTop_toTopOf="parent"
                 />
-        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/interest_rate_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/term_layout"
-            android:layout_marginTop="16dp"
-            >
-            <EditText
-                android:id="@+id/interest_rate"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/loan_amount_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Interest rate"
-                android:inputType="numberDecimal"
-                android:maxLines="1"
-                android:text="1.0"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/result"
+                android:layout_marginTop="16dp"
+                >
+                <EditText
+                    android:id="@+id/loan_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Loan amount"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:text="35000000"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/down_payment_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/interest_rate_layout"
-            android:layout_marginTop="16dp"
-            >
-            <EditText
-                android:id="@+id/down_payment"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/term_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Down payment"
-                android:inputType="number"
-                android:maxLines="1"
-                android:text="1000000"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/loan_amount_layout"
+                android:layout_marginTop="16dp"
+                >
+                <EditText
+                    android:id="@+id/term"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Loan term"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:text="35"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/monthly_management_fee_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/down_payment_layout"
-            android:layout_marginTop="16dp"
-            >
-            <EditText
-                android:id="@+id/monthly_management_fee"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/interest_rate_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Management fee (Monthly)"
-                android:inputType="number"
-                android:maxLines="1"
-                android:text="10000"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/term_layout"
+                android:layout_marginTop="16dp"
+                >
+                <EditText
+                    android:id="@+id/interest_rate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Interest rate"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:text="1.0"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/monthly_renovation_reserves_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintTop_toBottomOf="@id/monthly_management_fee_layout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
-            <EditText
-                android:id="@+id/monthly_renovation_reserves"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/down_payment_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Renovation reserves (Monthly)"
-                android:inputType="number"
-                android:maxLines="1"
-                android:text="10000"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/interest_rate_layout"
+                android:layout_marginTop="16dp"
+                >
+                <EditText
+                    android:id="@+id/down_payment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Down payment"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:text="1000000"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/monthly_management_fee_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/down_payment_layout"
+                android:layout_marginTop="16dp"
+                >
+                <EditText
+                    android:id="@+id/monthly_management_fee"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Management fee (Monthly)"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:text="10000"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/monthly_renovation_reserves_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintTop_toBottomOf="@id/monthly_management_fee_layout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+                <EditText
+                    android:id="@+id/monthly_renovation_reserves"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Renovation reserves (Monthly)"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:text="10000"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>
