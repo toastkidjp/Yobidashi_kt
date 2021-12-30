@@ -11,6 +11,9 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
 }
+
+apply from: '../jacoco.gradle'
+
 android {
     compileSdkVersion rootProject.ext.compileSdk
 
