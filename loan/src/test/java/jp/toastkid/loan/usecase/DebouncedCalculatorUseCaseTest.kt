@@ -55,7 +55,7 @@ class DebouncedCalculatorUseCaseTest {
 
         coEvery { currentFactorProvider() }
             .returns(Factor(10000000, 35, 1.0, 100000, 10000, 10000))
-        coEvery { calculator.invoke(any(), any(), any(), any(), any(), any()) }.returns(100)
+        coEvery { calculator.invoke(any()) }.returns(100)
         coEvery { onResult(any()) }.just(Runs)
     }
 
@@ -72,7 +72,7 @@ class DebouncedCalculatorUseCaseTest {
             inputChannel.send("test")
 
             coVerify { currentFactorProvider() }
-            coVerify { calculator.invoke(any(), any(), any(), any(), any(), any()) }
+            coVerify { calculator.invoke(any()) }
             coVerify { onResult(any()) }
         }
     }
