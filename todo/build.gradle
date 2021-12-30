@@ -51,6 +51,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
     implementation "androidx.room:room-runtime:$libVersions.room"
+    implementation "androidx.room:room-paging:$libVersions.room"
     kapt "androidx.room:room-compiler:$libVersions.room"
 
     testImplementation "junit:junit:$libVersions.junit"
