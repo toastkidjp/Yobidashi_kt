@@ -40,6 +40,7 @@ class DebouncedCalculatorUseCaseTest {
     @MockK
     private lateinit var onResult: (Int) -> Unit
 
+    @Suppress("unused")
     private val debounceMillis = 0L
 
     @MockK
