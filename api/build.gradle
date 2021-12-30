@@ -5,11 +5,12 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
 }
+
+apply from: '../jacoco.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
