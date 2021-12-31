@@ -15,6 +15,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.unmockkAll
+import io.mockk.verify
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -44,6 +45,7 @@ class ThousandSeparatorInsertionUseCaseTest {
     fun testIgnvoke() {
         thousandSeparatorInsertionUseCase.invoke(editText, "1231")
 
-        every { editText.text.replace(any(), any(), "1,231") }
+        verify { editText.text.replace(any(), any(), "1,231") }
     }
+
 }
