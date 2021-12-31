@@ -41,7 +41,7 @@ class ThousandSeparatorInsertionUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testIgnvoke() {
         thousandSeparatorInsertionUseCase.invoke(editText, "1231")
 
         every { editText.text.replace(any(), any(), any()) }
