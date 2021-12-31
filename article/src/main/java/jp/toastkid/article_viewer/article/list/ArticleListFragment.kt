@@ -211,6 +211,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         appBarBinding.searchClear.setOnClickListener {
             appBarBinding.input.setText("")
+            viewModel?.clearSearchWord()
         }
 
         appBarBinding.input.addTextChangedListener(object : TextWatcher {

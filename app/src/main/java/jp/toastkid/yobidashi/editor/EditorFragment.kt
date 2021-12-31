@@ -54,6 +54,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
+import jp.toastkid.yobidashi.editor.load.LoadFromStorageDialogFragment
 import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
 import jp.toastkid.yobidashi.editor.usecase.RestoreContentUseCase
 import jp.toastkid.yobidashi.libs.Toaster
@@ -270,6 +271,7 @@ class EditorFragment :
 
         parentFragmentManager.clearFragmentResultListener("clear_input")
         parentFragmentManager.clearFragmentResultListener("input_text")
+        parentFragmentManager.clearFragmentResultListener("load_from_storage")
 
         super.onDetach()
     }
@@ -280,17 +282,18 @@ class EditorFragment :
     private fun applySettings() {
         val colorPair = preferenceApplier.colorPair()
         TextViewColorApplier()(
-                colorPair.fontColor(),
-                menuBinding.save,
-                menuBinding.saveAs,
-                menuBinding.load,
-                menuBinding.loadAs,
-                menuBinding.exportArticleViewer,
-                menuBinding.restore,
-                menuBinding.lastSaved,
-                menuBinding.counter,
-                menuBinding.backup,
-                menuBinding.clear
+            colorPair.fontColor(),
+            menuBinding.save,
+            menuBinding.saveAs,
+            menuBinding.load,
+            menuBinding.loadAs,
+            menuBinding.loadFrom,
+            menuBinding.exportArticleViewer,
+            menuBinding.restore,
+            menuBinding.lastSaved,
+            menuBinding.counter,
+            menuBinding.backup,
+            menuBinding.clear
         )
 
         menuBinding.tabIcon.setColorFilter(colorPair.fontColor())
@@ -397,6 +400,19 @@ class EditorFragment :
      */
     fun loadAs() {
         loadAs?.launch(GetContentIntentFactory()("text/plain"))
+    }
+
+    fun loadFromStorage() {
+        parentFragmentManager.setFragmentResultListener(
+            "load_from_storage",
+            viewLifecycleOwner,
+            { key, result ->
+                val file = result[key] as? File ?: return@setFragmentResultListener
+                readFromFileUri(Uri.fromFile(file))
+                parentFragmentManager.clearFragmentResultListener("load_from_storage")
+            }
+        )
+        LoadFromStorageDialogFragment().show(parentFragmentManager, "load_from_storage")
     }
 
     fun exportToArticleViewer() {
