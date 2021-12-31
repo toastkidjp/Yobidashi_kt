@@ -19,7 +19,7 @@ import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.block.AdRemover
-import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
+import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
