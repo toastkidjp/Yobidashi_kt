@@ -150,12 +150,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_insert_thousand_separator -> {
-                val args = text.toBigIntegerOrNull() ?: return true
-                editText.text.replace(
-                    editText.selectionStart,
-                    editText.selectionEnd,
-                    String.format("%,d", args)
-                )
+                ThousandSeparatorInsertionUseCase().invoke(editText, text)
                 return true
             }
             else -> Unit
