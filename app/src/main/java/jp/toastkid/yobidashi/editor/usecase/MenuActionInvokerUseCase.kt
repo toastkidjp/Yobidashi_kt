@@ -14,6 +14,7 @@ import androidx.annotation.IdRes
 import androidx.core.net.toUri
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.UrlFactory
@@ -23,7 +24,6 @@ import jp.toastkid.yobidashi.editor.ListHeadAdder
 import jp.toastkid.yobidashi.editor.OrderedListHeadAdder
 import jp.toastkid.yobidashi.editor.StringSurroundingUseCase
 import jp.toastkid.yobidashi.editor.TableConverter
-import jp.toastkid.lib.input.Inputs
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
@@ -147,6 +147,15 @@ class MenuActionInvokerUseCase(
             }
             R.id.context_edit_count -> {
                 TextCountUseCase().invoke(editText, contentViewModel)
+                return true
+            }
+            R.id.context_edit_insert_thousand_separator -> {
+                val args = text.toBigIntegerOrNull() ?: return true
+                editText.text.replace(
+                    editText.selectionStart,
+                    editText.selectionEnd,
+                    String.format("%,d", args)
+                )
                 return true
             }
             else -> Unit

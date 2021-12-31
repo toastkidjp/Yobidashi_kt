@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/context_edit_insert_thousand_separator"
+        android:title="Insert thousand separator"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+
+</menu>
