@@ -399,6 +399,7 @@
     <string name="title_context_editor_italic">斜体</string>
     <string name="title_context_editor_strikethrough">取り消し線</string>
     <string name="title_context_editor_set_default_search_category">デフォルトの検索種別</string>
+    <string name="title_context_editor_code_block">コードブロック</string>
     <string name="title_reset_camera_button_position">カメラボタンの位置を戻す</string>
     <string name="title_search_suggestion">検索サジェスト</string>
     <string name="search_category">検索種別</string>
@@ -427,6 +428,5 @@
     <string name="hourly_trends">急上昇</string>
     <string name="sample_text_color_filter">あ</string>
     <string name="message_backup_is_empty">バックアップがありません</string>
-    <string name="title_context_editor_code_block">Code block</string>
 
 </resources>
