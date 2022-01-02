@@ -49,7 +49,7 @@ class ThousandSeparatorInsertionUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testNotDigitsCase() {
         thousandSeparatorInsertionUseCase.invoke(editText, "test")
 
         verify(inverse = true) { editText.text.replace(any(), any(), any()) }
