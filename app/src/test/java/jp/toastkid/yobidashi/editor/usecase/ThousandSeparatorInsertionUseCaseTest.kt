@@ -55,4 +55,11 @@ class ThousandSeparatorInsertionUseCaseTest {
         verify(inverse = true) { editText.text.replace(any(), any(), any()) }
     }
 
+    @Test
+    fun test() {
+        thousandSeparatorInsertionUseCase.invoke(editText, "12")
+
+        verify { editText.text.replace(any(), any(), "12") }
+    }
+
 }
