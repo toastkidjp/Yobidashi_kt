@@ -435,5 +435,6 @@
     <string name="hourly_trends">Hourly trends</string>
     <string name="sample_text_color_filter">A</string>
     <string name="message_backup_is_empty">Backup is empty.</string>
+    <string name="title_context_editor_code_block">Code block</string>
 
 </resources>

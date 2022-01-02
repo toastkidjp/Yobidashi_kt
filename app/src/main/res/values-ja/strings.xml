@@ -427,5 +427,6 @@
     <string name="hourly_trends">急上昇</string>
     <string name="sample_text_color_filter">あ</string>
     <string name="message_backup_is_empty">バックアップがありません</string>
+    <string name="title_context_editor_code_block">Code block</string>
 
 </resources>

@@ -33,7 +33,7 @@
         />
     <item
         android:id="@+id/context_edit_code_block"
-        android:title="Code block"
+        android:title="@string/title_context_editor_code_block"
         android:orderInCategory="100"
         app:showAsAction="always"
         />
