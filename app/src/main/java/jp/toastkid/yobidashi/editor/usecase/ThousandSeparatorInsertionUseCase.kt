@@ -9,15 +9,18 @@
 package jp.toastkid.yobidashi.editor.usecase
 
 import android.widget.EditText
+import java.text.DecimalFormat
 
 class ThousandSeparatorInsertionUseCase {
 
+    private val formatter = DecimalFormat("#,###.##")
+
     operator fun invoke(editText: EditText, text: String) {
-        val args = text.toBigIntegerOrNull() ?: return
+        val args = text.toBigDecimalOrNull() ?: return
         editText.text.replace(
             editText.selectionStart,
             editText.selectionEnd,
-            String.format("%,d", args)
+            formatter.format(args)
         )
     }
 
