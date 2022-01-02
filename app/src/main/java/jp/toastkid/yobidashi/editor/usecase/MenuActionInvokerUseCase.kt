@@ -104,6 +104,18 @@ class MenuActionInvokerUseCase(
                 listHeadAdder(editText, ">")
                 return true
             }
+            R.id.context_edit_code_block -> {
+                val selectionStart = editText.selectionStart
+                val selectionEnd = editText.selectionEnd
+                val lineSeparator = System.lineSeparator()
+
+                editText.text.replace(
+                    selectionStart,
+                    selectionEnd,
+                    "```$lineSeparator$text$lineSeparator```"
+                )
+                return true
+            }
             R.id.context_edit_double_quote -> {
                 StringSurroundingUseCase()(editText, '"')
                 return true

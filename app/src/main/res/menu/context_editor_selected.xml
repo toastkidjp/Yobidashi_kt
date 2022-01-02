@@ -32,6 +32,12 @@
         app:showAsAction="always"
         />
     <item
+        android:id="@+id/context_edit_code_block"
+        android:title="Code block"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+    <item
         android:id="@+id/context_edit_double_quote"
         android:title="@string/title_context_editor_double_quote"
         android:orderInCategory="100"
