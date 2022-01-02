@@ -73,7 +73,7 @@ class ThousandSeparatorInsertionUseCaseTest {
     fun testDecimalCase() {
         thousandSeparatorInsertionUseCase.invoke(editText, "1234.56")
 
-        verify(inverse = true) { editText.text.replace(any(), any(), any()) }
+        verify { editText.text.replace(any(), any(), "1,234.56") }
     }
 
 }
