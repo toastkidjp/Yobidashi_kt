@@ -56,7 +56,7 @@ class ThousandSeparatorInsertionUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testUnnecessaryDigitCase() {
         thousandSeparatorInsertionUseCase.invoke(editText, "12")
 
         verify { editText.text.replace(any(), any(), "12") }
