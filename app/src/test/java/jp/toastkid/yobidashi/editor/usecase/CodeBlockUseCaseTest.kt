@@ -46,6 +46,8 @@ class CodeBlockUseCaseTest {
     fun invoke() {
         codeBlockUseCase.invoke(editText, "test")
 
-        verify { editText.text.replace(any(), any(), any()) }
+        val lineSeparator = System.lineSeparator()
+
+        verify { editText.text.replace(any(), any(), "```${lineSeparator}test$lineSeparator```") }
     }
 }
