@@ -100,15 +100,7 @@ class MenuUseCase(
                 nextFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
-                mediaPermissionRequestLauncher.launch {
-                    if (it.not()) {
-                        return@launch
-                    }
-
-                    val parent = extractContentView() ?: return@launch
-                    mediaPlayerPopup.show(parent)
-                    menuViewModel?.close()
-                }
+                openMusicPlayer()
             }
             Menu.BOOKMARK-> {
                 nextFragment(BookmarkFragment::class.java)
@@ -216,5 +208,17 @@ class MenuUseCase(
 
     private fun extractContentView(): View? =
             activitySupplier().findViewById(R.id.content)
+
+    fun openMusicPlayer() {
+        mediaPermissionRequestLauncher.launch {
+            if (it.not()) {
+                return@launch
+            }
+
+            val parent = extractContentView() ?: return@launch
+            mediaPlayerPopup.show(parent)
+            menuViewModel?.close()
+        }
+    }
 
 }

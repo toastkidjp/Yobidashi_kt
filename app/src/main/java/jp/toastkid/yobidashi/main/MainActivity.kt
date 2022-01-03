@@ -2,9 +2,11 @@ package jp.toastkid.yobidashi.main
 
 import android.Manifest
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -130,6 +132,8 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
     private lateinit var menuSwitchColorApplier: MenuSwitchColorApplier
 
+    private var menuUseCase: MenuUseCase? = null
+
     private var activityResultLauncher: ActivityResultLauncher<Intent>? =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode != Activity.RESULT_OK) {
@@ -160,6 +164,12 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
         registerForActivityResult(ReadAudioPermissionRequestContract()) {
             it.second?.invoke(it.first)
         }
+
+    private val musicPlayerBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            menuUseCase?.openMusicPlayer()
+        }
+    }
 
     private val downloadPermissionRequestLauncher =
         registerForActivityResult(DownloadPermissionRequestContract()) {
@@ -311,6 +321,8 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
                 supportFragmentManager
         )
 
+        registerReceiver(musicPlayerBroadcastReceiver, IntentFilter("jp.toastkid.music.action.open"))
+
         supportFragmentManager.addOnBackStackChangedListener {
             val findFragment = findFragment()
 
@@ -363,7 +375,9 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
-        MenuUseCase({ this }, menuViewModel, contentViewModel, mediaPermissionRequestLauncher).observe()
+        menuUseCase =
+            MenuUseCase({ this }, menuViewModel, contentViewModel, mediaPermissionRequestLauncher)
+        menuUseCase?.observe()
     }
 
     private fun initializeContentViewModel() {
@@ -725,6 +739,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
         activityResultLauncher?.unregister()
         requestPermissionForOpenPdfTab.unregister()
         downloadPermissionRequestLauncher.unregister()
+        unregisterReceiver(musicPlayerBroadcastReceiver)
         supportFragmentManager.clearFragmentResultListener("clear_tabs")
         super.onDestroy()
     }
