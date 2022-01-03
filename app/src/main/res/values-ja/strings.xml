@@ -401,6 +401,7 @@
     <string name="title_context_editor_set_default_search_category">デフォルトの検索種別</string>
     <string name="title_context_editor_code_block">コードブロック</string>
     <string name="title_context_editor_task_list">タスクリスト</string>
+    <string name="title_context_editor_insert_thousand_separator">数値3桁区切</string>
     <string name="title_reset_camera_button_position">カメラボタンの位置を戻す</string>
     <string name="title_search_suggestion">検索サジェスト</string>
     <string name="search_category">検索種別</string>

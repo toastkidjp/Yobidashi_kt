@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/context_edit_insert_thousand_separator"
-        android:title="Insert thousand separator"
+        android:title="@string/title_context_editor_insert_thousand_separator"
         android:orderInCategory="100"
         app:showAsAction="always"
         />
