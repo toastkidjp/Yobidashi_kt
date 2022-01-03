@@ -105,15 +105,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_code_block -> {
-                val selectionStart = editText.selectionStart
-                val selectionEnd = editText.selectionEnd
-                val lineSeparator = System.lineSeparator()
-
-                editText.text.replace(
-                    selectionStart,
-                    selectionEnd,
-                    "```$lineSeparator$text$lineSeparator```"
-                )
+                CodeBlockUseCase().invoke(editText, text)
                 return true
             }
             R.id.context_edit_double_quote -> {
