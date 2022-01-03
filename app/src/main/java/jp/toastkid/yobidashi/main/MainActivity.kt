@@ -56,6 +56,7 @@ import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
 import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
 import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.main.usecase.BackgroundTabOpenerUseCase
+import jp.toastkid.yobidashi.main.usecase.MusicPlayerUseCase
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuSwitchColorApplier
 import jp.toastkid.yobidashi.menu.MenuUseCase
@@ -132,7 +133,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
     private lateinit var menuSwitchColorApplier: MenuSwitchColorApplier
 
-    private var menuUseCase: MenuUseCase? = null
+    private var musicPlayerUseCase: MusicPlayerUseCase? = null
 
     private var activityResultLauncher: ActivityResultLauncher<Intent>? =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -167,7 +168,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
     private val musicPlayerBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            menuUseCase?.openMusicPlayer()
+            musicPlayerUseCase?.invoke(binding.root)
         }
     }
 
@@ -375,8 +376,8 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
-        menuUseCase =
-            MenuUseCase({ this }, menuViewModel, contentViewModel, mediaPermissionRequestLauncher)
+        musicPlayerUseCase = MusicPlayerUseCase(mediaPermissionRequestLauncher)
+        val menuUseCase = MenuUseCase({ this }, menuViewModel, contentViewModel, musicPlayerUseCase)
         menuUseCase?.observe()
     }
 

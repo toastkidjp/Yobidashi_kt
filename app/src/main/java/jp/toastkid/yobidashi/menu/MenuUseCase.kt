@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.menu
 
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -33,6 +32,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.yobidashi.main.usecase.MusicPlayerUseCase
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
@@ -46,7 +46,7 @@ class MenuUseCase(
     private val activitySupplier: () -> FragmentActivity,
     private val menuViewModel: MenuViewModel?,
     private val contentViewModel: ContentViewModel?,
-    private val mediaPermissionRequestLauncher: ActivityResultLauncher<((Boolean) -> Unit)?>
+    private val musicPlayerUseCase: MusicPlayerUseCase?
 ) {
 
     private val preferenceApplier = PreferenceApplier(activitySupplier())
@@ -100,7 +100,8 @@ class MenuUseCase(
                 nextFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
-                openMusicPlayer()
+                musicPlayerUseCase?.invoke(extractContentView())
+                menuViewModel?.close()
             }
             Menu.BOOKMARK-> {
                 nextFragment(BookmarkFragment::class.java)
@@ -208,17 +209,5 @@ class MenuUseCase(
 
     private fun extractContentView(): View? =
             activitySupplier().findViewById(R.id.content)
-
-    fun openMusicPlayer() {
-        mediaPermissionRequestLauncher.launch {
-            if (it.not()) {
-                return@launch
-            }
-
-            val parent = extractContentView() ?: return@launch
-            mediaPlayerPopup.show(parent)
-            menuViewModel?.close()
-        }
-    }
 
 }
