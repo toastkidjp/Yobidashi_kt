@@ -43,7 +43,7 @@ class CodeBlockUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testConversion() {
         codeBlockUseCase.invoke(editText, "test")
 
         val lineSeparator = System.lineSeparator()
