@@ -36,4 +36,5 @@ interface ViewHistoryRepository {
 
     @Query("SELECT * FROM ViewHistory ORDER BY _id DESC")
     fun reversed(): List<ViewHistory>
+
 }

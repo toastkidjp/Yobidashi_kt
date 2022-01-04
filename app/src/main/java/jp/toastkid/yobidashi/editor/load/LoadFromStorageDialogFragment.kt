@@ -34,7 +34,7 @@ class LoadFromStorageDialogFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding: DialogUserAgentBinding =
             DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 

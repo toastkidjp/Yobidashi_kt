@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.browser.user_agent
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,12 +29,6 @@ import jp.toastkid.yobidashi.databinding.DialogUserAgentBinding
  */
 class UserAgentDialogFragment : BottomSheetDialogFragment() {
 
-    interface Callback {
-        fun onClickUserAgent(userAgent: UserAgent)
-    }
-
-    private var onClick: Callback? = null
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -50,25 +45,34 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
         val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(color, binding.title)
 
-        binding.list.choiceMode = ListView.CHOICE_MODE_SINGLE
+        initializeList(preferenceApplier, activityContext, binding.list)
+        return binding.root
+    }
+
+    private fun initializeList(
+        preferenceApplier: PreferenceApplier,
+        activityContext: Context,
+        listView: ListView
+    ) {
+        listView.choiceMode = ListView.CHOICE_MODE_SINGLE
         val currentIndex = UserAgent.findCurrentIndex(preferenceApplier.userAgent())
         val adapter = object : ArrayAdapter<CharSequence>(
-                activityContext,
-                android.R.layout.simple_list_item_single_choice,
-                android.R.id.text1,
-                UserAgent.titles()
+            activityContext,
+            android.R.layout.simple_list_item_single_choice,
+            android.R.id.text1,
+            UserAgent.titles()
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
                 val isItemChecked = position == currentIndex
                 if (isItemChecked) {
-                    binding.list.setItemChecked(position, true)
+                    listView.setItemChecked(position, true)
                 }
                 return view
             }
         }
-        binding.list.adapter = adapter
-        binding.list.setOnItemClickListener { _, _, position, _ ->
+        listView.adapter = adapter
+        listView.setOnItemClickListener { _, _, position, _ ->
             val userAgent = UserAgent.values()[position]
             preferenceApplier.setUserAgent(userAgent.name)
             parentFragmentManager.setFragmentResult(
@@ -77,7 +81,6 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
             )
             dismiss()
         }
-        return binding.root
     }
 
     companion object {
