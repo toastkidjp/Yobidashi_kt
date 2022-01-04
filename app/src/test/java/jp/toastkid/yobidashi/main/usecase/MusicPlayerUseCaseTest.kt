@@ -54,7 +54,7 @@ class MusicPlayerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testNormalCase() {
         musicPlayerUseCase.invoke(mockk())
 
         verify { mediaPermissionRequestLauncher.launch(any()) }
