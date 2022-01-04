@@ -15,6 +15,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.media.music.popup.MediaPlayerPopup
