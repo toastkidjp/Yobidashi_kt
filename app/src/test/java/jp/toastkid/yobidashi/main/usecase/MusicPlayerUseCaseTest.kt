@@ -51,4 +51,11 @@ class MusicPlayerUseCaseTest {
 
         verify(inverse = true) { mediaPermissionRequestLauncher.launch(any()) }
     }
+
+    @Test
+    fun test() {
+        musicPlayerUseCase.invoke(mockk())
+
+        verify { mediaPermissionRequestLauncher.launch(any()) }
+    }
 }
