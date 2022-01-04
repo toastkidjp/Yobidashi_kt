@@ -19,7 +19,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.loan.view.LoanCalculatorFragment
-import jp.toastkid.media.music.popup.MediaPlayerPopup
 import jp.toastkid.planning.CardListFragment
 import jp.toastkid.rss.RssReaderFragment
 import jp.toastkid.todo.view.board.BoardFragment
@@ -50,8 +49,6 @@ class MenuUseCase(
 ) {
 
     private val preferenceApplier = PreferenceApplier(activitySupplier())
-
-    private val mediaPlayerPopup by lazy { MediaPlayerPopup(activitySupplier()) }
 
     fun observe() {
         val activity = activitySupplier()
