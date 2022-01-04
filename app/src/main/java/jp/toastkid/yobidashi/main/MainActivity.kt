@@ -378,7 +378,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
         musicPlayerUseCase = MusicPlayerUseCase(mediaPermissionRequestLauncher)
         val menuUseCase = MenuUseCase({ this }, menuViewModel, contentViewModel, musicPlayerUseCase)
-        menuUseCase?.observe()
+        menuUseCase.observe()
     }
 
     private fun initializeContentViewModel() {
