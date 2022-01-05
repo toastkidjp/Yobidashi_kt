@@ -8,6 +8,8 @@
 
 <resources>
     <string name="link_privacy_policy">https://toastkidjp.tumblr.com/post/162665491938</string>
+    <string name="title_about_this_app">このアプリについて</string>
+    <string name="privacy_policy">プライバシーポリシー</string>
     <string name="copyright">(c) @toastkidjp</string>
     <string name="message_about_this_app">
         This app provide Web Search and many functions.\n

@@ -8,6 +8,8 @@
 
 <resources>
     <string name="link_privacy_policy">https://toastkidjp.tumblr.com/post/162665491938</string>
+    <string name="title_about_this_app">About this app</string>
+    <string name="privacy_policy">Privacy policy</string>
     <string name="copyright">(c) @toastkidjp</string>
     <string name="message_about_this_app">
         さまざまなサイトで情報を検索できる Web 検索アプリです。\n
