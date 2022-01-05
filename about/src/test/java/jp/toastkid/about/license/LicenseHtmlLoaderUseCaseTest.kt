@@ -6,11 +6,12 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.about.license
+package jp.toastkid.about.license
 
 import android.content.Context
 import android.content.res.AssetManager
 import android.view.View
+import android.webkit.WebView
 import android.widget.FrameLayout
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -21,8 +22,6 @@ import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi.browser.webview.CustomWebView
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -36,9 +35,6 @@ class LicenseHtmlLoaderUseCaseTest {
     private lateinit var licenseHtmlLoaderUseCase: LicenseHtmlLoaderUseCase
 
     @MockK
-    private lateinit var webViewFactory: WebViewFactory
-
-    @MockK
     private lateinit var frameLayout: FrameLayout
 
     @MockK
@@ -48,7 +44,7 @@ class LicenseHtmlLoaderUseCaseTest {
     private lateinit var assetManager: AssetManager
 
     @MockK
-    private lateinit var webView: CustomWebView
+    private lateinit var webView: WebView
 
     @Before
     fun setUp() {
@@ -61,7 +57,6 @@ class LicenseHtmlLoaderUseCaseTest {
         every { frameLayout.visibility }.returns(View.VISIBLE)
         every { frameLayout.childCount }.returns(0)
         every { context.assets }.returns(assetManager)
-        every { webViewFactory.make(any()) }.returns(webView)
         every { webView.loadDataWithBaseURL(any(), any(), any(), any(), any()) }.just(Runs)
         every { webView.scrollTo(any(), any()) }.just(Runs)
 
@@ -84,7 +79,6 @@ class LicenseHtmlLoaderUseCaseTest {
         verify(atLeast = 1) { frameLayout.visibility = any() }
         verify(atLeast = 1) { frameLayout.childCount }
         verify(exactly = 1) { context.assets }
-        verify(exactly = 1) { webViewFactory.make(any()) }
         verify(exactly = 1) { webView.loadDataWithBaseURL(any(), any(), any(), any(), any()) }
         verify(exactly = 0) { webView.scrollTo(any(), any()) }
         verify(exactly = 1) { anyConstructed<LicenseContentLoaderUseCase>().invoke() }
@@ -103,7 +97,6 @@ class LicenseHtmlLoaderUseCaseTest {
         verify(exactly = 1) { frameLayout.getChildAt(0) }
         verify(exactly = 0) { frameLayout.childCount }
         verify(exactly = 0) { context.assets }
-        verify(exactly = 0) { webViewFactory.make(any()) }
         verify(exactly = 0) { webView.loadDataWithBaseURL(any(), any(), any(), any(), any()) }
         verify(exactly = 1) { webView.scrollTo(0, 0) }
         verify(exactly = 0) { anyConstructed<LicenseContentLoaderUseCase>().invoke() }

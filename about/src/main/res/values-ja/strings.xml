@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2021 toastkidjp.
+  ~ All rights reserved. This program and the accompanying materials
+  ~ are made available under the terms of the Eclipse Public License v1.0
+  ~ which accompany this distribution.
+  ~ The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+  -->
+
+<resources>
+    <string name="link_privacy_policy">https://toastkidjp.tumblr.com/post/162665491938</string>
+    <string name="copyright">(c) @toastkidjp</string>
+    <string name="message_about_this_app">
+        This app provide Web Search and many functions.\n
+        \n
+        | Search experience\n
+        1. Favorite search……You could save pair of search site and keyword.\n
+        2. Many search sites.……Google, Bing, DuckDuckGo, Yelp, and so on...\n
+        3. App widget……You could set app-widget on home area or notification area.\n
+        \n
+        | Many functions\n
+        1. Web Search\n
+        2. Barcode Reader\n
+        3. RSS Reader\n
+        4. Simple Tab Browser\n
+        5. Tab Editor\n
+        6. Planning Poker\n
+        7. Screen filter\n
+        8. Music Player\n
+        9. Image Viewer\n
+        10. TODO List\n
+        \n
+        | Customize\n
+        1. Toolbar coloring\n
+        2. Background image\n
+        3. Default search site\n
+        4. Start-up activity\n
+        \n
+        \n
+        Resources\n
+        I have used icons which are owned by "Icon Rainbow (https://icon-rainbow.com/)".\n
+        \n
+        - インターネットでの検索アイコン 1: https://icon-rainbow.com/インターネットでの検索アイコン 1/\n
+        - サイト内検索のアイコン素材: https://icon-rainbow.com/サイト内検索のアイコン素材/\n
+    </string>
+
+</resources>

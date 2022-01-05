@@ -5,21 +5,20 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.about.license
+package jp.toastkid.about.license
 
+import android.webkit.WebSettings
+import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.core.view.get
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import java.nio.charset.StandardCharsets
 
 /**
  * @author toastkidjp
  */
-internal class LicenseHtmlLoaderUseCase(
-    private val webViewFactory: WebViewFactory = WebViewFactory()
-) {
+internal class LicenseHtmlLoaderUseCase() {
 
     operator fun invoke(container: FrameLayout) {
         container.isVisible = !container.isVisible
@@ -30,7 +29,15 @@ internal class LicenseHtmlLoaderUseCase(
 
         val content = LicenseContentLoaderUseCase(container.context.assets).invoke()
 
-        val webView = webViewFactory.make(container.context)
+        val webView = WebView(container.context)
+        webView.settings.also {
+            it.javaScriptCanOpenWindowsAutomatically = false
+            it.javaScriptEnabled = false
+            it.blockNetworkLoads = false
+            it.databaseEnabled = false
+            it.domStorageEnabled = false
+            it.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+        }
         container.addView(webView)
         webView.loadDataWithBaseURL(
             null,

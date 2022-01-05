@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2021 toastkidjp.
+  ~ All rights reserved. This program and the accompanying materials
+  ~ are made available under the terms of the Eclipse Public License v1.0
+  ~ which accompany this distribution.
+  ~ The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+  -->
+
+<resources>
+    <string name="link_privacy_policy">https://toastkidjp.tumblr.com/post/162665491938</string>
+    <string name="copyright">(c) @toastkidjp</string>
+    <string name="message_about_this_app">
+        さまざまなサイトで情報を検索できる Web 検索アプリです。\n
+        \n
+        【検索のしやすさ】\n
+        1. お気に入り検索……好きなサイトとキーワードの組み合わせを保存できます。
+        いつも検索するキーワードを保存しておけばすぐに検索ができます。\n
+        2. 多数の検索サイトに対応……Google, Bing, DuckDuckGo...その日の気分に合わせて使い分けOK！\n
+        3. 検索ウィジェット搭載……ホーム画面や通知領域にウィジェットを置けば、検索をすぐに起動できます。\n
+        \n
+        【豊富な機能】\n
+        1. Web 検索\n
+        2. バーコードリーダー\n
+        3. RSS リーダー\n
+        4. 簡易タブブラウザー\n
+        5. タブエディター\n
+        6. Planning Poker\n
+        7. カラーフィルター\n
+        8. 音楽プレイヤー\n
+        9. 画像ビューアー\n
+        10. TODO リスト\n
+        \n
+        【カスタマイズ】\n
+        1. Toolbar を好きな色に変えられます。\n
+        2. 背景を好きな画像に変更できます。\n
+        3. 好きな検索サイトをデフォルトにできます。\n
+        4. デフォルトのホーム画面だけでなく、検索やアプリランチャー画面を起動直後の画面に設定できます。\n
+        \n
+        Resources\n
+        I have used icons which are owned by "Icon Rainbow (https://icon-rainbow.com/)".\n
+        \n
+        - インターネットでの検索アイコン 1: https://icon-rainbow.com/インターネットでの検索アイコン 1/\n
+        - サイト内検索のアイコン素材: https://icon-rainbow.com/サイト内検索のアイコン素材/\n
+    </string>
+
+</resources>
