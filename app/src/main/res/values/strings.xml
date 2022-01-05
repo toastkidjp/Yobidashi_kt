@@ -63,7 +63,6 @@
     <string name="unit_id_interstitial">ca-app-pub-5751262573448755/4657576229</string>
     <string name="unit_id_banner_ad">ca-app-pub-5751262573448755/3489764085</string>
 
-    <string name="copyright">(c) @toastkidjp</string>
     <string name="clear_all">Clear All</string>
     <string name="add_background_image">Add Background Image</string>
     <string name="message_change_background_image">It has changed background image.</string>
