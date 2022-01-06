@@ -18,8 +18,8 @@ android {
         minSdkVersion rootProject.ext.minSdk
         vectorDrawables.useSupportLibrary = true
     }
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
     buildTypes {
         release {
