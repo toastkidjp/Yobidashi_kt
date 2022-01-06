@@ -14,9 +14,9 @@ import android.widget.RemoteViews
 internal class Provider : AppWidgetProvider() {
 
     override fun onUpdate(
-            context: Context,
-            appWidgetManager: AppWidgetManager,
-            appWidgetIds: IntArray
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
     ) {
         updateWidget(context, appWidgetManager, RemoteViewsFactory().make(context))
     }
@@ -27,6 +27,7 @@ internal class Provider : AppWidgetProvider() {
          * Update widget.
          *
          * @param context
+         * @param appWidgetManager [AppWidgetManager]
          * @param remoteViews
          */
         fun updateWidget(

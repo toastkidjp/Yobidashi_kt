@@ -133,6 +133,11 @@ enum class SearchCategory(
             R.drawable.ic_givero,
             "https://www.givero.com/search?q="
     ),
+    YOU_COM(
+        R.string.you_com,
+        R.drawable.ic_you_com,
+        "https://you.com/search?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,

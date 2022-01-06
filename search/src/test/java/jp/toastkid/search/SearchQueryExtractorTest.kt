@@ -74,7 +74,8 @@ class SearchQueryExtractorTest {
         "ramen" to "https://www.ebay.com/sch/i.html?_nkw=ramen",
         "voo" to "https://www.forbes.com/search?q=voo",
         "yahoo" to "https://news.google.com/search?q=yahoo",
-        "test" to "https://search.brave.com/search?source=web&q=test"
+        "test" to "https://search.brave.com/search?source=web&q=test",
+        "test" to "https://you.com/search?q=test"
     )
 
     @Before
