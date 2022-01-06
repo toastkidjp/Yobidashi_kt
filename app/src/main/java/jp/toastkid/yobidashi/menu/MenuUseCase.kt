@@ -12,6 +12,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.about.AboutThisAppFragment
 import jp.toastkid.gesture.GestureMemoFragment
 import jp.toastkid.image.list.ImageViewerFragment
 import jp.toastkid.lib.BrowserViewModel
@@ -23,8 +24,8 @@ import jp.toastkid.planning.CardListFragment
 import jp.toastkid.rss.RssReaderFragment
 import jp.toastkid.todo.view.board.BoardFragment
 import jp.toastkid.todo.view.list.TaskListFragment
+import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
@@ -132,7 +133,7 @@ class MenuUseCase(
                 nextFragment(GestureMemoFragment::class.java)
             }
             Menu.ABOUT_THIS_APP -> {
-                nextFragment(AboutThisAppFragment::class.java)
+                contentViewModel?.nextFragment(AboutThisAppFragment.makeWith(BuildConfig.VERSION_NAME))
             }
             Menu.TODO_TASKS_BOARD -> {
                 nextFragment(BoardFragment::class.java)
