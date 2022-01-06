@@ -31,8 +31,6 @@
     <string name="title_clear_settings">Clear Settings</string>
     <string name="title_advertisement_1">A</string>
     <string name="title_advertisement_2">D</string>
-    <string name="title_licenses">Licenses Information</string>
-    <string name="title_app_version">App Version: </string>
 
     <string name="settings_color_background_title">Background</string>
     <string name="settings_color_font_title">Font</string>
@@ -72,7 +70,6 @@
     <string name="done_addition">It has done addition!</string>
     <string name="message_add_recommended_colors">Would you like to add recommended colors?</string>
     <string name="title_add_random">Random</string>
-    <string name="title_go_google_play">Check update</string>
     <string name="section_title_about_this_app">This app\'s information</string>
     <string name="app_widget_name_search">Web Search App-Widget</string>
     <string name="app_widget_search">Search</string>

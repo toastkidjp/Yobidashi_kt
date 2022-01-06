@@ -25,8 +25,6 @@
     <string name="title_clear_settings">設定を初期化</string>
     <string name="title_advertisement_1">広</string>
     <string name="title_advertisement_2">告</string>
-    <string name="title_licenses">ライセンス情報</string>
-    <string name="title_app_version">アプリのバージョン: </string>
 
     <string name="settings_color_background_title">背景色</string>
     <string name="settings_color_font_title">文字色</string>
@@ -72,7 +70,6 @@
     <string name="done_addition">追加しました。</string>
     <string name="message_add_recommended_colors">おすすめの色を追加します。</string>
     <string name="title_add_random">ランダム</string>
-    <string name="title_go_google_play">アプリの更新を確認</string>
     <string name="section_title_about_this_app">このアプリの情報</string>
     <string name="link_privacy_policy">https://toastkidjp.tumblr.com/post/162665491938</string>
     <string name="app_widget_name_search">Web 検索ウィジェット</string>
