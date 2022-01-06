@@ -78,7 +78,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
- * Main of this calendar app.
+ * Main activity of this app.
  *
  * @author toastkidjp
  */
