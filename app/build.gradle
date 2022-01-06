@@ -68,7 +68,6 @@ dependencies {
     implementation project(":article")
     implementation project(":search")
     implementation project(":todo")
-    implementation project(":licenses")
     implementation project(':music')
     implementation project(":planning")
     implementation project(":gesture")
