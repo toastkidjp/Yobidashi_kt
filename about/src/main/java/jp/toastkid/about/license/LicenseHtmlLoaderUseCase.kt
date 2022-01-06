@@ -10,9 +10,11 @@ package jp.toastkid.about.license
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.get
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import jp.toastkid.about.R
 import java.nio.charset.StandardCharsets
 
 /**
@@ -38,7 +40,13 @@ internal class LicenseHtmlLoaderUseCase() {
             it.domStorageEnabled = false
             it.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
         }
-        container.addView(webView)
+
+        AlertDialog.Builder(container.context)
+            .setTitle(R.string.title_licenses)
+            .setView(webView)
+            .setPositiveButton(R.string.ok, { d, i -> d.dismiss() })
+            .show()
+
         webView.loadDataWithBaseURL(
             null,
             content,
