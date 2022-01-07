@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.about.R
+import jp.toastkid.about.license.LicenseContentLoaderUseCase
 import java.nio.charset.StandardCharsets
 
 internal class LicensesDialogFragment : DialogFragment() {
@@ -38,8 +39,7 @@ internal class LicensesDialogFragment : DialogFragment() {
             .setPositiveButton(R.string.ok) { d, _ -> d.dismiss() }
             .create()
 
-        val content = arguments?.getString(KEY_CONTENT)
-            ?: return super.onCreateDialog(savedInstanceState)
+        val content = LicenseContentLoaderUseCase(context.assets).invoke()
 
         webView.loadDataWithBaseURL(
             null,
