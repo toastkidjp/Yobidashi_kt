@@ -13,7 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.about.databinding.FragmentAboutBinding
-import jp.toastkid.about.license.LicenseHtmlLoaderUseCase
+import jp.toastkid.about.view.LicensesDialogFragment
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
@@ -54,9 +54,8 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
      * Show licenses dialog.
      */
     fun licenses() {
-        binding?.licenseContent?.let {
-            LicenseHtmlLoaderUseCase().invoke(it)
-        }
+        LicensesDialogFragment()
+            .show(parentFragmentManager, LicensesDialogFragment::class.java.canonicalName)
     }
 
     fun checkUpdate() {
