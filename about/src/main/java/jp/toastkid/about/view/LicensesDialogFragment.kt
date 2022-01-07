@@ -18,7 +18,7 @@ import androidx.fragment.app.DialogFragment
 import jp.toastkid.about.R
 import java.nio.charset.StandardCharsets
 
-class LicensesDialogFragment : DialogFragment() {
+internal class LicensesDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val context = context ?: return super.onCreateDialog(savedInstanceState)
