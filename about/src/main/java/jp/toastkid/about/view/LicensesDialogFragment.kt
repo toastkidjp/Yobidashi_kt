@@ -35,7 +35,7 @@ class LicensesDialogFragment : DialogFragment() {
         val dialog = AlertDialog.Builder(context)
             .setTitle(R.string.title_licenses)
             .setView(webView)
-            .setPositiveButton(R.string.ok) { d, i -> d.dismiss() }
+            .setPositiveButton(R.string.ok) { d, _ -> d.dismiss() }
             .create()
 
         val content = arguments?.getString(KEY_CONTENT)
