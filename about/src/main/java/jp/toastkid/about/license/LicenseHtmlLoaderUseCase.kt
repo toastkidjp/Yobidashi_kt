@@ -35,7 +35,7 @@ internal class LicenseHtmlLoaderUseCase {
         AlertDialog.Builder(container.context)
             .setTitle(R.string.title_licenses)
             .setView(webView)
-            .setPositiveButton(R.string.ok, { d, i -> d.dismiss() })
+            .setPositiveButton(R.string.ok) { d, i -> d.dismiss() }
             .show()
 
         webView.loadDataWithBaseURL(
