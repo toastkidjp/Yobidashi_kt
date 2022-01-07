@@ -11,9 +11,6 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.get
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import jp.toastkid.about.R
 import java.nio.charset.StandardCharsets
 
@@ -23,12 +20,6 @@ import java.nio.charset.StandardCharsets
 internal class LicenseHtmlLoaderUseCase() {
 
     operator fun invoke(container: FrameLayout) {
-        container.isVisible = !container.isVisible
-        if (container.isGone || container.childCount != 0) {
-            container[0].scrollTo(0, 0)
-            return
-        }
-
         val content = LicenseContentLoaderUseCase(container.context.assets).invoke()
 
         val webView = WebView(container.context)
