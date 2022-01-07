@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets
 /**
  * @author toastkidjp
  */
-internal class LicenseHtmlLoaderUseCase() {
+internal class LicenseHtmlLoaderUseCase {
 
     operator fun invoke(container: FrameLayout) {
         val content = LicenseContentLoaderUseCase(container.context.assets).invoke()
