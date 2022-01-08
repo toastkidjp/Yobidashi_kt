@@ -78,7 +78,7 @@ class DisplayingSettingFragment : Fragment() {
 
         LoadedAction(
             it.data?.data,
-            binding.fabParent,
+            binding.root,
             preferenceApplier.colorPair(),
             { adapter?.notifyDataSetChanged() },
             BACKGROUND_DIR
@@ -146,18 +146,19 @@ class DisplayingSettingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        preferenceApplier.colorPair().applyReverseTo(binding.fab)
 
         val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(
                 color,
                 binding.applyDarkMode,
-                binding.clearBackgroundSettings
+                binding.clearBackgroundSettings,
+            binding.backgroundSubHeader
         )
+        binding.fab.setColorFilter(color)
     }
 
     fun applyDarkMode() {
-        DarkModeApplier().invoke(preferenceApplier, binding.fabParent)
+        DarkModeApplier().invoke(preferenceApplier, binding.root)
     }
 
     /**
