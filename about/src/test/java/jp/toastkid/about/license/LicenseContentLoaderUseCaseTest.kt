@@ -28,13 +28,13 @@ class LicenseContentLoaderUseCaseTest {
     @MockK
     private lateinit var assetManager: AssetManager
 
-    private val content = "I have a question."
+    private val singleLineContent = "I have a question."
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { assetManager.open(any()) }.returns(content.byteInputStream())
+        every { assetManager.open(any()) }.returns(singleLineContent.byteInputStream())
     }
 
     @After
@@ -46,7 +46,7 @@ class LicenseContentLoaderUseCaseTest {
     fun testSingleLineTextCase() {
         val readContent = licenseContentLoaderUseCase.invoke()
 
-        assertEquals(content, readContent)
+        assertEquals(singleLineContent, readContent)
 
         verify { assetManager.open(any()) }
     }
