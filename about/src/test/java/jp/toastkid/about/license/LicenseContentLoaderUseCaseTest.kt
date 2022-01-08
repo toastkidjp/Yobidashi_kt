@@ -43,7 +43,7 @@ class LicenseContentLoaderUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testSingleLineTextCase() {
         val readContent = licenseContentLoaderUseCase.invoke()
 
         assertEquals(content, readContent)
