@@ -56,7 +56,7 @@ class LicenseContentLoaderUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testMultiLineContentCase() {
         every { assetManager.open(any()) }.returns(multiLineContent.byteInputStream())
 
         val readContent = licenseContentLoaderUseCase.invoke()
