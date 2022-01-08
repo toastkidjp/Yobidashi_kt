@@ -136,9 +136,10 @@ class DisplayingSettingFragment : Fragment() {
             "clear_background_images",
             viewLifecycleOwner,
             { _, _ ->
+                val preCount = adapter?.itemCount ?: 0
                 filesDir.clean()
                 contentViewModel?.snackShort(R.string.message_success_image_removal)
-                adapter?.notifyDataSetChanged()
+                adapter?.notifyItemRangeRemoved(0, preCount)
             }
         )
     }
