@@ -30,6 +30,10 @@ class LicenseContentLoaderUseCaseTest {
 
     private val singleLineContent = "I have a question."
 
+    private val multiLineContent =
+        arrayOf("I have a question.", "Did you have any questions?", "Thanks.")
+            .joinToString(System.lineSeparator())
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -47,6 +51,17 @@ class LicenseContentLoaderUseCaseTest {
         val readContent = licenseContentLoaderUseCase.invoke()
 
         assertEquals(singleLineContent, readContent)
+
+        verify { assetManager.open(any()) }
+    }
+
+    @Test
+    fun test() {
+        every { assetManager.open(any()) }.returns(multiLineContent.byteInputStream())
+
+        val readContent = licenseContentLoaderUseCase.invoke()
+
+        assertEquals(multiLineContent, readContent)
 
         verify { assetManager.open(any()) }
     }
