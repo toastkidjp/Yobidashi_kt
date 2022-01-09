@@ -11,7 +11,6 @@ package jp.toastkid.yobidashi.browser.webview.factory
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.ViewGroup
@@ -140,7 +139,7 @@ internal class WebViewFactory {
 
         webView.setDownloadListener { url, _, _, mimeType, _ ->
             when {
-                mimeType == "application/pdf" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
+                mimeType == "application/pdf" -> {
                     val intent = Intent().also { it.data = url.toUri() }
                     val currentContext = webView.context
                     if (currentContext.packageManager.resolveActivity(intent, 0) == null) {
