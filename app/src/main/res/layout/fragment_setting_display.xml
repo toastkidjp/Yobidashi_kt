@@ -24,7 +24,7 @@
             android:drawableStart="@drawable/ic_dark_mode_black"
             android:drawablePadding="4dp"
             android:onClick="@{view -> fragment.applyDarkMode()}"
-            android:text="Apply dark mode"
+            android:text="@string/apply_dark_mode"
             />
 
         <include layout="@layout/view_setting_divider" />
