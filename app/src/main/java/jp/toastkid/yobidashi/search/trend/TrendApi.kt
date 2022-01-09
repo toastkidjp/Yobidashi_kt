@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi.search.trend
 import androidx.annotation.WorkerThread
 import retrofit2.Retrofit
 import java.io.IOException
-import kotlin.jvm.Throws
+import java.util.Locale
 
 /**
  * @author toastkidjp
@@ -28,7 +28,7 @@ class TrendApi {
                 .build()
 
         val service = retrofit.create(TrendService::class.java)
-        val call = service.call()
+        val call = service.call(if (Locale.getDefault().equals(Locale.JAPAN)) "p4" else "p0")
         return call.execute().body()
     }
 
