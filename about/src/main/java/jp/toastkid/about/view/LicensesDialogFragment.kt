@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.about.R
 import jp.toastkid.about.license.LicenseContentLoaderUseCase
@@ -58,9 +57,6 @@ internal class LicensesDialogFragment : DialogFragment() {
         private val encoding = StandardCharsets.UTF_8.name()
 
         private const val KEY_CONTENT = "content"
-
-        fun makeWith(content: String) = LicensesDialogFragment()
-            .also { it.arguments = bundleOf(KEY_CONTENT to content) }
 
     }
 }
