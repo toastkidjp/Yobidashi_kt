@@ -68,6 +68,8 @@
                 android:layout_gravity="bottom|right"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/ripple_transparent"
+                android:scaleType="center"
+                tools:tint="@color/black"
                 app:srcCompat="@drawable/ic_add_white"
                 android:onClick="@{view -> fragment.launchAdding()}"
                 android:contentDescription="@string/add_background_image"
