@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.browser.user_agent
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,31 +32,23 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val activityContext = context
-                ?: return super.onCreateView(inflater, container, savedInstanceState)
-
-        val preferenceApplier = PreferenceApplier(activityContext)
-
+    ): View {
         val binding: DialogUserAgentBinding =
                 DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
         val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(color, binding.title)
 
-        initializeList(preferenceApplier, activityContext, binding.list)
+        initializeList(binding.list)
         return binding.root
     }
 
-    private fun initializeList(
-        preferenceApplier: PreferenceApplier,
-        activityContext: Context,
-        listView: ListView
-    ) {
+    private fun initializeList(listView: ListView) {
         listView.choiceMode = ListView.CHOICE_MODE_SINGLE
+        val preferenceApplier = PreferenceApplier(listView.context)
         val currentIndex = UserAgent.findCurrentIndex(preferenceApplier.userAgent())
         val adapter = object : ArrayAdapter<CharSequence>(
-            activityContext,
+            listView.context,
             android.R.layout.simple_list_item_single_choice,
             android.R.id.text1,
             UserAgent.titles()

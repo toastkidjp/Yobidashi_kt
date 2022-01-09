@@ -15,13 +15,10 @@ import kotlin.math.min
 /**
  * @author toastkidjp
  */
-class SpeechMaker(context: Context) {
-
-    private var successInitialization = false
-
-    private val textToSpeech = TextToSpeech(
-            context
-    ) { result -> successInitialization = result == TextToSpeech.SUCCESS }
+class SpeechMaker(
+    context: Context,
+    private val textToSpeech: TextToSpeech = TextToSpeech(context) {  }
+) {
 
     operator fun invoke(message: String) {
         if (textToSpeech.isSpeaking) {

@@ -42,7 +42,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
@@ -103,7 +103,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
             viewModelProvider.get(ReaderFragmentViewModel::class.java)
                     .content
-                    .observe(activity, Observer {
+                    .observe(activity, {
                         binding.title.text = it.first
                         binding.textContent.text = it.second
                     })
