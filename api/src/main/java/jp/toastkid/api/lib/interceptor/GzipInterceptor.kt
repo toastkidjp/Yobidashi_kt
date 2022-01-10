@@ -28,6 +28,7 @@ class GzipInterceptor : Interceptor {
         ) {
             return chain.proceed(originalRequest)
         }
+
         val compressedRequest = originalRequest.newBuilder()
             .header(KEY_HEADER, "gzip")
             .method(
