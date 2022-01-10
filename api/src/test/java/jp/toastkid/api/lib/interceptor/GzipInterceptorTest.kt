@@ -67,4 +67,13 @@ class GzipInterceptorTest {
         verify(inverse = true) { originalRequest.newBuilder() }
     }
 
+    @Test
+    fun test() {
+        gzipInterceptor.intercept(chain)
+
+        verify { chain.proceed(any()) }
+        verify { originalRequest.newBuilder() }
+        verify { builder.build() }
+    }
+
 }
