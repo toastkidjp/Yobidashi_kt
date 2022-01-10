@@ -68,7 +68,7 @@ class GzipInterceptorTest {
     }
 
     @Test
-    fun test() {
+    fun testCompleteCase() {
         gzipInterceptor.intercept(chain)
 
         verify { chain.proceed(any()) }
