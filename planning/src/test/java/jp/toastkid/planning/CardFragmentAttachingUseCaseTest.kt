@@ -8,12 +8,15 @@
 
 package jp.toastkid.planning
 
+import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -40,6 +43,9 @@ class CardFragmentAttachingUseCaseTest {
         every { transaction.add(any<Int>(), any()) }.returns(transaction)
         every { transaction.addToBackStack(any()) }.returns(transaction)
         every { transaction.commit() }.returns(0)
+
+        mockkConstructor(Bundle::class)
+        every { anyConstructed<Bundle>().putCharSequence(any(), any()) }.returns(mockk())
     }
 
     @After
