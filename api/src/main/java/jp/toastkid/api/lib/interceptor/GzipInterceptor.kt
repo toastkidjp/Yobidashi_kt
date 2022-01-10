@@ -22,7 +22,6 @@ class GzipInterceptor : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-
         val originalRequest = chain.request()
         if (originalRequest.body == null ||
             originalRequest.header(KEY_HEADER) != null
