@@ -18,7 +18,7 @@ import okio.GzipSink
 import okio.buffer
 import java.io.IOException
 
-class GzipInterceptor : Interceptor {
+internal class GzipInterceptor : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
