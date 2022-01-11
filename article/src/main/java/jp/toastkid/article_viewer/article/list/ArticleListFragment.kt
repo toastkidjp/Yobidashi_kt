@@ -44,7 +44,7 @@ import jp.toastkid.article_viewer.bookmark.BookmarkFragment
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
 import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
-import jp.toastkid.article_viewer.zip.ZipLoaderService
+import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
@@ -126,7 +126,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         context.registerReceiver(
                 progressBroadcastReceiver,
-                ZipLoaderService.makeProgressBroadcastIntentFilter()
+                ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
         )
     }
 
