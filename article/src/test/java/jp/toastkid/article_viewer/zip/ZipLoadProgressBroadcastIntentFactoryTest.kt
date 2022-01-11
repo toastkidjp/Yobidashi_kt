@@ -47,7 +47,7 @@ class ZipLoadProgressBroadcastIntentFactoryTest {
     }
 
     @Test
-    fun test() {
+    fun testMakeProgressBroadcastIntentFilter() {
         val intentFilter =
             ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
 
