@@ -45,4 +45,12 @@ class ZipLoadProgressBroadcastIntentFactoryTest {
         verify { anyConstructed<Intent>().putExtra(any(), any<Int>()) }
     }
 
+    @Test
+    fun test() {
+        val intentFilter =
+            ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
+
+        assertNotNull(intentFilter)
+    }
+
 }
