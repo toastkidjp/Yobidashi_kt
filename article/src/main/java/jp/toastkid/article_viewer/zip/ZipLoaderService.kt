@@ -9,7 +9,6 @@ package jp.toastkid.article_viewer.zip
 
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -47,22 +46,12 @@ class ZipLoaderService : JobIntentService() {
                 }
             }
 
-            sendBroadcast(makeBroadcastIntent(100))
+            sendBroadcast(ZipLoadProgressBroadcastIntentFactory()(100))
             zipLoader.dispose()
         }
     }
 
     companion object {
-
-        private const val ACTION_PROGRESS_BROADCAST = "jp.toastkid.articles.importing.progress"
-
-        private fun makeBroadcastIntent(progress: Int): Intent {
-            val progressIntent = Intent(ACTION_PROGRESS_BROADCAST)
-            progressIntent.putExtra("progress", progress)
-            return progressIntent
-        }
-
-        fun makeProgressBroadcastIntentFilter() = IntentFilter(ACTION_PROGRESS_BROADCAST)
 
         fun start(context: Context, target: Uri) {
             val intent = Intent(context, ZipLoaderService::class.java)
