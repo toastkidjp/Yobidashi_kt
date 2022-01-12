@@ -32,9 +32,7 @@ class ZipLoaderService(
 ) : JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
-        val dataBase = AppDatabase.find(this)
-
-        val articleRepository = dataBase.articleRepository()
+        val articleRepository = AppDatabase.find(this).articleRepository()
 
         val file = intent.getParcelableExtra<Uri>("target") ?: return
 
