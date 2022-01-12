@@ -34,11 +34,11 @@ class ZipLoaderService(
 ) : JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
-        val articleRepository = AppDatabase.find(this).articleRepository()
-
         val file = intent.getParcelableExtra<Uri>("target") ?: return
 
+        val articleRepository = AppDatabase.find(this).articleRepository()
         val zipLoader = ZipLoader(articleRepository)
+
         CoroutineScope(mainDispatcher).launch {
             withContext(ioDispatcher) {
                 try {
