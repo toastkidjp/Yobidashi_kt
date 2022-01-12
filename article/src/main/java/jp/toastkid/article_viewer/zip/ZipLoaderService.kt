@@ -14,6 +14,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.JobIntentService
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +26,10 @@ import java.io.IOException
  * @author toastkidjp
  */
 @RequiresApi(Build.VERSION_CODES.N)
-class ZipLoaderService : JobIntentService() {
+class ZipLoaderService(
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
         val dataBase = AppDatabase.find(this)
@@ -35,8 +39,8 @@ class ZipLoaderService : JobIntentService() {
         val file = intent.getParcelableExtra<Uri>("target") ?: return
 
         val zipLoader = ZipLoader(articleRepository)
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
+        CoroutineScope(mainDispatcher).launch {
+            withContext(ioDispatcher) {
                 try {
                     val inputStream = contentResolver.openInputStream(file) ?: return@withContext
                     zipLoader.invoke(inputStream)
