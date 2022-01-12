@@ -40,7 +40,7 @@ class ZipLoaderServiceTest {
     }
 
     @Test
-    fun test() {
+    fun testStart() {
         ZipLoaderService.start(mockk(), mockk())
 
         verify { JobIntentService.enqueueWork(any(), any<Class<Any>>(), any(), any()) }
