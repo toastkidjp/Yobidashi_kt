@@ -27,6 +27,8 @@ import java.io.IOException
  */
 @RequiresApi(Build.VERSION_CODES.N)
 class ZipLoaderService(
+    private val zipLoadProgressBroadcastIntentFactory: ZipLoadProgressBroadcastIntentFactory =
+        ZipLoadProgressBroadcastIntentFactory(),
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : JobIntentService() {
@@ -48,7 +50,7 @@ class ZipLoaderService(
                 }
             }
 
-            sendBroadcast(ZipLoadProgressBroadcastIntentFactory()(100))
+            sendBroadcast(zipLoadProgressBroadcastIntentFactory(100))
             zipLoader.dispose()
         }
     }
