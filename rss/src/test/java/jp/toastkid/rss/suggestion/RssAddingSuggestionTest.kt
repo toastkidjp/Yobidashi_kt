@@ -8,6 +8,8 @@
 
 package jp.toastkid.rss.suggestion
 
+import android.view.View
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelStoreOwner
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -47,6 +49,12 @@ class RssAddingSuggestionTest {
     @MockK
     private lateinit var contentViewModel: ContentViewModel
 
+    @MockK
+    private lateinit var view: View
+
+    @MockK
+    private lateinit var fragmentAfter: FragmentActivity
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -54,6 +62,8 @@ class RssAddingSuggestionTest {
         every { contentViewModelFactory.invoke(any()) }.returns(contentViewModel)
         every { contentViewModel.snackWithAction(any(), any(), any()) }.returns(mockk())
         every { preferenceApplier.colorPair() }.returns(mockk())
+        every { view.context }.returns(fragmentAfter)
+        every { fragmentAfter.getString(any()) }.returns("test")
     }
 
     @After
@@ -66,12 +76,11 @@ class RssAddingSuggestionTest {
         every { rssUrlValidator.invoke(any()) }.returns(true)
         every { preferenceApplier.containsRssTarget(any()) }.returns(false)
 
-        rssAddingSuggestion.invoke(mockk(), "https://www.yahoo.co.jp")
+        rssAddingSuggestion.invoke(view, "https://www.yahoo.co.jp")
 
         verify(exactly = 1) { rssUrlValidator.invoke(any()) }
         verify(exactly = 1) { preferenceApplier.containsRssTarget(any()) }
         verify(exactly = 1) { contentViewModel.snackWithAction(any(), any(), any()) }
-        verify(exactly = 1) { preferenceApplier.colorPair() }
     }
 
     @Test
