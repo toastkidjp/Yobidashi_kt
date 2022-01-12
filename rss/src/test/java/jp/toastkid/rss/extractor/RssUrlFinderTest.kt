@@ -9,6 +9,8 @@
 package jp.toastkid.rss.extractor
 
 import android.graphics.Color
+import android.view.View
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelStoreOwner
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -69,6 +71,15 @@ class RssUrlFinderTest {
     @MockK
     private lateinit var contentViewModel: ContentViewModel
 
+    @MockK
+    private lateinit var view: View
+
+    @MockK
+    private lateinit var fragmentAfter: FragmentActivity
+
+    @MockK
+    private lateinit var snackbarParentSupplier: () -> View
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -85,6 +96,10 @@ class RssUrlFinderTest {
         every { contentViewModelFactory.invoke(any()) }.returns(contentViewModel)
         every { contentViewModel.snackShort(any<Int>()) }.returns(mockk())
         every { contentViewModel.snackShort(any<String>()) }.returns(mockk())
+
+        every { snackbarParentSupplier.invoke() }.returns(view)
+        every { view.context }.returns(fragmentAfter)
+        every { fragmentAfter.getString(any()) }.returns("test")
     }
 
     @After
@@ -94,7 +109,7 @@ class RssUrlFinderTest {
 
     @Test
     fun testSuccessfulCase() {
-        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
+        rssUrlFinder.invoke("https://www.yahoo.co.jp", snackbarParentSupplier)
 
         verify(exactly = 1) { preferenceApplier.colorPair() }
         verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
@@ -111,7 +126,7 @@ class RssUrlFinderTest {
 
     @Test
     fun testBlankInputCase() {
-        rssUrlFinder.invoke(" ") { mockk() }
+        rssUrlFinder.invoke(" ", snackbarParentSupplier)
 
         verify(exactly = 0) { preferenceApplier.colorPair() }
         verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
@@ -130,7 +145,7 @@ class RssUrlFinderTest {
     fun testInputUrlIsValidCase() {
         every { urlValidator.invoke(any()) }.returns(true)
 
-        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
+        rssUrlFinder.invoke("https://www.yahoo.co.jp", snackbarParentSupplier)
 
         verify(exactly = 1) { preferenceApplier.colorPair() }
         verify(exactly = 1) { preferenceApplier.saveNewRssReaderTargets(any()) }
@@ -150,7 +165,7 @@ class RssUrlFinderTest {
     fun testHtmlApiReturnsNullCase() {
         coEvery { htmlApi.invoke(any()) }.returns(null)
 
-        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
+        rssUrlFinder.invoke("https://www.yahoo.co.jp", snackbarParentSupplier)
 
         verify(exactly = 1) { preferenceApplier.colorPair() }
         verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
@@ -169,7 +184,7 @@ class RssUrlFinderTest {
     fun testIsNotSuccessfulCase() {
         coEvery { response getProperty "isSuccessful" }.returns(false)
 
-        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
+        rssUrlFinder.invoke("https://www.yahoo.co.jp", snackbarParentSupplier)
 
         verify(exactly = 1) { preferenceApplier.colorPair() }
         verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
