@@ -61,7 +61,6 @@ class RssAddingSuggestionTest {
 
         every { contentViewModelFactory.invoke(any()) }.returns(contentViewModel)
         every { contentViewModel.snackWithAction(any(), any(), any()) }.returns(mockk())
-        every { preferenceApplier.colorPair() }.returns(mockk())
         every { view.context }.returns(fragmentAfter)
         every { fragmentAfter.getString(any()) }.returns("test")
     }
@@ -93,7 +92,6 @@ class RssAddingSuggestionTest {
         verify(exactly = 1) { rssUrlValidator.invoke(any()) }
         verify(exactly = 0) { preferenceApplier.containsRssTarget(any()) }
         verify(exactly = 0) { contentViewModel.snackWithAction(any(), any(), any()) }
-        verify(exactly = 0) { preferenceApplier.colorPair() }
     }
 
     @Test
@@ -106,7 +104,6 @@ class RssAddingSuggestionTest {
         verify(exactly = 1) { rssUrlValidator.invoke(any()) }
         verify(exactly = 1) { preferenceApplier.containsRssTarget(any()) }
         verify(exactly = 0) { contentViewModel.snackWithAction(any(), any(), any()) }
-        verify(exactly = 0) { preferenceApplier.colorPair() }
     }
 
 }
