@@ -132,7 +132,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
         adapter = Adapter(activityContext, callback as Callback)
         adapter.setCurrentIndex(index)
-        adapter.notifyDataSetChanged()
 
         binding = DataBindingUtil.inflate(
                 LayoutInflater.from(activityContext),
