@@ -10,7 +10,7 @@ package jp.toastkid.lib.view.list
 
 import androidx.recyclerview.widget.DiffUtil
 
-class CommonItemCallback<T>(
+class CommonItemCallback<T> private constructor(
     private val sameItemComparator: (T, T) -> Boolean,
     private val equals: (T, T) -> Boolean
 ) : DiffUtil.ItemCallback<T>() {
@@ -21,5 +21,15 @@ class CommonItemCallback<T>(
 
     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
         return equals(oldItem, newItem)
+    }
+
+    companion object {
+
+        fun <T>with(
+            sameItemComparator: (T, T) -> Boolean,
+            equals: (T, T) -> Boolean
+        ): DiffUtil.ItemCallback<T> =
+            CommonItemCallback(sameItemComparator, equals)
+
     }
 }
