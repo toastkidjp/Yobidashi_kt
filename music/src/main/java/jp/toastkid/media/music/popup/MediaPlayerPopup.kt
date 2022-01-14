@@ -95,7 +95,6 @@ class MediaPlayerPopup(private val context: Context) {
 
             children.forEach { adapter?.add(it) }
 
-            adapter?.notifyDataSetChanged()
             layoutManager?.scrollToPosition(adapter?.mediumPosition() ?: 0)
         }
     }
