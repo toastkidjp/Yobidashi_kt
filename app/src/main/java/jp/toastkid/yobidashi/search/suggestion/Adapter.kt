@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 
@@ -17,7 +18,9 @@ import jp.toastkid.yobidashi.search.SearchFragmentViewModel
  */
 internal class Adapter (
         private val layoutInflater: LayoutInflater
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<String, ViewHolder>(
+    CommonItemCallback.with<String>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+) {
 
     /**
      * Suggestion items.
