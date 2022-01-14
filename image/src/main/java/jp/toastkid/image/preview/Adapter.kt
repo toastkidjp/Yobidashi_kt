@@ -8,13 +8,16 @@
 package jp.toastkid.image.preview
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.image.Image
+import jp.toastkid.lib.view.list.CommonItemCallback
 
 /**
  * @author toastkidjp
  */
-class Adapter : RecyclerView.Adapter<ViewHolder>() {
+class Adapter : ListAdapter<String, ViewHolder>(
+    CommonItemCallback.with<String>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+) {
 
     private val images = mutableListOf<Image>()
 
