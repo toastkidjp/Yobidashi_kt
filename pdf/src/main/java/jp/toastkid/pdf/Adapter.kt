@@ -26,7 +26,7 @@ class Adapter(
     private val layoutInflater: LayoutInflater,
     private val contentResolver: ContentResolver?
 ): ListAdapter<Bitmap, ViewHolder>(
-    CommonItemCallback.with<Bitmap>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a.equals(b)})
+    CommonItemCallback.with<Bitmap>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
 ) {
 
     /**
