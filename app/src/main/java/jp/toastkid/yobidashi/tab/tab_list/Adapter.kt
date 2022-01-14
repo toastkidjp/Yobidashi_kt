@@ -30,7 +30,7 @@ internal class Adapter(
         private val context: Context,
         private val callback: TabListDialogFragment.Callback
 ) : ListAdapter<Tab, ViewHolder>(
-    CommonItemCallback.with<Tab>({ a, b -> a.id() == b.id() }, { a, b -> a.equals(b)})
+    CommonItemCallback.with<Tab>({ a, b -> a.id() == b.id() }, { a, b -> a == b })
 ) {
 
     /**
