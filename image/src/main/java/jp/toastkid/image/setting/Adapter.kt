@@ -10,10 +10,11 @@ package jp.toastkid.image.setting
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.image.R
 import jp.toastkid.image.databinding.ItemSettingImageExcludingBinding
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.CommonItemCallback
 
 /**
  * @author toastkidjp
@@ -21,7 +22,9 @@ import jp.toastkid.lib.preference.PreferenceApplier
 class Adapter(
         private val preferenceApplier: PreferenceApplier,
         private val viewModel: ExcludingSettingFragmentViewModel
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<String, ViewHolder>(
+    CommonItemCallback.with<String>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+) {
 
     private val items = mutableListOf<String>()
 
