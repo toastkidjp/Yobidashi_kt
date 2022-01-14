@@ -11,12 +11,16 @@ package jp.toastkid.yobidashi.settings.fragment.search.category
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 
-class Adapter(private val preferenceApplier: PreferenceApplier) : RecyclerView.Adapter<ViewHolder>() {
+class Adapter(private val preferenceApplier: PreferenceApplier)
+    : ListAdapter<SearchCategorySelection, ViewHolder>(
+    CommonItemCallback.with<SearchCategorySelection>({ a, b -> a.searchCategory.id == b.searchCategory.id }, { a, b -> a == b })
+) {
 
     private val initialDisables = preferenceApplier.readDisableSearchCategory()
 
