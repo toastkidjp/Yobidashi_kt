@@ -16,8 +16,9 @@ import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.media.R
 import jp.toastkid.media.databinding.ItemMediaListBinding
 import java.util.Random
@@ -30,7 +31,9 @@ class Adapter(
         private val preferenceApplier: PreferenceApplier,
         resources: Resources,
         private val mediaPlayerPopupViewModel: MediaPlayerPopupViewModel?
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<MediaBrowserCompat.MediaItem, ViewHolder>(
+    CommonItemCallback.with<MediaBrowserCompat.MediaItem>({ a, b -> a.mediaId == b.mediaId }, { a, b -> a == b })
+) {
 
     private lateinit var binding: ItemMediaListBinding
 
