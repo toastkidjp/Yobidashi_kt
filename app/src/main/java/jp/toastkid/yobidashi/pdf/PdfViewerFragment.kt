@@ -31,7 +31,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.view.EditTextColorSetter
 import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.yobidashi.CommonFragmentAction
+import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarPdfViewerBinding
 import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding

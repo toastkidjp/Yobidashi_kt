@@ -38,6 +38,11 @@ android {
         }
     }
     buildToolsVersion rootProject.ext.buildTools
+
+    afterEvaluate {
+        generateReleaseBuildConfig.enabled = false
+        generateDebugBuildConfig.enabled = false
+    }
 }
 
 jacoco {

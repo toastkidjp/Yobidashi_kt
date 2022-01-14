@@ -1,0 +1,31 @@
+<resources>
+    <string name="action_pause">一時停止</string>
+    <string name="action_play">再生</string>
+    <string name="action_shuffle">シャッフル</string>
+    <string name="title_audio_player">音楽プレイヤー</string>
+    <string name="message_audio_file_is_not_found">音楽ファイルが見つかりませんでした。</string>
+
+    <string name="title_lyrics_search">歌詞検索</string>
+    <string name="content_description_switch_visibility">表示切替</string>
+    <string name="content_description_reverse_color">色の反転</string>
+    <string name="content_description_sepia_color_filter">セピア</string>
+    <string name="content_description_gray_scale">灰色</string>
+    <string name="content_description_rotate_left">左に回転</string>
+    <string name="content_description_reverse_image">水平方向に反転</string>
+    <string name="content_description_rotate_right">右に回転</string>
+    <string name="content_description_set_to">画像を設定</string>
+    <string name="content_description_edit_image">画像を編集</string>
+
+    <string name="title_playing_speed_0_5">x0.5</string>
+    <string name="title_playing_speed_0_7">x0.7</string>
+    <string name="title_playing_speed_0_8">x0.8</string>
+    <string name="title_playing_speed_0_9">x0.9</string>
+    <string name="title_playing_speed_1">x1</string>
+    <string name="title_playing_speed_1_1">x1.1</string>
+    <string name="title_playing_speed_1_2">x1.2</string>
+    <string name="title_playing_speed_1_5">x1.5</string>
+    <string name="title_playing_speed_2">x2</string>
+    <string name="title_playing_speed_3">x3</string>
+    <string name="title_playing_speed_5">x5</string>
+
+</resources>
