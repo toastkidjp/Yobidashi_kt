@@ -57,8 +57,13 @@ class Adapter(private val preferenceApplier: PreferenceApplier)
     }
 
     fun invokeCheckAll() {
-        items.forEach { it.checked = true }
-        notifyDataSetChanged()
+        items.forEachIndexed { index, item ->
+            val shouldNotifyChanged = item.checked.not()
+            item.checked = true
+            if (shouldNotifyChanged) {
+                notifyItemChanged(index)
+            }
+        }
     }
 
 }
