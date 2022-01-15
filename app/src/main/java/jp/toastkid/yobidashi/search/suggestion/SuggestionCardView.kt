@@ -129,26 +129,12 @@ constructor(
     }
 
     /**
-     * Use for voice search.
-     *
-     * @param words Recognizer result words.
-     */
-    internal fun addAll(words: List<String>) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.Default) {
-                words.forEach { adapter?.add(it) }
-            }
-            adapter?.notifyDataSetChanged()
-        }
-    }
-
-    /**
      * Replace suggestions with specified items.
      *
      * @param suggestions
      * @return [Job]
      */
-    private fun replace(suggestions: Iterable<String>): Job {
+    internal fun replace(suggestions: Iterable<String>): Job {
         return CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.Default) {
                 adapter?.clear()
