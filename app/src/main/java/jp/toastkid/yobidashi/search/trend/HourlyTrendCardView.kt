@@ -92,10 +92,9 @@ constructor(
                     Timber.e(e)
                     null
                 }
-                adapter?.replace(trendItems?.take(10))
+                adapter?.submitList(trendItems?.take(10))
             }
             isVisible = adapter?.isNotEmpty() ?: false
-            adapter?.notifyDataSetChanged()
         }
     }
 

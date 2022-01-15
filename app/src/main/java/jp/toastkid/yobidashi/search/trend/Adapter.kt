@@ -33,12 +33,13 @@ class Adapter : ListAdapter<Trend, ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items.get(position))
+        val item = getItem(position)
+        holder.bind(item)
         holder.itemView.setOnClickListener {
-            viewModel?.search(items.get(position).link)
+            viewModel?.search(item.link)
         }
         holder.itemView.setOnLongClickListener {
-            viewModel?.searchOnBackground(items.get(position).title)
+            viewModel?.searchOnBackground(item.title)
             true
         }
         holder.setOnAdd {
@@ -46,9 +47,9 @@ class Adapter : ListAdapter<Trend, ViewHolder>(
         }
     }
 
-    override fun getItemCount(): Int {
+    /*override fun getItemCount(): Int {
         return items.size
-    }
+    }*/
 
     fun replace(trends: List<Trend>?) {
         trends ?: return
@@ -58,7 +59,7 @@ class Adapter : ListAdapter<Trend, ViewHolder>(
     }
 
     fun isNotEmpty(): Boolean {
-        return items.isNotEmpty()
+        return currentList.isNotEmpty()
     }
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
