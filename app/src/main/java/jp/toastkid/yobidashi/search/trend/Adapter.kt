@@ -10,14 +10,17 @@ package jp.toastkid.yobidashi.search.trend
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 
 /**
  * @author toastkidjp
  */
-class Adapter : RecyclerView.Adapter<ViewHolder>() {
+class Adapter : ListAdapter<Trend, ViewHolder>(
+    CommonItemCallback.with<Trend>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+) {
 
     private val items = mutableListOf<Trend>()
 
