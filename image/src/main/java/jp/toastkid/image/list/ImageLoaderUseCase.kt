@@ -29,19 +29,18 @@ internal class ImageLoaderUseCase(
     }
 
     operator fun invoke(bucket: String?) {
-        adapter?.clear()
-
         val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
 
         val sort = Sort.findByName(preferenceApplier.imageViewerSort())
 
-        if (bucket.isNullOrBlank()) {
+        val newList = if (bucket.isNullOrBlank()) {
             bucketLoader(sort)
                     .filter { excludedItemFilter(parentExtractor(it.path)) }
         } else {
             imageLoader(sort, bucket).filter { excludedItemFilter(it.path) }
         }
-                .forEach { adapter?.add(it) }
+        adapter?.submitList(newList)
+
         currentBucket = bucket
         refreshContent()
     }

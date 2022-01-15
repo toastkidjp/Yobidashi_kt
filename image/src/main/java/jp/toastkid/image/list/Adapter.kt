@@ -50,13 +50,13 @@ internal class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val image = images.get(position)
+        val image = getItem(position)
         holder.applyContent(image) {
             if (it.isBucket) {
                 imageViewerFragmentViewModel?.click(it.name)
             } else {
                 val fragmentManager = fragmentManager ?: return@applyContent
-                ImagePreviewDialogFragment.withImages(images, position)
+                ImagePreviewDialogFragment.withImages(currentList, position)
                         .show(fragmentManager, ImagePreviewDialogFragment::class.java.simpleName)
             }
         }
@@ -72,9 +72,9 @@ internal class Adapter(
         }
     }
 
-    override fun getItemCount(): Int {
+    /*override fun getItemCount(): Int {
         return images.size
-    }
+    }*/
 
     fun add(image: Image) {
         images.add(image)
@@ -84,6 +84,6 @@ internal class Adapter(
         images.clear()
     }
 
-    fun isBucketMode() = images.isNotEmpty() && images[0].isBucket
+    fun isBucketMode() = currentList.isNotEmpty() && currentList[0].isBucket
 
 }
