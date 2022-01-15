@@ -43,11 +43,7 @@ class Adapter(private val preferenceApplier: PreferenceApplier)
         holder.bind(item)
         holder.setTapListener({
             item.checked = item.checked.not()
-            if (item.checked) {
-                preferenceApplier.removeDisableSearchCategory(item.searchCategory.name)
-            } else {
-                preferenceApplier.addDisableSearchCategory(item.searchCategory.name)
-            }
+            storeNewState(item)
             return@setTapListener item.checked
         })
     }
@@ -60,9 +56,18 @@ class Adapter(private val preferenceApplier: PreferenceApplier)
         items.forEachIndexed { index, item ->
             val shouldNotifyChanged = item.checked.not()
             item.checked = true
+            storeNewState(item)
             if (shouldNotifyChanged) {
                 notifyItemChanged(index)
             }
+        }
+    }
+
+    private fun storeNewState(item: SearchCategorySelection) {
+        if (item.checked) {
+            preferenceApplier.removeDisableSearchCategory(item.searchCategory.name)
+        } else {
+            preferenceApplier.addDisableSearchCategory(item.searchCategory.name)
         }
     }
 
