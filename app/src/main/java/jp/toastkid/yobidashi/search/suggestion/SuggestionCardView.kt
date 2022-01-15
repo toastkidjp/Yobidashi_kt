@@ -91,7 +91,6 @@ constructor(
      */
     fun clear() {
         adapter?.clear()
-        adapter?.notifyDataSetChanged()
     }
 
     /**
@@ -134,14 +133,12 @@ constructor(
      * @param suggestions
      * @return [Job]
      */
-    internal fun replace(suggestions: Iterable<String>): Job {
+    internal fun replace(suggestions: List<String>): Job {
         return CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.Default) {
-                adapter?.clear()
-                suggestions.forEach { adapter?.add(it) }
+                adapter?.replace(suggestions)
             }
             show()
-            adapter?.notifyDataSetChanged()
         }
     }
 

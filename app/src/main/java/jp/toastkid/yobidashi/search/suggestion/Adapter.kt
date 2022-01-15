@@ -33,7 +33,7 @@ internal class Adapter (
      * Clear suggestions.
      */
     fun clear() {
-        suggestions.clear()
+        submitList(emptyList())
     }
 
     /**
@@ -44,10 +44,10 @@ internal class Adapter (
     fun add(s: String) {
         suggestions.add(s)
     }
-
+/*
     override fun getItemCount(): Int {
         return suggestions.size
-    }
+    }*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -55,7 +55,7 @@ internal class Adapter (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = suggestions[position]
+        val item = getItem(position)
         holder.setText(item)
         holder.itemView.setOnClickListener {
             viewModel?.putQuery(item)
@@ -70,6 +70,10 @@ internal class Adapter (
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         this.viewModel = viewModel
+    }
+
+    fun replace(suggestions: List<String>) {
+        submitList(suggestions)
     }
 
     companion object {
