@@ -44,10 +44,6 @@ internal class Adapter (
     fun add(s: String) {
         suggestions.add(s)
     }
-/*
-    override fun getItemCount(): Int {
-        return suggestions.size
-    }*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
