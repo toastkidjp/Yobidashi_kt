@@ -13,12 +13,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.lib.preference.PreferenceApplier
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.image.Image
 import jp.toastkid.image.R
 import jp.toastkid.image.databinding.ItemImageThumbnailsBinding
 import jp.toastkid.image.preview.ImagePreviewDialogFragment
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.CommonItemCallback
 
 /**
  * RecyclerView's adapter.
@@ -28,7 +29,9 @@ import jp.toastkid.image.preview.ImagePreviewDialogFragment
 internal class Adapter(
         private val fragmentManager: FragmentManager?,
         private val imageViewerFragmentViewModel: ImageViewerFragmentViewModel?
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<Image, ViewHolder>(
+    CommonItemCallback.with<Image>({ a, b -> a.path == b.path }, { a, b -> a == b })
+) {
 
     private val images = mutableListOf<Image>()
 
@@ -82,4 +85,5 @@ internal class Adapter(
     }
 
     fun isBucketMode() = images.isNotEmpty() && images[0].isBucket
+
 }
