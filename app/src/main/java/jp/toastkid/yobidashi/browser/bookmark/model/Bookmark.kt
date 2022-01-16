@@ -48,7 +48,7 @@ class Bookmark : UrlItem {
 
     override fun urlString() = url
 
-    override fun id() = _id
+    override fun itemId() = _id
 
     override fun toString(): String {
         return "Bookmark(_id=$_id, title='$title', url='$url', favicon='$favicon', " +

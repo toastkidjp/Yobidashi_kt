@@ -13,7 +13,7 @@ import jp.toastkid.yobidashi.search.url_suggestion.ViewHolder
  * @author toastkidjp
  */
 interface UrlItem {
-    fun id(): Long
+    fun itemId(): Long
 
     fun bind(holder: ViewHolder)
 
