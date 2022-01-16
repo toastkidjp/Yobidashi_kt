@@ -188,7 +188,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             it.setCallback(callback)
             @Suppress("UsePropertyAccessSyntax")
             setSessionToken(it.sessionToken)
-            it.setFlags(MEDIA_SESSION_FLAG)
         }
     }
 
@@ -241,10 +240,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         private const val NOTIFICATION_ID = 46
 
         private const val KEY_EXTRA_SPEED = "speed"
-
-        private const val MEDIA_SESSION_FLAG =
-                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
-                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
 
         private const val PLAYBACK_ACTION =
                 PlaybackStateCompat.ACTION_PLAY or

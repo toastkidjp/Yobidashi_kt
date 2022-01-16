@@ -25,17 +25,17 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
+import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.search.SearchQueryExtractor
-import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.browser.page_information.PageInformationDialogFragment
-import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
@@ -227,17 +227,17 @@ class BrowserFragment : Fragment(),
                 ?.observe(activity, { appBarBinding?.tabCount?.text = it.toString() })
 
         viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
-            viewModel.find.observe(activity, Observer {
+            viewModel.find.observe(viewLifecycleOwner, Observer {
                 val text = it?.getContentIfNotHandled() ?: return@Observer
                 browserModule.find(text)
             })
 
-            viewModel.upward.observe(activity, Observer {
+            viewModel.upward.observe(viewLifecycleOwner, Observer {
                 it?.getContentIfNotHandled() ?: return@Observer
                 browserModule.findUp()
             })
 
-            viewModel.downward.observe(activity, Observer {
+            viewModel.downward.observe(viewLifecycleOwner, Observer {
                 it?.getContentIfNotHandled() ?: return@Observer
                 browserModule.findDown()
             })
