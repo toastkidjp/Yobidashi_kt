@@ -67,7 +67,6 @@ class ExcludingSettingFragment : BottomSheetDialogFragment() {
             adapter.removeAt(it)
         }
         adapter.addAll(excludedItems)
-        adapter.notifyDataSetChanged()
     }
 
     override fun onDismiss(dialog: DialogInterface) {

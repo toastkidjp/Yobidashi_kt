@@ -43,25 +43,25 @@ class Adapter(
                 viewModel.dismiss()
                 return@ViewHolder
             }
-            notifyDataSetChanged()
+            submitList(preferenceApplier.excludedItems().toList())
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.setText(items.get(position))
+        holder.setText(getItem(position))
     }
-
-    override fun getItemCount() = items.size
 
     fun addAll(excludedItems: Set<String>?) {
         if (excludedItems == null) {
             return
         }
+        submitList(excludedItems.toList())
         items.addAll(excludedItems)
     }
 
     fun removeAt(position: Int) {
         items.get(position)
+        submitList(preferenceApplier.excludedItems().toList())
     }
 
 }
