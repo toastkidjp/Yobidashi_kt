@@ -9,8 +9,9 @@ package jp.toastkid.yobidashi.settings.color
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,9 @@ internal class SavedColorAdapter(
         private val repository: SavedColorRepository,
         private val contentViewModel: ContentViewModel,
         private val commitNewColor: (Int, Int) -> Unit
-) : RecyclerView.Adapter<SavedColorHolder>() {
+) : ListAdapter<SavedColor, SavedColorHolder>(
+    CommonItemCallback.with<SavedColor>({ a, b -> a.id == b.id }, { a, b -> a == b })
+) {
 
     private val items = mutableListOf<SavedColor>()
 
@@ -37,7 +40,7 @@ internal class SavedColorAdapter(
     }
 
     override fun onBindViewHolder(holder: SavedColorHolder, position: Int) {
-        bindView(holder, items[position])
+        bindView(holder, currentList[position])
     }
 
     /**
@@ -58,13 +61,10 @@ internal class SavedColorAdapter(
         }
     }
 
-    override fun getItemCount(): Int = items.count()
-
     fun refresh() {
-        items.clear()
         CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) { repository.findAll().forEach { items.add(it) } }
-            notifyDataSetChanged()
+            val list = withContext(Dispatchers.IO) { (repository.findAll()) }
+            submitList(list)
         }
     }
 
@@ -72,9 +72,8 @@ internal class SavedColorAdapter(
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 repository.delete(savedColor)
-                items.remove(savedColor)
             }
-            notifyDataSetChanged()
+            refresh()
         }
     }
 
@@ -86,12 +85,14 @@ internal class SavedColorAdapter(
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 repository.deleteAll()
-                items.clear()
             }
-
-            notifyDataSetChanged()
+            submitList(emptyList())
 
             contentViewModel.snackShort(R.string.settings_color_delete)
         }
+    }
+
+    fun reload() {
+        submitList(repository.findAll())
     }
 }
