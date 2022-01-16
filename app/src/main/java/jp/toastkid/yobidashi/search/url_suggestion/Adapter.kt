@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
@@ -28,7 +29,9 @@ class Adapter(
         private val layoutInflater: LayoutInflater,
         private val removeAt: (UrlItem) -> Unit,
         private val itemDeletionUseCase: ItemDeletionUseCase
-): RecyclerView.Adapter<ViewHolder>() {
+): ListAdapter<UrlItem, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a.id() == b.id() }, { a, b -> a == b })
+) {
 
     /**
      * Item list.
