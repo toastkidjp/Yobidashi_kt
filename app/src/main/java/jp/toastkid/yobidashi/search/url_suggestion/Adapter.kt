@@ -30,7 +30,7 @@ class Adapter(
         private val removeAt: (UrlItem) -> Unit,
         private val itemDeletionUseCase: ItemDeletionUseCase
 ): ListAdapter<UrlItem, ViewHolder>(
-    CommonItemCallback.with({ a, b -> a.id() == b.id() }, { a, b -> a == b })
+    CommonItemCallback.with({ a, b -> a.itemId() == b.itemId() }, { a, b -> a == b })
 ) {
 
     /**
@@ -47,7 +47,7 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = get(position)
+        val item = getItem(position)
 
         holder.itemView.isVisible = item != null
         if (item == null) {
@@ -63,8 +63,6 @@ class Adapter(
         holder.setDelete { removeAt(item) }
         holder.hideButton()
     }
-
-    override fun getItemCount(): Int = suggestions.size
 
     /**
      * Add item to list.
@@ -87,7 +85,7 @@ class Adapter(
      *
      * @return is not empty?
      */
-    fun isNotEmpty(): Boolean = suggestions.isNotEmpty()
+    fun isNotEmpty(): Boolean = currentList.isNotEmpty()
 
     /**
      * Return item.
@@ -95,10 +93,10 @@ class Adapter(
      * @return item
      */
     fun get(index: Int): UrlItem? {
-        if (index < 0 || suggestions.size <= index) {
+        if (index < 0 || currentList.size <= index) {
             return null
         }
-        return suggestions[index]
+        return currentList[index]
     }
 
     /**
@@ -117,13 +115,15 @@ class Adapter(
         }
 
         return CoroutineScope(Dispatchers.Main).launch {
-            val index = if (passedIndex == -1) suggestions.indexOf(item) else passedIndex
+            val index = if (passedIndex == -1) currentList.indexOf(item) else passedIndex
+            val newItems = mutableListOf<UrlItem>()
+            newItems.addAll(currentList)
             withContext(Dispatchers.IO) {
                 itemDeletionUseCase(item)
-                suggestions.remove(item)
+                newItems.removeAt(index)
             }
 
-            notifyItemRemoved(index)
+            submitList(newItems)
         }
     }
 

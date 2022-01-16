@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.search.url_suggestion
 
+import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,22 +29,21 @@ class QueryUseCase(
 ) {
 
     operator fun invoke(q: CharSequence) {
-        adapter.clear()
-
         CoroutineScope(mainDispatcher).launch {
+            val newItems = mutableListOf<UrlItem>()
             withContext(ioDispatcher) {
                 if (q.isBlank()) {
                     return@withContext
                 }
-                bookmarkRepository.search("%$q%", ITEM_LIMIT).forEach { adapter.add(it) }
+                bookmarkRepository.search("%$q%", ITEM_LIMIT).forEach { newItems.add(it) }
             }
 
             withContext(ioDispatcher) {
-                viewHistoryRepository.search("%$q%", ITEM_LIMIT).forEach { adapter.add(it) }
+                viewHistoryRepository.search("%$q%", ITEM_LIMIT).forEach { newItems.add(it) }
             }
 
-            switchVisibility(adapter.isNotEmpty())
-            adapter.notifyDataSetChanged()
+            switchVisibility(newItems.isNotEmpty())
+            adapter.submitList(newItems)
         }
     }
 
