@@ -10,8 +10,9 @@ package jp.toastkid.rss.setting
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.lib.view.swipe.Removable
 import jp.toastkid.rss.R
 import jp.toastkid.rss.databinding.ItemRssSettingBinding
@@ -24,8 +25,10 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class Adapter(private val preferenceApplier: PreferenceApplier) : RecyclerView.Adapter<ViewHolder>(),
-    Removable {
+class Adapter(private val preferenceApplier: PreferenceApplier)
+    : ListAdapter<String, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+    ), Removable {
 
     private val items = mutableListOf<String>()
 
@@ -40,20 +43,15 @@ class Adapter(private val preferenceApplier: PreferenceApplier) : RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items.get(position)
+        val item = getItem(position)
         holder.setUrl(item)
         holder.setDeleteAction {
             preferenceApplier.removeFromRssReaderTargets(item)
-            items.remove(item)
-            notifyItemRemoved(position)
         }
     }
 
-    override fun getItemCount() = items.size
-
     fun replace(readerTargets: Iterable<String>) {
-        items.clear()
-        items.addAll(readerTargets)
+        submitList(readerTargets.toList())
     }
 
     /**
@@ -63,12 +61,13 @@ class Adapter(private val preferenceApplier: PreferenceApplier) : RecyclerView.A
      * @return [Job]
      */
     override fun removeAt(position: Int): Job {
-        val item = items[position]
+        val item = getItem(position)
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO)  { preferenceApplier.removeFromRssReaderTargets(item) }
 
-            items.remove(item)
-            notifyItemRemoved(position)
+            val copy = mutableListOf<String>().also { it.addAll(currentList) }
+            copy.remove(item)
+            submitList(copy)
         }
         return Job()
     }
