@@ -64,7 +64,6 @@ class RssSettingFragment : Fragment(), CommonFragmentAction {
         }
 
         adapter.replace(rssReaderTargets)
-        adapter.notifyDataSetChanged()
     }
 
     override fun pressBack(): Boolean {
