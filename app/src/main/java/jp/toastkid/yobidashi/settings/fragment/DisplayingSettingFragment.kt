@@ -80,7 +80,7 @@ class DisplayingSettingFragment : Fragment() {
             it.data?.data,
             binding.root,
             preferenceApplier.colorPair(),
-            { adapter?.notifyDataSetChanged() },
+            { adapter?.refresh() },
             BACKGROUND_DIR
         )
             .invoke()
@@ -121,7 +121,8 @@ class DisplayingSettingFragment : Fragment() {
 
         adapter = Adapter(preferenceApplier, filesDir)
         binding.imagesView.adapter = adapter
-        if (adapter?.itemCount == 0) {
+        adapter?.refresh()
+        if (adapter?.currentList?.isEmpty() == true) {
             val activity = activity ?: return
             lastSnackbar = Toaster.withAction(
                 activity.findViewById(android.R.id.content),
@@ -136,10 +137,9 @@ class DisplayingSettingFragment : Fragment() {
             "clear_background_images",
             viewLifecycleOwner,
             { _, _ ->
-                val preCount = adapter?.itemCount ?: 0
                 filesDir.clean()
                 contentViewModel?.snackShort(R.string.message_success_image_removal)
-                adapter?.notifyItemRangeRemoved(0, preCount)
+                adapter?.refresh()
             }
         )
     }
@@ -214,7 +214,7 @@ class DisplayingSettingFragment : Fragment() {
         }
         R.id.background_settings_add_default -> {
             DefaultBackgroundImagePreparation().invoke(binding.root.context) {
-                activity?.runOnUiThread { adapter?.notifyDataSetChanged() }
+                activity?.runOnUiThread { adapter?.refresh() }
             }
             true
         }
