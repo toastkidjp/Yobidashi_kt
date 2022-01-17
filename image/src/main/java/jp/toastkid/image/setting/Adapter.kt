@@ -60,7 +60,8 @@ class Adapter(
     }
 
     fun removeAt(position: Int) {
-        items.get(position)
+        val item = getItem(position)
+        preferenceApplier.removeFromExcluding(item)
         submitList(preferenceApplier.excludedItems().toList())
     }
 
