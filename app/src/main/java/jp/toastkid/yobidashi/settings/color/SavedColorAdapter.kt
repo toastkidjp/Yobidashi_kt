@@ -77,10 +77,6 @@ internal class SavedColorAdapter(
         }
     }
 
-    fun add(savedColor: SavedColor) {
-        items.add(savedColor)
-    }
-
     fun clear() {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
