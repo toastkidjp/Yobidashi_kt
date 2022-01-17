@@ -65,15 +65,6 @@ class Adapter(
     }
 
     /**
-     * Add item to list.
-     *
-     * @param item
-     */
-    fun add(item: UrlItem?) {
-        item?.let { suggestions.add(it) }
-    }
-
-    /**
      * Clear items.
      */
     fun clear() {
