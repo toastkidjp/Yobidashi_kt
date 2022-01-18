@@ -9,8 +9,9 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +34,9 @@ internal class Adapter(
         private val viewHistoryRepository: ViewHistoryRepository,
         private val onClick: (ViewHistory) -> Unit,
         private val onDelete: (ViewHistory) -> Unit
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<ViewHistory, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a._id == b._id }, { a, b -> a == b })
+) {
 
     /**
      * Layout inflater.
@@ -48,7 +51,7 @@ internal class Adapter(
             ViewHolder(DataBindingUtil.inflate(inflater, ITEM_LAYOUT_ID, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val viewHistory: ViewHistory = items[position]
+        val viewHistory: ViewHistory = getItem(position)
 
         holder.setText(
             viewHistory.title,
@@ -75,32 +78,27 @@ internal class Adapter(
         holder.hideButton()
     }
 
-    override fun getItemCount(): Int = items.size
-
     fun filter(query: String?) {
         if (query.isNullOrBlank()) {
             refresh()
             return
         }
 
-        items.clear()
 
         CoroutineScope(Dispatchers.Main).launch(parent) {
-            withContext(Dispatchers.IO) {
-                items.addAll(viewHistoryRepository.search("%$query%"))
+            val searchResult = withContext(Dispatchers.IO) {
+                viewHistoryRepository.search("%$query%")
             }
 
-            notifyDataSetChanged()
+            submitList(searchResult)
         }
     }
 
     fun refresh(onComplete: () -> Unit = {}) {
-        items.clear()
-
         CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) { items.addAll(viewHistoryRepository.reversed()) }
+            val items = withContext(Dispatchers.IO) { viewHistoryRepository.reversed() }
 
-            notifyDataSetChanged()
+            submitList(items)
             onComplete()
         }
     }
@@ -111,18 +109,19 @@ internal class Adapter(
      * @param position
      */
     fun removeAt(position: Int) {
-        remove(items[position], position)
+        remove(getItem(position), position)
     }
 
     private fun remove(item: ViewHistory, position: Int = -1) {
         CoroutineScope(Dispatchers.Main).launch {
-            val index = if (position == -1) items.indexOf(item) else position
+            val index = if (position == -1) currentList.indexOf(item) else position
+            val copy = mutableListOf<ViewHistory>().also { it.addAll(currentList) }
             withContext(Dispatchers.IO) {
                 viewHistoryRepository.delete(item)
-                items.remove(item)
+                copy.remove(item)
             }
 
-            notifyItemRemoved(index)
+            submitList(copy)
         }
     }
 
@@ -138,7 +137,7 @@ internal class Adapter(
             }
 
             onComplete()
-            notifyDataSetChanged()
+            submitList(emptyList())
         }
     }
 
