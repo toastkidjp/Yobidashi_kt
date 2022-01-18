@@ -46,7 +46,7 @@ class Adapter(private val preferenceApplier: PreferenceApplier)
         val item = getItem(position)
         holder.setUrl(item)
         holder.setDeleteAction {
-            preferenceApplier.removeFromRssReaderTargets(item)
+            removeItem(item)
         }
     }
 
@@ -62,6 +62,11 @@ class Adapter(private val preferenceApplier: PreferenceApplier)
      */
     override fun removeAt(position: Int): Job {
         val item = getItem(position)
+        removeItem(item)
+        return Job()
+    }
+
+    private fun removeItem(item: String) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO)  { preferenceApplier.removeFromRssReaderTargets(item) }
 
@@ -69,7 +74,6 @@ class Adapter(private val preferenceApplier: PreferenceApplier)
             copy.remove(item)
             submitList(copy)
         }
-        return Job()
     }
 
 }
