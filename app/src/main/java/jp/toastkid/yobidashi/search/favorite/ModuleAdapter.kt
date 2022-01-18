@@ -113,7 +113,7 @@ internal class ModuleAdapter(
             }
 
             submitList(items)
-            onVisibilityChanged(!isEmpty())
+            onVisibilityChanged(items.isNotEmpty())
         }
     }
 
