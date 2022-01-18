@@ -29,8 +29,6 @@ class Adapter(
     CommonItemCallback.with({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
 ) {
 
-    private val items = mutableListOf<Item>()
-
     private lateinit var preferenceApplier: PreferenceApplier
 
     private lateinit var binding: ItemRssListBinding
