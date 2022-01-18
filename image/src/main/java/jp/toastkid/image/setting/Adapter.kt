@@ -36,10 +36,9 @@ class Adapter(
                 false
         )
         return ViewHolder(binding) {
-            items.remove(it)
-            preferenceApplier.removeFromExcluding(it)
+            remove(it)
 
-            if (items.isEmpty()) {
+            if (currentList.isEmpty()) {
                 viewModel.dismiss()
                 return@ViewHolder
             }
@@ -56,11 +55,14 @@ class Adapter(
             return
         }
         submitList(excludedItems.toList())
-        items.addAll(excludedItems)
     }
 
     fun removeAt(position: Int) {
         val item = getItem(position)
+        remove(item)
+    }
+
+    fun remove(item: String) {
         preferenceApplier.removeFromExcluding(item)
         submitList(preferenceApplier.excludedItems().toList())
     }
