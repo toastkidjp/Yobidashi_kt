@@ -65,13 +65,6 @@ class Adapter(
     }
 
     /**
-     * Clear items.
-     */
-    fun clear() {
-        suggestions.clear()
-    }
-
-    /**
      * Return is not empty for controlling visibility.
      *
      * @return is not empty?
