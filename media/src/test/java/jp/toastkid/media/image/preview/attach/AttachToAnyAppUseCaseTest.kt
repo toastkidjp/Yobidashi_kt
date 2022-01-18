@@ -62,6 +62,7 @@ class AttachToAnyAppUseCaseTest {
         every { intent.setDataAndType(any(), any()) }.returns(intent)
         every { intent.addFlags(any()) }.returns(intent)
         every { context.getCacheDir() }.returns(mockk())
+        every { context.packageName }.returns("jp.toastkid.yobidashi.test")
 
         mockkStatic(FileProvider::class)
         every { FileProvider.getUriForFile(any(), any(), any()) }.returns(mockk())

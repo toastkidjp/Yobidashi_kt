@@ -58,9 +58,9 @@ class Adapter(
 
         holder.loadIcon(item.description.iconUri, iconWidth)
 
-        holder.setOnClickListener({
+        holder.setOnClickListener {
             mediaPlayerPopupViewModel?.clickItem(item)
-        })
+        }
 
         holder.setOnLyricsClickListener({
             item.description.title?.also { lyrics ->

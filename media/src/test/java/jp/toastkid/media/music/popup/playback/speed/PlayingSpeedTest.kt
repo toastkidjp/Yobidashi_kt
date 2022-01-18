@@ -1,7 +1,7 @@
 package jp.toastkid.media.music.popup.playback.speed
 
-import jp.toastkid.yobidashi.R
-import org.junit.Assert.*
+import jp.toastkid.media.R
+import org.junit.Assert.assertSame
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

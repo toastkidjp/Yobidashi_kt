@@ -9,6 +9,7 @@ package jp.toastkid.media.image.preview
 
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
+import kotlin.math.max
 
 /**
  * @author toastkidjp
@@ -37,8 +38,8 @@ class ColorFilterUseCase(private val viewModel: ImagePreviewFragmentViewModel) {
 
     fun applyContrast(contrast: Float) {
         lastFilter = null
-        val v = Math.max(contrast, 0f) + 1f
-        val o = -128 * (v - 1);
+        val v = max(contrast, 0f) + 1f
+        val o = -128 * (v - 1)
         viewModel.newColorFilter(
                 ColorMatrixColorFilter(
                         ColorMatrix().also {

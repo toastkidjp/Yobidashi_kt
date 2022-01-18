@@ -77,6 +77,7 @@
     <string name="search_category_webster">Webster</string>
     <string name="search_category_hacker_news">Hacker News</string>
     <string name="my_index">myINDEX</string>
+    <string name="seeking_alpha">Seeking Alpha</string>
     <string name="search_category_weblio">Weblio</string>
     <string name="search_category_google_scholar">Google Scholar</string>
     <string name="search_category_economist">Economist</string>

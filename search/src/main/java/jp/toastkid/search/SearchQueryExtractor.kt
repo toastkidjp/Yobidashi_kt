@@ -59,6 +59,7 @@ class SearchQueryExtractor {
                     or host.equals("www.forbes.com")
                     or host.equals("search.brave.com")
                     or host.equals("you.com")
+                    or host.equals("seekingalpha.com")
                     or host.equals("www.givero.com") ->
                 uri.getQueryParameter("q")
             host.startsWith("www.amazon.") ->
