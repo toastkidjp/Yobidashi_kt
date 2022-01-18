@@ -30,8 +30,6 @@ class Adapter(private val preferenceApplier: PreferenceApplier)
     CommonItemCallback.with({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
     ), Removable {
 
-    private val items = mutableListOf<String>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate<ItemRssSettingBinding>(
                 LayoutInflater.from(parent.context),
