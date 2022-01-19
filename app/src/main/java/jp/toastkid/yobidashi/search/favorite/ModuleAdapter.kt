@@ -124,10 +124,10 @@ internal class ModuleAdapter(
      */
     fun removeAt(position: Int): Job {
         val item = getItem(position)
-        return remove(item, position)
+        return remove(item)
     }
 
-    private fun remove(item: FavoriteSearch, position: Int = -1): Job {
+    private fun remove(item: FavoriteSearch): Job {
         return CoroutineScope(Dispatchers.Main).launch {
             val copy = mutableListOf<FavoriteSearch>().also { it.addAll(currentList) }
             withContext(Dispatchers.IO) {
