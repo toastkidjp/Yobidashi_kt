@@ -24,7 +24,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.ArrayList
 import kotlin.math.min
 
 /**
@@ -52,11 +51,6 @@ internal class ModuleAdapter(
      * Layout inflater.
      */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-
-    /**
-     * Selected items.
-     */
-    private val selected: MutableList<SearchHistory> = ArrayList(5)
 
     private var viewModel: SearchFragmentViewModel? = null
 
