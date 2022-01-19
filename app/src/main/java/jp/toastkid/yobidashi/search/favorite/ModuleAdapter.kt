@@ -156,15 +156,6 @@ internal class ModuleAdapter(
         submitList(emptyList())
     }
 
-    /**
-     * Add passed history item to selected list.
-     *
-     * @param history
-     */
-    private fun add(history: FavoriteSearch) {
-        selected.add(history)
-    }
-
     fun refresh(): Job {
         return CoroutineScope(Dispatchers.Main).launch {
             val items = withContext(Dispatchers.IO) { favoriteSearchRepository.findAll() }
