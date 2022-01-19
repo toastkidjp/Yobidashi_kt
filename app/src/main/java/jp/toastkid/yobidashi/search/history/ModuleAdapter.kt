@@ -212,14 +212,6 @@ internal class ModuleAdapter(
         this.viewModel = viewModel
     }
 
-    /**
-     * Add passed history item to selected list.
-     * @param history
-     */
-    private fun add(history: SearchHistory) {
-        selected.add(history)
-    }
-
     override fun getItemCount(): Int {
         return if (maxItemCount == -1) currentList.size else min(maxItemCount, currentList.size)
     }
