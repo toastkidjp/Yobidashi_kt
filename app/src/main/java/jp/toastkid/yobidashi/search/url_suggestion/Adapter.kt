@@ -32,11 +32,6 @@ class Adapter(
     CommonItemCallback.with({ a, b -> a.itemId() == b.itemId() }, { a, b -> a == b })
 ) {
 
-    /**
-     * Item list.
-     */
-    private val suggestions: MutableList<UrlItem> = mutableListOf()
-
     private var viewModel: SearchFragmentViewModel? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
