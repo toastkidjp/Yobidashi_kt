@@ -129,7 +129,6 @@ internal class ModuleAdapter(
 
     private fun remove(item: FavoriteSearch, position: Int = -1): Job {
         return CoroutineScope(Dispatchers.Main).launch {
-            val removedIndex = if (position != -1 ) position else currentList.indexOf(item)
             val copy = mutableListOf<FavoriteSearch>().also { it.addAll(currentList) }
             withContext(Dispatchers.IO) {
                 favoriteSearchRepository.delete(item)
