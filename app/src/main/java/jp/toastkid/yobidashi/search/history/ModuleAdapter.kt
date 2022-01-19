@@ -32,6 +32,8 @@ import kotlin.math.min
  * @param context
  * @param repository Relation
  * @param onVisibilityChanged On changed visibility callback
+ * @param useAddition
+ * @param maxItemCount Use for limiting display item count
  *
  * @author toastkidjp
  */
