@@ -31,9 +31,7 @@ import kotlin.math.min
  *
  * @param context
  * @param repository Relation
- * @param onClick On click callback
  * @param onVisibilityChanged On changed visibility callback
- * @param onClickAdd
  *
  * @author toastkidjp
  */
