@@ -46,7 +46,7 @@ class LinkFormInsertionUseCase(
 
             contentViewModel
                 .snackWithAction(
-                    context.getString(R.string.paste_as_quotation),
+                    context.getString(R.string.done_addition),
                     context.getString(R.string.undo)
                 ) {
                     editText.setText(currentText)
