@@ -47,10 +47,6 @@ class Adapter : ListAdapter<Trend, ViewHolder>(
         }
     }
 
-    /*override fun getItemCount(): Int {
-        return items.size
-    }*/
-
     fun replace(trends: List<Trend>?) {
         trends ?: return
 
