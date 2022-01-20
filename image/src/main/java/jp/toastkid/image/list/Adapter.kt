@@ -72,10 +72,6 @@ internal class Adapter(
         }
     }
 
-    /*override fun getItemCount(): Int {
-        return images.size
-    }*/
-
     fun add(image: Image) {
         images.add(image)
     }
