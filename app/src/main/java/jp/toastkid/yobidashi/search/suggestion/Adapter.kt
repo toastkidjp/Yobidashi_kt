@@ -36,15 +36,6 @@ internal class Adapter (
         submitList(emptyList())
     }
 
-    /**
-     * Add item.
-     *
-     * @param s
-     */
-    fun add(s: String) {
-        suggestions.add(s)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
                 DataBindingUtil.inflate(layoutInflater, ITEM_LAYOUT_ID, parent, false))
