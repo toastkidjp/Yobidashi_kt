@@ -177,7 +177,6 @@ internal class ModuleAdapter(
                 repository.delete(item)
             }
 
-            val index = currentList.indexOf(item)
             val copy = mutableListOf<SearchHistory>().also { it.addAll(currentList) }
             copy.remove(item)
             submitList(copy)
