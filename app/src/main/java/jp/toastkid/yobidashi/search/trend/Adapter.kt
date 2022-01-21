@@ -50,8 +50,7 @@ class Adapter : ListAdapter<Trend, ViewHolder>(
     fun replace(trends: List<Trend>?) {
         trends ?: return
 
-        items.clear()
-        items.addAll(trends)
+        submitList(trends)
     }
 
     fun isNotEmpty(): Boolean {
