@@ -47,12 +47,6 @@ class Adapter : ListAdapter<Trend, ViewHolder>(
         }
     }
 
-    fun replace(trends: List<Trend>?) {
-        trends ?: return
-
-        submitList(trends)
-    }
-
     fun isNotEmpty(): Boolean {
         return currentList.isNotEmpty()
     }
