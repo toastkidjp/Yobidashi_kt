@@ -150,7 +150,7 @@ internal class ActivityAdapter(
      * @param item [Bookmark]
      * @param position position
      */
-    fun remove(item: Bookmark) {
+    private fun remove(item: Bookmark) {
         val copy = ArrayList<Bookmark>(currentList)
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             withContext(Dispatchers.IO) { bookmarkRepository.delete(item) }
