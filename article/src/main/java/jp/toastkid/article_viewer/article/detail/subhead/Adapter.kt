@@ -11,8 +11,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.article_viewer.R
+import jp.toastkid.lib.view.list.CommonItemCallback
 
 /**
  *
@@ -24,7 +25,9 @@ import jp.toastkid.article_viewer.R
 class Adapter(
         private val layoutInflater: LayoutInflater,
         private val viewModel: SubheadDialogFragmentViewModel
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<String, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+) {
 
     private val subheads = mutableListOf<String>()
 
@@ -36,19 +39,15 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = subheads[position]
+        val item = getItem(position)
         holder.setText(item)
         holder.itemView.setOnClickListener {
             viewModel.subhead(item)
         }
     }
 
-    override fun getItemCount() = subheads.size
-
     fun addAll(items: List<String>?) {
-        items?.let {
-            subheads.addAll(it)
-        }
+        submitList(items)
     }
 
     companion object {
