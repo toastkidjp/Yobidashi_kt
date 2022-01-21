@@ -5,12 +5,13 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 import timber.log.Timber
+import java.io.File
 import java.io.IOException
 import java.text.NumberFormat
 import java.util.Locale
@@ -26,12 +27,13 @@ import java.util.Locale
 internal class Adapter(
         context: Context,
         private val callback: (String) -> Unit
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<File, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a.absolutePath == b.absolutePath }, { a, b -> a == b })
+) {
 
-    /**
-     * Archive folder wrapper.
-     */
-    private val archiveDir: FilesDir = Archive.makeNew(context)
+    init {
+        submitList(Archive.makeNew(context).listFiles().toList())
+    }
 
     /**
      * Layout inflater.
@@ -55,7 +57,7 @@ internal class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val file = archiveDir[position] ?: return
+        val file = getItem(position) ?: return
         holder.setText(file.name)
         holder.setSubText(
                 "${toLastModifiedText(file.lastModified())} / ${toKiloBytes(file.length())}[KB]")
@@ -88,7 +90,5 @@ internal class Adapter(
      */
     private fun toKiloBytes(length: Long): String
             = NumberFormat.getIntegerInstance(Locale.getDefault()).format(length / 1024)
-
-    override fun getItemCount(): Int = archiveDir.count
 
 }
