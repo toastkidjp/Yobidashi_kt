@@ -26,8 +26,6 @@ class Adapter(
     CommonItemCallback.with<String>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
 ) {
 
-    private val items = mutableListOf<String>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate<ItemSettingImageExcludingBinding>(
                 LayoutInflater.from(parent.context),
