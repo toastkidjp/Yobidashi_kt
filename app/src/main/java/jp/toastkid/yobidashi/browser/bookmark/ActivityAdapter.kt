@@ -148,7 +148,6 @@ internal class ActivityAdapter(
      * Remove item.
      *
      * @param item [Bookmark]
-     * @param position position
      */
     private fun remove(item: Bookmark) {
         val copy = ArrayList<Bookmark>(currentList)
