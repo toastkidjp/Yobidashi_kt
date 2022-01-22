@@ -11,6 +11,7 @@ import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
@@ -22,7 +23,6 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
-import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
@@ -138,7 +138,7 @@ class TabAdapter(
                 if (title.isNotBlank()) title
                 else context.getString(R.string.new_tab)
 
-        val newTab = WebTab.makeBackground(tabTitle, url)
+        val newTab = WebTab.make(tabTitle, url)
         tabList.add(newTab)
         tabList.save()
 
