@@ -32,11 +32,6 @@ internal class MenuAdapter(
         submitList(Menu.values().toList())
     }
 
-    /**
-     * Menu.
-     */
-    private val menus: Array<Menu> = Menu.values()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder =
             MenuViewHolder(
                     DataBindingUtil.inflate(inflater, LAYOUT_ID, parent, false)
