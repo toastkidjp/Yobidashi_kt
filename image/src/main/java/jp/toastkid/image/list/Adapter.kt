@@ -72,10 +72,6 @@ internal class Adapter(
         }
     }
 
-    fun add(image: Image) {
-        images.add(image)
-    }
-
     fun isBucketMode() = currentList.isNotEmpty() && currentList[0].isBucket
 
 }
