@@ -42,7 +42,7 @@ internal class MenuAdapter(
         holder.setColorPair(preferenceApplier.colorPair())
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
-        holder.setOnClick(View.OnClickListener { menuViewModel?.click(menu) })
+        holder.setOnClick({ menuViewModel?.click(menu) })
         holder.setOnLongClick(
                 View.OnLongClickListener {
                     menuViewModel?.longClick(menu)
