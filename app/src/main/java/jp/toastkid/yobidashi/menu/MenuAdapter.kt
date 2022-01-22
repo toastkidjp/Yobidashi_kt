@@ -12,9 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.CommonItemCallback
+import jp.toastkid.yobidashi.R
 
 /**
  * @author toastkidjp
@@ -23,7 +24,13 @@ internal class MenuAdapter(
         private val inflater: LayoutInflater,
         private val preferenceApplier: PreferenceApplier,
         private val menuViewModel: MenuViewModel?
-) : RecyclerView.Adapter<MenuViewHolder>() {
+) : ListAdapter<Menu, MenuViewHolder>(
+    CommonItemCallback.with({ a, b -> a.ordinal == b.ordinal }, { a, b -> a == b })
+) {
+
+    init {
+        submitList(Menu.values().toList())
+    }
 
     /**
      * Menu.
@@ -36,7 +43,7 @@ internal class MenuAdapter(
             )
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
-        val menu = menus[position % menus.size]
+        val menu = getItem(position % currentList.size)
         holder.setColorPair(preferenceApplier.colorPair())
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
