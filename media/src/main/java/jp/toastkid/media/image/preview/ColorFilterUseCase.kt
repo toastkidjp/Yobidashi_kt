@@ -21,18 +21,14 @@ class ColorFilterUseCase(private val viewModel: ImagePreviewFragmentViewModel) {
     fun applyAlpha(alpha: Float) {
         lastFilter = null
         viewModel.newColorFilter(
-                ColorMatrixColorFilter(
-                        ColorMatrix().also {
-                            it.set(
-                                    floatArrayOf(
-                                            1f,0f,0f,alpha,000f,
-                                            0f,1f,0f,alpha,000f,
-                                            0f,0f,1f,alpha,000f,
-                                            0f,0f,0f,1f,000f
-                                    )
-                            )
-                        }
+            makeColorMatrixColorFilter(
+                floatArrayOf(
+                    1f, 0f, 0f, alpha, 000f,
+                    0f, 1f, 0f, alpha, 000f,
+                    0f, 0f, 1f, alpha, 000f,
+                    0f, 0f, 0f, 1f, 000f
                 )
+            )
         )
     }
 
@@ -41,20 +37,19 @@ class ColorFilterUseCase(private val viewModel: ImagePreviewFragmentViewModel) {
         val v = max(contrast, 0f) + 1f
         val o = -128 * (v - 1)
         viewModel.newColorFilter(
-                ColorMatrixColorFilter(
-                        ColorMatrix().also {
-                            it.set(
-                                    floatArrayOf(
-                                            v,0f,0f,0f,o,
-                                            0f,v,0f,0f,o,
-                                            0f,0f,v,0f,o,
-                                            0f,0f,0f,1f,000f
-                                    )
-                            )
-                        }
+            makeColorMatrixColorFilter(
+                floatArrayOf(
+                    v,0f,0f,0f,o,
+                    0f,v,0f,0f,o,
+                    0f,0f,v,0f,o,
+                    0f,0f,0f,1f,000f
                 )
+            )
         )
     }
+
+    private fun makeColorMatrixColorFilter(floats: FloatArray) =
+        ColorMatrixColorFilter(ColorMatrix().also { it.set(floats) })
 
     fun reverseFilter() {
         applyFilter(ImageColorFilter.REVERSE)
