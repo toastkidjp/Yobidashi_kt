@@ -22,8 +22,6 @@ class Adapter : ListAdapter<Trend, ViewHolder>(
     CommonItemCallback.with<Trend>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
 ) {
 
-    private val items = mutableListOf<Trend>()
-
     private var viewModel: SearchFragmentViewModel? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
