@@ -16,6 +16,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
+import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
@@ -87,7 +88,10 @@ class TabAdapter(
                         viewModelProvider.get(ContentViewModel::class.java),
                         AdRemover.make(viewContext.assets),
                         FaviconApplier(viewContext),
-                        preferenceApplier
+                        preferenceApplier,
+                        loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java),
+                        browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java),
+                        currentView = { GlobalWebViewPool.getLatest() }
                     )
             )
         }
