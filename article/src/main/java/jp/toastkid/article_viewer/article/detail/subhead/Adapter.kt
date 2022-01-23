@@ -29,8 +29,6 @@ class Adapter(
     CommonItemCallback.with({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
 ) {
 
-    private val subheads = mutableListOf<String>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
                 layoutInflater.inflate(ITEM_ID, parent, false)
