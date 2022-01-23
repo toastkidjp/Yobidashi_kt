@@ -33,8 +33,6 @@ internal class Adapter(
     CommonItemCallback.with<Image>({ a, b -> a.path == b.path }, { a, b -> a == b })
 ) {
 
-    private val images = mutableListOf<Image>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemBinding = DataBindingUtil.inflate<ItemImageThumbnailsBinding>(
                 LayoutInflater.from(parent.context),
