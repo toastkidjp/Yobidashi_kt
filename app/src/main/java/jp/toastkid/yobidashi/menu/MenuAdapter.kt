@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.menu
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -44,10 +43,10 @@ internal class MenuAdapter(
         holder.setImage(menu.iconId)
         holder.setOnClick({ menuViewModel?.click(menu) })
         holder.setOnLongClick(
-                View.OnLongClickListener {
-                    menuViewModel?.longClick(menu)
-                    true
-                }
+            {
+                menuViewModel?.longClick(menu)
+                true
+            }
         )
     }
 
