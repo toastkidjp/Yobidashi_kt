@@ -114,7 +114,6 @@ internal class Adapter(
 
     private fun remove(item: ViewHistory, position: Int = -1) {
         CoroutineScope(Dispatchers.Main).launch {
-            val index = if (position == -1) currentList.indexOf(item) else position
             val copy = ArrayList<ViewHistory>(currentList)
             withContext(Dispatchers.IO) {
                 viewHistoryRepository.delete(item)
