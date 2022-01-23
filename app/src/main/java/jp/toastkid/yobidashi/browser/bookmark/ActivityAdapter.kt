@@ -37,10 +37,6 @@ internal class ActivityAdapter(
 ) : ListAdapter<Bookmark, ViewHolder>(
     CommonItemCallback.with({ a, b -> a._id == b._id }, { a, b -> a == b })
 ) {
-    /**
-     * Items.
-     */
-    private val items: MutableList<Bookmark> = mutableListOf()
 
     /**
      * Layout inflater.
