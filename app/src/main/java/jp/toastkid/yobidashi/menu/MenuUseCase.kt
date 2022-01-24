@@ -13,10 +13,14 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.gesture.GestureMemoFragment
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.media.image.list.ImageViewerFragment
+import jp.toastkid.media.music.popup.MediaPlayerPopup
+import jp.toastkid.planning.CardListFragment
 import jp.toastkid.todo.view.board.BoardFragment
 import jp.toastkid.todo.view.list.TaskListFragment
 import jp.toastkid.yobidashi.R
@@ -25,12 +29,8 @@ import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
-import jp.toastkid.yobidashi.gesture.GestureMemoFragment
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
-import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
-import jp.toastkid.yobidashi.planning_poker.CardListFragment
 import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia

@@ -352,7 +352,6 @@
     <string name="sample_url">https://www.yahoo.com</string>
     <string name="plus">+</string>
     <string name="sample_date_time">2017/12/12 08:08:08</string>
-    <string name="sample_number">20</string>
     <string name="sample_a">あ</string>
     <string name="title_remove_ad">広告を消す</string>
     <string name="run">実行</string>
@@ -426,7 +425,6 @@
     <string name="search_category">検索種別</string>
 
     <string name="title_gesture_memo">ジェスチャーメモ</string>
-    <string name="message_store_gesture_memo">Save current canvas to %s</string>
     <string name="button_clip_url">URL をコピー</string>
     <string name="button_clip_cookie">Cookie をコピー</string>
     <string name="add_to_home_screen">ショートカットを設置</string>

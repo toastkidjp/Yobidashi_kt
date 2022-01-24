@@ -34,6 +34,7 @@ import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.ToolbarColorApplier
 import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.lib.view.filter.color.ForegroundColorFilterUseCase
+import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
@@ -45,7 +46,6 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
-import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
@@ -54,7 +54,6 @@ import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
 import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
 import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.main.usecase.BackgroundTabOpenerUseCase
-import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuSwitchColorApplier
 import jp.toastkid.yobidashi.menu.MenuUseCase
@@ -155,16 +154,6 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
             }
 
             activityResultLauncher?.launch(OpenDocumentIntentFactory()("application/pdf"))
-        }
-
-    private val requestPermissionForOpenEditorTab =
-        registerForActivityResult(WriteStoragePermissionRequestContract()) {
-            if (it.first.not()) {
-                return@registerForActivityResult
-            }
-
-            tabs.openNewEditorTab(it.second)
-            replaceToCurrentTab()
         }
 
     private val mediaPermissionRequestLauncher =
@@ -609,7 +598,8 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
      * Open Editor tab.
      */
     private fun openEditorTab(path: String? = null) {
-        requestPermissionForOpenEditorTab.launch(path)
+        tabs.openNewEditorTab(path)
+        replaceToCurrentTab()
     }
 
     /**
@@ -734,7 +724,6 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
         GlobalWebViewPool.dispose()
         activityResultLauncher?.unregister()
         requestPermissionForOpenPdfTab.unregister()
-        requestPermissionForOpenEditorTab.unregister()
         downloadPermissionRequestLauncher.unregister()
         supportFragmentManager.clearFragmentResultListener("clear_tabs")
         super.onDestroy()

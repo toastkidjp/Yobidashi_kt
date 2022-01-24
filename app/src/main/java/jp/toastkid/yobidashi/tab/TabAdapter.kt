@@ -22,7 +22,7 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
-import jp.toastkid.yobidashi.libs.ThumbnailGenerator
+import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab

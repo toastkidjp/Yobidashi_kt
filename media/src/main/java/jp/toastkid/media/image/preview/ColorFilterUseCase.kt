@@ -39,10 +39,10 @@ class ColorFilterUseCase(private val viewModel: ImagePreviewFragmentViewModel) {
         viewModel.newColorFilter(
             makeColorMatrixColorFilter(
                 floatArrayOf(
-                    v,0f,0f,0f,o,
-                    0f,v,0f,0f,o,
-                    0f,0f,v,0f,o,
-                    0f,0f,0f,1f,000f
+                    v, 0f, 0f, 0f, o,
+                    0f, v, 0f, 0f, o,
+                    0f, 0f, v, 0f, o,
+                    0f, 0f, 0f, 1f, 000f
                 )
             )
         )

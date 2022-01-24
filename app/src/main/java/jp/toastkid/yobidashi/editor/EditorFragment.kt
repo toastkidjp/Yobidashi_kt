@@ -7,11 +7,9 @@
  */
 package jp.toastkid.yobidashi.editor
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
@@ -29,7 +27,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Dimension
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -55,7 +52,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.editor.load.LoadFromStorageDialogFragment
-import jp.toastkid.yobidashi.editor.permission.WriteStoragePermissionRequestContract
 import jp.toastkid.yobidashi.editor.usecase.RestoreContentUseCase
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
@@ -130,16 +126,6 @@ class EditorFragment :
             }
 
             it.data?.data?.let { uri -> readFromFileUri(uri) }
-        }
-
-    private val permissionRequestLauncher =
-        registerForActivityResult(WriteStoragePermissionRequestContract()) {
-            if (it.first) {
-                return@registerForActivityResult
-            }
-
-            val filePath = it.second ?: return@registerForActivityResult
-            saveToFile(filePath)
         }
 
     override fun onCreateView(
@@ -261,13 +247,12 @@ class EditorFragment :
 
     override fun onDetach() {
         if (path.isNotEmpty()) {
-            saveToFileWithCheckingPermission(path)
+            saveToFile(path)
         }
         speechMaker?.dispose()
 
         loadAs?.unregister()
         loadResultLauncher?.unregister()
-        permissionRequestLauncher.unregister()
 
         parentFragmentManager.clearFragmentResultListener("clear_input")
         parentFragmentManager.clearFragmentResultListener("input_text")
@@ -337,7 +322,7 @@ class EditorFragment :
             return
         }
         val fileName = File(path).nameWithoutExtension + "_backup.txt"
-        saveToFileWithCheckingPermission(externalFileAssignment(binding.root.context, fileName).absolutePath)
+        saveToFile(externalFileAssignment(binding.root.context, fileName).absolutePath)
     }
 
     fun clear() {
@@ -381,7 +366,7 @@ class EditorFragment :
      */
     fun save() {
         if (path.isNotEmpty()) {
-            saveToFileWithCheckingPermission(path)
+            saveToFile(path)
             return
         }
 
@@ -448,24 +433,8 @@ class EditorFragment :
      */
     private fun saveIfNeed() {
         if (path.isNotEmpty()) {
-            saveToFileWithCheckingPermission(path)
+            saveToFile(path)
         }
-    }
-
-    /**
-     * Save content to file.
-     *
-     * @param filePath
-     */
-    private fun saveToFileWithCheckingPermission(filePath: String) {
-        if (ActivityCompat.checkSelfPermission(binding.root.context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED) {
-            snackText(R.string.message_requires_permission_storage)
-            permissionRequestLauncher.launch(filePath)
-            return
-        }
-
-        saveToFile(filePath)
     }
 
     private fun saveToFile(filePath: String) {
@@ -602,7 +571,7 @@ class EditorFragment :
         }
         path = newFile.absolutePath
         tabListViewModel?.saveEditorTab(newFile)
-        saveToFileWithCheckingPermission(path)
+        saveToFile(path)
     }
 
     /**

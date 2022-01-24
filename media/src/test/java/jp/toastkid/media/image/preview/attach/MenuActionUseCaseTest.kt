@@ -36,6 +36,9 @@ class MenuActionUseCaseTest {
     private lateinit var attachToAnyAppUseCase: AttachToAnyAppUseCase
 
     @MockK
+    private lateinit var attachToThisAppBackgroundUseCase: AttachToThisAppBackgroundUseCase
+
+    @MockK
     private lateinit var uriSupplier: () -> Uri
 
     @MockK
@@ -52,10 +55,11 @@ class MenuActionUseCaseTest {
         MockKAnnotations.init(this)
 
         every { attachToAnyAppUseCase.invoke(any(), any()) }.just(Runs)
+        every { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }.just(Runs)
         every { uriSupplier.invoke() }.returns(mockk())
         every { bitmapSupplier.invoke() }.returns(mockk())
         every { showDialog.invoke(any()) }.just(Runs)
-        every { view.getContext() }.returns(mockk())
+        every { view.context }.returns(mockk())
 
         mockkObject(ImageDetailFragment)
         every { ImageDetailFragment.withImageUri(any()) }.returns(mockk())
@@ -70,19 +74,21 @@ class MenuActionUseCaseTest {
     fun testThisApp() {
         menuActionUseCase.thisApp(view)
 
-        /*TODO verify (exactly = 1) { view.getContext() }
+        verify (exactly = 1) { view.context }
         verify (exactly = 0) { attachToAnyAppUseCase.invoke(any(), any()) }
+        verify (exactly = 1) { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }
         verify (exactly = 1) { uriSupplier.invoke() }
         verify (exactly = 1) { bitmapSupplier.invoke() }
-        verify (exactly = 0) { showDialog.invoke(any()) }*/
+        verify (exactly = 0) { showDialog.invoke(any()) }
     }
 
     @Test
     fun testOtherApp() {
         menuActionUseCase.otherApp(view)
 
-        verify (exactly = 1) { view.getContext() }
+        verify (exactly = 1) { view.context }
         verify (exactly = 1) { attachToAnyAppUseCase.invoke(any(), any()) }
+        verify (exactly = 0) { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }
         verify (exactly = 0) { uriSupplier.invoke() }
         verify (exactly = 1) { bitmapSupplier.invoke() }
         verify (exactly = 0) { showDialog.invoke(any()) }
@@ -92,7 +98,7 @@ class MenuActionUseCaseTest {
     fun testDetail() {
         menuActionUseCase.detail()
 
-        verify (exactly = 0) { view.getContext() }
+        verify (exactly = 0) { view.context }
         verify (exactly = 0) { attachToAnyAppUseCase.invoke(any(), any()) }
         verify (exactly = 1) { uriSupplier.invoke() }
         verify (exactly = 0) { bitmapSupplier.invoke() }

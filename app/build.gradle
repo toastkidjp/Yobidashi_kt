@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.triplet.play'
-apply plugin: "jacoco"
 apply plugin: "com.cookpad.android.plugin.license-tools"
 
 apply from: 'signing/config.gradle', to: android
+apply from: '../jacoco.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -70,6 +70,9 @@ dependencies {
     implementation project(":todo")
     implementation project(":licenses")
     implementation project(":media")
+    implementation project(":planning")
+    implementation project(":gesture")
+    implementation project(":pdf")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.cardview:cardview:$libVersions.cardview"
@@ -94,7 +97,6 @@ dependencies {
     implementation 'com.larswerkman:HoloColorPicker:1.5'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
-    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.squareup.moshi:moshi:1.8.0'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-moshi:2.6.2'
@@ -118,22 +120,4 @@ kapt {
     javacOptions {
         option("-Xmaxerrs", 5000)
     }
-}
-
-jacoco {
-    toolVersion = pluginVersions.jacoco
-}
-
-task jacocoTestReport(
-        type: JacocoReport,
-        dependsOn: "testDebugUnitTest",
-        group: "verification"
-) {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-    getSourceDirectories().from = "${projectDir}/src/main/java"
-    getClassDirectories().from = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug")
-    getExecutionData().from = "${buildDir}/jacoco/testDebugUnitTest.exec"
 }

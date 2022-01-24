@@ -10,4 +10,5 @@
     <string name="favorite_search_addition_dialog_empty_message">Please could you input any keyword?</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="done_addition">It has done addition!</string>
 </resources>
