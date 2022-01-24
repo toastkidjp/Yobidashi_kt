@@ -43,8 +43,6 @@ internal class Adapter(
      */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    private val items = mutableListOf<ViewHistory>()
-
     private val parent = Job()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
