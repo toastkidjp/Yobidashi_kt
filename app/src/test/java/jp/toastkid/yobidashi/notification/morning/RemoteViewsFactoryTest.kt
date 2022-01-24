@@ -71,7 +71,7 @@ class RemoteViewsFactoryTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         removeViewsFactory.invoke(context)
 
         verify { dateArticleUrlFactory.invoke(any(), any(), any()) }
