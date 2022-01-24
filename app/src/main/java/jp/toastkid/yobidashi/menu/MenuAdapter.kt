@@ -42,12 +42,10 @@ internal class MenuAdapter(
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
         holder.setOnClick({ menuViewModel?.click(menu) })
-        holder.setOnLongClick(
-            {
-                menuViewModel?.longClick(menu)
-                true
-            }
-        )
+        holder.setOnLongClick {
+            menuViewModel?.longClick(menu)
+            true
+        }
     }
 
     override fun getItemCount(): Int = MAXIMUM
