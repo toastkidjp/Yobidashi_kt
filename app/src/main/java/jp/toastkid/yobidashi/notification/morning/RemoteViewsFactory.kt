@@ -24,11 +24,10 @@ import java.util.concurrent.TimeUnit
 /**
  * @author toastkidjp
  */
-class RemoteViewsFactory {
-
-    private val dateArticleUrlFactory = DateArticleUrlFactory()
-
-    private val mainActivityIntentFactory = MainActivityIntentFactory()
+class RemoteViewsFactory(
+    private val dateArticleUrlFactory: DateArticleUrlFactory = DateArticleUrlFactory(),
+    private val mainActivityIntentFactory: MainActivityIntentFactory = MainActivityIntentFactory()
+) {
 
     /**
      * Make RemoteViews.
