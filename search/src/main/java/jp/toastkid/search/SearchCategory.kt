@@ -245,6 +245,11 @@ enum class SearchCategory(
             R.drawable.ic_flickr,
             "https://www.flickr.com/search/?text="
     ),
+    PX500(
+        R.string.search_category_500px,
+        R.drawable.ic_500px,
+        "https://500px.com/search?type=photos&sort=relevance&q="
+    ),
     WIKIMEDIA_COMMONS(
             R.string.search_category_wikimedia_commons,
             R.drawable.ic_wikimedia_commons,
