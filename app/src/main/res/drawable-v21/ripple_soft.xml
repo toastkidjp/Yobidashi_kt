@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/ripple"/>
+    <item>
+        <ripple android:color="@color/pre4_ripple" >
+            <item android:id="@android:id/mask" android:drawable="@color/white"/>
+        </ripple>
+    </item>
+</layer-list>
