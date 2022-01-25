@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_focused="false" android:state_pressed="false">
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/pre4_ripple">
+    <item>
         <shape android:shape="rectangle">
             <corners android:radius="4dp" />
-            <solid android:color="@color/filter_white" />
+            <solid android:color="#33FFFFFF" />
         </shape>
     </item>
-</selector>
+</ripple>
