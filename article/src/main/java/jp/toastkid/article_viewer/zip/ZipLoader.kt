@@ -9,8 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import okio.buffer
-import okio.source
 import timber.log.Timber
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -60,9 +58,9 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
         nextEntry: ZipEntry
     ) {
         // You don't use `use()` because it makes occur "java.io.IOException: Stream closed".
-        zipInputStream.source().buffer().let {
+        zipInputStream.bufferedReader().let {
             val start = System.currentTimeMillis()
-            val content = it.readUtf8()
+            val content = it.lineSequence().joinToString(System.lineSeparator())
             val title = extractFileName(nextEntry.name)
             val article = (articleRepository.findFirst(title) ?: Article(0)).also { a ->
                 a.title = title
