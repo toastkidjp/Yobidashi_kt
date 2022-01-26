@@ -22,7 +22,7 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.media.image.preview.detail.ImageDetailFragment
+import jp.toastkid.image.preview.detail.ImageDetailFragment
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
