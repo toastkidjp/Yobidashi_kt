@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.tab.tab_list
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.graphics.ColorUtils
@@ -71,7 +70,7 @@ internal class Adapter(
 
         holder.setImagePath(tabThumbnails.assignNewFile(tab.thumbnailPath()).absolutePath)
         holder.setTitle(tab.title())
-        holder.setCloseAction(View.OnClickListener { close(tab) })
+        holder.setCloseAction({ close(tab) })
         holder.setColor(colorPair)
         holder.setBackgroundColor(
                 if (index == position) {
