@@ -81,10 +81,10 @@ internal class ModuleAdapter(
                 Timber.e(e)
             }
         }
-        holder.setOnClickAdd(searchHistory, {
+        holder.setOnClickAdd(searchHistory) {
             val query = it.query ?: return@setOnClickAdd
             viewModel?.putQuery(query)
-        })
+        }
 
         holder.setOnClickDelete { remove(searchHistory) }
 
