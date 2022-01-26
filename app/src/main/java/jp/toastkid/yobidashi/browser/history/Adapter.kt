@@ -101,15 +101,6 @@ internal class Adapter(
         }
     }
 
-    /**
-     * Remove item with position.
-     *
-     * @param position
-     */
-    fun removeAt(position: Int) {
-        remove(getItem(position))
-    }
-
     private fun remove(item: ViewHistory) {
         CoroutineScope(Dispatchers.Main).launch {
             val copy = ArrayList<ViewHistory>(currentList)
