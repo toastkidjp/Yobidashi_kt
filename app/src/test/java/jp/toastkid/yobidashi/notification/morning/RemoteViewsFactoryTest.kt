@@ -77,4 +77,5 @@ class RemoteViewsFactoryTest {
         verify { dateArticleUrlFactory.invoke(any(), any(), any()) }
         verify { mainActivityIntentFactory.browser(any(), any()) }
     }
+
 }
