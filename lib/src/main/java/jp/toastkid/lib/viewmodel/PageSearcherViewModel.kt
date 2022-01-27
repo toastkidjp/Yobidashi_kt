@@ -17,26 +17,26 @@ import jp.toastkid.lib.lifecycle.Event
  */
 class PageSearcherViewModel : ViewModel() {
 
-    val find = MutableLiveData<Event<String>>()
+    val find = MutableLiveData<String>()
 
-    val upward = MutableLiveData<Event<String>>()
+    val upward = MutableLiveData<String>()
 
-    val downward = MutableLiveData<Event<String>>()
+    val downward = MutableLiveData<String>()
 
     val clear = MutableLiveData<Event<Unit>>()
 
     val close = MutableLiveData<Event<Unit>>()
 
     fun find(s: String?) {
-        find.postValue(Event(s ?: ""))
+        find.postValue(s ?: "")
     }
 
     fun findDown(s: String?) {
-        downward.postValue(Event(s ?: ""))
+        downward.postValue(s ?: "")
     }
 
     fun findUp(s: String?) {
-        upward.postValue(Event(s ?: ""))
+        upward.postValue(s ?: "")
     }
 
     fun findDown() {
