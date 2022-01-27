@@ -70,7 +70,7 @@ internal class Adapter(
 
         holder.setImagePath(tabThumbnails.assignNewFile(tab.thumbnailPath()).absolutePath)
         holder.setTitle(tab.title())
-        holder.setCloseAction({ close(tab) })
+        holder.setCloseAction { close(tab) }
         holder.setColor(colorPair)
         holder.setBackgroundColor(
                 if (index == position) {
