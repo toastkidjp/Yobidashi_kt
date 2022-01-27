@@ -8,6 +8,7 @@
 
 package jp.toastkid.api.suggestion
 
+import android.net.Uri
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -16,6 +17,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.api.lib.MultiByteCharacterInspector
@@ -25,6 +27,8 @@ import okhttp3.Request
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class SuggestionApiTest {
 
@@ -58,6 +62,9 @@ class SuggestionApiTest {
         every { call.enqueue(any()) }.just(Runs)
 
         every { multiByteCharacterInspector.invoke(any()) }.returns(true)
+
+        mockkStatic(Uri::class)
+        every { Uri.encode(any()) }.returns("query")
     }
 
     @After
@@ -67,13 +74,17 @@ class SuggestionApiTest {
 
     @Test
     fun testFetchAsync() {
-        suggestionApi.fetchAsync("query", {})
+        val countDownLatch = CountDownLatch(1)
+        suggestionApi.fetchAsync("query", {
+            verify(exactly = 1) { anyConstructed<Request.Builder>().url(any<String>()) }
+            verify(exactly = 1) { builder.build() }
+            verify(exactly = 1) { httpClient.newCall(any()) }
+            verify(exactly = 1) { call.enqueue(any()) }
+            verify(exactly = 1) { multiByteCharacterInspector.invoke(any()) }
+            countDownLatch.countDown()
+        })
 
-        verify(exactly = 1) { anyConstructed<Request.Builder>().url(any<String>()) }
-        verify(exactly = 1) { builder.build() }
-        verify(exactly = 1) { httpClient.newCall(any()) }
-        verify(exactly = 1) { call.enqueue(any()) }
-        verify(exactly = 1) { multiByteCharacterInspector.invoke(any()) }
+        countDownLatch.await(1, TimeUnit.SECONDS)
     }
 
 }
