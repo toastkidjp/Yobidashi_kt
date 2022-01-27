@@ -45,7 +45,7 @@
                     android:id="@+id/loan_amount"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Loan amount"
+                    android:hint="@string/hint_loan_amount"
                     android:inputType="number"
                     android:maxLines="1"
                     android:text="35000000"
