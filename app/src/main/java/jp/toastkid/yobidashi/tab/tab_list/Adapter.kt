@@ -83,7 +83,7 @@ internal class Adapter(
 
     /**
      * Close tab at index.
-     * @param position
+     * @param tab
      */
     private fun close(tab: Tab) {
         val index = callback.tabIndexOfFromTabList(tab)
