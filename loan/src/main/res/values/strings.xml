@@ -10,4 +10,5 @@
     <string name="title_loan_calculator">Loan calculator</string>
     <string name="message_result_montly_payment">Monthly payment: %,d</string>
     <string name="hint_loan_amount">Loan amount</string>
+    <string name="default_value_loan_amount">35000000</string>
 </resources>
