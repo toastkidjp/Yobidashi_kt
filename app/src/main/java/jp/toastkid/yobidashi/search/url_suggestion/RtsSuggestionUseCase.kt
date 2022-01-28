@@ -31,13 +31,15 @@ class RtsSuggestionUseCase(
             return@withContext null
         }
 
-        if (candidate?.isNotBlank() == true) {
-            itemCallback(
-                ViewHistory().also {
-                    it.title = "$candidate をリアルタイム検索で見る"
-                    it.url = "https://search.yahoo.co.jp/realtime/search?p=id:$candidate"
-                }
-            )
+        if (candidate.isNullOrBlank()) {
+            return
         }
+
+        itemCallback(
+            ViewHistory().also {
+                it.title = "$candidate をリアルタイム検索で見る"
+                it.url = "https://search.yahoo.co.jp/realtime/search?p=id:$candidate"
+            }
+        )
     }
 }
