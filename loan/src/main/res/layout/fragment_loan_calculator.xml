@@ -7,7 +7,7 @@
   ~ The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
   -->
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -49,6 +49,7 @@
                     android:inputType="number"
                     android:maxLines="1"
                     android:text="@string/default_value_loan_amount"
+                    android:importantForAutofill="no"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
