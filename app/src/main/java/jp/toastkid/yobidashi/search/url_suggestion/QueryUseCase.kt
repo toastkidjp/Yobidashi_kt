@@ -7,8 +7,11 @@
  */
 package jp.toastkid.yobidashi.search.url_suggestion
 
+import androidx.core.net.toUri
+import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
+import jp.toastkid.yobidashi.browser.history.ViewHistory
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +34,23 @@ class QueryUseCase(
     operator fun invoke(q: CharSequence) {
         CoroutineScope(mainDispatcher).launch {
             val newItems = mutableListOf<UrlItem>()
+
+            if (Urls.isValidUrl(q.toString())) {
+                val uri = q.toString().toUri()
+                if (uri.host?.endsWith("twitter.com") == true) {
+                    val candidate = uri.pathSegments[0]
+                    if (candidate.isNotBlank()) {
+                        newItems.add(
+                            0,
+                            ViewHistory().also {
+                                it.title = "$candidate をリアルタイム検索で見る"
+                                it.url = "https://search.yahoo.co.jp/realtime/search?p=id:$candidate"
+                            }
+                        )
+                    }
+                }
+            }
+
             withContext(ioDispatcher) {
                 if (q.isBlank()) {
                     return@withContext
