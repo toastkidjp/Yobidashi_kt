@@ -12,15 +12,17 @@ import androidx.core.net.toUri
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.history.ViewHistory
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class RtsSuggestionUseCase(
-    private val itemCallback: (UrlItem) -> Unit
+    private val itemCallback: (UrlItem) -> Unit,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
     suspend operator fun invoke(input: String?) {
-        val candidate = withContext(Dispatchers.Default) {
+        val candidate = withContext(dispatcher) {
             if (Urls.isValidUrl(input)) {
                 val uri = input?.toUri() ?: return@withContext null
                 if (uri.host?.endsWith("twitter.com") == true) {
