@@ -62,7 +62,7 @@ class RtsSuggestionUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         runBlocking {
             rtsSuggestionUseCase.invoke("https://www.twitter.com/test", itemCallback)
             coVerify { itemCallback.invoke(any()) }
