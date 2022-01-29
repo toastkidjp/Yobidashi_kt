@@ -22,11 +22,13 @@ class RtsSuggestionUseCase(
 
     suspend operator fun invoke(input: String?, itemCallback: (UrlItem) -> Unit) {
         val candidate = withContext(dispatcher) {
-            if (Urls.isValidUrl(input)) {
-                val uri = input?.toUri() ?: return@withContext null
-                if (uri.host?.endsWith("twitter.com") == true) {
-                    return@withContext uri.pathSegments[0]
-                }
+            if (Urls.isInvalidUrl(input)) {
+                return@withContext null
+            }
+
+            val uri = input?.toUri() ?: return@withContext null
+            if (uri.host?.endsWith("twitter.com") == true) {
+                return@withContext uri.pathSegments[0]
             }
 
             return@withContext null
