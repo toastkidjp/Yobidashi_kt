@@ -21,6 +21,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
@@ -454,10 +455,18 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
         })
         contentViewModel?.newArticle?.observe(this, Observer {
             val titleAndOnBackground = it?.getContentIfNotHandled() ?: return@Observer
-            tabs.openNewArticleTab(titleAndOnBackground.first, titleAndOnBackground.second)
+            val tab = tabs.openNewArticleTab(titleAndOnBackground.first, titleAndOnBackground.second)
             if (titleAndOnBackground.second) {
-                contentViewModel?.snackShort(
-                        getString(R.string.message_tab_open_background, titleAndOnBackground.first)
+                Toaster.withAction(
+                    binding.content,
+                    getString(R.string.message_tab_open_background, titleAndOnBackground.first),
+                    getString(R.string.open),
+                    {
+                        tabs.replace(tab)
+                        replaceToCurrentTab(true)
+                    },
+                    preferenceApplier.colorPair(),
+                    Snackbar.LENGTH_SHORT
                 )
             } else {
                 replaceToCurrentTab()
