@@ -32,7 +32,7 @@ class QueryUseCase(
         CoroutineScope(mainDispatcher).launch {
             val newItems = mutableListOf<UrlItem>()
 
-            RtsSuggestionUseCase({ newItems.add(0, it) }).invoke(q.toString())
+            RtsSuggestionUseCase().invoke(q.toString(), { newItems.add(0, it) })
 
             withContext(ioDispatcher) {
                 if (q.isBlank()) {

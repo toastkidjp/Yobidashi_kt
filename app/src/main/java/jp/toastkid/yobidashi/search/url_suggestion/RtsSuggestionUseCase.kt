@@ -17,11 +17,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class RtsSuggestionUseCase(
-    private val itemCallback: (UrlItem) -> Unit,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
-    suspend operator fun invoke(input: String?) {
+    suspend operator fun invoke(input: String?, itemCallback: (UrlItem) -> Unit) {
         val candidate = withContext(dispatcher) {
             if (Urls.isValidUrl(input)) {
                 val uri = input?.toUri() ?: return@withContext null
