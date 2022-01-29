@@ -20,7 +20,7 @@ buildscript {
     ext.versionNameValue = "${verMajor}.${verMiddle}.${verMinor}"
 
     ext.minSdk = 24
-    ext.compileSdk = 30
+    ext.compileSdk = 31
     ext.targetSdk = 30
     ext.buildTools = "30.0.3"
 
@@ -45,7 +45,7 @@ buildscript {
             constraintlayout: '2.0.2',
             lifecycle: '2.2.0',
             room: '2.3.0-alpha02',
-            paging: '3.0.0-alpha07',
+            paging: '3.1.0',
             material: '1.4.0',
             fragment: '1.2.4',
             timber: '4.6.0',
@@ -53,7 +53,8 @@ buildscript {
             robolectric: '4.2.1',
             mockk: '1.10.6',
             coroutines_test: '1.5.1',
-            photo_view: '2.3.0'
+            photo_view: '2.3.0',
+            okhttp: '4.9.0'
     ]
     ext.pluginVersions = [
             jacoco: '0.8.7'

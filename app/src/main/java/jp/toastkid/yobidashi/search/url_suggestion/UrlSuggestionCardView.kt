@@ -17,7 +17,7 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.databinding.ViewCardUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
-import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
+import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 
 /**
  * @author toastkidjp

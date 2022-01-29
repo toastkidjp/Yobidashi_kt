@@ -35,7 +35,7 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
-import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
+import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

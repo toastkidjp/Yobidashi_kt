@@ -8,4 +8,6 @@
 
 <resources>
     <string name="message_store_gesture_memo">Save current canvas to %s</string>
+    <string name="save">Save</string>
+    <string name="clear_all">Clear All</string>
 </resources>

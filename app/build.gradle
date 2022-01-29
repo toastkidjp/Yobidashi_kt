@@ -73,6 +73,8 @@ dependencies {
     implementation project(":planning")
     implementation project(":gesture")
     implementation project(":pdf")
+    implementation project(":api")
+    implementation project(":rss")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.cardview:cardview:$libVersions.cardview"
@@ -95,7 +97,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation 'com.larswerkman:HoloColorPicker:1.5'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation "com.squareup.okhttp3:okhttp:$libVersions.okhttp"
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
     implementation 'com.squareup.moshi:moshi:1.8.0'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'

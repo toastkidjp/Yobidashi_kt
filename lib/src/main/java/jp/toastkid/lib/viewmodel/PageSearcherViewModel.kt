@@ -7,36 +7,46 @@
  */
 package jp.toastkid.lib.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
 
 /**
- * TODO introduce LiveData.
  * @author toastkidjp
  */
 class PageSearcherViewModel : ViewModel() {
 
-    val find = MutableLiveData<String>()
+    private val _find = MutableLiveData<String>()
 
-    val upward = MutableLiveData<String>()
+    private val _upward = MutableLiveData<String>()
 
-    val downward = MutableLiveData<String>()
+    private val _downward = MutableLiveData<String>()
 
-    val clear = MutableLiveData<Event<Unit>>()
+    private val _clear = MutableLiveData<Event<Unit>>()
 
-    val close = MutableLiveData<Event<Unit>>()
+    private val _close = MutableLiveData<Event<Unit>>()
+
+    val find: LiveData<String> = _find
+
+    val upward: LiveData<String> = _upward
+
+    val downward: LiveData<String> = _downward
+
+    val clear: LiveData<Event<Unit>> = _clear
+
+    val close: LiveData<Event<Unit>> = _close
 
     fun find(s: String?) {
-        find.postValue(s ?: "")
+        _find.postValue(s ?: "")
     }
 
     fun findDown(s: String?) {
-        downward.postValue(s ?: "")
+        _downward.postValue(s ?: "")
     }
 
     fun findUp(s: String?) {
-        upward.postValue(s ?: "")
+        _upward.postValue(s ?: "")
     }
 
     fun findDown() {
@@ -48,10 +58,10 @@ class PageSearcherViewModel : ViewModel() {
     }
 
     fun hide() {
-        close.postValue(Event(Unit))
+        _close.postValue(Event(Unit))
     }
 
     fun clearInput() {
-        clear.postValue(Event(Unit))
+        _clear.postValue(Event(Unit))
     }
 }

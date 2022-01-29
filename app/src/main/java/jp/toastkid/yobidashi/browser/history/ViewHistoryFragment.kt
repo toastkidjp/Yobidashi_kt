@@ -22,11 +22,11 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
+import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentViewHistoryBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 
 /**
  * @author toastkidjp
@@ -79,7 +79,7 @@ class ViewHistoryFragment: Fragment(), ContentScrollable {
         val fragmentActivity = activity ?: return
         ViewModelProvider(fragmentActivity).get(PageSearcherViewModel::class.java)
                 .find
-                .observe(fragmentActivity, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     adapter.filter(it)
                 })
 

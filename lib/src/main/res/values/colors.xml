@@ -8,4 +8,7 @@
     <color name="transparent">#00000000</color>
     <color name="item_background">#AAFFFFFF</color>
     <color name="popup_background">#FFF0F0F0</color>
+    <color name="filter_white_bb">#CCFFFFFF</color>
+    <color name="filter_white_aa">#AAFFFFFF</color>
+    <color name="gray_500_dd">#DD9E9E9E</color>
 </resources>

@@ -96,7 +96,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
             val viewModelProvider = ViewModelProvider(activity)
             viewModelProvider.get(PageSearcherViewModel::class.java)
                     .find
-                    .observe(activity, Observer {
+                    .observe(viewLifecycleOwner, Observer {
                         finder(it)
                     })
 
