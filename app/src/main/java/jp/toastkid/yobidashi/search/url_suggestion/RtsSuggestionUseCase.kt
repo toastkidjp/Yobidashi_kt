@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.search.url_suggestion
 
+import androidx.annotation.UiThread
 import androidx.core.net.toUri
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.browser.UrlItem
@@ -20,6 +21,7 @@ class RtsSuggestionUseCase(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
+    @UiThread
     suspend operator fun invoke(input: String?, itemCallback: (UrlItem) -> Unit) {
         val candidate = withContext(dispatcher) {
             if (Urls.isInvalidUrl(input)) {
