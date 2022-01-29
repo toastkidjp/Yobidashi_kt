@@ -457,9 +457,8 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
             val titleAndOnBackground = it?.getContentIfNotHandled() ?: return@Observer
             ArticleTabOpenerUseCase(
                 tabs,
-                binding.content,
-                { replaceToCurrentTab() }
-            ).invoke(titleAndOnBackground.first, titleAndOnBackground.second, preferenceApplier.colorPair())
+                binding.content
+            ) { replaceToCurrentTab() }.invoke(titleAndOnBackground.first, titleAndOnBackground.second, preferenceApplier.colorPair())
         })
         contentViewModel?.openArticleList?.observe(this, {
             tabs.openArticleList()
