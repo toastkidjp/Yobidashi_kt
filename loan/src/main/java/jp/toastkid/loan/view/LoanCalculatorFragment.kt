@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 
 class LoanCalculatorFragment : Fragment() {
 
@@ -58,13 +59,22 @@ class LoanCalculatorFragment : Fragment() {
 
         }
 
+        val formatter = DecimalFormat("#,###.##")
+        val focusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+            val format = formatter.format((v as? EditText)?.text?.toString()?.replace(",", "")?.trim()?.toBigDecimalOrNull())
+            (v as? EditText)?.setText(format)
+        }
+
         binding?.loanAmount?.addTextChangedListener(textWatcher)
+        binding?.loanAmount?.onFocusChangeListener = focusChangeListener
         binding?.term?.addTextChangedListener(textWatcher)
         binding?.interestRate?.addTextChangedListener(textWatcher)
         binding?.downPayment?.addTextChangedListener(textWatcher)
+        binding?.downPayment?.onFocusChangeListener = focusChangeListener
         binding?.monthlyManagementFee?.addTextChangedListener(textWatcher)
+        binding?.monthlyManagementFee?.onFocusChangeListener = focusChangeListener
         binding?.monthlyRenovationReserves?.addTextChangedListener(textWatcher)
-
+        binding?.monthlyManagementFee?.onFocusChangeListener = focusChangeListener
 
         DebouncedCalculatorUseCase(
             inputChannel,
@@ -83,10 +93,10 @@ class LoanCalculatorFragment : Fragment() {
     }
 
     private fun extractInt(editText: EditText?) =
-        editText?.text?.toString()?.toIntOrNull() ?: 0
+        editText?.text?.toString()?.replace(",", "")?.toIntOrNull() ?: 0
 
     private fun extractDouble(editText: EditText?) =
-        editText?.text?.toString()?.toDoubleOrNull() ?: 0.0
+        editText?.text?.toString()?.replace(",", "")?.toDoubleOrNull() ?: 0.0
 
     override fun onDetach() {
         binding = null

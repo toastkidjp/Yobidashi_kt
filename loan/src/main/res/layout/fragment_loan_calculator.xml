@@ -47,6 +47,7 @@
                     android:layout_height="match_parent"
                     android:hint="@string/hint_loan_amount"
                     android:inputType="number"
+                    android:digits="0123456789,"
                     android:maxLines="1"
                     android:text="@string/default_value_loan_amount"
                     android:importantForAutofill="no"
@@ -66,6 +67,7 @@
                     android:layout_height="match_parent"
                     android:hint="Loan term"
                     android:inputType="number"
+                    android:digits="0123456789,"
                     android:maxLines="1"
                     android:text="35"
                     />
@@ -102,6 +104,7 @@
                     android:layout_height="match_parent"
                     android:hint="Down payment"
                     android:inputType="number"
+                    android:digits="0123456789,"
                     android:maxLines="1"
                     android:text="1000000"
                     />
@@ -120,6 +123,7 @@
                     android:layout_height="match_parent"
                     android:hint="Management fee (Monthly)"
                     android:inputType="number"
+                    android:digits="0123456789,"
                     android:maxLines="1"
                     android:text="10000"
                     />
@@ -140,6 +144,7 @@
                     android:layout_height="match_parent"
                     android:hint="Renovation reserves (Monthly)"
                     android:inputType="number"
+                    android:digits="0123456789,"
                     android:maxLines="1"
                     android:text="10000"
                     />
