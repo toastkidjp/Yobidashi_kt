@@ -9,7 +9,7 @@
 package jp.toastkid.loan.model
 
 class Factor(
-    val amount: Int,
+    val amount: Long,
     val term: Int,
     val interestRate: Double,
     val downPayment: Int,
