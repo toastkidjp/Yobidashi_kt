@@ -80,7 +80,7 @@ class LoanCalculatorFragment : Fragment() {
             inputChannel,
             {
                 Factor(
-                    extractInt(binding?.loanAmount),
+                    extractLong(binding?.loanAmount),
                     extractInt(binding?.term),
                     extractDouble(binding?.interestRate),
                     extractInt(binding?.downPayment),
@@ -91,6 +91,9 @@ class LoanCalculatorFragment : Fragment() {
             { binding?.result?.text = getString(R.string.message_result_montly_payment, it) }
         ).invoke()
     }
+
+    private fun extractLong(editText: EditText?) =
+        editText?.text?.toString()?.replace(",", "")?.toLongOrNull() ?: 0
 
     private fun extractInt(editText: EditText?) =
         editText?.text?.toString()?.replace(",", "")?.toIntOrNull() ?: 0
