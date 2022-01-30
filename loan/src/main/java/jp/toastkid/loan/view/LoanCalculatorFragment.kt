@@ -60,7 +60,7 @@ class LoanCalculatorFragment : Fragment() {
         }
 
         val formatter = DecimalFormat("#,###.##")
-        val focusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+        val focusChangeListener = View.OnFocusChangeListener { v, _ ->
             val format = formatter.format((v as? EditText)?.text?.toString()?.replace(",", "")?.trim()?.toBigDecimalOrNull())
             (v as? EditText)?.setText(format)
         }
