@@ -10,5 +10,5 @@
     <string name="title_loan_calculator">ローン計算</string>
     <string name="message_result_montly_payment">月々の支払額: %,d</string>
     <string name="hint_loan_amount">ローン総額</string>
-    <string name="default_value_loan_amount">35000000</string>
+    <string name="default_value_loan_amount">35,000,000</string>
 </resources>
