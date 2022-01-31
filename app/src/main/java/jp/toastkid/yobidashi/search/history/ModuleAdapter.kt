@@ -180,7 +180,7 @@ internal class ModuleAdapter(
             val copy = ArrayList<SearchHistory>(currentList)
             copy.remove(item)
             submitList(copy)
-            if (isEmpty()) {
+            if (copy.isEmpty()) {
                 onVisibilityChanged(false)
             }
         }
