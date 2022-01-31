@@ -34,8 +34,8 @@ task jacocoTestReport(
         group: "verification"
 ) {
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.getRequired().set(true)
+        html.getRequired().set(true)
     }
     getSourceDirectories().from = "${projectDir}/src/main/java"
     getClassDirectories().from = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug")
