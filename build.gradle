@@ -111,7 +111,7 @@ task jacocoMergedTestReport(
         }
     }
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.getRequired().set(true)
+        html.getRequired().set(true)
     }
 }
