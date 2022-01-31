@@ -68,4 +68,14 @@ class RtsSuggestionUseCaseTest {
             coVerify { itemCallback.invoke(any()) }
         }
     }
+
+    @Test
+    fun test() {
+        coEvery { Urls.isInvalidUrl(any()) }.returns(true)
+
+        runBlocking {
+            rtsSuggestionUseCase.invoke("https://www.twitter.com/test", itemCallback)
+            coVerify(inverse = true) { itemCallback.invoke(any()) }
+        }
+    }
 }
