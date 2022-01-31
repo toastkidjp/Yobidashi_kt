@@ -70,7 +70,7 @@ class RtsSuggestionUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testInvalidUriCase() {
         coEvery { Urls.isInvalidUrl(any()) }.returns(true)
 
         runBlocking {
