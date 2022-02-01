@@ -57,7 +57,8 @@ internal class ActivityAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bookmark: Bookmark = getItem(position)
-        holder.setText(bookmark.title, bookmark.url, bookmark.lastViewed)
+        holder.setText(bookmark.title, bookmark.url)
+        holder.setTimeIfNeed(bookmark.lastViewed)
         holder.itemView.setOnClickListener {
             if (bookmark.folder) {
                 folderHistory.push(bookmark.parent)
