@@ -57,7 +57,7 @@ internal class ActivityAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bookmark: Bookmark = getItem(position)
-        holder.setText(bookmark.title, bookmark.url)
+        holder.setText(bookmark.title, bookmark.url, bookmark.lastViewed)
         holder.itemView.setOnClickListener {
             if (bookmark.folder) {
                 folderHistory.push(bookmark.parent)
@@ -179,7 +179,7 @@ internal class ActivityAdapter(
     companion object {
 
         @LayoutRes
-        private const val ITEM_LAYOUT_ID = R.layout.item_bookmark
+        private const val ITEM_LAYOUT_ID = R.layout.item_view_history
 
     }
 

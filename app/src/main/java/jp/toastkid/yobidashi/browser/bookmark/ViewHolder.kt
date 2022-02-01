@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
+import android.text.format.DateFormat
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
@@ -7,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import jp.toastkid.yobidashi.databinding.ItemBookmarkBinding
+import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
 import java.io.File
 
 /**
@@ -16,8 +17,12 @@ import java.io.File
  * @param binding Data Binding object
  * @author toastkidjp
  */
-internal class ViewHolder(private val binding: ItemBookmarkBinding)
+internal class ViewHolder(private val binding: ItemViewHistoryBinding)
     : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        binding.bookmark.isVisible = false
+    }
 
     /**
      * Set text and URL.
@@ -25,10 +30,11 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
      * @param text text
      * @param url URL string
      */
-    fun setText(text: String, url: String) {
+    fun setText(text: String, url: String, lastViewed: Long) {
         binding.title.text = text
         binding.url.isVisible = url.isNotBlank()
         binding.url.text = url
+        binding.time.text = DateFormat.format("yyyy/MM/dd(E)HH:mm:ss", lastViewed)
     }
 
     /**
