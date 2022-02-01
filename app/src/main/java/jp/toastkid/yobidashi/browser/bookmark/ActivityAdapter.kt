@@ -135,14 +135,6 @@ internal class ActivityAdapter(
     }
 
     /**
-     * Remove item with position.
-     * @param position
-     */
-    fun removeAt(position: Int) {
-        remove(getItem(position))
-    }
-
-    /**
      * Remove item.
      *
      * @param item [Bookmark]
