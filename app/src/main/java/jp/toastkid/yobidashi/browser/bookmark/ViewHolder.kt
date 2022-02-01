@@ -41,7 +41,11 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
         binding.title.text = text
         binding.url.isVisible = url.isNotBlank()
         binding.url.text = url
-        binding.time.text = DateFormat.format("yyyy/MM/dd(E)HH:mm:ss", lastViewed)
+
+        binding.time.isVisible = lastViewed != 0L
+        if (binding.time.isVisible) {
+            binding.time.text = DateFormat.format("yyyy/MM/dd(E)HH:mm:ss", lastViewed)
+        }
     }
 
     /**
