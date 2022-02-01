@@ -16,18 +16,18 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
+import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.lib.fragment.CommonFragmentAction
+import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
@@ -137,29 +137,7 @@ class BookmarkFragment: Fragment(),
         binding.historiesView.onFlingListener = object : RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int) = false
         }
-        ItemTouchHelper(
-                object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT) {
-                    override fun onMove(
-                            rv: RecyclerView,
-                            viewHolder: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder
-                    ): Boolean {
-                        val fromPos = viewHolder.absoluteAdapterPosition
-                        val toPos = target.absoluteAdapterPosition
-                        adapter.notifyItemMoved(fromPos, toPos)
-                        return true
-                    }
-
-                    override fun onSwiped(
-                            viewHolder: RecyclerView.ViewHolder,
-                            direction: Int
-                    ) {
-                        if (direction != ItemTouchHelper.RIGHT) {
-                            return
-                        }
-                        adapter.removeAt(viewHolder.absoluteAdapterPosition)
-                    }
-                }).attachToRecyclerView(binding.historiesView)
+        SwipeActionAttachment().invoke(binding.historiesView)
 
         adapter.showRoot()
 

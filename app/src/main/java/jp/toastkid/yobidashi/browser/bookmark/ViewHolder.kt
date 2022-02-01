@@ -1,11 +1,15 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.text.format.DateFormat
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
+import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import jp.toastkid.lib.view.SwipeViewHolder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
@@ -18,7 +22,10 @@ import java.io.File
  * @author toastkidjp
  */
 internal class ViewHolder(private val binding: ItemViewHistoryBinding)
-    : RecyclerView.ViewHolder(binding.root) {
+    : RecyclerView.ViewHolder(binding.root), SwipeViewHolder {
+
+    private val buttonMargin = binding.root.resources
+        .getDimensionPixelSize(R.dimen.button_margin)
 
     init {
         binding.bookmark.isVisible = false
@@ -85,5 +92,26 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
     fun setIconColorFilter(@ColorInt color: Int) {
         binding.icon.setColorFilter(color)
     }
+
+    override fun isButtonVisible(): Boolean = binding.delete.isVisible
+
+    override fun showButton() {
+        binding.delete.visibility = View.VISIBLE
+        updateRightMargin(buttonMargin)
+    }
+
+    override fun hideButton() {
+        binding.delete.visibility = View.INVISIBLE
+        updateRightMargin(0)
+    }
+
+    private fun updateRightMargin(margin: Int) {
+        val marginLayoutParams = binding.front.layoutParams as? ViewGroup.MarginLayoutParams
+        marginLayoutParams?.rightMargin = margin
+        binding.front.layoutParams = marginLayoutParams
+        marginLayoutParams?.updateMargins()
+    }
+
+    override fun getFrontView(): View = binding.front
 
 }
