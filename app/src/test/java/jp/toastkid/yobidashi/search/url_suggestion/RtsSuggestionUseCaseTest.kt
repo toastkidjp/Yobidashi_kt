@@ -81,7 +81,7 @@ class RtsSuggestionUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testNotTargetUriHostCase() {
         coEvery { uri.host }.returns("www.yahoo.com")
 
         runBlocking {
