@@ -33,6 +33,7 @@ class RtsSuggestionUseCaseTest {
     @InjectMockKs
     private lateinit var rtsSuggestionUseCase: RtsSuggestionUseCase
 
+    @Suppress("unused")
     private val dispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     @MockK
