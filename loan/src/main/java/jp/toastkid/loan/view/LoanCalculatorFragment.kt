@@ -77,6 +77,10 @@ class LoanCalculatorFragment : Fragment() {
         binding?.monthlyRenovationReserves?.addTextChangedListener(textWatcher)
         binding?.monthlyManagementFee?.onFocusChangeListener = focusChangeListener
 
+        invokeCalculator()
+    }
+
+    private fun invokeCalculator() {
         DebouncedCalculatorUseCase(
             inputChannel,
             {
