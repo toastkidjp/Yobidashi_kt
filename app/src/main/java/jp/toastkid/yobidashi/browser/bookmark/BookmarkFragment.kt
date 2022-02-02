@@ -70,16 +70,15 @@ class BookmarkFragment: Fragment(),
     private val disposables: Job by lazy { Job() }
 
     private val getContentLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-        {
-            if (it.data == null || it.resultCode != Activity.RESULT_OK) {
-                return@registerForActivityResult
-            }
-
-            val uri = it.data?.data ?: return@registerForActivityResult
-            importBookmark(uri)
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.data == null || it.resultCode != Activity.RESULT_OK) {
+            return@registerForActivityResult
         }
-    )
+
+        val uri = it.data?.data ?: return@registerForActivityResult
+        importBookmark(uri)
+    }
 
     private val exportLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
