@@ -187,17 +187,16 @@ class MenuBinder(
                     else -> it
                 }
             }
-
             recyclerView?.scheduleLayoutAnimation()
             menuStub.root?.animate()?.let {
                 it.cancel()
                 it.alpha(1f)
-                        .setDuration(350L)
-                        .withStartAction {
-                            menuStub.root?.alpha = 0f
-                            menuStub.root?.visibility = View.VISIBLE
-                        }
-                        .start()
+                    .setDuration(350L)
+                    .withStartAction {
+                        menuStub.root?.alpha = 0f
+                        menuStub.root?.visibility = View.VISIBLE
+                    }
+                    .start()
             }
         }
     }
