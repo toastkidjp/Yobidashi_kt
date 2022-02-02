@@ -7,8 +7,23 @@
   -->
 
 <resources>
-    <string name="favorite_search_addition_dialog_empty_message">Please could you input any keyword?</string>
+
+    <string name="search">Search</string>
+    <string name="close">Close</string>
+    <string name="display">Display</string>
+    <string name="image">Image</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="share">Share</string>
+    <string name="select">Select</string>
+    <string name="check_all">Check all</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
+
+    <string name="favorite_search_addition_dialog_empty_message">Please could you input any keyword?</string>
     <string name="done_addition">It has done addition!</string>
+    <string name="sample_url">https://www.yahoo.com</string>
+    <string name="sample_date_time">2017/12/12 08:08:08</string>
+    <string name="sample_long_text">abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc</string>
 </resources>

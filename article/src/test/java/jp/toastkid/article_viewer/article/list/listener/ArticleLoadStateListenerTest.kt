@@ -54,12 +54,14 @@ class ArticleLoadStateListenerTest {
     @Test
     fun testInvoke() {
         val combinedLoadStates = CombinedLoadStates(
+            LoadState.Loading,
+            LoadState.NotLoading(false),
+            LoadState.NotLoading(false),
             LoadStates(
                 LoadState.Loading,
                 LoadState.NotLoading(false),
                 LoadState.NotLoading(false)
-            ),
-            null
+            )
         )
 
         articleLoadStateListener.invoke(combinedLoadStates)
@@ -80,6 +82,9 @@ class ArticleLoadStateListenerTest {
     @Test
     fun testCannotInvokedCase() {
         val combinedLoadStates = CombinedLoadStates(
+            LoadState.NotLoading(false),
+            LoadState.Loading,
+            LoadState.NotLoading(false),
             LoadStates(
                 LoadState.NotLoading(false),
                 LoadState.Loading,
@@ -105,6 +110,9 @@ class ArticleLoadStateListenerTest {
 
     private fun makeCompleteStatus(): CombinedLoadStates {
         val completeLoadStates = CombinedLoadStates(
+            LoadState.NotLoading(false),
+            LoadState.NotLoading(false),
+            LoadState.NotLoading(false),
             LoadStates(
                 LoadState.NotLoading(false),
                 LoadState.NotLoading(false),

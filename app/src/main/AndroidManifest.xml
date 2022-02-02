@@ -38,6 +38,7 @@
             android:noHistory="true"
             android:autoRemoveFromRecents="true"
             android:theme="@style/AppTheme.Translucent"
+            android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,6 +53,7 @@
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar"
+            android:exported="false"
             >
 
         </activity>
@@ -118,13 +120,15 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="androidx.media.session.MediaButtonReceiver">
+        <receiver android:name="androidx.media.session.MediaButtonReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".appwidget.search.Provider" >
+        <receiver android:name=".appwidget.search.Provider"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -133,7 +137,8 @@
                 android:resource="@xml/appwidget_provider" />
         </receiver>
 
-        <receiver android:name=".main.boot.BootReceiver">
+        <receiver android:name=".main.boot.BootReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

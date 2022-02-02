@@ -6,17 +6,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="close">閉じる</string>
-    <string name="display">表示</string>
-    <string name="image">画像</string>
-    <string name="cancel">キャンセル</string>
-    <string name="ok">決定</string>
-    <string name="share">シェア</string>
-    <string name="search">検索</string>
-    <string name="select">選択</string>
-    <string name="check_all">すべて選択</string>
-    <string name="edit">編集</string>
-
     <string name="title_search_action">検索</string>
     <string name="action_settings">設定</string>
     <string name="title_calendar">カレンダー</string>
@@ -283,7 +272,6 @@
     <string name="title_screen_mode_fixed">固定</string>
     <string name="title_header_and_footer">ヘッダとフッタ</string>
     <string name="message_has_opened_fragment">すでに開いています。</string>
-    <string name="title_activity_date_detail">Detail</string>
     <string name="title_editor">メモ</string>
     <string name="done_load">ロードしました。</string>
     <string name="done_save">保存しました。</string>
@@ -348,10 +336,7 @@
     <string name="minus">-</string>
     <string name="use_view_history">閲覧履歴を使う</string>
     <string name="use_app_search">アプリ検索を使う</string>
-    <string name="sample_long_text">あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほやゆよらりるれろわをん</string>
-    <string name="sample_url">https://www.yahoo.com</string>
     <string name="plus">+</string>
-    <string name="sample_date_time">2017/12/12 08:08:08</string>
     <string name="sample_a">あ</string>
     <string name="title_remove_ad">広告を消す</string>
     <string name="run">実行</string>
@@ -391,14 +376,11 @@
     <string name="title_add_to_rss_reader">RSS リーダーに追加</string>
     <string name="message_rss_reader_launch_failed">You should add any RSS link via header\'s menu if you want to use this function.</string>
     <string name="message_failure_extracting_rss">This site doesn\'t contains any RSS feeds.</string>
-    <string name="title_rss_setting">RSS 設定</string>
     <string name="clipboard">クリップボード</string>
-    <string name="message_add_rss_target">この RSS を追加しますか?</string>
     <string name="title_current_page">現在のページ</string>
     <string name="message_clip_to">%s をクリップボードにコピーしました。</string>
     <string name="title_url_module">URL モジュールを使う</string>
     <string name="title_audio_player">音楽プレイヤー</string>
-    <string name="description_play_switch">Switch playing state</string>
     <string name="menu_what_happened_today">今日は何の日？</string>
     <string name="message_cannot_use_under_l">This function can be used on Android 5.x and over.</string>
     <string name="message_require_usage_stats_permission">If you use this function, You should allow permission.</string>
@@ -408,7 +390,6 @@
     <string name="message_stay_tuned">お楽しみに！</string>
     <string name="title_image_viewer">画像ビューアー</string>
 
-    <string name="title_excluding_item_setting">除外設定</string>
     <string name="title_dark_mode">ダークモードを使う</string>
     <string name="undo">戻す</string>
     <string name="title_context_editor_add_order">順序リスト</string>
@@ -437,14 +418,9 @@
     <string name="preview_search">ちょっと見る検索</string>
     <string name="translate">翻訳</string>
     <string name="download_all_images">すべての画像を保存</string>
-    <string name="this_app">このアプリの背景に設定</string>
-    <string name="other_app">別のアプリで設定</string>
     <string name="title_todo_tasks">タスクリスト</string>
     <string name="title_todo_tasks_board">タスクボード</string>
     <string name="title_search_with_map_app">地図アプリで検索</string>
-    <string name="title_sort_by_date">日付でソート</string>
-    <string name="title_sort_by_name">名前でソート</string>
-    <string name="title_sort_by_count">数でソート</string>
     <string name="title_context_editor_task_list">タスクリスト</string>
     <string name="subhead_search_category_setting">検索種別の設定</string>
     <string name="message_failed_query_extraction_from_web_view">キーワードを取得できませんでした。再度実行するか、クリップボードにコピーして検索してください。</string>

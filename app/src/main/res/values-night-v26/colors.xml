@@ -5,9 +5,6 @@
     <color name="filter_white">#88000000</color>
     <color name="filter_white_bb">#CC000000</color>
     <color name="filter_white_aa">#AA000000</color>
-    <color name="soft_background">#FF0F0F0F</color>
-    <color name="link_blue">#FFE0E0E0</color>
     <color name="share_dialog_button_text">#FF000B00</color>
     <color name="setting_background">#88000000</color>
-    <color name="darkgray_scale">#66FFFFFF</color>
 </resources>

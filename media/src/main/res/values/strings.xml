@@ -16,6 +16,16 @@
     <string name="content_description_set_to">Set to</string>
     <string name="content_description_edit_image">Edit image</string>
     <string name="message_cannot_launch_app">It has cannot open App.</string>
+    <string name="title_excluding_item_setting">Excluding items</string>
+    <string name="title_sort_by_date">Sort by date</string>
+    <string name="title_sort_by_name">Sort by name</string>
+    <string name="title_sort_by_count">Sort by count</string>
+
+    <string name="action_close">Close</string>
+    <string name="title_activity_date_detail">Detail</string>
+    <string name="this_app">This app</string>
+    <string name="other_app">Other app</string>
+    <string name="settings_color_reset">Reset</string>
 
     <string name="title_playing_speed_0_5">x0.5</string>
     <string name="title_playing_speed_0_7">x0.7</string>
@@ -28,5 +38,6 @@
     <string name="title_playing_speed_2">x2</string>
     <string name="title_playing_speed_3">x3</string>
     <string name="title_playing_speed_5">x5</string>
+    <string name="description_play_switch">Switch playing state</string>
 
 </resources>
