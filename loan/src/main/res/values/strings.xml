@@ -11,4 +11,5 @@
     <string name="message_result_montly_payment">Monthly payment: %,d</string>
     <string name="hint_loan_amount">Loan amount</string>
     <string name="default_value_loan_amount">35,000,000</string>
+    <string name="hint_loan_term">Loan term</string>
 </resources>
