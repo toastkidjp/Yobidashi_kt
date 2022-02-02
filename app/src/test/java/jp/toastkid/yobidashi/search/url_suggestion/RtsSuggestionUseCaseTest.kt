@@ -89,4 +89,15 @@ class RtsSuggestionUseCaseTest {
             coVerify(inverse = true) { itemCallback.invoke(any()) }
         }
     }
+
+    @Test
+    fun test() {
+        coEvery { uri.pathSegments }.returns(listOf(""))
+
+        runBlocking {
+            rtsSuggestionUseCase.invoke("https://www.twitter.com/test", itemCallback)
+            coVerify(inverse = true) { itemCallback.invoke(any()) }
+        }
+    }
+
 }
