@@ -69,7 +69,7 @@
                     android:inputType="number"
                     android:digits="0123456789,"
                     android:maxLines="1"
-                    android:text="35"
+                    android:text="@string/default_value_loan_term"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
