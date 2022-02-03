@@ -24,6 +24,7 @@ class QueryUseCase(
     private val bookmarkRepository: BookmarkRepository,
     private val viewHistoryRepository: ViewHistoryRepository,
     private val switchVisibility: (Boolean) -> Unit,
+    private val rtsSuggestionUseCase: RtsSuggestionUseCase = RtsSuggestionUseCase(),
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
@@ -32,7 +33,7 @@ class QueryUseCase(
         CoroutineScope(mainDispatcher).launch {
             val newItems = mutableListOf<UrlItem>()
 
-            RtsSuggestionUseCase().invoke(q.toString(), { newItems.add(0, it) })
+            rtsSuggestionUseCase.invoke(q.toString(), { newItems.add(0, it) })
 
             withContext(ioDispatcher) {
                 if (q.isBlank()) {
