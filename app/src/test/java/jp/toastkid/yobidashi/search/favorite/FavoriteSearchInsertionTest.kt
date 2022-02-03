@@ -38,6 +38,7 @@ class FavoriteSearchInsertionTest {
     @MockK
     private lateinit var context: Context
 
+    @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
