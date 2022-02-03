@@ -10,8 +10,10 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
@@ -53,7 +55,7 @@ class FavoriteSearchInsertionTest {
         mockkConstructor(DatabaseFinder::class)
         every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
         every { appDatabase.favoriteSearchRepository() }.returns(repository)
-        every { repository.insert(any()) }.answers { Unit }
+        every { repository.insert(any()) }.just(Runs)
 
         mockkObject(Toaster)
         every { Toaster.tShort(any(), any<String>()) }.answers { Unit }
