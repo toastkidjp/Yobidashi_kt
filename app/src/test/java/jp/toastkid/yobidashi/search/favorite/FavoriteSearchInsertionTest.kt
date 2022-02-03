@@ -58,7 +58,7 @@ class FavoriteSearchInsertionTest {
         every { repository.insert(any()) }.just(Runs)
 
         mockkObject(Toaster)
-        every { Toaster.tShort(any(), any<String>()) }.answers { Unit }
+        every { Toaster.tShort(any(), any<String>()) }.just(Runs)
     }
 
     @After
