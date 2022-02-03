@@ -84,7 +84,7 @@
                     android:id="@+id/interest_rate"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Interest rate"
+                    android:hint="@string/hint_interest_rate"
                     android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:text="1.0"

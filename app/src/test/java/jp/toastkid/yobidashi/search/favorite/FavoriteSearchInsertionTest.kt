@@ -19,6 +19,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
@@ -36,6 +37,10 @@ class FavoriteSearchInsertionTest {
 
     @MockK
     private lateinit var context: Context
+
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     @Before
     fun setUp() {
