@@ -14,4 +14,5 @@
     <string name="hint_loan_term">Loan term</string>
     <string name="default_value_loan_term">35</string>
     <string name="hint_interest_rate">Interest rate</string>
+    <string name="default_value_interest_rate">1.0</string>
 </resources>
