@@ -9,6 +9,7 @@
 <resources>
 
     <string name="search">Search</string>
+    <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="display">Display</string>
     <string name="image">Image</string>
