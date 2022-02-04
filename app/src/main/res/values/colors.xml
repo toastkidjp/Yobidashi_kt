@@ -5,7 +5,6 @@
     <color name="black">#FF000B00</color>
     <color name="spinner_background">#DDFFFFFF</color>
     <color name="search_add_background">#33000000</color>
-    <color name="filter_white">#88FFFFFF</color>
     <color name="filter_white_bb">#CCFFFFFF</color>
     <color name="filter_white_aa">#AAFFFFFF</color>
     <color name="setting_background">#E0FFFFFF</color>
@@ -19,7 +18,6 @@
 
     <color name="ripple">#FFE0E0E0</color>
     <color name="pre4_ripple">#FFAAAAAA</color>
-    <color name="aw_ripple">#30000000</color>
 
     <color name="crimson_bg">#AAD50000</color>
     <color name="crimson_font">#EEFDD835</color>
