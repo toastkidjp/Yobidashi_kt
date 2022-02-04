@@ -243,10 +243,7 @@
     <string name="export_to_article_viewer">Export to Article viewer</string>
     <string name="restore">Restore</string>
     <string name="title_dialog_input_file_name">Input file name</string>
-    <string name="message_requires_permission_storage">
-        If you want to use this function, you should permit using storage to this app.</string>
     <string name="load">Load</string>
-    <string name="clip">Clip</string>
     <string name="tab_list">Tab</string>
     <string name="message_cannot_read_file">It could not read text from file...</string>
     <string name="title_clear_text">Clear text</string>
@@ -339,7 +336,6 @@
     <string name="title_rss_setting">RSS setting</string>
     <string name="clipboard">Clipboard</string>
     <string name="title_current_page">Current Page</string>
-    <string name="message_clip_to">Clip \'%s\'.</string>
     <string name="title_url_module">Use URL module</string>
     <string name="title_audio_player">Audio player</string>
     <string name="menu_what_happened_today">What happened today</string>

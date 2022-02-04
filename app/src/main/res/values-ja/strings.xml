@@ -236,10 +236,8 @@
     <string name="export_to_article_viewer">記事リストにエクスポート</string>
     <string name="restore">復元</string>
     <string name="title_dialog_input_file_name">ファイル名入力</string>
-    <string name="message_requires_permission_storage">
-        メモを使用するにはストレージの権限が必要です。</string>
+
     <string name="load">読込</string>
-    <string name="clip">クリップボードにコピー</string>
     <string name="tab_list">タブ一覧</string>
     <string name="message_cannot_read_file">ファイルを読み込めませんでした。</string>
     <string name="title_clear_text">テキストをクリア</string>
@@ -332,7 +330,6 @@
     <string name="message_failure_extracting_rss">This site doesn\'t contains any RSS feeds.</string>
     <string name="clipboard">クリップボード</string>
     <string name="title_current_page">現在のページ</string>
-    <string name="message_clip_to">%s をクリップボードにコピーしました。</string>
     <string name="title_url_module">URL モジュールを使う</string>
     <string name="title_audio_player">音楽プレイヤー</string>
     <string name="menu_what_happened_today">今日は何の日？</string>
