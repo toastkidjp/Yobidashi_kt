@@ -27,6 +27,7 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.Urls
 import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
@@ -36,8 +37,10 @@ import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.ToolbarColorApplier
 import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.lib.view.filter.color.ForegroundColorFilterUseCase
+import jp.toastkid.lib.viewmodel.WebSearchViewModel
 import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.search.SearchCategory
+import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
@@ -211,6 +214,21 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
         initializeContentViewModel()
 
         initializeMenuViewModel()
+
+        ViewModelProvider(this).get(WebSearchViewModel::class.java)
+            .search
+            .observe(this, {
+                val query = it?.getContentIfNotHandled() ?: return@observe
+                val validatedUrl = Urls.isValidUrl(query)
+                if (validatedUrl) {
+                    openNewWebTab(Uri.parse(query))
+                    return@observe
+                }
+
+                val category = preferenceApplier.getDefaultSearchEngine() ?: return@observe
+                val searchUri = UrlFactory()(category, query)
+                openNewWebTab(searchUri)
+            })
 
         menuSwitchColorApplier = MenuSwitchColorApplier(binding.menuSwitch)
 
@@ -455,10 +473,12 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
         })
         contentViewModel?.newArticle?.observe(this, Observer {
             val titleAndOnBackground = it?.getContentIfNotHandled() ?: return@Observer
-            ArticleTabOpenerUseCase(
-                tabs,
-                binding.content
-            ) { replaceToCurrentTab() }.invoke(titleAndOnBackground.first, titleAndOnBackground.second, preferenceApplier.colorPair())
+            ArticleTabOpenerUseCase(tabs, binding.content, ::replaceToCurrentTab)
+                .invoke(
+                    titleAndOnBackground.first,
+                    titleAndOnBackground.second,
+                    preferenceApplier.colorPair()
+                )
         })
         contentViewModel?.openArticleList?.observe(this, {
             tabs.openArticleList()

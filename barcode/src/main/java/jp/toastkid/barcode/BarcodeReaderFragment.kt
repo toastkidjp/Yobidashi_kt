@@ -40,6 +40,7 @@ import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.view.DraggableTouchListener
+import jp.toastkid.lib.viewmodel.WebSearchViewModel
 import jp.toastkid.lib.window.WindowRectCalculatorCompat
 import timber.log.Timber
 import java.io.FileOutputStream
@@ -134,12 +135,7 @@ class BarcodeReaderFragment : Fragment() {
             it.open.observe(viewLifecycleOwner, Observer { event ->
                 val text = event?.getContentIfNotHandled() ?: return@Observer
                 val activity = activity ?: return@Observer
-                /*TODO SearchAction(
-                        activity,
-                        preferenceApplier.getDefaultSearchEngine()
-                                ?: SearchCategory.getDefaultCategoryName(),
-                        text
-                ).invoke()*/
+                ViewModelProvider(activity).get(WebSearchViewModel::class.java).search(text)
             })
         }
 
