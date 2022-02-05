@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.barcode
+package jp.toastkid.barcode
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
@@ -20,10 +20,9 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.barcode.databinding.PopupBarcodeResultBinding
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.ColorPair
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.PopupBarcodeResultBinding
 
 /**
  * Popup for showing barcode reader's result.
@@ -152,6 +151,6 @@ class BarcodeReaderResultPopup(context: Context) {
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID = R.layout.popup_barcode_result
+        private val LAYOUT_ID = R.layout.popup_barcode_result
     }
 }
