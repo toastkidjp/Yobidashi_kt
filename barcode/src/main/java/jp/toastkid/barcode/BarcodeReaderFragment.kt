@@ -9,6 +9,10 @@ package jp.toastkid.barcode
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipDescription
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Rect
@@ -236,7 +240,13 @@ class BarcodeReaderFragment : Fragment() {
      */
     private fun clip(text: String) {
         binding?.root?.let { snackbarParent ->
-            //TODO Clipboard.clip(snackbarParent.context, text)
+            (context?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager?)
+                ?.setPrimaryClip(
+                    ClipData(
+                        ClipDescription("text_data", arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)),
+                        ClipData.Item(text)
+                    )
+                )
         }
     }
 
