@@ -14,11 +14,10 @@ import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.FileProvider
-import com.google.zxing.BarcodeFormat
-import com.journeyapps.barcodescanner.BarcodeEncoder
+import jp.toastkid.barcode.generator.BarcodeGenerator
+import jp.toastkid.lib.image.ImageCache
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.lib.image.ImageCache
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,8 +39,7 @@ class BarcodePreparationUseCase(
         CoroutineScope(mainDispatcher).launch {
             val imageView = contentView.findViewById<ImageView>(R.id.barcode)
             val bitmap = withContext(ioDispatcher) {
-                BarcodeEncoder()
-                        .encodeBitmap(url, BarcodeFormat.QR_CODE, BARCODE_SIZE, BARCODE_SIZE)
+                BarcodeGenerator().invoke(url, BARCODE_SIZE)
             }
             imageView.setImageBitmap(bitmap)
             imageView.visibility = View.VISIBLE
