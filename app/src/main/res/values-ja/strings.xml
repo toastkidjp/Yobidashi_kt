@@ -125,8 +125,6 @@
     <string name="clear_form_data">フォームデータを消去</string>
     <string name="title_load_image">画像を表示</string>
     <string name="title_save_form_data">フォームデータを保存</string>
-    <string name="title_camera">カメラ</string>
-    <string name="title_code_reader">バーコードリーダー</string>
     <string name="title_share_by_code">コードでシェア</string>
     <string name="title_user_agent">ユーザーエージェント</string>
     <string name="format_result_user_agent">%s に設定しました。</string>
@@ -137,7 +135,6 @@
     <string name="message_empty_archives">ページが保存されていません。</string>
     <string name="title_instant_barcode">インスタントバーコード作成</string>
     <string name="generate">生成</string>
-    <string name="message_requires_permission_camera">バーコードリーダーを使用するにはカメラの権限が必要です。</string>
     <string name="title_home">ホーム</string>
     <string name="title_open_url">URL を開く</string>
     <string name="message_invalid_url">URL が不正です。</string>
@@ -354,7 +351,6 @@
     <string name="title_context_editor_code_block">コードブロック</string>
     <string name="title_context_editor_task_list">タスクリスト</string>
     <string name="title_context_editor_insert_thousand_separator">数値3桁区切</string>
-    <string name="title_reset_camera_button_position">カメラボタンの位置を戻す</string>
     <string name="title_search_suggestion">検索サジェスト</string>
     <string name="search_category">検索種別</string>
 

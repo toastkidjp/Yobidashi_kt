@@ -126,8 +126,6 @@
     <string name="clear_form_data">Clear form data</string>
     <string name="title_load_image">Show images</string>
     <string name="title_save_form_data">Save form data</string>
-    <string name="title_camera">Camera</string>
-    <string name="title_code_reader">Barcode Reader</string>
     <string name="title_share_by_code">Share Barcode</string>
     <string name="title_user_agent">User Agent</string>
     <string name="format_result_user_agent">It has set %s.</string>
@@ -138,8 +136,6 @@
     <string name="message_empty_archives">It does not have any screenshots.</string>
     <string name="title_instant_barcode">Generate barcode</string>
     <string name="generate">Generate</string>
-    <string name="message_requires_permission_camera">
-        If you want to use this function, you should permit using camera to this app.</string>
     <string name="title_home">Home</string>
     <string name="title_open_url">Open URL</string>
     <string name="message_invalid_url">Input URL is invalid.</string>
@@ -360,7 +356,6 @@
     <string name="title_context_editor_task_list">Task list</string>
     <string name="title_context_editor_code_block">Code block</string>
     <string name="title_context_editor_insert_thousand_separator">Insert thousand separator</string>
-    <string name="title_reset_camera_button_position">Reset camera position</string>
     <string name="title_search_suggestion">Search suggestion</string>
     <string name="search_category">Search category</string>
 
