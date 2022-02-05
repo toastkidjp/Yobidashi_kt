@@ -12,8 +12,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import jp.toastkid.barcode.BarcodeReaderFragment
 import jp.toastkid.lib.Urls
-import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.settings.SettingFragment
