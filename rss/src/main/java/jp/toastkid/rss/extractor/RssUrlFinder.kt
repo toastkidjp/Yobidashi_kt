@@ -7,10 +7,12 @@
  */
 package jp.toastkid.rss.extractor
 
+import android.content.Context
 import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.api.html.HtmlApi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.ColorPair
@@ -30,6 +32,9 @@ class RssUrlFinder(
     private val urlValidator: RssUrlValidator = RssUrlValidator(),
     private val rssUrlExtractor: RssUrlExtractor = RssUrlExtractor(),
     private val htmlApi: HtmlApi = HtmlApi(),
+    private val contentViewModelFactory: (ViewModelStoreOwner) -> ContentViewModel? = {
+        ViewModelProvider(it).get(ContentViewModel::class.java)
+    },
     @VisibleForTesting
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     @VisibleForTesting
@@ -50,10 +55,8 @@ class RssUrlFinder(
 
         if (urlValidator(currentUrl)) {
             preferenceApplier.saveNewRssReaderTargets(currentUrl)
-            (snackbarParent.context as? FragmentActivity)?.let {
-                ViewModelProvider(it).get(ContentViewModel::class.java)
-                    .snackShort("Added $currentUrl")
-            }
+            obtainContentViewModel(snackbarParent.context)
+                    ?.snackShort("Added $currentUrl")
             return
         }
 
@@ -78,16 +81,16 @@ class RssUrlFinder(
         urls?.firstOrNull { urlValidator(it) }
                 ?.let {
                     preferenceApplier.saveNewRssReaderTargets(it)
-                    (snackbarParent.context as? FragmentActivity)?.let { fragmentActivity ->
-                        ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
-                            .snackShort("Added $it")
-                    }
+                    obtainContentViewModel(snackbarParent.context)?.snackShort("Added $it")
                     return
                 }
 
-        (snackbarParent.context as? FragmentActivity)?.let {
-            ViewModelProvider(it).get(ContentViewModel::class.java)
-                .snackShort(R.string.message_failure_extracting_rss)
-        }
+        obtainContentViewModel(snackbarParent.context)
+            ?.snackShort(R.string.message_failure_extracting_rss)
     }
+
+    private fun obtainContentViewModel(context: Context) =
+        (context as? FragmentActivity)?.let {
+            contentViewModelFactory(it)
+        }
 }

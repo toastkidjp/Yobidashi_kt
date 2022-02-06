@@ -62,11 +62,11 @@ class Adapter(
             mediaPlayerPopupViewModel?.clickItem(item)
         }
 
-        holder.setOnLyricsClickListener({
+        holder.setOnLyricsClickListener {
             item.description.title?.also { lyrics ->
                 mediaPlayerPopupViewModel?.clickLyrics(lyrics.toString())
             }
-        })
+        }
     }
 
     override fun getItemCount() = items.size * 20

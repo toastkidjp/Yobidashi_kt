@@ -14,11 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.gesture.GestureMemoFragment
+import jp.toastkid.image.list.ImageViewerFragment
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.media.image.list.ImageViewerFragment
 import jp.toastkid.media.music.popup.MediaPlayerPopup
 import jp.toastkid.planning.CardListFragment
 import jp.toastkid.rss.RssReaderFragment
