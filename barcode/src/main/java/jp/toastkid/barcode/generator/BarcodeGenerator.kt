@@ -9,11 +9,13 @@
 package jp.toastkid.barcode.generator
 
 import android.graphics.Bitmap
+import androidx.annotation.WorkerThread
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
 class BarcodeGenerator {
 
+    @WorkerThread
     operator fun invoke(url: String?, size: Int): Bitmap {
         return BarcodeEncoder()
             .encodeBitmap(url, BarcodeFormat.QR_CODE, size, size)
