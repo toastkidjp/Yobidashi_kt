@@ -13,11 +13,11 @@ import androidx.annotation.WorkerThread
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
-class BarcodeGenerator(private val barcodeGenerator : BarcodeEncoder = BarcodeEncoder()) {
+class BarcodeGenerator(private val barcodeEncoder : BarcodeEncoder = BarcodeEncoder()) {
 
     @WorkerThread
     operator fun invoke(url: String?, size: Int): Bitmap {
-        return barcodeGenerator
+        return barcodeEncoder
             .encodeBitmap(url, BarcodeFormat.QR_CODE, size, size)
     }
 
