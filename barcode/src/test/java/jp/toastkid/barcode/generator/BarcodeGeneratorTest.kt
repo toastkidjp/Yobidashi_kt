@@ -12,35 +12,36 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
-import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class BarcodeGeneratorTest {
 
     @InjectMockKs
     private lateinit var barcodeGenerator: BarcodeGenerator
 
-    @MockK
-    private lateinit var barcodeEncoder : BarcodeEncoder
-
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { barcodeEncoder.encodeBitmap(any(), any(), any(), any()) }.returns(mockk())
+        mockkConstructor(BarcodeEncoder::class)
+        every { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), any(), any(), any()) }.returns(mockk())
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         barcodeGenerator.invoke("https://www.yahoo.co.jp", 400)
 
-        verify { barcodeEncoder.encodeBitmap(any(), any(), any(), any()) }
+        verify { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), any(), any(), any()) }
     }
 }
