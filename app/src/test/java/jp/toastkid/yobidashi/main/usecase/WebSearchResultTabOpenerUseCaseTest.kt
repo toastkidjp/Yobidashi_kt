@@ -23,6 +23,9 @@ import io.mockk.verify
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.UrlFactory
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class WebSearchResultTabOpenerUseCaseTest {
 
@@ -38,7 +41,7 @@ class WebSearchResultTabOpenerUseCaseTest {
     @MockK
     private lateinit var urlFactory: UrlFactory
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { openNewWebTab.invoke(any()) }.just(Runs)
@@ -52,12 +55,12 @@ class WebSearchResultTabOpenerUseCaseTest {
         every { Uri.parse(any()) }.returns(mockk())
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         every { Urls.isValidUrl(any()) }.returns(false)
 
