@@ -43,7 +43,7 @@ class BarcodePreparationUseCaseTest {
         MockKAnnotations.init(this)
         coEvery { contentView.findViewById<ImageView>(any()) }.returns(imageView)
         coEvery { imageView.setImageBitmap(any()) }.just(Runs)
-        coEvery { imageView.setVisibility(any()) }.just(Runs)
+        coEvery { imageView.visibility = any() }.just(Runs)
         coEvery { imageView.getContext() }.returns(mockk())
         coEvery { imageView.setOnClickListener(any()) }.returns(mockk())
 
