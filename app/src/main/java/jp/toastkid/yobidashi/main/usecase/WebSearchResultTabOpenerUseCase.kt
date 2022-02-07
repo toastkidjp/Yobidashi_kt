@@ -15,7 +15,8 @@ import jp.toastkid.search.UrlFactory
 
 class WebSearchResultTabOpenerUseCase(
     private val preferenceApplier: PreferenceApplier,
-    private val openNewWebTab: (Uri) -> Unit
+    private val openNewWebTab: (Uri) -> Unit,
+    private val urlFactory: UrlFactory = UrlFactory()
 ) {
 
     operator fun invoke(query: String) {
@@ -26,7 +27,7 @@ class WebSearchResultTabOpenerUseCase(
         }
 
         val category = preferenceApplier.getDefaultSearchEngine() ?: return
-        val searchUri = UrlFactory()(category, query)
+        val searchUri = urlFactory(category, query)
         openNewWebTab(searchUri)
     }
 
