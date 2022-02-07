@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.browser.page_information
 
 import android.view.View
 import android.widget.ImageView
-import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -20,6 +19,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import jp.toastkid.barcode.generator.BarcodeGenerator
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
@@ -47,8 +47,8 @@ class BarcodePreparationUseCaseTest {
         coEvery { imageView.getContext() }.returns(mockk())
         coEvery { imageView.setOnClickListener(any()) }.returns(mockk())
 
-        mockkConstructor(BarcodeEncoder::class)
-        coEvery { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), any(), any(), any()) }
+        mockkConstructor(BarcodeGenerator::class)
+        coEvery { anyConstructed<BarcodeGenerator>().invoke(any(), any()) }
             .returns(mockk())
 
         barcodePreparationUseCase =
@@ -70,7 +70,7 @@ class BarcodePreparationUseCaseTest {
         coVerify(exactly = 1) { imageView.getContext() }
         coVerify(exactly = 1) { imageView.setOnClickListener(any()) }
         coVerify(exactly = 1) {
-            anyConstructed<BarcodeEncoder>().encodeBitmap(any(), any(), any(), any())
+            anyConstructed<BarcodeGenerator>().invoke(any(), any())
         }
     }
 
