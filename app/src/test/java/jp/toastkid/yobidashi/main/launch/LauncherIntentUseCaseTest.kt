@@ -14,7 +14,7 @@ import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
+import jp.toastkid.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.settings.SettingFragment
