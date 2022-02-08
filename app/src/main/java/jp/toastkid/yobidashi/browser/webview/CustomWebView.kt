@@ -109,15 +109,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_TOUCH)
                 return returnValue
             }
-            MotionEvent.ACTION_UP -> {
-                requestDisallowInterceptTouchEvent(false)
-                val returnValue = super.dispatchTouchEvent(event)
-                enablePullToRefresh = false
-                // end NestedScroll
-                stopNestedScroll()
-                return returnValue
-            }
-            MotionEvent.ACTION_CANCEL -> {
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 requestDisallowInterceptTouchEvent(false)
                 val returnValue = super.dispatchTouchEvent(event)
                 enablePullToRefresh = false
