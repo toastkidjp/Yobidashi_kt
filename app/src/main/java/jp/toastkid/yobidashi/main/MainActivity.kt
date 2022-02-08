@@ -27,7 +27,6 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
-import jp.toastkid.lib.Urls
 import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
@@ -40,7 +39,6 @@ import jp.toastkid.lib.view.filter.color.ForegroundColorFilterUseCase
 import jp.toastkid.lib.viewmodel.WebSearchViewModel
 import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.search.SearchCategory
-import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
@@ -61,6 +59,7 @@ import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.main.usecase.ArticleTabOpenerUseCase
 import jp.toastkid.yobidashi.main.usecase.BackgroundTabOpenerUseCase
 import jp.toastkid.yobidashi.main.usecase.MusicPlayerUseCase
+import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuSwitchColorApplier
 import jp.toastkid.yobidashi.menu.MenuUseCase
@@ -219,15 +218,8 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
             .search
             .observe(this, {
                 val query = it?.getContentIfNotHandled() ?: return@observe
-                val validatedUrl = Urls.isValidUrl(query)
-                if (validatedUrl) {
-                    openNewWebTab(Uri.parse(query))
-                    return@observe
-                }
-
-                val category = preferenceApplier.getDefaultSearchEngine() ?: return@observe
-                val searchUri = UrlFactory()(category, query)
-                openNewWebTab(searchUri)
+                WebSearchResultTabOpenerUseCase(preferenceApplier, { openNewWebTab(it)})
+                    .invoke(query)
             })
 
         menuSwitchColorApplier = MenuSwitchColorApplier(binding.menuSwitch)
