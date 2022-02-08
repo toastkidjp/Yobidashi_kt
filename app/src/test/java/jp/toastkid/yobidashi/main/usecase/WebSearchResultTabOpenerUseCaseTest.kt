@@ -72,7 +72,7 @@ class WebSearchResultTabOpenerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testWebUrlCase() {
         webSearchResultTabOpenerUseCase.invoke("test")
 
         verify { Uri.parse(any()) }
