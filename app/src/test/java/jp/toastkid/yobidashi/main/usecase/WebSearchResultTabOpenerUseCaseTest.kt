@@ -61,7 +61,7 @@ class WebSearchResultTabOpenerUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testLaunchSearchCase() {
         every { Urls.isValidUrl(any()) }.returns(false)
 
         webSearchResultTabOpenerUseCase.invoke("test")
