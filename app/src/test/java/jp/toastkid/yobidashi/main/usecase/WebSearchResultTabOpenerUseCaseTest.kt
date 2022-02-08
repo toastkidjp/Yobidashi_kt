@@ -79,4 +79,16 @@ class WebSearchResultTabOpenerUseCaseTest {
         verify(inverse = true) { urlFactory.invoke(any(), any()) }
         verify { openNewWebTab.invoke(any()) }
     }
+
+    @Test
+    fun test() {
+        every { Urls.isValidUrl(any()) }.returns(false)
+        every { preferenceApplier.getDefaultSearchEngine() }.returns(null)
+
+        webSearchResultTabOpenerUseCase.invoke("test")
+
+        verify(inverse = true) { Uri.parse(any()) }
+        verify(inverse = true) { urlFactory.invoke(any(), any()) }
+        verify(inverse = true) { openNewWebTab.invoke(any()) }
+    }
 }
