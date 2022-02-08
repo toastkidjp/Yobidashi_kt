@@ -70,4 +70,13 @@ class WebSearchResultTabOpenerUseCaseTest {
         verify { urlFactory.invoke(any(), any()) }
         verify { openNewWebTab.invoke(any()) }
     }
+
+    @Test
+    fun test() {
+        webSearchResultTabOpenerUseCase.invoke("test")
+
+        verify { Uri.parse(any()) }
+        verify(inverse = true) { urlFactory.invoke(any(), any()) }
+        verify { openNewWebTab.invoke(any()) }
+    }
 }
