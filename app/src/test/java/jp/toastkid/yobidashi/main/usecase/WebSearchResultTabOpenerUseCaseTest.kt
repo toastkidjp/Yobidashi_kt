@@ -81,7 +81,7 @@ class WebSearchResultTabOpenerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testCannotGetDefaultSearchCase() {
         every { Urls.isValidUrl(any()) }.returns(false)
         every { preferenceApplier.getDefaultSearchEngine() }.returns(null)
 
