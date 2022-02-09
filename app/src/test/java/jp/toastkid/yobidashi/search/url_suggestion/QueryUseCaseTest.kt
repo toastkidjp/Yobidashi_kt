@@ -85,7 +85,7 @@ class QueryUseCaseTest {
         coVerify(exactly = 1) { adapter.submitList(any()) }
         coVerify(exactly = 0) { bookmarkRepository.search(any(), any()) }
         coVerify(exactly = 1) { viewHistoryRepository.search(any(), any()) }
-        coEvery { rtsSuggestionUseCase.invoke(any(), any()) }
+        coVerify { rtsSuggestionUseCase.invoke(any(), any()) }
     }
 
 }
