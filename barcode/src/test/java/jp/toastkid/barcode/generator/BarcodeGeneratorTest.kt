@@ -45,7 +45,10 @@ class BarcodeGeneratorTest {
     fun testCorrectCase() {
         barcodeGenerator.invoke("https://www.yahoo.co.jp", 400)
 
-        verify { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), BarcodeFormat.QR_CODE, 400, 400) }
+        verify {
+            anyConstructed<BarcodeEncoder>()
+                .encodeBitmap(any(), BarcodeFormat.QR_CODE, 400, 400)
+        }
     }
 
     @Test
