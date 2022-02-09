@@ -8,6 +8,7 @@
 
 package jp.toastkid.barcode.generator
 
+import android.graphics.Bitmap
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.mockk.MockKAnnotations
@@ -15,6 +16,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -44,5 +46,15 @@ class BarcodeGeneratorTest {
         barcodeGenerator.invoke("https://www.yahoo.co.jp", 400)
 
         verify { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), BarcodeFormat.QR_CODE, any(), any()) }
+    }
+
+    @Test
+    fun test() {
+        mockkStatic(Bitmap::class)
+        every { Bitmap.createBitmap(any(), any(), any()) }.returns(mockk())
+
+        barcodeGenerator.invoke("https://www.yahoo.co.jp", -1)
+
+        verify(inverse = true) { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), BarcodeFormat.QR_CODE, any(), any()) }
     }
 }
