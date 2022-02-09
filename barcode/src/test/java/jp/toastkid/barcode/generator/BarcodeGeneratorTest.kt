@@ -49,7 +49,7 @@ class BarcodeGeneratorTest {
     }
 
     @Test
-    fun test() {
+    fun testPassedIllegalSize() {
         mockkStatic(Bitmap::class)
         every { Bitmap.createBitmap(any(), any(), any()) }.returns(mockk())
 
