@@ -23,6 +23,7 @@ import jp.toastkid.loan.model.Factor
 import jp.toastkid.loan.usecase.DebouncedCalculatorUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
@@ -80,6 +81,7 @@ class LoanCalculatorFragment : Fragment() {
         invokeCalculator()
     }
 
+    @FlowPreview
     private fun invokeCalculator() {
         DebouncedCalculatorUseCase(
             inputChannel,
