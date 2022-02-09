@@ -8,6 +8,7 @@
 
 package jp.toastkid.barcode.generator
 
+import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -42,6 +43,6 @@ class BarcodeGeneratorTest {
     fun testCorrectCase() {
         barcodeGenerator.invoke("https://www.yahoo.co.jp", 400)
 
-        verify { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), any(), any(), any()) }
+        verify { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), BarcodeFormat.QR_CODE, any(), any()) }
     }
 }
