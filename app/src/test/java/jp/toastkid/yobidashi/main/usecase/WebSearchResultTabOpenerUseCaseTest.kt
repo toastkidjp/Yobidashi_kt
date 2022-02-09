@@ -91,4 +91,5 @@ class WebSearchResultTabOpenerUseCaseTest {
         verify(inverse = true) { urlFactory.invoke(any(), any()) }
         verify(inverse = true) { openNewWebTab.invoke(any()) }
     }
+
 }
