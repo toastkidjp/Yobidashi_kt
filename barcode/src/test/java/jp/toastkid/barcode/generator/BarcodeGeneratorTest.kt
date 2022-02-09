@@ -39,7 +39,7 @@ class BarcodeGeneratorTest {
     }
 
     @Test
-    fun invoke() {
+    fun testCorrectCase() {
         barcodeGenerator.invoke("https://www.yahoo.co.jp", 400)
 
         verify { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), any(), any(), any()) }
