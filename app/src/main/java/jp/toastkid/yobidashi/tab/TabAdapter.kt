@@ -2,7 +2,9 @@ package jp.toastkid.yobidashi.tab
 
 import android.content.Context
 import android.net.Uri
+import android.os.Message
 import android.view.View
+import android.webkit.WebView
 import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
@@ -154,6 +156,35 @@ class TabAdapter(
     }
 
     /**
+     * Open background tab with URL string.
+     *
+     * @param title Tab's title
+     * @param url Tab's URL
+     */
+    fun openNewWindowWebTab(message: Message): () -> Unit {
+        val context = contextSupplier()
+        val title = message.data?.getString("title")
+        val url = message.data?.getString("url") ?: ""
+
+        val tabTitle =
+            if (title.isNullOrBlank()) context.getString(R.string.new_tab)
+            else title
+
+        val newTab = WebTab.make(tabTitle, url)
+        tabList.add(newTab)
+        tabList.save()
+
+        val webView = webViewFactory?.invoke(context) ?: return { }
+        val transport = message.obj as? WebView.WebViewTransport
+        transport?.webView = webView
+        message.sendToTarget()
+        GlobalWebViewPool.put(newTab.id(), webView)
+        setIndexByTab(newTab)
+        setCount()
+        return { setIndexByTab(newTab) }
+    }
+
+    /**
      * This method allow calling from only [BrowserFragment].
      */
     internal fun openNewEditorTab(path: String? = null) {
@@ -174,13 +205,15 @@ class TabAdapter(
         setIndexByTab(pdfTab)
     }
 
-    fun openNewArticleTab(title: String, onBackground: Boolean = false) {
+    fun openNewArticleTab(title: String, onBackground: Boolean = false): Tab {
         val articleTab = ArticleTab.make(title)
         tabList.add(articleTab)
         setCount()
         if (!onBackground) {
             setIndexByTab(articleTab)
         }
+
+        return articleTab
     }
 
     fun openArticleList() {
