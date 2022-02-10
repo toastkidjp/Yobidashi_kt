@@ -8,6 +8,7 @@
 package jp.toastkid.lib
 
 import android.net.Uri
+import android.os.Message
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -49,6 +50,14 @@ class BrowserViewModel : ViewModel() {
 
     fun openBackground(title: String, uri: Uri) {
         _openBackgroundWithTitle.postValue(Event(title to uri))
+    }
+
+    private val _openNewWindow = MutableLiveData<Event<Message?>>()
+
+    val openNewWindow: LiveData<Event<Message?>> = _openNewWindow
+
+    fun openNewWindow(resultMessage: Message?) {
+        _openNewWindow.postValue(Event(resultMessage))
     }
 
     private val _download = MutableLiveData<Event<String>>()
