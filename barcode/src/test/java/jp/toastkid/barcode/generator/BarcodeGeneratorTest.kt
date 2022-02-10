@@ -58,6 +58,9 @@ class BarcodeGeneratorTest {
 
         barcodeGenerator.invoke("https://www.yahoo.co.jp", -1)
 
-        verify(inverse = true) { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), BarcodeFormat.QR_CODE, any(), any()) }
+        verify(inverse = true) {
+            anyConstructed<BarcodeEncoder>()
+                .encodeBitmap(any(), BarcodeFormat.QR_CODE, any(), any())
+        }
     }
 }
