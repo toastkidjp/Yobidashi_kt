@@ -161,7 +161,7 @@ class TabAdapter(
      * @param title Tab's title
      * @param url Tab's URL
      */
-    fun openNewWindowWebTab(message: Message): () -> Unit {
+    fun openNewWindowWebTab(message: Message) {
         val context = contextSupplier()
         val title = message.data?.getString("title")
         val url = message.data?.getString("url") ?: ""
@@ -174,14 +174,13 @@ class TabAdapter(
         tabList.add(newTab)
         tabList.save()
 
-        val webView = webViewFactory?.invoke(context) ?: return { }
+        val webView = webViewFactory?.invoke(context) ?: return
         val transport = message.obj as? WebView.WebViewTransport
         transport?.webView = webView
         message.sendToTarget()
         GlobalWebViewPool.put(newTab.id(), webView)
         setIndexByTab(newTab)
         setCount()
-        return { setIndexByTab(newTab) }
     }
 
     /**
