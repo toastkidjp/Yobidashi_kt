@@ -18,7 +18,7 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi.rss.model.Rss
+import jp.toastkid.rss.model.Rss
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

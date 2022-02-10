@@ -34,8 +34,6 @@
     <string name="title_licenses">Licenses Information</string>
     <string name="title_app_version">App Version: </string>
 
-    <string name="settings_color_commit">Commit</string>
-    <string name="settings_color_reset">Reset</string>
     <string name="settings_color_background_title">Background</string>
     <string name="settings_color_font_title">Font</string>
     <string name="settings_color_saved_title">Saved Colors</string>
@@ -227,7 +225,7 @@
     <string name="message_enable_swc">It has enabled "Search with Clip".</string>
     <string name="message_disable_swc">It has disabled "Search with Clip".</string>
 
-    <string name="message_add_favorite_search" formatted="false" >
+    <string name="message_add_favorite_search" formatted="false">
         Would you like to add to "Favorite Search"? \n
         Site: %s\n
         Keyword: %s
@@ -289,7 +287,7 @@
     <string name="export_to_article_viewer">Export to Article viewer</string>
     <string name="restore">Restore</string>
     <string name="title_dialog_input_file_name">Input file name</string>
-    <string name="message_requires_permission_storage" >
+    <string name="message_requires_permission_storage">
         If you want to use this function, you should permit using storage to this app.</string>
     <string name="load">Load</string>
     <string name="clip">Clip</string>
@@ -437,5 +435,6 @@
     <string name="hourly_trends">Hourly trends</string>
     <string name="sample_text_color_filter">A</string>
     <string name="message_backup_is_empty">Backup is empty.</string>
+    <string name="title_loan">Loan calculator</string>
 
 </resources>

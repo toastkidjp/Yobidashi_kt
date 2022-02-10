@@ -1,0 +1,23 @@
+<resources>
+    <string name="action_pause">Pause</string>
+    <string name="action_play">Play</string>
+    <string name="action_shuffle">Shuffle</string>
+    <string name="title_audio_player">Audio player</string>
+    <string name="message_audio_file_is_not_found">Audio file is not found.</string>
+
+    <string name="title_lyrics_search">Lyrics search</string>
+
+    <string name="title_playing_speed_0_5">x0.5</string>
+    <string name="title_playing_speed_0_7">x0.7</string>
+    <string name="title_playing_speed_0_8">x0.8</string>
+    <string name="title_playing_speed_0_9">x0.9</string>
+    <string name="title_playing_speed_1">x1</string>
+    <string name="title_playing_speed_1_1">x1.1</string>
+    <string name="title_playing_speed_1_2">x1.2</string>
+    <string name="title_playing_speed_1_5">x1.5</string>
+    <string name="title_playing_speed_2">x2</string>
+    <string name="title_playing_speed_3">x3</string>
+    <string name="title_playing_speed_5">x5</string>
+    <string name="description_play_switch">Switch playing state</string>
+
+</resources>

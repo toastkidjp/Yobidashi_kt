@@ -47,7 +47,7 @@
                     android:adjustViewBounds="true"
                     app:srcCompat="@drawable/ic_stop"
                     android:onClick="@{view -> popup.reset()}"
-                    android:contentDescription="@string/settings_color_reset"
+                    android:contentDescription="@string/reset"
                     android:background="@drawable/ripple_transparent"
                     />
                 <ImageView

@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginRight="8dp"
-                    android:text="@string/settings_color_commit"
+                    android:text="@string/commit"
                     android:textSize="10sp"
                     style="?android:attr/buttonBarStyle"
                     android:onClick="@{view -> fragment.commitHomeInput()}"

@@ -19,6 +19,5 @@
     <string name="title_activity_date_detail">Detail</string>
     <string name="this_app">This app</string>
     <string name="other_app">Other app</string>
-    <string name="settings_color_reset">Reset</string>
 
 </resources>
