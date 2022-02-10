@@ -60,7 +60,7 @@ class ArticleTabOpenerUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testOpenBackgroundCase() {
         articleTabOpenerUseCase.invoke("title", true, mockk())
 
         verify { tabs.openNewArticleTab(any(), any()) }
