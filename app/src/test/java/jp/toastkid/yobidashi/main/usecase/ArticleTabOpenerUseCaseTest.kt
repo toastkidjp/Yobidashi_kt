@@ -67,4 +67,13 @@ class ArticleTabOpenerUseCaseTest {
         verify(inverse = true) { replaceToCurrentTab.invoke() }
         verify { Toaster.withAction(any(), any(), any<String>(), any(), any(), any()) }
     }
+
+    @Test
+    fun test() {
+        articleTabOpenerUseCase.invoke("title", false, mockk())
+
+        verify { tabs.openNewArticleTab(any(), any()) }
+        verify { replaceToCurrentTab.invoke() }
+        verify(inverse = true) { Toaster.withAction(any(), any(), any<String>(), any(), any(), any()) }
+    }
 }
