@@ -254,6 +254,11 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
             val pair = it?.getContentIfNotHandled() ?: return@Observer
             backgroundTabOpenerUseCase(pair.first, pair.second.toString(), preferenceApplier.colorPair())
         })
+        browserViewModel?.openNewWindow?.observe(this, Observer {
+            val message = it?.getContentIfNotHandled() ?: return@Observer
+            tabs.openNewWindowWebTab(message)
+            replaceToCurrentTab(true)
+        })
         browserViewModel?.download?.observe(this, Observer {
             val url = it?.getContentIfNotHandled() ?: return@Observer
             downloadPermissionRequestLauncher.launch(url)

@@ -13,7 +13,6 @@ import android.os.Message
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
@@ -64,16 +63,12 @@ class WebChromeClientFactory(
                 isUserGesture: Boolean,
                 resultMsg: Message?
         ): Boolean {
-            val href = view?.handler?.obtainMessage()
-            view?.requestFocusNodeHref(href)
-            val url = href?.data?.getString("url")?.toUri()
-                    ?: return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg)
-            view.stopLoading()
+            view?.stopLoading()
 
-            (view.context as? FragmentActivity)?.also { fragmentActivity ->
+            (view?.context as? FragmentActivity)?.also { fragmentActivity ->
                 ViewModelProvider(fragmentActivity)
                         .get(BrowserViewModel::class.java)
-                        .open(url)
+                        .openNewWindow(resultMsg)
             }
 
             return true
