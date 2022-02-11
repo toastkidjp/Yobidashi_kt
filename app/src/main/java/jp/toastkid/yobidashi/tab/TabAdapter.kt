@@ -158,6 +158,7 @@ class TabAdapter(
     /**
      * Open background tab with URL string.
      *
+     * @param message [Message]
      */
     fun openNewWindowWebTab(message: Message) {
         val context = contextSupplier()
