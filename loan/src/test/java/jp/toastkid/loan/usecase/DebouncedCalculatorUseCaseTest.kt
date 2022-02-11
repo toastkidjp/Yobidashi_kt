@@ -68,7 +68,7 @@ class DebouncedCalculatorUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         debouncedCalculatorUseCase.invoke()
 
         CoroutineScope(Dispatchers.Unconfined).launch {
