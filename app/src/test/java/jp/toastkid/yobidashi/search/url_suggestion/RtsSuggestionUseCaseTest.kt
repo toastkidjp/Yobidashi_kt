@@ -91,7 +91,7 @@ class RtsSuggestionUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testCannotExtractPathsCase() {
         coEvery { uri.pathSegments }.returns(listOf(""))
 
         runBlocking {
