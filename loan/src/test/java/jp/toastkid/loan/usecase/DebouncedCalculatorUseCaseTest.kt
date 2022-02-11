@@ -21,6 +21,7 @@ import jp.toastkid.loan.model.Factor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import org.junit.After
@@ -67,6 +68,7 @@ class DebouncedCalculatorUseCaseTest {
         unmockkAll()
     }
 
+    @FlowPreview
     @Test
     fun testInvoke() {
         debouncedCalculatorUseCase.invoke()
