@@ -76,4 +76,5 @@ class ArticleTabOpenerUseCaseTest {
         verify { replaceToCurrentTab.invoke() }
         verify(inverse = true) { Toaster.withAction(any(), any(), any<String>(), any(), any(), any()) }
     }
+
 }
