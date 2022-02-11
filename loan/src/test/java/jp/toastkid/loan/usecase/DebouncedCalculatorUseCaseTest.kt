@@ -49,6 +49,7 @@ class DebouncedCalculatorUseCaseTest {
     @Suppress("unused")
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
+    @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     @Before
