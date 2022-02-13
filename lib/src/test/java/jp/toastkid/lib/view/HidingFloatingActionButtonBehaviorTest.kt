@@ -21,6 +21,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class HidingFloatingActionButtonBehaviorTest {
 
@@ -38,7 +41,7 @@ class HidingFloatingActionButtonBehaviorTest {
     @MockK
     private lateinit var child: FloatingActionButton
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { context.obtainStyledAttributes(any<AttributeSet>(), any()) }.returns(typedArray)
@@ -51,20 +54,20 @@ class HidingFloatingActionButtonBehaviorTest {
         every { child.hide() }.just(Runs)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun onInterceptTouchEvent() {
     }
 
-    @org.junit.Test
+    @Test
     fun onStartNestedScroll() {
     }
 
-    @org.junit.Test
+    @Test
     fun onNestedPreScroll() {
         every { child.visibility }.returns(View.VISIBLE)
 
