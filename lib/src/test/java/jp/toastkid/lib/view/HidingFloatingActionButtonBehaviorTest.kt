@@ -12,6 +12,7 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.view.ViewCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -61,6 +62,20 @@ class HidingFloatingActionButtonBehaviorTest {
 
     @Test
     fun onInterceptTouchEvent() {
+    }
+
+    @Test
+    fun onStartNestedScroll() {
+        assertTrue(
+            hidingFloatingActionButtonBehavior.onStartNestedScroll(
+                mockk(),
+                child,
+                mockk(),
+                mockk(),
+                ViewCompat.SCROLL_AXIS_VERTICAL,
+                0
+            )
+        )
     }
 
     @Test
