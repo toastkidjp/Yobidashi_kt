@@ -73,6 +73,7 @@ class HidingFloatingActionButtonBehaviorTest {
 
         hidingFloatingActionButtonBehavior.onNestedPreScroll(mockk(), child, mockk(), 0, 1, intArrayOf(), 0)
 
+        verify(inverse = true) { child.show() }
         verify { child.hide() }
     }
 }
