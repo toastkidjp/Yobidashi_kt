@@ -80,6 +80,20 @@ class HidingFloatingActionButtonBehaviorTest {
     }
 
     @Test
+    fun onStartNestedScroll2() {
+        assertFalse(
+            hidingFloatingActionButtonBehavior.onStartNestedScroll(
+                mockk(),
+                child,
+                mockk(),
+                mockk(),
+                ViewCompat.SCROLL_AXIS_HORIZONTAL,
+                0
+            )
+        )
+    }
+
+    @Test
     fun testOnNestedPreScrollToHideVisibleButtonCase() {
         every { child.visibility }.returns(View.VISIBLE)
 
