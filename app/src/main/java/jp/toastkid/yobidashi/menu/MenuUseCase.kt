@@ -19,6 +19,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.loan.view.LoanCalculatorFragment
 import jp.toastkid.media.music.popup.MediaPlayerPopup
 import jp.toastkid.planning.CardListFragment
 import jp.toastkid.rss.RssReaderFragment
@@ -88,6 +89,9 @@ class MenuUseCase(
                             .update()
                 }
                 return
+            }
+            Menu.LOAN_CALCULATOR-> {
+                nextFragment(LoanCalculatorFragment::class.java)
             }
             Menu.PLANNING_POKER-> {
                 nextFragment(CardListFragment::class.java)

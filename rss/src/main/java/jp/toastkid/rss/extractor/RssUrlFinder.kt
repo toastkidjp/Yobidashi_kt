@@ -32,6 +32,7 @@ class RssUrlFinder(
     private val urlValidator: RssUrlValidator = RssUrlValidator(),
     private val rssUrlExtractor: RssUrlExtractor = RssUrlExtractor(),
     private val htmlApi: HtmlApi = HtmlApi(),
+    @VisibleForTesting
     private val contentViewModelFactory: (ViewModelStoreOwner) -> ContentViewModel? = {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     },
@@ -43,8 +44,8 @@ class RssUrlFinder(
 
 
     operator fun invoke(
-            currentUrl: String?,
-            snackbarParentSupplier: () -> View?
+        currentUrl: String?,
+        snackbarParentSupplier: () -> View?
     ) {
         if (currentUrl.isNullOrBlank()) {
             return
