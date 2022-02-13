@@ -88,7 +88,7 @@ class WebViewReplacementUseCaseTest {
         every { preferenceApplier.browserScreenMode() }.returns("fixed")
 
         every { browserHeaderViewModel.setBackButtonIsEnabled(any()) }.returns(Unit)
-        every { browserHeaderViewModel.setForwardButtonEnability(any()) }.returns(Unit)
+        every { browserHeaderViewModel.setForwardButtonIsEnabled(any()) }.returns(Unit)
         every { browserHeaderViewModel.nextTitle(any()) }.returns(Unit)
         every { browserHeaderViewModel.nextUrl(any()) }.returns(Unit)
         every { makeWebView.invoke() }.returns(webView)
@@ -133,7 +133,7 @@ class WebViewReplacementUseCaseTest {
         verify(exactly = 1) { preferenceApplier.useDarkMode() }
         verify(exactly = 1) { preferenceApplier.browserScreenMode() }
         verify(exactly = 1) { browserHeaderViewModel.setBackButtonIsEnabled(any()) }
-        verify(exactly = 1) { browserHeaderViewModel.setForwardButtonEnability(any()) }
+        verify(exactly = 1) { browserHeaderViewModel.setForwardButtonIsEnabled(any()) }
         verify(exactly = 1) { browserHeaderViewModel.nextTitle(any()) }
         verify(exactly = 1) { browserHeaderViewModel.nextUrl(any()) }
         verify(exactly = 1) { makeWebView.invoke() }

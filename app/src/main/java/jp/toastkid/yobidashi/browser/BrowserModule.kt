@@ -154,7 +154,7 @@ class BrowserModule(
     }
 
     private fun updateForwardButtonState(newState: Boolean) {
-        browserHeaderViewModel?.setForwardButtonEnability(newState)
+        browserHeaderViewModel?.setForwardButtonIsEnabled(newState)
     }
 
     /**
