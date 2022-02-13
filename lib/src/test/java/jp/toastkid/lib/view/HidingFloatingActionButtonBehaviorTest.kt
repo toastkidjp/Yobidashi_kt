@@ -66,7 +66,7 @@ class HidingFloatingActionButtonBehaviorTest {
     }
 
     @Test
-    fun onStartNestedScroll() {
+    fun testOnStartNestedScroll() {
         assertTrue(
             hidingFloatingActionButtonBehavior.onStartNestedScroll(
                 mockk(),
