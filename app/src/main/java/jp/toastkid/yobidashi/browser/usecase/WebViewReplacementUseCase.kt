@@ -62,7 +62,7 @@ class WebViewReplacementUseCase(
             (it.parent as? ViewGroup)?.removeAllViews()
             darkThemeApplier(it, preferenceApplier.useDarkMode())
             webViewContainer?.addView(it)
-            browserHeaderViewModel?.setBackButtonEnability(it.canGoBack())
+            browserHeaderViewModel?.setBackButtonIsEnabled(it.canGoBack())
             browserHeaderViewModel?.setForwardButtonEnability(it.canGoForward())
             browserHeaderViewModel?.nextTitle(it.title)
             browserHeaderViewModel?.nextUrl(it.url)

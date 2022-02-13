@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
@@ -33,7 +34,6 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import timber.log.Timber
 
 /**
@@ -150,7 +150,7 @@ class BrowserModule(
     }
 
     private fun updateBackButtonState(newState: Boolean) {
-        browserHeaderViewModel?.setBackButtonEnability(newState)
+        browserHeaderViewModel?.setBackButtonIsEnabled(newState)
     }
 
     private fun updateForwardButtonState(newState: Boolean) {

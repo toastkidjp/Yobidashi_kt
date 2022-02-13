@@ -67,7 +67,7 @@ class WebViewClientFactory(
             }
 
             rssAddingSuggestion?.invoke(view, url)
-            browserHeaderViewModel?.setBackButtonEnability(view.canGoBack())
+            browserHeaderViewModel?.setBackButtonIsEnabled(view.canGoBack())
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
