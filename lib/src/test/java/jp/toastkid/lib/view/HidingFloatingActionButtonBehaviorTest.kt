@@ -11,6 +11,7 @@ package jp.toastkid.lib.view
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.ViewCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -60,6 +61,19 @@ class HidingFloatingActionButtonBehaviorTest {
     @After
     fun tearDown() {
         unmockkAll()
+    }
+
+    @Test
+    fun onInterceptTouchEvent() {
+        val motionEvent = mockk<MotionEvent>()
+        every { motionEvent.action }.returns(MotionEvent.ACTION_CANCEL)
+        every { child.visibility }.returns(View.VISIBLE)
+        mockkConstructor(FloatingActionButton.Behavior::class)
+        every { anyConstructed<FloatingActionButton.Behavior>().onInterceptTouchEvent(any(), any(), any()) }.returns(true)
+
+        hidingFloatingActionButtonBehavior.onInterceptTouchEvent(mockk(), child, motionEvent)
+
+        verify(inverse = true) { child.show() }
     }
 
     @Test
