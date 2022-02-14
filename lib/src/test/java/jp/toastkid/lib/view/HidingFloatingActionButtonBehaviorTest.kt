@@ -63,10 +63,6 @@ class HidingFloatingActionButtonBehaviorTest {
     }
 
     @Test
-    fun onInterceptTouchEvent() {
-    }
-
-    @Test
     fun testOnStartNestedScroll() {
         assertTrue(
             hidingFloatingActionButtonBehavior.onStartNestedScroll(
@@ -81,7 +77,7 @@ class HidingFloatingActionButtonBehaviorTest {
     }
 
     @Test
-    fun onStartNestedScroll2() {
+    fun testOnStartNestedScrollReturnsFalseCase() {
         assertFalse(
             hidingFloatingActionButtonBehavior.onStartNestedScroll(
                 mockk(),
