@@ -57,6 +57,9 @@ class HidingFloatingActionButtonBehaviorTest {
 
         every { child.show() }.just(Runs)
         every { child.hide() }.just(Runs)
+
+        mockkConstructor(FloatingActionButton.Behavior::class)
+        every { anyConstructed<FloatingActionButton.Behavior>().onInterceptTouchEvent(any(), any(), any()) }.returns(true)
     }
 
     @After
@@ -69,8 +72,6 @@ class HidingFloatingActionButtonBehaviorTest {
         val motionEvent = mockk<MotionEvent>()
         every { motionEvent.action }.returns(MotionEvent.ACTION_CANCEL)
         every { child.visibility }.returns(View.VISIBLE)
-        mockkConstructor(FloatingActionButton.Behavior::class)
-        every { anyConstructed<FloatingActionButton.Behavior>().onInterceptTouchEvent(any(), any(), any()) }.returns(true)
 
         hidingFloatingActionButtonBehavior.onInterceptTouchEvent(mockk(), child, motionEvent)
 
@@ -83,8 +84,6 @@ class HidingFloatingActionButtonBehaviorTest {
         every { motionEvent.action }.returns(MotionEvent.ACTION_UP)
         every { motionEvent.rawY }.returns(-11f)
         every { child.visibility }.returns(View.GONE)
-        mockkConstructor(FloatingActionButton.Behavior::class)
-        every { anyConstructed<FloatingActionButton.Behavior>().onInterceptTouchEvent(any(), any(), any()) }.returns(true)
 
         hidingFloatingActionButtonBehavior.onInterceptTouchEvent(mockk(), child, motionEvent)
 
@@ -97,8 +96,6 @@ class HidingFloatingActionButtonBehaviorTest {
         every { motionEvent.action }.returns(MotionEvent.ACTION_UP)
         every { motionEvent.rawY }.returns(0f)
         every { child.visibility }.returns(View.GONE)
-        mockkConstructor(FloatingActionButton.Behavior::class)
-        every { anyConstructed<FloatingActionButton.Behavior>().onInterceptTouchEvent(any(), any(), any()) }.returns(true)
 
         hidingFloatingActionButtonBehavior.onInterceptTouchEvent(mockk(), child, motionEvent)
 
@@ -111,8 +108,6 @@ class HidingFloatingActionButtonBehaviorTest {
         every { motionEvent.action }.returns(MotionEvent.ACTION_MOVE)
         every { motionEvent.rawY }.returns(0f)
         every { child.visibility }.returns(View.GONE)
-        mockkConstructor(FloatingActionButton.Behavior::class)
-        every { anyConstructed<FloatingActionButton.Behavior>().onInterceptTouchEvent(any(), any(), any()) }.returns(true)
 
         hidingFloatingActionButtonBehavior.onInterceptTouchEvent(mockk(), child, motionEvent)
 
@@ -125,8 +120,6 @@ class HidingFloatingActionButtonBehaviorTest {
         every { motionEvent.action }.returns(MotionEvent.ACTION_MOVE)
         every { motionEvent.rawY }.returns(21f)
         every { child.visibility }.returns(View.GONE)
-        mockkConstructor(FloatingActionButton.Behavior::class)
-        every { anyConstructed<FloatingActionButton.Behavior>().onInterceptTouchEvent(any(), any(), any()) }.returns(true)
 
         hidingFloatingActionButtonBehavior.onInterceptTouchEvent(mockk(), child, motionEvent)
 
