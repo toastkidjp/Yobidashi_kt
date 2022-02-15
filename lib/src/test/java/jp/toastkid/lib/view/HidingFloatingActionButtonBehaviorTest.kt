@@ -120,7 +120,7 @@ class HidingFloatingActionButtonBehaviorTest {
     }
 
     @Test
-    fun onInterceptTouchEvent() {
+    fun testOnInterceptTouchEventActionMoveWithOverValueCase() {
         val motionEvent = mockk<MotionEvent>()
         every { motionEvent.action }.returns(MotionEvent.ACTION_MOVE)
         every { motionEvent.rawY }.returns(21f)
