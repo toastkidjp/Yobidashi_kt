@@ -59,7 +59,6 @@ class HidingFloatingActionButtonBehaviorTest {
         every { child.hide() }.just(Runs)
 
         mockkConstructor(FloatingActionButton.Behavior::class)
-        every { anyConstructed<FloatingActionButton.Behavior>().onInterceptTouchEvent(any(), any(), any()) }.returns(true)
     }
 
     @After
