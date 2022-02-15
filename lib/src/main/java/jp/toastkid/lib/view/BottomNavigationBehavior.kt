@@ -46,7 +46,6 @@ class BottomNavigationBehavior(context: Context, attrs: AttributeSet) :
             consumed: IntArray,
             type: Int
     ) {
-        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
         child.translationY = max(0f, min(child.height.toFloat(), child.translationY + dy))
     }
 
