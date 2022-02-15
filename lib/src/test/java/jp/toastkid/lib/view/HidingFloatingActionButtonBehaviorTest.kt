@@ -120,6 +120,20 @@ class HidingFloatingActionButtonBehaviorTest {
     }
 
     @Test
+    fun onInterceptTouchEvent() {
+        val motionEvent = mockk<MotionEvent>()
+        every { motionEvent.action }.returns(MotionEvent.ACTION_MOVE)
+        every { motionEvent.rawY }.returns(21f)
+        every { child.visibility }.returns(View.GONE)
+        mockkConstructor(FloatingActionButton.Behavior::class)
+        every { anyConstructed<FloatingActionButton.Behavior>().onInterceptTouchEvent(any(), any(), any()) }.returns(true)
+
+        hidingFloatingActionButtonBehavior.onInterceptTouchEvent(mockk(), child, motionEvent)
+
+        verify { child.show() }
+    }
+
+    @Test
     fun testOnStartNestedScroll() {
         assertTrue(
             hidingFloatingActionButtonBehavior.onStartNestedScroll(
