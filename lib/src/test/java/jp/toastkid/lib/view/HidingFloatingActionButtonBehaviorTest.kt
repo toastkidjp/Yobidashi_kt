@@ -21,7 +21,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -57,8 +56,6 @@ class HidingFloatingActionButtonBehaviorTest {
 
         every { child.show() }.just(Runs)
         every { child.hide() }.just(Runs)
-
-        mockkConstructor(FloatingActionButton.Behavior::class)
     }
 
     @After
