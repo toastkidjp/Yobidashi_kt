@@ -11,6 +11,7 @@ package jp.toastkid.lib.view
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
+import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.snackbar.Snackbar
@@ -90,6 +91,19 @@ class BottomNavigationBehaviorTest {
         verify { snackbarLayout.layoutParams }
         verify { snackbarLayout.layoutParams = any() }
         verify { layoutParams.anchorId = any() }
+    }
+
+    @Test
+    fun layoutDependsOn() {
+        val dependency = mockk<View>()
+        every { dependency.layoutParams }.returns(layoutParams)
+
+        bottomNavigationBehavior.layoutDependsOn(mockk(), child, dependency)
+
+        verify(inverse = true) { child.id }
+        verify(inverse = true) { snackbarLayout.layoutParams }
+        verify(inverse = true) { snackbarLayout.layoutParams = any() }
+        verify(inverse = true) { layoutParams.anchorId = any() }
     }
 
 }
