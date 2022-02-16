@@ -74,7 +74,7 @@ class BottomNavigationBehaviorTest {
     }
 
     @Test
-    fun onNestedPreScroll() {
+    fun testOnNestedPreScroll() {
         bottomNavigationBehavior.onNestedPreScroll(mockk(), child, mockk(), 0, 10, intArrayOf(), 0)
 
         verify { child.translationY = any() }
