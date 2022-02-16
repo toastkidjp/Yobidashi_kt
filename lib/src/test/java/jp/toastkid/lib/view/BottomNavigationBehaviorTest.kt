@@ -23,6 +23,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class BottomNavigationBehaviorTest {
 
@@ -47,7 +50,7 @@ class BottomNavigationBehaviorTest {
     @MockK
     private lateinit var layoutParams: CoordinatorLayout.LayoutParams
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { context.obtainStyledAttributes(any<AttributeSet>(), any()) }.returns(typedArray)
@@ -65,12 +68,12 @@ class BottomNavigationBehaviorTest {
         every { layoutParams.anchorId = any() }.just(Runs)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun onNestedPreScroll() {
         bottomNavigationBehavior.onNestedPreScroll(mockk(), child, mockk(), 0, 10, intArrayOf(), 0)
 
