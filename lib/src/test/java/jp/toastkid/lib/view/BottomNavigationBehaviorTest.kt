@@ -82,4 +82,14 @@ class BottomNavigationBehaviorTest {
         verify { child.height }
     }
 
+    @Test
+    fun layoutDependsOn() {
+        bottomNavigationBehavior.layoutDependsOn(mockk(), child, snackbarLayout)
+
+        verify { child.id }
+        verify { snackbarLayout.layoutParams }
+        verify { snackbarLayout.layoutParams = any() }
+        verify { layoutParams.anchorId = any() }
+    }
+
 }
