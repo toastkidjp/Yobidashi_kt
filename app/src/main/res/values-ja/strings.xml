@@ -399,6 +399,9 @@
     <string name="title_context_editor_italic">斜体</string>
     <string name="title_context_editor_strikethrough">取り消し線</string>
     <string name="title_context_editor_set_default_search_category">デフォルトの検索種別</string>
+    <string name="title_context_editor_code_block">コードブロック</string>
+    <string name="title_context_editor_task_list">タスクリスト</string>
+    <string name="title_context_editor_insert_thousand_separator">数値3桁区切</string>
     <string name="title_reset_camera_button_position">カメラボタンの位置を戻す</string>
     <string name="title_search_suggestion">検索サジェスト</string>
     <string name="search_category">検索種別</string>
@@ -419,7 +422,6 @@
     <string name="title_todo_tasks">タスクリスト</string>
     <string name="title_todo_tasks_board">タスクボード</string>
     <string name="title_search_with_map_app">地図アプリで検索</string>
-    <string name="title_context_editor_task_list">タスクリスト</string>
     <string name="subhead_search_category_setting">検索種別の設定</string>
     <string name="message_failed_query_extraction_from_web_view">キーワードを取得できませんでした。再度実行するか、クリップボードにコピーして検索してください。</string>
 

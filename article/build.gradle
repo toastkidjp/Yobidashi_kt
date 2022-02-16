@@ -80,6 +80,7 @@ dependencies {
     kapt "io.noties:prism4j-bundler:2.0.0"
 
     implementation "androidx.room:room-runtime:$libVersions.room"
+    implementation "androidx.room:room-paging:$libVersions.room"
     kapt "androidx.room:room-compiler:$libVersions.room"
 
     testImplementation "junit:junit:$libVersions.junit"

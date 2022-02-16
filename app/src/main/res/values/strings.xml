@@ -406,6 +406,9 @@
     <string name="title_context_editor_italic">Italic</string>
     <string name="title_context_editor_strikethrough">Strikethrough</string>
     <string name="title_context_editor_set_default_search_category">Set default search category</string>
+    <string name="title_context_editor_task_list">Task list</string>
+    <string name="title_context_editor_code_block">Code block</string>
+    <string name="title_context_editor_insert_thousand_separator">Insert thousand separator</string>
     <string name="title_reset_camera_button_position">Reset camera position</string>
     <string name="title_search_suggestion">Search suggestion</string>
     <string name="search_category">Search category</string>
@@ -427,7 +430,6 @@
     <string name="title_todo_tasks">TODO tasks</string>
     <string name="title_todo_tasks_board">Task board</string>
     <string name="title_search_with_map_app">Search with map app</string>
-    <string name="title_context_editor_task_list">Task list</string>
     <string name="subhead_search_category_setting">Search category setting</string>
     <string name="message_failed_query_extraction_from_web_view">Query extraction failed. Please would you retry or copy to clipboard?</string>
 

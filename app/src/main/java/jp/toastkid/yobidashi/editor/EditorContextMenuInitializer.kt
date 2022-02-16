@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.EditText
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -82,6 +83,9 @@ class EditorContextMenuInitializer {
                 val menuInflater = MenuInflater(context)
                 if (Urls.isValidUrl(text)) {
                     menuInflater.inflate(R.menu.context_editor_url, menu)
+                }
+                if (text.isDigitsOnly()) {
+                    menuInflater.inflate(R.menu.context_editor_digit, menu)
                 }
                 menuInflater.inflate(R.menu.context_editor_selected, menu)
                 menuInflater.inflate(R.menu.context_speech, menu)

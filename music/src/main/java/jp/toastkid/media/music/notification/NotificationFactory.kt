@@ -10,7 +10,9 @@ package jp.toastkid.media.music.notification
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -55,7 +57,7 @@ class NotificationFactory(
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                         .setMediaSession(mediaSessionSupplier().sessionToken)
-                        .setShowActionsInCompactView(0)
+                        .setShowActionsInCompactView(0, 1)
                 )
                 .setColor(preferenceApplier.color)
                 .setSmallIcon(R.drawable.ic_music)
@@ -71,6 +73,16 @@ class NotificationFactory(
                 )
 
         notificationBuilder.addAction(if (isPlaying()) pauseAction else playAction)
+        notificationBuilder.addAction(
+            R.drawable.ic_music,
+            context.getString(R.string.display),
+            PendingIntent.getBroadcast(
+                context,
+                23,
+                Intent("jp.toastkid.music.action.open"),
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            )
+        )
         return notificationBuilder.build()
     }
 
