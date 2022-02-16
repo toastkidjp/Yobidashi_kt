@@ -51,7 +51,7 @@ class DownloadActionTest {
     }
 
     @org.junit.Test
-    fun invoke() {
+    fun testNoopOnUnavailableWiFiCase() {
         every { NetworkChecker.isUnavailableWiFi(any()) }.returns(true)
 
         downloadAction.invoke("https://www.search.yahoo.co.jp")
