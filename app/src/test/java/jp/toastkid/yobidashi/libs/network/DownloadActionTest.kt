@@ -22,6 +22,9 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.Toaster
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class DownloadActionTest {
 
@@ -31,7 +34,7 @@ class DownloadActionTest {
     @MockK
     private lateinit var context: Context
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { context.getSharedPreferences(any(), any()) }.returns(mockk())
@@ -45,12 +48,12 @@ class DownloadActionTest {
         every { Toaster.tShort(any(), any<Int>()) }.just(Runs)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun testNoopOnUnavailableWiFiCase() {
         every { NetworkChecker.isUnavailableWiFi(any()) }.returns(true)
 
