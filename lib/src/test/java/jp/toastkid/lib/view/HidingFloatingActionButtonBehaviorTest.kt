@@ -179,4 +179,5 @@ class HidingFloatingActionButtonBehaviorTest {
         verify(inverse = true) { child.show() }
         verify(inverse = true) { child.hide() }
     }
+
 }
