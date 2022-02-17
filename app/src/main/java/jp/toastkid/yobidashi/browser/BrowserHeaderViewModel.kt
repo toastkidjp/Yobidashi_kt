@@ -21,7 +21,9 @@ class BrowserHeaderViewModel : ViewModel() {
     val title: LiveData<Event<String>> = _title
 
     fun nextTitle(nextTitle: String?) {
-        nextTitle ?: return
+        if (nextTitle.isNullOrBlank()) {
+            return
+        }
         _title.postValue(Event(nextTitle))
     }
 
@@ -29,7 +31,9 @@ class BrowserHeaderViewModel : ViewModel() {
     val url: LiveData<Event<String>> = _url
 
     fun nextUrl(nextUrl: String?) {
-        nextUrl ?: return
+        if (nextUrl.isNullOrBlank()) {
+            return
+        }
         _url.postValue(Event(nextUrl))
     }
 
