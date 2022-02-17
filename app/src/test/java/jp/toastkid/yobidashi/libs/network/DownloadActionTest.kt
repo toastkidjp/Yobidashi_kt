@@ -8,7 +8,9 @@
 
 package jp.toastkid.yobidashi.libs.network
 
+import android.app.DownloadManager
 import android.content.Context
+import android.net.Uri
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -18,6 +20,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -25,6 +28,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 
 class DownloadActionTest {
 
@@ -34,10 +38,24 @@ class DownloadActionTest {
     @MockK
     private lateinit var context: Context
 
+    @MockK
+    private lateinit var folder: File
+
+    @MockK
+    private lateinit var downloadManager: DownloadManager
+
+    @MockK
+    private lateinit var uri: Uri
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { context.getSharedPreferences(any(), any()) }.returns(mockk())
+        every { context.getExternalFilesDir(any()) }.returns(folder)
+        every { context.getSystemService(any()) }.returns(downloadManager)
+        every { folder.exists() }.returns(false)
+        every { folder.mkdirs() }.returns(true)
+        every { downloadManager.enqueue(any()) }.returns(1)
 
         mockkConstructor(PreferenceApplier::class)
         every { anyConstructed<PreferenceApplier>().wifiOnly }.returns(true)
@@ -46,6 +64,18 @@ class DownloadActionTest {
         every { NetworkChecker.isUnavailableWiFi(any()) }.returns(false)
         mockkObject(Toaster)
         every { Toaster.tShort(any(), any<Int>()) }.just(Runs)
+
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) }.returns(uri)
+        every { uri.lastPathSegment }.returns("test")
+
+        val request = mockk<DownloadManager.Request>()
+        mockkConstructor(DownloadManager.Request::class)
+        every { anyConstructed<DownloadManager.Request>().setNotificationVisibility(any()) }.returns(request)
+
+        every { request.setDestinationInExternalPublicDir(any(), any()) }.returns(request)
+        every { request.setAllowedOverMetered(any()) }.returns(request)
+        every { request.setAllowedOverRoaming(any()) }.returns(request)
     }
 
     @After
@@ -61,4 +91,14 @@ class DownloadActionTest {
 
         verify { Toaster.tShort(any(), any<Int>()) }
     }
+
+    @Test
+    fun test() {
+        downloadAction.invoke("https://www.search.yahoo.co.jp")
+
+        verify(inverse = true) { Toaster.tShort(any(), any<Int>()) }
+        verify { folder.mkdirs() }
+        verify { downloadManager.enqueue(any()) }
+    }
+
 }
