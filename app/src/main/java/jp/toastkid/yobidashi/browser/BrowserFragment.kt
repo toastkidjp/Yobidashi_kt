@@ -30,6 +30,7 @@ import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
@@ -45,7 +46,6 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -308,6 +308,7 @@ class BrowserFragment : Fragment(),
     fun reload() {
         if (appBarBinding?.progress?.isVisible == true) {
             browserModule.stopLoading()
+            stopSwipeRefresherLoading()
         } else {
             browserModule.reload()
         }
