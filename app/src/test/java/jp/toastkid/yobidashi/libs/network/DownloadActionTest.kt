@@ -102,7 +102,7 @@ class DownloadActionTest {
     }
 
     @Test
-    fun test() {
+    fun testEnqueueWithoutMakingFolderCase() {
         every { folder.exists() }.returns(true)
         downloadAction.invoke("https://www.search.yahoo.co.jp")
 
