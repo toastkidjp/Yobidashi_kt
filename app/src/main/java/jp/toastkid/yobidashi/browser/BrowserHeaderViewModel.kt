@@ -59,11 +59,11 @@ class BrowserHeaderViewModel : ViewModel() {
         _progress.postValue(newProgress)
     }
 
-    private val _stopProgress = MutableLiveData<Boolean>()
-    val stopProgress: LiveData<Boolean> = _stopProgress
+    private val _stopProgress = MutableLiveData<Event<Boolean>>()
+    val stopProgress: LiveData<Event<Boolean>> = _stopProgress
 
     fun stopProgress(stop: Boolean) {
-        _stopProgress.postValue(stop)
+        _stopProgress.postValue(Event(stop))
     }
 
 }

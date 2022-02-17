@@ -154,8 +154,9 @@ class BrowserFragment : Fragment(),
         appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
 
         viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
-            viewModel.stopProgress.observe(activity, Observer { stop ->
-                if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
+            viewModel.stopProgress.observe(activity, Observer {
+                val stop = it?.getContentIfNotHandled() ?: return@Observer
+                if (stop.not() || binding?.swipeRefresher?.isRefreshing == false) {
                     return@Observer
                 }
                 stopSwipeRefresherLoading()
