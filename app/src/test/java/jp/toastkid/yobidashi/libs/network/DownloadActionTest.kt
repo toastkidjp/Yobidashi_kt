@@ -101,4 +101,14 @@ class DownloadActionTest {
         verify { downloadManager.enqueue(any()) }
     }
 
+    @Test
+    fun test() {
+        every { folder.exists() }.returns(true)
+        downloadAction.invoke("https://www.search.yahoo.co.jp")
+
+        verify(inverse = true) { Toaster.tShort(any(), any<Int>()) }
+        verify(inverse = true) { folder.mkdirs() }
+        verify { downloadManager.enqueue(any()) }
+    }
+
 }
