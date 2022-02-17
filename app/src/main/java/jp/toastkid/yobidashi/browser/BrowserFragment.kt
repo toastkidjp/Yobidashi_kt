@@ -180,17 +180,13 @@ class BrowserFragment : Fragment(),
         }
 
         viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
-            viewModel.title.observe(activity, Observer { title ->
-                if (title.isNullOrBlank()) {
-                    return@Observer
-                }
+            viewModel.title.observe(activity, Observer {
+                val title = it?.getContentIfNotHandled() ?: return@Observer
                 appBarBinding?.mainText?.text = title
             })
 
-            viewModel.url.observe(activity, Observer { url ->
-                if (url.isNullOrBlank()) {
-                    return@Observer
-                }
+            viewModel.url.observe(activity, Observer {
+                val url = it?.getContentIfNotHandled() ?: return@Observer
                 appBarBinding?.subText?.text = url
             })
 

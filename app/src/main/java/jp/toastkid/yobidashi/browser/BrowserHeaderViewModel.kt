@@ -10,24 +10,27 @@ package jp.toastkid.yobidashi.browser
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.lifecycle.Event
 
 /**
  * @author toastkidjp
  */
 class BrowserHeaderViewModel : ViewModel() {
 
-    private val _title = MutableLiveData<String?>()
-    val title: LiveData<String?> = _title
+    private val _title = MutableLiveData<Event<String>>()
+    val title: LiveData<Event<String>> = _title
 
     fun nextTitle(nextTitle: String?) {
-        _title.postValue(nextTitle)
+        nextTitle ?: return
+        _title.postValue(Event(nextTitle))
     }
 
-    private val _url = MutableLiveData<String?>()
-    val url: LiveData<String?> = _url
+    private val _url = MutableLiveData<Event<String>>()
+    val url: LiveData<Event<String>> = _url
 
     fun nextUrl(nextUrl: String?) {
-        _url.postValue(nextUrl)
+        nextUrl ?: return
+        _url.postValue(Event(nextUrl))
     }
 
     private val _reset = MutableLiveData<Unit>()
