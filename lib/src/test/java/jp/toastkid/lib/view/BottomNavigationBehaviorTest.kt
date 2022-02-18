@@ -94,7 +94,7 @@ class BottomNavigationBehaviorTest {
     }
 
     @Test
-    fun layoutDependsOn() {
+    fun testLayoutDependsOnPassedOtherDependencyCase() {
         val dependency = mockk<View>()
         every { dependency.layoutParams }.returns(layoutParams)
 
