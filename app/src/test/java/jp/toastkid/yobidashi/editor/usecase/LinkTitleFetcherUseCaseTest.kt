@@ -68,7 +68,7 @@ class LinkTitleFetcherUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testOccurredIOExceptionCase() {
         every { Jsoup.parse(any<URL>(), any()) }.throws(IOException())
 
         val title = linkTitleFetcherUseCase.invoke("https://www.yahoo.co.jp")
