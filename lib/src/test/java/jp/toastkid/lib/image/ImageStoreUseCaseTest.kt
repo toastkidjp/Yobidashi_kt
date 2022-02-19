@@ -12,9 +12,11 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import android.net.Uri
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -64,10 +66,10 @@ class ImageStoreUseCaseTest {
 
         file = spyk(File.createTempFile("test", "webp"))
         every { filesDir.assignNewFile(any<String>()) }.answers { file }
-        every { preferenceApplier.backgroundImagePath = any() }.answers { Unit }
+        every { preferenceApplier.backgroundImagePath = any() }.just(Runs)
 
         mockkConstructor(FileOutputStream::class)
-        every { anyConstructed<FileOutputStream>().close() }.answers { Unit }
+        every { anyConstructed<FileOutputStream>().close() }.just(Runs)
 
         every { scaledBitmap.compress(any(), any(), any()) }.answers { true }
 
