@@ -66,7 +66,7 @@ class ImageFilterUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testSkipWhenPassedBlankCase() {
         imageFilterUseCase.invoke(" ")
 
         verify { imageLoaderUseCase.invoke() }
