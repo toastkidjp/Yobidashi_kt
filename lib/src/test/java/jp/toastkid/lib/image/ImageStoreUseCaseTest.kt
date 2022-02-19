@@ -30,7 +30,7 @@ import java.io.FileOutputStream
 /**
  * @author toastkidjp
  */
-class ImageStoreServiceTest {
+class ImageStoreUseCaseTest {
 
     @InjectMockKs
     private lateinit var imageStoreUseCase: ImageStoreUseCase
