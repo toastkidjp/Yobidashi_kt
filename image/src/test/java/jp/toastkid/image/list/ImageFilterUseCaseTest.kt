@@ -58,7 +58,7 @@ class ImageFilterUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testSkipWhenPassedNullCase() {
         imageFilterUseCase.invoke(null)
 
         verify { imageLoaderUseCase.invoke() }
