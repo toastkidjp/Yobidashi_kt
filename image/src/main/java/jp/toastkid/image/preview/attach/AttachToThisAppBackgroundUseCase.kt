@@ -11,20 +11,20 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import jp.toastkid.image.R
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.image.ImageStoreService
+import jp.toastkid.lib.image.ImageStoreUseCase
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.lib.window.WindowRectCalculatorCompat
-import jp.toastkid.image.R
 
 /**
  * @author toastkidjp
  */
 class AttachToThisAppBackgroundUseCase(
     private val contentViewModel: ContentViewModel,
-    private val imageStoreServiceFactory: (Context) -> ImageStoreService = {
-        ImageStoreService(
+    private val imageStoreUseCaseFactory: (Context) -> ImageStoreUseCase = {
+        ImageStoreUseCase(
             FilesDir(it, "background_dir"),
             PreferenceApplier(it)
         )
@@ -34,7 +34,7 @@ class AttachToThisAppBackgroundUseCase(
 
     operator fun invoke(context: Context, uri: Uri, image: Bitmap) {
         val displaySize = windowRectCalculatorCompat.invoke(context as? Activity) ?: return
-        imageStoreServiceFactory(context)(image, uri, displaySize)
+        imageStoreUseCaseFactory(context)(image, uri, displaySize)
         contentViewModel.refresh()
         contentViewModel.snackShort(R.string.done_addition)
     }

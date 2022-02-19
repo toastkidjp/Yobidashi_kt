@@ -33,7 +33,7 @@ import java.io.FileOutputStream
 class ImageStoreServiceTest {
 
     @InjectMockKs
-    private lateinit var imageStoreService: ImageStoreService
+    private lateinit var imageStoreUseCase: ImageStoreUseCase
 
     @MockK
     private lateinit var filesDir: FilesDir
@@ -87,7 +87,7 @@ class ImageStoreServiceTest {
 
     @Test
     fun test() {
-        imageStoreService.invoke(bitmap, uri, display)
+        imageStoreUseCase.invoke(bitmap, uri, display)
 
         verify(exactly = 2) { file.getPath() }
         verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
