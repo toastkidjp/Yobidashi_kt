@@ -64,4 +64,12 @@ class ImageFilterUseCaseTest {
         verify { imageLoaderUseCase.invoke() }
         verify(inverse = true) { imageLoaderUseCase.clearCurrentBucket() }
     }
+
+    @Test
+    fun test() {
+        imageFilterUseCase.invoke(" ")
+
+        verify { imageLoaderUseCase.invoke() }
+        verify(inverse = true) { imageLoaderUseCase.clearCurrentBucket() }
+    }
 }
