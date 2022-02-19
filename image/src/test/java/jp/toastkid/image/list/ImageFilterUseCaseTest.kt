@@ -17,6 +17,9 @@ import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class ImageFilterUseCaseTest {
 
@@ -38,7 +41,7 @@ class ImageFilterUseCaseTest {
     @MockK
     private lateinit var refreshContent: () -> Unit
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
@@ -49,12 +52,12 @@ class ImageFilterUseCaseTest {
         every { adapter.submitList(any()) }.just(Runs)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         imageFilterUseCase.invoke(null)
 
