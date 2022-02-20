@@ -9,6 +9,7 @@ package jp.toastkid.image.list
 
 import android.content.ContentResolver
 import android.database.Cursor
+import android.os.Build
 import android.provider.MediaStore
 import jp.toastkid.image.Image
 
@@ -18,9 +19,14 @@ import jp.toastkid.image.Image
 class ImageLoader(private val contentResolver: ContentResolver) {
 
     operator fun invoke(sort: Sort, bucket: String): List<Image> {
+        val externalContentUri =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+            else
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         return extractImages(
                 contentResolver.query(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        externalContentUri,
                         columns,
                         "bucket_display_name = ?",
                         arrayOf(bucket),
@@ -30,9 +36,14 @@ class ImageLoader(private val contentResolver: ContentResolver) {
     }
 
     fun filterBy(name: String?): List<Image> {
+        val externalContentUri =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+            else
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         return extractImages(
                 contentResolver.query(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        externalContentUri,
                         columns,
                         "${MediaStore.Images.Media.DISPLAY_NAME} LIKE ?",
                         arrayOf("%$name%"),
