@@ -68,7 +68,6 @@ dependencies {
     implementation project(":article")
     implementation project(":search")
     implementation project(":todo")
-    implementation project(":licenses")
     implementation project(':music')
     implementation project(":planning")
     implementation project(":gesture")
@@ -77,6 +76,7 @@ dependencies {
     implementation project(":rss")
     implementation project(":image")
     implementation project(":loan")
+    implementation project(":about")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.cardview:cardview:$libVersions.cardview"

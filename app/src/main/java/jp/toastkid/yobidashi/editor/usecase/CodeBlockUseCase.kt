@@ -12,10 +12,11 @@ import android.widget.EditText
 
 class CodeBlockUseCase {
 
+    private val lineSeparator = System.lineSeparator()
+
     operator fun invoke(editText: EditText, text: String) {
         val selectionStart = editText.selectionStart
         val selectionEnd = editText.selectionEnd
-        val lineSeparator = System.lineSeparator()
 
         editText.text.replace(
             selectionStart,

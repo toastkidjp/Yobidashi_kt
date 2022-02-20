@@ -13,9 +13,9 @@ import androidx.activity.result.ActivityResultLauncher
 import jp.toastkid.media.music.popup.MediaPlayerPopup
 
 class MusicPlayerUseCase(
-    private val mediaPermissionRequestLauncher: ActivityResultLauncher<((Boolean) -> Unit)?>
-) {
+    private val mediaPermissionRequestLauncher: ActivityResultLauncher<((Boolean) -> Unit)?>,
     private var mediaPlayerPopup: MediaPlayerPopup? = null
+) {
 
     operator fun invoke(parent: View?) {
         if (parent == null) {

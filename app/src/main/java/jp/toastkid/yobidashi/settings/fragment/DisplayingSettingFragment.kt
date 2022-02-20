@@ -78,7 +78,7 @@ class DisplayingSettingFragment : Fragment() {
 
         LoadedAction(
             it.data?.data,
-            binding.fabParent,
+            binding.root,
             preferenceApplier.colorPair(),
             { adapter?.notifyDataSetChanged() },
             BACKGROUND_DIR
@@ -136,27 +136,29 @@ class DisplayingSettingFragment : Fragment() {
             "clear_background_images",
             viewLifecycleOwner,
             { _, _ ->
+                val preCount = adapter?.itemCount ?: 0
                 filesDir.clean()
                 contentViewModel?.snackShort(R.string.message_success_image_removal)
-                adapter?.notifyDataSetChanged()
+                adapter?.notifyItemRangeRemoved(0, preCount)
             }
         )
     }
 
     override fun onResume() {
         super.onResume()
-        preferenceApplier.colorPair().applyReverseTo(binding.fab)
 
         val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(
                 color,
                 binding.applyDarkMode,
-                binding.clearBackgroundSettings
+                binding.clearBackgroundSettings,
+            binding.backgroundSubHeader
         )
+        binding.fab.setColorFilter(color)
     }
 
     fun applyDarkMode() {
-        DarkModeApplier().invoke(preferenceApplier, binding.fabParent)
+        DarkModeApplier().invoke(preferenceApplier, binding.root)
     }
 
     /**

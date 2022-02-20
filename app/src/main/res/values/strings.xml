@@ -31,8 +31,6 @@
     <string name="title_clear_settings">Clear Settings</string>
     <string name="title_advertisement_1">A</string>
     <string name="title_advertisement_2">D</string>
-    <string name="title_licenses">Licenses Information</string>
-    <string name="title_app_version">App Version: </string>
 
     <string name="settings_color_background_title">Background</string>
     <string name="settings_color_font_title">Font</string>
@@ -63,58 +61,16 @@
     <string name="unit_id_interstitial">ca-app-pub-5751262573448755/4657576229</string>
     <string name="unit_id_banner_ad">ca-app-pub-5751262573448755/3489764085</string>
 
-    <string name="copyright">(c) @toastkidjp</string>
     <string name="clear_all">Clear All</string>
     <string name="add_background_image">Add Background Image</string>
     <string name="message_change_background_image">It has changed background image.</string>
     <string name="title_background_image_setting">Background Image Setting</string>
     <string name="message_reset_bg_image">It has reset background image.</string>
-    <string name="title_ad">Ad</string>
-    <string name="title_loading_ad">Loading...</string>
-    <string name="thank_you_for_using">Thank you for using!</string>
-    <string name="title_about_this_app">About this app</string>
-    <string name="message_introduce_ad">Show AD</string>
-    <string name="message_about_this_app">
-        This app provide Web Search and many functions.\n
-        \n
-        | Search experience\n
-        1. Favorite search……You could save pair of search site and keyword.\n
-        2. Many search sites.……Google, Bing, DuckDuckGo, Yelp, and so on...\n
-        3. App widget……You could set app-widget on home area or notification area.\n
-        \n
-        | Many functions\n
-        1. Web Search\n
-        2. Barcode Reader\n
-        3. RSS Reader\n
-        4. Simple Tab Browser\n
-        5. Tab Editor\n
-        6. Planning Poker\n
-        7. Screen filter\n
-        8. Music Player\n
-        9. Image Viewer\n
-        10. TODO List\n
-        \n
-        | Customize\n
-        1. Toolbar coloring\n
-        2. Background image\n
-        3. Default search site\n
-        4. Start-up activity\n
-        \n
-        \n
-        Resources\n
-        I have used icons which are owned by "Icon Rainbow (https://icon-rainbow.com/)".\n
-        \n
-        - インターネットでの検索アイコン 1: https://icon-rainbow.com/インターネットでの検索アイコン 1/\n
-        - サイト内検索のアイコン素材: https://icon-rainbow.com/サイト内検索のアイコン素材/\n
-    </string>
     <string name="title_add_recommended_colors">Add recommended colors</string>
     <string name="done_addition">It has done addition!</string>
     <string name="message_add_recommended_colors">Would you like to add recommended colors?</string>
     <string name="title_add_random">Random</string>
-    <string name="title_go_google_play">Check update</string>
     <string name="section_title_about_this_app">This app\'s information</string>
-    <string name="privacy_policy">Privacy policy</string>
-    <string name="link_privacy_policy">https://toastkidjp.tumblr.com/post/162665491938</string>
     <string name="app_widget_name_search">Web Search App-Widget</string>
     <string name="app_widget_search">Search</string>
     <string name="title_daily_notification">Daily notification at 8:00 a.m.</string>
@@ -437,5 +393,6 @@
     <string name="hourly_trends">Hourly trends</string>
     <string name="sample_text_color_filter">A</string>
     <string name="message_backup_is_empty">Backup is empty.</string>
+    <string name="apply_dark_mode">Apply dark mode</string>
 
 </resources>

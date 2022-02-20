@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.about
+package jp.toastkid.about
 
 import android.content.Intent
 import android.net.Uri
@@ -8,17 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.about.databinding.FragmentAboutBinding
+import jp.toastkid.about.view.LicensesDialogFragment
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.BuildConfig
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.about.license.LicenseHtmlLoaderUseCase
-import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
 
 /**
  * About this app.
@@ -35,15 +34,15 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding?.fragment = this
-        binding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
+        binding?.settingsAppVersion?.text = arguments?.getString("version_name")
 
         val context = context ?: return binding?.root
         preferenceApplier = PreferenceApplier(context)
@@ -55,18 +54,18 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
      * Show licenses dialog.
      */
     fun licenses() {
-        binding?.licenseContent?.let {
-            LicenseHtmlLoaderUseCase().invoke(it)
-        }
+        LicensesDialogFragment()
+            .show(parentFragmentManager, LicensesDialogFragment::class.java.canonicalName)
     }
 
     fun checkUpdate() {
-        startActivity(GooglePlayIntentFactory()(BuildConfig.APPLICATION_ID))
+        val packageName = context?.applicationContext?.packageName ?: return
+        startActivity(GooglePlayIntentFactory()(packageName))
     }
 
     fun privacyPolicy() {
         val browserViewModel =
-                activity?.let { ViewModelProvider(it).get(BrowserViewModel::class.java) } ?: return
+            activity?.let { ViewModelProvider(it).get(BrowserViewModel::class.java) } ?: return
 
         popBackStack()
         browserViewModel.open(getString(R.string.link_privacy_policy).toUri())
@@ -102,7 +101,12 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_about
+        private val LAYOUT_ID = R.layout.fragment_about
+
+        fun makeWith(versionName: String): Fragment =
+            AboutThisAppFragment().also {
+                it.arguments = bundleOf("version_name" to versionName)
+            }
 
     }
 }

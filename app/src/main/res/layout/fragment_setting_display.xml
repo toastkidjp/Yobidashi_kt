@@ -24,7 +24,7 @@
             android:drawableStart="@drawable/ic_dark_mode_black"
             android:drawablePadding="4dp"
             android:onClick="@{view -> fragment.applyDarkMode()}"
-            android:text="Apply dark mode"
+            android:text="@string/apply_dark_mode"
             />
 
         <include layout="@layout/view_setting_divider" />
@@ -42,35 +42,47 @@
 
         <include layout="@layout/view_setting_divider" />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/fab_parent"
+        <FrameLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             >
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/images_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
-                tools:itemCount="3"
-                tools:listitem="@layout/item_image_thumbnails"
+
+            <TextView
+                android:id="@+id/background_sub_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:text="@string/title_background_image_setting"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_image"
+                android:drawableTint="@color/black"
                 />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <ImageView
                 android:id="@+id/fab"
                 android:layout_width="@dimen/fab_size"
                 android:layout_height="@dimen/fab_size"
                 android:layout_gravity="bottom|right"
-                android:layout_marginBottom="@dimen/fab_margin_bottom"
-                android:layout_marginRight="@dimen/fab_margin"
-                android:layout_marginEnd="@dimen/fab_margin"
-                app:backgroundTint="@color/colorPrimaryDark"
-                app:rippleColor="@color/aw_ripple"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/ripple_transparent"
+                android:scaleType="center"
+                tools:tint="@color/black"
                 app:srcCompat="@drawable/ic_add_white"
                 android:onClick="@{view -> fragment.launchAdding()}"
                 android:contentDescription="@string/add_background_image"
                 />
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/images_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_image_thumbnails"
+            />
     </LinearLayout>
 </layout>

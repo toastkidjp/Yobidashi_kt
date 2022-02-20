@@ -16,18 +16,15 @@ android {
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk
-        vectorDrawables.useSupportLibrary = true
-    }
-
-    buildFeatures {
-        dataBinding = true
     }
 
     buildTypes {
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    buildFeatures {
+        dataBinding = true
     }
 
     afterEvaluate {
@@ -38,24 +35,16 @@ android {
 
 dependencies {
     implementation project(":lib")
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(":licenses")
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.cardview:cardview:$libVersions.cardview"
     implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
-    implementation "com.google.android.material:material:$libVersions.material"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
-    implementation "androidx.exifinterface:exifinterface:$libVersions.exifinterface"
 
-    implementation "com.jakewharton.timber:timber:$libVersions.timber"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
-
-    implementation "com.github.chrisbanes:PhotoView:$libVersions.photo_view"
-    implementation "io.coil-kt:coil:$libVersions.coil"
-    implementation "io.coil-kt:coil-gif:$libVersions.coil"
+    implementation "com.google.android.material:material:$libVersions.material"
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"
-    testImplementation "org.robolectric:robolectric:$libVersions.robolectric"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$libVersions.coroutines_test"
 }

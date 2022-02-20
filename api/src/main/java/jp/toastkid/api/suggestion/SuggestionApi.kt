@@ -23,16 +23,14 @@ import java.util.Locale
 /**
  * Suggest Web API response fetcher.
  *
+ * @param httpClient HTTP client
+ * @param suggestionParser Response parser
+ * @param multiByteCharacterInspector Use for specifying language
+ *
  * @author toastkidjp
  */
 class SuggestionApi(
-    /**
-     * HTTP client.
-     */
     private val httpClient: OkHttpClient = HttpClientFactory().withTimeout(3L),
-    /**
-     * Response parser.
-     */
     private val suggestionParser: SuggestionParser = SuggestionParser(),
     private val multiByteCharacterInspector: MultiByteCharacterInspector = MultiByteCharacterInspector()
 ) {

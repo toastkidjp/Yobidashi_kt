@@ -9,13 +9,14 @@ package jp.toastkid.yobidashi.search.trend
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 /**
  * @author toastkidjp
  */
 interface TrendService {
 
-    @GET("trends/hottrends/atom/hourly?geo=JP")
-    fun call(): Call<List<Trend>?>
+    @GET("trends/hottrends/atom/hourly")
+    fun call(@Query("pn") pn: String): Call<List<Trend>?>
 
 }

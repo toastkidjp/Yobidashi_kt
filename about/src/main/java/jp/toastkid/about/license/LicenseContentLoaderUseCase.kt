@@ -5,12 +5,10 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.about.license
+package jp.toastkid.about.license
 
 import android.content.res.AssetManager
 import jp.toastkid.licence.LicensesHtmlLoader
-import okio.buffer
-import okio.source
 
 /**
  * @author toastkidjp
@@ -18,8 +16,8 @@ import okio.source
 class LicenseContentLoaderUseCase(private val assetManager: AssetManager) {
 
     operator fun invoke(): String {
-        return LicensesHtmlLoader(assetManager).invoke().source().use { source ->
-            source.buffer().readUtf8()
+        return LicensesHtmlLoader(assetManager).invoke().bufferedReader().use { source ->
+            source.lineSequence().joinToString(System.lineSeparator())
         }
     }
 
