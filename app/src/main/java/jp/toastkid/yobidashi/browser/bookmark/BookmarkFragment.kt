@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser.bookmark
 import android.Manifest
 import android.app.Activity
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -93,7 +94,7 @@ class BookmarkFragment: Fragment(),
 
     private val importRequestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (!it) {
+            if (!it && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 contentViewModel?.snackShort(R.string.message_requires_permission_storage)
                 return@registerForActivityResult
             }
@@ -103,7 +104,7 @@ class BookmarkFragment: Fragment(),
 
     private val exportRequestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (!it.not()) {
+            if (!it && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 contentViewModel?.snackShort(R.string.message_requires_permission_storage)
                 return@registerForActivityResult
             }
