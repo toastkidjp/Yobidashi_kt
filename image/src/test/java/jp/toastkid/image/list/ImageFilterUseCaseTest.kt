@@ -50,6 +50,7 @@ class ImageFilterUseCaseTest {
         every { preferenceApplier.excludedItems() }.returns(emptySet())
         every { imageLoader.filterBy(any()) }.returns(emptyList())
         every { adapter.submitList(any()) }.just(Runs)
+        every { refreshContent.invoke() }.just(Runs)
     }
 
     @After
@@ -71,5 +72,13 @@ class ImageFilterUseCaseTest {
 
         verify { imageLoaderUseCase.invoke() }
         verify(inverse = true) { imageLoaderUseCase.clearCurrentBucket() }
+    }
+
+    @Test
+    fun test() {
+        imageFilterUseCase.invoke("test")
+
+        verify(inverse = true) { imageLoaderUseCase.invoke() }
+        verify { imageLoaderUseCase.clearCurrentBucket() }
     }
 }
