@@ -39,5 +39,6 @@ class SimpleComparatorTest {
 
     @org.junit.Test
     fun areContentsTheSame() {
+        simpleComparator.areContentsTheSame(item0, item0)
     }
 }
