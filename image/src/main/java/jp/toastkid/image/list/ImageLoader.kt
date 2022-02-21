@@ -48,12 +48,10 @@ class ImageLoader(private val contentResolver: ContentResolver) {
     }
 
     private fun findContentResolveUri(): Uri {
-        val externalContentUri =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-            else
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        return externalContentUri
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        else
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
     }
 
     private fun extractImages(cursor: Cursor?): MutableList<Image> {
