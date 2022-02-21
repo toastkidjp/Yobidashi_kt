@@ -13,6 +13,7 @@ import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.unmockkAll
 import jp.toastkid.todo.model.TodoTask
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -37,7 +38,7 @@ class SimpleComparatorTest {
 
     @Test
     fun areItemsTheSame() {
-        simpleComparator.areItemsTheSame(item0, item0)
+        assertTrue(simpleComparator.areItemsTheSame(item0, item0))
     }
 
     @Test
