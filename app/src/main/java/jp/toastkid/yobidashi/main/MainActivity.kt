@@ -216,8 +216,8 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
         ViewModelProvider(this).get(WebSearchViewModel::class.java)
             .search
-            .observe(this, {
-                val query = it?.getContentIfNotHandled() ?: return@observe
+            .observe(this, { event ->
+                val query = event?.getContentIfNotHandled() ?: return@observe
                 WebSearchResultTabOpenerUseCase(preferenceApplier, { openNewWebTab(it)})
                     .invoke(query)
             })
