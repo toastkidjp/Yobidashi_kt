@@ -89,7 +89,9 @@ class BookmarkFragment: Fragment(),
         }
 
         val uri = it.data?.data ?: return@registerForActivityResult
-        exportBookmark(uri)
+        CoroutineScope(Dispatchers.IO).launch(disposables) {
+            exportBookmark(uri)
+        }
     }
 
     private val importRequestPermissionLauncher =
@@ -303,13 +305,11 @@ class BookmarkFragment: Fragment(),
      * @param uri
      */
     private fun exportBookmark(uri: Uri) {
-        CoroutineScope(Dispatchers.IO).launch(disposables) {
-            val items = bookmarkRepository.all()
-            val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return@launch
-            outputStream.sink().use { sink ->
-                sink.buffer().use {
-                    it.writeUtf8(Exporter(items).invoke())
-                }
+        val items = bookmarkRepository.all()
+        val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return
+        outputStream.sink().use { sink ->
+            sink.buffer().use {
+                it.writeUtf8(Exporter(items).invoke())
             }
         }
     }
