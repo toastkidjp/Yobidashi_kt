@@ -12,6 +12,9 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.unmockkAll
 import jp.toastkid.todo.model.TodoTask
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class SimpleComparatorTest {
 
@@ -20,24 +23,24 @@ class SimpleComparatorTest {
     @RelaxedMockK
     private lateinit var item0: TodoTask
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         simpleComparator = SimpleComparator()
 
         MockKAnnotations.init(this)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun areItemsTheSame() {
         simpleComparator.areItemsTheSame(item0, item0)
     }
 
-    @org.junit.Test
+    @Test
     fun areContentsTheSame() {
         simpleComparator.areContentsTheSame(item0, item0)
     }
