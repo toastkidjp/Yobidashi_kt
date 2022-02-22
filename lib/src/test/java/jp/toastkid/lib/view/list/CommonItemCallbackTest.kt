@@ -43,7 +43,7 @@ class CommonItemCallbackTest {
     }
 
     @Test
-    fun areItemsTheSame() {
+    fun testAreItemsTheSame() {
         itemCallback.areItemsTheSame("test", "test")
 
         verify { sameItemComparator.invoke(any(), any()) }
