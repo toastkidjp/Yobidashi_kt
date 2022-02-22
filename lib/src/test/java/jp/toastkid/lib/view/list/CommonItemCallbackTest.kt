@@ -14,6 +14,9 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class CommonItemCallbackTest {
 
@@ -25,7 +28,7 @@ class CommonItemCallbackTest {
     @MockK
     private lateinit var equals: (String, String) -> Boolean
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { sameItemComparator.invoke(any(), any()) }.returns(true)
@@ -34,12 +37,12 @@ class CommonItemCallbackTest {
         itemCallback = CommonItemCallback.with(sameItemComparator, equals)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun areItemsTheSame() {
         itemCallback.areItemsTheSame("test", "test")
 
