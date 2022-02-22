@@ -37,7 +37,7 @@ class SimpleComparatorTest {
     }
 
     @Test
-    fun areItemsTheSame() {
+    fun testAreItemsTheSame() {
         assertTrue(simpleComparator.areItemsTheSame(item0, item0))
     }
 
