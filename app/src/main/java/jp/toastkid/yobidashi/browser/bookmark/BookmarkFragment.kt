@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
+import androidx.annotation.WorkerThread
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -304,6 +305,7 @@ class BookmarkFragment: Fragment(),
      *
      * @param uri
      */
+    @WorkerThread
     private fun exportBookmark(uri: Uri) {
         val items = bookmarkRepository.all()
         val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return
