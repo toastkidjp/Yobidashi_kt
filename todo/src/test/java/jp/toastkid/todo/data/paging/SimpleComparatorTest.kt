@@ -43,6 +43,6 @@ class SimpleComparatorTest {
 
     @Test
     fun areContentsTheSame() {
-        simpleComparator.areContentsTheSame(item0, item0)
+        assertTrue(simpleComparator.areContentsTheSame(item0, item0))
     }
 }
