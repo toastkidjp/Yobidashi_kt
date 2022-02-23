@@ -45,4 +45,5 @@ class SimpleComparatorTest {
     fun testAreContentsTheSame() {
         assertTrue(simpleComparator.areContentsTheSame(item0, item0))
     }
+
 }
