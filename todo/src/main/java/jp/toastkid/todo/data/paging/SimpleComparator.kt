@@ -20,6 +20,6 @@ class SimpleComparator : DiffUtil.ItemCallback<TodoTask>() {
     }
 
     override fun areContentsTheSame(oldItem: TodoTask, newItem: TodoTask): Boolean {
-        return oldItem.equals(newItem)
+        return oldItem == newItem
     }
 }
