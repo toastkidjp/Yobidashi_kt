@@ -14,8 +14,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.paging.PagingDataAdapter
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.list.paging.SimpleComparator
 import jp.toastkid.lib.color.IconColorFinder
+import jp.toastkid.lib.view.list.CommonItemCallback
 
 /**
  * [SearchResult] list's adapter.
@@ -32,7 +32,9 @@ class Adapter(
     private val onClick: (String) -> Unit,
     private val onLongClick: (String) -> Unit,
     private val onMenuClick: (View, SearchResult) -> Unit
-) : PagingDataAdapter<SearchResult, ViewHolder>(SimpleComparator()) {
+) : PagingDataAdapter<SearchResult, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a.id == b.id }, { a, b -> a == b })
+) {
 
     @ColorInt
     private var menuColor = -1
