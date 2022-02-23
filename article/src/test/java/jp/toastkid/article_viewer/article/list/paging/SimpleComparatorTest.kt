@@ -11,6 +11,7 @@ package jp.toastkid.article_viewer.article.list.paging
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.RelaxedMockK
 import jp.toastkid.article_viewer.article.list.SearchResult
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -30,7 +31,7 @@ class SimpleComparatorTest {
 
     @Test
     fun testAreItemsTheSame() {
-        simpleComparator.areItemsTheSame(searchItem0, searchItem0)
+        assertTrue(simpleComparator.areItemsTheSame(searchItem0, searchItem0))
     }
 
     @Test
