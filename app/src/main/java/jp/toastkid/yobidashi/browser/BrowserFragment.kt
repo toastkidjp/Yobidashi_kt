@@ -154,14 +154,14 @@ class BrowserFragment : Fragment(),
         appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
 
         viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
-            viewModel.stopProgress.observe(activity, Observer {
+            viewModel.stopProgress.observe(viewLifecycleOwner, Observer {
                 val stop = it?.getContentIfNotHandled() ?: return@Observer
                 if (stop.not() || binding?.swipeRefresher?.isRefreshing == false) {
                     return@Observer
                 }
                 stopSwipeRefresherLoading()
             })
-            viewModel.progress.observe(activity, Observer { newProgress ->
+            viewModel.progress.observe(viewLifecycleOwner, Observer { newProgress ->
                 if (70 < newProgress) {
                     appBarBinding?.progress?.isVisible = false
                     appBarBinding?.reload?.setImageResource(R.drawable.ic_reload)
