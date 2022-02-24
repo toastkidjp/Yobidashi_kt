@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi.wikipedia.today
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
@@ -10,11 +10,27 @@ class MonthTest {
 
     private val month = Month()
 
+    private val monthNames = arrayOf(
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    )
+
     @Test
     fun test() {
         assertEquals("", month[-1])
-        assertEquals("January", month[0])
-        assertEquals("December", month[11])
+        (0..11).forEach {
+            assertEquals(monthNames[it], month[it])
+        }
         assertEquals("", month[12])
     }
 }

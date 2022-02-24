@@ -9,12 +9,12 @@ package jp.toastkid.article_viewer.zip
 
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.JobIntentService
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,18 +26,21 @@ import java.io.IOException
  * @author toastkidjp
  */
 @RequiresApi(Build.VERSION_CODES.N)
-class ZipLoaderService : JobIntentService() {
+class ZipLoaderService(
+    private val zipLoadProgressBroadcastIntentFactory: ZipLoadProgressBroadcastIntentFactory =
+        ZipLoadProgressBroadcastIntentFactory(),
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
-        val dataBase = AppDatabase.find(this)
-
-        val articleRepository = dataBase.articleRepository()
-
         val file = intent.getParcelableExtra<Uri>("target") ?: return
 
+        val articleRepository = AppDatabase.find(this).articleRepository()
         val zipLoader = ZipLoader(articleRepository)
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
+
+        CoroutineScope(mainDispatcher).launch {
+            withContext(ioDispatcher) {
                 try {
                     val inputStream = contentResolver.openInputStream(file) ?: return@withContext
                     zipLoader.invoke(inputStream)
@@ -47,22 +50,12 @@ class ZipLoaderService : JobIntentService() {
                 }
             }
 
-            sendBroadcast(makeBroadcastIntent(100))
+            sendBroadcast(zipLoadProgressBroadcastIntentFactory(100))
             zipLoader.dispose()
         }
     }
 
     companion object {
-
-        private const val ACTION_PROGRESS_BROADCAST = "jp.toastkid.articles.importing.progress"
-
-        private fun makeBroadcastIntent(progress: Int): Intent {
-            val progressIntent = Intent(ACTION_PROGRESS_BROADCAST)
-            progressIntent.putExtra("progress", progress)
-            return progressIntent
-        }
-
-        fun makeProgressBroadcastIntentFilter() = IntentFilter(ACTION_PROGRESS_BROADCAST)
 
         fun start(context: Context, target: Uri) {
             val intent = Intent(context, ZipLoaderService::class.java)

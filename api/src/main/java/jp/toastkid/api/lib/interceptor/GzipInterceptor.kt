@@ -18,22 +18,22 @@ import okio.GzipSink
 import okio.buffer
 import java.io.IOException
 
-class GzipInterceptor : Interceptor {
+internal class GzipInterceptor : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-
         val originalRequest = chain.request()
         if (originalRequest.body == null ||
             originalRequest.header(KEY_HEADER) != null
         ) {
             return chain.proceed(originalRequest)
         }
+
         val compressedRequest = originalRequest.newBuilder()
             .header(KEY_HEADER, "gzip")
             .method(
                 originalRequest.method,
-                withContentLength(gzip(originalRequest.body!!))
+                withContentLength(gzip(originalRequest.body))
             )
             .build()
         return chain.proceed(compressedRequest)
@@ -60,11 +60,11 @@ class GzipInterceptor : Interceptor {
         }
     }
 
-    private fun gzip(body: RequestBody): RequestBody {
+    private fun gzip(body: RequestBody?): RequestBody {
         return object : RequestBody() {
 
             override fun contentType(): MediaType? {
-                return body.contentType()
+                return body?.contentType()
             }
 
             override fun contentLength(): Long {
@@ -74,7 +74,7 @@ class GzipInterceptor : Interceptor {
             @Throws(IOException::class)
             override fun writeTo(sink: BufferedSink) {
                 val gzipSink = GzipSink(sink).buffer()
-                body.writeTo(gzipSink)
+                body?.writeTo(gzipSink)
                 gzipSink.close()
             }
         }
