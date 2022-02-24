@@ -15,6 +15,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -44,7 +45,7 @@ class CommonItemCallbackTest {
 
     @Test
     fun testAreItemsTheSame() {
-        itemCallback.areItemsTheSame("test", "test")
+        assertTrue(itemCallback.areItemsTheSame("test", "test"))
 
         verify { sameItemComparator.invoke(any(), any()) }
     }
