@@ -21,7 +21,7 @@ class ImageLoader(private val contentResolver: ContentResolver) {
 
     operator fun invoke(sort: Sort, bucket: String): List<Image> {
         val externalContentUri =
-            findContentResolveUri()
+            ResolvingUriFinder().invoke()
         return extractImages(
                 contentResolver.query(
                         externalContentUri,
@@ -35,7 +35,7 @@ class ImageLoader(private val contentResolver: ContentResolver) {
 
     fun filterBy(name: String?): List<Image> {
         val externalContentUri =
-            findContentResolveUri()
+            ResolvingUriFinder().invoke()
         return extractImages(
                 contentResolver.query(
                         externalContentUri,
