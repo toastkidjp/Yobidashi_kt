@@ -20,8 +20,7 @@ import jp.toastkid.image.Image
 class ImageLoader(private val contentResolver: ContentResolver) {
 
     operator fun invoke(sort: Sort, bucket: String): List<Image> {
-        val externalContentUri =
-            ResolvingUriFinder().invoke()
+        val externalContentUri = ResolvingUriFinder().invoke()
         return extractImages(
                 contentResolver.query(
                         externalContentUri,
