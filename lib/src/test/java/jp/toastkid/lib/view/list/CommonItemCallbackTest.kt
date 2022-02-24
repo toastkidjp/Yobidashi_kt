@@ -52,7 +52,7 @@ class CommonItemCallbackTest {
 
     @Test
     fun testAreContentsTheSame() {
-        itemCallback.areContentsTheSame("test", "test")
+        assertTrue(itemCallback.areContentsTheSame("test", "test"))
 
         verify { equals.invoke(any(), any()) }
     }
