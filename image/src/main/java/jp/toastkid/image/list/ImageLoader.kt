@@ -17,10 +17,12 @@ import jp.toastkid.image.Image
 /**
  * @author toastkidjp
  */
-class ImageLoader(private val contentResolver: ContentResolver) {
+class ImageLoader(
+    private val contentResolver: ContentResolver,
+    private val externalContentUri: Uri = ResolvingUriFinder().invoke()
+) {
 
     operator fun invoke(sort: Sort, bucket: String): List<Image> {
-        val externalContentUri = ResolvingUriFinder().invoke()
         return extractImages(
                 contentResolver.query(
                         externalContentUri,
@@ -33,7 +35,6 @@ class ImageLoader(private val contentResolver: ContentResolver) {
     }
 
     fun filterBy(name: String?): List<Image> {
-        val externalContentUri = ResolvingUriFinder().invoke()
         return extractImages(
                 contentResolver.query(
                         externalContentUri,
