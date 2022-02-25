@@ -8,7 +8,6 @@
 package jp.toastkid.image.list
 
 import android.content.ContentResolver
-import android.os.Build
 import android.provider.MediaStore
 import jp.toastkid.image.Image
 
@@ -22,11 +21,7 @@ class BucketLoader(private val contentResolver: ContentResolver) {
     operator fun invoke(sort: Sort): List<Image> {
         names.clear()
 
-        val externalContentUri =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-            else
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        val externalContentUri = ResolvingUriFinder().invoke()
         val cursor = MediaStore.Images.Media.query(
                 contentResolver,
                 externalContentUri,
