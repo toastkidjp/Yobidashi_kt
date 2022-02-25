@@ -56,4 +56,5 @@ class CommonItemCallbackTest {
 
         verify { equals.invoke(any(), any()) }
     }
+
 }
