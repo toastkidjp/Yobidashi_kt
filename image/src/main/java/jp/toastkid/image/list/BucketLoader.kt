@@ -42,7 +42,7 @@ class BucketLoader(
 
         val columnIndex = cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
         val pathIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-        while (cursor?.moveToNext() == true) {
+        while (cursor.moveToNext() == true) {
             val path = cursor.getString(pathIndex)
             val parentPath = parentExtractor(path) ?: continue
             names.add(parentPath)
