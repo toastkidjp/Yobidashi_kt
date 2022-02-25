@@ -25,17 +25,17 @@ class BucketLoader(
     operator fun invoke(sort: Sort): List<Image> {
         names.clear()
 
-        val cursor = MediaStore.Images.Media.query(
-                contentResolver,
+        val cursor = contentResolver.query(
                 externalContentUri,
                 arrayOf(
                         MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                         MediaStore.Images.Media.DATA,
                         MediaStore.Images.Media.DATE_MODIFIED
                 ),
-                null,
+            null,
+            null,
                 sort.bucketSort
-        )
+        ) ?: return emptyList()
 
         val buckets = mutableListOf<Image>()
         val parentExtractor = ParentExtractor()
