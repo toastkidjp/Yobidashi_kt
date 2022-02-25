@@ -10,6 +10,7 @@ package jp.toastkid.image.list
 
 import android.content.ContentResolver
 import android.database.Cursor
+import android.net.Uri
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -30,6 +31,9 @@ class ImageLoaderTest {
 
     @MockK
     private lateinit var cursor: Cursor
+
+    @MockK
+    private lateinit var externalContentUri: Uri
 
     @Before
     fun setUp() {
