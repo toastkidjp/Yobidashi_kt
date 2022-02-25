@@ -10,7 +10,6 @@ package jp.toastkid.image.list
 import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
 import jp.toastkid.image.Image
 
@@ -44,13 +43,6 @@ class ImageLoader(
                         Sort.NAME.imageSort
                 )
         )
-    }
-
-    private fun findContentResolveUri(): Uri {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-        else
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
     }
 
     private fun extractImages(cursor: Cursor?): MutableList<Image> {
