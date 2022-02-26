@@ -77,7 +77,7 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
      * Set default icon.
      */
     private fun setDefaultIcon() {
-        binding.icon.setImageResource(R.drawable.ic_bookmark_black)
+        binding.icon.load(R.drawable.ic_bookmark_black)
     }
 
     /**
