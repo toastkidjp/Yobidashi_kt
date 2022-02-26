@@ -11,8 +11,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.rss.R
 import jp.toastkid.rss.RssReaderFragmentViewModel
 import jp.toastkid.rss.databinding.ItemRssListBinding
@@ -24,9 +25,9 @@ import jp.toastkid.rss.model.Item
 class Adapter(
         private val layoutInflater: LayoutInflater,
         private val viewModel: RssReaderFragmentViewModel?
-) : RecyclerView.Adapter<ViewHolder>() {
-
-    private val items = mutableListOf<Item>()
+) : ListAdapter<Item, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+) {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
@@ -39,7 +40,7 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items.get(position)
+        val item = getItem(position)
         holder.setIconColor(preferenceApplier.colorPair().bgColor())
         holder.setTitle(item.title)
         holder.setUrl(item.link)
@@ -55,12 +56,10 @@ class Adapter(
         }
     }
 
-    override fun getItemCount()= items.size
-
     fun addAll(items: MutableList<Item>?) {
         items?.let {
-            this.items.addAll(it)
-            this.items.sortByDescending { item -> item.date }
+            items.sortByDescending { item -> item.date }
+            submitList(items)
         }
     }
 

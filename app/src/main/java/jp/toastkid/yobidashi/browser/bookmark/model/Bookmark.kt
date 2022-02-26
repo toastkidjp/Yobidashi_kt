@@ -5,9 +5,9 @@ import androidx.core.net.toUri
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
-import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.search.url_suggestion.ViewHolder
 
 /**
@@ -47,6 +47,8 @@ class Bookmark : UrlItem {
     }
 
     override fun urlString() = url
+
+    override fun itemId() = _id
 
     override fun toString(): String {
         return "Bookmark(_id=$_id, title='$title', url='$url', favicon='$favicon', " +

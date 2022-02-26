@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 
@@ -17,7 +18,9 @@ import jp.toastkid.yobidashi.search.SearchFragmentViewModel
  */
 internal class Adapter (
         private val layoutInflater: LayoutInflater
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<String, ViewHolder>(
+    CommonItemCallback.with<String>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+) {
 
     /**
      * Suggestion items.
@@ -30,20 +33,7 @@ internal class Adapter (
      * Clear suggestions.
      */
     fun clear() {
-        suggestions.clear()
-    }
-
-    /**
-     * Add item.
-     *
-     * @param s
-     */
-    fun add(s: String) {
-        suggestions.add(s)
-    }
-
-    override fun getItemCount(): Int {
-        return suggestions.size
+        submitList(emptyList())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -52,7 +42,7 @@ internal class Adapter (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = suggestions[position]
+        val item = getItem(position)
         holder.setText(item)
         holder.itemView.setOnClickListener {
             viewModel?.putQuery(item)
@@ -67,6 +57,10 @@ internal class Adapter (
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         this.viewModel = viewModel
+    }
+
+    fun replace(suggestions: List<String>) {
+        submitList(suggestions)
     }
 
     companion object {

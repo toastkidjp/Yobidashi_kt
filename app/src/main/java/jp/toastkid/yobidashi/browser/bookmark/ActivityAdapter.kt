@@ -9,9 +9,10 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.color.IconColorFinder
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
@@ -33,8 +34,9 @@ internal class ActivityAdapter(
         private val onClick: (Bookmark) -> Unit,
         private val onDelete: (Bookmark) -> Unit,
         private val onRefresh: () -> Unit
-) : RecyclerView.Adapter<ViewHolder> () {
-
+) : ListAdapter<Bookmark, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a._id == b._id }, { a, b -> a == b })
+) {
     /**
      * Items.
      */
@@ -58,7 +60,7 @@ internal class ActivityAdapter(
             ViewHolder(DataBindingUtil.inflate(inflater, ITEM_LAYOUT_ID, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val bookmark: Bookmark = items[position]
+        val bookmark: Bookmark = getItem(position)
         holder.setText(bookmark.title, bookmark.url)
         holder.itemView.setOnClickListener {
             if (bookmark.folder) {
@@ -95,9 +97,9 @@ internal class ActivityAdapter(
      * Return current folder name.
      */
     fun currentFolderName(): String =
-            if (items.isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
-            else if (items.isEmpty()) Bookmark.getRootFolderName()
-            else items[0].parent
+            if (currentList.isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
+            else if (currentList.isEmpty()) Bookmark.getRootFolderName()
+            else currentList[0].parent
 
     /**
      * Back to previous folder.
@@ -119,11 +121,10 @@ internal class ActivityAdapter(
 
     private fun findByFolderName(title: String) {
         CoroutineScope(Dispatchers.Main).launch(disposables) {
-            withContext(Dispatchers.IO) {
-                items.clear()
-                bookmarkRepository.findByParent(title).forEach { items.add(it) }
+            val items = withContext(Dispatchers.IO) {
+                bookmarkRepository.findByParent(title)
             }
-            notifyDataSetChanged()
+            submitList(items)
             onRefresh()
         }
     }
@@ -140,7 +141,7 @@ internal class ActivityAdapter(
      * @param position
      */
     fun removeAt(position: Int) {
-        remove(items[position], position)
+        remove(getItem(position), position)
     }
 
     /**
@@ -149,12 +150,13 @@ internal class ActivityAdapter(
      * @param item [Bookmark]
      * @param position position
      */
-    fun remove(item: Bookmark, position: Int = items.indexOf(item)) {
+    fun remove(item: Bookmark, position: Int = currentList.indexOf(item)) {
+        val copy = mutableListOf<Bookmark>().also { it.addAll(currentList) }
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             withContext(Dispatchers.IO) { bookmarkRepository.delete(item) }
 
-            items.remove(item)
-            notifyItemRemoved(position)
+            copy.remove(item)
+            submitList(copy)
         }
     }
 
@@ -168,12 +170,9 @@ internal class ActivityAdapter(
             withContext(Dispatchers.IO) { bookmarkRepository.clear() }
 
             onComplete()
-            items.clear()
-            notifyDataSetChanged()
+            submitList(emptyList())
         }
     }
-
-    override fun getItemCount(): Int = items.size
 
     /**
      * Dispose all disposable instances.

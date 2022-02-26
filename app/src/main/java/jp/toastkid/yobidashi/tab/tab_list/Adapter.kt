@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.tab.TabThumbnails
@@ -28,7 +29,9 @@ import jp.toastkid.yobidashi.tab.model.Tab
 internal class Adapter(
         private val context: Context,
         private val callback: TabListDialogFragment.Callback
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<Tab, ViewHolder>(
+    CommonItemCallback.with<Tab>({ a, b -> a.id() == b.id() }, { a, b -> a == b })
+) {
 
     /**
      * For getting Data binding object.

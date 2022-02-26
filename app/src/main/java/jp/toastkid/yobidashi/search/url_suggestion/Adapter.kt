@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
@@ -19,7 +20,6 @@ import kotlinx.coroutines.withContext
  *
  * @param layoutInflater [LayoutInflater]
  * @param removeAt Callback of removing
- * @param viewModel [SearchFragmentViewModel]
  * @param itemDeletionUseCase Use for deletion item from database
  *
  * @author toastkidjp
@@ -28,12 +28,9 @@ class Adapter(
         private val layoutInflater: LayoutInflater,
         private val removeAt: (UrlItem) -> Unit,
         private val itemDeletionUseCase: ItemDeletionUseCase
-): RecyclerView.Adapter<ViewHolder>() {
-
-    /**
-     * Item list.
-     */
-    private val suggestions: MutableList<UrlItem> = mutableListOf()
+): ListAdapter<UrlItem, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a.itemId() == b.itemId() }, { a, b -> a == b })
+) {
 
     private var viewModel: SearchFragmentViewModel? = null
 
@@ -44,7 +41,7 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = get(position)
+        val item = getItem(position)
 
         holder.itemView.isVisible = item != null
         if (item == null) {
@@ -61,30 +58,12 @@ class Adapter(
         holder.hideButton()
     }
 
-    override fun getItemCount(): Int = suggestions.size
-
-    /**
-     * Add item to list.
-     *
-     * @param item
-     */
-    fun add(item: UrlItem?) {
-        item?.let { suggestions.add(it) }
-    }
-
-    /**
-     * Clear items.
-     */
-    fun clear() {
-        suggestions.clear()
-    }
-
     /**
      * Return is not empty for controlling visibility.
      *
      * @return is not empty?
      */
-    fun isNotEmpty(): Boolean = suggestions.isNotEmpty()
+    fun isNotEmpty(): Boolean = currentList.isNotEmpty()
 
     /**
      * Return item.
@@ -92,10 +71,10 @@ class Adapter(
      * @return item
      */
     fun get(index: Int): UrlItem? {
-        if (index < 0 || suggestions.size <= index) {
+        if (index < 0 || currentList.size <= index) {
             return null
         }
-        return suggestions[index]
+        return currentList[index]
     }
 
     /**
@@ -114,13 +93,15 @@ class Adapter(
         }
 
         return CoroutineScope(Dispatchers.Main).launch {
-            val index = if (passedIndex == -1) suggestions.indexOf(item) else passedIndex
+            val index = if (passedIndex == -1) currentList.indexOf(item) else passedIndex
+            val newItems = mutableListOf<UrlItem>()
+            newItems.addAll(currentList)
             withContext(Dispatchers.IO) {
                 itemDeletionUseCase(item)
-                suggestions.remove(item)
+                newItems.removeAt(index)
             }
 
-            notifyItemRemoved(index)
+            submitList(newItems)
         }
     }
 

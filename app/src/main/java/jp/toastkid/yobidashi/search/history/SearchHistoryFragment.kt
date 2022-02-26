@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchHistoryBinding
@@ -30,7 +32,7 @@ import jp.toastkid.yobidashi.search.history.usecase.ClearItemsUseCase
  *
  * @author toastkidjp
  */
-class SearchHistoryFragment : Fragment() {
+class SearchHistoryFragment : Fragment(), ContentScrollable {
 
     private lateinit var binding: FragmentSearchHistoryBinding
 
@@ -130,6 +132,14 @@ class SearchHistoryFragment : Fragment() {
     override fun onDetach() {
         parentFragmentManager.clearFragmentResultListener("clear_search_history_items")
         super.onDetach()
+    }
+
+    override fun toTop() {
+        RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
+    }
+
+    override fun toBottom() {
+        RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
     }
 
     companion object {

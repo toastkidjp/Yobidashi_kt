@@ -11,7 +11,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
+import jp.toastkid.lib.view.list.CommonItemCallback
 
 /**
  * PDF Viewer's adapter.
@@ -24,7 +25,9 @@ import androidx.recyclerview.widget.RecyclerView
 class Adapter(
     private val layoutInflater: LayoutInflater,
     private val contentResolver: ContentResolver?
-): RecyclerView.Adapter<ViewHolder>() {
+): ListAdapter<Bitmap, ViewHolder>(
+    CommonItemCallback.with<Bitmap>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+) {
 
     /**
      * File descriptor.
@@ -61,7 +64,6 @@ class Adapter(
         fileDescriptor = contentResolver?.openFileDescriptor(uri, "r")
         pdfRenderer?.close()
         pdfRenderer = fileDescriptor?.let { PdfRenderer(it) }
-        notifyDataSetChanged()
     }
 
     /**

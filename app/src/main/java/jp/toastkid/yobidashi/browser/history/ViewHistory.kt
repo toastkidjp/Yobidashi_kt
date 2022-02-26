@@ -41,5 +41,7 @@ class ViewHistory : UrlItem {
 
     override fun urlString() = url
 
+    override fun itemId() = _id
+
 }
 

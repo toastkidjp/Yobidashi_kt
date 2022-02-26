@@ -12,8 +12,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.color.IconColorFinder
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
@@ -23,7 +24,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.ArrayList
 import kotlin.math.min
 
 /**
@@ -41,17 +41,14 @@ internal class ModuleAdapter(
         private val favoriteSearchRepository: FavoriteSearchRepository,
         private val onVisibilityChanged: (Boolean) -> Unit,
         private val maxItemCount: Int = -1
-) : RecyclerView.Adapter<ModuleViewHolder>() {
+) : ListAdapter<FavoriteSearch, ModuleViewHolder>(
+    CommonItemCallback.with({ a, b -> a.id == b.id }, { a, b -> a == b })
+) {
 
     /**
      * Layout inflater.
      */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-
-    /**
-     * Selected items.
-     */
-    private val selected: MutableList<FavoriteSearch> = ArrayList(5)
 
     private var viewModel: SearchFragmentViewModel? = null
 
@@ -61,7 +58,7 @@ internal class ModuleAdapter(
     }
 
     override fun onBindViewHolder(holder: ModuleViewHolder, position: Int) {
-        val favorite = selected[position]
+        val favorite = getItem(position)
         holder.setText(favorite.query)
         holder.itemView.setOnClickListener {
             try {
@@ -100,8 +97,6 @@ internal class ModuleAdapter(
      * @return [Job]
      */
     fun query(s: CharSequence): Job {
-        clear()
-
         return CoroutineScope(Dispatchers.Main).launch {
             val items = withContext(Dispatchers.IO) {
                 if (s.isNotBlank()) {
@@ -111,9 +106,8 @@ internal class ModuleAdapter(
                 }
             }
 
-            items.forEach { add(it) }
-            onVisibilityChanged(!isEmpty())
-            notifyDataSetChanged()
+            submitList(items)
+            onVisibilityChanged(items.isNotEmpty())
         }
     }
 
@@ -123,19 +117,19 @@ internal class ModuleAdapter(
      * @param position
      */
     fun removeAt(position: Int): Job {
-        val item = selected[position]
-        return remove(item, position)
+        val item = getItem(position)
+        return remove(item)
     }
 
-    private fun remove(item: FavoriteSearch, position: Int = -1): Job {
+    private fun remove(item: FavoriteSearch): Job {
         return CoroutineScope(Dispatchers.Main).launch {
-            val removedIndex = if (position != -1 ) position else selected.indexOf(item)
+            val copy = mutableListOf<FavoriteSearch>().also { it.addAll(currentList) }
             withContext(Dispatchers.IO) {
                 favoriteSearchRepository.delete(item)
-                selected.remove(item)
+                copy.remove(item)
             }
 
-            notifyItemRemoved(removedIndex)
+            submitList(copy)
             if (isEmpty()) {
                 onVisibilityChanged(false)
             }
@@ -153,25 +147,13 @@ internal class ModuleAdapter(
      * Clear selected items.
      */
     fun clear() {
-        selected.clear()
-    }
-
-    /**
-     * Add passed history item to selected list.
-     *
-     * @param history
-     */
-    private fun add(history: FavoriteSearch) {
-        selected.add(history)
+        submitList(emptyList())
     }
 
     fun refresh(): Job {
-        selected.clear()
-
         return CoroutineScope(Dispatchers.Main).launch {
             val items = withContext(Dispatchers.IO) { favoriteSearchRepository.findAll() }
-            items.forEach { selected.add(it) }
-            notifyDataSetChanged()
+            submitList(items)
         }
     }
 
@@ -180,7 +162,7 @@ internal class ModuleAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (maxItemCount == -1) selected.size else min(maxItemCount, selected.size)
+        return if (maxItemCount == -1) currentList.size else min(maxItemCount, currentList.size)
     }
 
     companion object {

@@ -139,7 +139,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         parentFragmentManager.setFragmentResultListener(
             "excluding",
             viewLifecycleOwner,
-            { _, _ -> refreshContent() }
+            { _, _ -> imageLoaderUseCase() }
         )
     }
 
@@ -175,7 +175,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     private fun refreshContent() {
         activity?.runOnUiThread {
-            adapter?.notifyDataSetChanged()
+            //adapter?.notifyDataSetChanged()
             RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
         }
     }

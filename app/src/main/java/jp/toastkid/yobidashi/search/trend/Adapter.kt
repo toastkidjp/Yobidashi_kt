@@ -10,14 +10,17 @@ package jp.toastkid.yobidashi.search.trend
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 
 /**
  * @author toastkidjp
  */
-class Adapter : RecyclerView.Adapter<ViewHolder>() {
+class Adapter : ListAdapter<Trend, ViewHolder>(
+    CommonItemCallback.with<Trend>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+) {
 
     private val items = mutableListOf<Trend>()
 
@@ -30,21 +33,18 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items.get(position))
+        val item = getItem(position)
+        holder.bind(item)
         holder.itemView.setOnClickListener {
-            viewModel?.search(items.get(position).link)
+            viewModel?.search(item.link)
         }
         holder.itemView.setOnLongClickListener {
-            viewModel?.searchOnBackground(items.get(position).title)
+            viewModel?.searchOnBackground(item.title)
             true
         }
         holder.setOnAdd {
             viewModel?.putQuery(it)
         }
-    }
-
-    override fun getItemCount(): Int {
-        return items.size
     }
 
     fun replace(trends: List<Trend>?) {
@@ -55,7 +55,7 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     fun isNotEmpty(): Boolean {
-        return items.isNotEmpty()
+        return currentList.isNotEmpty()
     }
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {

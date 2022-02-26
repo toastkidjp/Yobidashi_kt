@@ -27,15 +27,15 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
-import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.image.Image
 import jp.toastkid.image.R
 import jp.toastkid.image.databinding.DialogImagePreviewBinding
-import jp.toastkid.image.Image
 import jp.toastkid.image.preview.attach.AttachMenuPopup
 import jp.toastkid.image.preview.attach.AttachToAnyAppUseCase
 import jp.toastkid.image.preview.attach.AttachToThisAppBackgroundUseCase
 import jp.toastkid.image.preview.attach.MenuActionUseCase
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
@@ -108,7 +108,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val images: List<Image> = arguments?.getSerializable(KEY_IMAGE) as? List<Image>
                 ?: return super.onCreateDialog(savedInstanceState)
         adapter.setImages(images)
-        adapter.notifyDataSetChanged()
         val position = arguments?.getInt(KEY_POSITION) ?: 0
         binding.photo.scrollToPosition(position)
 

@@ -93,7 +93,6 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
                         withContext(Dispatchers.Main) {
                             val items = it?.items
                             adapter.addAll(items)
-                            adapter.notifyDataSetChanged()
                         }
                     }
         }

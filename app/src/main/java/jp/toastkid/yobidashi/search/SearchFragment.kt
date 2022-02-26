@@ -97,8 +97,7 @@ class SearchFragment : Fragment() {
             if (result == null || result.size == 0) {
                 return@registerForActivityResult
             }
-            binding?.suggestionCard?.clear()
-            binding?.suggestionCard?.addAll(result)
+            binding?.suggestionCard?.replace(result)
             binding?.suggestionCard?.show()
 
             CoroutineScope(Dispatchers.Default).launch(disposables) {

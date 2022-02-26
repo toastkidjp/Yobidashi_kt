@@ -9,9 +9,10 @@ import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.lib.view.swipe.Removable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
@@ -23,7 +24,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.ArrayList
 import kotlin.math.min
 
 /**
@@ -31,9 +31,9 @@ import kotlin.math.min
  *
  * @param context
  * @param repository Relation
- * @param onClick On click callback
  * @param onVisibilityChanged On changed visibility callback
- * @param onClickAdd
+ * @param useAddition
+ * @param maxItemCount Use for limiting display item count
  *
  * @author toastkidjp
  */
@@ -43,17 +43,14 @@ internal class ModuleAdapter(
         private val onVisibilityChanged: (Boolean) -> Unit,
         private val useAddition: Boolean = true,
         private val maxItemCount: Int = -1
-) : RecyclerView.Adapter<ViewHolder>(), Removable {
+) : ListAdapter<SearchHistory, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a.key == b.key }, { a, b -> a == b })
+), Removable {
 
     /**
      * Layout inflater.
      */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-
-    /**
-     * Selected items.
-     */
-    private val selected: MutableList<SearchHistory> = ArrayList(5)
 
     private var viewModel: SearchFragmentViewModel? = null
 
@@ -68,7 +65,7 @@ internal class ModuleAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val searchHistory = selected[position]
+        val searchHistory = getItem(position)
         holder.hideButton()
         val context = holder.itemView.context
         holder.setText(
@@ -127,11 +124,10 @@ internal class ModuleAdapter(
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
                     repository.deleteAll()
-                    selected.clear()
                 }
 
                 onComplete()
-                notifyDataSetChanged()
+                submitList(emptyList())
             }
 
     fun refresh(onEmpty: () -> Unit) {
@@ -141,8 +137,7 @@ internal class ModuleAdapter(
                 onEmpty()
                 return@launch
             }
-            selected.addAll(items)
-            notifyDataSetChanged()
+            submitList(items)
         }
     }
 
@@ -153,8 +148,6 @@ internal class ModuleAdapter(
      * @return [Job]
      */
     fun query(s: CharSequence): Job {
-        clear()
-
         return CoroutineScope(Dispatchers.Main).launch {
             val items = withContext(Dispatchers.IO) {
                 if (s.isNotBlank()) {
@@ -163,14 +156,13 @@ internal class ModuleAdapter(
                     repository.findAll()
                 }
             }
-            items.forEach { add(it) }
             onVisibilityChanged(!isEmpty)
-            notifyDataSetChanged()
+            submitList(items)
         }
     }
 
     override fun removeAt(position: Int): Job {
-        return remove(selected[position])
+        return remove(getItem(position))
     }
 
     /**
@@ -185,9 +177,9 @@ internal class ModuleAdapter(
                 repository.delete(item)
             }
 
-            val index = selected.indexOf(item)
-            selected.remove(item)
-            notifyItemRemoved(index)
+            val copy = mutableListOf<SearchHistory>().also { it.addAll(currentList) }
+            copy.remove(item)
+            submitList(copy)
             if (isEmpty) {
                 onVisibilityChanged(false)
             }
@@ -206,23 +198,15 @@ internal class ModuleAdapter(
      * Clear selected items.
      */
     fun clear() {
-        selected.clear()
+        submitList(emptyList())
     }
 
     fun setViewModel(viewModel: SearchFragmentViewModel) {
         this.viewModel = viewModel
     }
 
-    /**
-     * Add passed history item to selected list.
-     * @param history
-     */
-    private fun add(history: SearchHistory) {
-        selected.add(history)
-    }
-
     override fun getItemCount(): Int {
-        return if (maxItemCount == -1) selected.size else min(maxItemCount, selected.size)
+        return if (maxItemCount == -1) currentList.size else min(maxItemCount, currentList.size)
     }
 
     companion object {

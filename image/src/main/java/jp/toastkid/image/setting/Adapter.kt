@@ -10,10 +10,11 @@ package jp.toastkid.image.setting
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.toastkid.image.R
 import jp.toastkid.image.databinding.ItemSettingImageExcludingBinding
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.CommonItemCallback
 
 /**
  * @author toastkidjp
@@ -21,7 +22,9 @@ import jp.toastkid.lib.preference.PreferenceApplier
 class Adapter(
         private val preferenceApplier: PreferenceApplier,
         private val viewModel: ExcludingSettingFragmentViewModel
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<String, ViewHolder>(
+    CommonItemCallback.with<String>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
+) {
 
     private val items = mutableListOf<String>()
 
@@ -33,32 +36,35 @@ class Adapter(
                 false
         )
         return ViewHolder(binding) {
-            items.remove(it)
-            preferenceApplier.removeFromExcluding(it)
+            remove(it)
 
-            if (items.isEmpty()) {
+            if (currentList.isEmpty()) {
                 viewModel.dismiss()
                 return@ViewHolder
             }
-            notifyDataSetChanged()
+            submitList(preferenceApplier.excludedItems().toList())
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.setText(items.get(position))
+        holder.setText(getItem(position))
     }
-
-    override fun getItemCount() = items.size
 
     fun addAll(excludedItems: Set<String>?) {
         if (excludedItems == null) {
             return
         }
-        items.addAll(excludedItems)
+        submitList(excludedItems.toList())
     }
 
     fun removeAt(position: Int) {
-        items.get(position)
+        val item = getItem(position)
+        remove(item)
+    }
+
+    fun remove(item: String) {
+        preferenceApplier.removeFromExcluding(item)
+        submitList(preferenceApplier.excludedItems().toList())
     }
 
 }
