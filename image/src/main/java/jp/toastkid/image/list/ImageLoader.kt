@@ -54,6 +54,7 @@ class ImageLoader(
         while (cursor?.moveToNext() == true) {
             images.add(Image(cursor.getString(dataIndex), cursor.getString(displayNameIndex)))
         }
+        cursor?.close()
         return images
     }
 
