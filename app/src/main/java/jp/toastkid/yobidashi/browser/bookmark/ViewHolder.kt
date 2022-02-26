@@ -56,7 +56,7 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
      * @param iconId Icon's drawable resource ID.
      */
     fun setImageId(@DrawableRes iconId: Int) {
-        binding.icon.setImageResource(iconId)
+        binding.icon.load(iconId)
     }
 
     /**
