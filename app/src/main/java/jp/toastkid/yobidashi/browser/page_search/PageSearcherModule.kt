@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -130,6 +131,7 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
 
             CoroutineScope(Dispatchers.Default).launch {
                 channel.receiveAsFlow()
+                    .distinctUntilChanged()
                         .debounce(1000)
                         .collect {
                             withContext(Dispatchers.Main) {
