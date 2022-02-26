@@ -12,9 +12,11 @@ import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -41,6 +43,7 @@ class ImageLoaderTest {
         every { contentResolver.query(any(), any(), any(), any(), any()) }.returns(cursor)
         every { cursor.getColumnIndex(any()) }.returns(0)
         every { cursor.moveToNext() }.returns(false)
+        every { cursor.close() }.just(Runs)
     }
 
     @After
