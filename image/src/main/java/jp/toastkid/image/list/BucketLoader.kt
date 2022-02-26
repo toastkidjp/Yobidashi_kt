@@ -48,6 +48,7 @@ class BucketLoader(
             names.add(parentPath)
             buckets.add(Image.makeBucket(cursor.getString(columnIndex), path))
         }
+        cursor.close()
 
         val grouped = buckets
                 .groupBy { it.name }
