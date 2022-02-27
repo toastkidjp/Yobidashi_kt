@@ -1,9 +1,7 @@
 package jp.toastkid.yobidashi.browser.page_search
 
-import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import androidx.core.view.isVisible
 import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
@@ -37,6 +35,8 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
      */
     private var height = 0f
 
+    private val pageSearcherModuleAnimator = PageSearcherModuleAnimator()
+
     private val channel = Channel<String>()
 
     fun isVisible() = viewStubProxy.isInflated && viewStubProxy.root?.isVisible == true
@@ -56,37 +56,19 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
         if (!viewStubProxy.isInflated) {
             initialize()
         }
-        viewStubProxy.root?.animate()?.let {
-            it.cancel()
-            it.translationY(0f)
-                    .setDuration(ANIMATION_DURATION)
-                    .withStartAction { switchVisibility(View.GONE, View.VISIBLE) }
-                    .withEndAction {
-                        val editText = binding.inputLayout.editText ?: return@withEndAction
-                        editText.requestFocus()
-                        (binding.root.context as? Activity)?.also { activity ->
-                            Inputs.showKeyboard(activity, editText)
-                        }
-                    }
-                    .start()
-        }
+        val editText = binding.inputLayout.editText ?: return
+        pageSearcherModuleAnimator.show(viewStubProxy.root, editText)
     }
 
     /**
      * Hide module.
      */
     fun hide() {
-        viewStubProxy.root?.animate()?.let {
-            it.cancel()
-            it.translationY(-height)
-                    .setDuration(ANIMATION_DURATION)
-                    .withStartAction {
-                        clearInput()
-                        Inputs.hideKeyboard(binding.inputLayout.editText)
-                    }
-                    .withEndAction { switchVisibility(View.VISIBLE, View.GONE) }
-                    .start()
-        }
+        pageSearcherModuleAnimator.hide(
+            viewStubProxy.root,
+            binding.inputLayout.editText,
+            height
+        )
     }
 
     private fun switchVisibility(from: Int, to: Int) {
