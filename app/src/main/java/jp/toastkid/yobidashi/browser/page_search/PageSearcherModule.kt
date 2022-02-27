@@ -132,12 +132,12 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
             CoroutineScope(Dispatchers.Default).launch {
                 channel.receiveAsFlow()
                     .distinctUntilChanged()
-                        .debounce(1000)
-                        .collect {
-                            withContext(Dispatchers.Main) {
-                                viewModel?.find(it)
-                            }
+                    .debounce(1000)
+                    .collect {
+                        withContext(Dispatchers.Main) {
+                            viewModel?.find(it)
                         }
+                    }
             }
         }
 
