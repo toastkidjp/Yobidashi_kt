@@ -71,14 +71,6 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
         )
     }
 
-    private fun switchVisibility(from: Int, to: Int) {
-        CoroutineScope(Dispatchers.Main).launch {
-            if (viewStubProxy.root?.visibility == from) {
-                viewStubProxy.root?.visibility = to
-            }
-        }
-    }
-
     fun initialize() {
         val context = viewStubProxy.viewStub?.context ?: return
 
