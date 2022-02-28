@@ -156,5 +156,4 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
         channel.cancel()
     }
 
-    companion object
 }
