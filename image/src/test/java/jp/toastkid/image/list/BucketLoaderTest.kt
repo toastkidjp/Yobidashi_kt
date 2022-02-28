@@ -68,7 +68,7 @@ class BucketLoaderTest {
     }
 
     @Test
-    fun test() {
+    fun testQuerySuccessCase() {
         bucketLoader.invoke(Sort.default())
 
         verify { cursor.getColumnIndex(any()) }
