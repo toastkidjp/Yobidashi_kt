@@ -58,7 +58,7 @@ class BucketLoaderTest {
     }
 
     @Test
-    fun invoke() {
+    fun testQueryReturnsNullCase() {
         every { contentResolver.query(any(), any(), any(), any(), any()) }.returns(null)
 
         bucketLoader.invoke(Sort.default())
