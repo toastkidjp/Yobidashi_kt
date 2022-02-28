@@ -20,6 +20,9 @@ import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class BucketLoaderTest {
 
@@ -35,7 +38,7 @@ class BucketLoaderTest {
     @MockK
     private lateinit var cursor: Cursor
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
@@ -49,12 +52,12 @@ class BucketLoaderTest {
         every { anyConstructed<ParentExtractor>().invoke(any()) }.returns("path")
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         every { contentResolver.query(any(), any(), any(), any(), any()) }.returns(null)
 
