@@ -66,4 +66,12 @@ class BucketLoaderTest {
         verify(inverse = true) { cursor.getColumnIndex(any()) }
         verify(inverse = true) { cursor.close() }
     }
+
+    @Test
+    fun test() {
+        bucketLoader.invoke(Sort.default())
+
+        verify { cursor.getColumnIndex(any()) }
+        verify { cursor.close() }
+    }
 }
