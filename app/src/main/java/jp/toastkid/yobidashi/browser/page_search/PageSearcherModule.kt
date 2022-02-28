@@ -158,9 +158,5 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
 
     companion object {
 
-        /**
-         * Animation duration (ms).
-         */
-        private const val ANIMATION_DURATION = 250L
     }
 }
