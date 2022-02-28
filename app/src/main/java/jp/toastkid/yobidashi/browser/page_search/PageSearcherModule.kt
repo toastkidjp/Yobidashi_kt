@@ -26,7 +26,11 @@ import kotlinx.coroutines.withContext
  * TODO Clean up code.
  * @author toastkidjp
  */
-class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
+class PageSearcherModule(
+    private val viewStubProxy: ViewStubProxy,
+    private val pageSearcherModuleAnimator: PageSearcherModuleAnimator = PageSearcherModuleAnimator(),
+    private val channel: Channel<String> = Channel<String>()
+) {
 
     private lateinit var binding: ModuleSearcherBinding
 
@@ -34,10 +38,6 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
      * This value is used by show/hide animation.
      */
     private var height = 0f
-
-    private val pageSearcherModuleAnimator = PageSearcherModuleAnimator()
-
-    private val channel = Channel<String>()
 
     fun isVisible() = viewStubProxy.isInflated && viewStubProxy.root?.isVisible == true
 
