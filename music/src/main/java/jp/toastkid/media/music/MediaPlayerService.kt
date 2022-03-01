@@ -150,6 +150,11 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                     .setState(newState, mediaPlayer.currentPosition.toLong(), 1.0f)
             mediaSession.setPlaybackState(stateBuilder.build())
         }
+
+        override fun onSeekTo(pos: Long) {
+            super.onSeekTo(pos)
+            mediaPlayer.seekTo(pos.toInt())
+        }
     }
 
     private fun registerReceivers() {
@@ -248,7 +253,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                 PlaybackStateCompat.ACTION_PLAY or
                         PlaybackStateCompat.ACTION_PAUSE or
                         PlaybackStateCompat.ACTION_PLAY_PAUSE or
-                        PlaybackStateCompat.ACTION_STOP
+                        PlaybackStateCompat.ACTION_STOP or
+                        PlaybackStateCompat.ACTION_SEEK_TO
 
         fun makeSpeedIntent(speed: Float) =
                 Intent(ACTION_CHANGE_SPEED)
