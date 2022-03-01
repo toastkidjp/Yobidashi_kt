@@ -19,6 +19,9 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class PageSearcherModuleAnimatorTest {
 
@@ -34,7 +37,7 @@ class PageSearcherModuleAnimatorTest {
     @MockK
     private lateinit var animator: ViewPropertyAnimator
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
@@ -47,12 +50,12 @@ class PageSearcherModuleAnimatorTest {
         every { animator.start() }.just(Runs)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun show() {
         pageSearcherModuleAnimator.show(view, editText)
 
