@@ -218,6 +218,11 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         )
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        unregisterReceivers()
+        super.onTaskRemoved(rootIntent)
+    }
+
     override fun onDestroy() {
         unregisterReceivers()
 
