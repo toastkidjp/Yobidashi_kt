@@ -12,9 +12,6 @@ import android.app.Activity
 import android.view.View
 import android.widget.EditText
 import jp.toastkid.lib.input.Inputs
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class PageSearcherModuleAnimator {
 
@@ -52,10 +49,8 @@ class PageSearcherModuleAnimator {
     }
 
     private fun switchVisibility(view: View?, from: Int, to: Int) {
-        CoroutineScope(Dispatchers.Main).launch {
-            if (view?.visibility == from) {
-                view.visibility = to
-            }
+        if (view?.visibility == from) {
+            view.visibility = to
         }
     }
 
