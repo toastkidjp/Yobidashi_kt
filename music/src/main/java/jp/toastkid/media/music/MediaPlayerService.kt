@@ -160,8 +160,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
     private fun registerReceivers() {
         initializeReceiversIfNeed()
 
-        applicationContext.registerReceiver(audioNoisyReceiver, audioNoisyFilter)
-        applicationContext.registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
+        registerReceiver(audioNoisyReceiver, audioNoisyFilter)
+        registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
     }
 
     private fun initializeReceiversIfNeed() {
@@ -186,8 +186,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         super.onCreate()
 
         preferenceApplier = PreferenceApplier(this)
-        notificationManager = NotificationManagerCompat.from(baseContext)
-        notificationFactory = NotificationFactory(applicationContext) { mediaSession }
+        notificationManager = NotificationManagerCompat.from(this)
+        notificationFactory = NotificationFactory(this) { mediaSession }
 
         mediaSession = MediaSessionCompat(this, javaClass.simpleName).also {
             stateBuilder = PlaybackStateCompat.Builder()
@@ -231,10 +231,10 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     private fun unregisterReceivers() {
         if (audioNoisyReceiver != null) {
-            applicationContext.unregisterReceiver(audioNoisyReceiver)
+            unregisterReceiver(audioNoisyReceiver)
         }
         if (playbackSpeedReceiver != null) {
-            applicationContext.unregisterReceiver(playbackSpeedReceiver)
+            unregisterReceiver(playbackSpeedReceiver)
         }
 
         audioNoisyReceiver = null
