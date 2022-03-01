@@ -221,9 +221,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
     override fun onDestroy() {
         unregisterReceivers()
 
-        audioNoisyReceiver = null
-        playbackSpeedReceiver = null
-
         super.onDestroy()
     }
 
@@ -234,6 +231,9 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         if (playbackSpeedReceiver != null) {
             applicationContext.unregisterReceiver(playbackSpeedReceiver)
         }
+
+        audioNoisyReceiver = null
+        playbackSpeedReceiver = null
     }
 
     companion object {
