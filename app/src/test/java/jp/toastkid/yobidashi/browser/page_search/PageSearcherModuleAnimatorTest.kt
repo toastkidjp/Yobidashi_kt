@@ -62,4 +62,12 @@ class PageSearcherModuleAnimatorTest {
         verify { animator.cancel() }
         verify { animator.start() }
     }
+
+    @Test
+    fun hide() {
+        pageSearcherModuleAnimator.hide(view, editText, 1f)
+
+        verify { animator.cancel() }
+        verify { animator.start() }
+    }
 }
