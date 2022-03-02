@@ -16,6 +16,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import org.junit.After
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -45,4 +46,10 @@ class PageSearcherModuleTest {
         assertTrue(pageSearcherModule.isVisible())
     }
 
+    @Test
+    fun test() {
+        every { viewStubProxy.isInflated }.returns(false)
+
+        assertFalse(pageSearcherModule.isVisible())
+    }
 }
