@@ -41,7 +41,7 @@ class PageSearcherModuleTest {
     }
 
     @Test
-    fun isVisible() {
+    fun testIsVisible() {
         assertTrue(pageSearcherModule.isVisible())
     }
 
