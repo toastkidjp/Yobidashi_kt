@@ -81,10 +81,10 @@ internal class ModuleAdapter(
                 Timber.e(e)
             }
         }
-        holder.setOnClickAdd(searchHistory, {
+        holder.setOnClickAdd(searchHistory) {
             val query = it.query ?: return@setOnClickAdd
             viewModel?.putQuery(query)
-        })
+        }
 
         holder.setOnClickDelete { remove(searchHistory) }
 
@@ -177,7 +177,7 @@ internal class ModuleAdapter(
                 repository.delete(item)
             }
 
-            val copy = mutableListOf<SearchHistory>().also { it.addAll(currentList) }
+            val copy = ArrayList<SearchHistory>(currentList)
             copy.remove(item)
             submitList(copy)
             if (isEmpty) {

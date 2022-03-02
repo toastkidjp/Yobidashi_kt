@@ -29,6 +29,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="Border">
@@ -45,6 +46,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
@@ -99,5 +101,12 @@
     </style>
 
     <style name="TabListBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog" />
+
+    <style name="AppTheme.NoActionBar">
+        <item name="colorControlNormal">@color/filter_white</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
 
 </resources>

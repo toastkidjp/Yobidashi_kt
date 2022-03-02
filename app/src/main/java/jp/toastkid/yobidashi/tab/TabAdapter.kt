@@ -11,10 +11,12 @@ import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
+import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
@@ -22,7 +24,6 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
-import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
@@ -87,7 +88,10 @@ class TabAdapter(
                         viewModelProvider.get(ContentViewModel::class.java),
                         AdRemover.make(viewContext.assets),
                         FaviconApplier(viewContext),
-                        preferenceApplier
+                        preferenceApplier,
+                        loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java),
+                        browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java),
+                        currentView = { GlobalWebViewPool.getLatest() }
                     )
             )
         }
@@ -138,7 +142,7 @@ class TabAdapter(
                 if (title.isNotBlank()) title
                 else context.getString(R.string.new_tab)
 
-        val newTab = WebTab.makeBackground(tabTitle, url)
+        val newTab = WebTab.make(tabTitle, url)
         tabList.add(newTab)
         tabList.save()
 
@@ -227,10 +231,6 @@ class TabAdapter(
      * @return
      */
     internal fun getTabByIndex(index: Int): Tab? = tabList.get(index)
-
-    internal fun addTo(tab: Tab, index: Int) {
-        tabList.addTo(tab, index)
-    }
 
     /**
      * Close specified index' tab.

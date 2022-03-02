@@ -43,6 +43,7 @@
     <string name="slideshare">SlideShare</string>
     <string name="speakerdeck">Speaker Deck</string>
     <string name="search_category_flickr">Flickr</string>
+    <string name="search_category_500px">500px</string>
     <string name="search_category_wikimedia_commons">Wikimedia Commons</string>
     <string name="livejournal">LiveJournal</string>
     <string name="search_category_slashdot">Slashdot</string>

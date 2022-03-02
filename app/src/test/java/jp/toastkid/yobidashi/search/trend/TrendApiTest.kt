@@ -53,7 +53,7 @@ class TrendApiTest {
         every { requestBuilder.addConverterFactory(any()) }.returns(requestBuilder)
         every { requestBuilder.build() }.returns(retrofit)
         every { retrofit.create(any<Class<TrendService>>()) }.returns(service)
-        every { service.call() }.returns(call)
+        every { service.call(any()) }.returns(call)
         every { call.execute() }.returns(response)
         every { response.body() }.returns(body)
     }
@@ -71,7 +71,7 @@ class TrendApiTest {
         verify(exactly = 1) { requestBuilder.addConverterFactory(any()) }
         verify(exactly = 1) { requestBuilder.build() }
         verify(exactly = 1) { retrofit.create(any<Class<TrendService>>()) }
-        verify(exactly = 1) { service.call() }
+        verify(exactly = 1) { service.call(any()) }
         verify(exactly = 1) { call.execute() }
         verify(exactly = 1) { response.body() }
     }

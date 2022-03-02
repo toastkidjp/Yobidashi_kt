@@ -76,7 +76,8 @@ class SearchQueryExtractorTest {
         "yahoo" to "https://news.google.com/search?q=yahoo",
         "test" to "https://search.brave.com/search?source=web&q=test",
         "test" to "https://seekingalpha.com/search?q=test&tab=all",
-        "test" to "https://you.com/search?q=test"
+        "test" to "https://you.com/search?q=test",
+        "test" to "https://500px.com/search?q=test&type=photos&sort=relevance"
     )
 
     @Before

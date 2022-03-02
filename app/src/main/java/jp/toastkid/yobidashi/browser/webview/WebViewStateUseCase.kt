@@ -65,8 +65,6 @@ class WebViewStateUseCase(private val folder: CacheDir) {
         webView?.restoreState(state)
     }
 
-    fun clean() = folder.clean()
-
     fun delete(tabId: String?) {
         if (tabId.isNullOrBlank()) {
             return

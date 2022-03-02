@@ -14,8 +14,6 @@ internal class WebTab: Tab {
 
     private val id: String = UUID.randomUUID().toString()
 
-    @Transient var background = false
-
     @Synchronized override fun back(): String {
         return histories[0].url()
     }
@@ -30,10 +28,6 @@ internal class WebTab: Tab {
         }
 
         if (histories.isEmpty()) histories.add(history) else histories.set(0, history)
-
-        if (background) {
-            background = false
-        }
     }
 
     val latest: History
@@ -62,16 +56,6 @@ internal class WebTab: Tab {
             it.addHistory(History.make(title, url))
         }
 
-        /**
-         * Make [WebTab] for opening by background.
-         *
-         * @param title Title
-         * @param url URL
-         */
-        fun makeBackground(title: String, url: String): WebTab = WebTab().also {
-            it.addHistory(History.make(title, url))
-            it.background = true
-        }
     }
 
 }

@@ -11,6 +11,7 @@ package jp.toastkid.api.suggestion
 import okio.buffer
 import okio.source
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Test
 import java.io.File
 
@@ -26,7 +27,8 @@ class SuggestionParserTest {
      */
     @Test
     fun test_parse() {
-        val file = File(javaClass.classLoader?.getResource(PATH_TO_RESOURCE)?.toURI())
+        val uri = javaClass.classLoader?.getResource(PATH_TO_RESOURCE)?.toURI() ?: return fail()
+        val file = File(uri)
         val xml = file.source().use { source ->
             source.buffer().use {
                 it.readUtf8()

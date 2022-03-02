@@ -34,7 +34,7 @@ class RssSettingFragment : Fragment(), CommonFragmentAction {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_rss_setting, container, false)
         return binding.root

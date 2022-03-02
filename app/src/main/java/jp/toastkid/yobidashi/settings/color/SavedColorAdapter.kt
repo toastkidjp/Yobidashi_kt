@@ -30,8 +30,6 @@ internal class SavedColorAdapter(
     CommonItemCallback.with<SavedColor>({ a, b -> a.id == b.id }, { a, b -> a == b })
 ) {
 
-    private val items = mutableListOf<SavedColor>()
-
     override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int

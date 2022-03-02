@@ -43,8 +43,6 @@ internal class Adapter(
      */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    private val items = mutableListOf<ViewHistory>()
-
     private val parent = Job()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -103,19 +101,9 @@ internal class Adapter(
         }
     }
 
-    /**
-     * Remove item with position.
-     *
-     * @param position
-     */
-    fun removeAt(position: Int) {
-        remove(getItem(position), position)
-    }
-
-    private fun remove(item: ViewHistory, position: Int = -1) {
+    private fun remove(item: ViewHistory) {
         CoroutineScope(Dispatchers.Main).launch {
-            val index = if (position == -1) currentList.indexOf(item) else position
-            val copy = mutableListOf<ViewHistory>().also { it.addAll(currentList) }
+            val copy = ArrayList<ViewHistory>(currentList)
             withContext(Dispatchers.IO) {
                 viewHistoryRepository.delete(item)
                 copy.remove(item)

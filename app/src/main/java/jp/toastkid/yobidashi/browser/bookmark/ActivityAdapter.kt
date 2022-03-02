@@ -37,10 +37,6 @@ internal class ActivityAdapter(
 ) : ListAdapter<Bookmark, ViewHolder>(
     CommonItemCallback.with({ a, b -> a._id == b._id }, { a, b -> a == b })
 ) {
-    /**
-     * Items.
-     */
-    private val items: MutableList<Bookmark> = mutableListOf()
 
     /**
      * Layout inflater.
@@ -141,17 +137,16 @@ internal class ActivityAdapter(
      * @param position
      */
     fun removeAt(position: Int) {
-        remove(getItem(position), position)
+        remove(getItem(position))
     }
 
     /**
      * Remove item.
      *
      * @param item [Bookmark]
-     * @param position position
      */
-    fun remove(item: Bookmark, position: Int = currentList.indexOf(item)) {
-        val copy = mutableListOf<Bookmark>().also { it.addAll(currentList) }
+    private fun remove(item: Bookmark) {
+        val copy = ArrayList<Bookmark>(currentList)
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             withContext(Dispatchers.IO) { bookmarkRepository.delete(item) }
 
