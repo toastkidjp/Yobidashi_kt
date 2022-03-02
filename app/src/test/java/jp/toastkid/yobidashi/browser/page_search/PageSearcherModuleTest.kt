@@ -15,8 +15,10 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
-import org.junit.Assert.assertFalse
+import org.junit.After
 import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 
 class PageSearcherModuleTest {
 
@@ -26,19 +28,19 @@ class PageSearcherModuleTest {
     @MockK
     private lateinit var viewStubProxy: ViewStubProxy
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { viewStubProxy.isInflated }.returns(true)
         every { viewStubProxy.root?.visibility }.returns(View.VISIBLE)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun isVisible() {
         assertTrue(pageSearcherModule.isVisible())
     }
