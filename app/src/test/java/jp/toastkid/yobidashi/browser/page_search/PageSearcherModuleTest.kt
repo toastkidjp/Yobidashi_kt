@@ -47,7 +47,7 @@ class PageSearcherModuleTest {
     }
 
     @Test
-    fun test() {
+    fun testNotYetInflationCase() {
         every { viewStubProxy.isInflated }.returns(false)
 
         assertFalse(pageSearcherModule.isVisible())
