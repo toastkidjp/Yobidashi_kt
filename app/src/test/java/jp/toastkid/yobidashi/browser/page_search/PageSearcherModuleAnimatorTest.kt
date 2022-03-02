@@ -56,7 +56,7 @@ class PageSearcherModuleAnimatorTest {
     }
 
     @Test
-    fun show() {
+    fun testShow() {
         pageSearcherModuleAnimator.show(view, editText)
 
         verify { animator.cancel() }
