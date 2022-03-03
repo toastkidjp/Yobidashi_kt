@@ -19,6 +19,9 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class ItemMenuPopupTest {
 
@@ -33,7 +36,7 @@ class ItemMenuPopupTest {
     @MockK
     private lateinit var view: ItemMenuPopupView
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { context.resources.getDimensionPixelSize(any()) }.returns(1)
@@ -53,12 +56,12 @@ class ItemMenuPopupTest {
         itemMenuPopup = ItemMenuPopup(context, action, view)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun show() {
         itemMenuPopup.show(mockk(), mockk())
 
