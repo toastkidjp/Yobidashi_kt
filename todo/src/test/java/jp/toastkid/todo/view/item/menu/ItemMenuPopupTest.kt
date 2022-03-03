@@ -69,7 +69,7 @@ class ItemMenuPopupTest {
     }
 
     @Test
-    fun modify() {
+    fun testModifyWithoutShowCase() {
         itemMenuPopup.modify()
 
         verify(inverse = true) { action.modify(any()) }
