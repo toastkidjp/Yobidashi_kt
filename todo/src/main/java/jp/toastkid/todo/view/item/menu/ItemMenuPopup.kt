@@ -25,26 +25,40 @@ import jp.toastkid.todo.model.TodoTask
  * @param action [ItemMenuPopupActionUseCase]
  * @author toastkidjp
  */
-class ItemMenuPopup(context: Context, private val action: ItemMenuPopupActionUseCase) {
+class ItemMenuPopup(
+    context: Context,
+    private val action: ItemMenuPopupActionUseCase,
+    view: ItemMenuPopupView = object : ItemMenuPopupView {
 
-    private val popupWindow = PopupWindow(context)
-
-    private val binding: PopupTodoTasksItemMenuBinding = DataBindingUtil.inflate(
+        private val binding: PopupTodoTasksItemMenuBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
             LAYOUT_ID,
             null,
             false
-    )
+        )
+
+        override fun setPopup(popup: ItemMenuPopup) {
+            binding.popup = popup
+        }
+
+        override fun getView(): View {
+            return binding.root
+        }
+
+    }
+) {
+
+    private val popupWindow = PopupWindow(context)
 
     private var lastTask: TodoTask? = null
 
     init {
-        popupWindow.contentView = binding.root
+        popupWindow.contentView = view.getView()
         popupWindow.isOutsideTouchable = true
         popupWindow.width = context.resources.getDimensionPixelSize(WIDTH)
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
 
-        binding.popup = this
+        view.setPopup(this)
     }
 
     fun show(view: View, item: TodoTask) {
