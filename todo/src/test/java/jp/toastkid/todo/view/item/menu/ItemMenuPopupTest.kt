@@ -75,4 +75,13 @@ class ItemMenuPopupTest {
         verify(inverse = true) { action.modify(any()) }
         verify { anyConstructed<PopupWindow>().dismiss() }
     }
+
+    @Test
+    fun modify() {
+        itemMenuPopup.show(mockk(), mockk())
+        itemMenuPopup.modify()
+
+        verify { action.modify(any()) }
+        verify { anyConstructed<PopupWindow>().dismiss() }
+    }
 }
