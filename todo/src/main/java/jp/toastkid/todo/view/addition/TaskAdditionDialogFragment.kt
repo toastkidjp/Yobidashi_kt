@@ -64,6 +64,7 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
         task?.let {
             binding.additionQueryInput.setText(it.description)
+            binding.additionQueryInput.setSelection(it.description.length)
             (binding.colors.children
                     .firstOrNull { checkbox -> extractBackgroundColor(checkbox) == it.color }
                     as? RadioButton)?.isChecked = true
