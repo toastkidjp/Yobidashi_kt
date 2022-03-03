@@ -67,4 +67,12 @@ class ItemMenuPopupTest {
 
         verify { anyConstructed<PopupWindow>().showAsDropDown(any()) }
     }
+
+    @Test
+    fun modify() {
+        itemMenuPopup.modify()
+
+        verify(inverse = true) { action.modify(any()) }
+        verify { anyConstructed<PopupWindow>().dismiss() }
+    }
 }
