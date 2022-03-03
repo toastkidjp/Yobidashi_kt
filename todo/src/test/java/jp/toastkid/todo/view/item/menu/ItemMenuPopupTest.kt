@@ -62,7 +62,7 @@ class ItemMenuPopupTest {
     }
 
     @Test
-    fun show() {
+    fun testShowOnly() {
         itemMenuPopup.show(mockk(), mockk())
 
         verify { anyConstructed<PopupWindow>().showAsDropDown(any()) }
