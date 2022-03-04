@@ -16,7 +16,7 @@ import androidx.databinding.DataBindingUtil
 import jp.toastkid.todo.R
 import jp.toastkid.todo.databinding.PopupTodoTasksItemMenuBinding
 
-class ItemMenuViewImplementation(private val context: Context) : ItemMenuPopupView {
+class ItemMenuViewImplementation(context: Context) : ItemMenuPopupView {
 
     private val binding: PopupTodoTasksItemMenuBinding = DataBindingUtil.inflate(
         LayoutInflater.from(context),
