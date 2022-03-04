@@ -15,6 +15,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
+import kotlinx.coroutines.channels.Channel
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -28,6 +29,12 @@ class PageSearcherModuleTest {
 
     @MockK
     private lateinit var viewStubProxy: ViewStubProxy
+
+    @MockK
+    private lateinit var pageSearcherModuleAnimator: PageSearcherModuleAnimator
+
+    @MockK
+    private lateinit var channel: Channel<String>
 
     @Before
     fun setUp() {
