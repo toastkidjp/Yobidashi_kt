@@ -16,7 +16,7 @@ enum class SearchCategory(
         @StringRes val id: Int,
         @DrawableRes val iconId: Int,
         private val host: String,
-        private val generator: (l: String, h: String, q: String) -> String = { _, h, q ->  h + q }
+        private val generator: (l: String, h: String, q: String) -> String = { _, h, q ->  h + Uri.encode(q) }
 ) {
     GOOGLE(
             R.string.google,
