@@ -8,15 +8,12 @@
 package jp.toastkid.todo.view.item.menu
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.annotation.DimenRes
 import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
 import jp.toastkid.todo.R
-import jp.toastkid.todo.databinding.PopupTodoTasksItemMenuBinding
 import jp.toastkid.todo.model.TodoTask
 
 /**
@@ -28,24 +25,7 @@ import jp.toastkid.todo.model.TodoTask
 class ItemMenuPopup(
     context: Context,
     private val action: ItemMenuPopupActionUseCase,
-    view: ItemMenuPopupView = object : ItemMenuPopupView {
-
-        private val binding: PopupTodoTasksItemMenuBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(context),
-            LAYOUT_ID,
-            null,
-            false
-        )
-
-        override fun setPopup(popup: ItemMenuPopup) {
-            binding.popup = popup
-        }
-
-        override fun getView(): View {
-            return binding.root
-        }
-
-    }
+    view: ItemMenuPopupView = ItemMenuViewImplementation(context)
 ) {
 
     private val popupWindow = PopupWindow(context)
