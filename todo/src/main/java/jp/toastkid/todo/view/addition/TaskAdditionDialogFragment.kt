@@ -43,7 +43,7 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.dialog = this
 
