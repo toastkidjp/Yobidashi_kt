@@ -12,7 +12,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.annotation.DimenRes
-import androidx.annotation.LayoutRes
 import jp.toastkid.todo.R
 import jp.toastkid.todo.model.TodoTask
 
@@ -61,9 +60,6 @@ class ItemMenuPopup(
     }
 
     companion object {
-
-        @LayoutRes
-        private val LAYOUT_ID = R.layout.popup_todo_tasks_item_menu
 
         @DimenRes
         private val WIDTH = R.dimen.item_menu_popup_width
