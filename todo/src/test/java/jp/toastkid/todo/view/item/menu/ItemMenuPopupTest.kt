@@ -84,4 +84,12 @@ class ItemMenuPopupTest {
         verify { action.modify(any()) }
         verify { anyConstructed<PopupWindow>().dismiss() }
     }
+
+    @Test
+    fun delete() {
+        itemMenuPopup.delete()
+
+        verify(inverse = true)  { action.delete(any()) }
+        verify { anyConstructed<PopupWindow>().dismiss() }
+    }
 }
