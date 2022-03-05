@@ -220,11 +220,14 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         unregisterReceivers()
+        NotificationManagerCompat.from(this).cancel(NOTIFICATION_ID)
+
         super.onTaskRemoved(rootIntent)
     }
 
     override fun onDestroy() {
         unregisterReceivers()
+        NotificationManagerCompat.from(this).cancel(NOTIFICATION_ID)
 
         super.onDestroy()
     }
