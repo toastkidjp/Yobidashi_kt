@@ -77,7 +77,7 @@ class ItemMenuPopupTest {
     }
 
     @Test
-    fun testModifyWithShowCase() {
+    fun testModifyWithShowingCase() {
         itemMenuPopup.show(mockk(), mockk())
         itemMenuPopup.modify()
 
