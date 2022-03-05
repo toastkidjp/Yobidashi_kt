@@ -86,7 +86,7 @@ class ItemMenuPopupTest {
     }
 
     @Test
-    fun delete() {
+    fun testDeleteWithoutShowingCase() {
         itemMenuPopup.delete()
 
         verify(inverse = true)  { action.delete(any()) }
