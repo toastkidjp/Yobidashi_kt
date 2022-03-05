@@ -94,7 +94,7 @@ class ItemMenuPopupTest {
     }
 
     @Test
-    fun delete() {
+    fun testDeleteWithShowingCase() {
         itemMenuPopup.show(mockk(), mockk())
         itemMenuPopup.delete()
 
