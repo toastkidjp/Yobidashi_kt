@@ -22,29 +22,44 @@ import jp.toastkid.article_viewer.databinding.PopupArticleListMenuBinding
 /**
  * @author toastkidjp
  */
-class MenuPopup(context: Context, private val action: MenuPopupActionUseCase, useAddToBookmark: Boolean = true) {
-
-    private val popupWindow = PopupWindow(context)
-
-    private val binding: PopupArticleListMenuBinding = DataBindingUtil.inflate(
+class MenuPopup(
+    context: Context,
+    private val action: MenuPopupActionUseCase,
+    useAddToBookmark: Boolean = true,
+    private val menuPopupView: MenuPopupView = object : MenuPopupView {
+        private val binding: PopupArticleListMenuBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
             LAYOUT_ID,
             null,
             false
-    )
+        )
+
+        override fun setPopup(popup: MenuPopup) {
+            binding.popup = popup
+        }
+
+        override fun setVisibility(useAddToBookmark: Boolean) {
+            binding.addToBookmark.isVisible = useAddToBookmark
+            binding.divider.isVisible = useAddToBookmark
+        }
+
+        override fun contentView() = binding.root
+
+    }
+) {
+
+    private val popupWindow = PopupWindow(context)
 
     private var targetId: Int? = null
 
     init {
-        popupWindow.contentView = binding.root
+        popupWindow.contentView = menuPopupView.contentView()
         popupWindow.isOutsideTouchable = true
         popupWindow.width = context.resources.getDimensionPixelSize(R.dimen.menu_popup_width)
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
 
-        binding.addToBookmark.isVisible = useAddToBookmark
-        binding.divider.isVisible = useAddToBookmark
-
-        binding.popup = this
+        menuPopupView.setPopup(this)
+        menuPopupView.setVisibility(useAddToBookmark)
     }
 
     fun show(view: View, searchResult: SearchResult) {
