@@ -3,7 +3,6 @@
     <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
         app:cardElevation="5dp"
         android:layout_width="@dimen/tab_list_item_width"
         android:layout_height="@dimen/tab_list_item_height"
