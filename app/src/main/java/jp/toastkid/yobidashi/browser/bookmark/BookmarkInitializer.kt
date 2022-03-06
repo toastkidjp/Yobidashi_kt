@@ -50,8 +50,6 @@ class BookmarkInitializer(
             "Search" to mapOf(
                     "Google" to "https://www.google.com/",
                     "Bing" to "https://www.bing.com/",
-                    "Yandex" to "https://yandex.com/",
-
                     "Yahoo!" to "https://www.yahoo.com/",
                     "Yahoo! JAPAN" to "https://www.yahoo.co.jp/"
             ),
