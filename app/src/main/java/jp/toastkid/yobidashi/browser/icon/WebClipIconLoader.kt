@@ -24,7 +24,7 @@ import java.io.IOException
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
-class WebClipLoader(
+class WebClipIconLoader(
     private val faviconApplier: FaviconApplier,
     private val downloadApi: DownloadApi = DownloadApi(),
     private val bitmapScaling: BitmapScaling = BitmapScaling(),
@@ -84,7 +84,7 @@ class WebClipLoader(
     }
 
     companion object {
-        fun from(context: Context) = WebClipLoader(FaviconApplier(context))
+        fun from(context: Context) = WebClipIconLoader(FaviconApplier(context))
     }
 
 }
