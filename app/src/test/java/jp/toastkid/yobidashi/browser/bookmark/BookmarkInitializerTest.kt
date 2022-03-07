@@ -23,6 +23,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
+import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +38,9 @@ class BookmarkInitializerTest {
 
     @MockK
     private lateinit var favicons: FilesDir
+
+    @MockK
+    private lateinit var webClipIconLoader: WebClipIconLoader
 
     @MockK
     private lateinit var databaseFinder: DatabaseFinder
@@ -72,7 +76,7 @@ class BookmarkInitializerTest {
         coEvery { Uri.parse(any()) }.returns(uri)
 
         bookmarkInitializer = BookmarkInitializer(
-            favicons, databaseFinder, Dispatchers.Unconfined, Dispatchers.Unconfined
+            favicons, webClipIconLoader, databaseFinder, Dispatchers.Unconfined, Dispatchers.Unconfined
         )
     }
 
