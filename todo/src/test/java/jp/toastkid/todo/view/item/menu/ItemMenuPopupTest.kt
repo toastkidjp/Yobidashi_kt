@@ -101,4 +101,5 @@ class ItemMenuPopupTest {
         verify { action.delete(any()) }
         verify { anyConstructed<PopupWindow>().dismiss() }
     }
+
 }
