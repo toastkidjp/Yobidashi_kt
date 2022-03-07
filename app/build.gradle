@@ -77,6 +77,7 @@ dependencies {
     implementation project(":image")
     implementation project(":loan")
     implementation project(":about")
+    implementation project(":barcode")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.cardview:cardview:$libVersions.cardview"
@@ -84,7 +85,7 @@ dependencies {
     implementation "androidx.exifinterface:exifinterface:$libVersions.exifinterface"
     implementation "androidx.work:work-runtime:2.7.0"
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
-
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation "androidx.webkit:webkit:1.4.0"
 
     implementation "androidx.room:room-runtime:$libVersions.room"
@@ -100,7 +101,6 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation 'com.larswerkman:HoloColorPicker:1.5'
     implementation "com.squareup.okhttp3:okhttp:$libVersions.okhttp"
-    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
     implementation 'com.squareup.moshi:moshi:1.8.0'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-moshi:2.6.2'

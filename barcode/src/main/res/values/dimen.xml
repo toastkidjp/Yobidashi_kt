@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="barcode_result_popup_clip_font_size">24sp</dimen>
+</resources>
+

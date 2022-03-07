@@ -9,9 +9,11 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
@@ -41,20 +43,22 @@ class QueryUseCaseTest {
     @MockK
     private lateinit var switchVisibility: (Boolean) -> Unit
 
+    @MockK
+    private lateinit var rtsSuggestionUseCase: RtsSuggestionUseCase
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        coEvery { adapter.clear() }.returns(Unit)
-        coEvery { adapter.add(any()) }.returns(Unit)
-        coEvery { adapter.isNotEmpty() }.returns(true)
-        coEvery { adapter.notifyDataSetChanged() }.returns(Unit)
+        coEvery { adapter.submitList(any()) }.returns(Unit)
         coEvery { bookmarkRepository.search(any(), any()) }.returns(listOf(Bookmark()))
         coEvery { viewHistoryRepository.search(any(), any()) }.returns(listOf(ViewHistory()))
         coEvery { switchVisibility.invoke(any()) }.returns(Unit)
+        coEvery { rtsSuggestionUseCase.invoke(any(), any()) }.just(Runs)
 
         queryUseCase = QueryUseCase(
             adapter, bookmarkRepository, viewHistoryRepository, switchVisibility,
+            rtsSuggestionUseCase,
             Dispatchers.Unconfined, Dispatchers.Unconfined
         )
     }
@@ -68,24 +72,20 @@ class QueryUseCaseTest {
     fun testInvoke() {
         queryUseCase.invoke("test")
 
-        coVerify(exactly = 1) { adapter.clear() }
-        coVerify(atLeast = 1) { adapter.add(any()) }
-        coVerify(exactly = 1) { adapter.isNotEmpty() }
-        coVerify(exactly = 1) { adapter.notifyDataSetChanged() }
+        coVerify(exactly = 1) { adapter.submitList(any()) }
         coVerify(exactly = 1) { bookmarkRepository.search(any(), any()) }
         coVerify(exactly = 1) { viewHistoryRepository.search(any(), any()) }
+        coVerify { rtsSuggestionUseCase.invoke(any(), any()) }
     }
 
     @Test
     fun testBlankCase() {
         queryUseCase.invoke(" ")
 
-        coVerify(exactly = 1) { adapter.clear() }
-        coVerify(atLeast = 1) { adapter.add(any()) }
-        coVerify(exactly = 1) { adapter.isNotEmpty() }
-        coVerify(exactly = 1) { adapter.notifyDataSetChanged() }
+        coVerify(exactly = 1) { adapter.submitList(any()) }
         coVerify(exactly = 0) { bookmarkRepository.search(any(), any()) }
         coVerify(exactly = 1) { viewHistoryRepository.search(any(), any()) }
+        coEvery { rtsSuggestionUseCase.invoke(any(), any()) }
     }
 
 }

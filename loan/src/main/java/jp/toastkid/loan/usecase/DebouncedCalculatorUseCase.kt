@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 class DebouncedCalculatorUseCase(
     private val inputChannel: Channel<String>,
     private val currentFactorProvider: () -> Factor,
-    private val onResult: (Int) -> Unit,
+    private val onResult: (Long) -> Unit,
     private val calculator: Calculator = Calculator(),
     private val debounceMillis: Long = 1000,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -42,14 +42,7 @@ class DebouncedCalculatorUseCase(
                 .flowOn(mainDispatcher)
                 .collect {
                     val factor = currentFactorProvider()
-                    val payment = calculator(
-                        factor.amount,
-                        factor.term,
-                        factor.interestRate,
-                        factor.downPayment,
-                        factor.managementFee,
-                        factor.renovationReserves
-                    )
+                    val payment = calculator(factor)
 
                     onResult(payment)
                 }

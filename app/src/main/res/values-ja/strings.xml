@@ -125,8 +125,6 @@
     <string name="clear_form_data">フォームデータを消去</string>
     <string name="title_load_image">画像を表示</string>
     <string name="title_save_form_data">フォームデータを保存</string>
-    <string name="title_camera">カメラ</string>
-    <string name="title_code_reader">バーコードリーダー</string>
     <string name="title_share_by_code">コードでシェア</string>
     <string name="title_user_agent">ユーザーエージェント</string>
     <string name="format_result_user_agent">%s に設定しました。</string>
@@ -137,7 +135,6 @@
     <string name="message_empty_archives">ページが保存されていません。</string>
     <string name="title_instant_barcode">インスタントバーコード作成</string>
     <string name="generate">生成</string>
-    <string name="message_requires_permission_camera">バーコードリーダーを使用するにはカメラの権限が必要です。</string>
     <string name="title_home">ホーム</string>
     <string name="title_open_url">URL を開く</string>
     <string name="message_invalid_url">URL が不正です。</string>
@@ -201,7 +198,6 @@
     <string name="message_none_bookmarks">ブックマークがありません。</string>
     <string name="title_add_bookmark">ブックマークを追加</string>
     <string name="message_done_added_bookmark">ブックマークを追加しました。</string>
-    <string name="open">開く</string>
     <string name="title_add_default_bookmark">デフォルトのブックマークを追加</string>
     <string name="message_add_default_bookmark">デフォルトのブックマークを追加します。</string>
     <string name="message_add_bookmark">ブックマークを追加しますか？</string>
@@ -236,10 +232,8 @@
     <string name="export_to_article_viewer">記事リストにエクスポート</string>
     <string name="restore">復元</string>
     <string name="title_dialog_input_file_name">ファイル名入力</string>
-    <string name="message_requires_permission_storage">
-        メモを使用するにはストレージの権限が必要です。</string>
+
     <string name="load">読込</string>
-    <string name="clip">クリップボードにコピー</string>
     <string name="tab_list">タブ一覧</string>
     <string name="message_cannot_read_file">ファイルを読み込めませんでした。</string>
     <string name="title_clear_text">テキストをクリア</string>
@@ -332,7 +326,6 @@
     <string name="message_failure_extracting_rss">This site doesn\'t contains any RSS feeds.</string>
     <string name="clipboard">クリップボード</string>
     <string name="title_current_page">現在のページ</string>
-    <string name="message_clip_to">%s をクリップボードにコピーしました。</string>
     <string name="title_url_module">URL モジュールを使う</string>
     <string name="title_audio_player">音楽プレイヤー</string>
     <string name="menu_what_happened_today">今日は何の日？</string>
@@ -358,7 +351,6 @@
     <string name="title_context_editor_code_block">コードブロック</string>
     <string name="title_context_editor_task_list">タスクリスト</string>
     <string name="title_context_editor_insert_thousand_separator">数値3桁区切</string>
-    <string name="title_reset_camera_button_position">カメラボタンの位置を戻す</string>
     <string name="title_search_suggestion">検索サジェスト</string>
     <string name="search_category">検索種別</string>
 

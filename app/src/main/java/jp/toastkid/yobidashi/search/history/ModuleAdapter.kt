@@ -156,7 +156,7 @@ internal class ModuleAdapter(
                     repository.findAll()
                 }
             }
-            onVisibilityChanged(!isEmpty)
+            onVisibilityChanged(items.isNotEmpty())
             submitList(items)
         }
     }
@@ -180,19 +180,11 @@ internal class ModuleAdapter(
             val copy = ArrayList<SearchHistory>(currentList)
             copy.remove(item)
             submitList(copy)
-            if (isEmpty) {
+            if (copy.isEmpty()) {
                 onVisibilityChanged(false)
             }
         }
     }
-
-    /**
-     * Return selected item is empty.
-     *
-     * @return If this adapter's item is zero, return true.
-     */
-    private val isEmpty: Boolean
-        get() = itemCount == 0
 
     /**
      * Clear selected items.

@@ -9,6 +9,7 @@
 <resources>
 
     <string name="search">Search</string>
+    <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="display">Display</string>
     <string name="image">Image</string>
@@ -22,6 +23,11 @@
     <string name="delete">Delete</string>
     <string name="commit">Commit</string>
     <string name="reset">Reset</string>
+    <string name="clip">Clip</string>
+
+    <string name="message_requires_permission_storage">
+        If you want to use this function, you should permit using storage to this app.</string>
+    <string name="message_clip_to">Clip \'%s\'.</string>
 
     <string name="favorite_search_addition_dialog_empty_message">Please could you input any keyword?</string>
     <string name="done_addition">It has done addition!</string>

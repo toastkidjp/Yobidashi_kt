@@ -57,7 +57,9 @@ internal class ActivityAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bookmark: Bookmark = getItem(position)
+        holder.hideButton()
         holder.setText(bookmark.title, bookmark.url)
+        holder.setTimeIfNeed(bookmark.lastViewed)
         holder.itemView.setOnClickListener {
             if (bookmark.folder) {
                 folderHistory.push(bookmark.parent)
@@ -133,14 +135,6 @@ internal class ActivityAdapter(
     }
 
     /**
-     * Remove item with position.
-     * @param position
-     */
-    fun removeAt(position: Int) {
-        remove(getItem(position))
-    }
-
-    /**
      * Remove item.
      *
      * @param item [Bookmark]
@@ -179,7 +173,7 @@ internal class ActivityAdapter(
     companion object {
 
         @LayoutRes
-        private const val ITEM_LAYOUT_ID = R.layout.item_bookmark
+        private const val ITEM_LAYOUT_ID = R.layout.item_view_history
 
     }
 

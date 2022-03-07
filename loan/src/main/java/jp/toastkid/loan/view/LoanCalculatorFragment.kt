@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 
 class LoanCalculatorFragment : Fragment() {
 
@@ -58,19 +59,33 @@ class LoanCalculatorFragment : Fragment() {
 
         }
 
+        val formatter = DecimalFormat("#,###.##")
+        val focusChangeListener = View.OnFocusChangeListener { v, _ ->
+            val editText = v as? EditText ?: return@OnFocusChangeListener
+            val format = formatter.format(editText.text?.toString()?.replace(",", "")?.trim()?.toBigDecimalOrNull())
+            editText.setText(format)
+        }
+
         binding?.loanAmount?.addTextChangedListener(textWatcher)
+        binding?.loanAmount?.onFocusChangeListener = focusChangeListener
         binding?.term?.addTextChangedListener(textWatcher)
         binding?.interestRate?.addTextChangedListener(textWatcher)
         binding?.downPayment?.addTextChangedListener(textWatcher)
+        binding?.downPayment?.onFocusChangeListener = focusChangeListener
         binding?.monthlyManagementFee?.addTextChangedListener(textWatcher)
+        binding?.monthlyManagementFee?.onFocusChangeListener = focusChangeListener
         binding?.monthlyRenovationReserves?.addTextChangedListener(textWatcher)
+        binding?.monthlyManagementFee?.onFocusChangeListener = focusChangeListener
 
+        invokeCalculator()
+    }
 
+    private fun invokeCalculator() {
         DebouncedCalculatorUseCase(
             inputChannel,
             {
                 Factor(
-                    extractInt(binding?.loanAmount),
+                    extractLong(binding?.loanAmount),
                     extractInt(binding?.term),
                     extractDouble(binding?.interestRate),
                     extractInt(binding?.downPayment),
@@ -82,11 +97,14 @@ class LoanCalculatorFragment : Fragment() {
         ).invoke()
     }
 
+    private fun extractLong(editText: EditText?) =
+        editText?.text?.toString()?.replace(",", "")?.toLongOrNull() ?: 0
+
     private fun extractInt(editText: EditText?) =
-        editText?.text?.toString()?.toIntOrNull() ?: 0
+        editText?.text?.toString()?.replace(",", "")?.toIntOrNull() ?: 0
 
     private fun extractDouble(editText: EditText?) =
-        editText?.text?.toString()?.toDoubleOrNull() ?: 0.0
+        editText?.text?.toString()?.replace(",", "")?.toDoubleOrNull() ?: 0.0
 
     override fun onDetach() {
         binding = null

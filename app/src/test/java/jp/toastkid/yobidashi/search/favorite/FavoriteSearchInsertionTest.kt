@@ -10,8 +10,10 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
@@ -19,6 +21,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
@@ -37,6 +40,12 @@ class FavoriteSearchInsertionTest {
     @MockK
     private lateinit var context: Context
 
+    @Suppress("unused")
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
+    @Suppress("unused")
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -46,10 +55,10 @@ class FavoriteSearchInsertionTest {
         mockkConstructor(DatabaseFinder::class)
         every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
         every { appDatabase.favoriteSearchRepository() }.returns(repository)
-        every { repository.insert(any()) }.answers { Unit }
+        every { repository.insert(any()) }.just(Runs)
 
         mockkObject(Toaster)
-        every { Toaster.tShort(any(), any<String>()) }.answers { Unit }
+        every { Toaster.tShort(any(), any<String>()) }.just(Runs)
     }
 
     @After

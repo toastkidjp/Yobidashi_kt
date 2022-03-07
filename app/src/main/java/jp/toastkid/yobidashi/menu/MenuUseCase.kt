@@ -26,7 +26,7 @@ import jp.toastkid.todo.view.board.BoardFragment
 import jp.toastkid.todo.view.list.TaskListFragment
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
+import jp.toastkid.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment

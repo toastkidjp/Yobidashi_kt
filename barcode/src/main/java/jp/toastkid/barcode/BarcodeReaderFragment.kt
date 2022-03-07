@@ -5,10 +5,14 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.barcode
+package jp.toastkid.barcode
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipDescription
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Rect
@@ -30,17 +34,14 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.SourceData
 import com.journeyapps.barcodescanner.camera.PreviewCallback
+import jp.toastkid.barcode.databinding.FragmentBarcodeReaderBinding
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.view.DraggableTouchListener
+import jp.toastkid.lib.viewmodel.WebSearchViewModel
 import jp.toastkid.lib.window.WindowRectCalculatorCompat
-import jp.toastkid.search.SearchCategory
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentBarcodeReaderBinding
-import jp.toastkid.yobidashi.libs.clip.Clipboard
-import jp.toastkid.yobidashi.search.SearchAction
 import timber.log.Timber
 import java.io.FileOutputStream
 
@@ -134,12 +135,7 @@ class BarcodeReaderFragment : Fragment() {
             it.open.observe(viewLifecycleOwner, Observer { event ->
                 val text = event?.getContentIfNotHandled() ?: return@Observer
                 val activity = activity ?: return@Observer
-                SearchAction(
-                        activity,
-                        preferenceApplier.getDefaultSearchEngine()
-                                ?: SearchCategory.getDefaultCategoryName(),
-                        text
-                ).invoke()
+                ViewModelProvider(activity).get(WebSearchViewModel::class.java).search(text)
             })
         }
 
@@ -240,7 +236,13 @@ class BarcodeReaderFragment : Fragment() {
      */
     private fun clip(text: String) {
         binding?.root?.let { snackbarParent ->
-            Clipboard.clip(snackbarParent.context, text)
+            (context?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager?)
+                ?.setPrimaryClip(
+                    ClipData(
+                        ClipDescription("text_data", arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)),
+                        ClipData.Item(text)
+                    )
+                )
         }
     }
 
@@ -318,6 +320,6 @@ class BarcodeReaderFragment : Fragment() {
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_barcode_reader
+        private val LAYOUT_ID = R.layout.fragment_barcode_reader
     }
 }

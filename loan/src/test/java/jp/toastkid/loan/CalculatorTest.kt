@@ -8,6 +8,7 @@
 
 package jp.toastkid.loan
 
+import jp.toastkid.loan.model.Factor
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -25,7 +26,7 @@ class CalculatorTest {
     fun test() {
         assertEquals(
             87748,
-            calculator.invoke(25_000_000, 35, 1.0, 1_000_000, 10000, 10000)
+            calculator.invoke(Factor(25_000_000, 35, 1.0, 1_000_000, 10000, 10000))
         )
     }
 
@@ -33,7 +34,15 @@ class CalculatorTest {
     fun testOverDownPayment() {
         assertEquals(
             20000,
-            calculator.invoke(25_000_000, 35, 1.0, 27_000_000, 10000, 10000)
+            calculator.invoke(Factor(25_000_000, 35, 1.0, 27_000_000, 10000, 10000))
+        )
+    }
+
+    @Test
+    fun testOverIntegerRange() {
+        assertEquals(
+            70515207,
+            calculator.invoke(Factor(25_000_000_000L, 35, 1.0, 27_000_000, 10000, 10000))
         )
     }
 

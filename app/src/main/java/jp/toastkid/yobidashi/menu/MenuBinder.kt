@@ -22,6 +22,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.DraggableTouchListener
 import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import kotlin.math.min
 
 /**
@@ -40,6 +48,8 @@ class MenuBinder(
     private var previousIconColor: Int = Color.TRANSPARENT
 
     private var recyclerView: RecyclerView? = null
+
+    private val positionChannel = Channel<Pair<Float, Float>>()
 
     init {
         setFabListener()
@@ -78,9 +88,20 @@ class MenuBinder(
         val listener = DraggableTouchListener()
         listener.setCallback(object : DraggableTouchListener.OnNewPosition {
             override fun onNewPosition(x: Float, y: Float) {
-                preferenceApplier.setNewMenuFabPosition(x, y)
+                CoroutineScope(Dispatchers.Default).launch {
+                    positionChannel.send(x to y)
+                }
             }
         })
+
+        CoroutineScope(Dispatchers.Default).launch {
+            positionChannel.receiveAsFlow()
+                .debounce(TimeUnit.SECONDS.toMillis(2))
+                .collect {
+                    preferenceApplier.setNewMenuFabPosition(it.first, it.second)
+                }
+        }
+
         listener.setOnClick(object : DraggableTouchListener.OnClick {
             override fun onClick() {
                 if (!menuStub.isInflated) {
@@ -166,17 +187,16 @@ class MenuBinder(
                     else -> it
                 }
             }
-
             recyclerView?.scheduleLayoutAnimation()
             menuStub.root?.animate()?.let {
                 it.cancel()
                 it.alpha(1f)
-                        .setDuration(350L)
-                        .withStartAction {
-                            menuStub.root?.alpha = 0f
-                            menuStub.root?.visibility = View.VISIBLE
-                        }
-                        .start()
+                    .setDuration(350L)
+                    .withStartAction {
+                        menuStub.root?.alpha = 0f
+                        menuStub.root?.visibility = View.VISIBLE
+                    }
+                    .start()
             }
         }
     }
