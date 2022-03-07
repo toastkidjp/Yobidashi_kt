@@ -31,8 +31,10 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
+import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
 import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineScope
@@ -162,7 +164,8 @@ class BookmarkFragment: Fragment(),
             { _, _ ->
                 val currentContext = binding.root.context
                 BookmarkInitializer(
-                    FaviconFolderProviderService().invoke(currentContext)
+                    FaviconFolderProviderService().invoke(currentContext),
+                    WebClipIconLoader.from(context)
                 )(currentContext) { adapter.showRoot() }
                 contentViewModel?.snackShort(R.string.done_addition)
             }
@@ -291,8 +294,14 @@ class BookmarkFragment: Fragment(),
         val inputStream = context.contentResolver?.openInputStream(uri) ?: return
 
         CoroutineScope(Dispatchers.Main).launch(disposables) {
+            val faviconApplier = FaviconApplier(context)
             withContext(Dispatchers.IO) {
-                ExportedFileParser()(inputStream).forEach { bookmarkRepository.add(it) }
+                ExportedFileParser()(inputStream)
+                    .map {
+                        it.favicon = faviconApplier.makePath(it.url)
+                        it
+                    }
+                    .forEach { bookmarkRepository.add(it) }
 
                 adapter.showRoot()
                 contentViewModel?.snackShort(R.string.done_addition)
