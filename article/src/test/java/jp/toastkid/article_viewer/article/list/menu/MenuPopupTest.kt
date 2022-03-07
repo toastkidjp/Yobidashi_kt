@@ -21,6 +21,9 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.article_viewer.article.list.SearchResult
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class MenuPopupTest {
 
@@ -40,7 +43,7 @@ class MenuPopupTest {
     @RelaxedMockK
     private lateinit var searchResult: SearchResult
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { context.resources.getDimensionPixelSize(any()) }.returns(100)
@@ -63,12 +66,12 @@ class MenuPopupTest {
         menuPopup = MenuPopup(context, action, useAddToBookmark, menuPopupView)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun show() {
         menuPopup.show(mockk(), searchResult)
 
