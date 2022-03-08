@@ -6,6 +6,7 @@ apply plugin: "com.cookpad.android.plugin.license-tools"
 
 apply from: 'signing/config.gradle', to: android
 apply from: '../jacoco.gradle'
+apply from: '../detekt.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
