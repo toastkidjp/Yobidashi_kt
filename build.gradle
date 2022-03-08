@@ -102,3 +102,19 @@ task jacocoMergedTestReport(
         html.getRequired().set(true)
     }
 }
+
+task mergeDetektReport(type: io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
+    output = project.layout.buildDirectory.file("reports/detekt/merge.xml")
+}
+
+subprojects {
+    plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
+        tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask ->
+            finalizedBy(mergeDetektReport)
+
+            mergeDetektReport.configure { mergeTask ->
+                mergeTask.input.from(detektTask.xmlReportFile)
+            }
+        }
+    }
+}
