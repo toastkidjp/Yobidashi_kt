@@ -65,7 +65,6 @@ class WebClipIconLoader(
             override fun onResponse(call: Call, response: Response) {
                 response.body?.byteStream()?.use { stream ->
                     val bitmap = BitmapFactory.decodeStream(stream)
-                    println("tomato loaded ${webClipUrl.host} ${bitmap.width} ${bitmap.height}")
                     val longer = if (bitmap.width > bitmap.height) bitmap.width else bitmap.height
                     val sampling = 128.0 / longer.toDouble()
                     bitmapCompressor
