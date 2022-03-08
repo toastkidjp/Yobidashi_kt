@@ -8,8 +8,11 @@ detekt {
 
     reports {
         html {
-            enabled = true
+            required.set(true)
             destination = file("$buildDir/reports/detekt/detekt.html")
         }
+        xml.required.set(true)
+        txt.required.set(false)
+        sarif.required.set(false)
     }
 }
