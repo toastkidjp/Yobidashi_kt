@@ -14,6 +14,9 @@ config:
   # we need to care take of this by explicitly allowing this properties
   excludes: 'custom-checks.*'
 
+console-reports:
+  active: false
+
 custom-checks:
   active: true
   SpekTestDiscovery:
