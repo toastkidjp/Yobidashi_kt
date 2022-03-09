@@ -47,7 +47,7 @@ class DownloadApiTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         downloadApi.invoke("https://www.yahoo.co.jp", mockk())
 
         verify { httpClient.newCall(any()).enqueue(any()) }
