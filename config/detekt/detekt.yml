@@ -166,6 +166,12 @@ potential-bugs:
   UselessPostfixExpression:
     active: true
 
+output-reports:
+  active: true
+  exclude:
+    - 'TxtOutputReport'
+    - 'SarifOutputReport'
+
 style:
   ClassOrdering:
     active: true
