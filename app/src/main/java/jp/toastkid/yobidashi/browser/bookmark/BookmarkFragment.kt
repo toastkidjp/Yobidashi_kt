@@ -302,10 +302,10 @@ class BookmarkFragment: Fragment(),
                         it
                     }
                     .forEach { bookmarkRepository.add(it) }
-
-                adapter.showRoot()
-                contentViewModel?.snackShort(R.string.done_addition)
             }
+
+            adapter.showRoot()
+            contentViewModel?.snackShort(R.string.done_addition)
         }
     }
 
