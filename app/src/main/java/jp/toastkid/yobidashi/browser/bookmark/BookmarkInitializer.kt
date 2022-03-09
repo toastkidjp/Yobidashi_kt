@@ -83,6 +83,7 @@ class BookmarkInitializer(
 
             withContext(ioDispatcher) {
                 defaultBookmarks.values.flatMap { it.values }.forEach {
+                    @Suppress("DeferredResultUnused")
                     async { webClipIconLoader.invoke(it) }
                 }
             }
