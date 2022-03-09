@@ -19,6 +19,9 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.api.lib.HttpClientFactory
 import okhttp3.OkHttpClient
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class DownloadApiTest {
 
@@ -27,7 +30,7 @@ class DownloadApiTest {
     @MockK
     private lateinit var httpClient: OkHttpClient
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
@@ -38,12 +41,12 @@ class DownloadApiTest {
         downloadApi = DownloadApi()
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         downloadApi.invoke("https://www.yahoo.co.jp", mockk())
 
