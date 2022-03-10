@@ -41,7 +41,7 @@ class FirstLaunchInitializer(
         preferenceApplier.color = ContextCompat.getColor(context, R.color.colorPrimaryDark)
 
         defaultColorInsertion.insert(context)
-        BookmarkInitializer.from(context)(context)
+        BookmarkInitializer.from(context)()
         defaultBackgroundImagePreparation(context) {
             preferenceApplier.backgroundImagePath = it.absolutePath
         }

@@ -72,7 +72,7 @@ class BookmarkInitializer(
      *
      * @param context
      */
-    operator fun invoke(context: Context, onComplete: () -> Unit = {}): Job {
+    operator fun invoke(onComplete: () -> Unit = {}): Job {
         return CoroutineScope(mainDispatcher).launch {
             withContext(ioDispatcher) {
                 addBookmarks(bookmarkRepository, favicons)

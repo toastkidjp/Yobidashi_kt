@@ -161,7 +161,7 @@ class BookmarkFragment: Fragment(),
             viewLifecycleOwner,
             { _, _ ->
                 val currentContext = binding.root.context
-                BookmarkInitializer.from(context)(currentContext) { adapter.showRoot() }
+                BookmarkInitializer.from(context)() { adapter.showRoot() }
                 contentViewModel?.snackShort(R.string.done_addition)
             }
         )
