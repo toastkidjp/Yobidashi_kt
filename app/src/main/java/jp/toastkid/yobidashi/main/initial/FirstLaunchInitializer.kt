@@ -16,7 +16,6 @@ import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
-import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
 
@@ -42,7 +41,7 @@ class FirstLaunchInitializer(
         preferenceApplier.color = ContextCompat.getColor(context, R.color.colorPrimaryDark)
 
         defaultColorInsertion.insert(context)
-        BookmarkInitializer(faviconFolderProviderService.invoke(context), WebClipIconLoader.from(context))(context)
+        BookmarkInitializer.from(context)(context)
         defaultBackgroundImagePreparation(context) {
             preferenceApplier.backgroundImagePath = it.absolutePath
         }
