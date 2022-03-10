@@ -85,7 +85,7 @@ class FirstLaunchInitializerTest {
         mockkObject(SearchCategory)
         every { SearchCategory.getDefaultCategoryName() }.returns("yahoo")
         mockkConstructor(BookmarkInitializer::class)
-        every { anyConstructed<BookmarkInitializer>().invoke(any()) }.returns(mockk())
+        every { anyConstructed<BookmarkInitializer>().invoke() }.returns(mockk())
 
         firstLaunchInitializer = FirstLaunchInitializer(
             context,

@@ -105,7 +105,7 @@ class BookmarkInitializerTest {
 
     @Test
     fun invoke() {
-        bookmarkInitializer.invoke(context, onComplete)
+        bookmarkInitializer.invoke(onComplete)
 
         coVerify(atLeast = 1) { bookmarkRepository.add(any()) }
         coVerify(atLeast = 1) { favicons.assignNewFile(any<String>()) }
