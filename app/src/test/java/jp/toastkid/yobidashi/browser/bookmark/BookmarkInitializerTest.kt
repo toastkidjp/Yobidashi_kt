@@ -18,10 +18,13 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
 import jp.toastkid.yobidashi.libs.db.AppDatabase
@@ -76,7 +79,7 @@ class BookmarkInitializerTest {
         coEvery { Uri.parse(any()) }.returns(uri)
 
         bookmarkInitializer = BookmarkInitializer(
-            favicons, webClipIconLoader, databaseFinder, Dispatchers.Unconfined, Dispatchers.Unconfined
+            bookmarkRepository, favicons, webClipIconLoader, Dispatchers.Unconfined, Dispatchers.Unconfined
         )
     }
 
@@ -86,11 +89,24 @@ class BookmarkInitializerTest {
     }
 
     @Test
-    fun invoke() {
-        bookmarkInitializer.invoke(context, onComplete)
+    fun from() {
+        mockkConstructor(FaviconFolderProviderService::class)
+        every { anyConstructed<FaviconFolderProviderService>().invoke(any()) }.returns(mockk())
+        mockkObject(WebClipIconLoader)
+        every { WebClipIconLoader.from(any()) }.returns(mockk())
+
+        BookmarkInitializer.from(context)
 
         verify(exactly = 1) { databaseFinder.invoke(any()) }
         verify(exactly = 1) { appDatabase.bookmarkRepository() }
+        verify { anyConstructed<FaviconFolderProviderService>().invoke(any()) }
+        verify { WebClipIconLoader.from(any()) }
+    }
+
+    @Test
+    fun invoke() {
+        bookmarkInitializer.invoke(context, onComplete)
+
         coVerify(atLeast = 1) { bookmarkRepository.add(any()) }
         coVerify(atLeast = 1) { favicons.assignNewFile(any<String>()) }
     }
