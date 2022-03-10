@@ -52,4 +52,5 @@ class DownloadApiTest {
 
         verify { httpClient.newCall(any()).enqueue(any()) }
     }
+
 }
