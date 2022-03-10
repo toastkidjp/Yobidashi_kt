@@ -112,7 +112,7 @@ class FirstLaunchInitializerTest {
     }
 
     @Test
-    fun test() {
+    fun testIsNotFirstLaunch() {
         every { preferenceApplier.isFirstLaunch() }.returns(false)
 
         firstLaunchInitializer.invoke()
