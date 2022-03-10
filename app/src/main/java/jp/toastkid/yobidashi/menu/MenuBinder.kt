@@ -25,7 +25,7 @@ import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -96,8 +96,8 @@ class MenuBinder(
 
         CoroutineScope(Dispatchers.Default).launch {
             positionChannel.receiveAsFlow()
-                .debounce(TimeUnit.SECONDS.toMillis(2))
-                .collect {
+                .debounce(TimeUnit.SECONDS.toMillis(1))
+                .collectLatest {
                     preferenceApplier.setNewMenuFabPosition(it.first, it.second)
                 }
         }

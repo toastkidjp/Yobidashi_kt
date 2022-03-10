@@ -29,6 +29,4 @@
 
     <dimen name="menu_font_size">12sp</dimen>
 
-    <dimen name="barcode_result_popup_clip_font_size">24sp</dimen>
-
 </resources>

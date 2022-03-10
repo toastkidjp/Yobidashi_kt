@@ -102,7 +102,7 @@
                     android:id="@+id/down_payment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Down payment"
+                    android:hint="@string/hint_down_payment"
                     android:inputType="number"
                     android:digits="0123456789,"
                     android:maxLines="1"

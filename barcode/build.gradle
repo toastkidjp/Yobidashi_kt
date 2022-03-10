@@ -44,7 +44,7 @@ dependencies {
     implementation "com.google.android.material:material:$libVersions.material"
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
 
-    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"
