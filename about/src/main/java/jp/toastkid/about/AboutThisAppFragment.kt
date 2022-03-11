@@ -6,13 +6,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.TabRowDefaults.Divider
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.about.databinding.FragmentAboutBinding
 import jp.toastkid.about.view.LicensesDialogFragment
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
@@ -26,11 +45,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
  */
 class AboutThisAppFragment : Fragment(), ContentScrollable {
 
-    /**
-     * Data Binding.
-     */
-    private var binding: FragmentAboutBinding? = null
-
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreateView(
@@ -38,16 +52,138 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        binding?.fragment = this
-        binding?.settingsAppVersion?.text = arguments?.getString("version_name")
-
-        val context = context ?: return binding?.root
+        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(context)
 
-        return binding?.root
+        return ComposeView(context).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                AboutThisAppUi()
+            }
+        }
+    }
+
+    @Composable
+    fun AboutThisAppUi() {
+        Column(
+            Modifier
+                .background(color = Color(0xbbFFFFFF))
+                .verticalScroll(rememberScrollState())
+        ) {
+            Text(
+                text = getString(R.string.message_about_this_app),
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+
+            Divider(
+                color = colorResource(R.color.gray_500_dd),
+                modifier = Modifier.fillMaxWidth().height(1.dp).padding(start = 16.dp, end = 16.dp)
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .padding(start = 16.dp, end = 16.dp)
+                    .clickable(onClick = { checkUpdate() })
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_store_black),
+                    contentDescription = getString(R.string.title_go_google_play)
+                )
+                Text(
+                    text = getString(R.string.title_go_google_play),
+                    fontSize = 16.sp
+                )
+            }
+
+            Divider(
+                color = colorResource(R.color.gray_500_dd),
+                modifier = Modifier.fillMaxWidth().height(1.dp).padding(start = 16.dp, end = 16.dp)
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .padding(start = 16.dp, end = 16.dp)
+                    .clickable(onClick = { privacyPolicy() })
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_privacy),
+                    contentDescription = getString(R.string.privacy_policy)
+                )
+                Text(
+                    text = getString(R.string.privacy_policy),
+                    fontSize = 16.sp
+                )
+            }
+
+            Divider(
+                color = colorResource(R.color.gray_500_dd),
+                modifier = Modifier.fillMaxWidth().height(1.dp).padding(start = 16.dp, end = 16.dp)
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .padding(start = 16.dp, end = 16.dp)
+                    .clickable(onClick = { licenses() })
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_license_black),
+                    contentDescription = getString(R.string.title_licenses)
+                )
+                Text(
+                    text = getString(R.string.title_licenses),
+                    fontSize = 16.sp
+                )
+            }
+
+            Divider(
+                color = colorResource(R.color.gray_500_dd),
+                modifier = Modifier.fillMaxWidth().height(1.dp).padding(start = 16.dp, end = 16.dp)
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .padding(start = 16.dp, end = 16.dp)
+            ) {
+                Text(
+                    text = getString(R.string.title_app_version) + arguments?.getString("version_name"),
+                    fontSize = 16.sp
+                )
+            }
+
+            Divider(
+                color = colorResource(R.color.gray_500_dd),
+                modifier = Modifier.fillMaxWidth().height(1.dp).padding(start = 16.dp, end = 16.dp)
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .padding(start = 16.dp, end = 16.dp)
+                    .clickable(onClick = { aboutAuthorApp() })
+            ) {
+                Text(
+                    text = getString(R.string.copyright),
+                    fontSize = 16.sp
+                )
+            }
+        }
     }
 
     /**
@@ -83,25 +219,16 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
     }
 
     override fun toTop() {
-        binding?.aboutScroll?.smoothScrollTo(0, 0)
+        view?.scrollTo(0, 0)
+        //TODO binding?.aboutScroll?.smoothScrollTo(0, 0)
     }
 
     override fun toBottom() {
-        binding?.aboutScroll?.smoothScrollTo(0, binding?.root?.measuredHeight ?: 0)
-    }
-
-    override fun onDetach() {
-        binding = null
-        super.onDetach()
+        view?.scrollTo(0, view?.measuredHeight ?: 0)
+        //TODO binding?.aboutScroll?.smoothScrollTo(0, binding?.root?.measuredHeight ?: 0)
     }
 
     companion object {
-
-        /**
-         * Layout ID.
-         */
-        @LayoutRes
-        private val LAYOUT_ID = R.layout.fragment_about
 
         fun makeWith(versionName: String): Fragment =
             AboutThisAppFragment().also {
