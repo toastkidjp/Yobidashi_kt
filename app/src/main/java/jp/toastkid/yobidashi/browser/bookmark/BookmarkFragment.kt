@@ -160,8 +160,7 @@ class BookmarkFragment: Fragment(),
             "import_default",
             viewLifecycleOwner,
             { _, _ ->
-                val currentContext = binding.root.context
-                BookmarkInitializer.from(context)() { adapter.showRoot() }
+                BookmarkInitializer.from(binding.root.context)() { adapter.showRoot() }
                 contentViewModel?.snackShort(R.string.done_addition)
             }
         )
