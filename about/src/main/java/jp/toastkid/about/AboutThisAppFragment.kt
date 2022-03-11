@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,9 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * About this app.
@@ -46,6 +50,8 @@ import jp.toastkid.lib.preference.PreferenceApplier
 class AboutThisAppFragment : Fragment(), ContentScrollable {
 
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private var scrollState: ScrollState? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,10 +71,13 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
 
     @Composable
     fun AboutThisAppUi() {
+        val scrollState = rememberScrollState()
+        this.scrollState = scrollState
+
         Column(
             Modifier
                 .background(color = Color(0xbbFFFFFF))
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
         ) {
             Text(
                 text = getString(R.string.message_about_this_app),
@@ -215,12 +224,16 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
     }
 
     override fun toTop() {
-        view?.scrollTo(0, 0)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollTo(0)
+        }
         //TODO binding?.aboutScroll?.smoothScrollTo(0, 0)
     }
 
     override fun toBottom() {
-        view?.scrollTo(0, view?.measuredHeight ?: 0)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollTo(scrollState?.maxValue ?: 0)
+        }
         //TODO binding?.aboutScroll?.smoothScrollTo(0, binding?.root?.measuredHeight ?: 0)
     }
 
