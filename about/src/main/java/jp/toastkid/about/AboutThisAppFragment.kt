@@ -227,14 +227,12 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
         CoroutineScope(Dispatchers.Main).launch {
             scrollState?.scrollTo(0)
         }
-        //TODO binding?.aboutScroll?.smoothScrollTo(0, 0)
     }
 
     override fun toBottom() {
         CoroutineScope(Dispatchers.Main).launch {
             scrollState?.scrollTo(scrollState?.maxValue ?: 0)
         }
-        //TODO binding?.aboutScroll?.smoothScrollTo(0, binding?.root?.measuredHeight ?: 0)
     }
 
     companion object {
