@@ -78,10 +78,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
                     .padding(16.dp)
             )
 
-            Divider(
-                color = colorResource(R.color.gray_500_dd),
-                modifier = Modifier.fillMaxWidth().height(1.dp).padding(start = 16.dp, end = 16.dp)
-            )
+            InsetDivider()
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -101,10 +98,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
                 )
             }
 
-            Divider(
-                color = colorResource(R.color.gray_500_dd),
-                modifier = Modifier.fillMaxWidth().height(1.dp).padding(start = 16.dp, end = 16.dp)
-            )
+            InsetDivider()
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -124,10 +118,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
                 )
             }
 
-            Divider(
-                color = colorResource(R.color.gray_500_dd),
-                modifier = Modifier.fillMaxWidth().height(1.dp).padding(start = 16.dp, end = 16.dp)
-            )
+            InsetDivider()
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -147,10 +138,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
                 )
             }
 
-            Divider(
-                color = colorResource(R.color.gray_500_dd),
-                modifier = Modifier.fillMaxWidth().height(1.dp).padding(start = 16.dp, end = 16.dp)
-            )
+            InsetDivider()
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -165,10 +153,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
                 )
             }
 
-            Divider(
-                color = colorResource(R.color.gray_500_dd),
-                modifier = Modifier.fillMaxWidth().height(1.dp).padding(start = 16.dp, end = 16.dp)
-            )
+            InsetDivider()
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -184,6 +169,17 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
                 )
             }
         }
+    }
+
+    @Composable
+    private fun InsetDivider() {
+        Divider(
+            color = colorResource(R.color.gray_500_dd),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .padding(start = 16.dp, end = 16.dp)
+        )
     }
 
     /**
