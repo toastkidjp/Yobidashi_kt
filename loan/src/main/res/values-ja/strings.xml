@@ -16,4 +16,5 @@
     <string name="hint_interest_rate">Interest rate</string>
     <string name="default_value_interest_rate">1.0</string>
     <string name="hint_down_payment">Down payment</string>
+    <string name="default_value_down_payment">1,000,000</string>
 </resources>
