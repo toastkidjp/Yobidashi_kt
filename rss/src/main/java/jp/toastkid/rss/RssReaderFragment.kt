@@ -14,111 +14,184 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.rss.api.RssReaderApi
-import jp.toastkid.rss.databinding.FragmentRssReaderBinding
-import jp.toastkid.rss.list.Adapter
+import jp.toastkid.rss.model.Item
 import jp.toastkid.rss.setting.RssSettingFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
  */
+@ExperimentalFoundationApi
 class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
 
-    private lateinit var binding: FragmentRssReaderBinding
-
-    private var viewModel: RssReaderFragmentViewModel? = null
+    private var scrollState: LazyListState? = null
 
     private val disposables = Job()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         setHasOptionsMenu(true)
-        return binding.root
-    }
+        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val context = view.context
-
-        val fragmentActivity = activity ?: return
-        viewModel = ViewModelProvider(this).get(RssReaderFragmentViewModel::class.java)
-        observeViewModelEvent(fragmentActivity)
-
-        val adapter = Adapter(LayoutInflater.from(context), viewModel)
-        binding.rssList.adapter = adapter
-        binding.rssList.layoutManager =
-                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
-        val readRssReaderTargets = PreferenceApplier(fragmentActivity).readRssReaderTargets()
-
-        if (readRssReaderTargets.isEmpty()) {
-            ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
-                .snackShort(R.string.message_rss_reader_launch_failed)
-            activity?.supportFragmentManager?.popBackStack()
-            return
-        }
+        val composeView = ComposeView(context)
+        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
         CoroutineScope(Dispatchers.IO).launch(disposables) {
+            val readRssReaderTargets = PreferenceApplier(context).readRssReaderTargets()
             readRssReaderTargets.asFlow()
-                    .map { RssReaderApi().invoke(it) }
-                    .collect {
-                        withContext(Dispatchers.Main) {
-                            val items = it?.items
-                            adapter.addAll(items)
+                .mapNotNull { RssReaderApi().invoke(it) }
+                .collect {
+                    withContext(Dispatchers.Main) {
+                        val items = it.items
+                        composeView.setContent {
+                            RssReaderListUi(items)
                         }
                     }
+                }
         }
+
+        return composeView
     }
 
-    private fun observeViewModelEvent(fragmentActivity: FragmentActivity) {
-        viewModel?.itemClick?.observe(viewLifecycleOwner, Observer {
-            val event = it?.getContentIfNotHandled() ?: return@Observer
+    @Composable
+    fun RssReaderListUi(items: MutableList<Item>) {
+        val fragmentActivity = activity ?: return
+        val browserViewModel = ViewModelProvider(fragmentActivity)
+            .get(BrowserViewModel::class.java)
 
-            val browserViewModel = ViewModelProvider(fragmentActivity)
-                    .get(BrowserViewModel::class.java)
-            if (event.second) {
-                browserViewModel.openBackground(event.first.toUri())
-            } else {
-                browserViewModel.open(event.first.toUri())
-                activity?.supportFragmentManager?.popBackStack()
+        val listState = rememberLazyListState()
+        this.scrollState = listState
+
+        MaterialTheme {
+            LazyColumn(state = listState) {
+                items(items) {
+                    Surface(
+                        modifier = Modifier
+                            .padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                top = 2.dp,
+                                bottom = 2.dp
+                            )
+                            .combinedClickable(
+                                enabled = true,
+                                onClick = {
+                                    browserViewModel.open(it.link.toUri())
+                                    activity?.supportFragmentManager?.popBackStack()
+                                },
+                                onLongClick = {
+                                    browserViewModel.openBackground(it.link.toUri())
+                                }
+                            ),
+                        elevation = 4.dp
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                        ) {
+                            AsyncImage(
+                                R.drawable.ic_rss_feed,
+                                contentDescription = stringResource(id = R.string.image),
+                                modifier = Modifier.width(32.dp),
+                                colorFilter = ColorFilter.tint(
+                                    colorResource(id = R.color.colorPrimary),
+                                    BlendMode.SrcIn
+                                )
+                            )
+                            Column {
+                                Text(
+                                    text = it.title,
+                                    fontSize = 18.sp,
+                                    maxLines = 1,
+                                )
+                                Text(
+                                    text = it.link,
+                                    color = colorResource(R.color.link_blue),
+                                    fontSize = 12.sp,
+                                    maxLines = 1
+                                )
+                                Text(
+                                    text = it.content.toString(),
+                                    fontSize = 14.sp,
+                                    maxLines = 3,
+                                )
+                                Text(
+                                    text = it.source,
+                                    fontSize = 12.sp,
+                                    maxLines = 1,
+                                )
+                                Text(
+                                    text = it.date,
+                                    color = colorResource(R.color.darkgray_scale),
+                                    fontSize = 12.sp,
+                                    maxLines = 1,
+                                )
+                            }
+                        }
+                    }
+                }
             }
-        })
+        }
     }
 
     override fun toTop() {
-        RecyclerViewScroller.toTop(binding.rssList, binding.rssList.adapter?.itemCount ?: 0)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(0, 0)
+        }
     }
 
     override fun toBottom() {
-        RecyclerViewScroller.toBottom(binding.rssList, binding.rssList.adapter?.itemCount ?: 0)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(scrollState?.layoutInfo?.totalItemsCount ?: 0, 0)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -130,8 +203,8 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
         if (item.itemId == R.id.action_rss_setting) {
             val activity = activity ?: return true
             ViewModelProvider(activity)
-                    .get(ContentViewModel::class.java)
-                    .nextFragment(RssSettingFragment::class.java)
+                .get(ContentViewModel::class.java)
+                .nextFragment(RssSettingFragment::class.java)
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -147,8 +220,4 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
         disposables.cancel()
     }
 
-    companion object {
-        @LayoutRes
-        private val LAYOUT_ID = R.layout.fragment_rss_reader
-    }
 }
