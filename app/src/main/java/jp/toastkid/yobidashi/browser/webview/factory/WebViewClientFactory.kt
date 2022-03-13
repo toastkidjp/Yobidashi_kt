@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentActivity
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
@@ -35,7 +36,6 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
-import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,8 +61,10 @@ class WebViewClientFactory(
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
 
-            browserHeaderViewModel?.updateProgress(0)
-            browserHeaderViewModel?.nextUrl(url)
+            if (view == currentView()) {
+                browserHeaderViewModel?.updateProgress(0)
+                browserHeaderViewModel?.nextUrl(url)
+            }
 
             rssAddingSuggestion?.invoke(view, url)
             browserHeaderViewModel?.setBackButtonEnability(view.canGoBack())
