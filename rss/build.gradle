@@ -24,7 +24,6 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
         compose = true
     }
 
@@ -44,11 +43,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
-    implementation "androidx.cardview:cardview:$libVersions.cardview"
-    implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
-
-    implementation "com.google.android.material:material:$libVersions.material"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
