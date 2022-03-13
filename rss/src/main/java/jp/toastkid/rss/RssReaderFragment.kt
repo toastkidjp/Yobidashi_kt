@@ -63,7 +63,6 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-@ExperimentalFoundationApi
 class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
 
     private var scrollState: LazyListState? = null
@@ -99,6 +98,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
         return composeView
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun RssReaderListUi(items: MutableList<Item>) {
         val fragmentActivity = activity ?: return
