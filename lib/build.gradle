@@ -52,9 +52,9 @@ dependencies {
     implementation "androidx.core:core-ktx:$libVersions.ktx"
     implementation "androidx.fragment:fragment:$libVersions.fragment"
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$libVersions.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$libVersions.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
     implementation "com.google.android.material:material:$libVersions.material"
 
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
