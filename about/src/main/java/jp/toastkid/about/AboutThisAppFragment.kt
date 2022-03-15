@@ -194,7 +194,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
     /**
      * Show licenses dialog.
      */
-    fun licenses() {
+    private fun licenses() {
         LicensesDialogFragment()
             .show(parentFragmentManager, LicensesDialogFragment::class.java.canonicalName)
     }
