@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
@@ -49,6 +50,7 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.rss.api.RssReaderApi
 import jp.toastkid.rss.model.Item
 import jp.toastkid.rss.setting.RssSettingFragment
@@ -109,7 +111,10 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
         this.scrollState = listState
 
         MaterialTheme {
-            LazyColumn(state = listState) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
+            ) {
                 items(items) {
                     Surface(
                         modifier = Modifier
