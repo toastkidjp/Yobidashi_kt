@@ -66,6 +66,13 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
+    implementation "androidx.compose.material:material:$libVersions.compose"
+    implementation "androidx.compose.ui:ui-tooling:$libVersions.compose"
+    implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
+    implementation "androidx.paging:paging-compose:$libVersions.paging_compose"
+    implementation "androidx.paging:paging-runtime-ktx:$libVersions.paging"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
+
     final def markwonVersion = '4.6.2'
 
     implementation "io.noties.markwon:core:$markwonVersion"
