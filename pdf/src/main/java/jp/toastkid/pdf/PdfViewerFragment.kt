@@ -24,6 +24,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
@@ -34,6 +35,7 @@ import androidx.fragment.app.Fragment
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.fragment.CommonFragmentAction
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -78,7 +80,10 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
         this.scrollState = listState
 
         MaterialTheme {
-            LazyColumn(state = listState) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
+            ) {
                 val max = pdfRenderer.pageCount
                 items(max) {
                     androidx.compose.material.Surface(
