@@ -104,7 +104,7 @@ class BookmarkInitializerTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         bookmarkInitializer.invoke(onComplete)
 
         coVerify(atLeast = 1) { bookmarkRepository.add(any()) }
