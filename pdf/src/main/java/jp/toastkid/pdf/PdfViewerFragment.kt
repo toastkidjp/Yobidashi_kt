@@ -25,6 +25,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,6 +54,7 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
     ): View? {
         val context = context ?: return null
         val composeView = ComposeView(context)
+        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         arguments?.let { arguments ->
             arguments.getParcelable<Uri>(KEY_URI)?.also { uri ->
                 val pdfRenderer =
