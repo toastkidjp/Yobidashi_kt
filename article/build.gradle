@@ -20,6 +20,7 @@ android {
     }
     buildFeatures {
         dataBinding = true
+        compose = true
     }
     buildTypes {
         release {
@@ -47,6 +48,10 @@ android {
     afterEvaluate {
         generateReleaseBuildConfig.enabled = false
         generateDebugBuildConfig.enabled = false
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "$libVersions.compose"
     }
 }
 
