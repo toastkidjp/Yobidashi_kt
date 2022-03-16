@@ -14,6 +14,7 @@ import android.view.View
 import androidx.annotation.Keep
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.max
 import kotlin.math.min
@@ -22,12 +23,12 @@ import kotlin.math.min
  * @author toastkidjp
  */
 @Keep
-class BottomNavigationBehavior<V : View>(context: Context, attrs: AttributeSet) :
-        CoordinatorLayout.Behavior<V>(context, attrs) {
+class BottomNavigationBehavior(context: Context, attrs: AttributeSet) :
+        CoordinatorLayout.Behavior<BottomAppBar>(context, attrs) {
 
     override fun onStartNestedScroll(
             coordinatorLayout: CoordinatorLayout,
-            child: V,
+            child: BottomAppBar,
             directTargetChild: View,
             target: View,
             axes: Int,
@@ -38,18 +39,17 @@ class BottomNavigationBehavior<V : View>(context: Context, attrs: AttributeSet) 
 
     override fun onNestedPreScroll(
             coordinatorLayout: CoordinatorLayout,
-            child: V,
+            child: BottomAppBar,
             target: View,
             dx: Int,
             dy: Int,
             consumed: IntArray,
             type: Int
     ) {
-        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
         child.translationY = max(0f, min(child.height.toFloat(), child.translationY + dy))
     }
 
-    override fun layoutDependsOn(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
+    override fun layoutDependsOn(parent: CoordinatorLayout, child: BottomAppBar, dependency: View): Boolean {
         if (dependency is Snackbar.SnackbarLayout) {
             updateSnackbar(child, dependency)
         }

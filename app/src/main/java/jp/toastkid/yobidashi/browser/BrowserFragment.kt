@@ -30,6 +30,7 @@ import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
@@ -45,7 +46,6 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -154,8 +154,9 @@ class BrowserFragment : Fragment(),
         appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
 
         viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
-            viewModel.stopProgress.observe(activity, Observer { stop ->
-                if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
+            viewModel.stopProgress.observe(activity, Observer {
+                val stop = it?.getContentIfNotHandled() ?: return@Observer
+                if (stop.not() || binding?.swipeRefresher?.isRefreshing == false) {
                     return@Observer
                 }
                 stopSwipeRefresherLoading()
@@ -180,17 +181,13 @@ class BrowserFragment : Fragment(),
         }
 
         viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
-            viewModel.title.observe(activity, Observer { title ->
-                if (title.isNullOrBlank()) {
-                    return@Observer
-                }
+            viewModel.title.observe(activity, Observer {
+                val title = it?.getContentIfNotHandled() ?: return@Observer
                 appBarBinding?.mainText?.text = title
             })
 
-            viewModel.url.observe(activity, Observer { url ->
-                if (url.isNullOrBlank()) {
-                    return@Observer
-                }
+            viewModel.url.observe(activity, Observer {
+                val url = it?.getContentIfNotHandled() ?: return@Observer
                 appBarBinding?.subText?.text = url
             })
 
@@ -308,6 +305,7 @@ class BrowserFragment : Fragment(),
     fun reload() {
         if (appBarBinding?.progress?.isVisible == true) {
             browserModule.stopLoading()
+            stopSwipeRefresherLoading()
         } else {
             browserModule.reload()
         }

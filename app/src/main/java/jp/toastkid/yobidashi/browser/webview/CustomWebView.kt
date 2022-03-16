@@ -87,7 +87,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                 } else {
                     lastY = eventY.toFloat()
                 }
-                requestDisallowInterceptTouchEvent(true)
 
                 val returnValue = super.dispatchTouchEvent(event)
 
@@ -101,7 +100,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                 return returnValue
             }
             MotionEvent.ACTION_DOWN -> {
-                requestDisallowInterceptTouchEvent(true)
                 val returnValue = super.dispatchTouchEvent(event)
                 lastX = eventX.toFloat()
                 lastY = eventY.toFloat()
@@ -110,7 +108,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                 return returnValue
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                requestDisallowInterceptTouchEvent(false)
                 val returnValue = super.dispatchTouchEvent(event)
                 enablePullToRefresh = false
                 // end NestedScroll

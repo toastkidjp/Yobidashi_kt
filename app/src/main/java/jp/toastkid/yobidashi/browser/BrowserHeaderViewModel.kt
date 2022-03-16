@@ -10,24 +10,31 @@ package jp.toastkid.yobidashi.browser
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.lifecycle.Event
 
 /**
  * @author toastkidjp
  */
 class BrowserHeaderViewModel : ViewModel() {
 
-    private val _title = MutableLiveData<String?>()
-    val title: LiveData<String?> = _title
+    private val _title = MutableLiveData<Event<String>>()
+    val title: LiveData<Event<String>> = _title
 
     fun nextTitle(nextTitle: String?) {
-        _title.postValue(nextTitle)
+        if (nextTitle.isNullOrBlank()) {
+            return
+        }
+        _title.postValue(Event(nextTitle))
     }
 
-    private val _url = MutableLiveData<String?>()
-    val url: LiveData<String?> = _url
+    private val _url = MutableLiveData<Event<String>>()
+    val url: LiveData<Event<String>> = _url
 
     fun nextUrl(nextUrl: String?) {
-        _url.postValue(nextUrl)
+        if (nextUrl.isNullOrBlank()) {
+            return
+        }
+        _url.postValue(Event(nextUrl))
     }
 
     private val _reset = MutableLiveData<Unit>()
@@ -39,13 +46,13 @@ class BrowserHeaderViewModel : ViewModel() {
 
     private val _enableForward = MutableLiveData<Boolean>()
     val enableForward: LiveData<Boolean> = _enableForward
-    fun setForwardButtonEnability(newState: Boolean) {
+    fun setForwardButtonIsEnabled(newState: Boolean) {
         _enableForward.postValue(newState)
     }
 
     private val _enableBack = MutableLiveData<Boolean>()
     val enableBack: LiveData<Boolean> = _enableBack
-    fun setBackButtonEnability(newState: Boolean) {
+    fun setBackButtonIsEnabled(newState: Boolean) {
         _enableBack.postValue(newState)
     }
 
@@ -56,11 +63,11 @@ class BrowserHeaderViewModel : ViewModel() {
         _progress.postValue(newProgress)
     }
 
-    private val _stopProgress = MutableLiveData<Boolean>()
-    val stopProgress: LiveData<Boolean> = _stopProgress
+    private val _stopProgress = MutableLiveData<Event<Boolean>>()
+    val stopProgress: LiveData<Event<Boolean>> = _stopProgress
 
     fun stopProgress(stop: Boolean) {
-        _stopProgress.postValue(stop)
+        _stopProgress.postValue(Event(stop))
     }
 
 }

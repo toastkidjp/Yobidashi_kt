@@ -22,21 +22,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
  * @author toastkidjp
  */
 @Keep
-class HidingFloatingActionButtonBehavior<V : View>(context: Context, attrs: AttributeSet) :
-        CoordinatorLayout.Behavior<V>(context, attrs) {
+class HidingFloatingActionButtonBehavior(context: Context, attrs: AttributeSet) :
+        FloatingActionButton.Behavior(context, attrs) {
 
     private var lastY = 0f
 
     override fun onInterceptTouchEvent(
             parent: CoordinatorLayout,
-            child: V,
+            child: FloatingActionButton,
             motionEvent: MotionEvent
     ): Boolean {
         if (motionEvent.action == MotionEvent.ACTION_DOWN) {
             lastY = motionEvent.rawY
         }
 
-        if (child !is FloatingActionButton || child.isVisible) {
+        if (child.isVisible) {
             return super.onInterceptTouchEvent(parent, child, motionEvent)
         }
 
@@ -59,7 +59,7 @@ class HidingFloatingActionButtonBehavior<V : View>(context: Context, attrs: Attr
 
     override fun onStartNestedScroll(
             coordinatorLayout: CoordinatorLayout,
-            child: V,
+            child: FloatingActionButton,
             directTargetChild: View,
             target: View,
             axes: Int,
@@ -70,14 +70,14 @@ class HidingFloatingActionButtonBehavior<V : View>(context: Context, attrs: Attr
 
     override fun onNestedPreScroll(
             coordinatorLayout: CoordinatorLayout,
-            child: V,
+            child: FloatingActionButton,
             target: View,
             dx: Int,
             dy: Int,
             consumed: IntArray,
             type: Int
     ) {
-        if (child !is FloatingActionButton || child.isGone || dy <= 0) {
+        if (child.isGone || dy <= 0) {
             return
         }
 
