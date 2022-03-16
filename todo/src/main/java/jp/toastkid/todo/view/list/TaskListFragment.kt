@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -38,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
@@ -55,6 +58,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDataAccessor
 import jp.toastkid.todo.data.TodoTaskDatabase
@@ -72,6 +76,8 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class TaskListFragment : Fragment() {
+
+    private var scrollState: LazyListState? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -106,6 +112,9 @@ class TaskListFragment : Fragment() {
         val repository = TodoTaskDatabase.find(context).repository()
         val color = PreferenceApplier(context).color
 
+        val listState = rememberLazyListState()
+        this.scrollState = listState
+
         val taskAdditionDialogFragmentUseCase = TaskAdditionDialogFragmentUseCase(
             this,
             ViewModelProvider(this).get(TaskAdditionDialogFragmentViewModel::class.java)
@@ -130,7 +139,10 @@ class TaskListFragment : Fragment() {
         val tasks = flow.collectAsLazyPagingItems()
 
         MaterialTheme {
-            LazyColumn {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
+            ) {
                 items(tasks) { task ->
                     task ?: return@items
                     TaskListItem(task, repository, color, menuUseCase)
