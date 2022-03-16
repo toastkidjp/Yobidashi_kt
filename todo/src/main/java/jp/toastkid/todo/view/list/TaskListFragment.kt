@@ -57,6 +57,7 @@ import androidx.paging.cachedIn
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
+import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.todo.R
@@ -75,7 +76,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class TaskListFragment : Fragment() {
+class TaskListFragment : Fragment(), ContentScrollable {
 
     private var scrollState: LazyListState? = null
 
@@ -241,6 +242,18 @@ class TaskListFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    override fun toTop() {
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(0, 0)
+        }
+    }
+
+    override fun toBottom() {
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(scrollState?.layoutInfo?.totalItemsCount ?: 0, 0)
         }
     }
 
