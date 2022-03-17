@@ -52,7 +52,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -281,6 +283,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 AsyncImage(
                     R.drawable.ic_more,
                     stringResource(id = R.string.menu),
+                    colorFilter = ColorFilter.tint(
+                        Color(preferencesWrapper.color),
+                        BlendMode.SrcIn
+                    ),
                     modifier = Modifier
                         .width(32.dp)
                         .fillMaxHeight()
