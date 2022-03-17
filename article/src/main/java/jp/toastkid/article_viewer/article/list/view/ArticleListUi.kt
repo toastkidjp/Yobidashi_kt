@@ -49,16 +49,11 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.list.SearchResult
-import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
-import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
+import jp.toastkid.article_viewer.article.list.menu.MenuPopupActionUseCase
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -66,8 +61,7 @@ internal fun ArticleListUi(
     flow: Flow<PagingData<SearchResult>>?,
     listState: LazyListState,
     contentViewModel: ContentViewModel?,
-    articleRepository: ArticleRepository,
-    bookmarkRepository: BookmarkRepository,
+    menuPopupUseCase: MenuPopupActionUseCase,
     @ColorInt menuIconColor: Int
 ) {
     val articles = flow?.collectAsLazyPagingItems() ?: return
@@ -79,7 +73,7 @@ internal fun ArticleListUi(
         ) {
             items(articles) {
                 it ?: return@items
-                ListItem(it, contentViewModel, articleRepository, bookmarkRepository, menuIconColor)
+                ListItem(it, contentViewModel, menuPopupUseCase, menuIconColor)
             }
         }
     }
@@ -90,25 +84,13 @@ internal fun ArticleListUi(
 private fun ListItem(
     article: SearchResult,
     contentViewModel: ContentViewModel?,
-    articleRepository: ArticleRepository,
-    bookmarkRepository: BookmarkRepository,
+    menuPopupUseCase: MenuPopupActionUseCase,
     @ColorInt menuIconColor: Int
 ) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(
         stringResource(id = R.string.action_add_to_bookmark),
         stringResource(id = R.string.delete)
-    )
-
-    val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
-        articleRepository,
-        bookmarkRepository,
-        {
-            contentViewModel?.snackWithAction(
-                "Deleted: \"${it.title}\".",
-                "UNDO"
-            ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
-        }
     )
 
     Surface(

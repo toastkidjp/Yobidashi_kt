@@ -50,6 +50,7 @@ import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogFragment
 import jp.toastkid.article_viewer.article.list.date.FilterByMonthUseCase
+import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
 import jp.toastkid.article_viewer.article.list.usecase.UpdateUseCase
@@ -160,6 +161,17 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             }
         }
 
+        val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
+            articleRepository,
+            AppDatabase.find(context).bookmarkRepository(),
+            {
+                contentViewModel?.snackWithAction(
+                    "Deleted: \"${it.title}\".",
+                    "UNDO"
+                ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
+            }
+        )
+
         viewModel?.dataSource?.observe(viewLifecycleOwner, {
             composeView.setContent {
                 val listState = rememberLazyListState()
@@ -168,8 +180,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                     it?.flow,
                     listState,
                     contentViewModel,
-                    articleRepository,
-                    AppDatabase.find(context).bookmarkRepository(),
+                    menuPopupUseCase,
                     preferencesWrapper.color
                 )
             }
