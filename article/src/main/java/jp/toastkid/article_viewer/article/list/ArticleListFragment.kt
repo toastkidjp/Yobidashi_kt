@@ -12,7 +12,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,26 +19,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -50,33 +37,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.PagingData
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
-import coil.compose.AsyncImage
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogFragment
 import jp.toastkid.article_viewer.article.list.date.FilterByMonthUseCase
-import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
 import jp.toastkid.article_viewer.article.list.usecase.UpdateUseCase
+import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.article_viewer.bookmark.BookmarkFragment
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
 import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
@@ -84,12 +61,10 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -170,10 +145,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
         )
 
-        viewModel?.dataSource?.observe(viewLifecycleOwner, {
-            composeView.setContent { ArticleListUi(it?.flow) }
-        })
-
         activity?.let {
             val appBarComposeView = ComposeView(context)
             composeView.setViewCompositionStrategy(
@@ -189,6 +160,21 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             }
         }
 
+        viewModel?.dataSource?.observe(viewLifecycleOwner, {
+            composeView.setContent {
+                val listState = rememberLazyListState()
+                this.scrollState = listState
+                ArticleListUi(
+                    it?.flow,
+                    listState,
+                    contentViewModel,
+                    articleRepository,
+                    AppDatabase.find(context).bookmarkRepository(),
+                    preferencesWrapper.color
+                )
+            }
+        })
+
         CoroutineScope(Dispatchers.Default).launch {
             inputChannel.receiveAsFlow()
                 .distinctUntilChanged()
@@ -201,117 +187,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         }
 
         return composeView
-    }
-
-    @OptIn(ExperimentalFoundationApi::class)
-    @Composable
-    fun ArticleListUi(flow: Flow<PagingData<SearchResult>>?) {
-        val articles = flow?.collectAsLazyPagingItems() ?: return
-
-        val listState = rememberLazyListState()
-        this.scrollState = listState
-
-        MaterialTheme {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
-            ) {
-                items(articles) {
-                    it ?: return@items
-                    ListItem(it)
-                }
-            }
-        }
-    }
-
-    @OptIn(ExperimentalFoundationApi::class)
-    @Composable
-    private fun ListItem(article: SearchResult) {
-        var expanded by remember { mutableStateOf(false) }
-        val items = listOf(
-            stringResource(id = R.string.action_add_to_bookmark),
-            stringResource(id = R.string.delete)
-        )
-
-        val context = context ?: return
-        val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
-            articleRepository,
-            AppDatabase.find(context).bookmarkRepository(),
-            {
-                contentViewModel?.snackWithAction(
-                    "Deleted: \"${it.title}\".",
-                    "UNDO"
-                ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
-            }
-        )
-
-        Surface(
-            elevation = 4.dp,
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 2.dp)
-                .combinedClickable(
-                    onClick = { contentViewModel?.newArticle(article.title) },
-                    onLongClick = { contentViewModel?.newArticleOnBackground(article.title) }
-                )
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(4.dp)
-            ) {
-                Column() {
-                    Text(
-                        text = article.title,
-                        fontSize = 16.sp,
-                        maxLines = 1
-                    )
-                    Text(
-                        text = "Last updated: ${
-                            DateFormat.format(
-                                "yyyy/MM/dd(E) HH:mm:ss",
-                                article.lastModified
-                            )
-                        }" +
-                                " / ${article.length}",
-                        maxLines = 1,
-                        fontSize = 14.sp,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-                AsyncImage(
-                    R.drawable.ic_more,
-                    stringResource(id = R.string.menu),
-                    colorFilter = ColorFilter.tint(
-                        Color(preferencesWrapper.color),
-                        BlendMode.SrcIn
-                    ),
-                    modifier = Modifier
-                        .width(32.dp)
-                        .fillMaxHeight()
-                        .clickable {
-                            expanded = true
-                        }
-                )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .background(colorResource(id = R.color.soft_background))
-                ) {
-                    items.forEachIndexed { index, s ->
-                        DropdownMenuItem(onClick = {
-                            when (index) {
-                                0 -> menuPopupUseCase.addToBookmark(article.id)
-                                1 -> menuPopupUseCase.delete(article.id)
-                            }
-                            expanded = false
-                        }) { Text(text = s) }
-                    }
-                }
-            }
-        }
     }
 
     @Composable
