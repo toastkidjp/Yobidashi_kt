@@ -12,8 +12,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -21,41 +20,74 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.LayoutRes
-import androidx.core.graphics.ColorUtils
-import androidx.core.view.isVisible
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
+import coil.compose.AsyncImage
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogFragment
 import jp.toastkid.article_viewer.article.list.date.FilterByMonthUseCase
-import jp.toastkid.article_viewer.article.list.listener.ArticleLoadStateListener
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
-import jp.toastkid.article_viewer.article.list.menu.MenuPopup
 import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
 import jp.toastkid.article_viewer.article.list.usecase.UpdateUseCase
 import jp.toastkid.article_viewer.bookmark.BookmarkFragment
-import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
-import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
 import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
-import jp.toastkid.lib.view.RecyclerViewScroller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -68,15 +100,6 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiFragment {
-
-    /**
-     * List item adapter.
-     */
-    private lateinit var adapter: Adapter
-
-    private lateinit var binding: FragmentArticleListBinding
-
-    private lateinit var appBarBinding: AppBarArticleListBinding
 
     /**
      * Preferences wrapper.
@@ -106,8 +129,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
     private var viewModel: ArticleListFragmentViewModel? = null
 
-    private var searchUseCase: ArticleSearchUseCase? = null
-
     private val inputChannel = Channel<String>()
 
     private val setTargetLauncher =
@@ -119,151 +140,227 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             UpdateUseCase(viewModel) { context }.invokeIfNeed(it.data?.data)
         }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        preferencesWrapper = PreferenceApplier(context)
-
-        context.registerReceiver(
-                progressBroadcastReceiver,
-                ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
-        )
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        context?.let {
-            initializeRepository(it)
-        }
-
-        setHasOptionsMenu(true)
-    }
-
-    private fun initializeRepository(activityContext: Context) {
-        val dataBase = AppDatabase.find(activityContext)
-
-        articleRepository = dataBase.articleRepository()
-    }
+    private var scrollState: LazyListState? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(
-                inflater, LAYOUT_ID, container, false)
-        appBarBinding = DataBindingUtil.inflate(
-                inflater, R.layout.app_bar_article_list, container, false)
-        return binding.root
+    ): View? {
+        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+
+        initializeRepository(context)
+
+        preferencesWrapper = PreferenceApplier(context)
+
+        context.registerReceiver(
+            progressBroadcastReceiver,
+            ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
+        )
+
+        setHasOptionsMenu(true)
+
+        viewModel = ArticleListFragmentViewModelFactory(articleRepository, preferencesWrapper)
+            .create(ArticleListFragmentViewModel::class.java)
+
+        val composeView = ComposeView(context)
+        composeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
+
+        viewModel?.dataSource?.observe(viewLifecycleOwner, {
+            composeView.setContent { ArticleListUi(it?.flow) }
+        })
+
+        activity?.let {
+            val appBarComposeView = ComposeView(context)
+            composeView.setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+            )
+            appBarComposeView.setContent {
+                AppBarContent()
+            }
+            ViewModelProvider(it).get(AppBarViewModel::class.java)
+                .replace(appBarComposeView)
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel?.search("")
+            }
+        }
+
+        CoroutineScope(Dispatchers.Default).launch {
+            inputChannel.receiveAsFlow()
+                .distinctUntilChanged()
+                .debounce(1400L)
+                .collect {
+                    withContext(Dispatchers.Main) {
+                        //viewModel?.filter(it)
+                    }
+                }
+        }
+
+        return composeView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    @OptIn(ExperimentalFoundationApi::class)
+    @Composable
+    fun ArticleListUi(flow: Flow<PagingData<SearchResult>>?) {
+        val articles = flow?.collectAsLazyPagingItems() ?: return
 
+        val listState = rememberLazyListState()
+        this.scrollState = listState
+
+        MaterialTheme {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
+            ) {
+                items(articles) {
+                    it ?: return@items
+                    ListItem(it)
+                }
+            }
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class)
+    @Composable
+    private fun ListItem(article: SearchResult) {
+        var expanded by remember { mutableStateOf(false) }
+        val items = listOf(
+            stringResource(id = R.string.action_add_to_bookmark),
+            stringResource(id = R.string.delete)
+        )
+
+        val context = context ?: return
+        val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
+            articleRepository,
+            AppDatabase.find(context).bookmarkRepository(),
+            {
+                contentViewModel?.snackWithAction(
+                    "Deleted: \"${it.title}\".",
+                    "UNDO"
+                ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
+            }
+        )
+
+        Surface(
+            elevation = 4.dp,
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 2.dp)
+                .combinedClickable(
+                    onClick = { contentViewModel?.newArticle(article.title) },
+                    onLongClick = { contentViewModel?.newArticleOnBackground(article.title) }
+                )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(4.dp)
+            ) {
+                Column() {
+                    Text(
+                        text = article.title,
+                        fontSize = 16.sp,
+                        maxLines = 1
+                    )
+                    Text(
+                        text = "Last updated: ${
+                            DateFormat.format(
+                                "yyyy/MM/dd(E) HH:mm:ss",
+                                article.lastModified
+                            )
+                        }" +
+                                " / ${article.length}",
+                        maxLines = 1,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+                AsyncImage(
+                    R.drawable.ic_more,
+                    stringResource(id = R.string.menu),
+                    modifier = Modifier
+                        .width(32.dp)
+                        .fillMaxHeight()
+                        .clickable {
+                            expanded = true
+                        }
+                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier
+                        .background(colorResource(id = R.color.soft_background))
+                ) {
+                    items.forEachIndexed { index, s ->
+                        DropdownMenuItem(onClick = {
+                            when (index) {
+                                0 -> menuPopupUseCase.addToBookmark(article.id)
+                                1 -> menuPopupUseCase.delete(article.id)
+                            }
+                            expanded = false
+                        }) { Text(text = s) }
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun AppBarContent() {
         val activityContext = activity ?: return
 
         contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
 
-        val menuPopup = MenuPopup(
-                activityContext,
-                ArticleListMenuPopupActionUseCase(
-                        articleRepository,
-                        AppDatabase.find(activityContext).bookmarkRepository(),
-                    {
-                        adapter.refresh()
-                        contentViewModel?.snackWithAction(
-                            "Deleted: \"${it.title}\".",
-                            "UNDO"
-                        ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
-                    }
-                )
-        )
-
-        adapter = Adapter(
-                LayoutInflater.from(context),
-                { contentViewModel?.newArticle(it) },
-                { contentViewModel?.newArticleOnBackground(it) },
-                { itemView, searchResult -> menuPopup.show(itemView, searchResult) }
-        )
-
-        binding.results.adapter = adapter
-        binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
-
-        activity?.let {
-            val activityViewModel = ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
-            activityViewModel.search.observe(it, { searchInput ->
-                searchUseCase?.search(searchInput)
-                if (appBarBinding.input.text.isNullOrEmpty()) {
-                    appBarBinding.input.setText(searchInput)
-                    appBarBinding.searchClear.isVisible = searchInput?.length != 0
-                }
-            })
-
-            appBarBinding.input.setOnEditorActionListener { textView, _, _ ->
-                val keyword = textView.text.toString()
-                activityViewModel.search(keyword)
-                Inputs.hideKeyboard(appBarBinding.input)
-                true
-            }
-        }
-
-        appBarBinding.searchClear.setOnClickListener {
-            appBarBinding.input.setText("")
-            viewModel?.clearSearchWord()
-        }
-
-        appBarBinding.input.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) = Unit
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-
-            override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                CoroutineScope(Dispatchers.Default).launch {
-                    inputChannel.send(charSequence.toString())
-                }
-
-                appBarBinding.searchClear.isVisible = charSequence?.length != 0
-            }
-
-        })
-
-        CoroutineScope(Dispatchers.Default).launch {
-            inputChannel.receiveAsFlow()
-                    .distinctUntilChanged()
-                    .debounce(1400L)
-                    .collect {
-                        withContext(Dispatchers.Main) {
-                            searchUseCase?.filter(it)
+        var searchInput by remember { mutableStateOf("") }
+        var searchResult by remember { mutableStateOf("") }
+        Row {
+            Column {
+                TextField(
+                    value = searchInput,
+                    onValueChange = {
+                        searchInput = it
+                        CoroutineScope(Dispatchers.Default).launch {
+                            inputChannel.send(it)
                         }
-                    }
+                                    },
+                    label = { stringResource(id = R.string.hint_search_articles) },
+                    singleLine = true,
+                    keyboardActions = KeyboardActions{
+                        viewModel?.search(searchInput)
+                    },
+                    colors = TextFieldDefaults.textFieldColors(textColor = Color(preferencesWrapper.fontColor)),
+                    trailingIcon = {Icon(
+                        Icons.Filled.Clear,
+                        tint = Color(preferencesWrapper.fontColor),
+                        contentDescription = "clear text",
+                        modifier = Modifier
+                            .offset(x = 8.dp)
+                            .clickable {
+                                searchInput = ""
+                            }
+                    )}
+                )
+                Text(text = searchResult, color = Color.White)
+            }
         }
 
-        viewModel = ViewModelProvider(this).get(ArticleListFragmentViewModel::class.java)
         viewModel?.progressVisibility?.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled()?.let { isVisible ->
-                binding.progressCircular.isVisible = isVisible
+                //TODO binding.progressCircular.isVisible = isVisible
             }
         })
         viewModel?.progress?.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled()?.let { message ->
-                appBarBinding.searchResult.text = message
+                searchResult = message
             }
         })
         viewModel?.messageId?.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled()?.let { messageId ->
-                appBarBinding.searchResult.setText(messageId)
+                searchResult = activityContext.getString(messageId)
             }
-        })
-        viewModel?.sort?.observe(viewLifecycleOwner, {
-            it?.getContentIfNotHandled()?.let {
-                searchUseCase?.all()
-            }
-        })
-        viewModel?.filter?.observe(viewLifecycleOwner, {
-            val keyword = it ?: return@observe
-            searchUseCase?.filter(keyword, true)
         })
 
         parentFragmentManager.setFragmentResultListener(
@@ -286,32 +383,12 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 ).invoke(year, month)
             }
         )
-
-        searchUseCase = ArticleSearchUseCase(
-                ListLoaderUseCase(adapter),
-                articleRepository,
-                preferencesWrapper
-        )
-
-        adapter.addLoadStateListener(
-            ArticleLoadStateListener(contentViewModel, { adapter.itemCount }, { activityContext.getString(it) })
-        )
-
-        searchUseCase?.search(appBarBinding.input.text?.toString())
     }
 
-    override fun onResume() {
-        super.onResume()
-        preferencesWrapper.colorPair().setTo(appBarBinding.input)
+    private fun initializeRepository(activityContext: Context) {
+        val dataBase = AppDatabase.find(activityContext)
 
-        val buttonColor = ColorUtils.setAlphaComponent(preferencesWrapper.fontColor, 196)
-        appBarBinding.input.setHintTextColor(buttonColor)
-        appBarBinding.searchClear.setColorFilter(buttonColor)
-
-        activity?.let {
-            ViewModelProvider(it).get(AppBarViewModel::class.java)
-                    .replace(appBarBinding.root)
-        }
+        articleRepository = dataBase.articleRepository()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -325,8 +402,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         return when (item.itemId) {
             R.id.action_all_article -> {
                 activity?.let {
-                    ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
-                        .search(null)
+                    viewModel?.search("")
                 }
                 true
             }
@@ -359,15 +435,18 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     }
 
     override fun toTop() {
-        RecyclerViewScroller.toTop(binding.results, adapter.itemCount)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(0, 0)
+        }
     }
 
     override fun toBottom() {
-        RecyclerViewScroller.toBottom(binding.results, adapter.itemCount)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(scrollState?.layoutInfo?.totalItemsCount ?: 0, 0)
+        }
     }
 
     override fun onDetach() {
-        searchUseCase?.dispose()
         inputChannel.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
         setTargetLauncher.unregister()
@@ -376,10 +455,4 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         super.onDetach()
     }
 
-    companion object {
-
-        @LayoutRes
-        private val LAYOUT_ID = R.layout.fragment_article_list
-
-    }
 }
