@@ -67,6 +67,8 @@ dependencies {
     implementation "com.google.android.material:material:$libVersions.material"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
     implementation "androidx.paging:paging-runtime:$libVersions.paging"
+    implementation "com.halilibo.compose-richtext:richtext-commonmark:0.11.0"
+    implementation "com.halilibo.compose-richtext:richtext-ui-material:0.11.0"
 
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
@@ -77,18 +79,6 @@ dependencies {
     implementation "androidx.paging:paging-compose:$libVersions.paging_compose"
     implementation "androidx.paging:paging-runtime-ktx:$libVersions.paging"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
-
-    final def markwonVersion = '4.6.2'
-
-    implementation "io.noties.markwon:core:$markwonVersion"
-    implementation "io.noties.markwon:ext-tables:$markwonVersion"
-    implementation "io.noties.markwon:ext-tasklist:$markwonVersion"
-    implementation "io.noties.markwon:linkify:$markwonVersion"
-    implementation ("io.noties.markwon:syntax-highlight:$markwonVersion") {
-        exclude group: 'org.jetbrains', module: 'annotations-java5'
-    }
-    implementation "io.noties.markwon:image-coil:$markwonVersion"
-    kapt "io.noties:prism4j-bundler:2.0.0"
 
     implementation "androidx.room:room-runtime:$libVersions.room"
     implementation "androidx.room:room-paging:$libVersions.room"
