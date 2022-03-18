@@ -7,7 +7,6 @@
  */
 package jp.toastkid.article_viewer.article.detail
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -16,17 +15,32 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.halilibo.richtext.markdown.Markdown
+import com.halilibo.richtext.ui.RichText
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.article.detail.markdown.MarkdownConverterProviderUseCase
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragmentViewModel
 import jp.toastkid.article_viewer.article.detail.usecase.ContentTextSearchUseCase
+import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
 import jp.toastkid.article_viewer.bookmark.Bookmark
 import jp.toastkid.article_viewer.databinding.AppBarContentViewerBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
@@ -35,7 +49,6 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
-import jp.toastkid.lib.color.LinkColorGenerator
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.view.TextViewHighlighter
@@ -43,6 +56,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -55,7 +69,11 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
     private lateinit var repository: ArticleRepository
 
+    private lateinit var viewModel: ContentViewerFragmentViewModel
+
     private val subheads = mutableListOf<String>()
+
+    private var scrollState: ScrollState? = null
 
     private val disposables = Job()
 
@@ -63,8 +81,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
+    ): View? {
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_content,
@@ -90,15 +107,49 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
             ).invoke()
         }
 
-        val linkBehaviorService = makeLinkBehaviorService()
-
-        val linkMovementMethod = ContentLinkMovementMethod {
-            linkBehaviorService?.invoke(it)
-        }
-        binding.content.movementMethod = linkMovementMethod
+        viewModel = ViewModelProvider(this).get(ContentViewerFragmentViewModel::class.java)
 
         setHasOptionsMenu(true)
-        return binding.root
+
+        val activity = activity
+            ?: return super.onCreateView(inflater, container, savedInstanceState)
+
+        val composeView = ComposeView(activity)
+        composeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
+        composeView.setContent {
+            val listState = rememberScrollState()
+            this.scrollState = listState
+            ContentViewerUi(listState)
+        }
+        return composeView
+    }
+
+    @Composable
+    fun ContentViewerUi(scrollState: ScrollState) {
+        // binding.content.setTextColor(editorFontColor)
+        val context = context ?: return
+        val preferenceApplier = PreferenceApplier(context)
+        val linkBehaviorService = makeLinkBehaviorService()
+
+        MaterialTheme {
+            Surface(modifier = Modifier.background(Color.Transparent)) {
+                RichText(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp)
+                        .verticalScroll(scrollState)
+                        //.background(Color(preferenceApplier.editorBackgroundColor())),
+                ) {
+                    Markdown(
+                        viewModel.content.value,
+                        onLinkClicked = {
+                            linkBehaviorService?.invoke(it)
+                        }
+                    )
+                }
+            }
+        }
     }
 
     private fun makeLinkBehaviorService(): LinkBehaviorService? {
@@ -139,19 +190,19 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
     override fun onResume() {
         super.onResume()
-        val preferenceApplier = PreferenceApplier(binding.root.context)
+       /* val preferenceApplier = PreferenceApplier(binding.root.context)
         binding.contentScroll.setBackgroundColor(preferenceApplier.editorBackgroundColor())
 
         val editorFontColor = preferenceApplier.editorFontColor()
         binding.content.setTextColor(editorFontColor)
         binding.content.setLinkTextColor(LinkColorGenerator().invoke(editorFontColor))
-        binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CYAN)
-
+        binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CYAN)*/
+/*
         appBarBinding.searchResult.setTextColor(preferenceApplier.fontColor)
         appBarBinding.input.setTextColor(preferenceApplier.fontColor)
         appBarBinding.tabIcon.setColorFilter(preferenceApplier.fontColor)
         appBarBinding.tabCount.setTextColor(preferenceApplier.fontColor)
-        appBarBinding.subhead.setColorFilter(preferenceApplier.fontColor)
+        appBarBinding.subhead.setColorFilter(preferenceApplier.fontColor)*/
 
         activity?.let {
             ViewModelProvider(it).get(AppBarViewModel::class.java)
@@ -163,14 +214,15 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
     fun loadContent(title: String) {
         appBarBinding.searchResult.text = title
 
-        val context = binding.root.context
-
-        ContentLoaderUseCase(
-                repository,
-                MarkdownConverterProviderUseCase()(context),
-                binding.content,
-                subheads
-        ).invoke(title)
+        CoroutineScope(Dispatchers.IO).launch(disposables) {
+            val content = repository.findContentByTitle(title)
+            if (content.isNullOrBlank()) {
+                return@launch
+            }
+            withContext(Dispatchers.Main) {
+                viewModel.setContent(content)
+            }
+        }
     }
 
     fun tabList() {
