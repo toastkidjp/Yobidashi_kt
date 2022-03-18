@@ -38,12 +38,9 @@ import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
-import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragmentViewModel
-import jp.toastkid.article_viewer.article.detail.usecase.ContentTextSearchUseCase
 import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
 import jp.toastkid.article_viewer.bookmark.Bookmark
 import jp.toastkid.article_viewer.databinding.AppBarContentViewerBinding
-import jp.toastkid.article_viewer.databinding.FragmentContentBinding
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
@@ -51,7 +48,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
-import jp.toastkid.lib.view.TextViewHighlighter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -62,8 +58,6 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiFragment {
-
-    private lateinit var binding: FragmentContentBinding
 
     private lateinit var appBarBinding: AppBarContentViewerBinding
 
@@ -82,12 +76,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_content,
-            container,
-            false
-        )
         appBarBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.app_bar_content_viewer,
@@ -98,21 +86,20 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         appBarBinding.tabListViewModel = activity?.let {
             ViewModelProvider(it).get(TabListViewModel::class.java)
         }
-        repository = AppDatabase.find(binding.root.context).articleRepository()
 
-        activity?.let {
-            ContextMenuInitializer(
-                    binding.content,
-                    ViewModelProvider(it).get(BrowserViewModel::class.java)
-            ).invoke()
-        }
+        val activity = activity
+            ?: return super.onCreateView(inflater, container, savedInstanceState)
+
+        repository = AppDatabase.find(activity).articleRepository()
+
+        /*TODO ContextMenuInitializer(
+            binding.content,
+            ViewModelProvider(it).get(BrowserViewModel::class.java)
+        ).invoke()*/
 
         viewModel = ViewModelProvider(this).get(ContentViewerFragmentViewModel::class.java)
 
         setHasOptionsMenu(true)
-
-        val activity = activity
-            ?: return super.onCreateView(inflater, container, savedInstanceState)
 
         val composeView = ComposeView(activity)
         composeView.setViewCompositionStrategy(
@@ -165,22 +152,9 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.content.linksClickable = true
-
-        val contentTextSearchUseCase = ContentTextSearchUseCase(
-            TextViewHighlighter(binding.content)
-        )
-
         appBarBinding.input.addTextChangedListener {
-            contentTextSearchUseCase.invoke(it.toString())
+            //TODO contentTextSearchUseCase.invoke(it.toString())
         }
-
-        contentTextSearchUseCase.startObserve()
-
-        ViewModelProvider(this)
-            .get(SubheadDialogFragmentViewModel::class.java)
-            .subhead
-            .observe(viewLifecycleOwner, { })
 
         val activity = activity ?: return
         ViewModelProvider(activity).get(TabListViewModel::class.java)
@@ -232,10 +206,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         }
     }
 
-    override fun toTop() {
-        binding.contentScroll.smoothScrollTo(0, 0)
-    }
-
     fun showSubheads() {
         if (subheads.isEmpty()) {
             return
@@ -245,8 +215,16 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
             .show(parentFragmentManager, SubheadDialogFragment::class.java.canonicalName)
     }
 
+    override fun toTop() {
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollTo(0)
+        }
+    }
+
     override fun toBottom() {
-        binding.contentScroll.smoothScrollTo(0, binding.content.measuredHeight)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollTo(scrollState?.maxValue ?: 0)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
