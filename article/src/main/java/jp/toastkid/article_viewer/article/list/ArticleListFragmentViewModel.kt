@@ -15,6 +15,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.list.sort.Sort
+import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -24,6 +25,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
  */
 class ArticleListFragmentViewModel(
     private val articleRepository: ArticleRepository,
+    private val bookmarkRepository: BookmarkRepository,
     private val preferencesWrapper: PreferenceApplier
 ) : ViewModel() {
 
@@ -76,11 +78,17 @@ class ArticleListFragmentViewModel(
     fun filter(keyword: String?) {
         setNextPager {
             if (keyword.isNullOrBlank())
-                Sort.findByName(this@ArticleListFragmentViewModel.preferencesWrapper.articleSort())
-                    .invoke(this@ArticleListFragmentViewModel.articleRepository)
+                Sort.findByName(preferencesWrapper.articleSort())
+                    .invoke(articleRepository)
             else
-                this@ArticleListFragmentViewModel.articleRepository.filter(keyword)
+                articleRepository.filter(keyword)
         }
+    }
+
+    fun bookmark() {
+        val findByIds = articleRepository.findByIds(bookmarkRepository.allArticleIds())
+
+        setNextPager { findByIds }
     }
 
     private fun setNextPager(pagingSourceFactory: () -> PagingSource<Int, SearchResult>) {

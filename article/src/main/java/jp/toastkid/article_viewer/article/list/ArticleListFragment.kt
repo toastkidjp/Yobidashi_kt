@@ -138,7 +138,13 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         setHasOptionsMenu(true)
 
-        viewModel = ArticleListFragmentViewModelFactory(articleRepository, preferencesWrapper)
+        val bookmarkRepository = AppDatabase.find(context).bookmarkRepository()
+
+        viewModel = ArticleListFragmentViewModelFactory(
+            articleRepository,
+            bookmarkRepository,
+            preferencesWrapper
+        )
             .create(ArticleListFragmentViewModel::class.java)
 
         val composeView = ComposeView(context)
@@ -163,7 +169,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
             articleRepository,
-            AppDatabase.find(context).bookmarkRepository(),
+            bookmarkRepository,
             {
                 contentViewModel?.snackWithAction(
                     "Deleted: \"${it.title}\".",

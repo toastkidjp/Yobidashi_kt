@@ -15,24 +15,23 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.article.list.Adapter
-import jp.toastkid.article_viewer.article.list.ListLoaderUseCase
+import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
+import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModelFactory
 import jp.toastkid.article_viewer.article.list.menu.BookmarkListMenuPopupActionUseCase
-import jp.toastkid.article_viewer.article.list.menu.MenuPopup
+import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
-import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.RecyclerViewScroller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,11 +44,6 @@ import kotlinx.coroutines.withContext
 class BookmarkFragment : Fragment(), ContentScrollable {
 
     /**
-     * [RecyclerView]'s adapter.
-     */
-    private lateinit var adapter: Adapter
-
-    /**
      * Preferences wrapper.
      */
     private lateinit var preferencesWrapper: PreferenceApplier
@@ -59,7 +53,7 @@ class BookmarkFragment : Fragment(), ContentScrollable {
      */
     private lateinit var articleRepository: ArticleRepository
 
-    private lateinit var binding: FragmentArticleListBinding
+    private var scrollState: LazyListState? = null
 
     /**
      * Use for clean up subscriptions.
@@ -89,54 +83,60 @@ class BookmarkFragment : Fragment(), ContentScrollable {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        context?.let { preferencesWrapper = PreferenceApplier(it) }
+        val activity = activity
+            ?: return super.onCreateView(inflater, container, savedInstanceState)
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_list, container, false)
-        return binding.root
-    }
+        preferencesWrapper = PreferenceApplier(activity)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val composeView = ComposeView(activity)
+        composeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
+        val contentViewModel = ViewModelProvider(activity).get(ContentViewModel::class.java)
+        val bookmarkRepository = AppDatabase.find(activity).bookmarkRepository()
 
-        val activityContext = activity ?: return
+        val viewModel = ArticleListFragmentViewModelFactory(
+            articleRepository,
+            bookmarkRepository,
+            preferencesWrapper
+        )
+            .create(ArticleListFragmentViewModel::class.java)
 
-        val bookmarkRepository = AppDatabase.find(activityContext).bookmarkRepository()
-        val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
-        closeOnEmpty(bookmarkRepository, contentViewModel)
-
-        val menuPopup = MenuPopup(
-                activityContext,
-                BookmarkListMenuPopupActionUseCase(
-                    bookmarkRepository,
-                    {
-                        adapter.refresh()
-                        closeOnEmpty(bookmarkRepository, contentViewModel)
-                    }
-                ),
-                false
+        val menuPopupUseCase = BookmarkListMenuPopupActionUseCase(
+            bookmarkRepository,
+            {
+                contentViewModel.snackShort("Deleted.")
+                CoroutineScope(Dispatchers.IO).launch {
+                    viewModel.bookmark()
+                }
+                closeOnEmpty(bookmarkRepository, contentViewModel)
+            }
         )
 
-        adapter = Adapter(
-            LayoutInflater.from(activityContext),
-            {
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    contentViewModel.newArticle(it)
-                }
-            },
-            {
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    contentViewModel.newArticleOnBackground(it)
-                }
-            },
-            { itemView, searchResult -> menuPopup.show(itemView, searchResult) }
-        )
-        binding.results.adapter = adapter
-        binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
+        viewModel.dataSource.observe(viewLifecycleOwner, {
+            composeView.setContent {
+                val listState = rememberLazyListState()
+                this.scrollState = listState
+                ArticleListUi(
+                    it?.flow,
+                    listState,
+                    contentViewModel,
+                    menuPopupUseCase,
+                    preferencesWrapper.color
+                )
+            }
 
-        showAllBookmark(activityContext)
+            closeOnEmpty(bookmarkRepository, contentViewModel)
+        })
+
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.bookmark()
+        }
+
+        return composeView
     }
 
     private fun closeOnEmpty(
@@ -151,14 +151,6 @@ class BookmarkFragment : Fragment(), ContentScrollable {
                 contentViewModel.snackShort("Bookmark list is empty.")
                 activity?.supportFragmentManager?.popBackStack()
             }
-        }
-    }
-
-    private fun showAllBookmark(activityContext: Context) {
-        ListLoaderUseCase(adapter).invoke {
-            val database = AppDatabase.find(activityContext)
-            val articleIds = database.bookmarkRepository().allArticleIds()
-            return@invoke articleRepository.findByIds(articleIds)
         }
     }
 
@@ -180,11 +172,15 @@ class BookmarkFragment : Fragment(), ContentScrollable {
     }
 
     override fun toTop() {
-        RecyclerViewScroller.toTop(binding.results, binding.results.adapter?.itemCount ?: 0)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(0, 0)
+        }
     }
 
     override fun toBottom() {
-        RecyclerViewScroller.toBottom(binding.results, binding.results.adapter?.itemCount ?: 0)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(scrollState?.layoutInfo?.totalItemsCount ?: 0, 0)
+        }
     }
 
     override fun onDetach() {
