@@ -154,7 +154,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         activity?.let {
             val appBarComposeView = ComposeView(context)
-            composeView.setViewCompositionStrategy(
+            appBarComposeView.setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
             )
             appBarComposeView.setContent {
