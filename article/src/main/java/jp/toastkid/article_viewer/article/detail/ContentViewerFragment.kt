@@ -138,7 +138,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
                 RichText(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
-                        .verticalScroll(scrollState)
+                        .verticalScroll(scrollState),
                         //.background(Color(preferenceApplier.editorBackgroundColor())),
                 ) {
                     Markdown(
@@ -219,6 +219,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
             if (content.isNullOrBlank()) {
                 return@launch
             }
+
             withContext(Dispatchers.Main) {
                 viewModel.setContent(content)
             }
