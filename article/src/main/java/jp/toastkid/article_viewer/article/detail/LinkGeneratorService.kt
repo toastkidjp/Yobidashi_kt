@@ -7,8 +7,6 @@
  */
 package jp.toastkid.article_viewer.article.detail
 
-import android.text.util.Linkify
-import android.widget.TextView
 import java.util.regex.Pattern
 
 /**
@@ -16,18 +14,17 @@ import java.util.regex.Pattern
  */
 class LinkGeneratorService {
 
-    operator fun invoke(textView: TextView) {
-        embedLinks(textView, internalLinkPattern) { matcher, _ ->
-            InternalLinkScheme().makeLink(matcher.group(1))
-        }
-
-        embedLinks(textView, httpPattern) { matcher, _ ->
-            matcher.group(0)
-        }
+    operator fun invoke(text: String): String {
+        return embedLinks(text, internalLinkPattern, 1)
     }
 
-    private fun embedLinks(textView: TextView, pattern: Pattern, transformFilter: Linkify.TransformFilter) {
-        Linkify.addLinks(textView, pattern, null, null, transformFilter)
+    private fun embedLinks(text: String, pattern: Pattern, group: Int): String {
+        var converted = text
+        val matcher = pattern.matcher(converted)
+        while (matcher.find()) {
+            converted = matcher.replaceFirst(InternalLinkScheme().makeLink(matcher.group(group)))
+        }
+        return converted
     }
 
     companion object {
