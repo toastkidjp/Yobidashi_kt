@@ -200,11 +200,20 @@ class BoardFragment : Fragment() {
                 .height(140.dp)
                 .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
                 .pointerInput(Unit) {
-                    detectDragGestures { change, dragAmount ->
-                        change.consumeAllChanges()
-                        offsetX += dragAmount.x
-                        offsetY += dragAmount.y
-                    }
+                    detectDragGestures(
+                        onDragEnd = {
+                            task.x = offsetX
+                            task.y = offsetY
+                            CoroutineScope(Dispatchers.IO).launch {
+                                repository.insert(task)
+                            }
+                        },
+                        onDrag = { change, dragAmount ->
+                            change.consumeAllChanges()
+                            offsetX += dragAmount.x
+                            offsetY += dragAmount.y
+                        }
+                    )
                 }
         ) {
             Row(
