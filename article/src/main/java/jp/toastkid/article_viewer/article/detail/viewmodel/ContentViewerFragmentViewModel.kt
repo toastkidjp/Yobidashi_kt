@@ -14,6 +14,14 @@ import androidx.lifecycle.ViewModel
 
 class ContentViewerFragmentViewModel : ViewModel() {
 
+    private val _title = mutableStateOf("")
+
+    val title: State<String> = _title
+
+    fun setTitle(newTitle: String) {
+        _title.value = newTitle
+    }
+
     private val _content = mutableStateOf("")
 
     val content: State<String> = _content
