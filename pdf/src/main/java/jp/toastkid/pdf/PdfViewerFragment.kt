@@ -21,8 +21,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
@@ -32,7 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
+import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
@@ -40,6 +47,7 @@ import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 /**
  * @author toastkidjp
@@ -54,7 +62,7 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val context = context ?: return null
+        val context = activity ?: return null
         val composeView = ComposeView(context)
         composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         arguments?.let { arguments ->
@@ -68,6 +76,8 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
                 }
             }
         }
+
+        ViewModelProvider(context).get(AppBarViewModel::class.java).replace(context) { AppBarUi() }
 
         return composeView
     }
@@ -111,6 +121,24 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
                 }
             }
         }
+    }
+
+    @Composable
+    fun AppBarUi() {
+        var sliderPosition by remember { mutableStateOf(0f) }
+        Slider(
+            value = sliderPosition,
+            onValueChange = {
+                sliderPosition = it
+                CoroutineScope(Dispatchers.Main).launch {
+                    scrollState?.scrollToItem(
+                        ((scrollState?.layoutInfo?.totalItemsCount ?: 0 ) * it).roundToInt(),
+                        0
+                    )
+                }
+            },
+            steps = (scrollState?.layoutInfo?.totalItemsCount ?: 2) - 1
+        )
     }
 
     /**
