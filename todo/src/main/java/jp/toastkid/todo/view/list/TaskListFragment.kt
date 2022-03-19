@@ -223,41 +223,37 @@ class TaskListFragment : Fragment(), ContentScrollable {
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                Box(
-                    modifier = Modifier
-                        .width(20.dp)
-                        .fillMaxHeight()
-                        .background(color = Color(task.color))
-                )
-                AsyncImage(
-                    R.drawable.ic_more,
-                    contentDescription = stringResource(R.string.menu),
-                    colorFilter = ColorFilter.tint(
-                        Color(color),
-                        BlendMode.SrcIn
-                    ),
-                    modifier = Modifier
-                        .width(32.dp)
-                        .fillMaxHeight()
-                        .clickable {
-                            expanded = true
-                        }
-                        .background(color = Color(task.color))
-                )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .background(colorResource(id = R.color.soft_background))
-                ) {
-                    items.forEachIndexed { index, s ->
-                        DropdownMenuItem(onClick = {
-                            when (index) {
-                                0 -> menuUseCase.modify(task)
-                                1 -> menuUseCase.delete(task)
+                Box {
+                    AsyncImage(
+                        R.drawable.ic_more,
+                        contentDescription = stringResource(R.string.menu),
+                        colorFilter = ColorFilter.tint(
+                            Color(color),
+                            BlendMode.SrcIn
+                        ),
+                        modifier = Modifier
+                            .width(32.dp)
+                            .fillMaxHeight()
+                            .clickable {
+                                expanded = true
                             }
-                            expanded = false
-                        }) { Text(text = s) }
+                            .background(color = Color(task.color))
+                    )
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier
+                            .background(colorResource(id = R.color.soft_background))
+                    ) {
+                        items.forEachIndexed { index, s ->
+                            DropdownMenuItem(onClick = {
+                                when (index) {
+                                    0 -> menuUseCase.modify(task)
+                                    1 -> menuUseCase.delete(task)
+                                }
+                                expanded = false
+                            }) { Text(text = s) }
+                        }
                     }
                 }
             }
