@@ -126,6 +126,9 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
     @Composable
     fun AppBarUi() {
         var sliderPosition by remember { mutableStateOf(0f) }
+        if (scrollState?.layoutInfo?.totalItemsCount == 0) {
+            return
+        }
         Slider(
             value = sliderPosition,
             onValueChange = {
@@ -137,7 +140,7 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
                     )
                 }
             },
-            steps = (scrollState?.layoutInfo?.totalItemsCount ?: 2) - 1
+            steps = (scrollState?.layoutInfo?.totalItemsCount ?: 1) - 1
         )
     }
 
