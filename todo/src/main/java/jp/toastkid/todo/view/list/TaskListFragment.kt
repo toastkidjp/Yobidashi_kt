@@ -57,6 +57,7 @@ import androidx.paging.cachedIn
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
+import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
@@ -66,6 +67,7 @@ import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
+import jp.toastkid.todo.view.appbar.AppBarUi
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -80,18 +82,35 @@ class TaskListFragment : Fragment(), ContentScrollable {
 
     private var scrollState: LazyListState? = null
 
+    private var repository: TodoTaskDataAccessor? = null
+
+    private var taskAdditionDialogFragmentUseCase: TaskAdditionDialogFragmentUseCase? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val context = context ?: return null
+        val context = activity ?: return null
         val composeView = ComposeView(context)
         composeView.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
         )
 
         val repository = TodoTaskDatabase.find(context).repository()
+        this.repository = repository
+
+        taskAdditionDialogFragmentUseCase = TaskAdditionDialogFragmentUseCase(
+            this,
+            ViewModelProvider(this).get(TaskAdditionDialogFragmentViewModel::class.java)
+        ) {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    repository.insert(it)
+                }
+            }
+        }
+
         CoroutineScope(Dispatchers.Main).launch {
             val flow = withContext(Dispatchers.IO) {
                 Pager(
@@ -104,34 +123,35 @@ class TaskListFragment : Fragment(), ContentScrollable {
             composeView.setContent { TaskListUi(flow) }
         }
 
+        val appBarComposeView = ComposeView(context)
+        appBarComposeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
+        appBarComposeView.setContent {
+            AppBarUi {
+                taskAdditionDialogFragmentUseCase?.invoke()
+            }
+        }
+        ViewModelProvider(context).get(AppBarViewModel::class.java)
+            .replace(appBarComposeView)
+
         return composeView
     }
 
     @Composable
     fun TaskListUi(flow: Flow<PagingData<TodoTask>>) {
         val context = view?.context ?: return
-        val repository = TodoTaskDatabase.find(context).repository()
         val color = PreferenceApplier(context).color
 
         val listState = rememberLazyListState()
         this.scrollState = listState
 
-        val taskAdditionDialogFragmentUseCase = TaskAdditionDialogFragmentUseCase(
-            this,
-            ViewModelProvider(this).get(TaskAdditionDialogFragmentViewModel::class.java)
-        ) {
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    repository.insert(it)
-                }
-            }
-        }
         val menuUseCase = ItemMenuPopupActionUseCase(
-            { taskAdditionDialogFragmentUseCase.invoke(it) },
+            { taskAdditionDialogFragmentUseCase?.invoke(it) },
             {
                 CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
-                        repository.delete(it)
+                        repository?.delete(it)
                     }
                 }
             }
@@ -146,7 +166,7 @@ class TaskListFragment : Fragment(), ContentScrollable {
             ) {
                 items(tasks) { task ->
                     task ?: return@items
-                    TaskListItem(task, repository, color, menuUseCase)
+                    TaskListItem(task, color, menuUseCase)
                 }
             }
         }
@@ -155,7 +175,6 @@ class TaskListFragment : Fragment(), ContentScrollable {
     @Composable
     private fun TaskListItem(
         task: TodoTask,
-        repository: TodoTaskDataAccessor,
         color: Int,
         menuUseCase: ItemMenuPopupActionUseCase
     ) {
@@ -181,7 +200,7 @@ class TaskListFragment : Fragment(), ContentScrollable {
                     onCheckedChange = {
                         task.done = task.done.not()
                         CoroutineScope(Dispatchers.IO).launch {
-                            repository.insert(task)
+                            repository?.insert(task)
                         }
                     },
                     modifier = Modifier
