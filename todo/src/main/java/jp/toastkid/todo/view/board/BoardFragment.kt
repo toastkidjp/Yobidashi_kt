@@ -59,6 +59,7 @@ import androidx.paging.cachedIn
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
+import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDataAccessor
@@ -66,6 +67,7 @@ import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
+import jp.toastkid.todo.view.appbar.AppBarUi
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -79,8 +81,6 @@ import kotlin.math.roundToInt
  */
 class BoardFragment : Fragment() {
 
-    private var taskAdditionDialogFragmentUseCase: TaskAdditionDialogFragmentUseCase? = null
-
     private var taskClearUseCase: TaskClearUseCase? = null
 
     override fun onCreateView(
@@ -88,7 +88,7 @@ class BoardFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val context = context ?: return null
+        val context = activity ?: return null
         val composeView = ComposeView(context)
         composeView.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
@@ -106,6 +106,27 @@ class BoardFragment : Fragment() {
             }
             composeView.setContent { TaskBoardUi(flow) }
         }
+
+        val taskAdditionDialogFragmentUseCase = TaskAdditionDialogFragmentUseCase(
+            this,
+            ViewModelProvider(this).get(TaskAdditionDialogFragmentViewModel::class.java)
+        ) {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    repository.insert(it)
+                }
+            }
+        }
+
+        val appBarComposeView = ComposeView(context)
+        appBarComposeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
+        appBarComposeView.setContent {
+            AppBarUi { taskAdditionDialogFragmentUseCase.invoke() }
+        }
+        ViewModelProvider(context).get(AppBarViewModel::class.java)
+            .replace(appBarComposeView)
 
         return composeView
     }
@@ -255,73 +276,8 @@ class BoardFragment : Fragment() {
             }
         }
     }
-/*
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        var popup: ItemMenuPopup? = null
-
-        val viewModel = ViewModelProvider(this).get(TaskListFragmentViewModel::class.java)
-        viewModel
-                .showMenu
-                .observe(viewLifecycleOwner, Observer { event ->
-                    event.getContentIfNotHandled()?.let {
-                        popup?.show(it.first, it.second)
-                    }
-                })
-
-        taskAdditionDialogFragmentUseCase =
-                TaskAdditionDialogFragmentUseCase(
-                        this,
-                        ViewModelProvider(this).get(TaskAdditionDialogFragmentViewModel::class.java)
-                ) {
-                    val firstOrNull = tasks.firstOrNull { task -> task.lastModified == it.lastModified }
-                    if (firstOrNull == null) {
-                        it.id = tasks.size + 1
-                        taskAddingUseCase?.invoke(it)
-                        return@TaskAdditionDialogFragmentUseCase
-                    }
-
-                    tasks.remove(firstOrNull)
-                    removeTask(firstOrNull)
-                    taskAddingUseCase?.invoke(firstOrNull)
-                }
-
-        popup = ItemMenuPopup(
-                view.context,
-                ItemMenuPopupActionUseCase(
-                        { taskAdditionDialogFragmentUseCase?.invoke(it) },
-                        ::removeTask
-                )
-        )
-
-        taskAddingUseCase = TaskAddingUseCase(
-                PreferenceApplier(view.context).color,
-                tasks,
-                binding.board,
-                BoardItemViewFactory(layoutInflater) { parent, showTask ->
-                    popup.show(parent, showTask)
-                }
-        )
-
-        activity?.let {
-            val viewModelProvider = ViewModelProvider(it)
-
-            viewModelProvider.get(AppBarViewModel::class.java).replace(appBarBinding.root)
-
-            taskClearUseCase = TaskClearUseCase(
-                    tasks,
-                    viewModelProvider.get(ContentViewModel::class.java),
-                    taskAddingUseCase
-            ) { binding.board.removeAllViews() }
-        }
-
-        taskAddingUseCase?.invoke(makeSampleTask())
-    }*/
 
     fun addTask() {
-        taskAdditionDialogFragmentUseCase?.invoke()
     }
 
     fun clearTasks() {
