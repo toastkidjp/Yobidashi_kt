@@ -33,6 +33,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,8 +52,7 @@ import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogFragment
 import jp.toastkid.article_viewer.article.list.date.FilterByMonthUseCase
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
-import jp.toastkid.article_viewer.article.list.sort.Sort
-import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
+import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogUi
 import jp.toastkid.article_viewer.article.list.usecase.UpdateUseCase
 import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.article_viewer.bookmark.BookmarkFragment
@@ -118,6 +118,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             UpdateUseCase(viewModel) { context }.invokeIfNeed(it.data?.data)
         }
 
+    private var openSortDialog: MutableState<Boolean>? = null
+
     private var scrollState: LazyListState? = null
 
     override fun onCreateView(
@@ -152,6 +154,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
         )
 
+        val preferenceApplier = PreferenceApplier(context)
+
         activity?.let {
             val appBarComposeView = ComposeView(context)
             appBarComposeView.setViewCompositionStrategy(
@@ -159,6 +163,13 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             )
             appBarComposeView.setContent {
                 AppBarContent()
+                val openSortDialog = remember { mutableStateOf(false) }
+                this.openSortDialog = openSortDialog
+                if (openSortDialog.value) {
+                    SortSettingDialogUi(preferenceApplier, openSortDialog, onSelect = {
+                        viewModel?.sort(it)
+                    })
+                }
             }
             ViewModelProvider(it).get(AppBarViewModel::class.java)
                 .replace(appBarComposeView)
@@ -262,15 +273,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         })
 
         parentFragmentManager.setFragmentResultListener(
-            "sorting",
-            viewLifecycleOwner,
-            { key, result ->
-                val sort = result[key] as? Sort ?: return@setFragmentResultListener
-                viewModel?.sort(sort)
-            }
-        )
-
-        parentFragmentManager.setFragmentResultListener(
             "date_filter",
             viewLifecycleOwner,
             { _, result ->
@@ -313,8 +315,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 true
             }
             R.id.action_sort -> {
-                val dialogFragment = SortSettingDialogFragment()
-                dialogFragment.show(parentFragmentManager, "")
+                openSortDialog?.value = true
                 true
             }
             R.id.action_date_filter -> {
@@ -348,7 +349,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         inputChannel.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
         setTargetLauncher.unregister()
-        parentFragmentManager.clearFragmentResultListener("sorting")
         parentFragmentManager.clearFragmentResultListener("date_filter")
         super.onDetach()
     }
