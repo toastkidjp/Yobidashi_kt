@@ -27,13 +27,17 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,8 +69,8 @@ import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDataAccessor
 import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.model.TodoTask
-import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
+import jp.toastkid.todo.view.addition.TaskEditorUi
 import jp.toastkid.todo.view.appbar.AppBarUi
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
 import kotlinx.coroutines.CoroutineScope
@@ -84,8 +88,9 @@ class TaskListFragment : Fragment(), ContentScrollable {
 
     private var repository: TodoTaskDataAccessor? = null
 
-    private var taskAdditionDialogFragmentUseCase: TaskAdditionDialogFragmentUseCase? = null
+    private var taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel? = null
 
+    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -100,16 +105,8 @@ class TaskListFragment : Fragment(), ContentScrollable {
         val repository = TodoTaskDatabase.find(context).repository()
         this.repository = repository
 
-        taskAdditionDialogFragmentUseCase = TaskAdditionDialogFragmentUseCase(
-            this,
+        taskAdditionDialogFragmentViewModel =
             ViewModelProvider(this).get(TaskAdditionDialogFragmentViewModel::class.java)
-        ) {
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    repository.insert(it)
-                }
-            }
-        }
 
         CoroutineScope(Dispatchers.Main).launch {
             val flow = withContext(Dispatchers.IO) {
@@ -120,20 +117,40 @@ class TaskListFragment : Fragment(), ContentScrollable {
                     .flow
                     .cachedIn(lifecycleScope)
             }
-            composeView.setContent { TaskListUi(flow) }
-        }
+            composeView.setContent {
+                val preferenceApplier = PreferenceApplier(context)
+                val bottomSheetScaffoldState = rememberModalBottomSheetState(
+                    ModalBottomSheetValue.Hidden
+                )
 
-        val appBarComposeView = ComposeView(context)
-        appBarComposeView.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
-        )
-        appBarComposeView.setContent {
-            AppBarUi {
-                taskAdditionDialogFragmentUseCase?.invoke()
+                TaskEditorUi(
+                    { TaskListUi(flow) },
+                    taskAdditionDialogFragmentViewModel,
+                    bottomSheetScaffoldState,
+                    {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            repository.insert(it)
+                        }
+                    },
+                    colorPair = preferenceApplier.colorPair()
+                )
+
+                val coroutineScope = rememberCoroutineScope()
+
+                taskAdditionDialogFragmentViewModel?.task?.observe(viewLifecycleOwner, {
+                    coroutineScope.launch {
+                        bottomSheetScaffoldState.show()
+                    }
+                })
             }
         }
+
         ViewModelProvider(context).get(AppBarViewModel::class.java)
-            .replace(appBarComposeView)
+            .replace(context) {
+                AppBarUi {
+                    taskAdditionDialogFragmentViewModel?.setTask(null)
+                }
+            }
 
         return composeView
     }
@@ -147,7 +164,7 @@ class TaskListFragment : Fragment(), ContentScrollable {
         this.scrollState = listState
 
         val menuUseCase = ItemMenuPopupActionUseCase(
-            { taskAdditionDialogFragmentUseCase?.invoke(it) },
+            { taskAdditionDialogFragmentViewModel?.setTask(it) },
             {
                 CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {

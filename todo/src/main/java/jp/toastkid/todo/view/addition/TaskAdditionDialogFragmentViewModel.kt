@@ -19,6 +19,17 @@ import java.io.Serializable
  */
 class TaskAdditionDialogFragmentViewModel : ViewModel(), Serializable {
 
+    private val _task = MutableLiveData<TodoTask?>()
+
+    val task: LiveData<TodoTask?> = _task
+
+    fun setTask(task: TodoTask?) {
+        _task.postValue(
+            task
+                ?: TodoTask(0).also { it.dueDate = System.currentTimeMillis() }
+        )
+    }
+
     private val _refresh = MutableLiveData<Event<TodoTask>>()
 
     val refresh: LiveData<Event<TodoTask>> = _refresh
