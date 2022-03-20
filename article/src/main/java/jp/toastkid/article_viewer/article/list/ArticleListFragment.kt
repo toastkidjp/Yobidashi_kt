@@ -49,13 +49,14 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.article.list.date.DateFilterDialogFragment
+import jp.toastkid.article_viewer.article.list.date.DateFilterDialogUi
 import jp.toastkid.article_viewer.article.list.date.FilterByMonthUseCase
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogUi
 import jp.toastkid.article_viewer.article.list.usecase.UpdateUseCase
 import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.article_viewer.bookmark.BookmarkFragment
+import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
 import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
 import jp.toastkid.lib.AppBarViewModel
@@ -120,6 +121,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
     private var openSortDialog: MutableState<Boolean>? = null
 
+    private var openDateDialog: MutableState<Boolean>? = null
+
     private var scrollState: LazyListState? = null
 
     override fun onCreateView(
@@ -165,10 +168,22 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 AppBarContent()
                 val openSortDialog = remember { mutableStateOf(false) }
                 this.openSortDialog = openSortDialog
+
                 if (openSortDialog.value) {
                     SortSettingDialogUi(preferenceApplier, openSortDialog, onSelect = {
                         viewModel?.sort(it)
                     })
+                }
+
+                val openDateDialog = remember { mutableStateOf(false) }
+                this.openDateDialog = openDateDialog
+
+                if (openDateDialog.value) {
+                    DateFilterDialogUi(
+                        preferenceApplier.colorPair(),
+                        openDateDialog,
+                        DateSelectedActionUseCase(articleRepository, contentViewModel)
+                    )
                 }
             }
             ViewModelProvider(it).get(AppBarViewModel::class.java)
@@ -319,8 +334,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 true
             }
             R.id.action_date_filter -> {
-                val dateFilterDialogFragment = DateFilterDialogFragment()
-                dateFilterDialogFragment.show(parentFragmentManager, "")
+                openDateDialog?.value = true
                 true
             }
             R.id.action_switch_title_filter -> {
