@@ -8,12 +8,13 @@
 
 package jp.toastkid.image.preview
 
+import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -28,8 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import coil.ComponentRegistry
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
 import jp.toastkid.image.Image
 import kotlinx.coroutines.launch
 
@@ -39,10 +46,19 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
+    val imageLoader = ImageLoader.Builder(LocalContext.current)
+        .components {
+            ComponentRegistry.Builder()
+                .add(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) ImageDecoderDecoder.Factory()
+                    else GifDecoder.Factory()
+                )
+        }
+        .build()
+
     MaterialTheme {
         LazyRow(
             state = listState,
-            contentPadding = PaddingValues(end = 16.dp),
             modifier = Modifier.fillMaxSize().background(Color.Transparent)
         ) {
             items(images) { image ->
@@ -57,7 +73,9 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 }
 
                 AsyncImage(
-                    model = image.path,
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(image.path).crossfade(true).build(),
+                    imageLoader = imageLoader,
                     contentDescription = image.name,
                     modifier = Modifier.fillMaxSize()
                         .graphicsLayer(
@@ -68,6 +86,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             translationY = offset.y
                         )
                         .transformable(state = state)
+                        .padding(end = 16.dp)
                 )
             }
             coroutineScope.launch {
