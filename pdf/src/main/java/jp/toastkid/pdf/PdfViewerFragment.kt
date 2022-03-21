@@ -14,6 +14,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +31,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -105,11 +109,27 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
                                 bottom = 2.dp
                             )
                     ) {
-                        Column {
+                        var scale by remember { mutableStateOf(1f) }
+                        var offset by remember { mutableStateOf(Offset.Zero) }
+
+                        val state = rememberTransformableState { zoomChange, offsetChange, _ ->
+                            scale *= zoomChange
+                            offset += offsetChange
+                        }
+
+                        Column(
+                            modifier = Modifier.fillMaxWidth()
+                                .graphicsLayer(
+                                    scaleX = scale,
+                                    scaleY = scale,
+                                    translationX = offset.x,
+                                    translationY = offset.y
+                                )
+                                .transformable(state = state)
+                        ) {
                             AsyncImage(
                                 model = pdfImageFactory.invoke(pdfRenderer.openPage(it)),
-                                contentDescription = null,
-                                modifier = Modifier.fillMaxWidth()
+                                contentDescription = "${it + 1} / $max"
                             )
                             Text(
                                 text = "${it + 1} / $max",
