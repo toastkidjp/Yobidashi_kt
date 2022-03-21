@@ -20,7 +20,7 @@ import java.util.UUID
 /**
  * @author toastkidjp
  */
-class ImageStoreService(
+class ImageStoreUseCase(
     private val filesDir: StorageWrapper,
     private val preferenceApplier: PreferenceApplier,
     private val bitmapScaling: BitmapScaling = BitmapScaling()

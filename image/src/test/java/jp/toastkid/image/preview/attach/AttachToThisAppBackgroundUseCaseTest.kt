@@ -23,7 +23,7 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.image.ImageStoreService
+import jp.toastkid.lib.image.ImageStoreUseCase
 import jp.toastkid.lib.window.WindowRectCalculatorCompat
 import org.junit.After
 import org.junit.Before
@@ -41,13 +41,13 @@ class AttachToThisAppBackgroundUseCaseTest {
     private lateinit var contentViewModel: ContentViewModel
 
     @MockK
-    private lateinit var imageStoreServiceFactory: (Context) -> ImageStoreService
+    private lateinit var imageStoreUseCaseFactory: (Context) -> ImageStoreUseCase
 
     @MockK
     private lateinit var windowRectCalculatorCompat: WindowRectCalculatorCompat
 
     @MockK
-    private lateinit var imageStoreService: ImageStoreService
+    private lateinit var imageStoreUseCase: ImageStoreUseCase
 
     @MockK
     private lateinit var context: Activity
@@ -67,8 +67,8 @@ class AttachToThisAppBackgroundUseCaseTest {
 
         every { contentViewModel.refresh() }.just(Runs)
         every { contentViewModel.snackShort(any<Int>()) }.just(Runs)
-        every { imageStoreServiceFactory.invoke(any()) }.returns(imageStoreService)
-        every { imageStoreService.invoke(any(), any(), any()) }.just(Runs)
+        every { imageStoreUseCaseFactory.invoke(any()) }.returns(imageStoreUseCase)
+        every { imageStoreUseCase.invoke(any(), any(), any()) }.just(Runs)
         every { windowRectCalculatorCompat.invoke(any()) }.returns(mockk())
     }
 
@@ -84,8 +84,8 @@ class AttachToThisAppBackgroundUseCaseTest {
         verify(exactly = 1) { contentViewModel.refresh() }
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 1) { windowRectCalculatorCompat.invoke(any()) }
-        verify(exactly = 1) { imageStoreServiceFactory.invoke(any()) }
-        verify(exactly = 1) { imageStoreService.invoke(any(), any(), any()) }
+        verify(exactly = 1) { imageStoreUseCaseFactory.invoke(any()) }
+        verify(exactly = 1) { imageStoreUseCase.invoke(any(), any(), any()) }
     }
 
     @Test
@@ -97,8 +97,8 @@ class AttachToThisAppBackgroundUseCaseTest {
         verify(exactly = 1) { windowRectCalculatorCompat.invoke(any()) }
         verify(exactly = 0) { contentViewModel.refresh() }
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { imageStoreServiceFactory.invoke(any()) }
-        verify(exactly = 0) { imageStoreService.invoke(any(), any(), any()) }
+        verify(exactly = 0) { imageStoreUseCaseFactory.invoke(any()) }
+        verify(exactly = 0) { imageStoreUseCase.invoke(any(), any(), any()) }
     }
 
 }

@@ -93,7 +93,7 @@ class DownloadActionTest {
     }
 
     @Test
-    fun testEnqueueAndMakindFolderCase() {
+    fun testEnqueueAndMakingFolderCase() {
         downloadAction.invoke("https://www.search.yahoo.co.jp")
 
         verify(inverse = true) { Toaster.tShort(any(), any<Int>()) }

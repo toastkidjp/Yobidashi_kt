@@ -12,6 +12,7 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.snackbar.Snackbar
@@ -94,7 +95,7 @@ class BottomNavigationBehaviorTest {
     }
 
     @Test
-    fun layoutDependsOn() {
+    fun testLayoutDependsOnPassedOtherDependencyCase() {
         val dependency = mockk<View>()
         every { dependency.layoutParams }.returns(layoutParams)
 
@@ -104,6 +105,18 @@ class BottomNavigationBehaviorTest {
         verify(inverse = true) { snackbarLayout.layoutParams }
         verify(inverse = true) { snackbarLayout.layoutParams = any() }
         verify(inverse = true) { layoutParams.anchorId = any() }
+    }
+
+    @Test
+    fun layoutDependsOn() {
+        val params = mockk<ViewGroup.LayoutParams>()
+        every { snackbarLayout.layoutParams }.returns(params)
+
+        bottomNavigationBehavior.layoutDependsOn(mockk(), child, snackbarLayout)
+
+        verify { snackbarLayout.layoutParams }
+        verify(inverse = true) { child.id }
+        verify(inverse = true) { snackbarLayout.layoutParams = any() }
     }
 
 }

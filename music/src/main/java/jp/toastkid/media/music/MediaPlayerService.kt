@@ -53,9 +53,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
         override fun onPlayFromUri(uri: Uri?, extras: Bundle?) {
             super.onPlayFromUri(uri, extras)
-            initializeReceiversIfNeed()
-            registerReceiver(audioNoisyReceiver, audioNoisyFilter)
-            registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
+            registerReceivers()
 
             mediaPlayer.reset()
             if (uri != null) {
@@ -82,9 +80,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                 return
             }
 
-            initializeReceiversIfNeed()
-            registerReceiver(audioNoisyReceiver, audioNoisyFilter)
-            registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
+            registerReceivers()
 
             mediaSession.isActive = true
             mediaPlayer.start()
@@ -156,6 +152,13 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         }
     }
 
+    private fun registerReceivers() {
+        initializeReceiversIfNeed()
+
+        applicationContext.registerReceiver(audioNoisyReceiver, audioNoisyFilter)
+        applicationContext.registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
+    }
+
     private fun initializeReceiversIfNeed() {
         if (audioNoisyReceiver == null) {
             audioNoisyReceiver = object : BroadcastReceiver() {
@@ -221,10 +224,10 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     private fun unregisterReceivers() {
         if (audioNoisyReceiver != null) {
-            unregisterReceiver(audioNoisyReceiver)
+            applicationContext.unregisterReceiver(audioNoisyReceiver)
         }
         if (playbackSpeedReceiver != null) {
-            unregisterReceiver(playbackSpeedReceiver)
+            applicationContext.unregisterReceiver(playbackSpeedReceiver)
         }
     }
 

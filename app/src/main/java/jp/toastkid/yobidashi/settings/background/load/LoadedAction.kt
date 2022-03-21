@@ -8,7 +8,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.FragmentActivity
 import coil.imageLoader
 import coil.request.ImageRequest
-import jp.toastkid.lib.image.ImageStoreService
+import jp.toastkid.lib.image.ImageStoreUseCase
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
@@ -67,7 +67,7 @@ internal class LoadedAction (
                     val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
                     fixedImage?.let {
                         val displaySize = WindowRectCalculatorCompat().invoke(context as? Activity) ?: return@let
-                        ImageStoreService(
+                        ImageStoreUseCase(
                                 FilesDir(context, fileDir),
                                 PreferenceApplier(context)
                         )(it, uri, displaySize)
