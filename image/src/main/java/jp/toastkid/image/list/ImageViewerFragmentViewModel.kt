@@ -10,6 +10,7 @@ package jp.toastkid.image.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.image.Image
 
 /**
  * @author toastkidjp
@@ -38,6 +39,14 @@ class ImageViewerFragmentViewModel : ViewModel() {
 
     fun refresh() {
         _refresh.postValue(Unit)
+    }
+
+    private val _images = MutableLiveData<List<Image>>()
+
+    val images: LiveData<List<Image>> = _images
+
+    fun submitImages(images: List<Image>) {
+        _images.postValue(images)
     }
 
 }

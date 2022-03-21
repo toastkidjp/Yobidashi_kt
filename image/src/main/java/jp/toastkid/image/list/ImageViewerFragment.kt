@@ -16,21 +16,43 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import coil.compose.AsyncImage
+import jp.toastkid.image.Image
 import jp.toastkid.image.R
-import jp.toastkid.image.databinding.FragmentImageViewerBinding
+import jp.toastkid.image.preview.ImagePreviewDialogFragment
 import jp.toastkid.image.setting.ExcludingSettingFragment
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.RecyclerViewScroller
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,8 +63,6 @@ import kotlinx.coroutines.launch
  * @author toastkidjp
  */
 class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable {
-
-    private lateinit var binding: FragmentImageViewerBinding
 
     private lateinit var bucketLoader: BucketLoader
 
@@ -70,17 +90,31 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
             activity?.supportFragmentManager?.popBackStack()
         }
 
+    private var scrollState: LazyListState? = null
+
     private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        binding.fragment = this
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         setHasOptionsMenu(true)
-        return binding.root
+
+        val context = context ?: return null
+        val composeView = ComposeView(context)
+        composeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
+
+        val viewModel = ViewModelProvider(this).get(ImageViewerFragmentViewModel::class.java)
+        viewModel.images.observe(viewLifecycleOwner, { images ->
+            composeView.setContent {
+                ImageListUi(images)
+            }
+        })
+
+        return composeView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,44 +130,26 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
         val viewModelProvider = ViewModelProvider(this)
         val viewModel =
-                viewModelProvider.get(ImageViewerFragmentViewModel::class.java)
+            viewModelProvider.get(ImageViewerFragmentViewModel::class.java)
 
         adapter = Adapter(parentFragmentManager, viewModel)
 
-        val viewLifecycleOwner = viewLifecycleOwner
-        viewModel.onClick.observe(viewLifecycleOwner, {
-            CoroutineScope(Dispatchers.IO).launch(disposables) { imageLoaderUseCase(it) }
-        })
-
-        viewModel.onLongClick.observe(viewLifecycleOwner, {
-            preferenceApplier.addExcludeItem(it)
-            imageLoaderUseCase()
-        })
-
-        viewModel.refresh.observe(viewLifecycleOwner, {
-            attemptLoad()
-        })
-
         observePageSearcherViewModel()
 
-        binding.images.adapter = adapter
-        binding.images.layoutManager =
-                GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
-
         imageLoaderUseCase = ImageLoaderUseCase(
-                preferenceApplier,
-                adapter,
-                BucketLoader(contentResolver),
-                imageLoader,
-                this::refreshContent
+            preferenceApplier,
+            { viewModel.submitImages(it) },
+            BucketLoader(contentResolver),
+            imageLoader,
+            this::refreshContent
         )
 
         imageFilterUseCase = ImageFilterUseCase(
-                preferenceApplier,
-                adapter,
-                imageLoaderUseCase,
-                imageLoader,
-                this::refreshContent
+            preferenceApplier,
+            adapter,
+            imageLoaderUseCase,
+            imageLoader,
+            this::refreshContent
         )
 
         parentFragmentManager.setFragmentResultListener(
@@ -143,22 +159,86 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         )
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
+    @Composable
+    fun ImageListUi(images: List<Image>) {
+        val listState = rememberLazyListState()
+        this.scrollState = listState
+
+        MaterialTheme {
+            Surface(Modifier.background(colorResource(id = R.color.soft_background))) {
+                LazyVerticalGrid(
+                    state = listState,
+                    cells = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .nestedScroll(rememberViewInteropNestedScrollConnection())
+                        .padding(start = 16.dp, end = 16.dp)
+                ) {
+                    itemsIndexed(images) { index, image ->
+                        Surface(
+                            elevation = 4.dp,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .combinedClickable(
+                                        true,
+                                        onClick = {
+                                            if (image.isBucket) {
+                                                CoroutineScope(Dispatchers.IO).launch(disposables) {
+                                                    imageLoaderUseCase(image.name)
+                                                }
+                                            } else {
+                                                val fragmentManager = parentFragmentManager
+                                                ImagePreviewDialogFragment
+                                                    .withImages(images, index)
+                                                    .show(
+                                                        fragmentManager,
+                                                        ImagePreviewDialogFragment::class.java.simpleName
+                                                    )
+                                            }
+                                        },
+                                        onLongClick = {
+                                            preferenceApplier.addExcludeItem(image.path)
+                                            imageLoaderUseCase()
+                                        }
+                                    )
+                                    .fillMaxSize()
+                                    .padding(4.dp)
+                            ) {
+                                AsyncImage(
+                                    model = image.path,
+                                    contentDescription = image.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.height(152.dp)
+                                )
+                                Text(
+                                    text = image.makeDisplayName(),
+                                    fontSize = 14.sp,
+                                    maxLines = 2,
+                                    modifier = Modifier.padding(4.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun observePageSearcherViewModel() {
         val activity = activity ?: return
         ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
-                .also { viewModel ->
-                    viewModel.find.observe(viewLifecycleOwner, Observer {
-                        imageFilterUseCase(it)
-                    })
-                }
+            .also { viewModel ->
+                viewModel.find.observe(viewLifecycleOwner, Observer {
+                    imageFilterUseCase(it)
+                })
+            }
     }
 
     override fun pressBack(): Boolean {
-        if (adapter?.isBucketMode() == true) {
+        imageLoaderUseCase.back {
             activity?.supportFragmentManager?.popBackStack()
-        } else {
-            imageLoaderUseCase.clearCurrentBucket()
-            imageLoaderUseCase()
         }
         return true
     }
@@ -174,17 +254,19 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     private fun refreshContent() {
-        activity?.runOnUiThread {
-            RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
-        }
+        toTop()
     }
 
     override fun toTop() {
-        RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(0, 0)
+        }
     }
 
     override fun toBottom() {
-        RecyclerViewScroller.toBottom(binding.images, adapter?.itemCount ?: 0)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(scrollState?.layoutInfo?.totalItemsCount ?: 0, 0)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -221,9 +303,4 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         super.onDetach()
     }
 
-    companion object {
-
-        @LayoutRes
-        private val LAYOUT_ID = R.layout.fragment_image_viewer
-    }
 }

@@ -8,6 +8,7 @@
 package jp.toastkid.image.list
 
 import androidx.annotation.VisibleForTesting
+import jp.toastkid.image.Image
 import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
@@ -15,7 +16,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
  */
 internal class ImageLoaderUseCase(
         private val preferenceApplier: PreferenceApplier,
-        private val adapter: Adapter?,
+        private val submitImages: (List<Image>) -> Unit,
         private val bucketLoader: BucketLoader,
         private val imageLoader: ImageLoader,
         private val refreshContent: () -> Unit,
@@ -39,7 +40,7 @@ internal class ImageLoaderUseCase(
         } else {
             imageLoader(sort, bucket).filter { excludedItemFilter(it.path) }
         }
-        adapter?.submitList(newList)
+        submitImages(newList)
 
         currentBucket = bucket
         refreshContent()
@@ -47,6 +48,16 @@ internal class ImageLoaderUseCase(
 
     fun clearCurrentBucket() {
         currentBucket = null
+    }
+
+    fun back(onExit: () -> Unit) {
+        if (currentBucket.isNullOrBlank()) {
+            onExit()
+            return
+        }
+
+        clearCurrentBucket()
+        invoke()
     }
 
 }
