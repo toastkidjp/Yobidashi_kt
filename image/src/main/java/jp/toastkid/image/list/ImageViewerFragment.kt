@@ -15,6 +15,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.compose.BackHandler
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -33,16 +34,17 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -78,6 +80,8 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     private lateinit var imageLoaderUseCase: ImageLoaderUseCase
 
     private lateinit var imageFilterUseCase: ImageFilterUseCase
+
+    private var navController: NavController? = null
 
     private var adapter: Adapter? = null
 
@@ -116,15 +120,24 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         viewModel.images.observe(viewLifecycleOwner, { images ->
             composeView.setContent {
                 val navController = rememberNavController()
+                this.navController = navController
                 NavHost(navController = navController, startDestination = "list") {
                     composable("list") {
                         ImageListUi(images) { navController.navigate("preview/$it") }
+                        BackHandler(true) {
+                            imageLoaderUseCase.back {
+                                activity?.supportFragmentManager?.popBackStack()
+                            }
+                        }
                     }
                     composable(
                         "preview/{index}",
                         arguments = listOf(navArgument("index") { type = NavType.IntType })
                     ) {
                         ImagePreviewUi(images, it.arguments?.getInt("index") ?: 0)
+                        BackHandler(true) {
+                            navController.popBackStack()
+                        }
                     }
                 }
 
@@ -183,13 +196,14 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         this.scrollState = listState
 
         MaterialTheme {
-            Surface(Modifier.background(colorResource(id = R.color.soft_background))) {
+            Surface {
                 LazyVerticalGrid(
                     state = listState,
                     cells = GridCells.Fixed(2),
                     modifier = Modifier
                         .nestedScroll(rememberViewInteropNestedScrollConnection())
                         .padding(start = 16.dp, end = 16.dp)
+                        .background(Color.Transparent)
                 ) {
                     itemsIndexed(images) { index, image ->
                         Surface(
@@ -248,6 +262,11 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     override fun pressBack(): Boolean {
+        if (navController?.currentDestination?.route?.startsWith("preview") == true) {
+            navController?.popBackStack()
+            return true
+        }
+
         imageLoaderUseCase.back {
             activity?.supportFragmentManager?.popBackStack()
         }
