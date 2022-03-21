@@ -10,6 +10,7 @@ package jp.toastkid.image.preview
 import android.os.Build
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import coil.ComponentRegistry
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
@@ -26,8 +27,12 @@ class ViewHolder(private val view: ImageView) : RecyclerView.ViewHolder(view) {
     }
 
     private val imageLoader = ImageLoader.Builder(view.context)
-            .componentRegistry {
-                add(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) ImageDecoderDecoder(view.context) else GifDecoder())
+            .components() {
+                ComponentRegistry.Builder()
+                    .add(
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) ImageDecoderDecoder.Factory()
+                        else GifDecoder.Factory()
+                    )
             }
             .build()
 
