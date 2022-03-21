@@ -21,6 +21,7 @@ android {
 
     buildFeatures {
         dataBinding = true
+        compose = true
     }
 
     buildTypes {
@@ -34,6 +35,10 @@ android {
         generateReleaseBuildConfig.enabled = false
         generateDebugBuildConfig.enabled = false
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "$libVersions.compose"
+    }
 }
 
 dependencies {
@@ -44,6 +49,14 @@ dependencies {
     implementation "androidx.cardview:cardview:$libVersions.cardview"
     implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
     implementation "com.google.android.material:material:$libVersions.material"
+
+    // Compose dependencies.
+    implementation "androidx.compose.material:material:$libVersions.compose"
+    implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
+    implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
+    implementation "androidx.navigation:navigation-compose:$libVersions.navigation_compose"
+
     implementation "androidx.core:core-ktx:$libVersions.ktx"
     implementation "androidx.exifinterface:exifinterface:$libVersions.exifinterface"
 
