@@ -35,7 +35,7 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_date_filter, container, false)
         binding.dialog = this
 
