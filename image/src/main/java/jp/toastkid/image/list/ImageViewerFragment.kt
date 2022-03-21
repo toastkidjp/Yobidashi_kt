@@ -43,10 +43,15 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import jp.toastkid.image.Image
 import jp.toastkid.image.R
-import jp.toastkid.image.preview.ImagePreviewDialogFragment
+import jp.toastkid.image.preview.ImagePreviewUi
 import jp.toastkid.image.setting.ExcludingSettingFragment
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
@@ -110,7 +115,19 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         val viewModel = ViewModelProvider(this).get(ImageViewerFragmentViewModel::class.java)
         viewModel.images.observe(viewLifecycleOwner, { images ->
             composeView.setContent {
-                ImageListUi(images)
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "list") {
+                    composable("list") {
+                        ImageListUi(images) { navController.navigate("preview/$it") }
+                    }
+                    composable(
+                        "preview/{index}",
+                        arguments = listOf(navArgument("index") { type = NavType.IntType })
+                    ) {
+                        ImagePreviewUi(images, it.arguments?.getInt("index") ?: 0)
+                    }
+                }
+
             }
         })
 
@@ -161,7 +178,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun ImageListUi(images: List<Image>) {
+    fun ImageListUi(images: List<Image>, showPreview: (Int) -> Unit) {
         val listState = rememberLazyListState()
         this.scrollState = listState
 
@@ -189,13 +206,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                                                     imageLoaderUseCase(image.name)
                                                 }
                                             } else {
-                                                val fragmentManager = parentFragmentManager
-                                                ImagePreviewDialogFragment
-                                                    .withImages(images, index)
-                                                    .show(
-                                                        fragmentManager,
-                                                        ImagePreviewDialogFragment::class.java.simpleName
-                                                    )
+                                                showPreview(index)
                                             }
                                         },
                                         onLongClick = {
