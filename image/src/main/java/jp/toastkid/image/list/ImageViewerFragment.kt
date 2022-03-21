@@ -175,7 +175,6 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     private fun refreshContent() {
         activity?.runOnUiThread {
-            //adapter?.notifyDataSetChanged()
             RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
         }
     }
