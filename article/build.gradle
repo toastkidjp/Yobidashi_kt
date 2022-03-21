@@ -19,7 +19,6 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     buildFeatures {
-        dataBinding = true
         compose = true
     }
     buildTypes {
@@ -62,13 +61,7 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
-    implementation "androidx.cardview:cardview:$libVersions.cardview"
-    implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
-    implementation "com.google.android.material:material:$libVersions.material"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
-    implementation "androidx.paging:paging-runtime:$libVersions.paging"
-    implementation "com.halilibo.compose-richtext:richtext-commonmark:0.11.0"
-    implementation "com.halilibo.compose-richtext:richtext-ui-material:0.11.0"
 
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
@@ -79,7 +72,10 @@ dependencies {
     implementation "androidx.paging:paging-compose:$libVersions.paging_compose"
     implementation "androidx.paging:paging-runtime-ktx:$libVersions.paging"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
+    implementation "com.halilibo.compose-richtext:richtext-commonmark:0.11.0"
+    implementation "com.halilibo.compose-richtext:richtext-ui-material:0.11.0"
 
+    implementation "androidx.paging:paging-runtime:$libVersions.paging"
     implementation "androidx.room:room-runtime:$libVersions.room"
     implementation "androidx.room:room-paging:$libVersions.room"
     kapt "androidx.room:room-compiler:$libVersions.room"
