@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,6 +52,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import jp.toastkid.image.Image
 import jp.toastkid.image.R
 import jp.toastkid.image.preview.ImagePreviewUi
@@ -232,7 +234,11 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                                     .padding(4.dp)
                             ) {
                                 AsyncImage(
-                                    model = image.path,
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(image.path)
+                                        .crossfade(true)
+                                        .placeholder(R.drawable.ic_image)
+                                        .build(),
                                     contentDescription = image.name,
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier.height(152.dp)
