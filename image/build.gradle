@@ -20,7 +20,6 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
         compose = true
     }
 
@@ -43,12 +42,10 @@ android {
 
 dependencies {
     implementation project(":lib")
+    implementation project(":ui")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
-    implementation "androidx.cardview:cardview:$libVersions.cardview"
-    implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
-    implementation "com.google.android.material:material:$libVersions.material"
 
     // Compose dependencies.
     implementation "androidx.compose.material:material:$libVersions.compose"
@@ -63,7 +60,6 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
-    implementation "com.github.chrisbanes:PhotoView:$libVersions.photo_view"
     implementation "io.coil-kt:coil:$libVersions.coil"
     implementation "io.coil-kt:coil-gif:$libVersions.coil"
 
