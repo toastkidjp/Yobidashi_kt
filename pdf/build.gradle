@@ -45,7 +45,6 @@ dependencies {
     implementation "androidx.core:core-ktx:$libVersions.ktx"
 
     implementation "androidx.compose.material:material:$libVersions.compose"
-    implementation "androidx.compose.ui:ui-tooling:$libVersions.compose"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
 
     testImplementation "junit:junit:$libVersions.junit"
