@@ -181,17 +181,17 @@ class BrowserFragment : Fragment(),
         }
 
         viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
-            viewModel.title.observe(activity, Observer {
+            viewModel.title.observe(viewLifecycleOwner, Observer {
                 val title = it?.getContentIfNotHandled() ?: return@Observer
                 appBarBinding?.mainText?.text = title
             })
 
-            viewModel.url.observe(activity, Observer {
+            viewModel.url.observe(viewLifecycleOwner, Observer {
                 val url = it?.getContentIfNotHandled() ?: return@Observer
                 appBarBinding?.subText?.text = url
             })
 
-            viewModel.reset.observe(activity, Observer {
+            viewModel.reset.observe(viewLifecycleOwner, Observer {
                 if (!isVisible) {
                     return@Observer
                 }
@@ -199,9 +199,9 @@ class BrowserFragment : Fragment(),
                 appBarViewModel?.replace(headerView)
             })
 
-            viewModel.enableForward.observe(activity, Observer(::updateForwardButtonState))
+            viewModel.enableForward.observe(viewLifecycleOwner, Observer(::updateForwardButtonState))
 
-            viewModel.enableBack.observe(activity, Observer(::updateBackButtonState))
+            viewModel.enableBack.observe(viewLifecycleOwner, Observer(::updateBackButtonState))
         }
 
         CoroutineScope(Dispatchers.Main).launch {

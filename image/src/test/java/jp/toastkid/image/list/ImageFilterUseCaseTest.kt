@@ -75,7 +75,7 @@ class ImageFilterUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testFilterInvokingCase() {
         imageFilterUseCase.invoke("test")
 
         verify(inverse = true) { imageLoaderUseCase.invoke() }

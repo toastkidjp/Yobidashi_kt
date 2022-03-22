@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser.bookmark
 import android.Manifest
 import android.app.Activity
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
+import androidx.annotation.WorkerThread
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -88,12 +90,14 @@ class BookmarkFragment: Fragment(),
         }
 
         val uri = it.data?.data ?: return@registerForActivityResult
-        exportBookmark(uri)
+        CoroutineScope(Dispatchers.IO).launch(disposables) {
+            exportBookmark(uri)
+        }
     }
 
     private val importRequestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (!it) {
+            if (!it && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 contentViewModel?.snackShort(R.string.message_requires_permission_storage)
                 return@registerForActivityResult
             }
@@ -103,7 +107,7 @@ class BookmarkFragment: Fragment(),
 
     private val exportRequestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (!it.not()) {
+            if (!it && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 contentViewModel?.snackShort(R.string.message_requires_permission_storage)
                 return@registerForActivityResult
             }
@@ -301,14 +305,13 @@ class BookmarkFragment: Fragment(),
      *
      * @param uri
      */
+    @WorkerThread
     private fun exportBookmark(uri: Uri) {
-        CoroutineScope(Dispatchers.IO).launch(disposables) {
-            val items = bookmarkRepository.all()
-            val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return@launch
-            outputStream.sink().use { sink ->
-                sink.buffer().use {
-                    it.writeUtf8(Exporter(items).invoke())
-                }
+        val items = bookmarkRepository.all()
+        val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return
+        outputStream.sink().use { sink ->
+            sink.buffer().use {
+                it.writeUtf8(Exporter(items).invoke())
             }
         }
     }
