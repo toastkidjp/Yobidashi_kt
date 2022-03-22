@@ -7,17 +7,18 @@
  */
 package jp.toastkid.image.list
 
+import jp.toastkid.image.Image
 import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
  */
 internal class ImageFilterUseCase(
-        private val preferenceApplier: PreferenceApplier,
-        private val adapter: Adapter?,
-        private val imageLoaderUseCase: ImageLoaderUseCase,
-        private val imageLoader: ImageLoader,
-        private val refreshContent: () -> Unit
+    private val preferenceApplier: PreferenceApplier,
+    private val submitImages: (List<Image>) -> Unit,
+    private val imageLoaderUseCase: ImageLoaderUseCase,
+    private val imageLoader: ImageLoader,
+    private val refreshContent: () -> Unit
 ) {
 
     operator fun invoke(keyword: String?) {
@@ -29,7 +30,7 @@ internal class ImageFilterUseCase(
         val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
 
         val newList = imageLoader.filterBy(keyword).filter { excludedItemFilter(it.path) }
-        adapter?.submitList(newList)
+        submitImages(newList)
 
         imageLoaderUseCase.clearCurrentBucket()
 

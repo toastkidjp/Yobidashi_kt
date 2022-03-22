@@ -85,8 +85,6 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     private var navController: NavController? = null
 
-    private var adapter: Adapter? = null
-
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
@@ -164,8 +162,6 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         val viewModel =
             viewModelProvider.get(ImageViewerFragmentViewModel::class.java)
 
-        adapter = Adapter(parentFragmentManager, viewModel)
-
         observePageSearcherViewModel()
 
         imageLoaderUseCase = ImageLoaderUseCase(
@@ -178,7 +174,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
         imageFilterUseCase = ImageFilterUseCase(
             preferenceApplier,
-            adapter,
+            { viewModel.submitImages(it) },
             imageLoaderUseCase,
             imageLoader,
             this::refreshContent
