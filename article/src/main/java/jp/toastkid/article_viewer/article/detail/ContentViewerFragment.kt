@@ -51,6 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -65,7 +66,6 @@ import com.halilibo.richtext.ui.RichText
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
 import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
 import jp.toastkid.article_viewer.bookmark.Bookmark
 import jp.toastkid.lib.AppBarViewModel
@@ -74,6 +74,7 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -156,7 +157,8 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
                 RichText(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
-                        .verticalScroll(scrollState),
+                        .verticalScroll(scrollState)
+                        .nestedScroll(rememberViewInteropNestedScrollConnection()),
                         //.background(Color(preferenceApplier.editorBackgroundColor())),
                 ) {
                     Markdown(
@@ -288,8 +290,8 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
             return
         }
 
-        SubheadDialogFragment.make(subheads)
-            .show(parentFragmentManager, SubheadDialogFragment::class.java.canonicalName)
+        /*TODO SubheadDialogFragment.make(subheads)
+            .show(parentFragmentManager, SubheadDialogFragment::class.java.canonicalName)*/
     }
 
     override fun toTop() {
