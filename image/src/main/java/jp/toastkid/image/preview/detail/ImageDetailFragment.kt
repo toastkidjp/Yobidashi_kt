@@ -9,47 +9,34 @@
 package jp.toastkid.image.preview.detail
 
 import android.net.Uri
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.os.bundleOf
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.exifinterface.media.ExifInterface
-import androidx.fragment.app.DialogFragment
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.io.File
 import java.io.FileInputStream
 
-class ImageDetailFragment : BottomSheetDialogFragment() {
+@Composable
+internal fun ImageDetailDialogUi(imageUri: Uri) {
+    val inputStream = FileInputStream(File(imageUri.toString()))
+    val exifInterface = ExifInterface(inputStream)
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
+    val text = ExifInformationExtractorUseCase().invoke(exifInterface) ?: return
+    inputStream.close()
 
-        val context = context ?: return null
-        val textView = TextView(context)
-        val imageUri = arguments?.getParcelable<Uri>(KEY_EXTRA_IMAGE_URI) ?: return null
-        val inputStream = FileInputStream(File(imageUri.toString()))
-        val exifInterface = ExifInterface(inputStream)
+    var openInformationDialog by remember { mutableStateOf(false) }
 
-        textView.text = ExifInformationExtractorUseCase().invoke(exifInterface)
-        inputStream.close()
-        return textView
+    if (openInformationDialog.not()) {
+        return
     }
 
-    companion object {
-
-        private const val KEY_EXTRA_IMAGE_URI = "image_uri"
-
-        fun withImageUri(imageUri: Uri): DialogFragment =
-                ImageDetailFragment().also {
-                    it.arguments = bundleOf(KEY_EXTRA_IMAGE_URI to imageUri)
-                }
-
-    }
-
+    AlertDialog(
+        onDismissRequest = { openInformationDialog = false },
+        text = { Text(text) },
+        confirmButton = { openInformationDialog = false }
+    )
 }

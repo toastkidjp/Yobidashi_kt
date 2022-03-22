@@ -35,9 +35,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.image.R
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.list.SwipeToDismissItem
@@ -45,7 +45,7 @@ import jp.toastkid.ui.list.SwipeToDismissItem
 /**
  * @author toastkidjp
  */
-class ExcludingSettingFragment : BottomSheetDialogFragment() {
+class ExcludingSettingFragment : DialogFragment() {
 
     override fun onCreateView(
             inflater: LayoutInflater,
