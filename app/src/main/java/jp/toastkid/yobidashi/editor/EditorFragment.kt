@@ -154,6 +154,8 @@ class EditorFragment :
 
     private var openLoadFromStorageDialog: MutableState<Boolean>? = null
 
+    private var openInputFileNameDialog: MutableState<Boolean>? = null
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -174,6 +176,9 @@ class EditorFragment :
 
             val openLoadFromStorageDialog = remember { mutableStateOf(false) }
             this.openLoadFromStorageDialog = openLoadFromStorageDialog
+
+            val openInputFileNameDialog = remember { mutableStateOf(false) }
+            this.openInputFileNameDialog = openInputFileNameDialog
 
             TextField(
                 value = editorInput.value,
@@ -207,6 +212,20 @@ class EditorFragment :
                     openDialog = openLoadFromStorageDialog,
                     files = StorageFilesFinder().invoke(context),
                     onSelect = { readFromFileUri(Uri.fromFile(it)) }
+                )
+            }
+
+            if (openInputFileNameDialog.value) {
+                val currentName = File(path).nameWithoutExtension ?: ""
+                InputFileNameDialogUi(
+                    openDialog = openInputFileNameDialog,
+                    defaultInput = currentName,
+                    onCommit = {
+                        if (it.isBlank()) {
+                            return@InputFileNameDialogUi
+                        }
+                        assignNewFile(it)
+                    }
                 )
             }
         }
@@ -373,17 +392,6 @@ class EditorFragment :
             viewLifecycleOwner,
             { _, _ -> clearInput() }
         )
-        parentFragmentManager.setFragmentResultListener(
-            "input_text",
-            viewLifecycleOwner,
-            { key, result ->
-                val fileName = result.getString(key)
-                if (fileName.isNullOrBlank()) {
-                    return@setFragmentResultListener
-                }
-                assignNewFile(fileName)
-            }
-        )
 
         reload()
     }
@@ -415,8 +423,6 @@ class EditorFragment :
         loadResultLauncher?.unregister()
 
         parentFragmentManager.clearFragmentResultListener("clear_input")
-        parentFragmentManager.clearFragmentResultListener("input_text")
-        parentFragmentManager.clearFragmentResultListener("load_from_storage")
 
         super.onDetach()
     }
@@ -498,14 +504,14 @@ class EditorFragment :
             return
         }
 
-        InputNameDialogFragment.show(parentFragmentManager)
+        openInputFileNameDialog?.value = true
     }
 
     /**
      * Save current text as other file.
      */
     fun saveAs() {
-        InputNameDialogFragment.show(parentFragmentManager)
+        openInputFileNameDialog?.value = true
     }
 
     /**
