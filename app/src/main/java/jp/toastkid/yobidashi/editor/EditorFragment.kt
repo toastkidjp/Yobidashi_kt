@@ -55,7 +55,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextGeometricTransform
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
@@ -191,15 +190,11 @@ class EditorFragment :
                     color = Color(preferenceApplier.editorFontColor()),
                     fontSize = preferenceApplier.editorFontSize().toFloat().sp,
                     fontFamily = FontFamily.Monospace,
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Start,
                     shadow = Shadow(
                         color = Color.Black,
                         offset = Offset(8f, 8f),
                         blurRadius = 4f
-                    ),
-                    textGeometricTransform = TextGeometricTransform(
-                        scaleX = 2.5f,
-                        skewX = 1f
                     )
                 ),
                 modifier = Modifier
