@@ -38,10 +38,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -78,7 +77,8 @@ import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.editor.load.LoadFromStorageDialogFragment
+import jp.toastkid.yobidashi.editor.load.LoadFromStorageDialogUi
+import jp.toastkid.yobidashi.editor.load.StorageFilesFinder
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import okio.buffer
@@ -150,7 +150,9 @@ class EditorFragment :
             it.data?.data?.let { uri -> readFromFileUri(uri) }
         }
 
-    private var editorInput: String = ""
+    private var editorInput: MutableState<String>? = null
+
+    private var openLoadFromStorageDialog: MutableState<Boolean>? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -167,13 +169,16 @@ class EditorFragment :
             android:minLines="10"
          */
         composeView.setContent {
-            var editorInput by remember { mutableStateOf("") }
+            val editorInput = remember { mutableStateOf("") }
             this.editorInput = editorInput
 
+            val openLoadFromStorageDialog = remember { mutableStateOf(false) }
+            this.openLoadFromStorageDialog = openLoadFromStorageDialog
+
             TextField(
-                value = editorInput,
+                value = editorInput.value,
                 onValueChange = { newInput ->
-                    editorInput = newInput
+                    editorInput.value = newInput
                     setContentTextLengthCount(context)
                 },
                 label = { stringResource(id = R.string.hint_editor_input) },
@@ -196,6 +201,14 @@ class EditorFragment :
                     .background(Color(preferenceApplier.editorBackgroundColor()))
                     .padding(start = 4.dp, end = 4.dp)
             )
+
+            if (openLoadFromStorageDialog.value) {
+                LoadFromStorageDialogUi(
+                    openDialog = openLoadFromStorageDialog,
+                    files = StorageFilesFinder().invoke(context),
+                    onSelect = { readFromFileUri(Uri.fromFile(it)) }
+                )
+            }
         }
 /*
         CursorColorSetter().invoke(binding.editorInput, preferenceApplier.editorCursorColor(ContextCompat.getColor(binding.root.context, R.color.editor_cursor)))
@@ -463,7 +476,7 @@ class EditorFragment :
      * Go to bottom.
      */
     override fun toBottom() {
-        moveToIndex(editorInput.length)
+        moveToIndex(editorInput?.value?.length ?: 0)
     }
 
     /**
@@ -503,16 +516,7 @@ class EditorFragment :
     }
 
     fun loadFromStorage() {
-        parentFragmentManager.setFragmentResultListener(
-            "load_from_storage",
-            viewLifecycleOwner,
-            { key, result ->
-                val file = result[key] as? File ?: return@setFragmentResultListener
-                readFromFileUri(Uri.fromFile(file))
-                parentFragmentManager.clearFragmentResultListener("load_from_storage")
-            }
-        )
-        LoadFromStorageDialogFragment().show(parentFragmentManager, "load_from_storage")
+        openLoadFromStorageDialog?.value = true
     }
 
     fun exportToArticleViewer() {
@@ -658,7 +662,7 @@ class EditorFragment :
      * Set content string and set text length.
      */
     private fun setContentText(contentStr: String) {
-        editorInput = contentStr
+        editorInput?.value = contentStr
         context?.let { setContentTextLengthCount(it) }
         contentHolderService.setContent(contentStr)
     }
@@ -668,7 +672,7 @@ class EditorFragment :
      *
      * @return content [String]
      */
-    private fun content(): String = editorInput
+    private fun content(): String = editorInput?.value ?: ""
 
     /**
      * Assign new file object.
