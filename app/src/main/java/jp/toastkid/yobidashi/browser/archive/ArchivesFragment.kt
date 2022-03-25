@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
@@ -132,13 +133,18 @@ class ArchivesFragment : Fragment() {
                                         .fillMaxHeight()
                                         .padding(start = 8.dp, end = 8.dp)
                                 ) {
-                                    Text(text = archiveFile.name, maxLines = 1, fontSize = 16.sp)
+                                    Text(text = archiveFile.name, maxLines = 1, fontSize = 16.sp,
+                                            overflow = TextOverflow.Ellipsis
+                                    )
                                     Text(
                                         text = "${toLastModifiedText(archiveFile.lastModified())} / ${
                                             toKiloBytes(
                                                 archiveFile.length()
                                             )
-                                        }[KB]", maxLines = 1, fontSize = 10.sp
+                                        }[KB]",
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        fontSize = 10.sp
                                     )
                                 }
                             }
