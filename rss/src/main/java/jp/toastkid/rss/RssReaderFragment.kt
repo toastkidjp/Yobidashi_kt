@@ -102,7 +102,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun RssReaderListUi(items: MutableList<Item>) {
+    fun RssReaderListUi(items: List<Item>) {
         val fragmentActivity = activity ?: return
         val browserViewModel = ViewModelProvider(fragmentActivity)
             .get(BrowserViewModel::class.java)
