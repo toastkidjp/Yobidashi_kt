@@ -84,6 +84,7 @@ dependencies {
     implementation project(":loan")
     implementation project(":about")
     implementation project(":barcode")
+    implementation project(":ui")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.cardview:cardview:$libVersions.cardview"
