@@ -123,7 +123,7 @@ internal class ModuleAdapter(
 
     private fun remove(item: FavoriteSearch): Job {
         return CoroutineScope(Dispatchers.Main).launch {
-            val copy = mutableListOf<FavoriteSearch>().also { it.addAll(currentList) }
+            val copy = ArrayList<FavoriteSearch>(currentList)
             withContext(Dispatchers.IO) {
                 favoriteSearchRepository.delete(item)
                 copy.remove(item)
