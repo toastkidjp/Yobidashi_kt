@@ -71,7 +71,7 @@ internal fun ArticleListUi(
             state = listState,
             modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
         ) {
-            items(articles) {
+            items(articles, { it.id }) {
                 it ?: return@items
                 ListItem(it, contentViewModel, menuPopupUseCase, menuIconColor)
             }
