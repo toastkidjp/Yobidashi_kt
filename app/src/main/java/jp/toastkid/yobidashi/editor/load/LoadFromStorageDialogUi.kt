@@ -31,7 +31,7 @@ import jp.toastkid.yobidashi.R
 import java.io.File
 
 @Composable
-fun LoadFromStorageDialogUi(
+internal fun LoadFromStorageDialogUi(
     openDialog: MutableState<Boolean>,
     files: Array<File>?,
     onSelect: (File) -> Unit
