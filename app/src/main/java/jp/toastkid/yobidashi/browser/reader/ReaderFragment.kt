@@ -122,6 +122,8 @@ class ReaderFragment : Fragment(), ContentScrollable {
                             fontSize = 30.sp,
                             modifier = Modifier.fillMaxWidth()
                         )
+                    }
+                    SelectionContainer {
                         Text(
                             text = text,
                             color = Color(preferenceApplier.editorFontColor()),
