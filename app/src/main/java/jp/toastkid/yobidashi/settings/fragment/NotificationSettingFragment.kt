@@ -12,15 +12,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Checkbox
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.interop.ComposeViewFactory
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentSettingNotificationBinding
 import jp.toastkid.yobidashi.notification.morning.DailyNotificationWorker
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
@@ -32,11 +47,6 @@ import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 class NotificationSettingFragment : Fragment() {
 
     /**
-     * View data binding object.
-     */
-    private lateinit var binding: FragmentSettingNotificationBinding
-
-    /**
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
@@ -44,27 +54,91 @@ class NotificationSettingFragment : Fragment() {
     private lateinit var contentViewModel: ContentViewModel
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        binding.fragment = this
         val activityContext = activity
-                ?: return super.onCreateView(inflater, container, savedInstanceState)
+            ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
 
         contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
 
-        return binding.root
-    }
+        return ComposeViewFactory().invoke(activityContext) {
+            val notificationWidgetEnabled =
+                remember { mutableStateOf(preferenceApplier.useNotificationWidget()) }
+            val morningNotificationEnabled =
+                remember { mutableStateOf(preferenceApplier.useDailyNotification()) }
 
-    override fun onResume() {
-        super.onResume()
-        binding.useNotificationWidgetCheck.isChecked = preferenceApplier.useNotificationWidget()
-        binding.useNotificationWidgetCheck.jumpDrawablesToCurrentState()
-        binding.useDailyNotificationCheck.isChecked = preferenceApplier.useDailyNotification()
-        binding.useDailyNotificationCheck.jumpDrawablesToCurrentState()
+            MaterialTheme {
+                Column {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(72.dp)
+                        .clickable { switchNotificationWidget() }
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.title_show_notification_widget),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            AsyncImage(
+                                R.mipmap.thumbnail,
+                                contentDescription = stringResource(id = R.string.title_show_notification_widget)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .width(44.dp)
+                        ) {
+                            Checkbox(
+                                checked = notificationWidgetEnabled.value,
+                                onCheckedChange = {},
+                                modifier = Modifier.clickable(false) { })
+                        }
+                    }
+
+                    InsetDivider()
+
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(72.dp)
+                        .clickable { switchDailyNotification() }
+                    ) {
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.title_show_morning_notification),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            AsyncImage(
+                                R.mipmap.thumbnail,
+                                contentDescription = stringResource(id = R.string.title_show_morning_notification)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .width(44.dp)
+                        ) {
+                            Checkbox(
+                                checked = morningNotificationEnabled.value,
+                                onCheckedChange = {},
+                                modifier = Modifier.clickable(false) { })
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -73,18 +147,17 @@ class NotificationSettingFragment : Fragment() {
     fun switchNotificationWidget() {
         val newState = !preferenceApplier.useNotificationWidget()
         preferenceApplier.setUseNotificationWidget(newState)
-        binding.useNotificationWidgetCheck.isChecked = newState
 
         val activityContext: Context = context ?: return
 
         @StringRes val messageId =
-        if (newState) {
-            NotificationWidget.show(activityContext)
-            R.string.message_done_showing_notification_widget
-        } else {
-            NotificationWidget.hide(activityContext)
-            R.string.message_remove_notification_widget
-        }
+            if (newState) {
+                NotificationWidget.show(activityContext)
+                R.string.message_done_showing_notification_widget
+            } else {
+                NotificationWidget.hide(activityContext)
+                R.string.message_remove_notification_widget
+            }
 
         contentViewModel.snackShort(messageId)
     }
@@ -92,11 +165,10 @@ class NotificationSettingFragment : Fragment() {
     fun switchDailyNotification() {
         val newState = !preferenceApplier.useDailyNotification()
         preferenceApplier.setUseDailyNotification(newState)
-        binding.useDailyNotificationCheck.isChecked = newState
 
         @StringRes val messageId =
-                if (newState) R.string.message_stay_tuned
-                else R.string.message_remove_notification_widget
+            if (newState) R.string.message_stay_tuned
+            else R.string.message_remove_notification_widget
         contentViewModel.snackShort(messageId)
 
         val context = context ?: return
@@ -108,9 +180,6 @@ class NotificationSettingFragment : Fragment() {
     }
 
     companion object : TitleIdSupplier {
-
-        @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_setting_notification
 
         @StringRes
         override fun titleId() = R.string.subhead_notification
