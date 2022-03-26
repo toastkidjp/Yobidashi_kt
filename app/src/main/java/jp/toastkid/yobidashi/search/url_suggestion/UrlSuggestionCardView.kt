@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
@@ -17,7 +18,6 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.databinding.ViewCardUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
-import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 
 /**
  * @author toastkidjp
@@ -68,7 +68,7 @@ constructor(
         binding?.module = this
         binding?.urlSuggestions?.let { SwipeActionAttachment().invoke(it) }
         queryUseCase = QueryUseCase(
-            adapter,
+            { adapter.submitList(it) },
             bookmarkRepository,
             viewHistoryRepository,
             { if (it) show() else hide() }

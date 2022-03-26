@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class QueryUseCase(
-    private val adapter: Adapter,
+    private val submitItems: (List<UrlItem>) -> Unit,
     private val bookmarkRepository: BookmarkRepository,
     private val viewHistoryRepository: ViewHistoryRepository,
     private val switchVisibility: (Boolean) -> Unit,
@@ -47,7 +47,7 @@ class QueryUseCase(
             }
 
             switchVisibility(newItems.isNotEmpty())
-            adapter.submitList(newItems)
+            submitItems(newItems)
         }
     }
 
