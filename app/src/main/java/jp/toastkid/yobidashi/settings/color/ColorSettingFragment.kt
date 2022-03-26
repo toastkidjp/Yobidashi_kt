@@ -1,27 +1,53 @@
 package jp.toastkid.yobidashi.settings.color
 
-import android.graphics.Color
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import jp.toastkid.lib.ContentViewModel
+import com.godaddy.android.colorpicker.harmony.ColorHarmonyMode
+import com.godaddy.android.colorpicker.harmony.HarmonyColorPicker
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.fragment.CommonFragmentAction
+import jp.toastkid.lib.interop.ComposeViewFactory
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
-import jp.toastkid.yobidashi.databinding.FragmentSettingsColorBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
@@ -50,10 +76,9 @@ class ColorSettingFragment : Fragment(), CommonFragmentAction {
      */
     private var initialFontColor: Int = 0
 
-    /**
-     * Data-Binding object.
-     */
-    private var binding: FragmentSettingsColorBinding? = null
+    private var currentBackgroundColor: MutableState<Color>? = null
+
+    private var currentFontColor: MutableState<Color>? = null
 
     /**
      * Saved color's adapter.
@@ -74,40 +99,213 @@ class ColorSettingFragment : Fragment(), CommonFragmentAction {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-                inflater,
-                LAYOUT_ID,
-                container,
-                false
-        )
-        binding?.fragment = this
-
         val context = context ?: return null
         preferenceApplier = PreferenceApplier(context)
 
         setHasOptionsMenu(true)
 
-        return binding?.root ?: super.onCreateView(inflater, container, savedInstanceState)
+        repository = DatabaseFinder().invoke(context).savedColorRepository()
+
+        val colorPair = colorPair()
+        initialBgColor = colorPair.bgColor()
+        initialFontColor = colorPair.fontColor()
+
+        return ComposeViewFactory().invoke(context) {
+            val coroutineScope = rememberCoroutineScope()
+
+            MaterialTheme() {
+                LazyColumn(
+                    modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
+                        .padding(start = 16.dp, end = 16.dp)
+                ) {
+                    item {
+                        val currentBackgroundColor =
+                            remember { mutableStateOf(Color(preferenceApplier.color)) }
+                        this@ColorSettingFragment.currentBackgroundColor = currentBackgroundColor
+
+                        val currentFontColor =
+                            remember { mutableStateOf(Color(preferenceApplier.fontColor)) }
+                        this@ColorSettingFragment.currentFontColor = currentFontColor
+
+                        Surface(
+                            elevation = 4.dp
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                //.requiredHeight(300.dp)
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        stringResource(id = R.string.settings_color_background_title),
+                                        fontSize = 16.sp,
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    )
+                                    HarmonyColorPicker(
+                                        harmonyMode = ColorHarmonyMode.COMPLEMENTARY,
+                                        color = currentBackgroundColor.value,
+                                        onColorChanged = { hsvColor ->
+                                            currentBackgroundColor.value = hsvColor.toColor()
+                                        },
+                                        modifier = Modifier.height(200.dp)
+                                    )
+                                    Button(
+                                        onClick = {
+                                            val bgColor = currentBackgroundColor.value
+                                            val fontColor = currentFontColor.value
+
+                                            commitNewColor(bgColor, fontColor)
+
+                                            CoroutineScope(Dispatchers.Main).launch(disposables) {
+                                                withContext(Dispatchers.IO) {
+                                                    val savedColor =
+                                                        SavedColor.make(
+                                                            bgColor.toArgb(),
+                                                            fontColor.toArgb()
+                                                        )
+                                                    repository.add(savedColor)
+                                                    adapter?.reload()
+                                                }
+                                            }
+                                        },
+                                        colors = ButtonDefaults.textButtonColors(
+                                            backgroundColor = currentBackgroundColor.value,
+                                            contentColor = Color(preferenceApplier.fontColor),
+                                            disabledContentColor = Color.LightGray
+                                        ),
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    ) {
+                                        Text(stringResource(id = R.string.commit), fontSize = 14.sp)
+                                    }
+                                }
+
+                                Column(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .wrapContentHeight()
+                                ) {
+                                    Text(
+                                        stringResource(id = R.string.settings_color_font_title),
+                                        fontSize = 16.sp,
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    )
+                                    HarmonyColorPicker(
+                                        harmonyMode = ColorHarmonyMode.COMPLEMENTARY,
+                                        color = currentFontColor.value,
+                                        modifier = Modifier.height(200.dp),
+                                        onColorChanged = { hsvColor ->
+                                            currentFontColor.value = hsvColor.toColor()
+                                        }
+                                    )
+                                    Button(
+                                        onClick = {
+                                            commitNewColor(
+                                                Color(initialBgColor),
+                                                Color(initialFontColor)
+                                            )
+
+                                            activity?.let { Updater().update(it) }
+                                            snackShort(R.string.settings_color_done_reset)
+                                        },
+                                        colors = ButtonDefaults.textButtonColors(
+                                            backgroundColor = Color(initialBgColor),
+                                            contentColor = Color(initialFontColor),
+                                            disabledContentColor = Color.LightGray
+                                        ),
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    ) {
+                                        Text(stringResource(id = R.string.reset), fontSize = 14.sp)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    coroutineScope.launch {
+                        val savedColors = withContext(Dispatchers.IO) { repository.findAll().windowed(3, 3) }
+                        if (savedColors.isEmpty()) {
+                            return@launch
+                        }
+
+                        item {
+                            Surface(
+                                elevation = 4.dp,
+                                modifier = Modifier.height(44.dp).fillMaxWidth().padding(top = 8.dp)
+                            ) {
+                                Text(
+                                    stringResource(id = R.string.settings_color_saved_title),
+                                    fontSize = 18.sp
+                                )
+                            }
+                        }
+
+                        items(savedColors) { savedColorRow ->
+                            Row {
+                                savedColorRow.forEach { savedColor ->
+                                    Surface(
+                                        elevation = 4.dp,
+                                        modifier = Modifier
+                                            .clickable {
+                                                commitNewColor(
+                                                    Color(savedColor.bgColor),
+                                                    Color(savedColor.fontColor)
+                                                )
+                                            }
+                                            .padding(8.dp)
+                                    ) {
+                                        Box(modifier = Modifier
+                                            .weight(1f)
+                                            .height(100.dp)
+                                            .background(Color(savedColor.bgColor))
+                                            .padding(8.dp)
+                                        ) {
+                                            Text(text = stringResource(id = R.string.sample_a),
+                                                color = Color(savedColor.fontColor),
+                                                modifier = Modifier.align(
+                                                Alignment.Center)
+                                            )
+                                            Icon(painterResource(id = R.drawable.ic_remove_circle), contentDescription = stringResource(
+                                                id = R.string.delete
+                                            ),
+                                                modifier = Modifier
+                                                    .width(40.dp)
+                                                    .height(40.dp)
+                                                    .clickable {
+                                                        coroutineScope.launch {
+                                                            withContext(Dispatchers.IO) {
+                                                                repository.delete(savedColor)
+                                                            }
+                                                        }
+                                                    }
+                                                    .align(Alignment.TopEnd))
+                                        }
+                                    }
+                                }
+                            }
+
+                            /*
+                            binding?.clearSavedColor?.setOnClickListener{
+            ConfirmDialogFragment.show(
+                parentFragmentManager,
+                getString(R.string.title_clear_saved_color),
+                Html.fromHtml(
+                    activityContext.getString(R.string.confirm_clear_all_settings),
+                    Html.FROM_HTML_MODE_COMPACT
+                ),
+                "clear_color"
+            )
+        }
+                             */
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val colorPair = colorPair()
-
-        initPalettes()
-        initSavedColors()
-
-        initialBgColor = colorPair.bgColor()
-        binding?.prev?.setBackgroundColor(initialBgColor)
-        binding?.backgroundPalette?.color = initialBgColor
-
-        initialFontColor = colorPair.fontColor()
-        binding?.prev?.setTextColor(initialFontColor)
-        binding?.fontPalette?.color = initialFontColor
-
-        binding?.ok?.setOnClickListener { ok() }
-        binding?.prev?.setOnClickListener { reset() }
 
         parentFragmentManager.setFragmentResultListener(
             "clear_color",
@@ -124,119 +322,21 @@ class ColorSettingFragment : Fragment(), CommonFragmentAction {
     }
 
     /**
-     * Initialize background and font palettes.
-     */
-    private fun initPalettes() {
-        binding?.backgroundPalette?.also {
-            it.addSVBar(binding?.backgroundSvbar)
-            it.addOpacityBar(binding?.backgroundOpacitybar)
-            it.setOnColorChangedListener { color ->
-                binding?.ok?.setBackgroundColor(color)
-            }
-        }
-
-        binding?.fontPalette?.also {
-            it.addSVBar(binding?.fontSvbar)
-            it.addOpacityBar(binding?.fontOpacitybar)
-            it.setOnColorChangedListener { color ->
-                binding?.ok?.setTextColor(color)
-            }
-        }
-
-        refresh()
-    }
-
-    /**
-     * Initialize saved color's section.
-     */
-    private fun initSavedColors() {
-        val activityContext = activity ?: return
-
-        repository = DatabaseFinder().invoke(activityContext).savedColorRepository()
-
-        adapter = SavedColorAdapter(
-                LayoutInflater.from(activityContext),
-                repository,
-                ViewModelProvider(activityContext).get(ContentViewModel::class.java),
-                this::commitNewColor
-        )
-
-        binding?.savedColors?.adapter = adapter
-        binding?.savedColors?.layoutManager =
-                GridLayoutManager(activityContext, 3, LinearLayoutManager.VERTICAL, false)
-        binding?.clearSavedColor?.setOnClickListener{
-            ConfirmDialogFragment.show(
-                parentFragmentManager,
-                getString(R.string.title_clear_saved_color),
-                Html.fromHtml(
-                    activityContext.getString(R.string.confirm_clear_all_settings),
-                    Html.FROM_HTML_MODE_COMPACT
-                ),
-                "clear_color"
-            )
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        refresh()
-    }
-
-    /**
-     * Refresh with current color.
-     */
-    private fun refresh() {
-        binding?.ok?.also { colorPair().setTo(it) }
-        adapter?.refresh()
-    }
-
-    /**
-     * OK button's action.
-     */
-    private fun ok() {
-        val bgColor = binding?.backgroundPalette?.color ?: Color.BLACK
-        val fontColor = binding?.fontPalette?.color ?: Color.WHITE
-
-        commitNewColor(bgColor, fontColor)
-
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            withContext(Dispatchers.IO) {
-                val savedColor = SavedColor.make(bgColor, fontColor)
-                repository.add(savedColor)
-                adapter?.reload()
-            }
-        }
-    }
-
-    /**
      * Commit new color.
      *
      * @param bgColor   Background color int
      * @param fontColor Font color int
      */
-    private fun commitNewColor(bgColor: Int, fontColor: Int) {
-        preferenceApplier.color = bgColor
-        preferenceApplier.fontColor = fontColor
+    private fun commitNewColor(bgColor: Color, fontColor: Color) {
+        preferenceApplier.color = bgColor.toArgb()
+        preferenceApplier.fontColor = fontColor.toArgb()
 
-        refresh()
+        currentBackgroundColor?.value = bgColor
+        currentFontColor?.value = fontColor
 
-        binding?.backgroundPalette?.color = bgColor
-        binding?.fontPalette?.color = fontColor
         activity?.let { Updater().update(it) }
 
         snackShort(R.string.settings_color_done_commit)
-    }
-
-    /**
-     * Reset button's action.
-     */
-    private fun reset() {
-        preferenceApplier.color = initialBgColor
-        preferenceApplier.fontColor = initialFontColor
-
-        refresh()
-        activity?.let { Updater().update(it) }
-        snackShort(R.string.settings_color_done_reset)
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
@@ -267,7 +367,7 @@ class ColorSettingFragment : Fragment(), CommonFragmentAction {
     }
 
     private fun snackShort(@StringRes messageId: Int) {
-        binding?.root?.let {
+        view?.let {
             Toaster.snackShort(it, messageId, colorPair())
         }
     }
@@ -282,9 +382,6 @@ class ColorSettingFragment : Fragment(), CommonFragmentAction {
     }
 
     companion object : TitleIdSupplier {
-
-        @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_settings_color
 
         override fun titleId(): Int = R.string.title_settings_color
 
