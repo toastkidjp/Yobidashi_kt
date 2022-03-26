@@ -103,6 +103,7 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:$libVersions.paging"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
     implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
+    implementation 'com.godaddy.android.colorpicker:compose-color-picker:0.4.2'
 
     implementation "androidx.room:room-runtime:$libVersions.room"
     kapt "androidx.room:room-compiler:$libVersions.room"
