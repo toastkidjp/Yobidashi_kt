@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.PagingData
@@ -113,6 +114,7 @@ private fun ListItem(
                 Text(
                     text = article.title,
                     fontSize = 16.sp,
+                    overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
                 Text(
@@ -125,6 +127,7 @@ private fun ListItem(
                             " / ${article.length}",
                     maxLines = 1,
                     fontSize = 14.sp,
+                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
