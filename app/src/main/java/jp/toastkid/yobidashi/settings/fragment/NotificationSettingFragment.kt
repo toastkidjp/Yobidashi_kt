@@ -75,7 +75,10 @@ class NotificationSettingFragment : Fragment() {
                     Row(modifier = Modifier
                         .fillMaxWidth()
                         .height(72.dp)
-                        .clickable { switchNotificationWidget() }
+                        .clickable {
+                            switchNotificationWidget()
+                            notificationWidgetEnabled.value = preferenceApplier.useNotificationWidget()
+                        }
                     ) {
                         Column(
                             modifier = Modifier
@@ -108,7 +111,10 @@ class NotificationSettingFragment : Fragment() {
                     Row(modifier = Modifier
                         .fillMaxWidth()
                         .height(72.dp)
-                        .clickable { switchDailyNotification() }
+                        .clickable {
+                            switchDailyNotification()
+                            morningNotificationEnabled.value = preferenceApplier.useDailyNotification()
+                        }
                     ) {
 
                         Column(
