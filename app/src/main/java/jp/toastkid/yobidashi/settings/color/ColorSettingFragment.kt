@@ -252,10 +252,10 @@ class ColorSettingFragment : Fragment(), CommonFragmentAction {
                                                     Color(savedColor.fontColor)
                                                 )
                                             }
+                                            .weight(1f)
                                             .padding(8.dp)
                                     ) {
                                         Box(modifier = Modifier
-                                            .weight(1f)
                                             .height(100.dp)
                                             .background(Color(savedColor.bgColor))
                                             .padding(8.dp)
