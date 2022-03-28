@@ -25,6 +25,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -94,16 +95,13 @@ class NotificationSettingFragment : Fragment() {
                                 contentDescription = stringResource(id = R.string.title_show_notification_widget)
                             )
                         }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxHeight()
+                        Checkbox(
+                            checked = notificationWidgetEnabled.value,
+                            onCheckedChange = {},
+                            modifier = Modifier.clickable(false) { }
                                 .width(44.dp)
-                        ) {
-                            Checkbox(
-                                checked = notificationWidgetEnabled.value,
-                                onCheckedChange = {},
-                                modifier = Modifier.clickable(false) { })
-                        }
+                                .align(Alignment.CenterVertically)
+                        )
                     }
 
                     InsetDivider()
@@ -131,16 +129,14 @@ class NotificationSettingFragment : Fragment() {
                                 contentDescription = stringResource(id = R.string.title_show_morning_notification)
                             )
                         }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxHeight()
+
+                        Checkbox(
+                            checked = morningNotificationEnabled.value,
+                            onCheckedChange = {},
+                            modifier = Modifier.clickable(false) { }
                                 .width(44.dp)
-                        ) {
-                            Checkbox(
-                                checked = morningNotificationEnabled.value,
-                                onCheckedChange = {},
-                                modifier = Modifier.clickable(false) { })
-                        }
+                                .align(Alignment.CenterVertically)
+                        )
                     }
                 }
             }
