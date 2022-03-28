@@ -11,25 +11,54 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.BaseAdapter
 import androidx.annotation.ColorInt
-import androidx.annotation.LayoutRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
-import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.interop.ComposeViewFactory
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.CompoundDrawableColorApplier
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
+import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentSettingEditorBinding
 import jp.toastkid.yobidashi.editor.EditorFontSize
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragment
 import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragmentViewModel
+import jp.toastkid.yobidashi.settings.view.ColorPaletteUi
 
 /**
  * Editor setting fragment.
@@ -37,11 +66,6 @@ import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragmentViewModel
  * @author toastkidjp
  */
 class EditorSettingFragment : Fragment() {
-
-    /**
-     * View data binding object.
-     */
-    private lateinit var binding: FragmentSettingEditorBinding
 
     /**
      * Preferences wrapper.
@@ -60,176 +84,234 @@ class EditorSettingFragment : Fragment() {
     @ColorInt
     private var initialFontColor: Int = 0
 
+    private var currentBackgroundColor: MutableState<Color>? = null
+
+    private var currentFontColor: MutableState<Color>? = null
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+        val activityContext =
+            activity ?: return super.onCreateView(inflater, container, savedInstanceState)
+
         preferenceApplier = PreferenceApplier(activityContext)
-        binding.fragment = this
-        return binding.root
-    }
+        val backgroundColor = preferenceApplier.editorBackgroundColor()
+        val fontColor = preferenceApplier.editorFontColor()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        initialBgColor = backgroundColor
+        initialFontColor = fontColor
 
-        binding.also { editorModule ->
-            val backgroundColor = preferenceApplier.editorBackgroundColor()
-            val fontColor = preferenceApplier.editorFontColor()
+        val iconTint = Color(IconColorFinder.from(activityContext).invoke())
 
-            initialBgColor = backgroundColor
-            initialFontColor = fontColor
+        val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
 
-            editorModule.backgroundPalette.also { picker ->
-                picker.addSVBar(editorModule.backgroundSvbar)
-                picker.addOpacityBar(editorModule.backgroundOpacitybar)
-                picker.setOnColorChangedListener { editorModule.ok.setBackgroundColor(it) }
-                picker.color = preferenceApplier.editorBackgroundColor()
-            }
+        return ComposeViewFactory().invoke(activityContext) {
+            val currentBackgroundColor =
+                remember { mutableStateOf(Color(preferenceApplier.editorBackgroundColor())) }
+            this.currentBackgroundColor = currentBackgroundColor
 
-            editorModule.fontPalette.also { picker ->
-                picker.addSVBar(editorModule.fontSvbar)
-                picker.addOpacityBar(editorModule.fontOpacitybar)
-                picker.setOnColorChangedListener { editorModule.ok.setTextColor(it) }
-                picker.color = preferenceApplier.editorFontColor()
-            }
-            editorModule.fragment = this
+            val currentFontColor =
+                remember { mutableStateOf(Color(preferenceApplier.editorFontColor())) }
+            this.currentFontColor = currentFontColor
 
-            editorModule.ok.setOnClickListener { ok() }
-            editorModule.prev.setOnClickListener { reset() }
+            val cursorColor =
+                remember { mutableStateOf(Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, R.color.editor_cursor)))) }
 
-            ColorPair(backgroundColor, fontColor).setTo(binding.ok)
+            val highlightColor =
+                remember { mutableStateOf(Color(preferenceApplier.editorHighlightColor(ContextCompat.getColor(activityContext, R.color.light_blue_200_dd)))) }
 
-            ColorPair(initialBgColor, initialFontColor).setTo(binding.prev)
+            val fontSize =
+                remember { mutableStateOf(preferenceApplier.editorFontSize()) }
 
-            editorModule.fontSize.adapter = object : BaseAdapter() {
-                override fun getCount(): Int = EditorFontSize.values().size
+            val fontSizeOpen =
+                remember { mutableStateOf(false) }
 
-                override fun getItem(position: Int): EditorFontSize
-                        = EditorFontSize.values()[position]
+            MaterialTheme() {
+                LazyColumn(
+                    modifier = Modifier
+                        .nestedScroll(rememberViewInteropNestedScrollConnection())
+                        .padding(start = 8.dp, end = 8.dp)
+                ) {
+                    item {
+                        ColorPaletteUi(
+                            currentBackgroundColor,
+                            currentFontColor,
+                            initialBgColor,
+                            initialFontColor,
+                            onCommit = {
+                                preferenceApplier.setEditorBackgroundColor(currentBackgroundColor.value.toArgb())
+                                preferenceApplier.setEditorFontColor(currentFontColor.value.toArgb())
 
-                override fun getItemId(position: Int): Long
-                        = getItem(position).ordinal.toLong()
+                                contentViewModel.snackShort(R.string.settings_color_done_commit)
+                            },
+                            onReset = {
+                                preferenceApplier.setEditorBackgroundColor(initialBgColor)
+                                preferenceApplier.setEditorFontColor(initialFontColor)
 
-                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                    val item = EditorFontSize.values()[position]
+                                currentBackgroundColor.value = Color(initialBgColor)
+                                currentFontColor.value = Color(initialFontColor)
 
-                    if (convertView == null) {
-                        val newView = layoutInflater.inflate(
-                                android.R.layout.simple_spinner_item,
-                                parent,
-                                false
+                                contentViewModel.snackShort(R.string.settings_color_done_reset)
+                            }
                         )
-
-                        val viewHolder = FontSpinnerViewHolder(newView)
-                        newView.tag = viewHolder
-                        viewHolder.bind(item)
-                        return newView
                     }
 
-                    val viewHolder = convertView.tag as? FontSpinnerViewHolder?
-                    viewHolder?.bind(item)
-                    return convertView
+                    item {
+                        InsetDivider()
+                    }
+
+                    item {
+                        ColorChooserMenu(
+                            cursorColor,
+                            R.drawable.ic_cursor_black,
+                            R.string.title_cursor_color,
+                            iconTint
+                        ) { showCursorColorSetting(cursorColor) }
+                    }
+
+                    item {
+                        InsetDivider()
+                    }
+
+                    item {
+                        ColorChooserMenu(
+                            highlightColor,
+                            R.drawable.ic_highlight_black,
+                            R.string.title_highlight_color,
+                            iconTint
+                        ) { showCursorColorSetting(highlightColor) }
+                    }
+
+                    item {
+                        InsetDivider()
+                    }
+
+                    item {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .height(48.dp)
+                                .clickable(onClick = { fontSizeOpen.value = true })
+                                .background(colorResource(id = R.color.setting_background))
+                        ) {
+                            Icon(
+                                painterResource(id = R.drawable.ic_edit),
+                                tint = iconTint,
+                                contentDescription = stringResource(id = R.string.title_font_size)
+                            )
+
+                            Text(
+                                stringResource(id = R.string.title_font_size),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(start = 4.dp)
+                            )
+
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(dimensionResource(id = R.dimen.search_category_spinner_width))
+                                    .padding(end = 8.dp)
+                            ) {
+                                Text("${fontSize.value}")
+                                DropdownMenu(
+                                    expanded = fontSizeOpen.value,
+                                    onDismissRequest = { fontSizeOpen.value = false }
+                                ) {
+                                    EditorFontSize.values().forEach {
+                                        DropdownMenuItem(
+                                            onClick = {
+                                                preferenceApplier.setEditorFontSize(it.size)
+                                                fontSize.value = it.size
+                                                fontSizeOpen.value = false
+                                            }
+                                        ) {
+                                            Text(
+                                                "${it.size}",
+                                                color = colorResource(id = R.color.black),
+                                                fontSize = it.size.sp,
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .fillMaxHeight()
+                                                    .padding(8.dp)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            editorModule.fontSize.setSelection(
-                    EditorFontSize.findIndex(preferenceApplier.editorFontSize())
-            )
-            editorModule.fontSize.onItemSelectedListener =
-                object: AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        preferenceApplier.setEditorFontSize(EditorFontSize.values()[position].size)
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-            }
-
-            val context = binding.root.context
-
-            val defaultCursorColor = ContextCompat.getColor(context, R.color.editor_cursor)
-            editorModule.cursorPreview.setBackgroundColor(
-                    preferenceApplier.editorCursorColor(defaultCursorColor)
-            )
-
-            val defaultHighlightColor = ContextCompat.getColor(context, R.color.light_blue_200_dd)
-            editorModule.highlightPreview.setBackgroundColor(
-                    preferenceApplier.editorHighlightColor(defaultHighlightColor)
-            )
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    @Composable
+    private fun ColorChooserMenu(
+        colorState: MutableState<Color>,
+        @DrawableRes iconId: Int,
+        @StringRes textId: Int,
+        iconTint: Color,
+        onClick: () -> Unit
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .height(48.dp)
+                .clickable(onClick = onClick)
+                .background(colorResource(id = R.color.setting_background))
+        ) {
+            Icon(
+                painterResource(id = iconId),
+                tint = iconTint,
+                contentDescription = stringResource(id = textId)
+            )
 
-        val color = IconColorFinder.from(binding.root).invoke()
-        CompoundDrawableColorApplier().invoke(
-                color,
-                binding.textCursor,
-                binding.textHighlight,
-                binding.textFontSize
+            Text(
+                stringResource(id = textId),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 4.dp)
+            )
+            Button(
+                {},
+                colors = ButtonDefaults.textButtonColors(
+                    backgroundColor = colorState.value,
+                    contentColor = Color.Transparent,
+                    disabledContentColor = Color.LightGray
+                ),
+                modifier = Modifier
+                    .size(dimensionResource(id = R.dimen.search_category_spinner_width))
+                    .padding(end = 8.dp)
+            ) {
+
+            }
+        }
+    }
+
+    fun showCursorColorSetting(colorState: MutableState<Color>) {
+        parentFragmentManager.setFragmentResultListener(
+            "color",
+            viewLifecycleOwner,
+            { key, result ->
+                val color = result.getInt(key)
+                preferenceApplier.setEditorCursorColor(color)
+                colorState.value = Color(color)
+                parentFragmentManager.clearFragmentResult("color")
+            }
         )
-    }
 
-    /**
-     * OK button's action.
-     */
-    private fun ok() {
-        val backgroundColor = binding.backgroundPalette.color
-        val fontColor = binding.fontPalette.color
-
-        preferenceApplier.setEditorBackgroundColor(backgroundColor)
-        preferenceApplier.setEditorFontColor(fontColor)
-
-        binding.backgroundPalette.color = backgroundColor
-        binding.fontPalette.color = fontColor
-
-        val colorPair = ColorPair(backgroundColor, fontColor)
-        colorPair.setTo(binding.ok)
-        Toaster.snackShort(binding.root, R.string.settings_color_done_commit, colorPair)
-    }
-
-    /**
-     * Reset button's action.
-     */
-    private fun reset() {
-        preferenceApplier.setEditorBackgroundColor(initialBgColor)
-        preferenceApplier.setEditorFontColor(initialFontColor)
-
-        binding.backgroundPalette.color = initialBgColor
-        binding.fontPalette.color = initialFontColor
-
-        ColorPair(initialBgColor, initialFontColor).setTo(binding.ok)
-
-        Toaster.snackShort(binding.root, R.string.settings_color_done_reset, preferenceApplier.colorPair())
-    }
-
-    fun showCursorColorSetting() {
-        val activity = activity ?: return
-        val currentColor = preferenceApplier.editorCursorColor(
-                ContextCompat.getColor(activity, R.color.editor_cursor)
-        )
-        ColorChooserDialogFragment.withCurrentColor(currentColor)
+        ColorChooserDialogFragment.withCurrentColor(colorState.value.toArgb())
                 .show(
-                        activity.supportFragmentManager,
-                        ColorChooserDialogFragment::class.java.canonicalName
+                    parentFragmentManager,
+                    ColorChooserDialogFragment::class.java.canonicalName
                 )
-        ViewModelProvider(activity)
-                .get(ColorChooserDialogFragmentViewModel::class.java)
-                .color
-                .observe(activity, {
-                    preferenceApplier.setEditorCursorColor(it)
-                    binding.cursorPreview.setBackgroundColor(it)
-                })
     }
 
-    fun showHighlightColorSetting() {
+    // TODO remove it
+    fun showHighlightColorSetting(colorState: MutableState<Color>) {
         val activity = activity ?: return
         val currentColor = preferenceApplier.editorHighlightColor(
                 ContextCompat.getColor(activity, R.color.light_blue_200_dd)
@@ -244,14 +326,11 @@ class EditorSettingFragment : Fragment() {
                 .color
                 .observe(activity, {
                     preferenceApplier.setEditorHighlightColor(it)
-                    binding.highlightPreview.setBackgroundColor(it)
+                    colorState.value = Color(it)
                 })
     }
 
     companion object : TitleIdSupplier {
-
-        @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_setting_editor
 
         @StringRes
         override fun titleId() = R.string.subhead_editor
