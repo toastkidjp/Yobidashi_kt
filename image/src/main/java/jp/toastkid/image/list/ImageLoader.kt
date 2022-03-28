@@ -10,18 +10,18 @@ package jp.toastkid.image.list
 import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
 import jp.toastkid.image.Image
 
 /**
  * @author toastkidjp
  */
-class ImageLoader(private val contentResolver: ContentResolver) {
+class ImageLoader(
+    private val contentResolver: ContentResolver,
+    private val externalContentUri: Uri = ResolvingUriFinder().invoke()
+) {
 
     operator fun invoke(sort: Sort, bucket: String): List<Image> {
-        val externalContentUri =
-            findContentResolveUri()
         return extractImages(
                 contentResolver.query(
                         externalContentUri,
@@ -34,8 +34,6 @@ class ImageLoader(private val contentResolver: ContentResolver) {
     }
 
     fun filterBy(name: String?): List<Image> {
-        val externalContentUri =
-            findContentResolveUri()
         return extractImages(
                 contentResolver.query(
                         externalContentUri,
@@ -47,13 +45,6 @@ class ImageLoader(private val contentResolver: ContentResolver) {
         )
     }
 
-    private fun findContentResolveUri(): Uri {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-        else
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-    }
-
     private fun extractImages(cursor: Cursor?): MutableList<Image> {
         val images = mutableListOf<Image>()
 
@@ -63,6 +54,7 @@ class ImageLoader(private val contentResolver: ContentResolver) {
         while (cursor?.moveToNext() == true) {
             images.add(Image(cursor.getString(dataIndex), cursor.getString(displayNameIndex)))
         }
+        cursor?.close()
         return images
     }
 

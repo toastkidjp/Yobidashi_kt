@@ -43,7 +43,7 @@ class ViewHolder(private val binding: ItemViewHistoryBinding):
     }
 
     fun setIconResource(@DrawableRes iconId: Int) {
-        binding.icon.setImageResource(iconId)
+        binding.icon.load(iconId)
     }
 
     fun setIconFromPath(path: String) {

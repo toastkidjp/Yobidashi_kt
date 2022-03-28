@@ -27,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -96,6 +97,7 @@ class MenuBinder(
 
         CoroutineScope(Dispatchers.Default).launch {
             positionChannel.receiveAsFlow()
+                .distinctUntilChanged()
                 .debounce(TimeUnit.SECONDS.toMillis(1))
                 .collectLatest {
                     preferenceApplier.setNewMenuFabPosition(it.first, it.second)

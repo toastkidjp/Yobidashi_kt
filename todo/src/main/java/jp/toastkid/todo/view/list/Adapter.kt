@@ -12,14 +12,17 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.paging.PagingDataAdapter
+import jp.toastkid.lib.view.list.CommonItemCallback
 import jp.toastkid.todo.R
-import jp.toastkid.todo.data.paging.SimpleComparator
 import jp.toastkid.todo.model.TodoTask
 
 /**
  * @author toastkidjp
  */
-class Adapter(private val viewModel: TaskListFragmentViewModel) : PagingDataAdapter<TodoTask, ViewHolder>(SimpleComparator()) {
+class Adapter(private val viewModel: TaskListFragmentViewModel)
+    : PagingDataAdapter<TodoTask, ViewHolder>(
+    CommonItemCallback.with({ a, b -> a.id == b.id }, { a, b -> a == b })
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), LAYOUT_ID, parent, false))

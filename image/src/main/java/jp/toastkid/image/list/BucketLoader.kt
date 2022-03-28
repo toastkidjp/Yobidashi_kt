@@ -8,48 +8,47 @@
 package jp.toastkid.image.list
 
 import android.content.ContentResolver
-import android.os.Build
+import android.net.Uri
 import android.provider.MediaStore
 import jp.toastkid.image.Image
 
 /**
  * @author toastkidjp
  */
-class BucketLoader(private val contentResolver: ContentResolver) {
+class BucketLoader(
+    private val contentResolver: ContentResolver,
+    private val externalContentUri: Uri = ResolvingUriFinder().invoke()
+) {
 
     private val names = mutableSetOf<String>()
 
     operator fun invoke(sort: Sort): List<Image> {
         names.clear()
 
-        val externalContentUri =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-            else
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val cursor = MediaStore.Images.Media.query(
-                contentResolver,
+        val cursor = contentResolver.query(
                 externalContentUri,
                 arrayOf(
                         MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                         MediaStore.Images.Media.DATA,
                         MediaStore.Images.Media.DATE_MODIFIED
                 ),
-                null,
+            null,
+            null,
                 sort.bucketSort
-        )
+        ) ?: return emptyList()
 
         val buckets = mutableListOf<Image>()
         val parentExtractor = ParentExtractor()
 
         val columnIndex = cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
         val pathIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-        while (cursor?.moveToNext() == true) {
+        while (cursor.moveToNext()) {
             val path = cursor.getString(pathIndex)
             val parentPath = parentExtractor(path) ?: continue
             names.add(parentPath)
             buckets.add(Image.makeBucket(cursor.getString(columnIndex), path))
         }
+        cursor.close()
 
         val grouped = buckets
                 .groupBy { it.name }
