@@ -9,15 +9,20 @@ package jp.toastkid.yobidashi.settings.color
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
+import com.godaddy.android.colorpicker.ClassicColorPicker
+import jp.toastkid.lib.interop.ComposeViewFactory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.DialogColorChooserBinding
 
 /**
  * @author toastkidjp
@@ -27,42 +32,34 @@ class ColorChooserDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = activity ?: return super.onCreateDialog(savedInstanceState)
 
-        val chooserDialogFragmentViewModel =
-                ViewModelProvider(activityContext)
-                        .get(ColorChooserDialogFragmentViewModel::class.java)
+        val passedColorInt = arguments?.getInt(KEY_CURRENT_COLOR)
+        val passedColor = if (passedColorInt == null) Color.Transparent else Color(passedColorInt)
+        val colorState = mutableStateOf(passedColor)
 
-        val binding = DataBindingUtil.inflate<DialogColorChooserBinding>(
-                LayoutInflater.from(activityContext),
-                R.layout.dialog_color_chooser,
-                null,
-                false
-        )
+        val view = ComposeViewFactory().invoke(activityContext) {
+            val currentBackgroundColor = remember { colorState }
 
-        binding.palette.also {
-            it.addSVBar(binding?.svBar)
-            it.addOpacityBar(binding?.opacityBar)
-            it.setOnColorChangedListener { color ->
-                binding.preview.setBackgroundColor(color)
-            }
+            ClassicColorPicker(
+                color = currentBackgroundColor.value,
+                onColorChanged = { hsvColor ->
+                    currentBackgroundColor.value = hsvColor.toColor()
+                },
+                modifier = Modifier.height(200.dp)
+            )
         }
-
-        arguments?.getInt(KEY_CURRENT_COLOR)
-                ?.let { setPassedColor(binding, it) }
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_dialog_color_chooser)
-                .setView(binding.root)
+                .setView(view)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    chooserDialogFragmentViewModel.postColor(binding.palette.color)
+                    parentFragmentManager.setFragmentResult(
+                        "color",
+                        bundleOf("color" to colorState.value.toArgb())
+                    )
                     d.dismiss()
                 }
                 .create()
-    }
-
-    private fun setPassedColor(binding: DialogColorChooserBinding, color: Int) {
-        binding.palette.color = color
-        binding.preview.setBackgroundColor(color)
     }
 
     companion object {
