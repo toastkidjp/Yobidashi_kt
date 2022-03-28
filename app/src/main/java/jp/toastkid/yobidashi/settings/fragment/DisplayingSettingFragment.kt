@@ -18,27 +18,53 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import coil.compose.AsyncImage
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
+import jp.toastkid.lib.interop.ComposeViewFactory
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.storage.FilesDir
-import jp.toastkid.lib.view.CompoundDrawableColorApplier
+import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentSettingDisplayBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.settings.DarkModeApplier
-import jp.toastkid.yobidashi.settings.background.Adapter
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.background.load.LoadedAction
+import java.io.File
 
 /**
  * Display setting fragment.
@@ -48,11 +74,6 @@ import jp.toastkid.yobidashi.settings.background.load.LoadedAction
 class DisplayingSettingFragment : Fragment() {
 
     /**
-     * View binding.
-     */
-    private lateinit var binding: FragmentSettingDisplayBinding
-
-    /**
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
@@ -60,14 +81,11 @@ class DisplayingSettingFragment : Fragment() {
     private var contentViewModel: ContentViewModel? = null
 
     /**
-     * ModuleAdapter.
-     */
-    private var adapter: Adapter? = null
-
-    /**
      * Wrapper of FilesDir.
      */
     private lateinit var filesDir: FilesDir
+
+    private var files: MutableState<List<List<File>>>? = null
 
     private val addingLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -76,11 +94,13 @@ class DisplayingSettingFragment : Fragment() {
             return@registerForActivityResult
         }
 
+        val view = view ?: return@registerForActivityResult
+
         LoadedAction(
             it.data?.data,
-            binding.root,
+            view,
             preferenceApplier.colorPair(),
-            { adapter?.refresh() },
+            { refresh() },
             BACKGROUND_DIR
         )
             .invoke()
@@ -93,45 +113,163 @@ class DisplayingSettingFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-                inflater,
-                LAYOUT_ID,
-                container,
-                false
-        )
         val activityContext = activity
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
-        binding.fragment = this
         contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
         setHasOptionsMenu(true)
-        return binding.root
+
+        filesDir = FilesDir(activityContext, BACKGROUND_DIR)
+
+        return ComposeViewFactory().invoke(activityContext) {
+            val iconColor = Color(IconColorFinder.from(activityContext).invoke())
+
+            val files = remember {
+                mutableStateOf(filesDir.listFiles().toList().windowed(2, 2, true))
+            }
+            this@DisplayingSettingFragment.files = files
+
+            MaterialTheme() {
+                Surface(elevation = 4.dp, modifier = Modifier.padding(16.dp)) {
+                    LazyColumn(
+                        Modifier.background(colorResource(id = R.color.setting_background))
+                                .nestedScroll(rememberViewInteropNestedScrollConnection())
+                    ) {
+                        item {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                                    .clickable { applyDarkMode() }
+                            ) {
+                                Icon(
+                                    painterResource(id = R.drawable.ic_dark_mode_black),
+                                    tint = iconColor,
+                                    contentDescription = stringResource(id = R.string.apply_dark_mode)
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.apply_dark_mode),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 4.dp)
+                                )
+                            }
+
+                            InsetDivider()
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                                    .clickable { removeBackgroundSettings() }
+                            ) {
+                                Icon(
+                                    painterResource(id = R.drawable.ic_close_black),
+                                    tint = iconColor,
+                                    contentDescription = stringResource(id = R.string.title_bg_reset)
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.title_bg_reset),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 4.dp)
+                                )
+                            }
+
+                            InsetDivider()
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            ) {
+                                Icon(
+                                    painterResource(id = R.drawable.ic_image),
+                                    tint = iconColor,
+                                    contentDescription = stringResource(id = R.string.title_background_image_setting)
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.title_background_image_setting),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(start = 4.dp)
+                                )
+                                Icon(
+                                    painterResource(id = R.drawable.ic_add_white),
+                                    tint = iconColor,
+                                    contentDescription = stringResource(id = R.string.add_background_image),
+                                    modifier = Modifier.clickable { launchAdding() }
+                                )
+                            }
+                        }
+
+                        if (files.value.isEmpty()) {
+                            return@LazyColumn
+                        }
+
+                        items(files.value) { column ->
+                            Row() {
+                                column.forEach { imageFile ->
+                                    Surface(elevation = 4.dp, modifier = Modifier
+                                        .height(200.dp)
+                                        .weight(1f)
+                                        .padding(4.dp)) {
+                                        Box(Modifier.clickable {
+                                            preferenceApplier.backgroundImagePath = imageFile.path
+                                            contentViewModel
+                                                ?.snackShort(R.string.message_change_background_image)
+                                        }) {
+                                        Column() {
+                                            AsyncImage(
+                                                model = imageFile,
+                                                contentDescription = imageFile.name,
+                                                contentScale = ContentScale.Crop,
+                                                modifier = Modifier
+                                                    .height(150.dp)
+                                                    .padding(4.dp)
+                                            )
+                                            Text(
+                                                imageFile.nameWithoutExtension,
+                                                maxLines = 2,
+                                                fontSize = 14.sp,
+                                                overflow = TextOverflow.Ellipsis,
+                                                modifier = Modifier.padding(4.dp)
+                                            )
+                                        }
+                                            Icon(
+                                                painterResource(id = R.drawable.ic_remove_circle),
+                                                contentDescription = stringResource(id = R.string.delete),
+                                                modifier = Modifier.size(40.dp).align(Alignment.TopEnd)
+                                                    .clickable {
+                                                        if (!imageFile.exists()) {
+                                                            contentViewModel
+                                                                ?.snackShort(R.string.message_cannot_found_image)
+                                                            return@clickable
+                                                        }
+                                                        val successRemove = imageFile.delete()
+                                                        if (!successRemove) {
+                                                            contentViewModel
+                                                                ?.snackShort(R.string.message_failed_image_removal)
+                                                            return@clickable
+                                                        }
+                                                        refresh()
+                                                        contentViewModel
+                                                            ?.snackShort(R.string.message_success_image_removal)
+                                                    }
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.imagesView.layoutManager = GridLayoutManager(
-                view.context,
-                2,
-                LinearLayoutManager.VERTICAL,
-                false
-        )
-
-        filesDir = FilesDir(view.context, BACKGROUND_DIR)
-
-        adapter = Adapter(preferenceApplier, filesDir)
-        binding.imagesView.adapter = adapter
-        adapter?.refresh()
-        if (adapter?.currentList?.isEmpty() == true) {
-            val activity = activity ?: return
-            lastSnackbar = Toaster.withAction(
-                activity.findViewById(android.R.id.content),
-                R.string.message_snackbar_suggestion_select_background_image,
-                R.string.select,
-                { launchAdding() },
-                preferenceApplier.colorPair()
-            )
-        }
 
         parentFragmentManager.setFragmentResultListener(
             "clear_background_images",
@@ -139,26 +277,19 @@ class DisplayingSettingFragment : Fragment() {
             { _, _ ->
                 filesDir.clean()
                 contentViewModel?.snackShort(R.string.message_success_image_removal)
-                adapter?.refresh()
+                refresh()
             }
         )
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        val color = IconColorFinder.from(binding.root).invoke()
-        CompoundDrawableColorApplier().invoke(
-                color,
-                binding.applyDarkMode,
-                binding.clearBackgroundSettings,
-            binding.backgroundSubHeader
-        )
-        binding.fab.setColorFilter(color)
+    private fun refresh() {
+        files?.value = filesDir.listFiles().toList().windowed(2, 2, true)
     }
 
     fun applyDarkMode() {
-        DarkModeApplier().invoke(preferenceApplier, binding.root)
+        view?.let {
+            DarkModeApplier().invoke(preferenceApplier, it)
+        }
     }
 
     /**
@@ -213,8 +344,10 @@ class DisplayingSettingFragment : Fragment() {
             true
         }
         R.id.background_settings_add_default -> {
-            DefaultBackgroundImagePreparation().invoke(binding.root.context) {
-                activity?.runOnUiThread { adapter?.refresh() }
+            activity?.let { activity ->
+                DefaultBackgroundImagePreparation().invoke(activity) {
+                    activity.runOnUiThread { refresh() }
+                }
             }
             true
         }
@@ -246,9 +379,6 @@ class DisplayingSettingFragment : Fragment() {
          * Background image dir.
          */
         private const val BACKGROUND_DIR: String = "background_dir"
-
-        @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_setting_display
 
         fun getBackgroundDirectory() = BACKGROUND_DIR
 
