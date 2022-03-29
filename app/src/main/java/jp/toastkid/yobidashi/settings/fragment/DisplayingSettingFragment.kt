@@ -130,13 +130,14 @@ class DisplayingSettingFragment : Fragment() {
             this@DisplayingSettingFragment.files = files
 
             MaterialTheme() {
-                Surface(elevation = 4.dp, modifier = Modifier.padding(16.dp)) {
+                Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
                     LazyColumn(
                         Modifier.background(colorResource(id = R.color.setting_background))
                                 .nestedScroll(rememberViewInteropNestedScrollConnection())
                     ) {
                         item {
                             Row(
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(16.dp)
@@ -158,6 +159,7 @@ class DisplayingSettingFragment : Fragment() {
                             InsetDivider()
 
                             Row(
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(16.dp)
@@ -179,6 +181,7 @@ class DisplayingSettingFragment : Fragment() {
                             InsetDivider()
 
                             Row(
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(16.dp)
