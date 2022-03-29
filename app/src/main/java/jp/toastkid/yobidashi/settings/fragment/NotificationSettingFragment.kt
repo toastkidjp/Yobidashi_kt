@@ -13,20 +13,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -72,73 +76,81 @@ class NotificationSettingFragment : Fragment() {
                 remember { mutableStateOf(preferenceApplier.useDailyNotification()) }
 
             MaterialTheme {
-                Column {
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(72.dp)
-                        .clickable {
-                            switchNotificationWidget()
-                            notificationWidgetEnabled.value = preferenceApplier.useNotificationWidget()
-                        }
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .weight(1f)
+                Surface(
+                    elevation = 4.dp,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .background(colorResource(id = R.color.filter_white_bb))
+                ) {
+                    Column {
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                            .height(72.dp)
+                            .clickable {
+                                switchNotificationWidget()
+                                notificationWidgetEnabled.value = preferenceApplier.useNotificationWidget()
+                            }
                         ) {
-                            Text(
-                                text = stringResource(id = R.string.title_show_notification_widget),
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                            AsyncImage(
-                                R.mipmap.thumbnail,
-                                contentDescription = stringResource(id = R.string.title_show_notification_widget)
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .weight(1f)
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.title_show_notification_widget),
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                AsyncImage(
+                                    R.mipmap.thumbnail,
+                                    contentDescription = stringResource(id = R.string.title_show_notification_widget)
+                                )
+                            }
+                            Checkbox(
+                                checked = notificationWidgetEnabled.value,
+                                onCheckedChange = {},
+                                modifier = Modifier.clickable(false) { }
+                                    .width(44.dp)
+                                    .align(Alignment.CenterVertically)
                             )
                         }
-                        Checkbox(
-                            checked = notificationWidgetEnabled.value,
-                            onCheckedChange = {},
-                            modifier = Modifier.clickable(false) { }
-                                .width(44.dp)
-                                .align(Alignment.CenterVertically)
-                        )
-                    }
 
-                    InsetDivider()
+                        InsetDivider()
 
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(72.dp)
-                        .clickable {
-                            switchDailyNotification()
-                            morningNotificationEnabled.value = preferenceApplier.useDailyNotification()
-                        }
-                    ) {
-
-                        Column(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .weight(1f)
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                            .height(72.dp)
+                            .clickable {
+                                switchDailyNotification()
+                                morningNotificationEnabled.value = preferenceApplier.useDailyNotification()
+                            }
                         ) {
-                            Text(
-                                text = stringResource(id = R.string.title_show_morning_notification),
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                            AsyncImage(
-                                R.mipmap.thumbnail,
-                                contentDescription = stringResource(id = R.string.title_show_morning_notification)
+
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .weight(1f)
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.title_show_morning_notification),
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                AsyncImage(
+                                    R.mipmap.thumbnail,
+                                    contentDescription = stringResource(id = R.string.title_show_morning_notification)
+                                )
+                            }
+
+                            Checkbox(
+                                checked = morningNotificationEnabled.value,
+                                onCheckedChange = {},
+                                modifier = Modifier.clickable(false) { }
+                                    .width(44.dp)
+                                    .align(Alignment.CenterVertically)
                             )
                         }
-
-                        Checkbox(
-                            checked = morningNotificationEnabled.value,
-                            onCheckedChange = {},
-                            modifier = Modifier.clickable(false) { }
-                                .width(44.dp)
-                                .align(Alignment.CenterVertically)
-                        )
                     }
                 }
+
             }
         }
     }
