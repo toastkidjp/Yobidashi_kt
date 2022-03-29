@@ -109,6 +109,7 @@ class ColorFilterSettingFragment : Fragment() {
                                     switchColorFilter()
                                     check.value = preferenceApplier.useColorFilter()
                                 }
+                                .padding(start = 16.dp, end = 16.dp)
                         ) {
                             Icon(
                                 painterResource(id = R.drawable.ic_color_filter_black),
@@ -133,9 +134,11 @@ class ColorFilterSettingFragment : Fragment() {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp)
                         ) {
                             Text(
                                 text = stringResource(id = R.string.sample_text_color_filter),
+                                textAlign = TextAlign.Center,
                                 color = colorResource(id = R.color.black),
                                 modifier = Modifier
                                     .size(40.dp)
@@ -172,7 +175,10 @@ class ColorFilterSettingFragment : Fragment() {
 
                         InsetDivider()
 
-                        Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+                        Row(
+                            modifier = Modifier.horizontalScroll(rememberScrollState())
+                                .padding(start = 16.dp, end = 16.dp, top = 4.dp)
+                        ) {
                             ColorFilterItem(R.color.default_color_filter) { useCase.setYellow() }
                             ColorFilterItem(R.color.red_yellow) { useCase.setRedYellow() }
                             ColorFilterItem(R.color.deep_orange_500_dd) { useCase.setOrange() }
