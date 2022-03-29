@@ -15,11 +15,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,6 +51,8 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.TabThumbnails
 import jp.toastkid.yobidashi.tab.model.Tab
+import kotlinx.coroutines.launch
+import kotlin.math.max
 
 /**
  * Tab list dialog fragment.
@@ -121,18 +131,22 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         return composeView
     }
 
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     fun TabListUi() {
         val state = rememberLazyListState()
         val tabThumbnails = TabThumbnails.with(LocalContext.current)
         val index = callback?.tabIndexFromTabList() ?: 0
+        val rememberCoroutineScope = rememberCoroutineScope()
+
+        val tabs = remember { mutableStateListOf<Tab>() }
+        refresh(tabs)
 
         MaterialTheme {
             LazyRow(state = state, contentPadding = PaddingValues(horizontal = 4.dp)) {
-                items(callback?.getTabAdapterSizeFromTabList() ?: 0) { position ->
-                    val tab = callback?.getTabByIndexFromTabList(position) ?: return@items
-
+                itemsIndexed(tabs) { position, tab ->
                     Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .width(dimensionResource(id = R.dimen.tab_list_item_width))
                             .height(dimensionResource(R.dimen.tab_list_item_height))
@@ -150,8 +164,8 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                         Surface(
                             elevation = 4.dp,
                             modifier = Modifier
-                                .width(dimensionResource(id = R.dimen.tab_list_item_width))
-                                .height(dimensionResource(R.dimen.tab_list_item_height))
+                                .width(112.dp)
+                                .height(152.dp)
                         ) {
                             Box(
                                 modifier = Modifier
@@ -182,7 +196,24 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                                 )
                             }
                         }
+
+                        Icon(
+                            painterResource(id = R.drawable.ic_remove_circle),
+                            tint = Color(colorPair.fontColor()),
+                            contentDescription = stringResource(id = R.string.delete),
+                            modifier = Modifier.align(Alignment.TopEnd)
+                                .padding(4.dp)
+                                .clickable {
+                                    val removeIndex =
+                                        callback?.tabIndexOfFromTabList(tab) ?: return@clickable
+                                    callback?.closeTabFromTabList(removeIndex)
+                                    refresh(tabs)
+                                }
+                        )
                     }
+                }
+                rememberCoroutineScope.launch {
+                    state.scrollToItem(max(0, index - 1), 0)
                 }
             }
         }
@@ -227,6 +258,15 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                 PreferenceApplier(activityContext).backgroundImagePath
         )
          */
+    }
+
+    private fun refresh(tabs: SnapshotStateList<Tab>) {
+        tabs.clear()
+
+        (0 until (callback?.getTabAdapterSizeFromTabList() ?: 0)).forEach {
+            val tab = callback?.getTabByIndexFromTabList(it) ?: return@forEach
+            tabs.add(tab)
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
