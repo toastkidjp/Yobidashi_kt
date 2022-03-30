@@ -222,19 +222,6 @@ class BarcodeReaderFragment : Fragment() {
     }
 
     /**
-     * Start decode.
-     */
-    private fun startDecode() {
-        /*TODO
-        val text = barcodeResult.text
-                if (text == result.value) {
-                    return
-                }
-                result.value = text
-         */
-    }
-
-    /**
      * Copy result text to clipboard.
      *
      * @param text Result text
