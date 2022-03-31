@@ -105,6 +105,7 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
     implementation 'com.godaddy.android.colorpicker:compose-color-picker:0.4.2'
     implementation "com.google.accompanist:accompanist-flowlayout:0.24.5-alpha"
+    implementation 'androidx.activity:activity-compose:1.4.0'
 
     implementation "androidx.room:room-runtime:$libVersions.room"
     kapt "androidx.room:room-compiler:$libVersions.room"
