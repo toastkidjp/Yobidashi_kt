@@ -12,7 +12,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.search.favorite.ModuleAdapter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 internal class ClearItemsUseCase(
-    private val adapter: ModuleAdapter?,
     private val showSnackbar: (Int) -> Unit,
     @VisibleForTesting private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     @VisibleForTesting private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -34,7 +32,6 @@ internal class ClearItemsUseCase(
         CoroutineScope(mainDispatcher).launch(disposables) {
             withContext(ioDispatcher) {
                 repository.deleteAll()
-                adapter?.clear()
             }
 
             showSnackbar(R.string.settings_color_delete)
