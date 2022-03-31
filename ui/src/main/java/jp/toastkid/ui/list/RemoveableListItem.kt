@@ -37,16 +37,17 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SwipeToDismissItem(
     dismissState: DismissState,
-    dismissContent: @Composable RowScope.() -> Unit
+    dismissContent: @Composable RowScope.() -> Unit,
+    modifier: Modifier = Modifier
+        .padding(
+            start = 16.dp,
+            end = 16.dp,
+            top = 2.dp,
+            bottom = 2.dp
+        )
 ) {
     Surface(
-        modifier = Modifier
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 2.dp,
-                bottom = 2.dp
-            ),
+        modifier = modifier,
         elevation = 4.dp
     ) {
         SwipeToDismiss(
@@ -56,7 +57,7 @@ fun SwipeToDismissItem(
                 DismissDirection.EndToStart
             ),
             dismissThresholds = { direction ->
-                FractionalThreshold(if (direction == DismissDirection.StartToEnd) 0.25f else 0.5f)
+                FractionalThreshold(if (direction == DismissDirection.StartToEnd) 0.25f else 0.75f)
             },
             background = {
                 val direction =
