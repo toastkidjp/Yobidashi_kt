@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.search
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -20,13 +19,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.LayoutRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,8 +32,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -50,7 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -58,29 +52,27 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import coil.compose.AsyncImage
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.interop.ComposeViewFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
+import jp.toastkid.yobidashi.search.url_suggestion.QueryUseCase
 import jp.toastkid.yobidashi.search.usecase.ContentSwitcherUseCase
+import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
+import jp.toastkid.yobidashi.search.view.SearchCategorySpinner
+import jp.toastkid.yobidashi.search.view.SearchContentsUi
+import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
@@ -89,14 +81,9 @@ import timber.log.Timber
 class SearchFragment : Fragment() {
 
     /**
-     * View binder.
-     */
-    private var binding: FragmentSearchBinding? = null
-
-    /**
      * Does use voice search?
      */
-    private var useVoice: Boolean = true
+    private var useVoice: MutableState<Boolean>? = null
 
     private lateinit var preferenceApplier: PreferenceApplier
 
@@ -128,24 +115,16 @@ class SearchFragment : Fragment() {
             if (result == null || result.size == 0) {
                 return@registerForActivityResult
             }
+            /*
             binding?.suggestionCard?.replace(result)
             binding?.suggestionCard?.show()
-
-            CoroutineScope(Dispatchers.Default).launch(disposables) {
-                delay(200)
-                withContext(Dispatchers.Main) {
-                    val top = binding?.suggestionCard?.top ?: 0
-                    binding?.scroll?.smoothScrollTo(0, top)
-                }
-            }
+            */
         }
 
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
-
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
         currentTitle = arguments?.getString(EXTRA_KEY_TITLE)
         currentUrl = arguments?.getString(EXTRA_KEY_URL)
@@ -158,11 +137,34 @@ class SearchFragment : Fragment() {
             contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
         }
 
+        val inputState = mutableStateOf("")
+        this.currentInput = inputState
+
+        val viewModel = ViewModelProvider(this).get(SearchUiViewModel::class.java)
+        val database = DatabaseFinder().invoke(context)
+        val queryingUseCase = QueryingUseCase(
+            viewModel,
+            preferenceApplier,
+            QueryUseCase(
+                {
+                    viewModel.urlItems.clear()
+                    viewModel.urlItems.addAll(it)
+                },
+                database.bookmarkRepository(),
+                database.viewHistoryRepository(),
+                { }
+            ),
+            database.favoriteSearchRepository(),
+            database.searchHistoryRepository()
+        )
+
         appBarViewModel?.replace(context) {
-            val input = remember { mutableStateOf(currentUrl ?: "") }
-            currentInput = input
+            val input = remember { inputState }
 
             val spinnerOpen = remember { mutableStateOf(false) }
+
+            val useVoice = remember { mutableStateOf(false) }
+            this.useVoice = useVoice
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -179,62 +181,14 @@ class SearchFragment : Fragment() {
                 }
                 currentCategory = categoryName
 
-                Box(
-                    modifier = Modifier
-                        .clickable {
-                            spinnerOpen.value = true
-                        }
-                        .width(dimensionResource(id = R.dimen.search_category_spinner_width))
-                        .fillMaxHeight()
-                        .background(colorResource(id = R.color.spinner_background))
-                ) {
-                    val category = SearchCategory.findByCategory(currentCategory?.value)
-                    Image(
-                        painterResource(id = category.iconId),
-                        contentDescription = stringResource(id = category.id),
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(4.dp)
-                    )
-
-                    DropdownMenu(
-                        expanded = spinnerOpen.value,
-                        onDismissRequest = { spinnerOpen.value = false }
-                    ) {
-                        val initialDisables = PreferenceApplier(context).readDisableSearchCategory()
-                        val searchCategories = SearchCategory.values()
-                            .filterNot { initialDisables?.contains(it.name) ?: false }
-                        searchCategories.forEach { searchCategory ->
-                            DropdownMenuItem(
-                                onClick = {
-                                    categoryName.value = searchCategory.name
-                                    spinnerOpen.value = false
-                                }
-                            ) {
-                                AsyncImage(
-                                    model = searchCategory.iconId,
-                                    contentDescription = stringResource(id = searchCategory.id),
-                                    modifier = Modifier.width(40.dp)
-                                )
-                                Text(
-                                    stringResource(id = searchCategory.id),
-                                    color = colorResource(id = R.color.black),
-                                    fontSize = 20.sp,
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .fillMaxHeight()
-                                        .padding(8.dp)
-                                )
-                            }
-                        }
-                    }
-                }
+                SearchCategorySpinner(spinnerOpen, currentCategory)
 
                 TextField(
                     value = input.value,
                     onValueChange = { text ->
                         input.value = text
-                        contentSwitcherUseCase?.send(text)
+                        useVoice.value = text.isBlank()
+                        queryingUseCase.send(text)
                     },
                     label = {
                             Text(
@@ -274,10 +228,13 @@ class SearchFragment : Fragment() {
                 )
 
                 Image(
-                    painterResource(id = if (useVoice) R.drawable.ic_mic else R.drawable.ic_search_white),
+                    painterResource(id = if (useVoice.value) R.drawable.ic_mic else R.drawable.ic_search_white),
                     contentDescription = stringResource(id = R.string.title_search_action),
                     colorFilter = ColorFilter.tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn),
-                    modifier = Modifier.width(32.dp).fillMaxHeight().align(Alignment.CenterVertically)
+                    modifier = Modifier
+                        .width(32.dp)
+                        .fillMaxHeight()
+                        .align(Alignment.CenterVertically)
                         .combinedClickable(
                             true,
                             onClick = { invokeSearch() },
@@ -287,21 +244,21 @@ class SearchFragment : Fragment() {
             }
         }
 
-        contentSwitcherUseCase = ContentSwitcherUseCase(
-            binding, preferenceApplier, this::setActionButtonState, currentTitle, currentUrl
-        )
-
         contentSwitcherUseCase?.withDebounce()
 
-        binding?.urlCard?.setInsertAction(this::setTextAndMoveCursorToEnd)
-
-        setListenerForKeyboardHiding()
+        //TODO binding?.urlCard?.setInsertAction(this::setTextAndMoveCursorToEnd)
 
         contentViewModel?.snackShort(R.string.message_search_on_background)
 
         setHasOptionsMenu(true)
 
-        return binding?.root
+        queryingUseCase.withDebounce()
+
+        return ComposeViewFactory().invoke(context) {
+            SearchContentsUi(viewModel, inputState, currentTitle, currentUrl)
+
+            queryingUseCase.send("")
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -323,13 +280,6 @@ class SearchFragment : Fragment() {
                     setTextAndMoveCursorToEnd(query)
                 })
 
-        binding?.favoriteSearchCard?.setViewModel(viewModel)
-        binding?.suggestionCard?.setViewModel(viewModel)
-        binding?.searchHistoryCard?.setViewModel(viewModel)
-        binding?.urlSuggestionCard?.setViewModel(viewModel)
-
-        binding?.hourlyTrendCard?.setViewModel(viewModel)
-
         val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
         setInitialQuery(query)
         arguments?.remove(EXTRA_KEY_QUERY)
@@ -338,14 +288,6 @@ class SearchFragment : Fragment() {
     private fun setInitialQuery(query: String?) {
         currentInput?.value = query ?: ""
         contentSwitcherUseCase?.invoke(query ?: "")
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setListenerForKeyboardHiding() {
-        binding?.scroll?.setOnTouchListener { _, _ ->
-            hideKeyboard()
-            false
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -403,23 +345,6 @@ class SearchFragment : Fragment() {
         currentInput?.value = text
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        binding?.suggestionCard?.isEnabled = preferenceApplier.isEnableSuggestion
-        binding?.searchHistoryCard?.isEnabled = preferenceApplier.isEnableSearchHistory
-        binding?.favoriteSearchCard?.isEnabled = preferenceApplier.isEnableFavoriteSearch
-        binding?.urlCard?.isEnabled = preferenceApplier.isEnableUrlModule()
-        binding?.urlSuggestionCard?.isEnabled = preferenceApplier.isEnableViewHistory
-        binding?.hourlyTrendCard?.isEnabled = preferenceApplier.isEnableTrendModule()
-
-        binding?.hourlyTrendCard?.request()
-
-        binding?.urlCard?.onResume()
-
-        showKeyboard()
-    }
-
     private fun showKeyboard() {
         /*TODO activity?.let {
             val input = headerBinding?.searchInput ?: return@let
@@ -438,23 +363,14 @@ class SearchFragment : Fragment() {
         }*/
     }
 
-    /**
-     * Set action button state.
-     *
-     * @param useVoiceSearch
-     */
-    private fun setActionButtonState(useVoiceSearch: Boolean) {
-        this.useVoice = useVoiceSearch
-    }
-
     fun invokeSearch() {
-        if (useVoice) {
+        if (useVoice?.value == true) {
             invokeVoiceSearch()
             return
         }
         search(
                 extractCurrentSearchCategory(),
-                currentInput?.value.toString()
+                currentInput?.value ?: ""
         )
     }
 
@@ -465,18 +381,19 @@ class SearchFragment : Fragment() {
             }
         } catch (e: ActivityNotFoundException) {
             Timber.e(e)
-            VoiceSearch().suggestInstallGoogleApp(binding?.root as View, preferenceApplier.colorPair())
+            val view = view ?: return
+            VoiceSearch().suggestInstallGoogleApp(view, preferenceApplier.colorPair())
         }
     }
 
     fun invokeBackgroundSearch(): Boolean {
-        if (useVoice) {
+        if (useVoice?.value == true) {
             return true
         }
 
         search(
                 extractCurrentSearchCategory(),
-                currentInput?.value.toString(),
+                currentInput?.value ?: "",
                 true
         )
         return true
@@ -526,24 +443,11 @@ class SearchFragment : Fragment() {
         hideKeyboard()
         disposables.cancel()
         contentSwitcherUseCase?.dispose()
-        binding?.favoriteSearchCard?.dispose()
-        binding?.searchHistoryCard?.dispose()
-        binding?.suggestionCard?.dispose()
-        binding?.hourlyTrendCard?.dispose()
-        binding?.urlSuggestionCard?.dispose()
-        binding?.urlCard?.dispose()
         voiceSearchLauncher.unregister()
         super.onDetach()
     }
 
     companion object {
-
-        /**
-         * Layout ID.
-         */
-        @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_search
-
 
         /**
          * Extra key of query.
