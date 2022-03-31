@@ -77,16 +77,6 @@ class Adapter(
         return currentList[index]
     }
 
-    /**
-     * Remove at index.
-     *
-     * @param index
-     * @return disposable
-     */
-    fun removeAt(index: Int): Job {
-        return remove(get(index), index)
-    }
-
     fun remove(item: UrlItem?, passedIndex: Int = -1): Job {
         if (item == null) {
             return Job()

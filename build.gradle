@@ -86,26 +86,13 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-task mergeJacocoFiles(
-    type: JacocoMerge,
-    group: "verification"
-) {
-    gradle.afterProject { project, _ ->
-        if (project.rootProject != project && project.plugins.hasPlugin('jacoco')) {
-            executionData "${project.buildDir}/jacoco/testDebugUnitTest.exec"
-        }
-    }
-}
-
 task jacocoMergedTestReport(
     type: JacocoReport,
-    dependsOn: [tasks.mergeJacocoFiles],
     group: "verification"
 ) {
-    getExecutionData().from = mergeJacocoFiles.destinationFile
-
     gradle.afterProject { project, _ ->
         if (project.rootProject != project && project.plugins.hasPlugin('jacoco')) {
+            getExecutionData().from += "${project.buildDir}/jacoco/testDebugUnitTest.exec"
             getSourceDirectories().from += "${project.projectDir}/src/main/java"
             getClassDirectories().from += project.fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/debug")
         }

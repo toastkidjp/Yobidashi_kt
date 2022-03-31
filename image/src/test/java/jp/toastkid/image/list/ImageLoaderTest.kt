@@ -58,6 +58,7 @@ class ImageLoaderTest {
         verify(exactly = 1) { contentResolver.query(any(), any(), any(), any(), any()) }
         verify(atLeast = 1) { cursor.getColumnIndex(any()) }
         verify(exactly = 1) { cursor.moveToNext() }
+        verify { cursor.close() }
     }
 
     @Test
@@ -67,6 +68,7 @@ class ImageLoaderTest {
         verify(exactly = 1) { contentResolver.query(any(), any(), any(), any(), any()) }
         verify(atLeast = 1) { cursor.getColumnIndex(any()) }
         verify(exactly = 1) { cursor.moveToNext() }
+        verify { cursor.close() }
     }
 
 }
