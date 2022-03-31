@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
@@ -103,7 +104,8 @@ class SettingFragment : Fragment() {
                                 selected = selectedIndex.value == index,
                                 onClick = {
                                     selectedIndex.value = index
-                                }
+                                },
+                                modifier = Modifier.padding(start = 4.dp, end = 4.dp)
                             ) {
                                 Text(
                                     text = stringResource(id = page.second.titleId()),
