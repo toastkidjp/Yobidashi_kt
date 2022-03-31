@@ -115,7 +115,7 @@ internal fun SearchItemContent(
                 }
             }
         },
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
     )
 }
 
@@ -210,7 +210,13 @@ internal fun BindItemContent(
                     )
                 }
             }
-        }
+        },
+        modifier = Modifier.padding(
+            start = 8.dp,
+            end = 8.dp,
+            top = 2.dp,
+            bottom = 2.dp
+        )
     )
 }
 
