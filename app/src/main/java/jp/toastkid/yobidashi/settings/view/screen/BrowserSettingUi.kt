@@ -52,6 +52,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import kotlin.math.roundToInt
 
 @Composable
@@ -234,13 +235,13 @@ internal fun BrowserSettingUi() {
                 }
 
                 item {
+                    val open = remember { mutableStateOf(false) }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .padding(16.dp)
                             .clickable(onClick = {
-                                //userAgent()
-                                //TODO Implement with dropdown menu.
+                                open.value = true
                             })
                     ) {
                         Icon(
@@ -260,6 +261,10 @@ internal fun BrowserSettingUi() {
                             userAgent.value,
                             modifier = Modifier.wrapContentWidth()
                         )
+
+                        UserAgentDropdown(open) {
+                            preferenceApplier.setUserAgent(it.name)
+                        }
                     }
                 }
 
