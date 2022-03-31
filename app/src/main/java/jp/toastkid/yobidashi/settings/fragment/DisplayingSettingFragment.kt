@@ -63,7 +63,6 @@ import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
-import jp.toastkid.yobidashi.settings.background.load.LoadedAction
 import java.io.File
 
 /**
@@ -96,14 +95,14 @@ class DisplayingSettingFragment : Fragment() {
 
         val view = view ?: return@registerForActivityResult
 
-        LoadedAction(
+        /*LoadedAction(
             it.data?.data,
             view,
             preferenceApplier.colorPair(),
             { refresh() },
             BACKGROUND_DIR
         )
-            .invoke()
+            .invoke()*/
     }
 
     private var lastSnackbar: Snackbar? = null
