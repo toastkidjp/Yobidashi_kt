@@ -17,24 +17,24 @@ import jp.toastkid.lib.lifecycle.Event
  */
 class BrowserHeaderViewModel : ViewModel() {
 
-    private val _title = MutableLiveData<Event<String>>()
-    val title: LiveData<Event<String>> = _title
+    private val _title = MutableLiveData<String>()
+    val title: LiveData<String> = _title
 
     fun nextTitle(nextTitle: String?) {
         if (nextTitle.isNullOrBlank()) {
             return
         }
-        _title.postValue(Event(nextTitle))
+        _title.postValue(nextTitle ?: "")
     }
 
-    private val _url = MutableLiveData<Event<String>>()
-    val url: LiveData<Event<String>> = _url
+    private val _url = MutableLiveData<String>()
+    val url: LiveData<String> = _url
 
     fun nextUrl(nextUrl: String?) {
         if (nextUrl.isNullOrBlank()) {
             return
         }
-        _url.postValue(Event(nextUrl))
+        _url.postValue(nextUrl ?: "")
     }
 
     private val _reset = MutableLiveData<Unit>()
