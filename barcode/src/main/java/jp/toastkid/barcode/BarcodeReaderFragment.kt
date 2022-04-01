@@ -30,16 +30,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -132,7 +137,6 @@ class BarcodeReaderFragment : Fragment() {
                                 .also {
                                     it.setAnalyzer(executor, BarcodeAnalyzer { newResult ->
                                         val text = newResult.text
-                                        println("tomato text $text")
                                         if (text == result.value) {
                                             return@BarcodeAnalyzer
                                         }
@@ -157,26 +161,33 @@ class BarcodeReaderFragment : Fragment() {
                 MaterialTheme() {
                     Surface(
                         elevation = 4.dp,
-                        modifier = Modifier.background(Color(preferenceApplier.color))
+                        modifier = Modifier.wrapContentHeight()
                     ) {
-                        Column() {
-                            Row() {
+                        Column(
+                            modifier = Modifier.background(Color(preferenceApplier.color))
+                            .wrapContentWidth()
+                            .padding(16.dp)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
                                     stringResource(id = R.string.clip),
                                     color = Color(preferenceApplier.fontColor),
-                                    modifier = Modifier.clickable { clip(result.value) }
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.padding(16.dp).clickable { clip(result.value) }
                                 )
                                 Text(
                                     stringResource(id = R.string.share),
                                     color = Color(preferenceApplier.fontColor),
-                                    modifier = Modifier.clickable {
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.padding(16.dp).clickable {
                                         startActivity(ShareIntentFactory()(result.value))
                                     }
                                 )
                                 Text(
                                     stringResource(id = R.string.open),
                                     color = Color(preferenceApplier.fontColor),
-                                    modifier = Modifier.clickable {
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.padding(16.dp).clickable {
                                         val activity = activity ?: return@clickable
                                         ViewModelProvider(activity)
                                             .get(WebSearchViewModel::class.java)
@@ -184,7 +195,12 @@ class BarcodeReaderFragment : Fragment() {
                                     }
                                 )
                             }
-                            Text(result.value)
+                            Text(
+                                result.value,
+                                color = Color(preferenceApplier.fontColor),
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(8.dp)
+                            )
                         }
                     }
                 }
