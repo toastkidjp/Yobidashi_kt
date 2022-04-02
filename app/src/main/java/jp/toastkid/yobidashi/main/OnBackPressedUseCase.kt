@@ -8,8 +8,8 @@
 package jp.toastkid.yobidashi.main
 
 import androidx.fragment.app.FragmentManager
-import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.fragment.CommonFragmentAction
+import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
@@ -24,7 +24,7 @@ class OnBackPressedUseCase(
         private val tabListUseCase: TabListUseCase?,
         private val menuVisibility: () -> Boolean,
         private val menuViewModel: MenuViewModel?,
-        private val pageSearcherModule: PageSearcherModule,
+        private val pageSearcherModule: PageSearcherModule?,
         private val floatingPreviewSupplier: () -> FloatingPreview?,
         private val tabs: TabAdapter,
         private val onEmptyTabs: () -> Unit,
@@ -42,8 +42,8 @@ class OnBackPressedUseCase(
             return
         }
 
-        if (pageSearcherModule.isVisible()) {
-            pageSearcherModule.hide()
+        if (pageSearcherModule?.isVisible() == true) {
+            pageSearcherModule?.hide()
             return
         }
 
