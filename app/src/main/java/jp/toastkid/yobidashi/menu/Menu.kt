@@ -49,10 +49,6 @@ enum class Menu(
 
     LOAN_CALCULATOR(R.string.title_loan_calculator, R.drawable.ic_loan_calculator),
 
-    PLANNING_POKER(R.string.title_planning_poker, R.drawable.ic_card),
-
-    GESTURE_MEMO(R.string.title_gesture_memo, R.drawable.ic_gesture_memo),
-
     RSS_READER(R.string.title_rss_reader, R.drawable.ic_rss_feed),
 
     AUDIO(R.string.title_audio_player, R.drawable.ic_music),
