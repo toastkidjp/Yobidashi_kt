@@ -36,13 +36,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.interop.ComposeViewFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.settings.color.ColorSettingFragment
-import jp.toastkid.yobidashi.settings.fragment.BrowserSettingFragment
-import jp.toastkid.yobidashi.settings.fragment.ColorFilterSettingFragment
-import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
-import jp.toastkid.yobidashi.settings.fragment.EditorSettingFragment
-import jp.toastkid.yobidashi.settings.fragment.OtherSettingFragment
-import jp.toastkid.yobidashi.settings.fragment.SearchSettingFragment
 import jp.toastkid.yobidashi.settings.initial.InitialIndexSettingUseCase
 import jp.toastkid.yobidashi.settings.view.screen.BrowserSettingUi
 import jp.toastkid.yobidashi.settings.view.screen.ColorFilterSettingUi
@@ -70,14 +63,14 @@ class SettingFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        val pages = listOf(
-            DisplayingSettingFragment::class.java to DisplayingSettingFragment,
-            ColorSettingFragment::class.java to ColorSettingFragment,
-            SearchSettingFragment::class.java to SearchSettingFragment,
-            BrowserSettingFragment::class.java to BrowserSettingFragment,
-            EditorSettingFragment::class.java to EditorSettingFragment,
-            ColorFilterSettingFragment::class.java to ColorFilterSettingFragment,
-            OtherSettingFragment::class.java to OtherSettingFragment
+        val pages = arrayOf(
+            R.string.subhead_displaying,
+            R.string.title_settings_color,
+            R.string.search,
+            R.string.subhead_browser,
+            R.string.subhead_editor,
+            R.string.title_color_filter,
+            R.string.subhead_others
         )
 
         return ComposeViewFactory().invoke(activityContext) {
@@ -108,7 +101,7 @@ class SettingFragment : Fragment() {
                                 modifier = Modifier.padding(start = 4.dp, end = 4.dp)
                             ) {
                                 Text(
-                                    text = stringResource(id = page.second.titleId()),
+                                    text = stringResource(id = page),
                                     color = Color(preferenceApplier.fontColor),
                                     fontSize = 16.sp
                                 )
