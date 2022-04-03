@@ -9,6 +9,7 @@
 package jp.toastkid.image.preview
 
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberTransformableState
@@ -42,7 +43,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
+internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int, onBackPress: () -> Unit = {}) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -59,7 +60,9 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     MaterialTheme {
         LazyRow(
             state = listState,
-            modifier = Modifier.fillMaxSize().background(Color.Transparent)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent)
         ) {
             items(images) { image ->
                 var scale by remember { mutableStateOf(1f) }
@@ -77,7 +80,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         .data(image.path).crossfade(true).build(),
                     imageLoader = imageLoader,
                     contentDescription = image.name,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .graphicsLayer(
                             scaleX = scale,
                             scaleY = scale,
@@ -92,6 +96,10 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             coroutineScope.launch {
                 listState.scrollToItem(initialIndex, 0)
             }
+        }
+
+        BackHandler {
+            onBackPress()
         }
     }
 }
