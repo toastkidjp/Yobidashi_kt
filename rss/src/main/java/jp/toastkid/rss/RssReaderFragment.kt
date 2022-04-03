@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -155,28 +156,33 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
                                 Text(
                                     text = it.title,
                                     fontSize = 18.sp,
+                                    overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
                                 )
                                 Text(
                                     text = it.link,
                                     color = colorResource(R.color.link_blue),
                                     fontSize = 12.sp,
+                                    overflow = TextOverflow.Ellipsis,
                                     maxLines = 1
                                 )
                                 Text(
                                     text = it.content.toString(),
                                     fontSize = 14.sp,
+                                    overflow = TextOverflow.Ellipsis,
                                     maxLines = 3,
                                 )
                                 Text(
                                     text = it.source,
                                     fontSize = 12.sp,
+                                    overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
                                 )
                                 Text(
                                     text = it.date,
                                     color = colorResource(R.color.darkgray_scale),
                                     fontSize = 12.sp,
+                                    overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
                                 )
                             }
