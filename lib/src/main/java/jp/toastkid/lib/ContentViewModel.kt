@@ -55,20 +55,20 @@ class ContentViewModel : ViewModel() {
         _snackbar.postValue(Event(SnackbarEvent(message, actionLabel, action)))
     }
 
-    private val _toTop = MutableLiveData<Unit>()
+    private val _toTop = MutableLiveData<Event<Unit>>()
 
-    val toTop: LiveData<Unit> = _toTop
+    val toTop: LiveData<Event<Unit>> = _toTop
 
     fun toTop() {
-        _toTop.postValue(Unit)
+        _toTop.postValue(Event(Unit))
     }
 
-    private val _toBottom = MutableLiveData<Unit>()
+    private val _toBottom = MutableLiveData<Event<Unit>>()
 
-    val toBottom: LiveData<Unit> = _toBottom
+    val toBottom: LiveData<Event<Unit>> = _toBottom
 
     fun toBottom() {
-        _toBottom.postValue(Unit)
+        _toBottom.postValue(Event(Unit))
     }
 
     private val _share = MutableLiveData<Event<Unit>>()
