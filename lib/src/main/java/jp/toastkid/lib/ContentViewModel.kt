@@ -8,11 +8,14 @@
 package jp.toastkid.lib
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
+import jp.toastkid.lib.model.OptionMenu
 
 /**
  * @author toastkidjp
@@ -153,6 +156,18 @@ class ContentViewModel : ViewModel() {
 
     fun openCalendar() {
         _openCalendar.postValue(Event(Unit))
+    }
+
+    private val _optionMenus = mutableStateListOf<OptionMenu>()
+
+    val optionMenus: SnapshotStateList<OptionMenu> = _optionMenus
+
+    fun optionMenus(vararg menus: OptionMenu) {
+        _optionMenus.addAll(menus.toList())
+    }
+
+    fun clearOptionMenus() {
+        _optionMenus.clear()
     }
 
 }
