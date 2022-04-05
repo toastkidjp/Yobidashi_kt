@@ -27,6 +27,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
@@ -77,8 +79,6 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
             it.setDistanceToTriggerSync(500)
         }
 */
-    println("tomato compose web")
-
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
     val webViewContainer = remember { FrameLayout(activityContext) }
@@ -96,7 +96,9 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
                 browserModule.loadWithNewTab(uri, tabId)
             }
         },
-        modifier = Modifier.background(Color.Transparent)
+        modifier = Modifier
+            .background(Color.Transparent)
+            .verticalScroll(rememberScrollState())
     )
     BackHandler(true) {
         if (browserModule.back()) {
