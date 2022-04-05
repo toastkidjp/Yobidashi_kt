@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.ui.menu.model
+package jp.toastkid.lib.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
