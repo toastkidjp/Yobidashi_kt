@@ -23,6 +23,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -51,7 +52,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.TabThumbnails
 import jp.toastkid.yobidashi.tab.model.Tab
-import kotlinx.coroutines.launch
 import kotlin.math.max
 
 /**
@@ -201,7 +201,8 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                             painterResource(id = R.drawable.ic_remove_circle),
                             tint = Color(colorPair.fontColor()),
                             contentDescription = stringResource(id = R.string.delete),
-                            modifier = Modifier.align(Alignment.TopEnd)
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
                                 .padding(4.dp)
                                 .clickable {
                                     val removeIndex =
@@ -212,13 +213,12 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                         )
                     }
                 }
-                rememberCoroutineScope.launch {
-                    state.scrollToItem(max(0, index - 1), 0)
-                }
             }
         }
 
-
+        LaunchedEffect(key1 = "first_scroll", block = {
+            state.scrollToItem(max(0, index - 1), 0)
+        })
         /*
 
         adapter = Adapter(activityContext, callback as Callback)
