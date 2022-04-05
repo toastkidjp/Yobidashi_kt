@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.search.view
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,15 +30,17 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,14 +48,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
+import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
+import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.trend.Trend
 import jp.toastkid.yobidashi.search.trend.TrendApi
@@ -64,11 +71,15 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(
+    ExperimentalComposeUiApi::class,
+    ExperimentalMaterialApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 internal fun SearchContentsUi(
     viewModel: SearchUiViewModel,
-    input: State<String>?,
+    input: MutableState<String>?,
     currentTitle: String?,
     currentUrl: String?
 ) {
@@ -90,6 +101,8 @@ internal fun SearchContentsUi(
     val trendApi = TrendApi()
 
     val trends = remember { mutableListOf<Trend>() }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(
         key1 = "",
@@ -118,7 +131,7 @@ internal fun SearchContentsUi(
     ) {
         if (preferenceApplier.isEnableUrlModule()) {
             item {
-                UrlCard(currentTitle, currentUrl)
+                UrlCard(currentTitle, currentUrl, { input?.value = it })
             }
         }
 
@@ -133,9 +146,11 @@ internal fun SearchContentsUi(
                 BindItemContent(
                     urlItem,
                     onClick = {
+                        keyboardController?.hide()
                         viewModel.search(urlItem.urlString())
                     },
                     onLongClick = {
+                        keyboardController?.hide()
                         viewModel.searchOnBackground(urlItem.urlString())
                     },
                     onDelete = {
@@ -156,6 +171,7 @@ internal fun SearchContentsUi(
                     favoriteSearch.query,
                     favoriteSearch.category,
                     {
+                        keyboardController?.hide()
                         viewModel.searchWithCategory(
                             favoriteSearch.query ?: "",
                             favoriteSearch.category ?: "",
@@ -180,6 +196,7 @@ internal fun SearchContentsUi(
                     searchHistory.query,
                     searchHistory.category,
                     {
+                        keyboardController?.hide()
                         viewModel.searchWithCategory(
                             searchHistory.query ?: "",
                             searchHistory.category ?: "",
@@ -210,6 +227,7 @@ internal fun SearchContentsUi(
                             modifier = Modifier.combinedClickable(
                                 true,
                                 onClick = {
+                                    keyboardController?.hide()
                                     viewModel?.putQuery(it)
                                     viewModel?.search(it)
                                 },
@@ -261,6 +279,7 @@ internal fun SearchContentsUi(
                                 modifier = Modifier.combinedClickable(
                                     true,
                                     onClick = {
+                                        keyboardController?.hide()
                                         viewModel?.search(it.link)
                                     },
                                     onLongClick = {
@@ -304,12 +323,14 @@ internal fun SearchContentsUi(
 }
 
 @Composable
-private fun UrlCard(currentTitle: String?, currentUrl: String?) {
+private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (String) -> Unit) {
     if (currentUrl.isNullOrBlank() && currentUrl.isNullOrBlank()) {
         return
     }
 
     val color = IconColorFinder.from(LocalContext.current).invoke()
+
+    val context = LocalContext.current
 
     Surface(
         elevation = 4.dp,
@@ -341,7 +362,14 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?) {
                 colorFilter = ColorFilter.tint(Color(color), BlendMode.SrcIn),
                 modifier = Modifier
                     .width(32.dp)
-                    .clickable { /* TODO shareUrl */ }
+                    .clickable {
+                        context.startActivity(
+                            ShareIntentFactory().invoke(
+                                currentUrl,
+                                currentTitle
+                            )
+                        )
+                    }
             )
             Image(
                 painterResource(id = R.drawable.ic_clip),
@@ -349,7 +377,13 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?) {
                 colorFilter = ColorFilter.tint(Color(color), BlendMode.SrcIn),
                 modifier = Modifier
                     .width(32.dp)
-                    .clickable { /* TODO clipUrl */ }
+                    .clickable {
+                        Clipboard.clip(context, currentUrl)
+                        val activity = context as? ComponentActivity ?: return@clickable
+                        ViewModelProvider(activity).get(ContentViewModel::class.java).snackShort(
+                            context.getString(R.string.message_clip_to, currentUrl)
+                        )
+                    }
             )
             Image(
                 painterResource(id = R.drawable.ic_edit_black),
@@ -357,7 +391,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?) {
                 colorFilter = ColorFilter.tint(Color(color), BlendMode.SrcIn),
                 modifier = Modifier
                     .width(32.dp)
-                    .clickable { /* TODO edit */ }
+                    .clickable { setInput(currentUrl) }
             )
         }
     }
