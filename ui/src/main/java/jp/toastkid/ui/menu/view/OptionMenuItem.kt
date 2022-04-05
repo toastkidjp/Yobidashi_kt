@@ -25,8 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.lib.color.IconColorFinder
+import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.ui.R
-import jp.toastkid.ui.menu.model.OptionMenu
 
 @Composable
 fun OptionMenuItem(optionMenu: OptionMenu) {
@@ -36,9 +36,10 @@ fun OptionMenuItem(optionMenu: OptionMenu) {
         val title = stringResource(id = optionMenu.titleId)
         val color = Color(IconColorFinder.from(LocalContext.current).invoke())
 
-        if (optionMenu.iconId != null) {
+        val iconId = optionMenu.iconId
+        if (iconId != null) {
             Icon(
-                painterResource(id = optionMenu.iconId),
+                painterResource(id = iconId),
                 contentDescription = title,
                 tint = color
             )
@@ -53,9 +54,10 @@ fun OptionMenuItem(optionMenu: OptionMenu) {
                 .padding(start = 4.dp)
         )
 
-        if (optionMenu.checkState != null) {
+        val checkState = optionMenu.checkState
+        if (checkState != null) {
             Checkbox(
-                checked = optionMenu.checkState.value,
+                checked = checkState.value,
                 onCheckedChange = {},
                 Modifier.clickable(false) {})
         }
