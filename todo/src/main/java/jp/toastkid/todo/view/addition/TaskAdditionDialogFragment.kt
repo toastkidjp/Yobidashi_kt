@@ -43,7 +43,7 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.dialog = this
 
@@ -64,6 +64,7 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
         task?.let {
             binding.additionQueryInput.setText(it.description)
+            binding.additionQueryInput.setSelection(it.description.length)
             (binding.colors.children
                     .firstOrNull { checkbox -> extractBackgroundColor(checkbox) == it.color }
                     as? RadioButton)?.isChecked = true

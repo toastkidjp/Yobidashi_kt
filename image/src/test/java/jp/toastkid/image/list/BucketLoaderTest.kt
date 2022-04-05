@@ -74,4 +74,5 @@ class BucketLoaderTest {
         verify { cursor.getColumnIndex(any()) }
         verify { cursor.close() }
     }
+
 }

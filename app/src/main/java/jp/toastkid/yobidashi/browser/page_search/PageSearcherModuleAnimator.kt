@@ -11,13 +11,12 @@ package jp.toastkid.yobidashi.browser.page_search
 import android.app.Activity
 import android.view.View
 import android.widget.EditText
+import androidx.annotation.UiThread
 import jp.toastkid.lib.input.Inputs
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class PageSearcherModuleAnimator {
 
+    @UiThread
     fun show(view: View?, editText: EditText) {
         view?.animate()?.let {
             it.cancel()
@@ -37,6 +36,7 @@ class PageSearcherModuleAnimator {
     /**
      * Hide module.
      */
+    @UiThread
     fun hide(view: View?, editText: EditText?, height: Float) {
         view?.animate()?.let {
             it.cancel()
@@ -52,10 +52,8 @@ class PageSearcherModuleAnimator {
     }
 
     private fun switchVisibility(view: View?, from: Int, to: Int) {
-        CoroutineScope(Dispatchers.Main).launch {
-            if (view?.visibility == from) {
-                view.visibility = to
-            }
+        if (view?.visibility == from) {
+            view.visibility = to
         }
     }
 

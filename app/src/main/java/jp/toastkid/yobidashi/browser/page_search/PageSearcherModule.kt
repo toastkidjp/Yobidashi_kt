@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 class PageSearcherModule(
     private val viewStubProxy: ViewStubProxy,
     private val pageSearcherModuleAnimator: PageSearcherModuleAnimator = PageSearcherModuleAnimator(),
-    private val channel: Channel<String> = Channel<String>()
+    private val channel: Channel<String> = Channel()
 ) {
 
     private lateinit var binding: ModuleSearcherBinding

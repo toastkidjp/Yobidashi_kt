@@ -150,13 +150,18 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                     .setState(newState, mediaPlayer.currentPosition.toLong(), 1.0f)
             mediaSession.setPlaybackState(stateBuilder.build())
         }
+
+        override fun onSeekTo(pos: Long) {
+            super.onSeekTo(pos)
+            mediaPlayer.seekTo(pos.toInt())
+        }
     }
 
     private fun registerReceivers() {
         initializeReceiversIfNeed()
 
-        applicationContext.registerReceiver(audioNoisyReceiver, audioNoisyFilter)
-        applicationContext.registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
+        registerReceiver(audioNoisyReceiver, audioNoisyFilter)
+        registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
     }
 
     private fun initializeReceiversIfNeed() {
@@ -181,8 +186,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         super.onCreate()
 
         preferenceApplier = PreferenceApplier(this)
-        notificationManager = NotificationManagerCompat.from(baseContext)
-        notificationFactory = NotificationFactory(applicationContext) { mediaSession }
+        notificationManager = NotificationManagerCompat.from(this)
+        notificationFactory = NotificationFactory(this) { mediaSession }
 
         mediaSession = MediaSessionCompat(this, javaClass.simpleName).also {
             stateBuilder = PlaybackStateCompat.Builder()
@@ -213,22 +218,27 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         )
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        unregisterReceivers()
+        super.onTaskRemoved(rootIntent)
+    }
+
     override fun onDestroy() {
         unregisterReceivers()
-
-        audioNoisyReceiver = null
-        playbackSpeedReceiver = null
 
         super.onDestroy()
     }
 
     private fun unregisterReceivers() {
         if (audioNoisyReceiver != null) {
-            applicationContext.unregisterReceiver(audioNoisyReceiver)
+            unregisterReceiver(audioNoisyReceiver)
         }
         if (playbackSpeedReceiver != null) {
-            applicationContext.unregisterReceiver(playbackSpeedReceiver)
+            unregisterReceiver(playbackSpeedReceiver)
         }
+
+        audioNoisyReceiver = null
+        playbackSpeedReceiver = null
     }
 
     companion object {
@@ -248,7 +258,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                 PlaybackStateCompat.ACTION_PLAY or
                         PlaybackStateCompat.ACTION_PAUSE or
                         PlaybackStateCompat.ACTION_PLAY_PAUSE or
-                        PlaybackStateCompat.ACTION_STOP
+                        PlaybackStateCompat.ACTION_STOP or
+                        PlaybackStateCompat.ACTION_SEEK_TO
 
         fun makeSpeedIntent(speed: Float) =
                 Intent(ACTION_CHANGE_SPEED)

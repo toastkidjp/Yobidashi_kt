@@ -8,15 +8,11 @@
 package jp.toastkid.todo.view.item.menu
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.annotation.DimenRes
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
 import jp.toastkid.todo.R
-import jp.toastkid.todo.databinding.PopupTodoTasksItemMenuBinding
 import jp.toastkid.todo.model.TodoTask
 
 /**
@@ -25,26 +21,23 @@ import jp.toastkid.todo.model.TodoTask
  * @param action [ItemMenuPopupActionUseCase]
  * @author toastkidjp
  */
-class ItemMenuPopup(context: Context, private val action: ItemMenuPopupActionUseCase) {
+class ItemMenuPopup(
+    context: Context,
+    private val action: ItemMenuPopupActionUseCase,
+    view: ItemMenuPopupView = ItemMenuViewImplementation(context)
+) {
 
     private val popupWindow = PopupWindow(context)
-
-    private val binding: PopupTodoTasksItemMenuBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(context),
-            LAYOUT_ID,
-            null,
-            false
-    )
 
     private var lastTask: TodoTask? = null
 
     init {
-        popupWindow.contentView = binding.root
+        popupWindow.contentView = view.getView()
         popupWindow.isOutsideTouchable = true
         popupWindow.width = context.resources.getDimensionPixelSize(WIDTH)
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
 
-        binding.popup = this
+        view.setPopup(this)
     }
 
     fun show(view: View, item: TodoTask) {
@@ -67,9 +60,6 @@ class ItemMenuPopup(context: Context, private val action: ItemMenuPopupActionUse
     }
 
     companion object {
-
-        @LayoutRes
-        private val LAYOUT_ID = R.layout.popup_todo_tasks_item_menu
 
         @DimenRes
         private val WIDTH = R.dimen.item_menu_popup_width

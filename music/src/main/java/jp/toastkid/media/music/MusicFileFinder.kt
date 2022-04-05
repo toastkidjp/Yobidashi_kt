@@ -60,6 +60,10 @@ class MusicFileFinder(private val contentResolver: ContentResolver) {
                             MediaMetadataCompat.METADATA_KEY_MEDIA_URI,
                             cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))
                     )
+                    .putLong(
+                        MediaMetadataCompat.METADATA_KEY_DURATION,
+                        cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION))
+                    )
                     .build()
 
             result.add(meta)
