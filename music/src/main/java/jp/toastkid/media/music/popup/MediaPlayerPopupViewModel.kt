@@ -8,6 +8,9 @@
 package jp.toastkid.media.music.popup
 
 import android.support.v4.media.MediaBrowserCompat
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,4 +35,15 @@ class MediaPlayerPopupViewModel : ViewModel() {
     fun clickLyrics(name: CharSequence?) {
         name?.also { _lyrics.postValue(it.toString()) }
     }
+
+    private val _musics = MutableLiveData<List<MediaBrowserCompat.MediaItem>>()
+
+    val musics: LiveData<List<MediaBrowserCompat.MediaItem>> = _musics
+
+    fun nextMusics(musics: List<MediaBrowserCompat.MediaItem>) {
+        _musics.postValue(musics)
+    }
+
+    var playing by mutableStateOf(false)
+
 }
