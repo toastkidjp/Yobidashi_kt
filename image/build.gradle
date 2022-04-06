@@ -53,6 +53,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
     implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
     implementation "androidx.navigation:navigation-compose:$libVersions.navigation_compose"
+    implementation 'androidx.activity:activity-compose:1.4.0'
 
     implementation "androidx.core:core-ktx:$libVersions.ktx"
     implementation "androidx.exifinterface:exifinterface:$libVersions.exifinterface"
