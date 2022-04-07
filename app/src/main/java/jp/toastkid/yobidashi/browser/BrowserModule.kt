@@ -7,6 +7,7 @@ import android.view.animation.AnimationUtils
 import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.FrameLayout
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
@@ -33,7 +34,6 @@ import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.yobidashi.main.MainActivity
 import timber.log.Timber
 
 /**
@@ -83,7 +83,7 @@ class BrowserModule(
 
         customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
 
-        if (context is MainActivity) {
+        if (context is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(context)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
             loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java)
@@ -188,6 +188,8 @@ class BrowserModule(
     fun pageDown() {
         currentView()?.pageDown(true)
     }
+
+    fun canGoBack() = currentView()?.canGoBack() ?: false
 
     fun back() = currentView()?.let {
         return if (it.canGoBack()) {

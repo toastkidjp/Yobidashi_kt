@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Message
 import android.view.View
 import android.webkit.WebView
+import androidx.activity.ComponentActivity
 import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
@@ -26,7 +27,6 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
-import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab
@@ -79,7 +79,7 @@ class TabAdapter(
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
 
-        if (viewContext is MainActivity) {
+        if (viewContext is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
             appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
