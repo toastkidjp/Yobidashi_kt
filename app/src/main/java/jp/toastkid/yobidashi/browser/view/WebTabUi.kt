@@ -8,11 +8,14 @@
 
 package jp.toastkid.yobidashi.browser.view
 
+import android.Manifest
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -33,6 +36,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,22 +54,34 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.Urls
 import jp.toastkid.lib.intent.ShareIntentFactory
+import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.BrowserModule
+import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.LoadingViewModel
+import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
+import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
+import jp.toastkid.yobidashi.browser.translate.TranslatedPageOpenerUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.webview.usecase.WebViewAssignmentUseCase
+import jp.toastkid.yobidashi.libs.Toaster
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -122,6 +138,74 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
         it.getContentIfNotHandled() ?: return@observe
         activityContext.startActivity(
             ShareIntentFactory()(browserModule.makeShareMessage())
+        )
+    })
+
+    val browserViewModel =
+        viewModel(modelClass = BrowserViewModel::class.java)
+
+    val storagePermissionRequestLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                Toaster.tShort(activityContext, R.string.message_requires_permission_storage)
+                return@rememberLauncherForActivityResult
+            }
+
+            browserModule.downloadAllImages()
+        }
+
+    LaunchedEffect(key1 = "add_option_menu", block = {
+        contentViewModel.optionMenus(
+            OptionMenu(titleId = R.string.translate, action = {
+                TranslatedPageOpenerUseCase(browserViewModel).invoke(browserModule.currentUrl())
+            }),
+            OptionMenu(titleId = R.string.download_all_images, action = {
+                storagePermissionRequestLauncher
+                    .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }),
+            OptionMenu(titleId = R.string.add_to_home_screen, action = {
+                val uri = browserModule.currentUrl()?.toUri() ?: return@OptionMenu
+                ShortcutUseCase(activityContext)
+                    .invoke(
+                        uri,
+                        browserModule.currentTitle(),
+                        FaviconApplier(activityContext).load(uri)
+                    )
+            }),
+            OptionMenu(titleId = R.string.title_add_bookmark, action = {
+                val faviconApplier = FaviconApplier(activityContext)
+                val url = browserModule.currentUrl() ?: ""
+                BookmarkInsertion(
+                    activityContext,
+                    browserModule.currentTitle(),
+                    url,
+                    faviconApplier.makePath(url),
+                    Bookmark.getRootFolderName()
+                ).insert()
+
+                contentViewModel.snackShort(R.string.message_done_added_bookmark)
+            }),
+            OptionMenu(titleId = R.string.title_archive, action = {
+                browserModule.saveArchive()
+            }),
+            OptionMenu(titleId = R.string.title_add_to_rss_reader, action = {
+                RssUrlFinder(PreferenceApplier(activityContext))
+                    .invoke(browserModule.currentUrl()) {
+                        null//TODO
+                    }
+            }),
+            OptionMenu(titleId = R.string.title_replace_home, action = {
+                browserModule.currentUrl()?.let {
+                    if (Urls.isInvalidUrl(it)) {
+                        contentViewModel
+                            .snackShort(activityContext.getString(R.string.message_cannot_replace_home_url))
+                        return@let
+                    }
+                    PreferenceApplier(activityContext).homeUrl = it
+                    contentViewModel
+                        .snackShort(activityContext.getString(R.string.message_replace_home_url, it))
+                }
+            })
         )
     })
 }
@@ -375,65 +459,6 @@ private fun HeaderSubButton(
             .clickable(enabled = enable, onClick = onClick)
     )
 }
-
-/*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-        R.id.translate -> {
-            val activity = activity ?: return true
-            val browserViewModel =
-                ViewModelProvider(activity).get(BrowserViewModel::class.java)
-            TranslatedPageOpenerUseCase(browserViewModel).invoke(browserModule.currentUrl())
-        }
-        R.id.download_all_images -> {
-            storagePermissionRequestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-        R.id.add_to_home -> {
-            val uri = browserModule.currentUrl()?.toUri() ?: return true
-            val context = context ?: return true
-            ShortcutUseCase(context)
-                .invoke(
-                    uri,
-                    browserModule.currentTitle(),
-                    FaviconApplier(context).load(uri)
-                )
-        }
-        R.id.add_bookmark -> {
-            val context = context ?: return true
-            val faviconApplier = FaviconApplier(context)
-            val url = browserModule.currentUrl() ?: ""
-            BookmarkInsertion(
-                context,
-                browserModule.currentTitle(),
-                url,
-                faviconApplier.makePath(url),
-                Bookmark.getRootFolderName()
-            ).insert()
-
-            contentViewModel?.snackShort(context.getString(R.string.message_done_added_bookmark))
-            return true
-        }
-        R.id.add_archive -> {
-            browserModule.saveArchive()
-            return true
-        }
-        R.id.add_rss -> {
-            RssUrlFinder(preferenceApplier).invoke(browserModule.currentUrl()) { null *//* TODO*//* }
-                return true
-            }
-            R.id.replace_home -> {
-                browserModule.currentUrl()?.let {
-                    val context = context ?: return true
-                    if (Urls.isInvalidUrl(it)) {
-                        contentViewModel?.snackShort(context.getString(R.string.message_cannot_replace_home_url))
-                        return true
-                    }
-                    preferenceApplier.homeUrl = it
-                    contentViewModel?.snackShort(context.getString(R.string.message_replace_home_url, it))
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }*/
 
 //TODO show composed reader UI
 private fun showReaderFragment(content: String, snackShort: (String) -> Unit) {
