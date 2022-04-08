@@ -12,6 +12,7 @@ import android.graphics.Canvas
 import android.view.View
 import androidx.annotation.UiThread
 import timber.log.Timber
+import kotlin.math.min
 
 /**
  * @author toastkidjp
@@ -24,9 +25,10 @@ class ThumbnailGenerator {
             return null
         }
 
+        val displayMetrics = view.context.resources.displayMetrics
         val bitmap = Bitmap.createBitmap(
-                view.measuredWidth,
-                view.measuredHeight,
+                min(view.measuredWidth, displayMetrics.widthPixels),
+                min(view.measuredHeight, displayMetrics.heightPixels),
                 Bitmap.Config.ARGB_8888
         )
 
