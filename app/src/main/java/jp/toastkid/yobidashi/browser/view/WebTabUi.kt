@@ -80,6 +80,7 @@ import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
 import jp.toastkid.yobidashi.browser.translate.TranslatedPageOpenerUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
+import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.webview.usecase.WebViewAssignmentUseCase
 import jp.toastkid.yobidashi.libs.Toaster
 import kotlinx.coroutines.CoroutineScope
@@ -315,23 +316,23 @@ private fun initializeHeaderViewModels(activity: ComponentActivity, browserModul
                             )
                         }
                     }
+
+                    val openPageInformation = remember { mutableStateOf(false) }
                     HeaderSubButton(
                         R.drawable.ic_info,
                         R.string.title_menu_page_information,
                         tint
                     ) {
-                        val pageInformation = browserModule.makeCurrentPageInformation()
-                        if (pageInformation.isEmpty) {
-                            return@HeaderSubButton
-                        }
-
-                        /*TODO Implement compose PageInformationDialogFragment()
-                            .also { it.arguments = pageInformation }
-                            .show(
-                                parentFragmentManager,
-                                PageInformationDialogFragment::class.java.simpleName
-                            )*/
+                        openPageInformation.value = true
                     }
+
+                    if (openPageInformation.value) {
+                        val pageInformation = browserModule.makeCurrentPageInformation()
+                        if (pageInformation.isEmpty.not()) {
+                            PageInformationDialog(openPageInformation, pageInformation)
+                        }
+                    }
+
                     HeaderSubButton(
                         R.drawable.ic_code,
                         R.string.title_menu_html_source,
@@ -361,9 +362,9 @@ private fun initializeHeaderViewModels(activity: ComponentActivity, browserModul
                             .padding(4.dp)
                             .clickable {
                                 //TODO
-                                //browserModule.invokeContentExtraction(ValueCallback(this::showReaderFragment))
                             }
                     )
+
                     Column(
                         modifier = Modifier.weight(1f)
                     ) {
