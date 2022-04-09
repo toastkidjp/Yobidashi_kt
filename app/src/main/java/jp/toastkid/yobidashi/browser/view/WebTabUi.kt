@@ -37,6 +37,7 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -81,6 +82,7 @@ import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
 import jp.toastkid.yobidashi.browser.translate.TranslatedPageOpenerUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
+import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
 import jp.toastkid.yobidashi.browser.webview.usecase.WebViewAssignmentUseCase
 import jp.toastkid.yobidashi.libs.Toaster
 import kotlinx.coroutines.CoroutineScope
@@ -103,8 +105,6 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
     val enableBackStack = remember { mutableStateOf(true) }
     val browserModule = BrowserModule(activityContext, webViewContainer)
 
-    initializeHeaderViewModels(activityContext, browserModule)
-
     AndroidView(
         factory = {
             webViewContainer
@@ -118,7 +118,19 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
             .background(Color.Transparent)
             .verticalScroll(ScrollState(0))
     )
+
+    val readerModeText = remember { mutableStateOf("") }
+    if (readerModeText.value.isNotBlank()) {
+        ReaderModeUi(browserModule.currentTitle(), readerModeText)
+    }
+
+    initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }
+
     BackHandler(enableBackStack.value) {
+        if (readerModeText.value.isNotBlank()) {
+            readerModeText.value = ""
+            return@BackHandler
+        }
         if (browserModule.back()) {
             enableBackStack.value = browserModule.canGoBack()
             return@BackHandler
@@ -212,7 +224,11 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-private fun initializeHeaderViewModels(activity: ComponentActivity, browserModule: BrowserModule) {
+private fun initializeHeaderViewModels(
+    activity: ComponentActivity,
+    browserModule: BrowserModule,
+    resetReaderModeContent: (String) -> Unit
+) {
     val viewModelProvider = ViewModelProvider(activity)
     val appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
 
@@ -339,9 +355,8 @@ private fun initializeHeaderViewModels(activity: ComponentActivity, browserModul
                         tint
                     ) {
                         browserModule.invokeHtmlSourceExtraction {
-                            showReaderFragment(it.replace("\\u003C", "<")) {
-                                contentViewModel.snackShort("This page can't show reader mode.")
-                            }
+                            val replace = it.replace("\\u003C", "<")
+                            showReader(replace, contentViewModel, resetReaderModeContent)
                         }
                     }
                 }
@@ -361,7 +376,9 @@ private fun initializeHeaderViewModels(activity: ComponentActivity, browserModul
                         modifier = Modifier
                             .padding(4.dp)
                             .clickable {
-                                //TODO
+                                browserModule.invokeContentExtraction {
+                                    showReader(it, contentViewModel, resetReaderModeContent)
+                                }
                             }
                     )
 
@@ -441,6 +458,21 @@ private fun initializeHeaderViewModels(activity: ComponentActivity, browserModul
     }
 }
 
+private fun showReader(
+    content: String,
+    contentViewModel: ContentViewModel,
+    resetReaderModeContent: (String) -> Unit
+) {
+    val cleaned = content.replace("^\"|\"$".toRegex(), "")
+    if (cleaned.isBlank()) {
+        contentViewModel.snackShort("This page can't show reader mode.")
+        return
+    }
+
+    val lineSeparator = System.lineSeparator()
+    resetReaderModeContent(cleaned.replace("\\n", lineSeparator))
+}
+
 @Composable
 private fun HeaderSubButton(
     iconId: Int,
@@ -462,15 +494,8 @@ private fun HeaderSubButton(
 }
 
 //TODO show composed reader UI
-private fun showReaderFragment(content: String, snackShort: (String) -> Unit) {
-    val cleaned = content.replace("^\"|\"$".toRegex(), "")
-    if (cleaned.isBlank()) {
-        snackShort("This page can't show reader mode.")
-        return
-    }
+private fun showReader(state: MutableState<String>, content: String, snackShort: (String) -> Unit) {
 
-    val lineSeparator = System.lineSeparator()
-    val replacedContent = cleaned.replace("\\n", lineSeparator)
 }
 
 /*TODO
