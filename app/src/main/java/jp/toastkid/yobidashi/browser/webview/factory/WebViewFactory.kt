@@ -138,8 +138,8 @@ internal class WebViewFactory {
         webView.setBackgroundColor(alphaConverter.readBackground(context))
 
         webView.setDownloadListener { url, _, _, mimeType, _ ->
-            when {
-                mimeType == "application/pdf" -> {
+            when (mimeType) {
+                "application/pdf" -> {
                     val intent = Intent().also { it.data = url.toUri() }
                     val currentContext = webView.context
                     if (currentContext.packageManager.resolveActivity(intent, 0) == null) {
