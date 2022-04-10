@@ -139,7 +139,7 @@ fun SearchInputUi(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    appBarViewModel.replace(context) {
+    appBarViewModel.replace {
         val spinnerOpen = remember { mutableStateOf(false) }
 
         val useVoice = remember { mutableStateOf(false) }
