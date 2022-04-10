@@ -53,8 +53,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
@@ -96,7 +98,10 @@ fun SearchInputUi(
         )
     }
 
-    val inputState = remember { mutableStateOf(inputQuery ?: "") }
+    val inputState = remember {
+        val text = inputQuery ?: ""
+        mutableStateOf(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
+    }
 
     val viewModel = ViewModelProvider(context).get(SearchUiViewModel::class.java)
 
@@ -135,8 +140,6 @@ fun SearchInputUi(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     appBarViewModel.replace(context) {
-        val input = remember { inputState }
-
         val spinnerOpen = remember { mutableStateOf(false) }
 
         val useVoice = remember { mutableStateOf(false) }
@@ -152,11 +155,11 @@ fun SearchInputUi(
             SearchCategorySpinner(spinnerOpen, categoryName)
 
             TextField(
-                value = input.value,
+                value = inputState.value,
                 onValueChange = { text ->
-                    input.value = text
-                    useVoice.value = text.isBlank()
-                    queryingUseCase.send(text)
+                    inputState.value = text
+                    useVoice.value = text.text.isBlank()
+                    queryingUseCase.send(text.text)
                 },
                 label = {
                     Text(
@@ -177,14 +180,14 @@ fun SearchInputUi(
                         modifier = Modifier
                             //.offset(x = 8.dp)
                             .clickable {
-                                input.value = ""
+                                inputState.value = TextFieldValue()
                             }
                     )
                 },
                 maxLines = 1,
                 keyboardActions = KeyboardActions {
                     keyboardController?.hide()
-                    search(context, contentViewModel, currentUrl, categoryName.value, input.value)
+                    search(context, contentViewModel, currentUrl, categoryName.value, inputState.value.text)
                 },
                 keyboardOptions = KeyboardOptions(
                     autoCorrect = true,
@@ -220,7 +223,7 @@ fun SearchInputUi(
                                 contentViewModel,
                                 currentUrl,
                                 categoryName.value,
-                                input.value
+                                inputState.value.text
                             )
                         },
                         onLongClick = {
@@ -229,7 +232,7 @@ fun SearchInputUi(
                                 contentViewModel,
                                 currentUrl,
                                 categoryName.value,
-                                input.value,
+                                inputState.value.text,
                                 true
                             )
                         }
@@ -246,7 +249,7 @@ fun SearchInputUi(
 
     queryingUseCase.withDebounce()
 
-    SearchContentsUi(viewModel, inputState, currentTitle, currentUrl)
+    SearchContentsUi(viewModel, currentTitle, currentUrl)
 
     queryingUseCase.send("")
 
@@ -267,10 +270,8 @@ fun SearchInputUi(
     viewModel.putQuery
         .observe(context, Observer { event ->
             val query = event?.getContentIfNotHandled() ?: return@Observer
-            inputState.value = query
+            inputState.value = TextFieldValue(query, )
         })
-
-    inputState.value = inputQuery ?: ""
 
     LocalSoftwareKeyboardController.current?.show()
 }
