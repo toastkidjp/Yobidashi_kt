@@ -128,6 +128,14 @@ class ContentViewModel : ViewModel() {
         _bottomSheetContent.value = content
     }
 
+    private val _currentTabId = mutableStateOf("")
+
+    val currentTabId: State<String> = _currentTabId
+
+    fun setCurrentTabId(tabId: String) {
+        _currentTabId.value = tabId
+    }
+
     @OptIn(ExperimentalMaterialApi::class)
     val modalBottomSheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
 

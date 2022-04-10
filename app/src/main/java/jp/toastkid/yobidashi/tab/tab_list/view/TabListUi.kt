@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.tab.tab_list.view
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,7 +25,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -40,7 +40,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.TabThumbnails
@@ -50,12 +52,13 @@ import kotlin.math.max
 
 @Composable
 internal fun TabListUi() {
-    val context = LocalContext.current
+    val context = LocalContext.current as? ComponentActivity ?: return
     val callback = context as? TabListDialogFragment.Callback ?: return
     val preferenceApplier = PreferenceApplier(context)
     val colorPair = preferenceApplier.colorPair()
     val tabThumbnails = TabThumbnails.with(LocalContext.current)
-    val currentTabId = remember { mutableStateOf(callback.currentTabIdFromTabList()) }
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
+    val currentTabId = remember { contentViewModel.currentTabId }
     val currentIndex = callback?.tabIndexFromTabList() ?: 0
     val state = rememberLazyListState(max(0, currentIndex - 1))
     val rememberCoroutineScope = rememberCoroutineScope()
