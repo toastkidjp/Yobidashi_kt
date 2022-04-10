@@ -11,18 +11,25 @@ package jp.toastkid.yobidashi.tab.tab_list.view
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Surface
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.Text
+import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -33,10 +40,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
@@ -49,7 +58,9 @@ import jp.toastkid.yobidashi.tab.TabThumbnails
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import kotlin.math.max
+import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun TabListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
@@ -66,9 +77,19 @@ internal fun TabListUi() {
     val tabs = remember { mutableStateListOf<Tab>() }
     refresh(callback, tabs)
 
+    val sizePx = with(LocalDensity.current) { dimensionResource(R.dimen.tab_list_item_height).toPx() }
+    val anchors = mapOf(0f to 0, -sizePx to 1)
+
     MaterialTheme {
         LazyRow(state = state, contentPadding = PaddingValues(horizontal = 4.dp)) {
             itemsIndexed(tabs) { position, tab ->
+                val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
+                    if (it == 1) {
+                        callback.closeTabFromTabList(callback.tabIndexOfFromTabList(tab))
+                        refresh(callback, tabs)
+                    }
+                    true
+                })
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
@@ -84,6 +105,14 @@ internal fun TabListUi() {
                                 Color(ColorUtils.setAlphaComponent(colorPair.bgColor(), 128))
                             else
                                 Color.Transparent
+                        )
+                        .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
+                        .swipeable(
+                            swipeableState,
+                            anchors = anchors,
+                            thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                            resistance = ResistanceConfig(0.5f),
+                            orientation = Orientation.Vertical
                         )
                 ){
                     Surface(
