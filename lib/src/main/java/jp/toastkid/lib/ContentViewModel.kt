@@ -88,12 +88,12 @@ class ContentViewModel : ViewModel() {
         _share.value = Event(Unit)
     }
 
-    private val _webSearch = MutableLiveData<Unit>()
+    private val _webSearch = MutableLiveData<Event<Unit>>()
 
-    val webSearch: LiveData<Unit> = _webSearch
+    val webSearch: LiveData<Event<Unit>> = _webSearch
 
     fun webSearch() {
-        _webSearch.postValue(Unit)
+        _webSearch.postValue(Event(Unit))
     }
 
     private val _openPdf = MutableLiveData<Unit>()
