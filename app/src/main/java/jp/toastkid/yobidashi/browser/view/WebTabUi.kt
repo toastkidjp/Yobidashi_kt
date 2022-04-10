@@ -9,8 +9,8 @@
 package jp.toastkid.yobidashi.browser.view
 
 import android.Manifest
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -18,10 +18,11 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +32,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
@@ -47,7 +47,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -83,14 +82,14 @@ import jp.toastkid.yobidashi.browser.translate.TranslatedPageOpenerUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
-import jp.toastkid.yobidashi.browser.webview.usecase.WebViewAssignmentUseCase
+import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.Toaster
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId: String? = null) {
+fun WebTabUi(uri: Uri, tabId: String? = null) {
 /*TODO swipe refresher
         binding?.swipeRefresher?.let {
             it.setOnRefreshListener { reload() }
@@ -101,9 +100,12 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
     val webViewContainer = remember { FrameLayout(activityContext) }
-    webViewContainer.background = ColorDrawable(Color.Transparent.toArgb())
     val enableBackStack = remember { mutableStateOf(true) }
     val browserModule = BrowserModule(activityContext, webViewContainer)
+
+    val baseOffset = 120.dp.value.toInt()
+
+    val currentWebView = remember { mutableStateOf<WebView?>(null) }
 
     AndroidView(
         factory = {
@@ -113,10 +115,16 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
             tabId?.let {
                 browserModule.loadWithNewTab(uri, tabId)
             }
+            currentWebView.value = GlobalWebViewPool.getLatest()
         },
         modifier = Modifier
-            .background(Color.Transparent)
-            .verticalScroll(ScrollState(0))
+            .scrollable(
+                state = rememberScrollableState { delta ->
+                    currentWebView.value?.flingScroll(0, -delta.toInt() * baseOffset)
+                    delta
+                },
+                Orientation.Vertical
+            )
     )
 
     val readerModeText = remember { mutableStateOf("") }
@@ -454,6 +462,10 @@ private fun initializeHeaderViewModels(
 
         viewModel.downward.observe(activity, Observer {
             browserModule.findDown()
+        })
+
+        viewModel.clear.observe(activity, Observer {
+            browserModule.clearMatches()
         })
     }
 }

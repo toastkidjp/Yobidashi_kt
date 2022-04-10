@@ -181,6 +181,10 @@ class BrowserModule(
         currentView()?.findNext(true)
     }
 
+    fun clearMatches() {
+        currentView()?.clearMatches()
+    }
+
     fun pageUp() {
         currentView()?.pageUp(true)
     }
