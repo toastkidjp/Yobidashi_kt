@@ -153,6 +153,14 @@ class ContentViewModel : ViewModel() {
         modalBottomSheetState.hide()
     }
 
+    private val _nextRoute = MutableLiveData<Event<String>>()
+
+    val nextRoute: LiveData<Event<String>> = _nextRoute
+
+    fun nextRoute(route: String) {
+        _nextRoute.postValue(Event(route))
+    }
+
     private val _switchTabList = MutableLiveData<Event<Unit>>()
 
     val switchTabList: LiveData<Event<Unit>> = _switchTabList
