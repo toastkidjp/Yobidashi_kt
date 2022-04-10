@@ -57,7 +57,7 @@ fun SwipeToDismissItem(
                 DismissDirection.EndToStart
             ),
             dismissThresholds = { direction ->
-                FractionalThreshold(if (direction == DismissDirection.StartToEnd) 0.25f else 0.75f)
+                FractionalThreshold(if (direction == DismissDirection.StartToEnd) 0.25f else 0.95f)
             },
             background = {
                 val direction =
