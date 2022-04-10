@@ -37,7 +37,6 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,7 +56,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
@@ -374,7 +372,11 @@ private fun initializeHeaderViewModels(
                     modifier = Modifier
                         .height(32.dp)
                         .fillMaxWidth()
-                        .clickable { tapHeader(activity, browserModule, preferenceApplier) }
+                        .clickable {
+                            ViewModelProvider(activity)
+                                .get(ContentViewModel::class.java)
+                                .webSearch()
+                        }
                     //url_box_background
                 ) {
                     Icon(
@@ -505,60 +507,12 @@ private fun HeaderSubButton(
     )
 }
 
-//TODO show composed reader UI
-private fun showReader(state: MutableState<String>, content: String, snackShort: (String) -> Unit) {
-
-}
-
 /*TODO
         binding?.swipeRefresher?.let {
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
         }*/
 
-//TODO override fun pressBack(): Boolean = back()
-
-/*
-TODO share
-startActivity(
-        ShareIntentFactory()(browserModule.makeShareMessage())
-    )
- */
-
-private fun tapHeader(
-    viewModelStoreOwner: ViewModelStoreOwner,
-    browserModule: BrowserModule,
-    preferenceApplier: PreferenceApplier
-) {
-    ViewModelProvider(viewModelStoreOwner)
-        .get(ContentViewModel::class.java)
-        .webSearch()
-    /*
-     val currentTitle = browserModule.currentTitle()
-    val currentUrl = browserModule.currentUrl()
-    val inputText = if (preferenceApplier.enableSearchQueryExtract) {
-        SearchQueryExtractor()(currentUrl) ?: currentUrl
-    } else {
-        currentUrl
-    }
-    makeWithQuery(
-        inputText ?: "",
-        currentTitle,
-        currentUrl
-    )
-     */
-}
-
 fun stopSwipeRefresherLoading() {
     //TODO binding?.swipeRefresher?.isRefreshing = false
 }
-
-/*override fun onPause() {
-    browserModule.onPause()
-}
-
-override fun onDetach() {
-    appBarViewModel?.show()
-    browserModule.onDestroy()
-}*/
-
