@@ -69,7 +69,7 @@ class ItemMenuPopupTest {
     }
 
     @Test
-    fun testModifyWithoutShowCase() {
+    fun testModifyWithoutShowingCase() {
         itemMenuPopup.modify()
 
         verify(inverse = true) { action.modify(any()) }
@@ -77,11 +77,28 @@ class ItemMenuPopupTest {
     }
 
     @Test
-    fun testModifyWithShowCase() {
+    fun testModifyWithShowingCase() {
         itemMenuPopup.show(mockk(), mockk())
         itemMenuPopup.modify()
 
         verify { action.modify(any()) }
+        verify { anyConstructed<PopupWindow>().dismiss() }
+    }
+
+    @Test
+    fun testDeleteWithoutShowingCase() {
+        itemMenuPopup.delete()
+
+        verify(inverse = true)  { action.delete(any()) }
+        verify { anyConstructed<PopupWindow>().dismiss() }
+    }
+
+    @Test
+    fun testDeleteWithShowingCase() {
+        itemMenuPopup.show(mockk(), mockk())
+        itemMenuPopup.delete()
+
+        verify { action.delete(any()) }
         verify { anyConstructed<PopupWindow>().dismiss() }
     }
 }
