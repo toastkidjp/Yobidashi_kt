@@ -43,9 +43,11 @@ import androidx.compose.ui.window.Popup
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.search.SearchCategory
+import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchAction
@@ -66,6 +68,9 @@ fun FavoriteSearchListUi() {
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
 
     val favoriteSearchItems = remember { mutableStateListOf<FavoriteSearch>() }
+
+    val database = DatabaseFinder().invoke(activityContext)
+    val repository = database.favoriteSearchRepository()
 
     ViewModelProvider(activityContext).get(AppBarViewModel::class.java)
         .replace {
@@ -126,7 +131,7 @@ fun FavoriteSearchListUi() {
                                     input.value
                                 ).invoke()
 
-                                reload(DatabaseFinder().invoke(activityContext).favoriteSearchRepository(), favoriteSearchItems)
+                                reload(repository, favoriteSearchItems)
 
                                 val message = MessageFormat.format(
                                     activityContext.getString(R.string.favorite_search_addition_successful_format),
@@ -139,7 +144,9 @@ fun FavoriteSearchListUi() {
                                 contentColor = Color(preferenceApplier.fontColor),
                                 disabledContentColor = Color.LightGray
                             ),
-                            modifier = Modifier.fillMaxWidth().padding(4.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(4.dp)
                         ) {
                             Text(
                                 text = stringResource(id = R.string.title_add)
@@ -150,14 +157,36 @@ fun FavoriteSearchListUi() {
             }
         }
 
-    FavoriteSearchItemList(favoriteSearchItems)
+    FavoriteSearchItemList(repository, favoriteSearchItems)
+
+    val clearConfirmDialogState = remember { mutableStateOf(false) }
+    contentViewModel.optionMenus(
+        OptionMenu(titleId = R.string.title_delete_all, action = {
+            clearConfirmDialogState.value = true
+        })
+    )
+
+    DestructiveChangeConfirmDialog(
+        clearConfirmDialogState,
+        R.string.title_clear_favorite_search
+    ) {
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                repository.deleteAll()
+            }
+            favoriteSearchItems.clear()
+
+            contentViewModel.snackShort(R.string.done_clear)
+        }
+    }
 }
 
 @Composable
-private fun FavoriteSearchItemList(favoriteSearchItems: SnapshotStateList<FavoriteSearch>) {
+private fun FavoriteSearchItemList(
+    repository: FavoriteSearchRepository,
+    favoriteSearchItems: SnapshotStateList<FavoriteSearch>
+) {
     val context = LocalContext.current
-    val database = DatabaseFinder().invoke(context)
-    val repository = database.favoriteSearchRepository()
 
     val coroutineScope = rememberCoroutineScope()
 
