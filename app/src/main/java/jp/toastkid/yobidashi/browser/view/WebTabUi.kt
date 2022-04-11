@@ -216,8 +216,7 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
             OptionMenu(titleId = R.string.title_replace_home, action = {
                 browserModule.currentUrl()?.let {
                     if (Urls.isInvalidUrl(it)) {
-                        contentViewModel
-                            .snackShort(activityContext.getString(R.string.message_cannot_replace_home_url))
+                        contentViewModel.snackShort(R.string.message_cannot_replace_home_url)
                         return@let
                     }
                     PreferenceApplier(activityContext).homeUrl = it
