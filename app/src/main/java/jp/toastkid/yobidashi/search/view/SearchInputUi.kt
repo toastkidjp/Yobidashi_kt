@@ -243,6 +243,7 @@ fun SearchInputUi(
 
         LaunchedEffect(key1 = "first_launch", block = {
             focusRequester.requestFocus()
+            keyboardController?.show()
         })
     }
 
@@ -273,8 +274,6 @@ fun SearchInputUi(
             val query = event?.getContentIfNotHandled() ?: return@Observer
             inputState.value = TextFieldValue(query, )
         })
-
-    LocalSoftwareKeyboardController.current?.show()
 
     val isEnableSuggestion = remember { mutableStateOf(preferenceApplier.isEnableSuggestion) }
     val isEnableSearchHistory = remember { mutableStateOf(preferenceApplier.isEnableSearchHistory) }
