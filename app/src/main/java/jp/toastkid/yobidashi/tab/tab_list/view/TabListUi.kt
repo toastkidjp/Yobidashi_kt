@@ -72,7 +72,6 @@ internal fun TabListUi() {
     val currentTabId = remember { contentViewModel.currentTabId }
     val currentIndex = callback?.tabIndexFromTabList() ?: 0
     val state = rememberLazyListState(max(0, currentIndex - 1))
-    val rememberCoroutineScope = rememberCoroutineScope()
 
     val tabs = remember { mutableStateListOf<Tab>() }
     refresh(callback, tabs)
