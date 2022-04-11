@@ -26,7 +26,7 @@ class MenuPopup(
     context: Context,
     private val action: MenuPopupActionUseCase,
     useAddToBookmark: Boolean = true,
-    private val menuPopupView: MenuPopupView = object : MenuPopupView {
+    menuPopupView: MenuPopupView = object : MenuPopupView {
         private val binding: PopupArticleListMenuBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
             LAYOUT_ID,

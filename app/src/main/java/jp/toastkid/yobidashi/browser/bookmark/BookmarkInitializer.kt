@@ -6,11 +6,13 @@ import androidx.core.net.toUri
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
+import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -22,6 +24,7 @@ import java.util.Locale
  */
 class BookmarkInitializer(
     private val favicons: FilesDir,
+    private val webClipIconLoader: WebClipIconLoader,
     private val databaseFinder: DatabaseFinder = DatabaseFinder(),
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -47,8 +50,6 @@ class BookmarkInitializer(
             "Search" to mapOf(
                     "Google" to "https://www.google.com/",
                     "Bing" to "https://www.bing.com/",
-                    "Yandex" to "https://yandex.com/",
-
                     "Yahoo!" to "https://www.yahoo.com/",
                     "Yahoo! JAPAN" to "https://www.yahoo.co.jp/"
             ),
@@ -79,6 +80,12 @@ class BookmarkInitializer(
             }
 
             onComplete()
+
+            withContext(ioDispatcher) {
+                defaultBookmarks.values.flatMap { it.values }.forEach {
+                    async { webClipIconLoader.invoke(it) }
+                }
+            }
         }
     }
 
