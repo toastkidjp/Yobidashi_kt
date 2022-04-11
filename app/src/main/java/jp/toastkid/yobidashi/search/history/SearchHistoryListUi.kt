@@ -69,7 +69,7 @@ fun SearchHistoryListUi() {
                 searchHistoryItems.addAll(loaded)
             }
 
-            items(searchHistoryItems) { searchHistory ->
+            items(searchHistoryItems, { it.key }) { searchHistory ->
                 SearchItemContent(
                     searchHistory.query,
                     searchHistory.category,
