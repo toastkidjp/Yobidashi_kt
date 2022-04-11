@@ -23,7 +23,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -134,9 +133,9 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     fun TabListUi() {
-        val state = rememberLazyListState()
         val tabThumbnails = TabThumbnails.with(LocalContext.current)
         val index = callback?.tabIndexFromTabList() ?: 0
+        val state = rememberLazyListState(max(0, index - 1))
         val rememberCoroutineScope = rememberCoroutineScope()
 
         val tabs = remember { mutableStateListOf<Tab>() }
@@ -216,9 +215,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
             }
         }
 
-        LaunchedEffect(key1 = "first_scroll", block = {
-            state.scrollToItem(max(0, index - 1), 0)
-        })
         /*
 
         adapter = Adapter(activityContext, callback as Callback)
