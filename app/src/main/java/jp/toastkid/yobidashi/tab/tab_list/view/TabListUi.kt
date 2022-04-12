@@ -76,8 +76,7 @@ internal fun TabListUi() {
     val tabThumbnails = TabThumbnails.with(LocalContext.current)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val currentTabId = remember { contentViewModel.currentTabId }
-    val currentIndex = callback?.tabIndexFromTabList() ?: 0
-    val state = rememberLazyListState(max(0, currentIndex - 1))
+    val state = rememberLazyListState(max(0, callback?.tabIndexFromTabList() - 1))
 
     val tabs = remember { mutableStateListOf<Tab>() }
     refresh(callback, tabs)
@@ -96,6 +95,8 @@ internal fun TabListUi() {
 
         Column() {
             LazyRow(state = state, contentPadding = PaddingValues(horizontal = 4.dp)) {
+                val currentIndex = callback?.tabIndexFromTabList()
+
                 itemsIndexed(tabs) { position, tab ->
                     val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
                         if (it == 1) {
