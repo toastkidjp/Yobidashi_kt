@@ -12,8 +12,11 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -22,9 +25,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Surface
 import androidx.compose.material.SwipeableState
@@ -33,7 +36,6 @@ import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,8 +51,10 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
+import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
@@ -79,7 +83,7 @@ internal fun TabListUi() {
     val sizePx = with(LocalDensity.current) { dimensionResource(R.dimen.tab_list_item_height).toPx() }
     val anchors = mapOf(0f to 0, -sizePx to 1)
 
-    MaterialTheme {
+    Column() {
         LazyRow(state = state, contentPadding = PaddingValues(horizontal = 4.dp)) {
             itemsIndexed(tabs) { position, tab ->
                 val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
@@ -167,6 +171,36 @@ internal fun TabListUi() {
                 }
             }
         }
+
+        val tint = Color(preferenceApplier.fontColor)
+        val backgroundColor = Color(preferenceApplier.color)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.padding(8.dp)
+        ) {
+            TabActionFab(R.drawable.ic_edit, R.string.title_editor, tint, backgroundColor, Modifier.padding(4.dp)) {
+                contentViewModel.openEditorTab()
+                callback.onCloseOnly()
+            }
+            TabActionFab(R.drawable.ic_pdf, R.string.title_open_pdf, tint, backgroundColor, Modifier.padding(4.dp)) {
+                contentViewModel.openPdf()
+                callback.onCloseOnly()
+            }
+            TabActionFab(R.drawable.ic_article, R.string.title_article_viewer, tint, backgroundColor, Modifier.padding(4.dp)) {
+                contentViewModel.openArticleList()
+                callback.onCloseOnly()
+            }
+            val browserViewModel = viewModel(BrowserViewModel::class.java, context)
+            TabActionFab(R.drawable.ic_web, R.string.title_browser, tint, backgroundColor, Modifier.padding(4.dp)) {
+                browserViewModel.open(preferenceApplier.homeUrl.toUri())
+                callback.onCloseOnly()
+            }
+            TabActionFab(R.drawable.ic_add_tab, R.string.open, tint, backgroundColor, Modifier.padding(4.dp)) {
+                callback.openNewTabFromTabList()
+                callback.onCloseOnly()
+            }
+        }
     }
 
     /*
@@ -208,6 +242,28 @@ internal fun TabListUi() {
             PreferenceApplier(activityContext).backgroundImagePath
     )
      */
+}
+
+@Composable
+private fun TabActionFab(
+    iconId: Int,
+    contentDescriptionId: Int,
+    iconColor: Color,
+    buttonColor: Color,
+    modifier: Modifier,
+    action: () -> Unit
+) {
+    FloatingActionButton(
+        onClick = action,
+        backgroundColor = buttonColor,
+        modifier = modifier
+    ) {
+        Icon(
+            painterResource(id = iconId),
+            stringResource(id = contentDescriptionId),
+            tint = iconColor
+        )
+    }
 }
 
 private fun refresh(callback: TabListDialogFragment.Callback, tabs: SnapshotStateList<Tab>) {
