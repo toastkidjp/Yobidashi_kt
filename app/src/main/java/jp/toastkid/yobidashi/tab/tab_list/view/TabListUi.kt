@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -83,122 +84,162 @@ internal fun TabListUi() {
     val sizePx = with(LocalDensity.current) { dimensionResource(R.dimen.tab_list_item_height).toPx() }
     val anchors = mapOf(0f to 0, -sizePx to 1)
 
-    Column() {
-        LazyRow(state = state, contentPadding = PaddingValues(horizontal = 4.dp)) {
-            itemsIndexed(tabs) { position, tab ->
-                val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
-                    if (it == 1) {
-                        callback.closeTabFromTabList(callback.tabIndexOfFromTabList(tab))
-                        refresh(callback, tabs)
-                    }
-                    true
-                })
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .width(dimensionResource(id = R.dimen.tab_list_item_width))
-                        .height(dimensionResource(R.dimen.tab_list_item_height))
-                        .clickable {
-                            callback?.replaceTabFromTabList(tab)
-                            callback?.onCloseTabListDialogFragment(currentTabId.value)
-                            callback?.onCloseOnly()
+    Box {
+        AsyncImage(
+            model = preferenceApplier.backgroundImagePath,
+            contentDescription = stringResource(id = R.string.content_description_background),
+            alignment = Alignment.Center,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        Column() {
+            LazyRow(state = state, contentPadding = PaddingValues(horizontal = 4.dp)) {
+                itemsIndexed(tabs) { position, tab ->
+                    val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
+                        if (it == 1) {
+                            callback.closeTabFromTabList(callback.tabIndexOfFromTabList(tab))
+                            refresh(callback, tabs)
                         }
-                        .background(
-                            if (currentIndex == position)
-                                Color(ColorUtils.setAlphaComponent(colorPair.bgColor(), 128))
-                            else
-                                Color.Transparent
-                        )
-                        .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
-                        .swipeable(
-                            swipeableState,
-                            anchors = anchors,
-                            thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                            resistance = ResistanceConfig(0.5f),
-                            orientation = Orientation.Vertical
-                        )
-                ){
-                    Surface(
-                        elevation = 4.dp,
+                        true
+                    })
+                    Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            .width(112.dp)
-                            .height(152.dp)
+                            .width(dimensionResource(id = R.dimen.tab_list_item_width))
+                            .height(dimensionResource(R.dimen.tab_list_item_height))
+                            .clickable {
+                                callback?.replaceTabFromTabList(tab)
+                                callback?.onCloseTabListDialogFragment(currentTabId.value)
+                                callback?.onCloseOnly()
+                            }
+                            .background(
+                                if (currentIndex == position)
+                                    Color(ColorUtils.setAlphaComponent(colorPair.bgColor(), 128))
+                                else
+                                    Color.Transparent
+                            )
+                            .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
+                            .swipeable(
+                                swipeableState,
+                                anchors = anchors,
+                                thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                                resistance = ResistanceConfig(0.5f),
+                                orientation = Orientation.Vertical
+                            )
                     ) {
-                        Box(
+                        Surface(
+                            elevation = 4.dp,
                             modifier = Modifier
                                 .width(112.dp)
                                 .height(152.dp)
-                                .padding(4.dp)
-                                .align(Alignment.BottomCenter)
                         ) {
-                            AsyncImage(
-                                model = tabThumbnails.assignNewFile(tab.thumbnailPath()),
-                                contentDescription = tab.title(),
-                                contentScale = ContentScale.FillHeight,
-                                placeholder = painterResource(id = R.drawable.ic_yobidashi),
+                            Box(
                                 modifier = Modifier
-                                    .padding(top = 4.dp)
-                                    .align(Alignment.TopCenter)
-                            )
-                            Text(
-                                text = tab.title(),
-                                color = Color(colorPair.fontColor()),
-                                maxLines = 2,
-                                fontSize = 14.sp,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier
-                                    .align(Alignment.BottomCenter)
-                                    .background(Color(colorPair.bgColor()))
+                                    .width(112.dp)
+                                    .height(152.dp)
                                     .padding(4.dp)
-                            )
-                        }
-                    }
-
-                    Icon(
-                        painterResource(id = R.drawable.ic_remove_circle),
-                        tint = Color(colorPair.fontColor()),
-                        contentDescription = stringResource(id = R.string.delete),
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(4.dp)
-                            .clickable {
-                                val removeIndex =
-                                    callback?.tabIndexOfFromTabList(tab) ?: return@clickable
-                                callback?.closeTabFromTabList(removeIndex)
-                                refresh(callback, tabs)
+                                    .align(Alignment.BottomCenter)
+                            ) {
+                                AsyncImage(
+                                    model = tabThumbnails.assignNewFile(tab.thumbnailPath()),
+                                    contentDescription = tab.title(),
+                                    contentScale = ContentScale.FillHeight,
+                                    placeholder = painterResource(id = R.drawable.ic_yobidashi),
+                                    modifier = Modifier
+                                        .padding(top = 4.dp)
+                                        .align(Alignment.TopCenter)
+                                )
+                                Text(
+                                    text = tab.title(),
+                                    color = Color(colorPair.fontColor()),
+                                    maxLines = 2,
+                                    fontSize = 14.sp,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier
+                                        .align(Alignment.BottomCenter)
+                                        .background(Color(colorPair.bgColor()))
+                                        .padding(4.dp)
+                                )
                             }
-                    )
+                        }
+
+                        Icon(
+                            painterResource(id = R.drawable.ic_remove_circle),
+                            tint = Color(colorPair.fontColor()),
+                            contentDescription = stringResource(id = R.string.delete),
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(4.dp)
+                                .clickable {
+                                    val removeIndex =
+                                        callback?.tabIndexOfFromTabList(tab) ?: return@clickable
+                                    callback?.closeTabFromTabList(removeIndex)
+                                    refresh(callback, tabs)
+                                }
+                        )
+                    }
                 }
             }
-        }
 
-        val tint = Color(preferenceApplier.fontColor)
-        val backgroundColor = Color(preferenceApplier.color)
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.padding(8.dp)
-        ) {
-            TabActionFab(R.drawable.ic_edit, R.string.title_editor, tint, backgroundColor, Modifier.padding(4.dp)) {
-                contentViewModel.openEditorTab()
-                callback.onCloseOnly()
-            }
-            TabActionFab(R.drawable.ic_pdf, R.string.title_open_pdf, tint, backgroundColor, Modifier.padding(4.dp)) {
-                contentViewModel.openPdf()
-                callback.onCloseOnly()
-            }
-            TabActionFab(R.drawable.ic_article, R.string.title_article_viewer, tint, backgroundColor, Modifier.padding(4.dp)) {
-                contentViewModel.openArticleList()
-                callback.onCloseOnly()
-            }
-            val browserViewModel = viewModel(BrowserViewModel::class.java, context)
-            TabActionFab(R.drawable.ic_web, R.string.title_browser, tint, backgroundColor, Modifier.padding(4.dp)) {
-                browserViewModel.open(preferenceApplier.homeUrl.toUri())
-                callback.onCloseOnly()
-            }
-            TabActionFab(R.drawable.ic_add_tab, R.string.open, tint, backgroundColor, Modifier.padding(4.dp)) {
-                callback.openNewTabFromTabList()
-                callback.onCloseOnly()
+            val tint = Color(preferenceApplier.fontColor)
+            val backgroundColor = Color(preferenceApplier.color)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                TabActionFab(
+                    R.drawable.ic_edit,
+                    R.string.title_editor,
+                    tint,
+                    backgroundColor,
+                    Modifier.padding(4.dp)
+                ) {
+                    contentViewModel.openEditorTab()
+                    callback.onCloseOnly()
+                }
+                TabActionFab(
+                    R.drawable.ic_pdf,
+                    R.string.title_open_pdf,
+                    tint,
+                    backgroundColor,
+                    Modifier.padding(4.dp)
+                ) {
+                    contentViewModel.openPdf()
+                    callback.onCloseOnly()
+                }
+                TabActionFab(
+                    R.drawable.ic_article,
+                    R.string.title_article_viewer,
+                    tint,
+                    backgroundColor,
+                    Modifier.padding(4.dp)
+                ) {
+                    contentViewModel.openArticleList()
+                    callback.onCloseOnly()
+                }
+                val browserViewModel = viewModel(BrowserViewModel::class.java, context)
+                TabActionFab(
+                    R.drawable.ic_web,
+                    R.string.title_browser,
+                    tint,
+                    backgroundColor,
+                    Modifier.padding(4.dp)
+                ) {
+                    browserViewModel.open(preferenceApplier.homeUrl.toUri())
+                    callback.onCloseOnly()
+                }
+                TabActionFab(
+                    R.drawable.ic_add_tab,
+                    R.string.open,
+                    tint,
+                    backgroundColor,
+                    Modifier.padding(4.dp)
+                ) {
+                    callback.openNewTabFromTabList()
+                    callback.onCloseOnly()
+                }
             }
         }
     }
