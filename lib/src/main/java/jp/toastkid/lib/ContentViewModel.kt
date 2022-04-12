@@ -96,20 +96,20 @@ class ContentViewModel : ViewModel() {
         _webSearch.postValue(Event(Unit))
     }
 
-    private val _openPdf = MutableLiveData<Unit>()
+    private val _openPdf = MutableLiveData<Event<Unit>>()
 
-    val openPdf: LiveData<Unit> = _openPdf
+    val openPdf: LiveData<Event<Unit>> = _openPdf
 
     fun openPdf() {
-        _openPdf.postValue(Unit)
+        _openPdf.postValue(Event(Unit))
     }
 
-    private val _openEditorTab = MutableLiveData<Unit>()
+    private val _openEditorTab = MutableLiveData<Event<Unit>>()
 
-    val openEditorTab: LiveData<Unit> = _openEditorTab
+    val openEditorTab: LiveData<Event<Unit>> = _openEditorTab
 
     fun openEditorTab() {
-        _openEditorTab.postValue(Unit)
+        _openEditorTab.postValue(Event(Unit))
     }
 
     private val _switchPageSearcher = MutableLiveData<Unit>()
