@@ -100,7 +100,6 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
     val webViewContainer = remember { FrameLayout(activityContext) }
-    val enableBackStack = remember { mutableStateOf(true) }
     val browserModule = BrowserModule(activityContext, webViewContainer)
 
     val baseOffset = 120.dp.value.toInt()
@@ -134,16 +133,19 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
 
     initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }
 
-    BackHandler(enableBackStack.value) {
+    val browserHeaderViewModel =
+        viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
+
+    BackHandler(browserHeaderViewModel.enableBackPress.value) {
         if (readerModeText.value.isNotBlank()) {
             readerModeText.value = ""
             return@BackHandler
         }
         if (browserModule.back()) {
-            enableBackStack.value = browserModule.canGoBack()
+            browserHeaderViewModel.setEnableBackPress(browserModule.canGoBack())
             return@BackHandler
         }
-        enableBackStack.value = false
+        browserHeaderViewModel.setEnableBackPress(false)
     }
 
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
@@ -162,9 +164,6 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
         )
     })
 
-    val browserViewModel =
-        viewModel(modelClass = BrowserViewModel::class.java)
-
     val storagePermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it) {
@@ -175,6 +174,7 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
             browserModule.downloadAllImages()
         }
 
+    val browserViewModel = viewModel(modelClass = BrowserViewModel::class.java, activityContext)
     LaunchedEffect(key1 = "add_option_menu", block = {
         contentViewModel.optionMenus(
             OptionMenu(titleId = R.string.translate, action = {
