@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -297,7 +298,7 @@ private fun TabActionFab(
     FloatingActionButton(
         onClick = action,
         backgroundColor = buttonColor,
-        modifier = modifier
+        modifier = modifier.size(44.dp)
     ) {
         Icon(
             painterResource(id = iconId),
