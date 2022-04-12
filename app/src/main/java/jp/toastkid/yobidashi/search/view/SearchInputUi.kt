@@ -247,8 +247,6 @@ fun SearchInputUi(
         })
     }
 
-    contentViewModel.snackShort(R.string.message_search_on_background)
-
     queryingUseCase.withDebounce()
 
     SearchContentsUi(viewModel, currentTitle, currentUrl)
