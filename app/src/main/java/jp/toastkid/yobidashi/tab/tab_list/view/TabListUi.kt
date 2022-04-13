@@ -17,8 +17,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -90,7 +91,7 @@ internal fun TabListUi() {
             contentDescription = stringResource(id = R.string.content_description_background),
             alignment = Alignment.Center,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.heightIn(max = 236.dp)
         )
 
         Column() {
@@ -189,7 +190,7 @@ internal fun TabListUi() {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp).fillMaxWidth()
             ) {
                 TabActionFab(
                     R.drawable.ic_edit,
@@ -299,7 +300,7 @@ private fun TabActionFab(
     FloatingActionButton(
         onClick = action,
         backgroundColor = buttonColor,
-        modifier = modifier.size(44.dp)
+        modifier = modifier.size(48.dp)
     ) {
         Icon(
             painterResource(id = iconId),
