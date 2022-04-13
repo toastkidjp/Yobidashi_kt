@@ -69,7 +69,7 @@ internal fun DisplaySettingUi() {
     val iconColor = Color(IconColorFinder.from(activityContext).invoke())
 
     val files = remember {
-        mutableStateOf(filesDir.listFiles().toList().windowed(2, 2, true))
+        mutableStateOf(loadFileChunk(filesDir))
     }
 
     val addingLauncher = rememberLauncherForActivityResult(
@@ -83,7 +83,7 @@ internal fun DisplaySettingUi() {
             it.data?.data,
             activityContext,
             contentViewModel,
-            { refresh() },
+            { files.value = loadFileChunk(filesDir) },
             BACKGROUND_DIR
         )
             .invoke()
@@ -123,7 +123,10 @@ internal fun DisplaySettingUi() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp)
-                            .clickable { removeBackgroundSettings() }
+                            .clickable {
+                                preferenceApplier.removeBackgroundImagePath()
+                                contentViewModel.snackShort(R.string.message_reset_bg_image)
+                            }
                     ) {
                         Icon(
                             painterResource(id = R.drawable.ic_close_black),
@@ -215,7 +218,7 @@ internal fun DisplaySettingUi() {
                                                         ?.snackShort(R.string.message_failed_image_removal)
                                                     return@clickable
                                                 }
-                                                refresh()
+                                                files.value = loadFileChunk(filesDir)
                                                 contentViewModel
                                                     ?.snackShort(R.string.message_success_image_removal)
                                             }
@@ -230,8 +233,11 @@ internal fun DisplaySettingUi() {
     }
 }
 
+private fun loadFileChunk(filesDir: FilesDir) =
+    filesDir.listFiles().toList().windowed(2, 2, true)
 
-    private fun refresh() {
+
+private fun refresh() {
         //TODO files?.value = filesDir.listFiles().toList().windowed(2, 2, true)
     }
 
