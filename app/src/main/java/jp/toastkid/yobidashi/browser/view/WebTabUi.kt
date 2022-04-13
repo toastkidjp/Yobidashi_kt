@@ -78,7 +78,6 @@ import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
-import jp.toastkid.yobidashi.browser.translate.TranslatedPageOpenerUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
@@ -174,12 +173,8 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
             browserModule.downloadAllImages()
         }
 
-    val browserViewModel = viewModel(modelClass = BrowserViewModel::class.java, activityContext)
     LaunchedEffect(key1 = "add_option_menu", block = {
         contentViewModel.optionMenus(
-            OptionMenu(titleId = R.string.translate, action = {
-                TranslatedPageOpenerUseCase(browserViewModel).invoke(browserModule.currentUrl())
-            }),
             OptionMenu(titleId = R.string.download_all_images, action = {
                 storagePermissionRequestLauncher
                     .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
