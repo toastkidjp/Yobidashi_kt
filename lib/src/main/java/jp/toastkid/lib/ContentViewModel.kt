@@ -210,6 +210,7 @@ class ContentViewModel : ViewModel() {
     val optionMenus: SnapshotStateList<OptionMenu> = _optionMenus
 
     fun optionMenus(vararg menus: OptionMenu) {
+        _optionMenus.clear()
         _optionMenus.addAll(menus.toList())
     }
 
