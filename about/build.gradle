@@ -10,6 +10,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply from: '../jacoco.gradle'
+apply from: '../detekt.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -24,12 +25,15 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
+        compose true
     }
 
     afterEvaluate {
         generateReleaseBuildConfig.enabled = false
         generateDebugBuildConfig.enabled = false
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
     }
 }
 
@@ -42,6 +46,9 @@ dependencies {
     implementation "androidx.cardview:cardview:$libVersions.cardview"
     implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
+
+    implementation 'androidx.compose.material:material:1.1.1'
+    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
 
     implementation "com.google.android.material:material:$libVersions.material"
 

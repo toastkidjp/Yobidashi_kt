@@ -1,0 +1,18 @@
+apply plugin: "io.gitlab.arturbosch.detekt"
+
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("$projectDir/../config/detekt/detekt.yml")
+    baseline = file("$projectDir/../config/detekt/baseline.xml")
+
+    reports {
+        html {
+            required.set(true)
+            destination = file("$buildDir/reports/detekt/detekt.html")
+        }
+        xml.required.set(true)
+        txt.required.set(false)
+        sarif.required.set(false)
+    }
+}

@@ -32,9 +32,7 @@ import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.lib.view.swipe.SwipeActionAttachment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
-import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
 import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineScope
@@ -162,11 +160,7 @@ class BookmarkFragment: Fragment(),
             "import_default",
             viewLifecycleOwner,
             { _, _ ->
-                val currentContext = binding.root.context
-                BookmarkInitializer(
-                    FaviconFolderProviderService().invoke(currentContext),
-                    WebClipIconLoader.from(context)
-                )(currentContext) { adapter.showRoot() }
+                BookmarkInitializer.from(binding.root.context)() { adapter.showRoot() }
                 contentViewModel?.snackShort(R.string.done_addition)
             }
         )
@@ -302,10 +296,10 @@ class BookmarkFragment: Fragment(),
                         it
                     }
                     .forEach { bookmarkRepository.add(it) }
-
-                adapter.showRoot()
-                contentViewModel?.snackShort(R.string.done_addition)
             }
+
+            adapter.showRoot()
+            contentViewModel?.snackShort(R.string.done_addition)
         }
     }
 

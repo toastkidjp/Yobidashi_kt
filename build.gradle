@@ -64,7 +64,7 @@ buildscript {
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.16.0"
+    id "io.gitlab.arturbosch.detekt" version "1.19.0"
     id "com.cookpad.android.plugin.license-tools" version "1.2.8"
 }
 
@@ -100,5 +100,21 @@ task jacocoMergedTestReport(
     reports {
         xml.getRequired().set(true)
         html.getRequired().set(true)
+    }
+}
+
+task mergeDetektReport(type: io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
+    output = project.layout.buildDirectory.file("reports/detekt/merge.xml")
+}
+
+subprojects {
+    plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
+        tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask ->
+            finalizedBy(mergeDetektReport)
+
+            mergeDetektReport.configure { mergeTask ->
+                mergeTask.input.from(detektTask.xmlReportFile)
+            }
+        }
     }
 }

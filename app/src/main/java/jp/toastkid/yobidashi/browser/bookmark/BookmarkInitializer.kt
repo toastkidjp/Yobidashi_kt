@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
@@ -23,9 +24,9 @@ import java.util.Locale
  * @author toastkidjp
  */
 class BookmarkInitializer(
+    private val bookmarkRepository: BookmarkRepository,
     private val favicons: FilesDir,
     private val webClipIconLoader: WebClipIconLoader,
-    private val databaseFinder: DatabaseFinder = DatabaseFinder(),
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
@@ -71,9 +72,7 @@ class BookmarkInitializer(
      *
      * @param context
      */
-    operator fun invoke(context: Context, onComplete: () -> Unit = {}): Job {
-        val bookmarkRepository = databaseFinder.invoke(context).bookmarkRepository()
-
+    operator fun invoke(onComplete: () -> Unit = {}): Job {
         return CoroutineScope(mainDispatcher).launch {
             withContext(ioDispatcher) {
                 addBookmarks(bookmarkRepository, favicons)
@@ -83,6 +82,7 @@ class BookmarkInitializer(
 
             withContext(ioDispatcher) {
                 defaultBookmarks.values.flatMap { it.values }.forEach {
+                    @Suppress("DeferredResultUnused")
                     async { webClipIconLoader.invoke(it) }
                 }
             }
@@ -119,4 +119,15 @@ class BookmarkInitializer(
                 it.parent = Bookmark.getRootFolderName()
                 it.folder = true
             }
+
+    companion object {
+
+        fun from(context: Context) =
+            BookmarkInitializer(
+                DatabaseFinder().invoke(context).bookmarkRepository(),
+                FaviconFolderProviderService().invoke(context),
+                WebClipIconLoader.from(context)
+            )
+
+    }
 }

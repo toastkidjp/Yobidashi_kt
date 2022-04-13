@@ -718,6 +718,7 @@ img.e-nls.com
 img.fam-ad.com
 img.fluct.jp
 img.fluct.jp.eimg.jp
+img.gsspat.jp
 img.i2i.jp
 img.ll.impact-ad.jp
 img.shinobi.jp
@@ -1125,6 +1126,7 @@ ssp-sync.i-mobile.co.jp
 ssp.advg.jp
 ssp.virool.com
 stat.gamy.ameba.jp
+static.sp-adroute.focas.jp
 static-cdn.ashleyrnadison.com
 static.a-ads.com
 static.adgger.jp

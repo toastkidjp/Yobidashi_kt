@@ -14,9 +14,7 @@ import androidx.core.content.ContextCompat
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
-import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
 
@@ -27,7 +25,6 @@ class FirstLaunchInitializer(
     private val context: Context,
     private val preferenceApplier: PreferenceApplier,
     @VisibleForTesting private val defaultColorInsertion: DefaultColorInsertion = DefaultColorInsertion(),
-    @VisibleForTesting private val faviconFolderProviderService: FaviconFolderProviderService = FaviconFolderProviderService(),
     @VisibleForTesting private val defaultBackgroundImagePreparation: DefaultBackgroundImagePreparation = DefaultBackgroundImagePreparation()
 ) {
 
@@ -42,7 +39,7 @@ class FirstLaunchInitializer(
         preferenceApplier.color = ContextCompat.getColor(context, R.color.colorPrimaryDark)
 
         defaultColorInsertion.insert(context)
-        BookmarkInitializer(faviconFolderProviderService.invoke(context), WebClipIconLoader.from(context))(context)
+        BookmarkInitializer.from(context)()
         defaultBackgroundImagePreparation(context) {
             preferenceApplier.backgroundImagePath = it.absolutePath
         }
