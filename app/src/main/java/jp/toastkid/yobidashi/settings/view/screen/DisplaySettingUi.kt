@@ -236,30 +236,10 @@ internal fun DisplaySettingUi() {
 private fun loadFileChunk(filesDir: FilesDir) =
     filesDir.listFiles().toList().windowed(2, 2, true)
 
-
-private fun refresh() {
-        //TODO files?.value = filesDir.listFiles().toList().windowed(2, 2, true)
-    }
-
     fun applyDarkMode() {
         /*view?.let {
             DarkModeApplier().invoke(preferenceApplier, it)
         }*/
-    }
-
-    /**
-     * Clear background setting.
-     */
-    fun removeBackgroundSettings() {
-        //preferenceApplier.removeBackgroundImagePath()
-        //contentViewModel?.snackShort(R.string.message_reset_bg_image)
-    }
-
-    /**
-     * Launch Adding action.
-     */
-    fun launchAdding() {
-        //TODO
     }
 
     /**
@@ -310,17 +290,10 @@ private fun refresh() {
         else -> super.onOptionsItemSelected(item)
     }*/
 
-/*TODO onDispose
-contentViewModel?.refresh()
-        addingLauncher.unregister()
- */
-
 /**
  * Background image dir.
  */
 private const val BACKGROUND_DIR: String = "background_dir"
-
-fun getBackgroundDirectory() = BACKGROUND_DIR
 
 @StringRes
 const val titleId: Int = R.string.title_settings_display
