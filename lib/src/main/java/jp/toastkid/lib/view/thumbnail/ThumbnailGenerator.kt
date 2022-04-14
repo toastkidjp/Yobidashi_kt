@@ -42,6 +42,9 @@ class ThumbnailGenerator {
         } catch (e: IllegalArgumentException) {
             Timber.e(e)
             return null
+        } catch (e: IllegalStateException) {
+            Timber.e(e)
+            return null
         }
 
         return bitmap
