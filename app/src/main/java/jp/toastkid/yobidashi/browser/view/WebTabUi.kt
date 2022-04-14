@@ -51,7 +51,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -401,30 +400,12 @@ private fun initializeHeaderViewModels(
                             }
                     )
 
-                    Column(
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        val progressTitle =
-                            if (progress.value ?: 100 < 70)
-                                activity.getString(R.string.prefix_loading) + "${progress.value}%"
-                            else
-                                headerTitle.value ?: ""
-
-                        Text(
-                            text = progressTitle,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = tint,
-                            fontSize = 12.sp
-                        )
-                        Text(
-                            text = headerUrl.value ?: "",
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = tint,
-                            fontSize = 10.sp
-                        )
-                    }
+                    BrowserTitle(
+                        progress,
+                        headerTitle,
+                        headerUrl,
+                        Modifier.weight(1f)
+                    )
 
                     val isNotLoading = 70 < progress.value ?: 100
                     val reloadIconId =
