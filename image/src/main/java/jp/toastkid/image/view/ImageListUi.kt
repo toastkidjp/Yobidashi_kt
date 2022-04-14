@@ -140,7 +140,6 @@ fun ImageListTopUi() {
             preview.value = true
         },
         {
-            println("tomato onBack ${index.value}")
             if (index.value != -1) {
                 index.value = -1
                 preview.value = false
