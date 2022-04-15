@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.settings.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Checkbox
@@ -31,7 +32,10 @@ internal fun TextMenu(
 ) {
     Text(
         stringResource(id = textId),
-        modifier = Modifier.padding(16.dp).clickable(onClick = clickable)
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = clickable)
+            .padding(16.dp)
     )
 }
 
