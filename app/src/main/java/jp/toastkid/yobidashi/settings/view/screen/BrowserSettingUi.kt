@@ -399,7 +399,7 @@ internal fun BrowserSettingUi() {
 
                 item {
                     Text(
-                        stringResource(id = R.string.title_clear_cache),
+                        stringResource(id = R.string.title_clear_coolie),
                         modifier = Modifier.padding(16.dp)
                             .clickable {
                                 CookieManager.getInstance().removeAllCookies {
