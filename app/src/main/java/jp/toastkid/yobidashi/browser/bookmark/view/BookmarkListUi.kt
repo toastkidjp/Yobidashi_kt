@@ -44,7 +44,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -60,7 +59,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.model.OptionMenu
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.list.SwipeToDismissItem
@@ -266,9 +264,7 @@ private fun BookmarkList(
     LazyColumn(
         contentPadding = PaddingValues(bottom = 4.dp),
         state = listState,
-        modifier = Modifier
-            .nestedScroll(rememberViewInteropNestedScrollConnection())
-            .padding(start = 8.dp, end = 8.dp)
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
     ) {
         items(bookmarks) { bookmark ->
             val dismissState = DismissState(
@@ -304,7 +300,7 @@ private fun BookmarkList(
                             alignment = Alignment.Center,
                             placeholder = painterResource(id = if (bookmark.folder) R.drawable.ic_folder_black else R.drawable.ic_bookmark),
                             error = painterResource(id = if (bookmark.folder) R.drawable.ic_folder_black else R.drawable.ic_bookmark),
-                            modifier = Modifier.width(44.dp).padding(end = 8.dp)
+                            modifier = Modifier.width(44.dp).padding(8.dp)
                         )
                         Column() {
                             Text(
