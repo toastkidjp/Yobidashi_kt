@@ -15,6 +15,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -400,12 +401,14 @@ internal fun BrowserSettingUi() {
                 item {
                     Text(
                         stringResource(id = R.string.title_clear_coolie),
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .clickable {
                                 CookieManager.getInstance().removeAllCookies {
                                     contentViewModel?.snackShort(R.string.done_clear)
                                 }
                             }
+                            .padding(16.dp)
                     )
                 }
             }
