@@ -20,10 +20,15 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.WorkerThread
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -34,16 +39,22 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.DismissState
 import androidx.compose.material.DismissValue
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -52,10 +63,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.model.OptionMenu
@@ -256,11 +269,12 @@ private fun query(
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun BookmarkList(
-    bookmarks: List<Bookmark>,
+    bookmarks: SnapshotStateList<Bookmark>,
     listState: LazyListState,
     onClick: (Bookmark, Boolean) -> Unit,
     onDelete: (Bookmark) -> Unit
 ) {
+    val iconColor = Color(IconColorFinder.from(LocalContext.current).invoke())
     LazyColumn(
         contentPadding = PaddingValues(bottom = 4.dp),
         state = listState,
@@ -276,6 +290,9 @@ private fun BookmarkList(
                     true
                 }
             )
+
+            val openEditor = remember { mutableStateOf(false) }
+
             SwipeToDismissItem(
                 dismissState,
                 dismissContent = {
@@ -300,9 +317,11 @@ private fun BookmarkList(
                             alignment = Alignment.Center,
                             placeholder = painterResource(id = if (bookmark.folder) R.drawable.ic_folder_black else R.drawable.ic_bookmark),
                             error = painterResource(id = if (bookmark.folder) R.drawable.ic_folder_black else R.drawable.ic_bookmark),
-                            modifier = Modifier.width(44.dp).padding(8.dp)
+                            modifier = Modifier
+                                .width(44.dp)
+                                .padding(8.dp)
                         )
-                        Column() {
+                        Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = bookmark.title,
                                 fontSize = 18.sp,
@@ -333,13 +352,150 @@ private fun BookmarkList(
                                 )
                             }
                         }
+
+                        if (bookmark.folder.not()) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_option_menu),
+                                contentDescription = stringResource(id = R.string.title_option_menu),
+                                tint = iconColor,
+                                modifier = Modifier.clickable {
+                                    openEditor.value = true
+                                }
+                            )
+                        }
                     }
                 },
                 modifier = Modifier
             )
+
+            if (openEditor.value) {
+                EditorDialog(openEditor, bookmark, bookmarks)
+            }
         }
     }
 
+}
+
+@Composable
+private fun EditorDialog(
+    openEditor: MutableState<Boolean>,
+    currentItem: Bookmark,
+    bookmarks: SnapshotStateList<Bookmark>
+) {
+    val bookmarkRepository = DatabaseFinder().invoke(LocalContext.current).bookmarkRepository()
+    val folders = remember { mutableStateListOf<String>() }
+    val currentFolder = remember { mutableStateOf(currentItem.parent) }
+
+    LaunchedEffect("load_folders") {
+        folders.clear()
+        folders.add(Bookmark.getRootFolderName())
+        CoroutineScope(Dispatchers.IO).launch {
+            folders.addAll(bookmarkRepository.folders())
+        }
+    }
+
+    Dialog(onDismissRequest = { openEditor.value = false }) {
+        Surface(
+            color = colorResource(id = R.color.soft_background),
+            elevation = 4.dp
+        ) {
+            Box() {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.cancel),
+                        color = colorResource(id = R.color.colorPrimary),
+                        modifier = Modifier
+                            .clickable {
+                                openEditor.value = false
+                            }
+                            .padding(16.dp)
+                    )
+
+                    Text(
+                        text = stringResource(id = R.string.ok),
+                        color = colorResource(id = R.color.colorPrimary),
+                        modifier = Modifier
+                            .clickable {
+                                openEditor.value = false
+                                if (currentItem.parent != currentFolder.value) {
+                                    moveFolder(
+                                        currentItem,
+                                        currentFolder.value,
+                                        bookmarkRepository,
+                                        bookmarks
+                                    )
+                                }
+                            }
+                            .padding(16.dp)
+                    )
+                }
+
+                val openChooser = remember { mutableStateOf(false) }
+
+                Column {
+                     Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                painterResource(id = R.drawable.ic_folder_black),
+                                stringResource(id = R.string.title_add_folder)
+                            )
+                            Text(
+                                "Move to other folder",
+                                fontSize = 20.sp
+                            )
+                        }
+                    Box(
+                        Modifier
+                            .padding(bottom = 60.dp)
+                            .defaultMinSize(200.dp)
+                            .background(colorResource(id = R.color.spinner_background))
+                            .clickable { openChooser.value = true }
+                    ) {
+                        Text(
+                            currentFolder.value,
+                            fontSize = 20.sp
+                        )
+
+                        DropdownMenu(
+                            openChooser.value,
+                            onDismissRequest = { openChooser.value = false }
+                        ) {
+                            folders.forEach {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        openChooser.value = false
+                                        currentFolder.value = it
+                                    }
+                                ) {
+                                    Text(
+                                        it,
+                                        fontSize = 20.sp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private fun moveFolder(
+    currentItem: Bookmark,
+    newFolder: String,
+    bookmarkRepository: BookmarkRepository,
+    bookmarks: SnapshotStateList<Bookmark>
+) {
+    val folder = currentItem.parent
+    CoroutineScope(Dispatchers.IO).launch {
+        currentItem.parent = newFolder
+        bookmarkRepository.add(currentItem)
+        query(bookmarkRepository, bookmarks, folder)
+    }
 }
 
 /**
