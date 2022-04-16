@@ -46,6 +46,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -177,6 +179,7 @@ internal fun MusicList(
     LazyColumn {
         item {
             Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp)
@@ -213,8 +216,17 @@ internal fun MusicList(
                     modifier = Modifier
                         .width(88.dp)
                         .fillMaxHeight()
+                        .padding(8.dp)
+                        .clickable {
+                            expanded = true
+                        }
                 ) {
-                    Text(text = stringResource(id = currentSpeed))
+                    Text(
+                        text = stringResource(id = currentSpeed),
+                        style = TextStyle(Color(iconColor), fontWeight = FontWeight.Bold),
+                        fontSize = 20.sp,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
@@ -225,10 +237,14 @@ internal fun MusicList(
                         values.forEachIndexed { index, s ->
                             DropdownMenuItem(onClick = {
                                 currentSpeed = values[index].textId
-                                //values[index].speed
                                 sendSpeedBroadcast(values[index].speed)
                                 expanded = false
-                            }) { Text(text = stringResource(id = values[index].textId)) }
+                            }) {
+                                Text(
+                                    stringResource(id = values[index].textId),
+                                    fontSize = 20.sp
+                                )
+                            }
                         }
                     }
                 }
