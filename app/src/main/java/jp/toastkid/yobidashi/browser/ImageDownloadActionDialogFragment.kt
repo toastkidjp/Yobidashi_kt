@@ -1,10 +1,8 @@
 package jp.toastkid.yobidashi.browser
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
@@ -22,7 +20,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 
 /**
  * Method object of downloading image file.
- *
+ * TODO Compose
  * @author toastkidjp
  */
 class ImageDownloadActionDialogFragment : DialogFragment() {
@@ -32,20 +30,17 @@ class ImageDownloadActionDialogFragment : DialogFragment() {
 
         val url = arguments?.getString(KEY_URL) ?: return super.onCreateDialog(savedInstanceState)
 
-        @SuppressLint("InflateParams")
-        val contentView = LayoutInflater.from(activityContext)
-                .inflate(R.layout.content_dialog_image, null)
-        val imageView = contentView.findViewById<ImageView>(R.id.image)
+        val imageView = ImageView(activityContext)
         downloadPreview(url, imageView)
 
-        contentView.setOnClickListener {
+        imageView.setOnClickListener {
             imageView.visibility = if (imageView.isVisible) View.GONE else View.VISIBLE
         }
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_download_image)
                 .setMessage(R.string.message_confirm_downloading_image)
-                .setView(contentView)
+                .setView(imageView)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
                     activity?.let {

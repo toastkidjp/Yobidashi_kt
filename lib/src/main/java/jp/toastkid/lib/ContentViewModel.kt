@@ -112,14 +112,6 @@ class ContentViewModel : ViewModel() {
         _openEditorTab.postValue(Event(Unit))
     }
 
-    private val _switchPageSearcher = MutableLiveData<Unit>()
-
-    val switchPageSearcher: LiveData<Unit> = _switchPageSearcher
-
-    fun switchPageSearcher() {
-        _switchPageSearcher.postValue(Unit)
-    }
-
     private val _bottomSheetContent = mutableStateOf<@Composable () -> Unit>({})
 
     val bottomSheetContent: State<@Composable () -> Unit> = _bottomSheetContent

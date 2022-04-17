@@ -41,11 +41,11 @@ dependencies {
     implementation project(":lib")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
 
     implementation "androidx.compose.material:material:$libVersions.compose"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
+    implementation 'androidx.activity:activity-compose:1.4.0'
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"

@@ -10,7 +10,6 @@ package jp.toastkid.image.preview.attach
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.View
-import androidx.fragment.app.DialogFragment
 
 /**
  * @author toastkidjp
@@ -19,8 +18,7 @@ class MenuActionUseCase(
     private val attachToAnyAppUseCase: AttachToAnyAppUseCase,
     private val attachToThisAppBackgroundUseCase: AttachToThisAppBackgroundUseCase,
     private val uriSupplier: () -> Uri?,
-    private val bitmapSupplier: () -> Bitmap?,
-    private val showDialog: (DialogFragment) -> Unit
+    private val bitmapSupplier: () -> Bitmap?
 ) {
 
     fun thisApp(v: View) {

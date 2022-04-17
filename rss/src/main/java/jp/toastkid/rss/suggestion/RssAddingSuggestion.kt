@@ -8,7 +8,6 @@
 package jp.toastkid.rss.suggestion
 
 import android.view.View
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
@@ -46,7 +45,7 @@ class RssAddingSuggestion(
     }
 
     private fun toast(view: View, url: String) {
-        (view.context as? FragmentActivity)?.let {
+        (view.context as? ViewModelStoreOwner)?.let {
             contentViewModelFactory(it)
                 ?.snackWithAction(
                     view.context.getString(R.string.message_add_rss_target),

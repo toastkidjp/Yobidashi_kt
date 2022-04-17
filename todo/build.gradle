@@ -44,17 +44,16 @@ dependencies {
     implementation project(":lib")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
     implementation "androidx.paging:paging-runtime:$libVersions.paging"
 
     implementation "androidx.compose.material:material:$libVersions.compose"
-    implementation "androidx.compose.ui:ui-tooling:$libVersions.compose"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
     implementation "androidx.paging:paging-compose:$libVersions.paging_compose"
     implementation "androidx.paging:paging-runtime-ktx:$libVersions.paging"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
     implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
+    implementation 'androidx.activity:activity-compose:1.4.0'
 
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"

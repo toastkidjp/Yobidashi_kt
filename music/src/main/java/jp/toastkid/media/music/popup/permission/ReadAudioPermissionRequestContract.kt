@@ -9,12 +9,12 @@
 package jp.toastkid.media.music.popup.permission
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 
 class ReadAudioPermissionRequestContract
     : ActivityResultContract<((Boolean) -> Unit)?, Pair<Boolean, ((Boolean) -> Unit)?>>() {
@@ -32,7 +32,7 @@ class ReadAudioPermissionRequestContract
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Pair<Boolean, ((Boolean) -> Unit)?> {
-        if (resultCode != AppCompatActivity.RESULT_OK) return false to onResultCallback
+        if (resultCode != Activity.RESULT_OK) return false to onResultCallback
         val granted = intent
             ?.getIntArrayExtra(ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
             ?.getOrNull(0) == PackageManager.PERMISSION_GRANTED

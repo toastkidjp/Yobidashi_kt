@@ -40,7 +40,6 @@ dependencies {
     implementation project(":lib")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
 
     // Compose dependencies.

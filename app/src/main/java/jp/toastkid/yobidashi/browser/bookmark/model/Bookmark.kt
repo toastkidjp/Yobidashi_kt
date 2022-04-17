@@ -6,9 +6,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import jp.toastkid.lib.storage.FilesDir
-import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
-import jp.toastkid.yobidashi.search.url_suggestion.ViewHolder
 
 /**
  * Bookmark model.
@@ -34,17 +32,6 @@ class Bookmark : UrlItem {
     var viewCount: Int = 0
 
     var lastViewed: Long = 0
-
-    override fun bind(holder: ViewHolder) {
-        holder.setTitle(title)
-        holder.setUrl(url)
-        if (favicon.isEmpty()) {
-            holder.setIconResource(R.drawable.ic_bookmark_black)
-            return
-        }
-        holder.setIconFromPath(favicon)
-        holder.setTime(lastViewed)
-    }
 
     override fun urlString() = url
 

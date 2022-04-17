@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.browser
 
 import androidx.annotation.IdRes
-import jp.toastkid.yobidashi.R
 
 /**
  * Browser screen mode.
@@ -10,9 +9,9 @@ import jp.toastkid.yobidashi.R
  */
 internal enum class ScreenMode(@IdRes private val id: Int) {
 
-    FULL_SCREEN(R.id.full_screen),
-    EXPANDABLE(R.id.expandable),
-    FIXED(R.id.fixed);
+    FULL_SCREEN(1),
+    EXPANDABLE(2),
+    FIXED(3);
 
     fun id(): Int = this.id
 
