@@ -38,6 +38,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -247,6 +248,7 @@ private fun initializeHeaderViewModels(
 
     val tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
+    val pageSearcherViewModel = viewModelProvider.get(PageSearcherViewModel::class.java)
 
     viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
         appBarViewModel?.replace {
@@ -426,6 +428,19 @@ private fun initializeHeaderViewModels(
                     )
                 }
             }
+
+            DisposableEffect("remove_observers") {
+                onDispose {
+                    contentViewModel.toTop.removeObservers(activity)
+                    contentViewModel.toBottom.removeObservers(activity)
+                    contentViewModel.share.removeObservers(activity)
+
+                    pageSearcherViewModel.find.removeObservers(activity)
+                    pageSearcherViewModel.upward.removeObservers(activity)
+                    pageSearcherViewModel.downward.removeObservers(activity)
+                    pageSearcherViewModel.clear.removeObservers(activity)
+                }
+            }
         }
     }
 
@@ -443,7 +458,7 @@ private fun initializeHeaderViewModels(
             browserModule.loadWithNewTab(it.first, it.second)
         })
 
-    viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
+    pageSearcherViewModel.also { viewModel ->
         viewModel.find.observe(activity, Observer {
             browserModule.find(it)
         })
