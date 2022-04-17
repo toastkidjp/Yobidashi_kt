@@ -24,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
@@ -69,12 +70,16 @@ internal fun FloatingPreviewUi(uri: Uri) {
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.background(Color(preferenceApplier.color)).padding(8.dp)
+            modifier = Modifier
+                .background(Color(preferenceApplier.color))
+                .padding(8.dp)
         ) {
             AsyncImage(
                 model = viewModel.icon.observeAsState().value,
                 contentDescription = stringResource(id = R.string.image),
-                modifier = Modifier.size(36.dp).padding(end = 8.dp)
+                modifier = Modifier
+                    .size(36.dp)
+                    .padding(end = 8.dp)
             )
 
             BrowserTitle(
