@@ -15,7 +15,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.fragment.app.FragmentActivity
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.block.AdRemover
 
@@ -33,7 +32,7 @@ class WebViewInitializer(
      * @param webView [WebView]
      */
     operator fun invoke(webView: WebView) {
-        val context = webView.context as? FragmentActivity ?: return
+        val context = webView.context
 
         val adRemover = AdRemover.make(context.assets)
 
