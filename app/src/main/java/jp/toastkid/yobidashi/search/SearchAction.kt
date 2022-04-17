@@ -2,8 +2,8 @@ package jp.toastkid.yobidashi.search
 
 import android.content.Context
 import android.net.Uri
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -34,7 +34,7 @@ class SearchAction(
         private val onBackground: Boolean = false,
         private val saveHistory: Boolean = true,
         private val viewModelSupplier: (Context) -> BrowserViewModel? = {
-            (activityContext as? FragmentActivity)?.let {
+            (activityContext as? ViewModelStoreOwner)?.let {
                 ViewModelProvider(it).get(BrowserViewModel::class.java)
             }
         },

@@ -44,8 +44,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.godaddy.android.colorpicker.ClassicColorPicker
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
@@ -60,7 +60,7 @@ import jp.toastkid.yobidashi.settings.view.ColorPaletteUi
 internal fun EditorSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
-    val contentViewModel = (activityContext as? FragmentActivity)?.let {
+    val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
         ViewModelProvider(activityContext).get(ContentViewModel::class.java)
     }
     val backgroundColor = preferenceApplier.editorBackgroundColor()

@@ -37,14 +37,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
@@ -64,13 +65,14 @@ internal fun ColorFilterSettingUi() {
         remember { mutableStateOf(OverlayColorFilterUseCase.getDefaultAlpha().toFloat()) }
     val check = remember { mutableStateOf(preferenceApplier.useColorFilter()) }
 
-    val overlayColorFilterViewModel =(activityContext as? FragmentActivity)?.let { activity ->
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val overlayColorFilterViewModel =(activityContext as? ViewModelStoreOwner)?.let { activity ->
         val viewModel = ViewModelProvider(activity).get(OverlayColorFilterViewModel::class.java)
 
         viewModel
             .newColor
             .observe(
-                activity,
+                lifecycleOwner,
                 { sample.value = preferenceApplier.filterColor(Color.Transparent.toArgb()) }
             )
 
