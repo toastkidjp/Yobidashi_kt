@@ -22,9 +22,11 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.fragment.app.FragmentActivity
+import androidx.core.app.ComponentActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.R
@@ -129,16 +131,14 @@ class WebViewClientFactory(
             handler?.cancel()
 
             val context = view?.context ?: return
-            if (context !is FragmentActivity || context.isFinishing) {
+            if (context !is ComponentActivity
+                || context !is ViewModelStoreOwner
+                || context.isFinishing) {
                 return
             }
 
-            ConfirmDialogFragment.show(
-                context.supportFragmentManager,
-                context.getString(R.string.title_ssl_connection_error),
-                TlsErrorMessageGenerator().invoke(context, error),
-                "tls_error"
-            )
+            ViewModelProvider(context).get(BrowserViewModel::class.java)
+                .setError(TlsErrorMessageGenerator().invoke(context, error))
         }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)

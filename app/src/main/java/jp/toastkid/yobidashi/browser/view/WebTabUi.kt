@@ -69,6 +69,7 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.rss.extractor.RssUrlFinder
+import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
@@ -128,6 +129,17 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     val readerModeText = remember { mutableStateOf("") }
     if (readerModeText.value.isNotBlank()) {
         ReaderModeUi(browserModule.currentTitle(), readerModeText)
+    }
+
+    val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
+    if (browserViewModel.openErrorDialog.value) {
+        ConfirmDialog(
+            browserViewModel.openErrorDialog,
+            stringResource(id = R.string.title_ssl_connection_error),
+            browserViewModel.error.value
+        ) {
+            browserViewModel.clearError()
+        }
     }
 
     initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }
