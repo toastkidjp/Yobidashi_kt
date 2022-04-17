@@ -26,7 +26,7 @@ class SettingsIntentFactoryTest {
     }
 
     @Test
-    fun wifi() {
+    fun testWifi() {
         settingsIntentFactory.wifi()
     }
 

@@ -63,6 +63,7 @@
             app:layout_constraintTop_toBottomOf="@id/recycler_view"
             app:rippleColor="@color/aw_ripple"
             app:srcCompat="@drawable/ic_pdf"
+            android:contentDescription="@string/title_open_pdf"
             android:onClick="@{view -> dialog.openPdf()}"
             />
 

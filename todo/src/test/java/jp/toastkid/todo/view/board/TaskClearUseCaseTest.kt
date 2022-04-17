@@ -32,9 +32,6 @@ class TaskClearUseCaseTest {
     private lateinit var contentViewModel: ContentViewModel
 
     @MockK
-    private lateinit var taskAddingUseCase: TaskAddingUseCase
-
-    @MockK
     private lateinit var clearBoard: () -> Unit
 
     @Before

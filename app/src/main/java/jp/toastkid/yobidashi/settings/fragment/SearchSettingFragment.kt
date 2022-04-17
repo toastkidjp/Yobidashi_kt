@@ -72,7 +72,6 @@ class SearchSettingFragment : Fragment() {
         binding.checkSearchCategory.setOnClickListener {
             adapter.invokeCheckAll()
         }
-        adapter.notifyDataSetChanged()
 
         return binding.root
     }

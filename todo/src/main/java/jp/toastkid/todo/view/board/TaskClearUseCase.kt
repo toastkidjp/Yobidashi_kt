@@ -16,18 +16,11 @@ import jp.toastkid.todo.model.TodoTask
 class TaskClearUseCase(
         private val tasks: MutableList<TodoTask>,
         private val contentViewModel: ContentViewModel,
-        private val taskAddingUseCase: TaskAddingUseCase?,
         private val clearBoard: () -> Unit
 ) {
     operator fun invoke() {
-        val keep = mutableListOf<TodoTask>().also {
-            it.addAll(tasks)
-        }
         tasks.clear()
         clearBoard()
-        contentViewModel
-                .snackWithAction("Clear all tasks.", "Undo") {
-                    keep.forEach { taskAddingUseCase?.invoke(it) }
-                }
+        contentViewModel.snackShort("Clear all tasks.")
     }
 }

@@ -10,13 +10,26 @@ package jp.toastkid.article_viewer.article.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingSource
+import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.list.sort.Sort
+import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
+import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.lib.lifecycle.Event
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
  */
-class ArticleListFragmentViewModel : ViewModel() {
+class ArticleListFragmentViewModel(
+    private val articleRepository: ArticleRepository,
+    private val bookmarkRepository: BookmarkRepository,
+    private val preferencesWrapper: PreferenceApplier
+) : ViewModel() {
+
+    private val tokenizer = NgramTokenizer()
 
     private val _progressVisibility = MutableLiveData<Event<Boolean>>()
     val progressVisibility : LiveData<Event<Boolean>> = _progressVisibility
@@ -47,25 +60,44 @@ class ArticleListFragmentViewModel : ViewModel() {
     val sort: LiveData<Event<Sort>> = _sort
 
     fun sort(sort: Sort) {
-        _sort.postValue(Event(sort))
+        setNextPager { sort.invoke(articleRepository) }
     }
 
-    private val _search = MutableLiveData<String?>()
-    val search: LiveData<String?> = _search
+    private val _dataSource = MutableLiveData<Pager<Int, SearchResult>>()
+    val dataSource: LiveData<Pager<Int, SearchResult>> = _dataSource
 
     fun search(keyword: String?) {
-        _search.postValue(keyword)
+        setNextPager {
+            if (keyword.isNullOrBlank())
+                Sort.findByName(preferencesWrapper.articleSort()).invoke(articleRepository)
+            else
+                articleRepository.search("${tokenizer(keyword, 2)}")
+        }
     }
-
-    fun clearSearchWord() {
-        _search.value = null
-    }
-
-    private val _filter = MutableLiveData<String?>()
-    val filter: LiveData<String?> = _filter
 
     fun filter(keyword: String?) {
-        _filter.postValue(keyword)
+        setNextPager {
+            if (keyword.isNullOrBlank())
+                Sort.findByName(preferencesWrapper.articleSort())
+                    .invoke(articleRepository)
+            else
+                articleRepository.filter(keyword)
+        }
+    }
+
+    fun bookmark() {
+        val findByIds = articleRepository.findByIds(bookmarkRepository.allArticleIds())
+
+        setNextPager { findByIds }
+    }
+
+    private fun setNextPager(pagingSourceFactory: () -> PagingSource<Int, SearchResult>) {
+        _dataSource.postValue(
+            Pager(
+                PagingConfig(pageSize = 10, enablePlaceholders = true),
+                pagingSourceFactory = pagingSourceFactory
+            )
+        )
     }
 
 }

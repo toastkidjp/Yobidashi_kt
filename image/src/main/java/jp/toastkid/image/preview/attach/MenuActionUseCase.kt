@@ -11,7 +11,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.view.View
 import androidx.fragment.app.DialogFragment
-import jp.toastkid.image.preview.detail.ImageDetailFragment
 
 /**
  * @author toastkidjp
@@ -37,7 +36,7 @@ class MenuActionUseCase(
 
     fun detail() {
         val uri = uriSupplier() ?: return
-        showDialog(ImageDetailFragment.withImageUri(uri))
+        //showDialog(ImageDetailFragment.withImageUri(uri))
     }
 
 }

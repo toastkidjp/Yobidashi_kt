@@ -12,7 +12,7 @@ package jp.toastkid.article_viewer.article.detail
  */
 class InternalLinkScheme {
 
-    fun makeLink(title: String?) = "$INTERNAL_LINK_SCHEME$title"
+    fun makeLink(title: String?) = "[$title]($INTERNAL_LINK_SCHEME$title)"
 
     fun isInternalLink(url: String): Boolean {
         return url.startsWith(INTERNAL_LINK_SCHEME)

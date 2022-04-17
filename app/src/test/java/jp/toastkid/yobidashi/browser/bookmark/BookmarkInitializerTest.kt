@@ -89,7 +89,7 @@ class BookmarkInitializerTest {
     }
 
     @Test
-    fun from() {
+    fun testFrom() {
         mockkConstructor(FaviconFolderProviderService::class)
         every { anyConstructed<FaviconFolderProviderService>().invoke(any()) }.returns(mockk())
         mockkObject(WebClipIconLoader)
@@ -104,7 +104,7 @@ class BookmarkInitializerTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         bookmarkInitializer.invoke(onComplete)
 
         coVerify(atLeast = 1) { bookmarkRepository.add(any()) }

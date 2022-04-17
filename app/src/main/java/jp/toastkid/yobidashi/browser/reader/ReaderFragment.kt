@@ -8,51 +8,149 @@
 package jp.toastkid.yobidashi.browser.reader
 
 import android.os.Bundle
-import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter.Companion.tint
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentScrollable
-import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.TextViewHighlighter
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentReaderModeBinding
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
  */
 class ReaderFragment : Fragment(), ContentScrollable {
 
-    private lateinit var binding: FragmentReaderModeBinding
-
     private lateinit var speechMaker: SpeechMaker
 
+    private var scrollState: ScrollState? = null
+
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        binding.fragment = this
-        speechMaker = SpeechMaker(binding.root.context)
-        return binding.root
+        val context = activity ?: return super.onCreateView(inflater, container, savedInstanceState)
+
+        speechMaker = SpeechMaker(context)
+
+        val composeView = ComposeView(context)
+        composeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
+        val viewModelProvider = ViewModelProvider(context)
+
+        viewModelProvider.get(ReaderFragmentViewModel::class.java)
+            .content
+            .observe(viewLifecycleOwner, {
+                composeView.setContent {
+                    ReaderUi(it.first, it.second)
+                }
+            })
+
+        // TODO val finder = TextViewHighlighter(binding.textContent)
+        viewModelProvider.get(PageSearcherViewModel::class.java)
+            .find
+            .observe(viewLifecycleOwner, Observer {
+                //TODO finder(it)
+            })
+
+        setHasOptionsMenu(true)
+        return composeView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    @Composable
+    fun ReaderUi(title: String, text: String) {
+        val preferenceApplier = PreferenceApplier(LocalContext.current)
 
+        val scrollState = rememberScrollState()
+        this.scrollState = scrollState
+
+        MaterialTheme() {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(Color(preferenceApplier.editorBackgroundColor()))
+                    .padding(16.dp)
+            ) {
+                Column(Modifier.verticalScroll(scrollState)) {
+                    SelectionContainer {
+                        Text(
+                            text = title,
+                            color = Color(preferenceApplier.editorFontColor()),
+                            fontSize = 30.sp,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                    SelectionContainer {
+                        Text(
+                            text = text,
+                            color = Color(preferenceApplier.editorFontColor()),
+                            fontSize = 16.sp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                        )
+                    }
+                }
+                Image(
+                    painterResource(R.drawable.ic_close_black),
+                    contentDescription = stringResource(id = R.string.close),
+                    colorFilter = tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn),
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(60.dp)
+                        .padding(16.dp)
+                        .align(Alignment.TopEnd)
+                        .clickable {
+                            activity?.supportFragmentManager?.popBackStack()
+                        }
+                )
+            }
+        }
+
+        /*
         binding.textContent.customSelectionActionModeCallback = object : ActionMode.Callback {
 
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
@@ -64,7 +162,10 @@ class ReaderFragment : Fragment(), ContentScrollable {
                 return true
             }
 
-            override fun onActionItemClicked(actionMode: ActionMode?, menuItem: MenuItem?): Boolean {
+            override fun onActionItemClicked(
+                actionMode: ActionMode?,
+                menuItem: MenuItem?
+            ): Boolean {
                 val text = extractSelectedText()
                 when (menuItem?.itemId) {
                     R.id.context_edit_speech -> {
@@ -80,8 +181,11 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
             private fun extractSelectedText(): String {
                 return binding.textContent.text
-                        .subSequence(binding.textContent.selectionStart, binding.textContent.selectionEnd)
-                        .toString()
+                    .subSequence(
+                        binding.textContent.selectionStart,
+                        binding.textContent.selectionEnd
+                    )
+                    .toString()
             }
 
             override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
@@ -89,26 +193,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
             override fun onDestroyActionMode(p0: ActionMode?) = Unit
 
         }
-
-        activity?.also { activity ->
-            val finder = TextViewHighlighter(binding.textContent)
-
-            val viewModelProvider = ViewModelProvider(activity)
-            viewModelProvider.get(PageSearcherViewModel::class.java)
-                    .find
-                    .observe(viewLifecycleOwner, Observer {
-                        finder(it)
-                    })
-
-            viewModelProvider.get(ReaderFragmentViewModel::class.java)
-                    .content
-                    .observe(activity, {
-                        binding.title.text = it.first
-                        binding.textContent.text = it.second
-                    })
-        }
-
-        setHasOptionsMenu(true)
+         */
     }
 
     fun close() {
@@ -116,23 +201,15 @@ class ReaderFragment : Fragment(), ContentScrollable {
     }
 
     override fun toTop() {
-        binding.scroll.smoothScrollTo(0, 0)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollTo(0)
+        }
     }
 
     override fun toBottom() {
-        binding.scroll.smoothScrollTo(0, binding.textContent.measuredHeight)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        val preferenceApplier = PreferenceApplier(binding.root.context)
-        binding.background.setBackgroundColor(preferenceApplier.editorBackgroundColor())
-
-        val editorFontColor = preferenceApplier.editorFontColor()
-        binding.title.setTextColor(editorFontColor)
-        binding.textContent.setTextColor(editorFontColor)
-        binding.close.setColorFilter(editorFontColor)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollTo(scrollState?.maxValue ?: 0)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -143,7 +220,13 @@ class ReaderFragment : Fragment(), ContentScrollable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_speech -> {
-                speechMaker.invoke("${binding.title.text}$lineSeparator${binding.textContent.text}")
+                val activity = activity ?: return true
+                val viewModelProvider = ViewModelProvider(activity)
+
+                val pair = viewModelProvider.get(ReaderFragmentViewModel::class.java)
+                    .content
+                    .value ?: return true
+                speechMaker.invoke("${pair.first} ${pair.second}")
                 return true
             }
         }
@@ -158,15 +241,6 @@ class ReaderFragment : Fragment(), ContentScrollable {
     override fun onDetach() {
         speechMaker.dispose()
         super.onDetach()
-    }
-
-    companion object {
-
-        @LayoutRes
-        private val LAYOUT_ID = R.layout.fragment_reader_mode
-
-        private val lineSeparator = System.lineSeparator()
-
     }
 
 }

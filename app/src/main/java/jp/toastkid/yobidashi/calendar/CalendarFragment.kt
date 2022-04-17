@@ -11,27 +11,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import android.widget.DatePicker
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentCalendarBinding
 
 /**
  * @author toastkidjp
  */
 class CalendarFragment : Fragment(), OnBackCloseableTabUiFragment {
 
-    private lateinit var binding: FragmentCalendarBinding
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container, false)
-        return binding.root
+        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+        val composeView = ComposeView(context)
+        composeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
+        composeView.setContent {
+            AndroidView(
+                factory = { DatePicker(context) },
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+        return composeView
     }
 
 }

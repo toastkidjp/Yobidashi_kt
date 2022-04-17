@@ -10,38 +10,67 @@ package jp.toastkid.yobidashi.search
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import coil.compose.AsyncImage
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.input.Inputs
-import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.EditTextColorSetter
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.AppBarSearchBinding
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
 import jp.toastkid.yobidashi.search.usecase.ContentSwitcherUseCase
@@ -75,11 +104,13 @@ class SearchFragment : Fragment() {
 
     private var appBarViewModel: AppBarViewModel? = null
 
-    private var headerBinding: AppBarSearchBinding? = null
-
     private var currentTitle: String? = null
 
     private var currentUrl: String? = null
+
+    private var currentInput: MutableState<String>? = null
+
+    private var currentCategory: MutableState<String>? = null
 
     private var contentSwitcherUseCase: ContentSwitcherUseCase? = null
 
@@ -109,6 +140,7 @@ class SearchFragment : Fragment() {
             }
         }
 
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
@@ -118,20 +150,6 @@ class SearchFragment : Fragment() {
         currentTitle = arguments?.getString(EXTRA_KEY_TITLE)
         currentUrl = arguments?.getString(EXTRA_KEY_URL)
 
-        headerBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_search, container, false)
-        headerBinding?.fragment = this
-        headerBinding?.searchCategories?.let {
-            val searchCategoryAdapter = SearchCategoryAdapter(context)
-            it.adapter = searchCategoryAdapter
-            val categoryName = (jp.toastkid.search.SearchCategory.findByUrlOrNull(currentUrl)?.name
-                    ?: PreferenceApplier(context).getDefaultSearchEngine())
-                    ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
-            val index = searchCategoryAdapter.findIndex(categoryName)
-            if (index != -1) {
-                it.setSelection(index)
-            }
-        }
-
         preferenceApplier = PreferenceApplier(context)
 
         activity?.also {
@@ -140,15 +158,144 @@ class SearchFragment : Fragment() {
             contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
         }
 
-        applyColor()
+        appBarViewModel?.replace(context) {
+            val input = remember { mutableStateOf(currentUrl ?: "") }
+            currentInput = input
+
+            val spinnerOpen = remember { mutableStateOf(false) }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(dimensionResource(id = R.dimen.toolbar_height))
+            ) {
+                val categoryName = remember {
+                    mutableStateOf(
+                        (SearchCategory.findByUrlOrNull(currentUrl)?.name
+                            ?: PreferenceApplier(context).getDefaultSearchEngine())
+                            ?: SearchCategory.getDefaultCategoryName()
+                    )
+                }
+                currentCategory = categoryName
+
+                Box(
+                    modifier = Modifier
+                        .clickable {
+                            spinnerOpen.value = true
+                        }
+                        .width(dimensionResource(id = R.dimen.search_category_spinner_width))
+                        .fillMaxHeight()
+                        .background(colorResource(id = R.color.spinner_background))
+                ) {
+                    val category = SearchCategory.findByCategory(currentCategory?.value)
+                    Image(
+                        painterResource(id = category.iconId),
+                        contentDescription = stringResource(id = category.id),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(4.dp)
+                    )
+
+                    DropdownMenu(
+                        expanded = spinnerOpen.value,
+                        onDismissRequest = { spinnerOpen.value = false }
+                    ) {
+                        val initialDisables = PreferenceApplier(context).readDisableSearchCategory()
+                        val searchCategories = SearchCategory.values()
+                            .filterNot { initialDisables?.contains(it.name) ?: false }
+                        searchCategories.forEach { searchCategory ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    categoryName.value = searchCategory.name
+                                    spinnerOpen.value = false
+                                }
+                            ) {
+                                AsyncImage(
+                                    model = searchCategory.iconId,
+                                    contentDescription = stringResource(id = searchCategory.id),
+                                    modifier = Modifier.width(40.dp)
+                                )
+                                Text(
+                                    stringResource(id = searchCategory.id),
+                                    color = colorResource(id = R.color.black),
+                                    fontSize = 20.sp,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .fillMaxHeight()
+                                        .padding(8.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                TextField(
+                    value = input.value,
+                    onValueChange = { text ->
+                        input.value = text
+                        contentSwitcherUseCase?.send(text)
+                    },
+                    label = {
+                            Text(
+                                stringResource(id = R.string.title_search),
+                                color = Color(preferenceApplier.fontColor)
+                            )
+                    },
+                    singleLine = true,
+                    textStyle = TextStyle(
+                        color = Color(preferenceApplier.fontColor),
+                        textAlign = TextAlign.Start,
+                    ),
+                    trailingIcon = {
+                        Icon(
+                            Icons.Filled.Clear,
+                            contentDescription = "clear text",
+                            tint = Color(preferenceApplier.fontColor),
+                            modifier = Modifier
+                                //.offset(x = 8.dp)
+                                .clickable {
+                                    input.value = ""
+                                }
+                        )
+                    },
+                    maxLines = 1,
+                    keyboardActions = KeyboardActions {
+                        search(extractCurrentSearchCategory(), input.value)
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = true,
+                        imeAction = ImeAction.Search
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 4.dp)
+                        .background(Color.Transparent)
+                )
+
+                Image(
+                    painterResource(id = if (useVoice) R.drawable.ic_mic else R.drawable.ic_search_white),
+                    contentDescription = stringResource(id = R.string.title_search_action),
+                    colorFilter = ColorFilter.tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn),
+                    modifier = Modifier.width(32.dp).fillMaxHeight().align(Alignment.CenterVertically)
+                        .combinedClickable(
+                            true,
+                            onClick = { invokeSearch() },
+                            onLongClick = { invokeBackgroundSearch() }
+                        )
+                )
+            }
+        }
+
+        contentSwitcherUseCase = ContentSwitcherUseCase(
+            binding, preferenceApplier, this::setActionButtonState, currentTitle, currentUrl
+        )
+
+        contentSwitcherUseCase?.withDebounce()
 
         binding?.urlCard?.setInsertAction(this::setTextAndMoveCursorToEnd)
 
         setListenerForKeyboardHiding()
-
-        initSearchInput()
-
-        headerBinding?.searchBar?.transitionName = "share"
 
         contentViewModel?.snackShort(R.string.message_search_on_background)
 
@@ -189,11 +336,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun setInitialQuery(query: String?) {
-        headerBinding?.searchInput?.let { input ->
-            input.setText(query)
-            input.selectAll()
-            contentSwitcherUseCase?.invoke(query ?: "")
-        }
+        currentInput?.value = query ?: ""
+        contentSwitcherUseCase?.invoke(query ?: "")
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -215,20 +359,15 @@ class SearchFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.double_quote -> {
-            val queryOrEmpty = headerBinding?.searchInput?.text?.toString()
+            val queryOrEmpty = currentInput?.value
             if (queryOrEmpty?.isNotBlank() == true) {
                 setTextAndMoveCursorToEnd("\"$queryOrEmpty\"")
             }
             true
         }
         R.id.set_default_search_category -> {
-            val categoryName = preferenceApplier.getDefaultSearchEngine()
-                ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
-            val index = (headerBinding?.searchCategories?.adapter as? SearchCategoryAdapter)
-                ?.findIndex(categoryName) ?: -1
-            if (index != -1) {
-                headerBinding?.searchCategories?.setSelection(index)
-            }
+            currentCategory?.value = preferenceApplier.getDefaultSearchEngine()
+                ?: SearchCategory.getDefaultCategoryName()
             true
         }
         R.id.suggestion_check -> {
@@ -261,10 +400,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setTextAndMoveCursorToEnd(text: String) {
-        headerBinding?.searchInput?.also {
-            it.setText(text)
-            it.setSelection(text.length)
-        }
+        currentInput?.value = text
     }
 
     override fun onResume() {
@@ -279,16 +415,13 @@ class SearchFragment : Fragment() {
 
         binding?.hourlyTrendCard?.request()
 
-        val headerView = headerBinding?.root ?: return
-        appBarViewModel?.replace(headerView)
-
         binding?.urlCard?.onResume()
 
         showKeyboard()
     }
 
     private fun showKeyboard() {
-        activity?.let {
+        /*TODO activity?.let {
             val input = headerBinding?.searchInput ?: return@let
             if (!input.requestFocus()) {
                 return@let
@@ -302,37 +435,7 @@ class SearchFragment : Fragment() {
                     { inputMethodManager.showSoftInput(input, InputMethodManager.SHOW_FORCED) },
                     100L
             )
-        }
-    }
-
-    /**
-     * Initialize search input.
-     */
-    private fun initSearchInput() {
-        headerBinding?.searchInput?.let {
-            it.setOnEditorActionListener { v, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    search(extractCurrentSearchCategory(), v.text.toString())
-                }
-                true
-            }
-            it.addTextChangedListener(object : TextWatcher {
-
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
-
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    contentSwitcherUseCase?.send(s.toString())
-                }
-
-                override fun afterTextChanged(s: Editable) = Unit
-            })
-
-            contentSwitcherUseCase = ContentSwitcherUseCase(
-                binding, preferenceApplier, this::setActionButtonState, currentTitle, currentUrl
-            )
-
-            contentSwitcherUseCase?.withDebounce()
-        }
+        }*/
     }
 
     /**
@@ -342,23 +445,6 @@ class SearchFragment : Fragment() {
      */
     private fun setActionButtonState(useVoiceSearch: Boolean) {
         this.useVoice = useVoiceSearch
-        (if (useVoiceSearch) R.drawable.ic_mic else R.drawable.ic_search_white)
-                .also { headerBinding?.searchAction?.setImageResource(it) }
-    }
-
-    /**
-     * Apply color to views.
-     */
-    private fun applyColor() {
-        val colorPair : ColorPair = preferenceApplier.colorPair()
-        @ColorInt val fontColor: Int = colorPair.fontColor()
-        EditTextColorSetter().invoke(headerBinding?.searchInput, fontColor)
-
-        headerBinding?.also {
-            it.searchAction.setColorFilter(fontColor)
-            it.searchClear.setColorFilter(fontColor)
-            it.searchInputBorder.setBackgroundColor(fontColor)
-        }
     }
 
     fun invokeSearch() {
@@ -368,7 +454,7 @@ class SearchFragment : Fragment() {
         }
         search(
                 extractCurrentSearchCategory(),
-                headerBinding?.searchInput?.text.toString()
+                currentInput?.value.toString()
         )
     }
 
@@ -390,7 +476,7 @@ class SearchFragment : Fragment() {
 
         search(
                 extractCurrentSearchCategory(),
-                headerBinding?.searchInput?.text.toString(),
+                currentInput?.value.toString(),
                 true
         )
         return true
@@ -417,7 +503,7 @@ class SearchFragment : Fragment() {
     }
 
     fun clearInput() {
-        headerBinding?.searchInput?.setText("")
+        currentInput?.value = ""
     }
 
     /**
@@ -425,11 +511,11 @@ class SearchFragment : Fragment() {
      * TODO should deactivate
      */
     private fun hideKeyboard() {
-        headerBinding?.searchInput?.let { Inputs.hideKeyboard(it) }
+        //TODO headerBinding?.searchInput?.let { Inputs.hideKeyboard(it) }
     }
 
     private fun extractCurrentSearchCategory() =
-            headerBinding?.searchCategories?.selectedItem.toString()
+            currentCategory?.value ?: ""
 
     override fun onPause() {
         super.onPause()

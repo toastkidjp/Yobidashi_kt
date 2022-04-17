@@ -13,10 +13,7 @@ import android.content.Intent
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
 import android.text.Html
-import android.text.TextWatcher
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,11 +21,42 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.Dimension
-import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -46,13 +74,10 @@ import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.tab.TabUiFragment
-import jp.toastkid.lib.view.TextViewColorApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
-import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
-import jp.toastkid.yobidashi.editor.load.LoadFromStorageDialogFragment
-import jp.toastkid.yobidashi.editor.usecase.RestoreContentUseCase
+import jp.toastkid.yobidashi.editor.load.LoadFromStorageDialogUi
+import jp.toastkid.yobidashi.editor.load.StorageFilesFinder
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import okio.buffer
@@ -70,10 +95,6 @@ class EditorFragment :
     CommonFragmentAction,
     ContentScrollable
 {
-
-    private lateinit var binding: FragmentEditorBinding
-
-    private lateinit var menuBinding: AppBarEditorBinding
 
     /**
      * Preferences wrapper.
@@ -128,21 +149,187 @@ class EditorFragment :
             it.data?.data?.let { uri -> readFromFileUri(uri) }
         }
 
+    private var editorInput: MutableState<String>? = null
+
+    private var openLoadFromStorageDialog: MutableState<Boolean>? = null
+
+    private var openInputFileNameDialog: MutableState<Boolean>? = null
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        menuBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.app_bar_editor,
-                container,
-                false
+    ): View? {
+        val context = activity ?: return super.onCreateView(inflater, container, savedInstanceState)
+        val composeView = ComposeView(context)
+        composeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
         )
-        menuBinding.fragment = this
-        return binding.root
+        /*
+            android:inputType="textMultiLine"
+            android:minLines="10"
+         */
+        composeView.setContent {
+            val editorInput = remember { mutableStateOf("") }
+            this.editorInput = editorInput
+
+            val openLoadFromStorageDialog = remember { mutableStateOf(false) }
+            this.openLoadFromStorageDialog = openLoadFromStorageDialog
+
+            val openInputFileNameDialog = remember { mutableStateOf(false) }
+            this.openInputFileNameDialog = openInputFileNameDialog
+
+            TextField(
+                value = editorInput.value,
+                onValueChange = { newInput ->
+                    editorInput.value = newInput
+                    setContentTextLengthCount(context)
+                },
+                label = { stringResource(id = R.string.hint_editor_input) },
+                textStyle = TextStyle(
+                    color = Color(preferenceApplier.editorFontColor()),
+                    fontSize = preferenceApplier.editorFontSize().toFloat().sp,
+                    fontFamily = FontFamily.Monospace,
+                    textAlign = TextAlign.Start,
+                    shadow = Shadow(
+                        color = Color.Black,
+                        offset = Offset(8f, 8f),
+                        blurRadius = 4f
+                    )
+                ),
+                modifier = Modifier
+                    .background(Color(preferenceApplier.editorBackgroundColor()))
+                    .padding(start = 4.dp, end = 4.dp)
+            )
+
+            if (openLoadFromStorageDialog.value) {
+                LoadFromStorageDialogUi(
+                    openDialog = openLoadFromStorageDialog,
+                    files = StorageFilesFinder().invoke(context),
+                    onSelect = { readFromFileUri(Uri.fromFile(it)) }
+                )
+            }
+
+            if (openInputFileNameDialog.value) {
+                val currentName = File(path).nameWithoutExtension ?: ""
+                InputFileNameDialogUi(
+                    openDialog = openInputFileNameDialog,
+                    defaultInput = currentName,
+                    onCommit = {
+                        if (it.isBlank()) {
+                            return@InputFileNameDialogUi
+                        }
+                        assignNewFile(it)
+                    }
+                )
+            }
+        }
+/*
+        CursorColorSetter().invoke(binding.editorInput, preferenceApplier.editorCursorColor(ContextCompat.getColor(binding.root.context, R.color.editor_cursor)))
+        binding.editorInput.highlightColor = preferenceApplier.editorHighlightColor(ContextCompat.getColor(binding.root.context, R.color.light_blue_200_dd))
+ */
+        ViewModelProvider(context).get(AppBarViewModel::class.java)
+            .replace(context) {
+                Row(
+                    modifier = Modifier
+                        .height(48.dp)
+                        .fillMaxWidth()
+                        .horizontalScroll(
+                            rememberScrollState()
+                        )
+                ) {
+                    EditorMenuItem(R.string.load, R.drawable.ic_load) { load() }
+
+                    EditorMenuItem(R.string.save, R.drawable.ic_save) { save() }
+
+                    EditorMenuItem(R.string.save_backup, R.drawable.ic_backup) { backup() }
+
+                    EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { saveAs() }
+
+                    Box(modifier = Modifier
+                        .width(60.dp)
+                        .fillMaxHeight()
+                        .clickable {
+                            tabList()
+                        }) {
+                        Image(
+                            painterResource(R.drawable.ic_tab),
+                            contentDescription = stringResource(id = R.string.tab_list),
+                            colorFilter = ColorFilter.tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                                .padding(12.dp)
+                        )
+                        Text(text = "",
+                            color = Color(preferenceApplier.fontColor),
+                            fontSize = 12.sp)
+                    }
+
+                    EditorMenuItem(R.string.restore, R.drawable.ic_restore) { restore() }
+
+                    EditorMenuItem(R.string.load_as, R.drawable.ic_load_as) { loadAs() }
+
+                    EditorMenuItem(R.string.load_from_storage, R.drawable.ic_load) { loadFromStorage() }
+
+                    EditorMenuItem(R.string.export_to_article_viewer, R.drawable.ic_article) { exportToArticleViewer() }
+
+                    Text(
+                        text = "",
+                        color = Color(preferenceApplier.fontColor),
+                        fontSize = 14.sp,
+                        maxLines = 2,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(start = 4.dp, end = 4.dp)
+                    )
+
+                    Text(
+                        text = "",
+                        color = Color(preferenceApplier.fontColor),
+                        fontSize = 14.sp,
+                        maxLines = 2,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(start = 4.dp, end = 4.dp)
+                    )
+
+                    EditorMenuItem(R.string.clear_all, R.drawable.ic_clear_form) { clear() }
+                }
+            }
+
+        return composeView
+    }
+
+    @Composable
+    private fun EditorMenuItem(
+        labelId: Int,
+        iconId: Int,
+        onClick: () -> Unit
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .width(60.dp)
+                .background(Color(preferenceApplier.color))
+                .fillMaxHeight()
+                .clickable {
+                    onClick()
+                }
+        ) {
+            Image(
+                painter = painterResource(id = iconId),
+                contentDescription = stringResource(id = labelId),
+                colorFilter = ColorFilter.tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn)
+            )
+            Text(
+                text = stringResource(id = labelId),
+                color = Color(preferenceApplier.fontColor),
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -151,20 +338,9 @@ class EditorFragment :
         val context = context ?: return
 
         preferenceApplier = PreferenceApplier(context)
-        finder = EditTextFinder(binding.editorInput)
+        //TODO finder = EditTextFinder(binding.editorInput)
 
         speechMaker = SpeechMaker(context)
-
-        binding.editorInput.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(contentEditable: Editable?) {
-                setContentTextLengthCount(context)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-
-        })
 
         lastSavedTitle = context.getString(R.string.last_saved)
 
@@ -173,11 +349,11 @@ class EditorFragment :
             appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
 
-            EditorContextMenuInitializer().invoke(binding.editorInput, speechMaker, viewModelProvider)
+            //TODO EditorContextMenuInitializer().invoke(binding.editorInput, speechMaker, viewModelProvider)
 
             tabListViewModel
                     ?.tabCount
-                    ?.observe(activity, { menuBinding.tabCount.text = it.toString() })
+                    //TODO ?.observe(activity, { menuBinding.tabCount.text = it.toString() })
 
             (viewModelProvider.get(PageSearcherViewModel::class.java)).let { viewModel ->
                 var currentWord = ""
@@ -211,17 +387,6 @@ class EditorFragment :
             viewLifecycleOwner,
             { _, _ -> clearInput() }
         )
-        parentFragmentManager.setFragmentResultListener(
-            "input_text",
-            viewLifecycleOwner,
-            { key, result ->
-                val fileName = result.getString(key)
-                if (fileName.isNullOrBlank()) {
-                    return@setFragmentResultListener
-                }
-                assignNewFile(fileName)
-            }
-        )
 
         reload()
     }
@@ -236,13 +401,6 @@ class EditorFragment :
         } else {
             readFromFile(File(path))
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        applySettings()
-        val view = menuBinding.root
-        appBarViewModel?.replace(view)
     }
 
     override fun onPause() {
@@ -260,43 +418,8 @@ class EditorFragment :
         loadResultLauncher?.unregister()
 
         parentFragmentManager.clearFragmentResultListener("clear_input")
-        parentFragmentManager.clearFragmentResultListener("input_text")
-        parentFragmentManager.clearFragmentResultListener("load_from_storage")
 
         super.onDetach()
-    }
-
-    /**
-     * Apply color and font setting.
-     */
-    private fun applySettings() {
-        val colorPair = preferenceApplier.colorPair()
-        TextViewColorApplier()(
-            colorPair.fontColor(),
-            menuBinding.save,
-            menuBinding.saveAs,
-            menuBinding.load,
-            menuBinding.loadAs,
-            menuBinding.loadFrom,
-            menuBinding.exportArticleViewer,
-            menuBinding.restore,
-            menuBinding.lastSaved,
-            menuBinding.counter,
-            menuBinding.backup,
-            menuBinding.clear
-        )
-
-        menuBinding.tabIcon.setColorFilter(colorPair.fontColor())
-        menuBinding.tabCount.setTextColor(colorPair.fontColor())
-
-        menuBinding.editorMenu.setBackgroundColor(colorPair.bgColor())
-
-        binding.editorScroll.setBackgroundColor(preferenceApplier.editorBackgroundColor())
-        binding.editorInput.setTextColor(preferenceApplier.editorFontColor())
-        binding.editorInput.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
-
-        CursorColorSetter().invoke(binding.editorInput, preferenceApplier.editorCursorColor(ContextCompat.getColor(binding.root.context, R.color.editor_cursor)))
-        binding.editorInput.highlightColor = preferenceApplier.editorHighlightColor(ContextCompat.getColor(binding.root.context, R.color.light_blue_200_dd))
     }
 
     /**
@@ -305,7 +428,7 @@ class EditorFragment :
      * @param context Context
      */
     private fun setContentTextLengthCount(context: Context) {
-        menuBinding.counter.text =
+        //TODO menuBinding.counter.text =
                 context.getString(R.string.message_character_count, content().length)
     }
 
@@ -327,7 +450,8 @@ class EditorFragment :
             return
         }
         val fileName = File(path).nameWithoutExtension + "_backup.txt"
-        saveToFile(externalFileAssignment(binding.root.context, fileName).absolutePath)
+        val context = context ?: return
+        saveToFile(externalFileAssignment(context, fileName).absolutePath)
     }
 
     fun clear() {
@@ -353,7 +477,7 @@ class EditorFragment :
      * Go to bottom.
      */
     override fun toBottom() {
-        moveToIndex(binding.editorInput.length())
+        moveToIndex(editorInput?.value?.length ?: 0)
     }
 
     /**
@@ -362,8 +486,8 @@ class EditorFragment :
      * @param index index of editor.
      */
     private fun moveToIndex(index: Int) {
-        binding.editorInput.requestFocus()
-        binding.editorInput.setSelection(index)
+        //binding.editorInput.requestFocus()
+        //TODO binding.editorInput.setSelection(index)
     }
 
     /**
@@ -375,14 +499,14 @@ class EditorFragment :
             return
         }
 
-        InputNameDialogFragment.show(parentFragmentManager)
+        openInputFileNameDialog?.value = true
     }
 
     /**
      * Save current text as other file.
      */
     fun saveAs() {
-        InputNameDialogFragment.show(parentFragmentManager)
+        openInputFileNameDialog?.value = true
     }
 
     /**
@@ -393,16 +517,7 @@ class EditorFragment :
     }
 
     fun loadFromStorage() {
-        parentFragmentManager.setFragmentResultListener(
-            "load_from_storage",
-            viewLifecycleOwner,
-            { key, result ->
-                val file = result[key] as? File ?: return@setFragmentResultListener
-                readFromFileUri(Uri.fromFile(file))
-                parentFragmentManager.clearFragmentResultListener("load_from_storage")
-            }
-        )
-        LoadFromStorageDialogFragment().show(parentFragmentManager, "load_from_storage")
+        openLoadFromStorageDialog?.value = true
     }
 
     fun exportToArticleViewer() {
@@ -415,12 +530,12 @@ class EditorFragment :
     }
 
     fun restore() {
-        RestoreContentUseCase(
+        /*TODO RestoreContentUseCase(
             contentHolderService,
             contentViewModel,
             binding.editorInput,
             ::setContentText
-        ).invoke()
+        ).invoke()*/
     }
 
     /**
@@ -525,7 +640,7 @@ class EditorFragment :
      * @param ms
      */
     private fun setLastSaved(ms: Long) {
-        menuBinding.lastSaved.text = DateFormat.format("$lastSavedTitle HH:mm:ss", ms)
+        //TODO menuBinding.lastSaved.text = DateFormat.format("$lastSavedTitle HH:mm:ss", ms)
     }
 
     /**
@@ -534,7 +649,7 @@ class EditorFragment :
     private fun clearPath() {
         path = ""
         clearInput()
-        menuBinding.lastSaved.text = ""
+        //TODO menuBinding.lastSaved.text = ""
     }
 
     /**
@@ -548,7 +663,7 @@ class EditorFragment :
      * Set content string and set text length.
      */
     private fun setContentText(contentStr: String) {
-        binding.editorInput.setText(contentStr)
+        editorInput?.value = contentStr
         context?.let { setContentTextLengthCount(it) }
         contentHolderService.setContent(contentStr)
     }
@@ -558,7 +673,7 @@ class EditorFragment :
      *
      * @return content [String]
      */
-    private fun content(): String = binding.editorInput.text.toString()
+    private fun content(): String = editorInput?.value ?: ""
 
     /**
      * Assign new file object.
@@ -621,13 +736,7 @@ class EditorFragment :
      * @param text insert text
      */
     fun insert(text: CharSequence?) {
-        binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
+        //TODO editorInput.insert(binding.editorInput.selectionStart, text)
     }
 
-    companion object {
-
-        @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_editor
-
-    }
 }

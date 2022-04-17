@@ -7,155 +7,162 @@
  */
 package jp.toastkid.pdf
 
-import android.content.res.ColorStateList
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
-import androidx.annotation.LayoutRes
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
+import coil.compose.AsyncImage
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.fragment.CommonFragmentAction
-import jp.toastkid.lib.preference.ColorPair
-import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
-import jp.toastkid.lib.view.EditTextColorSetter
-import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.pdf.databinding.AppBarPdfViewerBinding
-import jp.toastkid.pdf.databinding.FragmentPdfViewerBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 /**
  * @author toastkidjp
  */
-class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragmentAction, ContentScrollable {
+class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragmentAction,
+    ContentScrollable {
 
-    /**
-     * Data binding object.
-     */
-    private lateinit var binding: FragmentPdfViewerBinding
+    private var scrollState: LazyListState? = null
 
-    private lateinit var appBarBinding: AppBarPdfViewerBinding
-
-    /**
-     * Adapter.
-     */
-    private lateinit var adapter: Adapter
-
-    /**
-     * LayoutManager.
-     */
-    private lateinit var layoutManager: LinearLayoutManager
-
-    private var appBarViewModel: AppBarViewModel? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(
-                inflater,
-                LAYOUT_ID,
-                container,
-                false
-        )
-        appBarBinding = DataBindingUtil.inflate(
-                inflater,
-                APP_BAR_CONTENT_LAYOUT_ID,
-                container,
-                false
-        )
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        adapter = Adapter(LayoutInflater.from(context), context?.contentResolver)
-        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
-        binding.pdfImages.adapter = adapter
-        binding.pdfImages.layoutManager = layoutManager
-        PagerSnapHelper().attachToRecyclerView(binding.pdfImages)
-
-        appBarBinding.seek.addOnChangeListener { _, value, _ ->
-            appBarBinding.input.setText((value.toInt() + 1).toString())
-        }
-        appBarBinding.input.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(p0: Editable?) = Unit
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-
-            override fun onTextChanged(inputText: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                inputText?.let {
-                    val newIndex = try {
-                        Integer.parseInt(it.toString()) - 1
-                    } catch (e: NumberFormatException) {
-                        -1
-                    }
-
-                    if (newIndex == -1) {
-                        return@let
-                    }
-
-                    scrollTo(newIndex)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val context = activity ?: return null
+        val composeView = ComposeView(context)
+        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        arguments?.let { arguments ->
+            arguments.getParcelable<Uri>(KEY_URI)?.also { uri ->
+                val pdfRenderer =
+                    context.contentResolver.openFileDescriptor(uri, "r")
+                        ?.let { PdfRenderer(it) }
+                        ?: return null
+                composeView.setContent {
+                    PdfViewerUi(pdfRenderer)
                 }
             }
-
-        })
-
-        activity?.let {
-            appBarViewModel = ViewModelProvider(it).get(AppBarViewModel::class.java)
         }
 
-        arguments?.let { arguments ->
-            arguments.getParcelable<Uri>(KEY_URI)?.also { load(it) }
-            arguments.getInt(KEY_SCROLL_Y).also { scrollTo(it) }
+        ViewModelProvider(context).get(AppBarViewModel::class.java).replace(context) { AppBarUi() }
+
+        return composeView
+    }
+
+    @Composable
+    fun PdfViewerUi(pdfRenderer: PdfRenderer) {
+        val pdfImageFactory = PdfImageFactory()
+
+        val listState = rememberLazyListState()
+        this.scrollState = listState
+
+        MaterialTheme {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
+            ) {
+                val max = pdfRenderer.pageCount
+                items(max) {
+                    androidx.compose.material.Surface(
+                        modifier = Modifier
+                            .padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                top = 2.dp,
+                                bottom = 2.dp
+                            )
+                    ) {
+                        var scale by remember { mutableStateOf(1f) }
+                        var offset by remember { mutableStateOf(Offset.Zero) }
+
+                        val state = rememberTransformableState { zoomChange, offsetChange, _ ->
+                            scale *= zoomChange
+                            offset += offsetChange
+                        }
+
+                        Column(
+                            modifier = Modifier.fillMaxWidth()
+                                .graphicsLayer(
+                                    scaleX = scale,
+                                    scaleY = scale,
+                                    translationX = offset.x,
+                                    translationY = offset.y
+                                )
+                                .transformable(state = state)
+                        ) {
+                            AsyncImage(
+                                model = pdfImageFactory.invoke(pdfRenderer.openPage(it)),
+                                contentDescription = "${it + 1} / $max"
+                            )
+                            Text(
+                                text = "${it + 1} / $max",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 10.sp
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 
-    /**
-     * Load PDF content from [Uri].
-     *
-     * @param uri
-     */
-    private fun load(uri: Uri) {
-        adapter.load(uri)
-
-        if (adapter.itemCount == 0) {
-            activity?.supportFragmentManager?.popBackStack()
-            return@load
+    @Composable
+    fun AppBarUi() {
+        var sliderPosition by remember { mutableStateOf(0f) }
+        if (scrollState?.layoutInfo?.totalItemsCount == 0) {
+            return
         }
-
-        val to = if (adapter.itemCount == 1) 1 else adapter.itemCount - 1
-        appBarBinding.seek.valueTo = to.toFloat()
-        binding.pdfImages.scheduleLayoutAnimation()
+        Slider(
+            value = sliderPosition,
+            onValueChange = {
+                sliderPosition = it
+                CoroutineScope(Dispatchers.Main).launch {
+                    scrollState?.scrollToItem(
+                        ((scrollState?.layoutInfo?.totalItemsCount ?: 0 ) * it).roundToInt(),
+                        0
+                    )
+                }
+            },
+            steps = (scrollState?.layoutInfo?.totalItemsCount ?: 1) - 1
+        )
     }
-
-    /**
-     * Scroll to specified position.
-     *
-     * @param position
-     */
-    private fun scrollTo(position: Int) {
-        layoutManager.scrollToPosition(getSafeIndex(position))
-    }
-
-    /**
-     * Get safe index.
-     *
-     * @param index
-     */
-    private fun getSafeIndex(index: Int): Int =
-            if (index < 0 || adapter.itemCount < index) 0 else index
 
     /**
      * Animate root view.
@@ -163,50 +170,28 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
      * @param animation
      */
     fun animate(animation: Animation) {
-        binding.root.startAnimation(animation)
+        view?.startAnimation(animation)
     }
 
     override fun toTop() {
-        RecyclerViewScroller.toTop(binding.pdfImages, adapter.itemCount)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(0, 0)
+        }
     }
 
     override fun toBottom() {
-        RecyclerViewScroller.toBottom(binding.pdfImages, adapter.itemCount)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        appBarViewModel?.replace(appBarBinding.root)
-        applyColor(PreferenceApplier(appBarBinding.root.context).colorPair())
-    }
-
-    /**
-     * Apply color to views.
-     *
-     * @param colorPair
-     */
-    private fun applyColor(colorPair: ColorPair) {
-        appBarBinding.appBar.setBackgroundColor(colorPair.bgColor())
-        appBarBinding.seek.thumbTintList = ColorStateList.valueOf(colorPair.fontColor())
-        appBarBinding.seek.trackActiveTintList = ColorStateList.valueOf(colorPair.fontColor())
-        EditTextColorSetter().invoke(appBarBinding.input, colorPair.fontColor())
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(scrollState?.layoutInfo?.totalItemsCount ?: 0, 0)
+        }
     }
 
     fun setInitialArguments(uri: Uri?, scrolled: Int) {
-        arguments = bundleOf(KEY_URI to uri, KEY_SCROLL_Y to scrolled)
+        arguments = bundleOf(KEY_URI to uri)
     }
 
     companion object {
 
-        @LayoutRes
-        private val LAYOUT_ID = R.layout.fragment_pdf_viewer
-
-        @LayoutRes
-        private val APP_BAR_CONTENT_LAYOUT_ID = R.layout.app_bar_pdf_viewer
-
         private const val KEY_URI = "uri"
-
-        private const val KEY_SCROLL_Y = "scrollY"
 
     }
 }

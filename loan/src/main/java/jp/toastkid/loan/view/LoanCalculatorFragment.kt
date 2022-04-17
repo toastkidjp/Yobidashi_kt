@@ -9,28 +9,43 @@
 package jp.toastkid.loan.view
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import jp.toastkid.loan.R
-import jp.toastkid.loan.databinding.FragmentLoanCalculatorBinding
 import jp.toastkid.loan.model.Factor
 import jp.toastkid.loan.usecase.DebouncedCalculatorUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
 class LoanCalculatorFragment : Fragment() {
-
-    private var binding: FragmentLoanCalculatorBinding? = null
 
     private val inputChannel: Channel<String> = Channel()
 
@@ -39,78 +54,158 @@ class LoanCalculatorFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_loan_calculator, container, false)
-        return binding?.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val textWatcher = object : TextWatcher {
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    inputChannel.send(s?.toString() ?: "")
-                }
+        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+        return ComposeView(context).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                LoanCalculatorUi()
             }
-
-            override fun afterTextChanged(s: Editable?) = Unit
-
         }
-
-        val formatter = DecimalFormat("#,###.##")
-        val focusChangeListener = View.OnFocusChangeListener { v, _ ->
-            val editText = v as? EditText ?: return@OnFocusChangeListener
-            val format = formatter.format(editText.text?.toString()?.replace(",", "")?.trim()?.toBigDecimalOrNull())
-            editText.setText(format)
-        }
-
-        binding?.loanAmount?.addTextChangedListener(textWatcher)
-        binding?.loanAmount?.onFocusChangeListener = focusChangeListener
-        binding?.term?.addTextChangedListener(textWatcher)
-        binding?.interestRate?.addTextChangedListener(textWatcher)
-        binding?.downPayment?.addTextChangedListener(textWatcher)
-        binding?.downPayment?.onFocusChangeListener = focusChangeListener
-        binding?.monthlyManagementFee?.addTextChangedListener(textWatcher)
-        binding?.monthlyManagementFee?.onFocusChangeListener = focusChangeListener
-        binding?.monthlyRenovationReserves?.addTextChangedListener(textWatcher)
-        binding?.monthlyManagementFee?.onFocusChangeListener = focusChangeListener
-
-        invokeCalculator()
     }
 
-    @FlowPreview
-    private fun invokeCalculator() {
+    @Composable
+    fun LoanCalculatorUi() {
+        var result by rememberSaveable {
+            mutableStateOf("")
+        }
+        var loanAmount by remember {
+            mutableStateOf(getString(R.string.default_value_loan_amount))
+        }
+        var loanTerm by remember {
+            mutableStateOf(getString(R.string.default_value_loan_term))
+        }
+        var interestRate by remember {
+            mutableStateOf(getString(R.string.default_value_interest_rate))
+        }
+        var downPayment by remember {
+            mutableStateOf(getString(R.string.default_value_down_payment))
+        }
+        var managementFee by remember {
+            mutableStateOf("10,000")
+        }
+        var renovationReserves by remember {
+            mutableStateOf("10,000")
+        }
+
         DebouncedCalculatorUseCase(
             inputChannel,
             {
                 Factor(
-                    extractLong(binding?.loanAmount),
-                    extractInt(binding?.term),
-                    extractDouble(binding?.interestRate),
-                    extractInt(binding?.downPayment),
-                    extractInt(binding?.monthlyManagementFee),
-                    extractInt(binding?.monthlyRenovationReserves)
+                    extractLong(loanAmount),
+                    extractInt(loanTerm),
+                    extractDouble(interestRate),
+                    extractInt(downPayment),
+                    extractInt(managementFee),
+                    extractInt(renovationReserves)
                 )
             },
-            { binding?.result?.text = getString(R.string.message_result_montly_payment, it) }
+            {
+                result = getString(R.string.message_result_montly_payment, it)
+                println("tomato res $it")
+            }
         ).invoke()
+
+        Column(
+            Modifier
+                .background(color = Color(0xbbFFFFFF))
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Text(text = result, fontSize = 18.sp, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(
+                value = loanAmount,
+                onValueChange = {
+                    loanAmount = format(it)
+                    onChange(it)
+                },
+                label = { Text(text = stringResource(R.string.hint_loan_amount)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = loanTerm,
+                onValueChange = {
+                    loanTerm = format(it)
+                    onChange(it)
+                },
+                label = { Text(text = stringResource(R.string.hint_loan_term)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = interestRate,
+                onValueChange = {
+                    interestRate = it
+                    onChange(it)
+                },
+                label = { Text(text = stringResource(R.string.hint_interest_rate)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = downPayment,
+                onValueChange = {
+                    downPayment = format(it)
+                    onChange(it)
+                },
+                label = { Text(text = stringResource(R.string.hint_down_payment)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = managementFee,
+                onValueChange = {
+                    managementFee = format(it)
+                    onChange(it)
+                },
+                label = { Text(text = "Management fee (Monthly)") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = renovationReserves,
+                onValueChange = {
+                    renovationReserves = format(it)
+                    onChange(it)
+                },
+                label = { Text(text = "Renovation reserves (Monthly)") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 
-    private fun extractLong(editText: EditText?) =
-        editText?.text?.toString()?.replace(",", "")?.toLongOrNull() ?: 0
-
-    private fun extractInt(editText: EditText?) =
-        editText?.text?.toString()?.replace(",", "")?.toIntOrNull() ?: 0
-
-    private fun extractDouble(editText: EditText?) =
-        editText?.text?.toString()?.replace(",", "")?.toDoubleOrNull() ?: 0.0
-
-    override fun onDetach() {
-        binding = null
-        super.onDetach()
+    private fun onChange(text: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            inputChannel.send(text ?: "")
+        }
     }
+
+    private val formatter = DecimalFormat("#,###.##")
+
+    private fun format(input: String?): String {
+        if (input.isNullOrBlank()) {
+            return "0"
+        }
+
+        return formatter.format(
+            input.filter { it.isDigit() || it == '.' }.trim()?.toBigDecimalOrNull()
+        )
+    }
+
+    private fun extractLong(editText: String) =
+        editText.replace(",", "")?.toLongOrNull() ?: 0
+
+    private fun extractInt(editText: String) =
+        editText.replace(",", "")?.toIntOrNull() ?: 0
+
+    private fun extractDouble(editText: String) =
+        editText.replace(",", "")?.toDoubleOrNull() ?: 0.0
 
 }

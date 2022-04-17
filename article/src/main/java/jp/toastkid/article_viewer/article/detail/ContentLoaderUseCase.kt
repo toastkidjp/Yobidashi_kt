@@ -8,7 +8,6 @@
 package jp.toastkid.article_viewer.article.detail
 
 import android.widget.TextView
-import io.noties.markwon.Markwon
 import jp.toastkid.article_viewer.article.ArticleRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +20,7 @@ import kotlinx.coroutines.withContext
  */
 class ContentLoaderUseCase(
     private val repository: ArticleRepository,
-    private val markwon: Markwon,
+   // private val markwon: Markwon,
     private val contentView: TextView,
     private val subheads: MutableList<String>,
     private val linkGeneratorService: LinkGeneratorService = LinkGeneratorService(),
@@ -35,9 +34,9 @@ class ContentLoaderUseCase(
             val content = withContext(ioDispatcher) { repository.findContentByTitle(title) }
                     ?: return@launch
 
-            markwon.setMarkdown(contentView, content)
+            //markwon.setMarkdown(contentView, content)
 
-            linkGeneratorService.invoke(contentView)
+            //linkGeneratorService.invoke(contentView)
 
             withContext(defaultDispatcher) {
                 appendSubheads(content)

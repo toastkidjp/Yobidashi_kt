@@ -283,7 +283,7 @@ class TabList private constructor() {
     }
 
     private fun makeCopyTabs(): MutableList<Tab> {
-        return mutableListOf<Tab>().also { it.addAll(tabs) }
+        return ArrayList(tabs)
     }
 
 }

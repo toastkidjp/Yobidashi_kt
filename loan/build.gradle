@@ -32,17 +32,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    buildFeatures.dataBinding = true
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion "$libVersions.compose"
+    }
 }
 
 dependencies {
     implementation project(":lib")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
-    implementation "androidx.cardview:cardview:$libVersions.cardview"
-    implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
-    implementation "com.google.android.material:material:$libVersions.material"
+
+    implementation "androidx.compose.material:material:$libVersions.compose"
+    implementation "androidx.compose.ui:ui-tooling:$libVersions.compose"
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"

@@ -7,7 +7,11 @@
  */
 package jp.toastkid.lib
 
+import android.content.Context
 import android.view.View
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,6 +27,15 @@ class AppBarViewModel : ViewModel() {
 
     fun replace(view: View) {
         _content.postValue(view)
+    }
+
+    fun replace(context: Context, composable: @Composable() () -> Unit) {
+        val appBarComposeView = ComposeView(context)
+        appBarComposeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
+        appBarComposeView.setContent { composable() }
+        _content.postValue(appBarComposeView)
     }
 
     private val _visibility = MutableLiveData<Boolean>()

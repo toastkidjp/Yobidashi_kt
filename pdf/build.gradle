@@ -24,12 +24,16 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
+        compose = true
     }
 
     afterEvaluate {
         generateReleaseBuildConfig.enabled = false
         generateDebugBuildConfig.enabled = false
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "$libVersions.compose"
     }
 }
 
@@ -38,12 +42,10 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
-    implementation "androidx.cardview:cardview:$libVersions.cardview"
-    implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
-    implementation "com.github.chrisbanes:PhotoView:$libVersions.photo_view"
 
-    implementation "com.google.android.material:material:$libVersions.material"
+    implementation "androidx.compose.material:material:$libVersions.compose"
+    implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"

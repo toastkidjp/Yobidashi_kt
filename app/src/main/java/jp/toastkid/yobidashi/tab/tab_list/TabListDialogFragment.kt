@@ -1,27 +1,47 @@
 package jp.toastkid.yobidashi.tab.tab_list
 
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.RecyclerView
+import coil.compose.AsyncImage
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
+import jp.toastkid.yobidashi.tab.TabThumbnails
 import jp.toastkid.yobidashi.tab.model.Tab
 
 /**
@@ -30,11 +50,6 @@ import jp.toastkid.yobidashi.tab.model.Tab
  * @author toastkidjp
  */
 class TabListDialogFragment : BottomSheetDialogFragment() {
-
-    /**
-     * DataBinding object.
-     */
-    private lateinit var binding: DialogFragmentTabListBinding
 
     /**
      * WebTab list adapter.
@@ -97,38 +112,83 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
             return super.onCreateView(inflater, container, savedInstanceState)
         }
 
-        initializeContentView(activityContext)
-
-        BackgroundImageLoaderUseCase().invoke(
-                binding.background,
-                PreferenceApplier(activityContext).backgroundImagePath
+        val composeView = ComposeView(activityContext)
+        composeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
         )
+        composeView.setContent { TabListUi() }
 
-        return binding.root
+        return composeView
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        setStyle(STYLE_NORMAL, R.style.TabListBottomSheetDialog)
-        return super.onCreateDialog(savedInstanceState)
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        callback?.onCloseTabListDialogFragment(lastTabId)
-    }
-
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-        callback?.onCloseTabListDialogFragment(lastTabId)
-    }
-
-    /**
-     * Initialize views.
-     *
-     * @param activityContext [Context]
-     */
-    private fun initializeContentView(activityContext: Context) {
+    @Composable
+    fun TabListUi() {
+        val state = rememberLazyListState()
+        val tabThumbnails = TabThumbnails.with(LocalContext.current)
         val index = callback?.tabIndexFromTabList() ?: 0
+
+        MaterialTheme {
+            LazyRow(state = state, contentPadding = PaddingValues(horizontal = 4.dp)) {
+                items(callback?.getTabAdapterSizeFromTabList() ?: 0) { position ->
+                    val tab = callback?.getTabByIndexFromTabList(position) ?: return@items
+
+                    Box(
+                        modifier = Modifier
+                            .width(dimensionResource(id = R.dimen.tab_list_item_width))
+                            .height(dimensionResource(R.dimen.tab_list_item_height))
+                            .clickable {
+                                callback?.replaceTabFromTabList(tab)
+                                callback?.onCloseOnly()
+                            }
+                            .background(
+                                if (index == position)
+                                    Color(ColorUtils.setAlphaComponent(colorPair.bgColor(), 128))
+                                else
+                                    Color.Transparent
+                            )
+                    ){
+                        Surface(
+                            elevation = 4.dp,
+                            modifier = Modifier
+                                .width(dimensionResource(id = R.dimen.tab_list_item_width))
+                                .height(dimensionResource(R.dimen.tab_list_item_height))
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .width(112.dp)
+                                    .height(152.dp)
+                                    .padding(4.dp)
+                                    .align(Alignment.BottomCenter)
+                            ) {
+                                AsyncImage(
+                                    model = tabThumbnails.assignNewFile(tab.thumbnailPath()),
+                                    contentDescription = tab.title(),
+                                    contentScale = ContentScale.FillHeight,
+                                    placeholder = painterResource(id = R.drawable.ic_yobidashi),
+                                    modifier = Modifier
+                                        .padding(top = 4.dp)
+                                        .align(Alignment.TopCenter)
+                                )
+                                Text(
+                                    text = tab.title(),
+                                    color = Color(colorPair.fontColor()),
+                                    maxLines = 2,
+                                    fontSize = 14.sp,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier
+                                        .align(Alignment.BottomCenter)
+                                        .background(Color(colorPair.bgColor()))
+                                        .padding(4.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /*
 
         adapter = Adapter(activityContext, callback as Callback)
         adapter.setCurrentIndex(index)
@@ -161,6 +221,27 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
             firstLaunch = false
         }
         lastTabId = callback?.currentTabIdFromTabList() ?: ""
+
+        BackgroundImageLoaderUseCase().invoke(
+                binding.background,
+                PreferenceApplier(activityContext).backgroundImagePath
+        )
+         */
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        setStyle(STYLE_NORMAL, R.style.TabListBottomSheetDialog)
+        return super.onCreateDialog(savedInstanceState)
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        callback?.onCloseTabListDialogFragment(lastTabId)
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        callback?.onCloseTabListDialogFragment(lastTabId)
     }
 
     fun openPdf() {
@@ -200,22 +281,4 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         )
     }
 
-    /**
-     * Initialize recyclerView.
-     *
-     * @param recyclerView
-     */
-    private fun initRecyclerView(recyclerView: RecyclerView) {
-        ItemTouchHelperAttachment()(recyclerView)
-
-        LinearSnapHelper().attachToRecyclerView(recyclerView)
-
-        recyclerView.adapter = adapter
-    }
-
-    companion object {
-
-        @LayoutRes
-        private const val LAYOUT_ID = R.layout.dialog_fragment_tab_list
-    }
 }

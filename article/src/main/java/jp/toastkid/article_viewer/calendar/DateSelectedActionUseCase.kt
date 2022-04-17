@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
  */
 class DateSelectedActionUseCase(
     private val repository: ArticleRepository,
-    private val viewModel: ContentViewModel,
+    private val viewModel: ContentViewModel?,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
@@ -33,7 +33,7 @@ class DateSelectedActionUseCase(
             val article = withContext(ioDispatcher) {
                 repository.findFirst(TitleFilterGenerator()(year, month + 1, date))
             } ?: return@launch
-            viewModel.newArticle(article.title)
+            viewModel?.newArticle(article.title)
         }
     }
 

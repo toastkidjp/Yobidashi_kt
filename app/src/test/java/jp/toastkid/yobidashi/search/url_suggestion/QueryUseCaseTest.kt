@@ -15,6 +15,7 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
+import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistory
@@ -32,7 +33,7 @@ class QueryUseCaseTest {
     private lateinit var queryUseCase: QueryUseCase
 
     @MockK
-    private lateinit var adapter: Adapter
+    private lateinit var submitItems: (List<UrlItem>) -> Unit
 
     @MockK
     private lateinit var bookmarkRepository: BookmarkRepository
@@ -50,14 +51,14 @@ class QueryUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        coEvery { adapter.submitList(any()) }.returns(Unit)
+        coEvery { submitItems.invoke(any()) }.returns(Unit)
         coEvery { bookmarkRepository.search(any(), any()) }.returns(listOf(Bookmark()))
         coEvery { viewHistoryRepository.search(any(), any()) }.returns(listOf(ViewHistory()))
         coEvery { switchVisibility.invoke(any()) }.returns(Unit)
         coEvery { rtsSuggestionUseCase.invoke(any(), any()) }.just(Runs)
 
         queryUseCase = QueryUseCase(
-            adapter, bookmarkRepository, viewHistoryRepository, switchVisibility,
+            submitItems, bookmarkRepository, viewHistoryRepository, switchVisibility,
             rtsSuggestionUseCase,
             Dispatchers.Unconfined, Dispatchers.Unconfined
         )
@@ -72,7 +73,7 @@ class QueryUseCaseTest {
     fun testInvoke() {
         queryUseCase.invoke("test")
 
-        coVerify(exactly = 1) { adapter.submitList(any()) }
+        coVerify(exactly = 1) { submitItems.invoke(any()) }
         coVerify(exactly = 1) { bookmarkRepository.search(any(), any()) }
         coVerify(exactly = 1) { viewHistoryRepository.search(any(), any()) }
         coVerify { rtsSuggestionUseCase.invoke(any(), any()) }
@@ -82,7 +83,7 @@ class QueryUseCaseTest {
     fun testBlankCase() {
         queryUseCase.invoke(" ")
 
-        coVerify(exactly = 1) { adapter.submitList(any()) }
+        coVerify(exactly = 1) { submitItems.invoke(any()) }
         coVerify(exactly = 0) { bookmarkRepository.search(any(), any()) }
         coVerify(exactly = 1) { viewHistoryRepository.search(any(), any()) }
         coVerify { rtsSuggestionUseCase.invoke(any(), any()) }

@@ -22,11 +22,6 @@ internal class Adapter (
     CommonItemCallback.with<String>({ a, b -> a.hashCode() == b.hashCode() }, { a, b -> a == b })
 ) {
 
-    /**
-     * Suggestion items.
-     */
-    private val suggestions: MutableList<String> = mutableListOf()
-
     private var viewModel: SearchFragmentViewModel? = null
 
     /**
