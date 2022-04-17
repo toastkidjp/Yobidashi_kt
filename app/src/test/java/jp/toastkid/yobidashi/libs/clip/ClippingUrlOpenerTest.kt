@@ -20,7 +20,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import org.junit.After
 import org.junit.Before
@@ -54,9 +53,6 @@ class ClippingUrlOpenerTest {
         mockkObject(Urls)
         every { Urls.isInvalidUrl(any()) }.returns(false)
 
-        mockkObject(Toaster)
-        every { Toaster.withAction(any(), any<String>(), any<Int>(), any(), any(), any()) }.returns(mockk())
-
         mockkConstructor(PreferenceApplier::class)
         every { anyConstructed<PreferenceApplier>().colorPair() }.returns(mockk())
         every { anyConstructed<PreferenceApplier>().lastClippedWord() }.returns("last-clipped")
@@ -80,7 +76,7 @@ class ClippingUrlOpenerTest {
     fun testNetworkIsNotAvailable() {
         every { NetworkChecker.isNotAvailable(any()) }.returns(true)
 
-        clippingUrlOpener.invoke(view) { }
+        clippingUrlOpener.invoke(context) { }
 
         verify(exactly = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
@@ -91,7 +87,7 @@ class ClippingUrlOpenerTest {
     fun testClipboardIsNull() {
         every { Clipboard.getPrimary(any()) }.returns(null)
 
-        clippingUrlOpener.invoke(view) { }
+        clippingUrlOpener.invoke(context) { }
 
         verify(atLeast = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
@@ -104,13 +100,12 @@ class ClippingUrlOpenerTest {
         every { Clipboard.getPrimary(any()) }.returns("test")
         every { Urls.isInvalidUrl(any()) }.returns(true)
 
-        clippingUrlOpener.invoke(view) { }
+        clippingUrlOpener.invoke(context) { }
 
         verify(atLeast = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         verify(exactly = 1) { Urls.isInvalidUrl(any()) }
-        verify(exactly = 0) { Toaster.withAction(any(), any<String>(), any<Int>(), any(), any(), any()) }
     }
 
     @Test
@@ -118,7 +113,7 @@ class ClippingUrlOpenerTest {
         every { Clipboard.getPrimary(any()) }.returns("https://www.yahoo.co.jp")
         every { Urls.isInvalidUrl(any()) }.returns(false)
 
-        clippingUrlOpener.invoke(view) { }
+        clippingUrlOpener.invoke(context) { }
 
         verify(atLeast = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
@@ -127,7 +122,6 @@ class ClippingUrlOpenerTest {
         verify(exactly = 1) { context.getString(any(), any()) }
         verify(exactly = 1) { anyConstructed<PreferenceApplier>().lastClippedWord() }
         verify(exactly = 1) { anyConstructed<PreferenceApplier>().setLastClippedWord(any()) }
-        verify(exactly = 1) { Toaster.withAction(any(), any<String>(), any<Int>(), any(), any(), any()) }
         verify(exactly = 1) { anyConstructed<PreferenceApplier>().colorPair() }
     }
 

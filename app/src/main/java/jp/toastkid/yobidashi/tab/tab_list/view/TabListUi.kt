@@ -63,7 +63,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.TabThumbnails
 import jp.toastkid.yobidashi.tab.model.Tab
-import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
+import jp.toastkid.yobidashi.tab.tab_list.Callback
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -71,7 +71,7 @@ import kotlin.math.roundToInt
 @Composable
 internal fun TabListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val callback = context as? TabListDialogFragment.Callback ?: return
+    val callback = context as? Callback ?: return
     val preferenceApplier = PreferenceApplier(context)
     val colorPair = preferenceApplier.colorPair()
     val tabThumbnails = TabThumbnails.with(LocalContext.current)
@@ -310,7 +310,7 @@ private fun TabActionFab(
     }
 }
 
-private fun refresh(callback: TabListDialogFragment.Callback, tabs: SnapshotStateList<Tab>) {
+private fun refresh(callback: Callback, tabs: SnapshotStateList<Tab>) {
     tabs.clear()
 
     (0 until (callback?.getTabAdapterSizeFromTabList() ?: 0)).forEach {

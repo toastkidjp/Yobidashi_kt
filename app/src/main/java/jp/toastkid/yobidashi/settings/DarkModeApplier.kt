@@ -10,9 +10,11 @@ package jp.toastkid.yobidashi.settings
 import android.graphics.Color
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
 
 /**
  * @author toastkidjp
@@ -30,12 +32,15 @@ class DarkModeApplier {
                 ContextCompat.getColor(context, R.color.light_blue_200_dd)
         )
         darkTheme.apply(preferenceApplier)
-        Toaster.snackLong(
-            parent,
+
+        val contentViewModel = (context as? ViewModelStoreOwner)?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java)
+        }
+
+        contentViewModel?.snackWithAction(
             "Apply dark mode.",
-            R.string.undo,
-            { currentTheme.apply(preferenceApplier) },
-            preferenceApplier.colorPair()
+            context.getString(R.string.undo),
+            { currentTheme.apply(preferenceApplier) }
         )
     }
 

@@ -2,9 +2,10 @@ package jp.toastkid.yobidashi.browser.archive
 
 import android.view.View
 import android.webkit.WebView
-import jp.toastkid.lib.preference.PreferenceApplier
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
 import java.io.File
 
 /**
@@ -37,13 +38,17 @@ class ArchiveSaver {
      */
     private fun saveToFile(view: View, value: String?) {
         val context = view.context
-        val pair = PreferenceApplier(context).colorPair()
+        val contentViewModel = (context as? ViewModelStoreOwner)?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java)
+        }
+
         if (value == null) {
-            Toaster.snackShort(view, R.string.message_save_failed, pair)
+            contentViewModel?.snackShort(R.string.message_save_failed)
             return
         }
+
         val message = context.getString(R.string.message_done_save) + value.substring(value.lastIndexOf("/"))
-        Toaster.snackShort(view, message, pair)
+        contentViewModel?.snackShort(message)
     }
 
 }

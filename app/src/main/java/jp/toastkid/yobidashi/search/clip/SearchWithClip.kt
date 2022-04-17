@@ -3,13 +3,15 @@ package jp.toastkid.yobidashi.search.clip
 import android.content.ClipboardManager
 import android.view.View
 import androidx.core.net.toUri
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 
 /**
@@ -42,7 +44,8 @@ class SearchWithClip(
      */
     private val listener: ClipboardManager.OnPrimaryClipChangedListener by lazy {
         ClipboardManager.OnPrimaryClipChangedListener{
-            if (isInvalidCondition() || NetworkChecker.isNotAvailable(parent.context)) {
+            val context = parent.context
+            if (isInvalidCondition() || NetworkChecker.isNotAvailable(context)) {
                 return@OnPrimaryClipChangedListener
             }
 
@@ -59,13 +62,14 @@ class SearchWithClip(
 
             preferenceApplier.setLastClippedWord(text.toString())
 
-            val context = parent.context
-            Toaster.snackLong(
-                parent,
+            val contentViewModel = (context as? ViewModelStoreOwner)?.let {
+                ViewModelProvider(it).get(ContentViewModel::class.java)
+            }
+
+            contentViewModel?.snackWithAction(
                 context.getString(R.string.message_clip_search, text),
-                R.string.title_search_action,
-                { searchOrBrowse(text) },
-                colorPair
+                context.getString(R.string.title_search_action),
+                { searchOrBrowse(text) }
             )
         }
     }
