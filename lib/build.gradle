@@ -63,7 +63,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$libVersions.lifecycle"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$libVersions.lifecycle"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
-    implementation "com.google.android.material:material:$libVersions.material"
 
     implementation "androidx.compose.material:material:$libVersions.compose"
 
