@@ -387,4 +387,12 @@
     <string name="apply_dark_mode">Apply dark mode</string>
     <string name="error_content_is_empty">Error: Content is empty. Please would you make sure of content area.</string>
 
+    <string name="row_dialog_open_new">Open new tab</string>
+    <string name="row_dialog_open_background">Open background tab</string>
+    <string name="row_dialog_image_search">Image search</string>
+    <string name="row_dialog_preview">Preview</string>
+    <string name="row_dialog_download">Download this image file</string>
+    <string name="row_dialog_copy">Copy URL</string>
+    <string name="row_dialog_copy_text">Copy Text</string>
+
 </resources>
