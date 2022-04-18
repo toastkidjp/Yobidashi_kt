@@ -120,6 +120,12 @@ internal fun FloatingPreviewUi(uri: Uri) {
         webView.loadUrl(uri.toString())
     })
 
+    DisposableEffect("dispose") {
+        onDispose {
+            webView.destroy()
+        }
+    }
+
     BackHandler {
         if (webView.canGoBack()) {
             webView.goBack()
