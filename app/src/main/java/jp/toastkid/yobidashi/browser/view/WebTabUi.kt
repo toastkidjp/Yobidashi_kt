@@ -80,6 +80,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
+import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
@@ -140,6 +141,16 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
         ) {
             browserViewModel.clearError()
         }
+    }
+
+    if (browserViewModel.openLongTapDialog.value) {
+        val value = browserViewModel.longTapActionParameters.value
+        AnchorLongTapDialog(
+            browserViewModel.openLongTapDialog,
+            value.first,
+            value.second,
+            value.third
+        )
     }
 
     initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }

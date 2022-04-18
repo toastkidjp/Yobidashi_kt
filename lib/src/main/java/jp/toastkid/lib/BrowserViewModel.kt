@@ -85,4 +85,20 @@ class BrowserViewModel : ViewModel() {
         openErrorDialog.value = false
     }
 
+    private val _longTapActionParameters =
+        mutableStateOf(Triple<String?, String?, String?>(null, null, null))
+    val openLongTapDialog = mutableStateOf(false)
+
+    val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
+
+    fun setLongTapParameters(title: String?, anchor: String?, imageUrl: String?) {
+        _longTapActionParameters.value = Triple(title, anchor, imageUrl)
+        openLongTapDialog.value = true
+    }
+
+    fun clearLongTapParameters() {
+        _longTapActionParameters.value = Triple(null, null, null)
+        openLongTapDialog.value = false
+    }
+
 }
