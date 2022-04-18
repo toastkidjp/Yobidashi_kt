@@ -16,7 +16,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,22 +26,6 @@ import jp.toastkid.lib.model.OptionMenu
  * @author toastkidjp
  */
 class ContentViewModel : ViewModel() {
-
-    private val _fragmentClass = MutableLiveData<Event<Class<out Fragment>>>()
-
-    val fragmentClass: LiveData<Event<Class<out Fragment>>> = _fragmentClass
-
-    fun nextFragment(fragmentClass: Class<out Fragment>) {
-        _fragmentClass.postValue(Event(fragmentClass))
-    }
-
-    private val _fragment = MutableLiveData<Event<Fragment>>()
-
-    val fragment: LiveData<Event<Fragment>> = _fragment
-
-    fun nextFragment(fragment: Fragment) {
-        _fragment.postValue(Event(fragment))
-    }
 
     private val _snackbar = MutableLiveData<Event<SnackbarEvent>>()
 
