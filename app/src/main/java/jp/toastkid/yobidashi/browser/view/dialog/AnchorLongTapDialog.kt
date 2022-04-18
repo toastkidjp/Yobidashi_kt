@@ -53,8 +53,6 @@ internal fun AnchorLongTapDialog(
         return
     }
 
-    println("tomato long-tap t/$title a/$anchor i/$imageUrl")
-
     val context = LocalContext.current
     val browserViewModel = (context as? ViewModelStoreOwner)?.let {
         viewModel(BrowserViewModel::class.java, it)
