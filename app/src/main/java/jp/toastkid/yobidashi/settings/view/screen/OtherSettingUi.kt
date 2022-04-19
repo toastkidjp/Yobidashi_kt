@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.settings.view.screen
 
-import android.content.Context
 import androidx.annotation.ColorInt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,7 +33,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentActivity
 import coil.compose.AsyncImage
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -242,7 +240,7 @@ internal fun OtherSettingUi() {
         visibleState = openConfirmDialog,
         titleId = R.string.title_clear_settings
     ) {
-        clearSettings(activityContext)
+        PreferencesClearUseCase.make(activityContext).invoke()
     }
 }
 
@@ -270,19 +268,3 @@ private fun NewTabSettingItem(
         }
     }
 }
-
-/**
- * Clear all settings.
- */
-private fun clearSettings(context: Context) {
-    val activity = context as? FragmentActivity ?: return
-
-    activity.supportFragmentManager.setFragmentResultListener(
-        "clear_setting",
-        activity,
-        { key, result ->
-            PreferencesClearUseCase.make(activity).invoke()
-        }
-    )
-}
-
