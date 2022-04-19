@@ -346,7 +346,7 @@
     <string name="title_dark_mode">Use dark mode</string>
     <string name="undo">undo</string>
     <string name="title_context_editor_add_order">Add order</string>
-    <string name="title_context_editor_unordered_list">Unordered list</string>
+    <string name="title_context_editor_unordered_list">To list</string>
     <string name="title_context_editor_convert_to_table">To table</string>
     <string name="title_context_editor_add_quote">Add quote</string>
     <string name="title_context_editor_double_quote">Double quote</string>
