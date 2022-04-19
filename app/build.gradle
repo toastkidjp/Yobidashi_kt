@@ -61,6 +61,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion "$libVersions.compose"
     }
+    lintOptions {
+        checkReleaseBuilds false
+    }
 }
 
 play {
@@ -83,7 +86,6 @@ dependencies {
     implementation project(":barcode")
     implementation project(":ui")
 
-    implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.exifinterface:exifinterface:$libVersions.exifinterface"
     implementation "androidx.work:work-runtime:2.7.0"
     implementation "androidx.webkit:webkit:1.4.0"
