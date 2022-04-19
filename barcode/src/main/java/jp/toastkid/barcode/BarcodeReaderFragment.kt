@@ -8,42 +8,48 @@
 package jp.toastkid.barcode
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.zxing.ResultPoint
-import com.journeyapps.barcodescanner.BarcodeCallback
-import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.SourceData
-import com.journeyapps.barcodescanner.camera.PreviewCallback
-import jp.toastkid.barcode.databinding.FragmentBarcodeReaderBinding
+import jp.toastkid.barcode.model.BarcodeAnalyzer
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.ShareIntentFactory
+import jp.toastkid.lib.interop.ComposeViewFactory
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.storage.ExternalFileAssignment
-import jp.toastkid.lib.view.DraggableTouchListener
 import jp.toastkid.lib.viewmodel.WebSearchViewModel
-import jp.toastkid.lib.window.WindowRectCalculatorCompat
-import timber.log.Timber
-import java.io.FileOutputStream
 
 /**
  * Barcode reader function fragment.
@@ -53,28 +59,16 @@ import java.io.FileOutputStream
 class BarcodeReaderFragment : Fragment() {
 
     /**
-     * Data Binding object.
-     */
-    private var binding: FragmentBarcodeReaderBinding? = null
-
-    private var viewModel: BarcodeReaderResultPopupViewModel? = null
-
-    /**
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
-
-    /**
-     * For showing barcode reader result.
-     */
-    private lateinit var resultPopup: BarcodeReaderResultPopup
 
     private var contentViewModel: ContentViewModel? = null
 
     private val cameraPermissionRequestLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
-                startDecode()
+                onResume.value = true
                 return@registerForActivityResult
             }
 
@@ -82,76 +76,136 @@ class BarcodeReaderFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-    private val storagePermissionRequestLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it) {
-                invokeRequest()
-                return@registerForActivityResult
-            }
-
-            contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-        }
-
     /**
      * Required permission for this fragment(and function).
      */
-    private val permission = Manifest.permission.CAMERA
+    private val cameraPermission = Manifest.permission.CAMERA
+
+    private val onResume = mutableStateOf(false)
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-
-        val context = binding?.root?.context ?: return binding?.root
-        resultPopup = BarcodeReaderResultPopup(context)
-
-        return binding?.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        preferenceApplier = PreferenceApplier(view.context)
-
-        binding?.fragment = this
+        val context = context ?: return null
 
         if (isNotGranted()) {
-            cameraPermissionRequestLauncher.launch(permission)
+            cameraPermissionRequestLauncher.launch(cameraPermission)
         }
 
-        viewModel = ViewModelProvider(this).get(BarcodeReaderResultPopupViewModel::class.java)
-        viewModel?.also {
-            val viewLifecycleOwner = viewLifecycleOwner
-            it.clip.observe(viewLifecycleOwner, Observer { event ->
-                val text = event?.getContentIfNotHandled() ?: return@Observer
-                clip(text)
-            })
-            it.share.observe(viewLifecycleOwner, Observer { event ->
-                val text = event?.getContentIfNotHandled() ?: return@Observer
-                startActivity(ShareIntentFactory()(text))
-            })
-            it.open.observe(viewLifecycleOwner, Observer { event ->
-                val text = event?.getContentIfNotHandled() ?: return@Observer
-                val activity = activity ?: return@Observer
-                ViewModelProvider(activity).get(WebSearchViewModel::class.java).search(text)
-            })
-        }
-
-        resultPopup.setViewModel(viewModel)
+        preferenceApplier = PreferenceApplier(context)
 
         contentViewModel = activity?.let { ViewModelProvider(it).get(ContentViewModel::class.java) }
 
-        initializeFab()
+        return ComposeViewFactory().invoke(context) {
+            val lifecycleOwner = LocalLifecycleOwner.current
+            val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
+            val onResume = remember { onResume }
+            val result = remember { mutableStateOf("") }
 
-        setHasOptionsMenu(true)
+            if (onResume.value.not()) {
+                return@invoke
+            }
+
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = {
+                    val previewView = PreviewView(context)
+                    val executor = ContextCompat.getMainExecutor(context)
+                    cameraProviderFuture.addListener(
+                        {
+                            val preview = Preview.Builder().build().also {
+                                it.setSurfaceProvider(previewView.surfaceProvider)
+                            }
+
+                            val cameraSelector = CameraSelector.Builder()
+                                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                                .build()
+
+                            val cameraProvider = cameraProviderFuture.get()
+                            cameraProvider.unbindAll()
+
+                            val imageAnalysis = ImageAnalysis.Builder()
+                                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                                .build()
+                                .also {
+                                    it.setAnalyzer(executor, BarcodeAnalyzer { newResult ->
+                                        val text = newResult.text
+                                        println("tomato text $text")
+                                        if (text == result.value) {
+                                            return@BarcodeAnalyzer
+                                        }
+                                        result.value = text
+                                    })
+                                }
+
+                            cameraProvider.bindToLifecycle(
+                                lifecycleOwner,
+                                cameraSelector,
+                                imageAnalysis,
+                                preview
+                            )
+                        },
+                        executor
+                    )
+                    previewView
+                }
+            )
+
+            if (result.value.isNotBlank()) {
+                MaterialTheme() {
+                    Surface(
+                        elevation = 4.dp,
+                        modifier = Modifier.background(Color(preferenceApplier.color))
+                    ) {
+                        Column() {
+                            Row() {
+                                Text(
+                                    stringResource(id = R.string.clip),
+                                    color = Color(preferenceApplier.fontColor),
+                                    modifier = Modifier.clickable { clip(result.value) }
+                                )
+                                Text(
+                                    stringResource(id = R.string.share),
+                                    color = Color(preferenceApplier.fontColor),
+                                    modifier = Modifier.clickable {
+                                        startActivity(ShareIntentFactory()(result.value))
+                                    }
+                                )
+                                Text(
+                                    stringResource(id = R.string.open),
+                                    color = Color(preferenceApplier.fontColor),
+                                    modifier = Modifier.clickable {
+                                        val activity = activity ?: return@clickable
+                                        ViewModelProvider(activity)
+                                            .get(WebSearchViewModel::class.java)
+                                            .search(result.value)
+                                    }
+                                )
+                            }
+                            Text(result.value)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         if (isNotGranted()) {
+            cameraPermissionRequestLauncher.launch(cameraPermission)
             return
         }
 
-        startDecode()
+        onResume.value = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        onResume.value = false
     }
 
     /**
@@ -160,73 +214,11 @@ class BarcodeReaderFragment : Fragment() {
      * @return If is granted camera permission, return true
      */
     private fun isNotGranted() =
-            activity?.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
+        activity?.checkSelfPermission(cameraPermission) != PackageManager.PERMISSION_GRANTED
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.camera, menu)
-    }
-
-    /**
-     * Invoke click menu action.
-     *
-     * @param item [MenuItem]
-     * @return This function always return true
-     */
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.reset_camera_fab_position -> {
-            binding?.camera?.also {
-                it.translationX = 0f
-                it.translationY = 0f
-                preferenceApplier.clearCameraFabPosition()
-            }
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private fun initializeFab() {
-        val draggableTouchListener = DraggableTouchListener()
-        draggableTouchListener.setCallback(object : DraggableTouchListener.OnNewPosition {
-            override fun onNewPosition(x: Float, y: Float) {
-                preferenceApplier.setNewCameraFabPosition(x, y)
-            }
-        })
-        draggableTouchListener.setOnClick(object : DraggableTouchListener.OnClick {
-            override fun onClick() {
-                camera()
-            }
-        })
-
-        binding?.camera?.setOnTouchListener(draggableTouchListener)
-
-        binding?.camera?.also {
-            val position = preferenceApplier.cameraFabPosition() ?: return@also
-            it.animate()
-                    .x(position.first)
-                    .y(position.second)
-                    .setDuration(10)
-                    .start()
-        }
-    }
-
-    /**
-     * Start decode.
-     */
-    private fun startDecode() {
-        binding?.barcodeView?.decodeContinuous(object : BarcodeCallback {
-
-            override fun barcodeResult(barcodeResult: BarcodeResult) {
-                val text = barcodeResult.text
-                if (text == resultPopup.currentText()) {
-                    return
-                }
-                showResult(text)
-            }
-
-            override fun possibleResultPoints(list: List<ResultPoint>) = Unit
-        })
     }
 
     /**
@@ -235,91 +227,18 @@ class BarcodeReaderFragment : Fragment() {
      * @param text Result text
      */
     private fun clip(text: String) {
-        binding?.root?.let { snackbarParent ->
-            (context?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager?)
-                ?.setPrimaryClip(
-                    ClipData(
-                        ClipDescription("text_data", arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)),
-                        ClipData.Item(text)
-                    )
+        (context?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager?)
+            ?.setPrimaryClip(
+                ClipData(
+                    ClipDescription("text_data", arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)),
+                    ClipData.Item(text)
                 )
-        }
-    }
-
-    private fun camera() {
-        storagePermissionRequestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    }
-
-    private fun invokeRequest() {
-        val barcodeView = binding?.barcodeView ?: return
-
-        barcodeView.barcodeView?.cameraInstance?.requestPreview(object : PreviewCallback {
-            override fun onPreview(sourceData: SourceData?) {
-                val context = context ?: return
-                val output = ExternalFileAssignment()(
-                        context,
-                        "shoot_${System.currentTimeMillis()}.png"
-                )
-
-                sourceData?.cropRect = getRect()
-                val fileOutputStream = FileOutputStream(output)
-                sourceData?.bitmap?.compress(
-                        Bitmap.CompressFormat.PNG,
-                        100,
-                        fileOutputStream
-                )
-                fileOutputStream.close()
-
-                contentViewModel?.snackShort("Camera saved: ${output.absolutePath}")
-            }
-
-            private fun getRect(): Rect? {
-                return WindowRectCalculatorCompat().invoke(activity)
-            }
-
-            override fun onPreviewError(e: Exception?) {
-                Timber.e(e)
-            }
-
-        })
-    }
-
-    /**
-     * Show result with snackbar.
-     *
-     * @param text [String]
-     */
-    private fun showResult(text: String) {
-        binding?.root?.let { resultPopup.show(it, text) }
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        binding?.barcodeView?.resume()
-        val colorPair = preferenceApplier.colorPair()
-        resultPopup.onResume(colorPair)
-        colorPair.applyReverseTo(binding?.camera)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding?.barcodeView?.pause()
-        resultPopup.hide()
+            )
     }
 
     override fun onDetach() {
-        storagePermissionRequestLauncher.unregister()
         cameraPermissionRequestLauncher.unregister()
         super.onDetach()
     }
 
-    companion object {
-
-        /**
-         * Layout ID.
-         */
-        @LayoutRes
-        private val LAYOUT_ID = R.layout.fragment_barcode_reader
-    }
 }

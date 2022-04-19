@@ -10,17 +10,13 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -39,8 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import com.godaddy.android.colorpicker.harmony.ColorHarmonyMode
-import com.godaddy.android.colorpicker.harmony.HarmonyColorPicker
 import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.interop.ComposeViewFactory
@@ -51,6 +45,7 @@ import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
+import jp.toastkid.yobidashi.settings.view.ColorPaletteUi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -115,8 +110,9 @@ class ColorSettingFragment : Fragment(), CommonFragmentAction {
 
             MaterialTheme() {
                 LazyColumn(
-                    modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
-                        .padding(start = 16.dp, end = 16.dp)
+                    modifier = Modifier
+                        .nestedScroll(rememberViewInteropNestedScrollConnection())
+                        .padding(start = 8.dp, end = 8.dp)
                 ) {
                     item {
                         val currentBackgroundColor =
@@ -127,99 +123,39 @@ class ColorSettingFragment : Fragment(), CommonFragmentAction {
                             remember { mutableStateOf(Color(preferenceApplier.fontColor)) }
                         this@ColorSettingFragment.currentFontColor = currentFontColor
 
-                        Surface(
-                            elevation = 4.dp
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight()
-                                //.requiredHeight(300.dp)
-                            ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        stringResource(id = R.string.settings_color_background_title),
-                                        fontSize = 16.sp,
-                                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                                    )
-                                    HarmonyColorPicker(
-                                        harmonyMode = ColorHarmonyMode.COMPLEMENTARY,
-                                        color = currentBackgroundColor.value,
-                                        onColorChanged = { hsvColor ->
-                                            currentBackgroundColor.value = hsvColor.toColor()
-                                        },
-                                        modifier = Modifier.height(200.dp)
-                                    )
-                                    Button(
-                                        onClick = {
-                                            val bgColor = currentBackgroundColor.value
-                                            val fontColor = currentFontColor.value
+                        ColorPaletteUi(
+                            currentBackgroundColor,
+                            currentFontColor,
+                            initialBgColor,
+                            initialFontColor,
+                            onCommit = {
+                                val bgColor = currentBackgroundColor.value
+                                val fontColor = currentFontColor.value
 
-                                            commitNewColor(bgColor, fontColor)
+                                commitNewColor(bgColor, fontColor)
 
-                                            CoroutineScope(Dispatchers.Main).launch(disposables) {
-                                                withContext(Dispatchers.IO) {
-                                                    val savedColor =
-                                                        SavedColor.make(
-                                                            bgColor.toArgb(),
-                                                            fontColor.toArgb()
-                                                        )
-                                                    repository.add(savedColor)
-                                                    adapter?.reload()
-                                                }
-                                            }
-                                        },
-                                        colors = ButtonDefaults.textButtonColors(
-                                            backgroundColor = currentBackgroundColor.value,
-                                            contentColor = Color(preferenceApplier.fontColor),
-                                            disabledContentColor = Color.LightGray
-                                        ),
-                                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                                    ) {
-                                        Text(stringResource(id = R.string.commit), fontSize = 14.sp)
-                                    }
-                                }
-
-                                Column(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .wrapContentHeight()
-                                ) {
-                                    Text(
-                                        stringResource(id = R.string.settings_color_font_title),
-                                        fontSize = 16.sp,
-                                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                                    )
-                                    HarmonyColorPicker(
-                                        harmonyMode = ColorHarmonyMode.COMPLEMENTARY,
-                                        color = currentFontColor.value,
-                                        modifier = Modifier.height(200.dp),
-                                        onColorChanged = { hsvColor ->
-                                            currentFontColor.value = hsvColor.toColor()
-                                        }
-                                    )
-                                    Button(
-                                        onClick = {
-                                            commitNewColor(
-                                                Color(initialBgColor),
-                                                Color(initialFontColor)
+                                CoroutineScope(Dispatchers.Main).launch(disposables) {
+                                    withContext(Dispatchers.IO) {
+                                        val savedColor =
+                                            SavedColor.make(
+                                                bgColor.toArgb(),
+                                                fontColor.toArgb()
                                             )
-
-                                            activity?.let { Updater().update(it) }
-                                            snackShort(R.string.settings_color_done_reset)
-                                        },
-                                        colors = ButtonDefaults.textButtonColors(
-                                            backgroundColor = Color(initialBgColor),
-                                            contentColor = Color(initialFontColor),
-                                            disabledContentColor = Color.LightGray
-                                        ),
-                                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                                    ) {
-                                        Text(stringResource(id = R.string.reset), fontSize = 14.sp)
+                                        repository.add(savedColor)
+                                        adapter?.reload()
                                     }
                                 }
+                            },
+                            onReset = {
+                                commitNewColor(
+                                    Color(initialBgColor),
+                                    Color(initialFontColor)
+                                )
+
+                                activity?.let { Updater().update(it) }
+                                snackShort(R.string.settings_color_done_reset)
                             }
-                        }
+                        )
                     }
 
                     coroutineScope.launch {
@@ -231,12 +167,18 @@ class ColorSettingFragment : Fragment(), CommonFragmentAction {
                         item {
                             Surface(
                                 elevation = 4.dp,
-                                modifier = Modifier.height(44.dp).fillMaxWidth().padding(top = 8.dp)
+                                modifier = Modifier
+                                    .height(44.dp)
+                                    .fillMaxWidth()
+                                    .padding(top = 8.dp)
                             ) {
-                                Text(
-                                    stringResource(id = R.string.settings_color_saved_title),
-                                    fontSize = 18.sp
-                                )
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        stringResource(id = R.string.settings_color_saved_title),
+                                        fontSize = 18.sp,
+                                        modifier = Modifier.padding(16.dp)
+                                    )
+                                }
                             }
                         }
 
@@ -252,10 +194,10 @@ class ColorSettingFragment : Fragment(), CommonFragmentAction {
                                                     Color(savedColor.fontColor)
                                                 )
                                             }
+                                            .weight(1f)
                                             .padding(8.dp)
                                     ) {
                                         Box(modifier = Modifier
-                                            .weight(1f)
                                             .height(100.dp)
                                             .background(Color(savedColor.bgColor))
                                             .padding(8.dp)

@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,13 +14,39 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.LayoutRes
 import androidx.annotation.WorkerThread
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.rememberDismissState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
@@ -27,13 +54,14 @@ import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
+import jp.toastkid.lib.interop.ComposeViewFactory
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.lib.view.swipe.SwipeActionAttachment
+import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
+import jp.toastkid.ui.list.SwipeToDismissItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
+import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
-import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +70,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okio.buffer
 import okio.sink
+import timber.log.Timber
+import java.io.IOException
+import java.util.Stack
 
 /**
  * Bookmark list activity.
@@ -52,16 +83,6 @@ class BookmarkFragment: Fragment(),
         CommonFragmentAction,
         ContentScrollable
 {
-
-    /**
-     * Data binding object.
-     */
-    private lateinit var binding: FragmentBookmarkBinding
-
-    /**
-     * Adapter.
-     */
-    private lateinit var adapter: ActivityAdapter
 
     private lateinit var preferenceApplier: PreferenceApplier
 
@@ -117,34 +138,33 @@ class BookmarkFragment: Fragment(),
             )
         }
 
+    /**
+     * Folder moving history.
+     */
+    private val folderHistory: Stack<String> = Stack()
+
+    private val currentBookmarks = mutableStateListOf<Bookmark>()
+
+    private var scrollState: LazyListState? = null
+
+    @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        val context = context
+        val activityContext = activity
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
 
-        preferenceApplier = PreferenceApplier(context)
+        preferenceApplier = PreferenceApplier(activityContext)
 
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        bookmarkRepository = DatabaseFinder().invoke(context).bookmarkRepository()
+        bookmarkRepository = DatabaseFinder().invoke(activityContext).bookmarkRepository()
 
-        binding.historiesView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        adapter = ActivityAdapter(
-                context,
-                bookmarkRepository,
-                { history -> finishWithResult(Uri.parse(history.url)) },
-                { history -> contentViewModel?.snackShort(history.title) },
-                binding.historiesView::scheduleLayoutAnimation
-        )
-        binding.historiesView.adapter = adapter
-        binding.historiesView.onFlingListener = object : RecyclerView.OnFlingListener() {
-            override fun onFling(velocityX: Int, velocityY: Int) = false
-        }
-        SwipeActionAttachment().invoke(binding.historiesView)
-
-        adapter.showRoot()
+        showRoot()
 
         setHasOptionsMenu(true)
+
+        activity?.let {
+            contentViewModel = ViewModelProvider(it).get(ContentViewModel::class.java)
+        }
 
         parentFragmentManager.setFragmentResultListener(
             "clear_bookmark",
@@ -153,14 +173,14 @@ class BookmarkFragment: Fragment(),
                 if (results[key] != true) {
                     return@setFragmentResultListener
                 }
-                adapter.clearAll{ contentViewModel?.snackShort(R.string.done_clear) }
+                clearAll{ contentViewModel?.snackShort(R.string.done_clear) }
             }
         )
         parentFragmentManager.setFragmentResultListener(
             "import_default",
             viewLifecycleOwner,
             { _, _ ->
-                BookmarkInitializer.from(binding.root.context)() { adapter.showRoot() }
+                BookmarkInitializer.from(activityContext)() { showRoot() }
                 contentViewModel?.snackShort(R.string.done_addition)
             }
         )
@@ -176,26 +196,188 @@ class BookmarkFragment: Fragment(),
 
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
                     BookmarkInsertion(
-                        binding.root.context,
+                        activityContext,
                         title,
-                        parent = adapter.currentFolderName(),
+                        parent = currentFolderName(),
                         folder = true
                     ).insert()
 
-                    adapter.reload()
+                    reload()
                 }
             }
         )
 
-        return binding.root
-    }
+        return ComposeViewFactory().invoke(activityContext) {
+            val bookmarks = remember { currentBookmarks }
+            val listState = rememberLazyListState()
+            this.scrollState = listState
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        activity?.let {
-            contentViewModel = ViewModelProvider(it).get(ContentViewModel::class.java)
+            MaterialTheme() {
+                LazyColumn(
+                    contentPadding = PaddingValues(bottom = 4.dp),
+                    modifier = Modifier
+                        .nestedScroll(rememberViewInteropNestedScrollConnection())
+                        .padding(start = 8.dp, end = 8.dp)
+                ) {
+                    items(bookmarks) { bookmark ->
+                        val dismissState = rememberDismissState(
+                            confirmStateChange = { dismissValue ->
+                                if (dismissValue == DismissValue.DismissedToStart) {
+                                    try {
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            bookmarkRepository.delete(bookmark)
+                                        }
+                                    } catch (e: IOException) {
+                                        Timber.e(e)
+                                    }
+                                }
+                                true
+                            }
+                        )
+                        SwipeToDismissItem(
+                            dismissState,
+                            dismissContent = {
+                                Row(verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .combinedClickable(
+                                            true,
+                                            onClick = {
+                                                if (bookmark.folder) {
+                                                    folderHistory.push(bookmark.parent)
+                                                    findByFolderName(bookmark.title)
+                                                } else {
+                                                    finishWithResult(Uri.parse(bookmark.url))
+                                                }
+                                            },
+                                            onLongClick = {
+                                                ViewModelProvider(activityContext)
+                                                    .get(BrowserViewModel::class.java)
+                                                    .openBackground(
+                                                        bookmark.title,
+                                                        Uri.parse(bookmark.url)
+                                                    )
+                                            }
+                                        )
+                                        .fillMaxWidth()
+                                        .wrapContentHeight()
+                                ) {
+                                    AsyncImage(
+                                        bookmark.favicon,
+                                        bookmark.title,
+                                        contentScale = ContentScale.Fit,
+                                        alignment = Alignment.Center,
+                                        placeholder = painterResource(id = if (bookmark.folder) R.drawable.ic_folder_black else R.drawable.ic_bookmark),
+                                        modifier = Modifier.padding(end = 8.dp)
+                                    )
+                                    Column() {
+                                        Text(
+                                            text = bookmark.title,
+                                            fontSize = 18.sp,
+                                            maxLines = 2,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+
+                                        if (bookmark.url.isNotBlank()) {
+                                            Text(
+                                                text = bookmark.url,
+                                                color = colorResource(id = R.color.link_blue),
+                                                fontSize = 12.sp,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        }
+
+                                        if (bookmark.lastViewed != 0L) {
+                                            Text(
+                                                text = DateFormat.format(
+                                                    stringResource(R.string.date_format),
+                                                    bookmark.lastViewed
+                                                ).toString(),
+                                                color = colorResource(id = R.color.gray_500_dd),
+                                                fontSize = 12.sp,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        }
+                                    }
+                                }
+                            },
+                            modifier = Modifier
+                        )
+                    }
+                }
+            }
         }
     }
+
+    private fun findByFolderName(title: String) {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            val items = withContext(Dispatchers.IO) {
+                bookmarkRepository.findByParent(title)
+            }
+            submitList(items)
+        }
+    }
+
+    /**
+     * Reload.
+     */
+    private fun reload() {
+        findByFolderName(currentFolderName())
+    }
+
+    /**
+     * Remove item.
+     *
+     * @param item [Bookmark]
+     */
+    private fun remove(item: Bookmark) {
+        val copy = ArrayList<Bookmark>(currentBookmarks)
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            withContext(Dispatchers.IO) { bookmarkRepository.delete(item) }
+
+            copy.remove(item)
+            submitList(copy)
+        }
+    }
+
+    /**
+     * Back to previous folder.
+     */
+    private fun back(): Boolean {
+        if (folderHistory.isEmpty()) {
+            return false
+        }
+        findByFolderName(folderHistory.pop())
+        return true
+    }
+
+    /**
+     * Clear all items.
+     *
+     * @param onComplete callback
+     */
+    private fun clearAll(onComplete: () -> Unit) {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            withContext(Dispatchers.IO) { bookmarkRepository.clear() }
+
+            onComplete()
+            submitList(emptyList())
+        }
+    }
+
+    private fun submitList(items: List<Bookmark>) {
+        currentBookmarks.clear()
+        currentBookmarks.addAll(items)
+    }
+
+    /**
+     * Return current folder name.
+     */
+    private fun currentFolderName(): String =
+        if (currentBookmarks.isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
+        else if (currentBookmarks.isEmpty()) Bookmark.getRootFolderName()
+        else currentBookmarks[0].parent
 
     /**
      * Finish this activity with result.
@@ -264,18 +446,22 @@ class BookmarkFragment: Fragment(),
     }
 
     override fun pressBack(): Boolean {
-        if (adapter.back()) {
+        if (back()) {
             return true
         }
         return super.pressBack()
     }
 
     override fun toTop() {
-        RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(0, 0)
+        }
     }
 
     override fun toBottom() {
-        RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
+        CoroutineScope(Dispatchers.Main).launch {
+            scrollState?.scrollToItem(scrollState?.layoutInfo?.totalItemsCount ?: 0, 0)
+        }
     }
 
     /**
@@ -298,9 +484,16 @@ class BookmarkFragment: Fragment(),
                     .forEach { bookmarkRepository.add(it) }
             }
 
-            adapter.showRoot()
+            showRoot()
             contentViewModel?.snackShort(R.string.done_addition)
         }
+    }
+
+    /**
+     * Show root folder.
+     */
+    private fun showRoot() {
+        findByFolderName(Bookmark.getRootFolderName())
     }
 
     /**
@@ -320,7 +513,6 @@ class BookmarkFragment: Fragment(),
     }
 
     override fun onDetach() {
-        adapter.dispose()
         disposables.cancel()
         getContentLauncher.unregister()
         exportLauncher.unregister()
@@ -334,13 +526,4 @@ class BookmarkFragment: Fragment(),
         super.onDetach()
     }
 
-    companion object {
-
-        /**
-         * Layout ID.
-         */
-        @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.fragment_bookmark
-
-    }
 }

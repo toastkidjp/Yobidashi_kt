@@ -24,8 +24,8 @@ class SearchFragmentViewModel : ViewModel() {
         _search.postValue(Event(SearchEvent(query)))
     }
 
-    fun searchWithCategory(query: String, category: String) {
-        _search.postValue(Event(SearchEvent(query, category)))
+    fun searchWithCategory(query: String, category: String, background: Boolean = false) {
+        _search.postValue(Event(SearchEvent(query, category, background)))
     }
 
     fun searchOnBackground(query: String) {

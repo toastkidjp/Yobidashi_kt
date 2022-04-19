@@ -60,7 +60,6 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.article_viewer.article.data.ArticleInsertion
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
@@ -78,7 +77,6 @@ import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.load.LoadFromStorageDialogUi
 import jp.toastkid.yobidashi.editor.load.StorageFilesFinder
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import okio.buffer
 import okio.sink
@@ -701,14 +699,10 @@ class EditorFragment :
      */
     fun showName(view: View): Boolean {
         if (view is TextView) {
-            Toaster.withAction(
-                view,
+            contentViewModel?.snackWithAction(
                 view.text.toString(),
-                R.string.run,
-                { view.performClick() },
-                preferenceApplier.colorPair(),
-                Snackbar.LENGTH_LONG
-            )
+                activity?.getString(R.string.run) ?: ""
+            ) { view.performClick() }
         }
         return true
     }

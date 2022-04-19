@@ -10,6 +10,7 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
@@ -77,7 +78,6 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -248,11 +248,11 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
         browserViewModel?.openBackground?.observe(this, Observer {
             val urlString = it?.getContentIfNotHandled()?.toString() ?: return@Observer
-            backgroundTabOpenerUseCase(urlString, urlString, preferenceApplier.colorPair())
+            backgroundTabOpenerUseCase(urlString, urlString, colorPair)
         })
         browserViewModel?.openBackgroundWithTitle?.observe(this, Observer {
             val pair = it?.getContentIfNotHandled() ?: return@Observer
-            backgroundTabOpenerUseCase(pair.first, pair.second.toString(), preferenceApplier.colorPair())
+            backgroundTabOpenerUseCase(pair.first, pair.second.toString(), colorPair)
         })
         browserViewModel?.openNewWindow?.observe(this, Observer {
             val message = it?.getContentIfNotHandled() ?: return@Observer
@@ -708,7 +708,7 @@ class MainActivity : AppCompatActivity(), TabListDialogFragment.Callback {
 
     override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
 
-    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_fab_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
