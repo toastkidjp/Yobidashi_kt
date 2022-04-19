@@ -28,7 +28,7 @@ interface BookmarkRepository {
     @Query("SELECT * FROM Bookmark WHERE parent = :folderName")
     fun findByParent(folderName: String): List<Bookmark>
 
-    @Query("SELECT * FROM Bookmark WHERE title LIKE :query LIMIT :limit")
+    @Query("SELECT * FROM Bookmark WHERE title LIKE :query AND folder = 0 LIMIT :limit")
     fun search(query: String, limit: Int): List<Bookmark>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
