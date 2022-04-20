@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -253,8 +254,10 @@ fun SearchInputUi(
 
     queryingUseCase.send("")
 
+    val localLifecycleOwner = LocalLifecycleOwner.current
+
     viewModel.search
-        .observe(context, Observer { event ->
+        .observe(localLifecycleOwner, Observer { event ->
             keyboardController?.hide()
 
             val searchEvent = event?.getContentIfNotHandled() ?: return@Observer
@@ -268,7 +271,7 @@ fun SearchInputUi(
             )
         })
     viewModel.putQuery
-        .observe(context, Observer { event ->
+        .observe(localLifecycleOwner, Observer { event ->
             val query = event?.getContentIfNotHandled() ?: return@Observer
             inputState.value = TextFieldValue(query, TextRange(query.length), TextRange.Zero)
         })
