@@ -233,7 +233,6 @@ internal fun SearchContentsUi(
                         ) {
                             Text(
                                 text = it,
-                                color = colorResource(id = R.color.black),
                                 fontSize = 16.sp,
                                 modifier = Modifier
                                     .wrapContentWidth()
@@ -289,7 +288,6 @@ internal fun SearchContentsUi(
                                 )
                                 Text(
                                     text = it.title,
-                                    color = colorResource(id = R.color.black),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     fontSize = 16.sp,
@@ -394,36 +392,43 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
 
 @Composable
 private fun Header(headerTextId: Int) {
-    Text(
-        text = stringResource(id = headerTextId),
-        modifier = Modifier
-            .padding(start = 8.dp, end = 8.dp)
-            .background(colorResource(id = R.color.soft_background))
-            .fillMaxWidth()
-            .padding(8.dp)
-    )
+    Surface(
+        elevation = 4.dp
+    ) {
+        Text(
+            text = stringResource(id = headerTextId),
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp)
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+    }
 }
 
 @Composable
 private fun HeaderWithLink(headerTextId: Int, linkTextId: Int, onLinkClick: () -> Unit) {
-    Box(modifier = Modifier
-        .padding(start = 8.dp, end = 8.dp)
-        .background(colorResource(id = R.color.soft_background))
-        .fillMaxWidth()
-        .padding(8.dp)
+    Surface(
+        elevation = 4.dp
     ) {
-        Text(
-            stringResource(id = headerTextId),
+        Box(
             modifier = Modifier
-                .align(Alignment.CenterStart)
-        )
-        Text(
-            stringResource(id = linkTextId),
-            color = colorResource(id = R.color.link_blue),
-            modifier = Modifier
-                .clickable(onClick = onLinkClick)
-                .align(Alignment.CenterEnd)
-        )
+                .padding(start = 8.dp, end = 8.dp)
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(
+                stringResource(id = headerTextId),
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+            )
+            Text(
+                stringResource(id = linkTextId),
+                color = colorResource(id = R.color.link_blue),
+                modifier = Modifier
+                    .clickable(onClick = onLinkClick)
+                    .align(Alignment.CenterEnd)
+            )
+        }
     }
 }
 
