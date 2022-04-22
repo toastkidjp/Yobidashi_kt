@@ -1,8 +1,6 @@
 package jp.toastkid.yobidashi.browser
 
 import android.Manifest
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuInflater
@@ -10,11 +8,40 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.ValueCallback
+import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.LayoutRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Icon
+import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
-import androidx.core.view.isVisible
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -27,6 +54,7 @@ import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.fragment.CommonFragmentAction
 import jp.toastkid.lib.intent.ShareIntentFactory
+import jp.toastkid.lib.interop.ComposeViewFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
@@ -41,15 +69,12 @@ import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
 import jp.toastkid.yobidashi.browser.translate.TranslatedPageOpenerUseCase
-import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
-import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
-import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
+import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.search.SearchFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -72,13 +97,6 @@ class BrowserFragment : Fragment(),
      * Browser module.
      */
     private lateinit var browserModule: BrowserModule
-
-    /**
-     * Data binding object.
-     */
-    private var binding: FragmentBrowserBinding? = null
-
-    private var appBarBinding: AppBarBrowserBinding? = null
 
     private val searchQueryExtractor = SearchQueryExtractor()
 
@@ -104,27 +122,32 @@ class BrowserFragment : Fragment(),
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        appBarBinding = DataBindingUtil.inflate(inflater, APP_BAR_LAYOUT_ID, container, false)
-        appBarBinding?.fragment = this
-
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        binding?.fragment = this
-
+/*TODO swipe refresher
         binding?.swipeRefresher?.let {
             it.setOnRefreshListener { reload() }
             it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
             it.setDistanceToTriggerSync(500)
         }
+*/
 
         val activityContext = context ?: return null
 
         preferenceApplier = PreferenceApplier(activityContext)
 
-        browserModule = BrowserModule(activityContext, binding?.webViewContainer)
+        val webViewContainer = FrameLayout(activityContext)
+        browserModule = BrowserModule(activityContext, webViewContainer)
 
         setHasOptionsMenu(true)
 
-        return binding?.root
+        return ComposeViewFactory().invoke(activityContext) {
+            MaterialTheme {
+                AndroidView(
+                    factory = {
+                        webViewContainer
+                    }
+                )
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -135,18 +158,6 @@ class BrowserFragment : Fragment(),
         initializeHeaderViewModels(activity)
 
         contentViewModel = ViewModelProvider(activity).get(ContentViewModel::class.java)
-
-        parentFragmentManager.setFragmentResultListener(
-            "user_agent_setting",
-            viewLifecycleOwner,
-            { key, results ->
-                val userAgent = results[key] as? UserAgent ?: return@setFragmentResultListener
-                browserModule.resetUserAgent(userAgent.text())
-                contentViewModel?.snackShort(
-                    getString(R.string.format_result_user_agent, userAgent.title())
-                )
-            }
-        )
     }
 
     private fun initializeHeaderViewModels(activity: FragmentActivity) {
@@ -156,52 +167,172 @@ class BrowserFragment : Fragment(),
         viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
             viewModel.stopProgress.observe(viewLifecycleOwner, Observer {
                 val stop = it?.getContentIfNotHandled() ?: return@Observer
-                if (stop.not() || binding?.swipeRefresher?.isRefreshing == false) {
+                if (stop.not()
+                    //TODO || binding?.swipeRefresher?.isRefreshing == false
+                ) {
                     return@Observer
                 }
                 stopSwipeRefresherLoading()
             })
-            viewModel.progress.observe(viewLifecycleOwner, Observer { newProgress ->
-                if (70 < newProgress) {
-                    appBarBinding?.progress?.isVisible = false
-                    appBarBinding?.reload?.setImageResource(R.drawable.ic_reload)
-                    return@Observer
-                }
-
-                val progressTitle =
-                        activity.getString(R.string.prefix_loading) + newProgress + "%"
-                appBarBinding?.mainText?.text = progressTitle
-
-                appBarBinding?.progress?.let {
-                    it.isVisible = true
-                    it.progress = newProgress
-                    appBarBinding?.reload?.setImageResource(R.drawable.ic_close)
-                }
-            })
         }
 
+        tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
+
         viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
-            viewModel.title.observe(viewLifecycleOwner, Observer {
-                val title = it?.getContentIfNotHandled() ?: return@Observer
-                appBarBinding?.mainText?.text = title
-            })
-
-            viewModel.url.observe(viewLifecycleOwner, Observer {
-                val url = it?.getContentIfNotHandled() ?: return@Observer
-                appBarBinding?.subText?.text = url
-            })
-
             viewModel.reset.observe(viewLifecycleOwner, Observer {
                 if (!isVisible) {
                     return@Observer
                 }
-                val headerView = appBarBinding?.root ?: return@Observer
-                appBarViewModel?.replace(headerView)
+
+                val context = context ?: return@Observer
+
+                appBarViewModel?.replace(context) {
+                    val tint = Color(preferenceApplier.fontColor)
+
+                    val headerTitle = viewModel.title.observeAsState()
+                    val headerUrl = viewModel.url.observeAsState()
+                    val progress = viewModel.progress.observeAsState()
+                    val enableBack = viewModel.enableBack.observeAsState()
+                    val enableForward = viewModel.enableForward.observeAsState()
+                    val tabCountState = tabListViewModel?.tabCount?.observeAsState()
+
+                    Column(modifier = Modifier
+                        .height(76.dp)
+                        .fillMaxWidth()
+                    ) {
+                        if (progress.value ?: 0 < 70) {
+                            LinearProgressIndicator(
+                                progress = (progress.value?.toFloat() ?: 100f) / 100f,
+                                color = Color(preferenceApplier.fontColor),
+                                modifier = Modifier.height(1.dp)
+                            )
+                        }
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            HeaderSubButton(
+                                R.drawable.ic_back,
+                                R.string.back,
+                                tint,
+                                enableBack.value ?: false
+                            ) { back() }
+                            HeaderSubButton(
+                                R.drawable.ic_forward,
+                                R.string.title_menu_forward,
+                                tint,
+                                enableForward.value ?: false
+                            ) { forward() }
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(44.dp)
+                                    .padding(8.dp)
+                                    .clickable { tabList() }
+                            ) {
+                                Image(
+                                    painterResource(R.drawable.ic_tab),
+                                    contentDescription = stringResource(id = R.string.tab_list),
+                                    colorFilter = ColorFilter.tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight()
+                                )
+                                Text(
+                                    text = "${tabCountState?.value ?: 0}",
+                                    color = Color(preferenceApplier.fontColor),
+                                    fontSize = 10.sp
+                                )
+                            }
+                            Box {
+                                val open = remember { mutableStateOf(false) }
+                                HeaderSubButton(
+                                    R.drawable.ic_user_agent,
+                                    R.string.title_user_agent,
+                                    tint
+                                ) { open.value = true }
+                                UserAgentDropdown(open) {
+                                    preferenceApplier.setUserAgent(it.name)
+                                    browserModule.resetUserAgent(it.text())
+                                    contentViewModel?.snackShort(
+                                        activity.getString(
+                                            R.string.format_result_user_agent,
+                                            it.title()
+                                        )
+                                    )
+                                }
+                            }
+                            HeaderSubButton(
+                                R.drawable.ic_info,
+                                R.string.title_menu_page_information,
+                                tint
+                            ) { showPageInformation() }
+                            HeaderSubButton(
+                                R.drawable.ic_code,
+                                R.string.title_menu_html_source,
+                                tint
+                            ) { showHtmlSource() }
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .height(32.dp)
+                                .fillMaxWidth()
+                                .clickable { tapHeader() }
+                        //url_box_background
+                        ) {
+                            Icon(
+                                painterResource(id = R.drawable.ic_reader_mode),
+                                contentDescription = stringResource(id = R.string.title_menu_reader_mode),
+                                tint = tint,
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .clickable { openReaderMode() }
+                            )
+                            Column(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                val progressTitle =
+                                    if (progress.value ?: 100 < 70)
+                                        activity.getString(R.string.prefix_loading) + "${progress.value}%"
+                                    else
+                                        headerTitle.value ?: ""
+
+                                Text(
+                                    text = progressTitle,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    color = tint,
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    text = headerUrl.value ?: "",
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    color = tint,
+                                    fontSize = 10.sp
+                                )
+                            }
+
+                            val isNotLoading = 70 < progress.value ?: 100
+                            val reloadIconId = if (isNotLoading) R.drawable.ic_reload else R.drawable.ic_close
+                            Icon(
+                                painterResource(id = reloadIconId),
+                                contentDescription = stringResource(id = R.string.title_menu_reload),
+                                tint = tint,
+                                modifier = Modifier
+                                    .clickable {
+                                        if (isNotLoading) {
+                                            browserModule.reload()
+                                        } else {
+                                            browserModule.stopLoading()
+                                            stopSwipeRefresherLoading()
+                                        }
+                                    }
+                            )
+                        }
+                    }
+                }
             })
-
-            viewModel.enableForward.observe(viewLifecycleOwner, Observer(::updateForwardButtonState))
-
-            viewModel.enableBack.observe(viewLifecycleOwner, Observer(::updateBackButtonState))
         }
 
         CoroutineScope(Dispatchers.Main).launch {
@@ -218,11 +349,6 @@ class BrowserFragment : Fragment(),
                     browserModule.loadWithNewTab(it.first, it.second)
                 })
 
-        tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
-        tabListViewModel
-                ?.tabCount
-                ?.observe(activity, { appBarBinding?.tabCount?.text = it.toString() })
-
         viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
             viewModel.find.observe(viewLifecycleOwner, Observer {
                 browserModule.find(it)
@@ -236,6 +362,26 @@ class BrowserFragment : Fragment(),
                 browserModule.findDown()
             })
         }
+    }
+
+    @Composable
+    private fun HeaderSubButton(
+        iconId: Int,
+        descriptionId: Int,
+        tint: Color,
+        enable: Boolean = true,
+        onClick: () -> Unit
+    ) {
+        Icon(
+            painterResource(id = iconId),
+            contentDescription = stringResource(id = descriptionId),
+            tint = tint,
+            modifier = Modifier
+                .width(40.dp)
+                .padding(4.dp)
+                .alpha(if (enable) 1f else 0.6f)
+                .clickable(enabled = enable, onClick = onClick)
+        )
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
@@ -256,7 +402,7 @@ class BrowserFragment : Fragment(),
             }
             R.id.add_to_home -> {
                 val uri = browserModule.currentUrl()?.toUri() ?: return true
-                val context = binding?.root?.context ?: return true
+                val context = context ?: return true
                 ShortcutUseCase(context)
                         .invoke(
                                 uri,
@@ -284,7 +430,7 @@ class BrowserFragment : Fragment(),
                 return true
             }
             R.id.add_rss -> {
-                RssUrlFinder(preferenceApplier).invoke(browserModule.currentUrl()) { binding?.root }
+                RssUrlFinder(preferenceApplier).invoke(browserModule.currentUrl()) { null /* TODO*/ }
                 return true
             }
             R.id.replace_home -> {
@@ -303,12 +449,7 @@ class BrowserFragment : Fragment(),
     }
 
     fun reload() {
-        if (appBarBinding?.progress?.isVisible == true) {
-            browserModule.stopLoading()
-            stopSwipeRefresherLoading()
-        } else {
-            browserModule.reload()
-        }
+        // TODO Delete it
     }
 
     fun openReaderMode() {
@@ -322,16 +463,6 @@ class BrowserFragment : Fragment(),
     fun openNewTab(): Boolean {
         tabListViewModel?.openNewTab()
         return true
-    }
-
-    private fun updateForwardButtonState(enable: Boolean) {
-        appBarBinding?.forward?.isEnabled = enable
-        appBarBinding?.forward?.alpha = if (enable) 1f else 0.6f
-    }
-
-    private fun updateBackButtonState(enable: Boolean) {
-        appBarBinding?.back?.isEnabled = enable
-        appBarBinding?.back?.alpha = if (enable) 1f else 0.6f
     }
 
     private fun showReaderFragment(content: String) {
@@ -424,37 +555,14 @@ class BrowserFragment : Fragment(),
 
         switchToolbarVisibility()
 
-        val colorPair = preferenceApplier.colorPair()
-
-        val fontColor = colorPair.fontColor()
-
-        appBarBinding?.also {
-            it.icon.setColorFilter(fontColor)
-            it.mainText.setTextColor(fontColor)
-            it.subText.setTextColor(fontColor)
-            it.reload.setColorFilter(fontColor)
-            it.back.setColorFilter(fontColor)
-            it.forward.setColorFilter(fontColor)
-            it.tabIcon.setColorFilter(fontColor)
-            it.tabCount.setTextColor(fontColor)
-            it.pageInformation.setColorFilter(fontColor)
-            it.userAgent.setColorFilter(fontColor)
-            it.htmlSource.setColorFilter(fontColor)
-            it.progress.progressDrawable.colorFilter =
-                    PorterDuffColorFilter(
-                            fontColor,
-                            PorterDuff.Mode.SRC_IN
-                    )
-        }
-
         browserModule.resizePool(preferenceApplier.poolSize)
         browserModule.applyNewAlpha()
         browserModule.onResume()
-
+/*TODO
         binding?.swipeRefresher?.let {
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
-        }
+        }*/
     }
 
     private fun switchToolbarVisibility() {
@@ -495,7 +603,7 @@ class BrowserFragment : Fragment(),
     }
 
     fun stopSwipeRefresherLoading() {
-        binding?.swipeRefresher?.isRefreshing = false
+        //TODO binding?.swipeRefresher?.isRefreshing = false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -521,22 +629,8 @@ class BrowserFragment : Fragment(),
     override fun onDetach() {
         appBarViewModel?.show()
         browserModule.onDestroy()
-        parentFragmentManager.clearFragmentResultListener("user_agent_setting")
         storagePermissionRequestLauncher.unregister()
         super.onDetach()
-    }
-
-    companion object {
-
-        /**
-         * Layout ID.
-         */
-        @LayoutRes
-        private const val LAYOUT_ID = R.layout.fragment_browser
-
-        @LayoutRes
-        private const val APP_BAR_LAYOUT_ID = R.layout.app_bar_browser
-
     }
 
 }

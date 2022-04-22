@@ -40,7 +40,7 @@ class BarcodePreparationUseCase(
             val imageView = contentView.findViewById<ImageView>(R.id.barcode)
             val bitmap = withContext(ioDispatcher) {
                 BarcodeGenerator().invoke(url, BARCODE_SIZE)
-            }
+            } ?: return@launch
             imageView.setImageBitmap(bitmap)
             imageView.visibility = View.VISIBLE
             setShareAction(bitmap, contentView.findViewById(R.id.share))

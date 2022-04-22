@@ -101,7 +101,6 @@ class LoanCalculatorFragment : Fragment() {
             },
             {
                 result = getString(R.string.message_result_montly_payment, it)
-                println("tomato res $it")
             }
         ).invoke()
 

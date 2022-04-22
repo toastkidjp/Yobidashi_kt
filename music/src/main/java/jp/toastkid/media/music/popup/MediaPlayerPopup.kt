@@ -10,35 +10,27 @@ package jp.toastkid.media.music.popup
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.widget.AdapterView
 import android.widget.PopupWindow
-import androidx.annotation.LayoutRes
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.ViewTreeLifecycleOwner
+import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.SlidingTapListener
 import jp.toastkid.media.R
-import jp.toastkid.media.databinding.PopupMediaPlayerBinding
 import jp.toastkid.media.music.MediaPlayerService
-import jp.toastkid.media.music.popup.playback.speed.PlaybackSpeedAdapter
-import jp.toastkid.media.music.popup.playback.speed.PlayingSpeed
 import kotlinx.coroutines.Job
 
 /**
@@ -51,18 +43,7 @@ class MediaPlayerPopup(private val context: Context) {
      */
     private val popupWindow = PopupWindow(context)
 
-    /**
-     * View binding.
-     */
-    private val binding: PopupMediaPlayerBinding
-
-    private var adapter: Adapter? = null
-
-    private var layoutManager: LinearLayoutManager? = null
-
     private lateinit var mediaBrowser: MediaBrowserCompat
-
-    private val preferenceApplier = PreferenceApplier(context)
 
     private val resources = context.resources
 
@@ -71,10 +52,6 @@ class MediaPlayerPopup(private val context: Context) {
     private val headerHeight = resources.getDimensionPixelSize(R.dimen.media_player_popup_header_height)
 
     private val swipeLimit = heightPixels - (headerHeight / 2)
-
-    private val pauseBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_pause)
-
-    private val playBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_play_media)
 
     private val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
 
@@ -87,15 +64,11 @@ class MediaPlayerPopup(private val context: Context) {
                 return
             }
 
-            adapter?.clear()
-
             attemptMediaController()?.also {
                 it.transportControls?.prepare()
             }
 
-            children.forEach { adapter?.add(it) }
-
-            layoutManager?.scrollToPosition(adapter?.mediumPosition() ?: 0)
+            mediaPlayerPopupViewModel?.nextMusics(children)
         }
     }
 
@@ -134,29 +107,11 @@ class MediaPlayerPopup(private val context: Context) {
     private val disposables: Job by lazy { Job() }
 
     init {
-        val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, null, false)
-        binding.popup = this
-
         initializeViewModels()
-
-        adapter = Adapter(
-            LayoutInflater.from(context),
-            preferenceApplier,
-            resources,
-            mediaPlayerPopupViewModel
-        )
 
         observeViewModels()
 
-        binding.mediaList.adapter = adapter
-
-        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        binding.mediaList.layoutManager = layoutManager
-
-        initializePlaybackSpeedChanger()
-
-        applyColors()
+        //TODO applyColors()
 
         initializePopupWindow()
 
@@ -168,25 +123,6 @@ class MediaPlayerPopup(private val context: Context) {
             connectionCallback,
             null
         )
-    }
-
-    private fun initializePlaybackSpeedChanger() {
-        binding.playingSpeed.isVisible = true
-
-        binding.playingSpeed.adapter = PlaybackSpeedAdapter(
-            LayoutInflater.from(binding.root.context),
-            preferenceApplier.colorPair()
-        )
-        binding.playingSpeed.setSelection(PlayingSpeed.getDefault().findIndex())
-        binding.playingSpeed.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val speed = PlayingSpeed.findById(id).speed
-                val intent = MediaPlayerService.makeSpeedIntent(speed)
-                context.sendBroadcast(intent)
-            }
-        }
     }
 
     private fun observeViewModels() {
@@ -202,7 +138,7 @@ class MediaPlayerPopup(private val context: Context) {
         }
     }
 
-    private fun applyColors() {
+    /*private fun applyColors() {
         val colorPair = preferenceApplier.colorPair()
         binding.control.setBackgroundColor(colorPair.bgColor())
 
@@ -211,10 +147,19 @@ class MediaPlayerPopup(private val context: Context) {
         binding.playSwitch.setColorFilter(fontColor)
         binding.shuffle.setColorFilter(fontColor)
         binding.hide.setColorFilter(fontColor)
-    }
+    }*/
 
     private fun initializePopupWindow() {
-        popupWindow.contentView = binding.root
+        val composeView = ComposeView(context)
+        val activity = context as? FragmentActivity ?: return
+
+        ViewTreeLifecycleOwner.set(composeView, activity)
+        ViewTreeSavedStateRegistryOwner.set(composeView, activity)
+        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
+
+        popupWindow.contentView = composeView.also {
+
+        }
 
         popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
@@ -255,24 +200,22 @@ class MediaPlayerPopup(private val context: Context) {
     }
 
     private fun setPauseIcon() {
-        binding.playSwitch.setImageBitmap(pauseBitmap)
-        binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
+        mediaPlayerPopupViewModel?.playing = true
     }
 
     private fun setPlayIcon() {
-        binding.playSwitch.setImageBitmap(playBitmap)
-        binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
+        mediaPlayerPopupViewModel?.playing = false
     }
 
     fun shuffle() {
         attemptMediaController()
             ?.transportControls
-            ?.playFromUri(adapter?.random()?.description?.mediaUri, bundleOf())
+            //TODO ?.playFromUri(adapter?.random()?.description?.mediaUri, bundleOf())
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setSlidingListener() {
-        val slidingTouchListener = SlidingTapListener(binding.popupBackground)
+        val slidingTouchListener = SlidingTapListener(popupWindow.contentView)
         slidingTouchListener.setCallback(object : SlidingTapListener.OnNewPosition {
             override fun onNewPosition(x: Float, y: Float) {
                 if (y > swipeLimit) {
@@ -281,7 +224,7 @@ class MediaPlayerPopup(private val context: Context) {
                 popupWindow.update(-1, -(y.toInt() - headerHeight), -1, -1)
             }
         })
-        binding.header.setOnTouchListener(slidingTouchListener)
+        popupWindow.contentView?.setOnTouchListener(slidingTouchListener)
     }
 
     fun show(parent: View) {
@@ -324,10 +267,4 @@ class MediaPlayerPopup(private val context: Context) {
 
     private fun attemptExtractActivity() = (context as? FragmentActivity)
 
-    companion object {
-
-        @LayoutRes
-        private val LAYOUT_ID = R.layout.popup_media_player
-
-    }
 }

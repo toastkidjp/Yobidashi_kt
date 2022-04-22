@@ -10,6 +10,8 @@ package jp.toastkid.lib
 import android.content.Context
 import android.view.View
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.LiveData
@@ -20,6 +22,10 @@ import androidx.lifecycle.ViewModel
  * @author toastkidjp
  */
 class AppBarViewModel : ViewModel() {
+
+    private val appBarComposable = mutableStateOf<@Composable () -> Unit>({})
+
+    val appBarContent: State<@Composable () -> Unit> = appBarComposable
 
     private val _content = MutableLiveData<View>()
 
@@ -35,7 +41,12 @@ class AppBarViewModel : ViewModel() {
             ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
         )
         appBarComposeView.setContent { composable() }
-        _content.postValue(appBarComposeView)
+        //_content.postValue(appBarComposeView)
+        appBarComposable.value = composable
+    }
+
+    fun replace(composable: @Composable() () -> Unit) {
+        appBarComposable.value = composable
     }
 
     private val _visibility = MutableLiveData<Boolean>()

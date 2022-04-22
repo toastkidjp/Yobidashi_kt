@@ -75,8 +75,6 @@ dependencies {
     implementation project(":search")
     implementation project(":todo")
     implementation project(':music')
-    implementation project(":planning")
-    implementation project(":gesture")
     implementation project(":pdf")
     implementation project(":api")
     implementation project(":rss")
@@ -106,6 +104,7 @@ dependencies {
     implementation 'com.godaddy.android.colorpicker:compose-color-picker:0.4.2'
     implementation "com.google.accompanist:accompanist-flowlayout:0.24.5-alpha"
     implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation "androidx.navigation:navigation-compose:$libVersions.navigation_compose"
 
     implementation "androidx.room:room-runtime:$libVersions.room"
     kapt "androidx.room:room-compiler:$libVersions.room"
