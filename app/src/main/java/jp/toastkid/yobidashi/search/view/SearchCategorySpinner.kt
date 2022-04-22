@@ -88,7 +88,6 @@ internal fun SearchCategorySpinner(
                         )
                         Text(
                             stringResource(id = searchCategory.id),
-                            color = colorResource(id = R.color.black),
                             fontSize = 20.sp,
                             modifier = Modifier.padding(8.dp)
                         )

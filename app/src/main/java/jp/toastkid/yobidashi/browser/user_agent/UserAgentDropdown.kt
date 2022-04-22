@@ -18,11 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.R
 
 @Composable
 fun UserAgentDropdown(open: MutableState<Boolean>, onSelect: (UserAgent) -> Unit) {
@@ -40,7 +38,6 @@ fun UserAgentDropdown(open: MutableState<Boolean>, onSelect: (UserAgent) -> Unit
             ) {
                 Text(
                     userAgent.title(),
-                    color = colorResource(id = R.color.black),
                     fontSize = 20.sp,
                     modifier = Modifier
                         .weight(1f)
