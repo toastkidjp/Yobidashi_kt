@@ -9,13 +9,17 @@
 package jp.toastkid.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import jp.toastkid.lib.preference.PreferenceApplier
 
@@ -45,10 +49,22 @@ fun AppTheme(
                 onBackground = Color(0xFF000B00)
             )
 
+    val handleColor = Color(preferenceApplier.editorHighlightColor(Color(0xFF81D4FA).toArgb()))
+
     MaterialTheme(
         colors = colors,
         typography = Typography(),
-        shapes = Shapes(),
-        content = content
-    )
+        shapes = Shapes()
+    ) {
+        CompositionLocalProvider(
+            LocalTextSelectionColors.provides(
+                TextSelectionColors(
+                    handleColor = handleColor,
+                    backgroundColor = handleColor.copy(alpha = 0.4f)
+                )
+            )
+        ) {
+            content()
+        }
+    }
 }
