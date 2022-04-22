@@ -4,7 +4,6 @@ import android.app.Application
 import android.webkit.WebView
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.initial.FirstLaunchInitializer
-import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,10 +29,6 @@ class ExtendedApplication : Application() {
 
         CoroutineScope(Dispatchers.Default).launch {
             FirstLaunchInitializer(this@ExtendedApplication, preferenceApplier)
-        }
-
-        if (preferenceApplier.useNotificationWidget()) {
-            NotificationWidget.show(this)
         }
     }
 
