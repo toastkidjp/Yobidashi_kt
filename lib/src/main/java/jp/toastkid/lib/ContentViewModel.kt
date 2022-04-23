@@ -193,4 +193,13 @@ class ContentViewModel : ViewModel() {
         _optionMenus.clear()
     }
 
+    val bottomBarOffsetHeightPx = mutableStateOf(0f)
+
+    val fabScale = mutableStateOf(1f)
+
+    fun resetComponentVisibility() {
+        bottomBarOffsetHeightPx.value = 0f
+        fabScale.value = 1f
+    }
+
 }
