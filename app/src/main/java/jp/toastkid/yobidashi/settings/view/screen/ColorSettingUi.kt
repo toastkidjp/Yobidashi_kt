@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.settings.view.screen
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -39,11 +40,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
+import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
+import jp.toastkid.yobidashi.settings.color.RandomColorInsertion
 import jp.toastkid.yobidashi.settings.color.SavedColor
 import jp.toastkid.yobidashi.settings.view.ColorPaletteUi
 import kotlinx.coroutines.CoroutineScope
@@ -73,6 +79,8 @@ internal fun ColorSettingUi() {
 
     val currentFontColor =
         remember { mutableStateOf(Color(preferenceApplier.fontColor)) }
+
+    val openConfirmDialog = remember { mutableStateOf(false) }
 
     MaterialTheme() {
         LazyColumn(
@@ -127,7 +135,8 @@ internal fun ColorSettingUi() {
             }
 
             coroutineScope.launch {
-                val savedColors = withContext(Dispatchers.IO) { repository.findAll().windowed(3, 3) }
+                val savedColors =
+                    withContext(Dispatchers.IO) { repository.findAll().windowed(3, 3) }
                 if (savedColors.isEmpty()) {
                     return@launch
                 }
@@ -169,19 +178,23 @@ internal fun ColorSettingUi() {
                                     .weight(1f)
                                     .padding(8.dp)
                             ) {
-                                Box(modifier = Modifier
-                                    .height(100.dp)
-                                    .background(Color(savedColor.bgColor))
-                                    .padding(8.dp)
+                                Box(
+                                    modifier = Modifier
+                                        .height(100.dp)
+                                        .background(Color(savedColor.bgColor))
+                                        .padding(8.dp)
                                 ) {
-                                    Text(text = stringResource(id = R.string.sample_a),
+                                    Text(
+                                        text = stringResource(id = R.string.sample_a),
                                         color = Color(savedColor.fontColor),
                                         modifier = Modifier.align(
-                                            Alignment.Center)
+                                            Alignment.Center
+                                        )
                                     )
-                                    Icon(painterResource(id = R.drawable.ic_remove_circle), contentDescription = stringResource(
-                                        id = R.string.delete
-                                    ),
+                                    Icon(painterResource(id = R.drawable.ic_remove_circle),
+                                        contentDescription = stringResource(
+                                            id = R.string.delete
+                                        ),
                                         modifier = Modifier
                                             .width(40.dp)
                                             .height(40.dp)
@@ -197,40 +210,51 @@ internal fun ColorSettingUi() {
                             }
                         }
                     }
-
-                    /*
-                    binding?.clearSavedColor?.setOnClickListener{
-    ConfirmDialogFragment.show(
-        parentFragmentManager,
-        getString(R.string.title_clear_saved_color),
-        Html.fromHtml(
-            activityContext.getString(R.string.confirm_clear_all_settings),
-            Html.FROM_HTML_MODE_COMPACT
-        ),
-        "clear_color"
-    )
-}
-                     */
                 }
             }
         }
     }
-}
 
-/*
-parentFragmentManager.setFragmentResultListener(
-        "clear_color",
-        viewLifecycleOwner,
-        { _, _ ->
-            adapter?.clear()
+    viewModel(modelClass = ContentViewModel::class.java).optionMenus(
+        OptionMenu(
+            titleId = R.string.title_clear_saved_color,
+            action = {
+                openConfirmDialog.value = true
+            }
+        ),
+        OptionMenu(
+            titleId = R.string.title_add_recommended_colors,
+            action = {
+                DefaultColorInsertion().insert(context)
+            }
+        ),
+        OptionMenu(
+            titleId = R.string.title_add_random,
+            action = {
+                RandomColorInsertion(repository)() {
+                    //TODO adapter?.refresh()
+                }
+                //TODO snackShort(R.string.done_addition)
+            }
+        )
+    )
+
+    DestructiveChangeConfirmDialog(
+        openConfirmDialog,
+        titleId = R.string.title_clear_saved_color
+    ) {
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                DatabaseFinder().invoke(context).searchHistoryRepository().deleteAll()
+            }
+
+            (context as? ComponentActivity)?.let { activity ->
+                ViewModelProvider(activity).get(ContentViewModel::class.java)
+                    .snackShort(R.string.settings_color_delete)
+            }
         }
-    )
-    parentFragmentManager.setFragmentResultListener(
-        "add_recommended_colors",
-        viewLifecycleOwner,
-        { _, _ -> DefaultColorInsertion().insert(view.context) }
-    )
-*/
+    }
+}
 
 /**
  * Commit new color.
@@ -275,4 +299,3 @@ private fun commitNewColor(
         else -> super.onOptionsItemSelected(item)
     }
 }*/
-    //override fun titleId(): Int = R.string.title_settings_color

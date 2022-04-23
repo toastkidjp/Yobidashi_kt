@@ -8,11 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.webkit.WebView
-import androidx.annotation.Size
 import androidx.core.net.toUri
-import androidx.core.view.NestedScrollingChild3
-import androidx.core.view.NestedScrollingChildHelper
-import androidx.core.view.ViewCompat
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.webview.usecase.SelectedTextUseCase
@@ -24,9 +20,7 @@ import jp.toastkid.yobidashi.libs.speech.SpeechMaker
  *
  * @author toastkidjp
  */
-internal class CustomWebView(context: Context) : WebView(context), NestedScrollingChild3 {
-
-    private val childHelper: NestedScrollingChildHelper = NestedScrollingChildHelper(this)
+internal class CustomWebView(context: Context) : WebView(context) {
 
     /**
      * Pull-to-Refresh availability.
@@ -104,7 +98,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                 lastX = eventX.toFloat()
                 lastY = eventY.toFloat()
                 // start NestedScroll
-                startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_TOUCH)
+                //startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_TOUCH)
                 return returnValue
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
@@ -207,118 +201,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             SelectedTextUseCase.make(context)
                     ?.searchWithPreview(word, PreferenceApplier(context).getDefaultSearchEngine())
         }
-    }
-
-    override fun setNestedScrollingEnabled(enabled: Boolean) {
-        childHelper.isNestedScrollingEnabled = enabled
-    }
-
-    override fun isNestedScrollingEnabled(): Boolean {
-        return childHelper.isNestedScrollingEnabled
-    }
-
-    override fun startNestedScroll(axes: Int): Boolean {
-        return childHelper.startNestedScroll(axes)
-    }
-
-    override fun startNestedScroll(axes: Int, type: Int): Boolean {
-        return childHelper.startNestedScroll(axes, type)
-    }
-
-    override fun stopNestedScroll() {
-        childHelper.stopNestedScroll()
-    }
-
-    override fun stopNestedScroll(type: Int) {
-        childHelper.stopNestedScroll(type)
-    }
-
-    override fun hasNestedScrollingParent(): Boolean {
-        return childHelper.hasNestedScrollingParent()
-    }
-
-    override fun hasNestedScrollingParent(type: Int): Boolean {
-        return childHelper.hasNestedScrollingParent(type)
-    }
-
-    override fun dispatchNestedScroll(
-            dxConsumed: Int,
-            dyConsumed: Int,
-            dxUnconsumed: Int,
-            dyUnconsumed: Int,
-            @Size(value = 2) offsetInWindow: IntArray?
-    ): Boolean {
-        return childHelper.dispatchNestedScroll(
-                dxConsumed,
-                dyConsumed,
-                dxUnconsumed,
-                dyUnconsumed,
-                offsetInWindow
-        )
-    }
-
-    override fun dispatchNestedPreScroll(
-            dx: Int, dy: Int,
-            @Size(value = 2) consumed: IntArray?,
-            @Size(value = 2) offsetInWindow: IntArray?
-    ): Boolean {
-        return childHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow)
-    }
-
-    override fun dispatchNestedFling(velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
-        return childHelper.dispatchNestedFling(velocityX, velocityY, consumed)
-    }
-
-    override fun dispatchNestedPreFling(velocityX: Float, velocityY: Float): Boolean {
-        return childHelper.dispatchNestedPreFling(velocityX, velocityY)
-    }
-
-    override fun dispatchNestedScroll(
-            dxConsumed: Int,
-            dyConsumed: Int,
-            dxUnconsumed: Int,
-            dyUnconsumed: Int,
-            offsetInWindow: IntArray?,
-            type: Int,
-            consumed: IntArray
-    ) {
-        return childHelper.dispatchNestedScroll(
-                dxConsumed,
-                dyConsumed,
-                dxUnconsumed,
-                dyUnconsumed,
-                offsetInWindow,
-                type,
-                consumed
-        )
-    }
-
-    override fun dispatchNestedScroll(
-            dxConsumed: Int,
-            dyConsumed: Int,
-            dxUnconsumed: Int,
-            dyUnconsumed: Int,
-            offsetInWindow: IntArray?,
-            type: Int
-    ): Boolean {
-        return childHelper.dispatchNestedScroll(
-                dxConsumed,
-                dyConsumed,
-                dxUnconsumed,
-                dyUnconsumed,
-                offsetInWindow,
-                type
-        )
-    }
-
-    override fun dispatchNestedPreScroll(
-            dx: Int,
-            dy: Int,
-            consumed: IntArray?,
-            offsetInWindow: IntArray?,
-            type: Int
-    ): Boolean {
-        return childHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow, type)
     }
 
     companion object {

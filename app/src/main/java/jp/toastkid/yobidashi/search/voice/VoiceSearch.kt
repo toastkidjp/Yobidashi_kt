@@ -6,6 +6,7 @@ import android.speech.RecognizerIntent
 import android.view.View
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 
@@ -22,13 +23,13 @@ class VoiceSearch {
      * @param context
      * @return [Intent]
      */
-    fun makeIntent(context: Context): Intent =
+    fun makeIntent(context: Context? = null): Intent =
             Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
                 it.putExtra(
                         RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                         RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
                 )
-                it.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
+                it.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, BuildConfig.APPLICATION_ID)
             }
 
     /**
