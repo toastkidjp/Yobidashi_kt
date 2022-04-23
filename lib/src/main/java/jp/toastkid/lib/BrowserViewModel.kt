@@ -101,4 +101,12 @@ class BrowserViewModel : ViewModel() {
         openLongTapDialog.value = false
     }
 
+    private val _switchWebViewToCurrent = MutableLiveData<Event<String>>()
+
+    val switchWebViewToCurrent: LiveData<Event<String>> = _switchWebViewToCurrent
+
+    fun switchWebViewToCurrent(tabId: String) {
+        _switchWebViewToCurrent.postValue(Event(tabId))
+    }
+
 }

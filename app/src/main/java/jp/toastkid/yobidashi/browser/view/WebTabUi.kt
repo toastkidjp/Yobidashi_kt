@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -103,7 +104,7 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     val webViewContainer = remember { FrameLayout(activityContext) }
     val browserModule = BrowserModule(activityContext, webViewContainer)
 
-    val baseOffset = 120.dp.value.toInt()
+    val baseOffset = -100.dp.value.toInt()
 
     val currentWebView = remember { mutableStateOf<WebView?>(null) }
 
@@ -120,7 +121,7 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
         modifier = Modifier
             .scrollable(
                 state = rememberScrollableState { delta ->
-                    currentWebView.value?.flingScroll(0, -delta.toInt() * baseOffset)
+                    currentWebView.value?.flingScroll(0, delta.toInt() * baseOffset)
                     delta
                 },
                 Orientation.Vertical
@@ -157,6 +158,21 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
 
     val browserHeaderViewModel =
         viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    viewModel(BrowserFragmentViewModel::class.java, activityContext)
+        .loadWithNewTab
+        .observe(lifecycleOwner, {
+            val pair = it?.getContentIfNotHandled() ?: return@observe
+            browserModule.loadWithNewTab(pair.first, pair.second)
+            currentWebView.value = GlobalWebViewPool.getLatest()
+        })
+
+    browserViewModel.switchWebViewToCurrent.observe(lifecycleOwner, {
+        val newTabId = it?.getContentIfNotHandled() ?: return@observe
+        browserModule.switchWebViewToCurrent(newTabId)
+        currentWebView.value = GlobalWebViewPool.getLatest()
+    })
 
     BackHandler(browserHeaderViewModel.enableBackPress.value) {
         if (readerModeText.value.isNotBlank()) {
@@ -246,6 +262,20 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
             })
         )
     })
+
+    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
+    DisposableEffect("remove_observers") {
+        onDispose {
+            contentViewModel.toTop.removeObservers(activityContext)
+            contentViewModel.toBottom.removeObservers(activityContext)
+            contentViewModel.share.removeObservers(activityContext)
+
+            pageSearcherViewModel.find.removeObservers(activityContext)
+            pageSearcherViewModel.upward.removeObservers(activityContext)
+            pageSearcherViewModel.downward.removeObservers(activityContext)
+            pageSearcherViewModel.clear.removeObservers(activityContext)
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -451,19 +481,6 @@ private fun initializeHeaderViewModels(
                     )
                 }
             }
-
-            DisposableEffect("remove_observers") {
-                onDispose {
-                    contentViewModel.toTop.removeObservers(activity)
-                    contentViewModel.toBottom.removeObservers(activity)
-                    contentViewModel.share.removeObservers(activity)
-
-                    pageSearcherViewModel.find.removeObservers(activity)
-                    pageSearcherViewModel.upward.removeObservers(activity)
-                    pageSearcherViewModel.downward.removeObservers(activity)
-                    pageSearcherViewModel.clear.removeObservers(activity)
-                }
-            }
         }
     }
 
@@ -474,12 +491,6 @@ private fun initializeHeaderViewModels(
                 browserModule.saveArchiveForAutoArchive()
             }
     }
-
-    viewModelProvider.get(BrowserFragmentViewModel::class.java)
-        .loadWithNewTab
-        .observe(activity, {
-            browserModule.loadWithNewTab(it.first, it.second)
-        })
 
     pageSearcherViewModel.also { viewModel ->
         viewModel.find.observe(activity, Observer {
