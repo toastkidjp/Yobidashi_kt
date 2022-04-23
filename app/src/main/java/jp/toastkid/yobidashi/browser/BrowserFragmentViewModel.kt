@@ -11,18 +11,19 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.lifecycle.Event
 
 /**
  * @author toastkidjp
  */
 class BrowserFragmentViewModel : ViewModel() {
 
-    private val _loadWithNewTab = MutableLiveData<Pair<Uri, String>>()
+    private val _loadWithNewTab = MutableLiveData<Event<Pair<Uri, String>>>()
 
-    val loadWithNewTab: LiveData<Pair<Uri, String>> = _loadWithNewTab
+    val loadWithNewTab: LiveData<Event<Pair<Uri, String>>> = _loadWithNewTab
 
     fun loadWithNewTab(next: Pair<Uri, String>) {
-        _loadWithNewTab.postValue(next)
+        _loadWithNewTab.postValue(Event(next))
     }
 
 }
