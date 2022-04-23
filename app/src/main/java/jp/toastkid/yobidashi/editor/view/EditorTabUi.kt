@@ -77,6 +77,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.CursorColorSetter
 import jp.toastkid.yobidashi.editor.EditTextFinder
 import jp.toastkid.yobidashi.editor.EditorContextMenuInitializer
+import jp.toastkid.yobidashi.editor.InputFileNameDialogUi
 import jp.toastkid.yobidashi.editor.load.LoadFromStorageDialogUi
 import jp.toastkid.yobidashi.editor.load.StorageFilesFinder
 import jp.toastkid.yobidashi.editor.usecase.FileActionUseCase
@@ -302,6 +303,14 @@ private fun AppBarContent(
             onSelect = { fileActionUseCase.readFromFileUri(Uri.fromFile(it)) }
         )
     }
+
+    InputFileNameDialogUi(
+        openInputFileNameDialog,
+        onCommit = {
+            fileActionUseCase.assignNewFile(it)
+            fileActionUseCase.save(openInputFileNameDialog)
+        }
+    )
 
     DestructiveChangeConfirmDialog(
         visibleState = openConfirmDialog,
