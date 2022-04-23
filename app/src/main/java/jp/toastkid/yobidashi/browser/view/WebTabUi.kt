@@ -72,7 +72,6 @@ import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.BrowserModule
 import jp.toastkid.yobidashi.browser.FaviconApplier
@@ -160,7 +159,7 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
         viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    viewModel(BrowserFragmentViewModel::class.java, activityContext)
+    browserViewModel
         .loadWithNewTab
         .observe(lifecycleOwner, {
             val pair = it?.getContentIfNotHandled() ?: return@observe
