@@ -26,17 +26,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -217,8 +221,9 @@ private fun AppBarContent(
     val openConfirmDialog = remember { mutableStateOf(false) }
 
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .height(48.dp)
+            .height(72.dp)
             .fillMaxWidth()
             .horizontalScroll(
                 rememberScrollState()
@@ -277,8 +282,8 @@ private fun AppBarContent(
             fontSize = 14.sp,
             maxLines = 2,
             modifier = Modifier
-                .fillMaxHeight()
                 .padding(start = 4.dp, end = 4.dp)
+                .align(Alignment.CenterVertically)
         )
 
         Text(
@@ -287,8 +292,8 @@ private fun AppBarContent(
             fontSize = 14.sp,
             maxLines = 2,
             modifier = Modifier
-                .fillMaxHeight()
                 .padding(start = 4.dp, end = 4.dp)
+                .align(Alignment.CenterVertically)
         )
 
         EditorMenuItem(R.string.clear_all, R.drawable.ic_clear_form) {
@@ -353,20 +358,22 @@ private fun EditorMenuItem(
 ) {
     val preferenceApplier = PreferenceApplier(LocalContext.current)
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .width(60.dp)
-            .background(Color(preferenceApplier.color))
             .fillMaxHeight()
             .clickable {
                 onClick()
             }
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Image(
+        Icon(
             painter = painterResource(id = iconId),
             contentDescription = stringResource(id = labelId),
-            colorFilter = ColorFilter.tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn)
+            tint = Color(preferenceApplier.fontColor)
         )
+        Spacer(Modifier.requiredWidth(8.dp))
         Text(
             text = stringResource(id = labelId),
             color = Color(preferenceApplier.fontColor),
