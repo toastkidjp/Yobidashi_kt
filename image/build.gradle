@@ -48,6 +48,7 @@ dependencies {
     // Compose dependencies.
     implementation "androidx.compose.material:material:$libVersions.compose"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
+    implementation "io.coil-kt:coil-gif:$libVersions.coil_compose"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
     implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
     implementation "androidx.navigation:navigation-compose:$libVersions.navigation_compose"
@@ -58,9 +59,6 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
-
-    implementation "io.coil-kt:coil:$libVersions.coil"
-    implementation "io.coil-kt:coil-gif:$libVersions.coil"
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"
