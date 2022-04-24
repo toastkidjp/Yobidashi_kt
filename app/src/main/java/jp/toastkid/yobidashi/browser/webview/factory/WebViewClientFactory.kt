@@ -35,7 +35,6 @@ import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
-import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
@@ -96,10 +95,6 @@ class WebViewClientFactory(
                 }
             } catch (e: Exception) {
                 Timber.e(e)
-            }
-
-            CoroutineScope(Dispatchers.IO).launch {
-                WebClipIconLoader(faviconApplier).invoke(urlStr)
             }
 
             if (preferenceApplier.saveViewHistory
