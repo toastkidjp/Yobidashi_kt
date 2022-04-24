@@ -9,6 +9,7 @@
 package jp.toastkid.media.music.view
 
 import android.content.ComponentName
+import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -137,19 +138,28 @@ fun MusicListUi() {
 
     MusicList(
         {
+            val mediaUri = it.description.mediaUri
+            if (mediaUri == null || mediaUri == Uri.EMPTY) {
+                return@MusicList
+            }
             attemptToGetMediaController(activity)
                 ?.transportControls
-                ?.playFromUri(it.description.mediaUri, bundleOf())
+                ?.playFromUri(mediaUri, bundleOf())
         },
         {
             browserViewModel.preview("https://www.google.com/search?q=$it Lyrics".toUri())
         },
         { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         {
+            val mediaUri = mediaPlayerPopupViewModel.musics.value?.random()?.description?.mediaUri
+            if (mediaUri == null || mediaUri == Uri.EMPTY) {
+                return@MusicList
+            }
+
             attemptToGetMediaController(activity)
                 ?.transportControls
                 ?.playFromUri(
-                    mediaPlayerPopupViewModel.musics.value?.random()?.description?.mediaUri,
+                    mediaUri,
                     bundleOf()
                 )
         }
