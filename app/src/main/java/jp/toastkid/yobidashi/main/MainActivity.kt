@@ -786,6 +786,9 @@ class MainActivity : ComponentActivity(), Callback {
                         if (route == "setting/top") {
                             refresh()
                         }
+                        if (route?.startsWith("search") == true) {
+                            focusManager.clearFocus(true)
+                        }
                         if (route?.startsWith("tab/") == true) {
                             tabs.closeTab(tabs.index())
 
