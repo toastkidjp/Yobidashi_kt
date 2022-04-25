@@ -29,6 +29,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -201,7 +202,7 @@ internal fun MusicList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp)
-                    .background(Color(preferenceApplier.color))
+                    .background(MaterialTheme.colors.primary)
             ) {
                 AsyncImage(
                     R.drawable.ic_stop,
@@ -247,9 +248,7 @@ internal fun MusicList(
                     )
                     DropdownMenu(
                         expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                        modifier = Modifier
-                            .background(colorResource(id = R.color.soft_background))
+                        onDismissRequest = { expanded = false }
                     ) {
                         val values = PlayingSpeed.values()
                         values.forEachIndexed { index, s ->
