@@ -15,11 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import jp.toastkid.ui.R
 
 @Composable
 fun SingleLineText(
@@ -29,7 +27,6 @@ fun SingleLineText(
     Text(
         text = stringResource(id = textId),
         fontSize = 16.sp,
-        color = colorResource(id = R.color.black),
         modifier = Modifier.fillMaxWidth().padding(16.dp).clickable(onClick = onClick)
     )
 }
