@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,42 +55,40 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int, onBackPress:
         )
         .build()
 
-    MaterialTheme {
-        LazyRow(
-            state = listState,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Transparent)
-        ) {
-            items(images) { image ->
-                var scale by remember { mutableStateOf(1f) }
-                var rotation by remember { mutableStateOf(0f) }
-                var offset by remember { mutableStateOf(Offset.Zero) }
+    LazyRow(
+        state = listState,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Transparent)
+    ) {
+        items(images) { image ->
+            var scale by remember { mutableStateOf(1f) }
+            var rotation by remember { mutableStateOf(0f) }
+            var offset by remember { mutableStateOf(Offset.Zero) }
 
-                val state = rememberTransformableState { zoomChange, offsetChange, rotationChange ->
-                    scale *= zoomChange
-                    rotation += rotationChange
-                    offset += offsetChange
-                }
-
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(image.path).crossfade(true).build(),
-                    imageLoader = imageLoader,
-                    contentDescription = image.name,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(
-                            scaleX = scale,
-                            scaleY = scale,
-                            rotationZ = rotation,
-                            translationX = offset.x,
-                            translationY = offset.y
-                        )
-                        .transformable(state = state)
-                        .padding(end = 16.dp)
-                )
+            val state = rememberTransformableState { zoomChange, offsetChange, rotationChange ->
+                scale *= zoomChange
+                rotation += rotationChange
+                offset += offsetChange
             }
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(image.path).crossfade(true).build(),
+                imageLoader = imageLoader,
+                contentDescription = image.name,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .graphicsLayer(
+                        scaleX = scale,
+                        scaleY = scale,
+                        rotationZ = rotation,
+                        translationX = offset.x,
+                        translationY = offset.y
+                    )
+                    .transformable(state = state)
+                    .padding(end = 16.dp)
+            )
         }
     }
 }
