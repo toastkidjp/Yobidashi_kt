@@ -47,8 +47,8 @@ class ExportedFileParser {
     private fun read(doc: Document): List<Bookmark> {
         doc.select("dl")
                 .first()
-                .children()
-                .forEach { element ->
+                ?.children()
+                ?.forEach { element ->
                     parseChild(element,  Bookmark.getRootFolderName())?.let { bookmarks.add(it) }
                 }
         return bookmarks
