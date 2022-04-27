@@ -695,6 +695,7 @@ class MainActivity : ComponentActivity(), Callback {
                         }
                         composable("tab/web/current") {
                             val currentTab = tabs.currentTab() as? WebTab ?: return@composable
+                            focusManager.clearFocus(true)
                             WebTabUi(currentTab.latest.url().toUri(), currentTab.id())
                         }
                         composable("tab/pdf/current") {
