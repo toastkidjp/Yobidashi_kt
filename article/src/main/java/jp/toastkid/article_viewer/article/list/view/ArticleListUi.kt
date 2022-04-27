@@ -18,7 +18,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorInt
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -55,7 +54,6 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -340,7 +338,7 @@ private fun ListItem(
     Surface(
         elevation = 4.dp,
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 2.dp)
+            .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
             .combinedClickable(
                 onClick = { contentViewModel?.newArticle(article.title) },
                 onLongClick = { contentViewModel?.newArticleOnBackground(article.title) }
@@ -394,9 +392,7 @@ private fun ListItem(
                 )
                 DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .background(colorResource(id = R.color.soft_background))
+                    onDismissRequest = { expanded = false }
                 ) {
                     items.forEachIndexed { index, s ->
                         DropdownMenuItem(onClick = {
