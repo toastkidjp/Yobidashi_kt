@@ -93,7 +93,7 @@ fun EditorTabUi(path: String?) {
     val preferenceApplier = PreferenceApplier(context)
     val viewModelProvider = ViewModelProvider(context)
 
-    val editText = EditText(context)
+    val editText = remember { EditText(context) }
 
     val finder = EditTextFinder(editText)
 
