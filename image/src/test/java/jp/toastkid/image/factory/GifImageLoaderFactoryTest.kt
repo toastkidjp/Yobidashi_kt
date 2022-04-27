@@ -20,6 +20,9 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class GifImageLoaderFactoryTest {
 
@@ -35,7 +38,7 @@ class GifImageLoaderFactoryTest {
     @MockK
     private lateinit var context: Context
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
@@ -48,12 +51,12 @@ class GifImageLoaderFactoryTest {
         every { context.applicationContext }.returns(context)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         gifImageLoaderFactory.invoke(context)
 
