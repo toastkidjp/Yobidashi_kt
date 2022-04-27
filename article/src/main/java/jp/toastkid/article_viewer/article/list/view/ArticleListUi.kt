@@ -55,7 +55,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -85,7 +84,6 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -315,10 +313,7 @@ internal fun ArticleListUi(
     val articles = flow?.collectAsLazyPagingItems() ?: return
 
     MaterialTheme {
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
-        ) {
+        LazyColumn(state = listState) {
             items(articles, { it.id }) {
                 it ?: return@items
                 ListItem(it, contentViewModel, menuPopupUseCase, menuIconColor)
