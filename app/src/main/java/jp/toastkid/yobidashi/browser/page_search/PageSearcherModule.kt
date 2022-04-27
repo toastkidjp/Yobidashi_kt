@@ -14,7 +14,6 @@ import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -52,7 +51,7 @@ class PageSearcherModule(
     /**
      * Show module with opening software keyboard.
      */
-    fun show() {
+    private fun show() {
         if (!viewStubProxy.isInflated) {
             initialize()
         }

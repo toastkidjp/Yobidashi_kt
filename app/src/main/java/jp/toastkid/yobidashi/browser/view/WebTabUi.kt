@@ -15,6 +15,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -27,7 +28,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
@@ -83,6 +83,7 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
 
     val webViewContainer = remember { FrameLayout(activityContext) }
     webViewContainer.background = ColorDrawable(Color.Transparent.toArgb())
+    val enableBackStack = remember { mutableStateOf(true) }
     val browserModule = BrowserModule(activityContext, webViewContainer)
 
     initializeHeaderViewModels(activityContext, browserModule)
@@ -98,13 +99,14 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
         },
         modifier = Modifier
             .background(Color.Transparent)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(ScrollState(0))
     )
-    BackHandler(true) {
+    BackHandler(enableBackStack.value) {
         if (browserModule.back()) {
+            enableBackStack.value = browserModule.canGoBack()
             return@BackHandler
         }
-        activityContext.onBackPressed()
+        enableBackStack.value = false
     }
 
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
