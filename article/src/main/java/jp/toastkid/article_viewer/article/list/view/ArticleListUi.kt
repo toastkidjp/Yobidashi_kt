@@ -37,7 +37,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -312,12 +311,10 @@ internal fun ArticleListUi(
 ) {
     val articles = flow?.collectAsLazyPagingItems() ?: return
 
-    MaterialTheme {
-        LazyColumn(state = listState) {
-            items(articles, { it.id }) {
-                it ?: return@items
-                ListItem(it, contentViewModel, menuPopupUseCase, menuIconColor)
-            }
+    LazyColumn(state = listState) {
+        items(articles, { it.id }) {
+            it ?: return@items
+            ListItem(it, contentViewModel, menuPopupUseCase, menuIconColor)
         }
     }
 
