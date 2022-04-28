@@ -14,7 +14,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -87,140 +84,136 @@ internal fun DisplaySettingUi() {
             .invoke()
     }
 
-    MaterialTheme() {
-        Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
-            LazyColumn(
-                Modifier.background(colorResource(id = R.color.setting_background))
-            ) {
-                item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
+    Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
+        LazyColumn {
+            item {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .clickable { applyDarkMode() }
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_dark_mode_black),
+                        tint = iconColor,
+                        contentDescription = stringResource(id = R.string.apply_dark_mode)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.apply_dark_mode),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
-                            .clickable { applyDarkMode() }
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.ic_dark_mode_black),
-                            tint = iconColor,
-                            contentDescription = stringResource(id = R.string.apply_dark_mode)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.apply_dark_mode),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 4.dp)
-                        )
-                    }
-
-                    InsetDivider()
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .clickable {
-                                preferenceApplier.removeBackgroundImagePath()
-                                contentViewModel.snackShort(R.string.message_reset_bg_image)
-                            }
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.ic_close_black),
-                            tint = iconColor,
-                            contentDescription = stringResource(id = R.string.title_bg_reset)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.title_bg_reset),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 4.dp)
-                        )
-                    }
-
-                    InsetDivider()
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.ic_image),
-                            tint = iconColor,
-                            contentDescription = stringResource(id = R.string.title_background_image_setting)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.title_background_image_setting),
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(start = 4.dp)
-                        )
-                        Icon(
-                            painterResource(id = R.drawable.ic_add_white),
-                            tint = iconColor,
-                            contentDescription = stringResource(id = R.string.add_background_image),
-                            modifier = Modifier.clickable { addingLauncher.launch(makePickImage()) }
-                        )
-                    }
+                            .padding(start = 4.dp)
+                    )
                 }
 
-                if (files.value.isEmpty()) {
-                    return@LazyColumn
+                InsetDivider()
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .clickable {
+                            preferenceApplier.removeBackgroundImagePath()
+                            contentViewModel.snackShort(R.string.message_reset_bg_image)
+                        }
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_close_black),
+                        tint = iconColor,
+                        contentDescription = stringResource(id = R.string.title_bg_reset)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.title_bg_reset),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 4.dp)
+                    )
                 }
 
-                items(files.value) { column ->
-                    Row() {
-                        column.forEach { imageFile ->
-                            Surface(elevation = 4.dp, modifier = Modifier
-                                .height(200.dp)
-                                .weight(1f)
-                                .padding(4.dp)) {
-                                Box(Modifier.clickable {
-                                    preferenceApplier.backgroundImagePath = imageFile.path
-                                    contentViewModel
-                                        ?.snackShort(R.string.message_change_background_image)
-                                }) {
-                                    Column() {
-                                        AsyncImage(
-                                            model = imageFile,
-                                            contentDescription = imageFile.name,
-                                            contentScale = ContentScale.Crop,
-                                            modifier = Modifier
-                                                .height(150.dp)
-                                                .padding(4.dp)
-                                        )
-                                        Text(
-                                            imageFile.nameWithoutExtension,
-                                            maxLines = 2,
-                                            fontSize = 14.sp,
-                                            overflow = TextOverflow.Ellipsis,
-                                            modifier = Modifier.padding(4.dp)
-                                        )
-                                    }
-                                    Icon(
-                                        painterResource(id = R.drawable.ic_remove_circle),
-                                        contentDescription = stringResource(id = R.string.delete),
-                                        modifier = Modifier.size(40.dp).align(Alignment.TopEnd)
-                                            .clickable {
-                                                if (!imageFile.exists()) {
-                                                    contentViewModel
-                                                        ?.snackShort(R.string.message_cannot_found_image)
-                                                    return@clickable
-                                                }
-                                                val successRemove = imageFile.delete()
-                                                if (!successRemove) {
-                                                    contentViewModel
-                                                        ?.snackShort(R.string.message_failed_image_removal)
-                                                    return@clickable
-                                                }
-                                                files.value = loadFileChunk(filesDir)
-                                                contentViewModel
-                                                    ?.snackShort(R.string.message_success_image_removal)
-                                            }
+                InsetDivider()
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_image),
+                        tint = iconColor,
+                        contentDescription = stringResource(id = R.string.title_background_image_setting)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.title_background_image_setting),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 4.dp)
+                    )
+                    Icon(
+                        painterResource(id = R.drawable.ic_add_white),
+                        tint = iconColor,
+                        contentDescription = stringResource(id = R.string.add_background_image),
+                        modifier = Modifier.clickable { addingLauncher.launch(makePickImage()) }
+                    )
+                }
+            }
+
+            if (files.value.isEmpty()) {
+                return@LazyColumn
+            }
+
+            items(files.value) { column ->
+                Row() {
+                    column.forEach { imageFile ->
+                        Surface(elevation = 4.dp, modifier = Modifier
+                            .height(200.dp)
+                            .weight(1f)
+                            .padding(4.dp)) {
+                            Box(Modifier.clickable {
+                                preferenceApplier.backgroundImagePath = imageFile.path
+                                contentViewModel
+                                    ?.snackShort(R.string.message_change_background_image)
+                            }) {
+                                Column() {
+                                    AsyncImage(
+                                        model = imageFile,
+                                        contentDescription = imageFile.name,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .height(150.dp)
+                                            .padding(4.dp)
+                                    )
+                                    Text(
+                                        imageFile.nameWithoutExtension,
+                                        maxLines = 2,
+                                        fontSize = 14.sp,
+                                        overflow = TextOverflow.Ellipsis,
+                                        modifier = Modifier.padding(4.dp)
                                     )
                                 }
+                                Icon(
+                                    painterResource(id = R.drawable.ic_remove_circle),
+                                    contentDescription = stringResource(id = R.string.delete),
+                                    modifier = Modifier.size(40.dp).align(Alignment.TopEnd)
+                                        .clickable {
+                                            if (!imageFile.exists()) {
+                                                contentViewModel
+                                                    ?.snackShort(R.string.message_cannot_found_image)
+                                                return@clickable
+                                            }
+                                            val successRemove = imageFile.delete()
+                                            if (!successRemove) {
+                                                contentViewModel
+                                                    ?.snackShort(R.string.message_failed_image_removal)
+                                                return@clickable
+                                            }
+                                            files.value = loadFileChunk(filesDir)
+                                            contentViewModel
+                                                ?.snackShort(R.string.message_success_image_removal)
+                                        }
+                                )
                             }
                         }
                     }
@@ -228,6 +221,7 @@ internal fun DisplaySettingUi() {
             }
         }
     }
+
 }
 
 private fun loadFileChunk(filesDir: FilesDir) =
