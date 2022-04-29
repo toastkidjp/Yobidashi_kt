@@ -203,14 +203,17 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
     pageSearcherViewModel.also { viewModel ->
         viewModel.find.observe(lifecycleOwner, Observer {
-            browserModule.find(it)
+            val word = it.getContentIfNotHandled() ?: return@Observer
+            browserModule.find(word)
         })
 
         viewModel.upward.observe(lifecycleOwner, Observer {
+            it.getContentIfNotHandled() ?: return@Observer
             browserModule.findUp()
         })
 
         viewModel.downward.observe(lifecycleOwner, Observer {
+            it.getContentIfNotHandled() ?: return@Observer
             browserModule.findDown()
         })
 

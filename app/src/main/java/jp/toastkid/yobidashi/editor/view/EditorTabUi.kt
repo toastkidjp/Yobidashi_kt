@@ -170,13 +170,16 @@ fun EditorTabUi(path: String?) {
     val pageSearcherViewModel =
         viewModelProvider.get(PageSearcherViewModel::class.java)
     pageSearcherViewModel.upward.observe(context, {
-        finder.findUp(it)
+        val word = it.getContentIfNotHandled() ?: return@observe
+        finder.findUp(word)
     })
     pageSearcherViewModel.downward.observe(context, {
-        finder.findDown(it)
+        val word = it.getContentIfNotHandled() ?: return@observe
+        finder.findDown(word)
     })
     pageSearcherViewModel.find.observe(context, {
-        finder.findDown(it)
+        val word = it.getContentIfNotHandled() ?: return@observe
+        finder.findDown(word)
     })
 
     val dialogState = remember { mutableStateOf(false) }

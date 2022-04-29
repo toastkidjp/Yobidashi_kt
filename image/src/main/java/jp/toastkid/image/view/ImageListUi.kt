@@ -109,7 +109,7 @@ fun ImageListTopUi() {
     (context as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(PageSearcherViewModel::class.java)
             .also { viewModel ->
-                val keyword = viewModel.find.observeAsState().value
+                val keyword = viewModel.find.observeAsState().value?.getContentIfNotHandled()
                 if (keyword.isNullOrBlank()) {
                     return@also
                 }
