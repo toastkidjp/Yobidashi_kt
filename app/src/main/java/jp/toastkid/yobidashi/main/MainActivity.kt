@@ -475,7 +475,8 @@ class MainActivity : ComponentActivity(), Callback {
                                 .offset {
                                     IntOffset(
                                         x = 0,
-                                        y = -1 * (contentViewModel?.bottomBarOffsetHeightPx?.value?.roundToInt() ?: 0)
+                                        y = -1 * (contentViewModel?.bottomBarOffsetHeightPx?.value?.roundToInt()
+                                            ?: 0)
                                     )
                                 }
                         ) {
@@ -1135,11 +1136,6 @@ class MainActivity : ComponentActivity(), Callback {
         //tabReplacingUseCase.invoke(withAnimation)
         when (val tab = tabs.currentTab()) {
             is WebTab -> {
-                if (navigationHostController?.currentDestination?.route == "tab/web/current") {
-                    ViewModelProvider(this).get(BrowserViewModel::class.java)
-                        .loadWithNewTab(tab.latest.url().toUri() to tab.latest.title())
-                    return
-                }
                 navigate(navigationHostController, "tab/web/current")
             }
             is PdfTab -> {

@@ -38,7 +38,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -186,20 +185,39 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     }
 
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
-    contentViewModel.toTop.observe(activityContext, {
+    contentViewModel.toTop.observe(lifecycleOwner, {
         it.getContentIfNotHandled() ?: return@observe
         browserModule.pageUp()
     })
-    contentViewModel.toBottom.observe(activityContext, {
+    contentViewModel.toBottom.observe(lifecycleOwner, {
         it.getContentIfNotHandled() ?: return@observe
         browserModule.pageDown()
     })
-    contentViewModel.share.observe(activityContext, {
+    contentViewModel.share.observe(lifecycleOwner, {
         it.getContentIfNotHandled() ?: return@observe
         activityContext.startActivity(
             ShareIntentFactory()(browserModule.makeShareMessage())
         )
     })
+
+    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
+    pageSearcherViewModel.also { viewModel ->
+        viewModel.find.observe(lifecycleOwner, Observer {
+            browserModule.find(it)
+        })
+
+        viewModel.upward.observe(lifecycleOwner, Observer {
+            browserModule.findUp()
+        })
+
+        viewModel.downward.observe(lifecycleOwner, Observer {
+            browserModule.findDown()
+        })
+
+        viewModel.clear.observe(lifecycleOwner, Observer {
+            browserModule.clearMatches()
+        })
+    }
 
     val storagePermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -261,20 +279,6 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
             })
         )
     })
-
-    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
-    DisposableEffect("remove_observers") {
-        onDispose {
-            contentViewModel.toTop.removeObservers(activityContext)
-            contentViewModel.toBottom.removeObservers(activityContext)
-            contentViewModel.share.removeObservers(activityContext)
-
-            pageSearcherViewModel.find.removeObservers(activityContext)
-            pageSearcherViewModel.upward.removeObservers(activityContext)
-            pageSearcherViewModel.downward.removeObservers(activityContext)
-            pageSearcherViewModel.clear.removeObservers(activityContext)
-        }
-    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -489,24 +493,6 @@ private fun initializeHeaderViewModels(
             .collect {
                 browserModule.saveArchiveForAutoArchive()
             }
-    }
-
-    pageSearcherViewModel.also { viewModel ->
-        viewModel.find.observe(activity, Observer {
-            browserModule.find(it)
-        })
-
-        viewModel.upward.observe(activity, Observer {
-            browserModule.findUp()
-        })
-
-        viewModel.downward.observe(activity, Observer {
-            browserModule.findDown()
-        })
-
-        viewModel.clear.observe(activity, Observer {
-            browserModule.clearMatches()
-        })
     }
 }
 
