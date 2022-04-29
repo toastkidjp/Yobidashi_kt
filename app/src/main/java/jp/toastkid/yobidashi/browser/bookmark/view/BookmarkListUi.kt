@@ -395,10 +395,7 @@ private fun EditorDialog(
     }
 
     Dialog(onDismissRequest = { openEditor.value = false }) {
-        Surface(
-            color = colorResource(id = R.color.soft_background),
-            elevation = 4.dp
-        ) {
+        Surface(elevation = 4.dp) {
             Box() {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
