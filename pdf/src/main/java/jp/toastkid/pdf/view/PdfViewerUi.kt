@@ -33,7 +33,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
@@ -43,7 +42,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.pdf.PdfImageFactory
-import jp.toastkid.pdf.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -115,7 +113,6 @@ private fun PdfPageList(pdfRenderer: PdfRenderer, listState: LazyListState) {
                         )
                         Text(
                             text = "${it + 1} / $max",
-                            color = colorResource(id = R.color.black),
                             fontSize = 10.sp
                         )
                     }
