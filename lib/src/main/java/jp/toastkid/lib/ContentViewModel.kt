@@ -8,7 +8,13 @@
 package jp.toastkid.lib
 
 import androidx.annotation.StringRes
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -112,6 +118,39 @@ class ContentViewModel : ViewModel() {
 
     fun switchPageSearcher() {
         _switchPageSearcher.postValue(Unit)
+    }
+
+    private val _bottomSheetContent = mutableStateOf<@Composable () -> Unit>({})
+
+    val bottomSheetContent: State<@Composable () -> Unit> = _bottomSheetContent
+
+    fun setBottomSheetContent(content: @Composable () -> Unit) {
+        _bottomSheetContent.value = content
+    }
+
+    private val _currentTabId = mutableStateOf("")
+
+    val currentTabId: State<String> = _currentTabId
+
+    fun setCurrentTabId(tabId: String) {
+        _currentTabId.value = tabId
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
+    val modalBottomSheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+
+    @OptIn(ExperimentalMaterialApi::class)
+    suspend fun switchBottomSheet() {
+        if (modalBottomSheetState.isVisible) {
+            modalBottomSheetState.hide()
+        } else {
+            modalBottomSheetState.show()
+        }
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
+    suspend fun hideBottomSheet() {
+        modalBottomSheetState.hide()
     }
 
     private val _switchTabList = MutableLiveData<Event<Unit>>()

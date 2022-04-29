@@ -8,17 +8,21 @@
 
 package jp.toastkid.yobidashi.browser.view
 
-import android.graphics.drawable.ColorDrawable
+import android.Manifest
 import android.net.Uri
+import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,11 +32,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +46,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,28 +53,41 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.Urls
 import jp.toastkid.lib.intent.ShareIntentFactory
+import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.BrowserModule
+import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.LoadingViewModel
+import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
+import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
+import jp.toastkid.yobidashi.browser.translate.TranslatedPageOpenerUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
-import jp.toastkid.yobidashi.browser.webview.usecase.WebViewAssignmentUseCase
+import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
+import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
+import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.libs.Toaster
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId: String? = null) {
+fun WebTabUi(uri: Uri, tabId: String? = null) {
 /*TODO swipe refresher
         binding?.swipeRefresher?.let {
             it.setOnRefreshListener { reload() }
@@ -82,11 +98,12 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
     val webViewContainer = remember { FrameLayout(activityContext) }
-    webViewContainer.background = ColorDrawable(Color.Transparent.toArgb())
     val enableBackStack = remember { mutableStateOf(true) }
     val browserModule = BrowserModule(activityContext, webViewContainer)
 
-    initializeHeaderViewModels(activityContext, browserModule)
+    val baseOffset = 120.dp.value.toInt()
+
+    val currentWebView = remember { mutableStateOf<WebView?>(null) }
 
     AndroidView(
         factory = {
@@ -96,12 +113,30 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
             tabId?.let {
                 browserModule.loadWithNewTab(uri, tabId)
             }
+            currentWebView.value = GlobalWebViewPool.getLatest()
         },
         modifier = Modifier
-            .background(Color.Transparent)
-            .verticalScroll(ScrollState(0))
+            .scrollable(
+                state = rememberScrollableState { delta ->
+                    currentWebView.value?.flingScroll(0, -delta.toInt() * baseOffset)
+                    delta
+                },
+                Orientation.Vertical
+            )
     )
+
+    val readerModeText = remember { mutableStateOf("") }
+    if (readerModeText.value.isNotBlank()) {
+        ReaderModeUi(browserModule.currentTitle(), readerModeText)
+    }
+
+    initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }
+
     BackHandler(enableBackStack.value) {
+        if (readerModeText.value.isNotBlank()) {
+            readerModeText.value = ""
+            return@BackHandler
+        }
         if (browserModule.back()) {
             enableBackStack.value = browserModule.canGoBack()
             return@BackHandler
@@ -124,10 +159,82 @@ fun WebTabUi(webViewAssignmentUseCase: WebViewAssignmentUseCase, uri: Uri, tabId
             ShareIntentFactory()(browserModule.makeShareMessage())
         )
     })
+
+    val browserViewModel =
+        viewModel(modelClass = BrowserViewModel::class.java)
+
+    val storagePermissionRequestLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                Toaster.tShort(activityContext, R.string.message_requires_permission_storage)
+                return@rememberLauncherForActivityResult
+            }
+
+            browserModule.downloadAllImages()
+        }
+
+    LaunchedEffect(key1 = "add_option_menu", block = {
+        contentViewModel.optionMenus(
+            OptionMenu(titleId = R.string.translate, action = {
+                TranslatedPageOpenerUseCase(browserViewModel).invoke(browserModule.currentUrl())
+            }),
+            OptionMenu(titleId = R.string.download_all_images, action = {
+                storagePermissionRequestLauncher
+                    .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }),
+            OptionMenu(titleId = R.string.add_to_home_screen, action = {
+                val uri = browserModule.currentUrl()?.toUri() ?: return@OptionMenu
+                ShortcutUseCase(activityContext)
+                    .invoke(
+                        uri,
+                        browserModule.currentTitle(),
+                        FaviconApplier(activityContext).load(uri)
+                    )
+            }),
+            OptionMenu(titleId = R.string.title_add_bookmark, action = {
+                val faviconApplier = FaviconApplier(activityContext)
+                val url = browserModule.currentUrl() ?: ""
+                BookmarkInsertion(
+                    activityContext,
+                    browserModule.currentTitle(),
+                    url,
+                    faviconApplier.makePath(url),
+                    Bookmark.getRootFolderName()
+                ).insert()
+
+                contentViewModel.snackShort(R.string.message_done_added_bookmark)
+            }),
+            OptionMenu(titleId = R.string.title_archive, action = {
+                browserModule.saveArchive()
+            }),
+            OptionMenu(titleId = R.string.title_add_to_rss_reader, action = {
+                RssUrlFinder(PreferenceApplier(activityContext))
+                    .invoke(browserModule.currentUrl()) {
+                        null//TODO
+                    }
+            }),
+            OptionMenu(titleId = R.string.title_replace_home, action = {
+                browserModule.currentUrl()?.let {
+                    if (Urls.isInvalidUrl(it)) {
+                        contentViewModel
+                            .snackShort(activityContext.getString(R.string.message_cannot_replace_home_url))
+                        return@let
+                    }
+                    PreferenceApplier(activityContext).homeUrl = it
+                    contentViewModel
+                        .snackShort(activityContext.getString(R.string.message_replace_home_url, it))
+                }
+            })
+        )
+    })
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-private fun initializeHeaderViewModels(activity: ComponentActivity, browserModule: BrowserModule) {
+private fun initializeHeaderViewModels(
+    activity: ComponentActivity,
+    browserModule: BrowserModule,
+    resetReaderModeContent: (String) -> Unit
+) {
     val viewModelProvider = ViewModelProvider(activity)
     val appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
 
@@ -231,32 +338,31 @@ private fun initializeHeaderViewModels(activity: ComponentActivity, browserModul
                             )
                         }
                     }
+
+                    val openPageInformation = remember { mutableStateOf(false) }
                     HeaderSubButton(
                         R.drawable.ic_info,
                         R.string.title_menu_page_information,
                         tint
                     ) {
-                        val pageInformation = browserModule.makeCurrentPageInformation()
-                        if (pageInformation.isEmpty) {
-                            return@HeaderSubButton
-                        }
-
-                        /*TODO Implement compose PageInformationDialogFragment()
-                            .also { it.arguments = pageInformation }
-                            .show(
-                                parentFragmentManager,
-                                PageInformationDialogFragment::class.java.simpleName
-                            )*/
+                        openPageInformation.value = true
                     }
+
+                    if (openPageInformation.value) {
+                        val pageInformation = browserModule.makeCurrentPageInformation()
+                        if (pageInformation.isEmpty.not()) {
+                            PageInformationDialog(openPageInformation, pageInformation)
+                        }
+                    }
+
                     HeaderSubButton(
                         R.drawable.ic_code,
                         R.string.title_menu_html_source,
                         tint
                     ) {
                         browserModule.invokeHtmlSourceExtraction {
-                            showReaderFragment(it.replace("\\u003C", "<")) {
-                                contentViewModel.snackShort("This page can't show reader mode.")
-                            }
+                            val replace = it.replace("\\u003C", "<")
+                            showReader(replace, contentViewModel, resetReaderModeContent)
                         }
                     }
                 }
@@ -266,7 +372,11 @@ private fun initializeHeaderViewModels(activity: ComponentActivity, browserModul
                     modifier = Modifier
                         .height(32.dp)
                         .fillMaxWidth()
-                        .clickable { tapHeader(activity, browserModule, preferenceApplier) }
+                        .clickable {
+                            ViewModelProvider(activity)
+                                .get(ContentViewModel::class.java)
+                                .webSearch()
+                        }
                     //url_box_background
                 ) {
                     Icon(
@@ -276,10 +386,12 @@ private fun initializeHeaderViewModels(activity: ComponentActivity, browserModul
                         modifier = Modifier
                             .padding(4.dp)
                             .clickable {
-                                //TODO
-                                //browserModule.invokeContentExtraction(ValueCallback(this::showReaderFragment))
+                                browserModule.invokeContentExtraction {
+                                    showReader(it, contentViewModel, resetReaderModeContent)
+                                }
                             }
                     )
+
                     Column(
                         modifier = Modifier.weight(1f)
                     ) {
@@ -353,7 +465,26 @@ private fun initializeHeaderViewModels(activity: ComponentActivity, browserModul
         viewModel.downward.observe(activity, Observer {
             browserModule.findDown()
         })
+
+        viewModel.clear.observe(activity, Observer {
+            browserModule.clearMatches()
+        })
     }
+}
+
+private fun showReader(
+    content: String,
+    contentViewModel: ContentViewModel,
+    resetReaderModeContent: (String) -> Unit
+) {
+    val cleaned = content.replace("^\"|\"$".toRegex(), "")
+    if (cleaned.isBlank()) {
+        contentViewModel.snackShort("This page can't show reader mode.")
+        return
+    }
+
+    val lineSeparator = System.lineSeparator()
+    resetReaderModeContent(cleaned.replace("\\n", lineSeparator))
 }
 
 @Composable
@@ -376,126 +507,12 @@ private fun HeaderSubButton(
     )
 }
 
-/*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-        R.id.translate -> {
-            val activity = activity ?: return true
-            val browserViewModel =
-                ViewModelProvider(activity).get(BrowserViewModel::class.java)
-            TranslatedPageOpenerUseCase(browserViewModel).invoke(browserModule.currentUrl())
-        }
-        R.id.download_all_images -> {
-            storagePermissionRequestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-        R.id.add_to_home -> {
-            val uri = browserModule.currentUrl()?.toUri() ?: return true
-            val context = context ?: return true
-            ShortcutUseCase(context)
-                .invoke(
-                    uri,
-                    browserModule.currentTitle(),
-                    FaviconApplier(context).load(uri)
-                )
-        }
-        R.id.add_bookmark -> {
-            val context = context ?: return true
-            val faviconApplier = FaviconApplier(context)
-            val url = browserModule.currentUrl() ?: ""
-            BookmarkInsertion(
-                context,
-                browserModule.currentTitle(),
-                url,
-                faviconApplier.makePath(url),
-                Bookmark.getRootFolderName()
-            ).insert()
-
-            contentViewModel?.snackShort(context.getString(R.string.message_done_added_bookmark))
-            return true
-        }
-        R.id.add_archive -> {
-            browserModule.saveArchive()
-            return true
-        }
-        R.id.add_rss -> {
-            RssUrlFinder(preferenceApplier).invoke(browserModule.currentUrl()) { null *//* TODO*//* }
-                return true
-            }
-            R.id.replace_home -> {
-                browserModule.currentUrl()?.let {
-                    val context = context ?: return true
-                    if (Urls.isInvalidUrl(it)) {
-                        contentViewModel?.snackShort(context.getString(R.string.message_cannot_replace_home_url))
-                        return true
-                    }
-                    preferenceApplier.homeUrl = it
-                    contentViewModel?.snackShort(context.getString(R.string.message_replace_home_url, it))
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }*/
-
-//TODO show composed reader UI
-private fun showReaderFragment(content: String, snackShort: (String) -> Unit) {
-    val cleaned = content.replace("^\"|\"$".toRegex(), "")
-    if (cleaned.isBlank()) {
-        snackShort("This page can't show reader mode.")
-        return
-    }
-
-    val lineSeparator = System.lineSeparator()
-    val replacedContent = cleaned.replace("\\n", lineSeparator)
-}
-
 /*TODO
         binding?.swipeRefresher?.let {
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
         }*/
 
-//TODO override fun pressBack(): Boolean = back()
-
-/*
-TODO share
-startActivity(
-        ShareIntentFactory()(browserModule.makeShareMessage())
-    )
- */
-
-private fun tapHeader(
-    viewModelStoreOwner: ViewModelStoreOwner,
-    browserModule: BrowserModule,
-    preferenceApplier: PreferenceApplier
-) {
-    ViewModelProvider(viewModelStoreOwner)
-        .get(ContentViewModel::class.java)
-        .webSearch()
-    /*
-     val currentTitle = browserModule.currentTitle()
-    val currentUrl = browserModule.currentUrl()
-    val inputText = if (preferenceApplier.enableSearchQueryExtract) {
-        SearchQueryExtractor()(currentUrl) ?: currentUrl
-    } else {
-        currentUrl
-    }
-    makeWithQuery(
-        inputText ?: "",
-        currentTitle,
-        currentUrl
-    )
-     */
-}
-
 fun stopSwipeRefresherLoading() {
     //TODO binding?.swipeRefresher?.isRefreshing = false
 }
-
-/*override fun onPause() {
-    browserModule.onPause()
-}
-
-override fun onDetach() {
-    appBarViewModel?.show()
-    browserModule.onDestroy()
-}*/
-

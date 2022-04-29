@@ -30,7 +30,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -79,14 +78,10 @@ import java.io.IOException
 @Composable
 internal fun SearchContentsUi(
     viewModel: SearchUiViewModel,
-    input: MutableState<String>?,
     currentTitle: String?,
     currentUrl: String?
 ) {
     val preferenceApplier = PreferenceApplier(LocalContext.current)
-
-    val query = remember { input }
-
     val database = DatabaseFinder().invoke(LocalContext.current)
     val bookmarkRepository: BookmarkRepository = database.bookmarkRepository()
     val viewHistoryRepository: ViewHistoryRepository = database.viewHistoryRepository()
@@ -131,7 +126,7 @@ internal fun SearchContentsUi(
     ) {
         if (preferenceApplier.isEnableUrlModule()) {
             item {
-                UrlCard(currentTitle, currentUrl, { input?.value = it })
+                UrlCard(currentTitle, currentUrl, { viewModel.putQuery(it) })
             }
         }
 

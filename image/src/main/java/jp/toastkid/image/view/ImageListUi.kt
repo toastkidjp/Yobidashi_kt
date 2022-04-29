@@ -10,6 +10,7 @@ package jp.toastkid.image.view
 
 import android.Manifest
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -25,7 +26,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -117,7 +118,7 @@ fun ImageListTopUi() {
     }
 
     if (preview.value.not()) {
-        SideEffect {
+        LaunchedEffect(key1 = "first_launch") {
             requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     }
@@ -125,12 +126,11 @@ fun ImageListTopUi() {
     val index = remember { mutableStateOf(-1) }
 
     if (preview.value) {
-        ImagePreviewUi(images, index.value, {
-            index.value = -1
-            preview.value = false
-        })
+        ImagePreviewUi(images, index.value)
         return
     }
+
+    val current = LocalOnBackPressedDispatcherOwner.current
 
     ImageListUi(
         imageLoaderUseCase,
@@ -140,8 +140,14 @@ fun ImageListTopUi() {
             preview.value = true
         },
         {
-            imageLoaderUseCase.back {
-                //activity?.supportFragmentManager?.popBackStack()
+            println("tomato onBack ${index.value}")
+            if (index.value != -1) {
+                index.value = -1
+                preview.value = false
+            } else {
+                imageLoaderUseCase.back {
+                    current?.onBackPressedDispatcher?.onBackPressed()
+                }
             }
         }
     )

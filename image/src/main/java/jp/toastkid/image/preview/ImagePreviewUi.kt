@@ -9,7 +9,6 @@
 package jp.toastkid.image.preview
 
 import android.os.Build
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberTransformableState
@@ -39,12 +38,11 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import jp.toastkid.image.Image
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int, onBackPress: () -> Unit = {}) {
-    val listState = rememberLazyListState()
+    val listState = rememberLazyListState(initialIndex)
     val coroutineScope = rememberCoroutineScope()
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
@@ -93,13 +91,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int, onBackPress:
                         .padding(end = 16.dp)
                 )
             }
-            coroutineScope.launch {
-                listState.scrollToItem(initialIndex, 0)
-            }
-        }
-
-        BackHandler {
-            onBackPress()
         }
     }
 }
