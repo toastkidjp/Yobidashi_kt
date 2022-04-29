@@ -25,7 +25,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -89,122 +88,119 @@ internal fun EditorSettingUi() {
     val fontSizeOpen =
         remember { mutableStateOf(false) }
 
-    MaterialTheme() {
-        LazyColumn(
-            modifier = Modifier
-                .nestedScroll(rememberViewInteropNestedScrollConnection())
-                .padding(start = 8.dp, end = 8.dp)
-        ) {
-            item {
-                ColorPaletteUi(
-                    currentBackgroundColor,
-                    currentFontColor,
-                    initialBgColor,
-                    initialFontColor,
-                    onCommit = {
-                        preferenceApplier.setEditorBackgroundColor(currentBackgroundColor.value.toArgb())
-                        preferenceApplier.setEditorFontColor(currentFontColor.value.toArgb())
+    LazyColumn(
+        modifier = Modifier
+            .nestedScroll(rememberViewInteropNestedScrollConnection())
+            .padding(start = 8.dp, end = 8.dp)
+    ) {
+        item {
+            ColorPaletteUi(
+                currentBackgroundColor,
+                currentFontColor,
+                initialBgColor,
+                initialFontColor,
+                onCommit = {
+                    preferenceApplier.setEditorBackgroundColor(currentBackgroundColor.value.toArgb())
+                    preferenceApplier.setEditorFontColor(currentFontColor.value.toArgb())
 
-                        contentViewModel?.snackShort(R.string.settings_color_done_commit)
-                    },
-                    onReset = {
-                        preferenceApplier.setEditorBackgroundColor(initialBgColor)
-                        preferenceApplier.setEditorFontColor(initialFontColor)
+                    contentViewModel?.snackShort(R.string.settings_color_done_commit)
+                },
+                onReset = {
+                    preferenceApplier.setEditorBackgroundColor(initialBgColor)
+                    preferenceApplier.setEditorFontColor(initialFontColor)
 
-                        currentBackgroundColor.value = Color(initialBgColor)
-                        currentFontColor.value = Color(initialFontColor)
+                    currentBackgroundColor.value = Color(initialBgColor)
+                    currentFontColor.value = Color(initialFontColor)
 
-                        contentViewModel?.snackShort(R.string.settings_color_done_reset)
-                    }
+                    contentViewModel?.snackShort(R.string.settings_color_done_reset)
+                }
+            )
+        }
+
+        item {
+            InsetDivider()
+        }
+
+        item {
+            ColorChooserMenu(
+                cursorColor,
+                R.drawable.ic_cursor_black,
+                R.string.title_cursor_color,
+                iconTint
+            ) {
+                preferenceApplier.setEditorCursorColor(it.toArgb())
+                cursorColor.value = it
+            }
+        }
+
+        item {
+            InsetDivider()
+        }
+
+        item {
+            ColorChooserMenu(
+                highlightColor,
+                R.drawable.ic_highlight_black,
+                R.string.title_highlight_color,
+                iconTint
+            ) {
+                preferenceApplier.setEditorHighlightColor(it.toArgb())
+                highlightColor.value = it
+            }
+        }
+
+        item {
+            InsetDivider()
+        }
+
+        item {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .height(48.dp)
+                    .clickable(onClick = { fontSizeOpen.value = true })
+                    .background(colorResource(id = R.color.setting_background))
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.ic_edit),
+                    tint = iconTint,
+                    contentDescription = stringResource(id = R.string.title_font_size)
                 )
-            }
 
-            item {
-                InsetDivider()
-            }
-
-            item {
-                ColorChooserMenu(
-                    cursorColor,
-                    R.drawable.ic_cursor_black,
-                    R.string.title_cursor_color,
-                    iconTint
-                ) {
-                    preferenceApplier.setEditorCursorColor(it.toArgb())
-                    cursorColor.value = it
-                }
-            }
-
-            item {
-                InsetDivider()
-            }
-
-            item {
-                ColorChooserMenu(
-                    highlightColor,
-                    R.drawable.ic_highlight_black,
-                    R.string.title_highlight_color,
-                    iconTint
-                ) {
-                    preferenceApplier.setEditorHighlightColor(it.toArgb())
-                    highlightColor.value = it
-                }
-            }
-
-            item {
-                InsetDivider()
-            }
-
-            item {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Text(
+                    stringResource(id = R.string.title_font_size),
                     modifier = Modifier
-                        .height(48.dp)
-                        .clickable(onClick = { fontSizeOpen.value = true })
-                        .background(colorResource(id = R.color.setting_background))
+                        .weight(1f)
+                        .padding(start = 4.dp)
+                )
+
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.search_category_spinner_width))
+                        .padding(end = 8.dp)
                 ) {
-                    Icon(
-                        painterResource(id = R.drawable.ic_edit),
-                        tint = iconTint,
-                        contentDescription = stringResource(id = R.string.title_font_size)
-                    )
-
-                    Text(
-                        stringResource(id = R.string.title_font_size),
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 4.dp)
-                    )
-
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .size(dimensionResource(id = R.dimen.search_category_spinner_width))
-                            .padding(end = 8.dp)
+                    Text("${fontSize.value}")
+                    DropdownMenu(
+                        expanded = fontSizeOpen.value,
+                        onDismissRequest = { fontSizeOpen.value = false }
                     ) {
-                        Text("${fontSize.value}")
-                        DropdownMenu(
-                            expanded = fontSizeOpen.value,
-                            onDismissRequest = { fontSizeOpen.value = false }
-                        ) {
-                            EditorFontSize.values().forEach {
-                                DropdownMenuItem(
-                                    onClick = {
-                                        preferenceApplier.setEditorFontSize(it.size)
-                                        fontSize.value = it.size
-                                        fontSizeOpen.value = false
-                                    }
-                                ) {
-                                    Text(
-                                        "${it.size}",
-                                        color = colorResource(id = R.color.black),
-                                        fontSize = it.size.sp,
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .fillMaxHeight()
-                                            .padding(8.dp)
-                                    )
+                        EditorFontSize.values().forEach {
+                            DropdownMenuItem(
+                                onClick = {
+                                    preferenceApplier.setEditorFontSize(it.size)
+                                    fontSize.value = it.size
+                                    fontSizeOpen.value = false
                                 }
+                            ) {
+                                Text(
+                                    "${it.size}",
+                                    fontSize = it.size.sp,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .fillMaxHeight()
+                                        .padding(8.dp)
+                                )
                             }
                         }
                     }
