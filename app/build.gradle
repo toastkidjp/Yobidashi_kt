@@ -121,6 +121,13 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$libVersions.coroutines_test"
 }
 
+configurations.implementation {
+    exclude group: 'androidx.appcompat', module: 'appcompat'
+    exclude group: 'org.jetbrains.compose.runtime', module: 'runtime'
+    exclude group: 'org.jetbrains.compose.foundation', module: 'foundation'
+    exclude group: 'org.jetbrains.compose.material', module: 'material'
+}
+
 repositories{
     flatDir{
         dirs 'libs'

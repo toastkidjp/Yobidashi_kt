@@ -6,7 +6,6 @@
         android:id="@+id/context_edit_speech"
         android:title="Speech"
         android:orderInCategory="100"
-        app:showAsAction="always"
         android:icon="@drawable/ic_quote"
         tools:ignore="AlwaysShowAction"
         />

@@ -6,6 +6,5 @@
         android:orderInCategory="100"
         android:title="Speech"
         android:checkable="false"
-        app:showAsAction="never"
         />
 </menu>

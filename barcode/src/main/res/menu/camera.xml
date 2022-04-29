@@ -5,6 +5,5 @@
         android:id="@+id/reset_camera_fab_position"
         android:title="@string/title_reset_camera_button_position"
         android:orderInCategory="100"
-        app:showAsAction="never"
         />
 </menu>

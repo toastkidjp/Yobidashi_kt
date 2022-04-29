@@ -15,7 +15,6 @@
         android:id="@+id/context_edit_paste_url_with_title"
         android:title="@string/paste_url_with_title"
         android:orderInCategory="100"
-        app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
         />
 

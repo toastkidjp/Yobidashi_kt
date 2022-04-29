@@ -7,12 +7,10 @@
         android:id="@+id/menu_close"
         android:title="@string/close"
         android:orderInCategory="100"
-        app:showAsAction="never"
         />
     <item
         android:id="@+id/menu_exit"
         android:title="@string/exit"
         android:orderInCategory="100"
-        app:showAsAction="never"
         />
 </menu>

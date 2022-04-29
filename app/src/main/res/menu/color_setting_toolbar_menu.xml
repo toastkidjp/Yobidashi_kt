@@ -7,10 +7,10 @@
         android:id="@+id/color_settings_toolbar_menu_add_recommend"
         android:title="@string/title_add_recommended_colors"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        />
     <item
         android:id="@+id/color_settings_toolbar_menu_add_random"
         android:title="@string/title_add_random"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        />
 </menu>

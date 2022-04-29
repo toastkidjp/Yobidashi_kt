@@ -6,12 +6,10 @@
         android:id="@+id/favorite_toolbar_menu_add"
         android:title="@string/title_add"
         android:orderInCategory="90"
-        app:showAsAction="never"
         />
     <item
         android:id="@+id/favorite_toolbar_menu_clear"
         android:title="@string/title_delete_all"
         android:orderInCategory="91"
-        app:showAsAction="never"
         />
 </menu>
