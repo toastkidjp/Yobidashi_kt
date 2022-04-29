@@ -168,7 +168,6 @@ internal fun ImageListUi(
         LazyColumn(
             state = listState,
             modifier = Modifier
-                .nestedScroll(rememberViewInteropNestedScrollConnection())
                 .padding(start = 16.dp, end = 16.dp)
                 .background(Color.Transparent)
         ) {
