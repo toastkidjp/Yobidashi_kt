@@ -18,7 +18,7 @@ class WebTabUiFactory(private val webViewAssignmentUseCase: WebViewAssignmentUse
 
     @Composable
     operator fun invoke(uri: Uri, tabId: String? = null) {
-        WebTabUi(webViewAssignmentUseCase, uri, tabId)
+        WebTabUi()
     }
 
     companion object {

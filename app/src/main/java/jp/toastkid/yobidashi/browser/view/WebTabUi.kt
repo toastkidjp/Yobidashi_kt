@@ -9,7 +9,6 @@
 package jp.toastkid.yobidashi.browser.view
 
 import android.Manifest
-import android.net.Uri
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
@@ -89,7 +88,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun WebTabUi(uri: Uri, tabId: String? = null) {
+fun WebTabUi() {
 /*TODO swipe refresher
         binding?.swipeRefresher?.let {
             it.setOnRefreshListener { reload() }
@@ -109,12 +108,6 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     AndroidView(
         factory = {
             webViewContainer
-        },
-        update = {
-            tabId?.let {
-                browserModule.loadWithNewTab(uri, tabId)
-            }
-            currentWebView.value = GlobalWebViewPool.getLatest()
         },
         modifier = Modifier
             .scrollable(

@@ -647,8 +647,9 @@ internal fun Content() {
                     composable("tab/web/current") {
                         val currentTab = tabs.currentTab() as? WebTab ?: return@composable
                         focusManager.clearFocus(true)
-                        println("tomato webtab ${ currentTab.id()}, ${currentTab.latest.url().toUri()}")
-                        WebTabUi(currentTab.latest.url().toUri(), currentTab.id())
+                        WebTabUi()
+                        browserViewModel
+                            .loadWithNewTab(currentTab.latest.url().toUri() to currentTab.id())
                     }
                     composable("tab/pdf/current") {
                         val currentTab = tabs.currentTab() as? PdfTab ?: return@composable
