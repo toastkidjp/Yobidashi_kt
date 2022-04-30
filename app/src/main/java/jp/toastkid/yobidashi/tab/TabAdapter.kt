@@ -16,7 +16,6 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.LoadingViewModel
