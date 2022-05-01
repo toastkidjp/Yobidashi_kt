@@ -10,16 +10,15 @@ package jp.toastkid.yobidashi.calendar.view
 
 import android.widget.DatePicker
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -52,36 +51,39 @@ fun CalendarUi() {
         dayOfMonth = d
     }
 
-    Column(modifier = Modifier.background(colorResource(id = R.color.soft_background))) {
-        AndroidView(
-            factory = { datePicker },
-            modifier = Modifier
-                .padding(8.dp)
-        )
-
-        InsetDivider()
-
-        SingleLineMenu(R.string.menu_what_happened_today) {
-            val url = DateArticleUrlFactory()(
-                context,
-                monthOfYear,
-                dayOfMonth
+    Surface(elevation = 4.dp) {
+        Column {
+            AndroidView(
+                factory = { datePicker },
+                modifier = Modifier
+                    .padding(8.dp)
             )
-            if (Urls.isValidUrl(url)) {
-                browserViewModel.open(url.toUri())
+
+            InsetDivider()
+
+            SingleLineMenu(R.string.menu_what_happened_today) {
+                val url = DateArticleUrlFactory()(
+                    context,
+                    monthOfYear,
+                    dayOfMonth
+                )
+                if (Urls.isValidUrl(url)) {
+                    browserViewModel.open(url.toUri())
+                }
+            }
+
+            InsetDivider()
+
+            SingleLineMenu(R.string.title_article_viewer) {
+                DateSelectedActionUseCase(
+                    AppDatabase
+                        .find(context)
+                        .articleRepository(),
+                    contentViewModel
+                ).invoke(year, monthOfYear, dayOfMonth)
             }
         }
 
-        InsetDivider()
-
-        SingleLineMenu(R.string.title_article_viewer) {
-            DateSelectedActionUseCase(
-                AppDatabase
-                    .find(context)
-                    .articleRepository(),
-                contentViewModel
-            ).invoke(year, monthOfYear, dayOfMonth)
-        }
     }
 }
 
