@@ -31,21 +31,9 @@ enum class Menu(
 
     BOOKMARK(R.string.title_bookmark, R.drawable.ic_bookmark),
 
-    LOAD_HOME(R.string.title_load_home, R.drawable.ic_home),
-
-    EDITOR(R.string.title_editor, R.drawable.ic_edit),
-
-    PDF(R.string.title_open_pdf, R.drawable.ic_pdf),
-
     CALENDAR(R.string.title_calendar, R.drawable.ic_calendar),
 
-    ARTICLE_VIEWER(R.string.title_article_viewer, R.drawable.ic_article),
-
     CODE_READER(R.string.title_code_reader, R.drawable.ic_barcode),
-
-    RANDOM_WIKIPEDIA(R.string.menu_random_wikipedia, R.drawable.ic_wikipedia_white),
-
-    WHAT_HAPPENED_TODAY(R.string.menu_what_happened_today, R.drawable.ic_what_happened_today),
 
     LOAN_CALCULATOR(R.string.title_loan_calculator, R.drawable.ic_loan_calculator),
 
@@ -54,8 +42,6 @@ enum class Menu(
     AUDIO(R.string.title_audio_player, R.drawable.ic_music),
 
     IMAGE_VIEWER(R.string.title_image_viewer, R.drawable.ic_photo),
-
-    OVERLAY_COLOR_FILTER(R.string.title_color_filter, R.drawable.ic_color_filter),
 
     ABOUT_THIS_APP(R.string.title_about_this_app, R.drawable.ic_yobidashi),
 

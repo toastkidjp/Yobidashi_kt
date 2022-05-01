@@ -379,5 +379,6 @@
     <string name="sample_text_color_filter">あ</string>
     <string name="message_backup_is_empty">バックアップがありません</string>
     <string name="apply_dark_mode">ダークモードにする</string>
+    <string name="error_content_is_empty">エラー：コンテンツが空です。やり直してください</string>
 
 </resources>

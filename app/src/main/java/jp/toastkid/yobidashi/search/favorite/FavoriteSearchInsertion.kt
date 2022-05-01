@@ -1,8 +1,6 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -32,11 +30,6 @@ class FavoriteSearchInsertion(
                         DatabaseFinder().invoke(context).favoriteSearchRepository()
                 repository.insert(FavoriteSearch.with(category, query))
             }
-
-            Toaster.tShort(
-                    context,
-                    context.getString(R.string.format_message_done_adding_favorite_search, query)
-            )
         }
     }
 

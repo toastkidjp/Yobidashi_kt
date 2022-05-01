@@ -31,10 +31,12 @@ class AppBarViewModel : ViewModel() {
 
     val content: LiveData<View> = _content
 
+    @Deprecated("This function will be deleted.")
     fun replace(view: View) {
         _content.postValue(view)
     }
 
+    @Deprecated("This function will be deleted.")
     fun replace(context: Context, composable: @Composable() () -> Unit) {
         val appBarComposeView = ComposeView(context)
         appBarComposeView.setViewCompositionStrategy(

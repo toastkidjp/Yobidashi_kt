@@ -88,28 +88,28 @@ class ContentViewModel : ViewModel() {
         _share.value = Event(Unit)
     }
 
-    private val _webSearch = MutableLiveData<Unit>()
+    private val _webSearch = MutableLiveData<Event<Unit>>()
 
-    val webSearch: LiveData<Unit> = _webSearch
+    val webSearch: LiveData<Event<Unit>> = _webSearch
 
     fun webSearch() {
-        _webSearch.postValue(Unit)
+        _webSearch.postValue(Event(Unit))
     }
 
-    private val _openPdf = MutableLiveData<Unit>()
+    private val _openPdf = MutableLiveData<Event<Unit>>()
 
-    val openPdf: LiveData<Unit> = _openPdf
+    val openPdf: LiveData<Event<Unit>> = _openPdf
 
     fun openPdf() {
-        _openPdf.postValue(Unit)
+        _openPdf.postValue(Event(Unit))
     }
 
-    private val _openEditorTab = MutableLiveData<Unit>()
+    private val _openEditorTab = MutableLiveData<Event<Unit>>()
 
-    val openEditorTab: LiveData<Unit> = _openEditorTab
+    val openEditorTab: LiveData<Event<Unit>> = _openEditorTab
 
     fun openEditorTab() {
-        _openEditorTab.postValue(Unit)
+        _openEditorTab.postValue(Event(Unit))
     }
 
     private val _switchPageSearcher = MutableLiveData<Unit>()
@@ -151,6 +151,14 @@ class ContentViewModel : ViewModel() {
     @OptIn(ExperimentalMaterialApi::class)
     suspend fun hideBottomSheet() {
         modalBottomSheetState.hide()
+    }
+
+    private val _nextRoute = MutableLiveData<Event<String>>()
+
+    val nextRoute: LiveData<Event<String>> = _nextRoute
+
+    fun nextRoute(route: String) {
+        _nextRoute.postValue(Event(route))
     }
 
     private val _switchTabList = MutableLiveData<Event<Unit>>()
@@ -202,6 +210,7 @@ class ContentViewModel : ViewModel() {
     val optionMenus: SnapshotStateList<OptionMenu> = _optionMenus
 
     fun optionMenus(vararg menus: OptionMenu) {
+        _optionMenus.clear()
         _optionMenus.addAll(menus.toList())
     }
 

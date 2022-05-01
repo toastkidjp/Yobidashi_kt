@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -248,23 +249,23 @@ internal fun MusicList(
                 elevation = 4.dp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+                    .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
             ) {
                 Row(
-                    modifier = Modifier.clickable {
-                        onClickItem(music)
-                    }
+                    modifier = Modifier
+                        .clickable { onClickItem(music) }
+                        .padding(4.dp)
                 ) {
                     AsyncImage(
                         music.description.iconUri,
                         contentDescription = "TODO",
-                        contentScale = ContentScale.Crop,
+                        contentScale = ContentScale.FillBounds,
                         alignment = Alignment.Center,
                         placeholder = painterResource(id = R.drawable.ic_music),
                         modifier = Modifier
-                            .width(32.dp)
+                            .width(44.dp)
                             .fillMaxHeight()
-                            .padding(start = 4.dp, end = 4.dp)
+                            .padding(end = 4.dp)
                     )
                     Column(
                         modifier = Modifier
@@ -274,13 +275,15 @@ internal fun MusicList(
                         Text(
                             text = music.description.title.toString(),
                             fontSize = 18.sp,
-                            maxLines = 1
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = music.description.subtitle.toString(),
                             color = colorResource(id = R.color.link_blue),
                             fontSize = 12.sp,
-                            maxLines = 1
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                     AsyncImage(

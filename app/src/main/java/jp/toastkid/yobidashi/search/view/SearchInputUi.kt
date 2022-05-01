@@ -63,6 +63,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
@@ -139,7 +140,7 @@ fun SearchInputUi(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    appBarViewModel.replace(context) {
+    appBarViewModel.replace {
         val spinnerOpen = remember { mutableStateOf(false) }
 
         val useVoice = remember { mutableStateOf(false) }
@@ -242,10 +243,9 @@ fun SearchInputUi(
 
         LaunchedEffect(key1 = "first_launch", block = {
             focusRequester.requestFocus()
+            keyboardController?.show()
         })
     }
-
-    contentViewModel.snackShort(R.string.message_search_on_background)
 
     queryingUseCase.withDebounce()
 
@@ -273,7 +273,62 @@ fun SearchInputUi(
             inputState.value = TextFieldValue(query, )
         })
 
-    LocalSoftwareKeyboardController.current?.show()
+    val isEnableSuggestion = remember { mutableStateOf(preferenceApplier.isEnableSuggestion) }
+    val isEnableSearchHistory = remember { mutableStateOf(preferenceApplier.isEnableSearchHistory) }
+
+    contentViewModel.optionMenus(
+        OptionMenu(
+            titleId = R.string.title_context_editor_double_quote,
+            action = {
+                val queryOrEmpty = inputState.value.text
+                if (queryOrEmpty.isNotBlank()) {
+                    viewModel.putQuery("\"$queryOrEmpty\"")
+                }
+            }
+        ),
+        OptionMenu(
+            titleId = R.string.title_context_editor_set_default_search_category,
+            action = {
+                categoryName.value = preferenceApplier.getDefaultSearchEngine()
+                    ?: SearchCategory.getDefaultCategoryName()
+            }
+        ),
+        OptionMenu(
+            titleId = R.string.title_enable_suggestion,
+            action = {
+                preferenceApplier.switchEnableSuggestion()
+                isEnableSuggestion.value = preferenceApplier.isEnableSuggestion
+                if (preferenceApplier.isEnableSuggestion.not()) {
+                    viewModel.suggestions.clear()
+                }
+            },
+            checkState = isEnableSuggestion
+        ),
+        OptionMenu(
+            titleId = R.string.title_use_search_history,
+            action = {
+                preferenceApplier.switchEnableSearchHistory()
+                isEnableSearchHistory.value = preferenceApplier.isEnableSearchHistory
+                if (preferenceApplier.isEnableSearchHistory.not()) {
+                    viewModel.searchHistories.clear()
+                }
+            },
+            checkState = isEnableSearchHistory
+        ),
+        OptionMenu(
+            titleId = R.string.title_favorite_search,
+            action = {
+                contentViewModel.nextRoute("search/favorite/list")
+
+            }
+        ),
+        OptionMenu(
+            titleId = R.string.title_search_history,
+            action = {
+                contentViewModel.nextRoute("search/history/list")
+            }
+        )
+    )
 }
 
 private fun invokeVoiceSearch(

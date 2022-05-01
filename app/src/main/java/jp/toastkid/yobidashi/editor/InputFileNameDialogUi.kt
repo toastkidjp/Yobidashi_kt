@@ -34,6 +34,10 @@ internal fun InputFileNameDialogUi(
     defaultInput: String = "",
     onCommit: (String) -> Unit
 ) {
+    if (openDialog.value.not()) {
+        return
+    }
+
     val input = remember { mutableStateOf(defaultInput) }
     MaterialTheme {
         AlertDialog(

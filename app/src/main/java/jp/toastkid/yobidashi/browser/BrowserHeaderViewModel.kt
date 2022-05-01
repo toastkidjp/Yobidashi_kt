@@ -7,6 +7,8 @@
  */
 package jp.toastkid.yobidashi.browser
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,6 +46,14 @@ class BrowserHeaderViewModel : ViewModel() {
         _reset.postValue(Unit)
     }
 
+    private val _enableBackPress = mutableStateOf(false)
+
+    val enableBackPress: State<Boolean> = _enableBackPress
+
+    fun setEnableBackPress(newState: Boolean) {
+        _enableBackPress.value = newState
+    }
+
     private val _enableForward = MutableLiveData<Boolean>()
     val enableForward: LiveData<Boolean> = _enableForward
     fun setForwardButtonIsEnabled(newState: Boolean) {
@@ -54,6 +64,7 @@ class BrowserHeaderViewModel : ViewModel() {
     val enableBack: LiveData<Boolean> = _enableBack
     fun setBackButtonIsEnabled(newState: Boolean) {
         _enableBack.postValue(newState)
+        setEnableBackPress(newState)
     }
 
     private val _progress = MutableLiveData<Int>()

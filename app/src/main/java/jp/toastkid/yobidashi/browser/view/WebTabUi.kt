@@ -23,6 +23,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
@@ -76,7 +78,6 @@ import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
-import jp.toastkid.yobidashi.browser.translate.TranslatedPageOpenerUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
@@ -98,7 +99,6 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
     val webViewContainer = remember { FrameLayout(activityContext) }
-    val enableBackStack = remember { mutableStateOf(true) }
     val browserModule = BrowserModule(activityContext, webViewContainer)
 
     val baseOffset = 120.dp.value.toInt()
@@ -132,16 +132,19 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
 
     initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }
 
-    BackHandler(enableBackStack.value) {
+    val browserHeaderViewModel =
+        viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
+
+    BackHandler(browserHeaderViewModel.enableBackPress.value) {
         if (readerModeText.value.isNotBlank()) {
             readerModeText.value = ""
             return@BackHandler
         }
         if (browserModule.back()) {
-            enableBackStack.value = browserModule.canGoBack()
+            browserHeaderViewModel.setEnableBackPress(browserModule.canGoBack())
             return@BackHandler
         }
-        enableBackStack.value = false
+        browserHeaderViewModel.setEnableBackPress(false)
     }
 
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
@@ -160,9 +163,6 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
         )
     })
 
-    val browserViewModel =
-        viewModel(modelClass = BrowserViewModel::class.java)
-
     val storagePermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it) {
@@ -175,9 +175,6 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
 
     LaunchedEffect(key1 = "add_option_menu", block = {
         contentViewModel.optionMenus(
-            OptionMenu(titleId = R.string.translate, action = {
-                TranslatedPageOpenerUseCase(browserViewModel).invoke(browserModule.currentUrl())
-            }),
             OptionMenu(titleId = R.string.download_all_images, action = {
                 storagePermissionRequestLauncher
                     .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -216,8 +213,7 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
             OptionMenu(titleId = R.string.title_replace_home, action = {
                 browserModule.currentUrl()?.let {
                     if (Urls.isInvalidUrl(it)) {
-                        contentViewModel
-                            .snackShort(activityContext.getString(R.string.message_cannot_replace_home_url))
+                        contentViewModel.snackShort(R.string.message_cannot_replace_home_url)
                         return@let
                     }
                     PreferenceApplier(activityContext).homeUrl = it
@@ -278,7 +274,10 @@ private fun initializeHeaderViewModels(
                     )
                 }
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.horizontalScroll(rememberScrollState())
+                ) {
                     HeaderSubButton(
                         R.drawable.ic_back,
                         R.string.back,
@@ -353,6 +352,16 @@ private fun initializeHeaderViewModels(
                         if (pageInformation.isEmpty.not()) {
                             PageInformationDialog(openPageInformation, pageInformation)
                         }
+                    }
+
+                    val browserViewModel = viewModel(BrowserViewModel::class.java, activity)
+                    HeaderSubButton(
+                        R.drawable.ic_home,
+                        R.string.title_load_home,
+                        tint
+                    ) {
+                        browserViewModel
+                            .open(preferenceApplier.homeUrl.toUri())
                     }
 
                     HeaderSubButton(
@@ -500,7 +509,7 @@ private fun HeaderSubButton(
         contentDescription = stringResource(id = descriptionId),
         tint = tint,
         modifier = Modifier
-            .width(40.dp)
+            .width(44.dp)
             .padding(4.dp)
             .alpha(if (enable) 1f else 0.6f)
             .clickable(enabled = enable, onClick = onClick)
