@@ -310,7 +310,7 @@ internal fun Content() {
             it.second?.invoke(it.first)
         }
 
-    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java)
+    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     pageSearcherViewModel.close.observe(activity, {
