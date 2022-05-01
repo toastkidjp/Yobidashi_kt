@@ -8,16 +8,19 @@
 
 package jp.toastkid.yobidashi.calendar.view
 
+import android.os.Build
 import android.widget.DatePicker
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,6 +32,7 @@ import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
@@ -49,6 +53,10 @@ fun CalendarUi() {
         year = y
         monthOfYear = m
         dayOfMonth = d
+    }
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+        && PreferenceApplier(context).useDarkMode()) {
+        datePicker.setBackgroundColor(MaterialTheme.colors.onSurface.toArgb())
     }
 
     Surface(elevation = 4.dp) {
