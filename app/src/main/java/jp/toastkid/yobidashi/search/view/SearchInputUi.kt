@@ -19,7 +19,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -32,12 +31,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,11 +45,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
@@ -168,19 +164,19 @@ fun SearchInputUi(
                 label = {
                     Text(
                         stringResource(id = R.string.title_search),
-                        color = Color(preferenceApplier.fontColor)
+                        color = MaterialTheme.colors.onPrimary
                     )
                 },
                 singleLine = true,
                 textStyle = TextStyle(
-                    color = Color(preferenceApplier.fontColor),
+                    color = MaterialTheme.colors.onPrimary,
                     textAlign = TextAlign.Start,
                 ),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.Clear,
                         contentDescription = "clear text",
-                        tint = Color(preferenceApplier.fontColor),
+                        tint = MaterialTheme.colors.onPrimary,
                         modifier = Modifier
                             //.offset(x = 8.dp)
                             .clickable {
@@ -204,10 +200,10 @@ fun SearchInputUi(
                     .focusRequester(focusRequester)
             )
 
-            Image(
+            Icon(
                 painterResource(id = if (useVoice.value) R.drawable.ic_mic else R.drawable.ic_search_white),
                 contentDescription = stringResource(id = R.string.title_search_action),
-                colorFilter = ColorFilter.tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn),
+                tint = MaterialTheme.colors.onPrimary,
                 modifier = Modifier
                     .width(32.dp)
                     .fillMaxHeight()
@@ -244,15 +240,8 @@ fun SearchInputUi(
             )
         }
 
-        val focusManager = LocalFocusManager.current
         LaunchedEffect(key1 = "first_launch", block = {
             focusRequester.requestFocus()
-        })
-
-        DisposableEffect(key1 = "clear_focus", effect = {
-            onDispose {
-                focusManager.clearFocus(true)
-            }
         })
     }
 
@@ -367,49 +356,3 @@ private inline fun search(
 
     SearchAction(context, category, query, currentUrl, onBackground).invoke()
 }
-
-/*
-TODO menu
-        inflater.inflate(R.menu.search_menu, menu)
-
-        menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
-        menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
-R.id.double_quote -> {
-            val queryOrEmpty = currentInput?.value
-            if (queryOrEmpty?.isNotBlank() == true) {
-                setTextAndMoveCursorToEnd("\"$queryOrEmpty\"")
-            }
-            true
-        }
-        R.id.set_default_search_category -> {
-            currentCategory?.value = preferenceApplier.getDefaultSearchEngine()
-                ?: SearchCategory.getDefaultCategoryName()
-            true
-        }
-        R.id.suggestion_check -> {
-            preferenceApplier.switchEnableSuggestion()
-            item.isChecked = preferenceApplier.isEnableSuggestion
-            true
-        }
-        R.id.history_check -> {
-            preferenceApplier.switchEnableSearchHistory()
-            item.isChecked = preferenceApplier.isEnableSearchHistory
-            true
-        }
-        R.id.open_favorite_search -> {
-            activity?.also {
-                ViewModelProvider(it)
-                        .get(ContentViewModel::class.java)
-                        .nextFragment(FavoriteSearchFragment::class.java)
-            }
-            true
-        }
-        R.id.open_search_history -> {
-            activity?.also {
-                ViewModelProvider(it)
-                        .get(ContentViewModel::class.java)
-                        .nextFragment(SearchHistoryFragment::class.java)
-            }
-            true
-        }
- */
