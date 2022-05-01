@@ -387,7 +387,9 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
 @Composable
 private fun Header(headerTextId: Int) {
     Surface(
-        elevation = 4.dp
+        elevation = 4.dp,
+        modifier = Modifier
+            .padding(start = 8.dp, end = 8.dp)
     ) {
         Text(
             text = stringResource(id = headerTextId),
@@ -402,7 +404,9 @@ private fun Header(headerTextId: Int) {
 @Composable
 private fun HeaderWithLink(headerTextId: Int, linkTextId: Int, onLinkClick: () -> Unit) {
     Surface(
-        elevation = 4.dp
+        elevation = 4.dp,
+        modifier = Modifier
+            .padding(start = 8.dp, end = 8.dp)
     ) {
         Box(
             modifier = Modifier
