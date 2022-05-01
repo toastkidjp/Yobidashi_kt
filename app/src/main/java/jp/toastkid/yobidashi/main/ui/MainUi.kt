@@ -647,9 +647,7 @@ internal fun Content() {
                     composable("tab/web/current") {
                         val currentTab = tabs.currentTab() as? WebTab ?: return@composable
                         focusManager.clearFocus(true)
-                        WebTabUi()
-                        browserViewModel
-                            .loadWithNewTab(currentTab.latest.url().toUri() to currentTab.id())
+                        WebTabUi(currentTab.latest.url().toUri(), currentTab.id())
                     }
                     composable("tab/pdf/current") {
                         val currentTab = tabs.currentTab() as? PdfTab ?: return@composable
@@ -739,9 +737,6 @@ internal fun Content() {
                     navigationHostController?.popBackStack()
                     if (route == "setting/top") {
                         contentViewModel?.refresh()
-                    }
-                    if (route?.startsWith("search") == true) {
-                        focusManager.clearFocus(true)
                     }
                     if (route?.startsWith("tab/") == true) {
                         tabs.closeTab(tabs.index())

@@ -13,8 +13,8 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.core.view.get
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
@@ -67,10 +67,10 @@ class WebViewReplacementUseCase(
             browserHeaderViewModel?.nextTitle(it.title)
             browserHeaderViewModel?.nextUrl(it.url)
 
-            webViewContainer?.startAnimation(slideUpFromBottom)
+            //webViewContainer?.startAnimation(slideUpFromBottom)
 
             val activity = webViewContainer?.context
-            if (activity is FragmentActivity
+            if (activity is ViewModelStoreOwner
                     && ScreenMode.find(preferenceApplier.browserScreenMode()) != ScreenMode.FULL_SCREEN) {
                 ViewModelProvider(activity).get(AppBarViewModel::class.java).show()
             }
