@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -71,46 +70,44 @@ fun PdfViewerUi(uri: Uri) {
 private fun PdfPageList(pdfRenderer: PdfRenderer, listState: LazyListState) {
     val pdfImageFactory = PdfImageFactory()
 
-    MaterialTheme {
-        LazyColumn(state = listState) {
-            val max = pdfRenderer.pageCount
-            items(max) {
-                Surface(
-                    modifier = Modifier
-                        .padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            top = 2.dp,
-                            bottom = 2.dp
+    LazyColumn(state = listState) {
+        val max = pdfRenderer.pageCount
+        items(max) {
+            Surface(
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 2.dp,
+                        bottom = 2.dp
+                    )
+            ) {
+                var scale by remember { mutableStateOf(1f) }
+                var offset by remember { mutableStateOf(Offset.Zero) }
+
+                val state = rememberTransformableState { zoomChange, offsetChange, _ ->
+                    scale *= zoomChange
+                    offset += offsetChange
+                }
+
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                        .graphicsLayer(
+                            scaleX = scale,
+                            scaleY = scale,
+                            translationX = offset.x,
+                            translationY = offset.y
                         )
+                        .transformable(state = state)
                 ) {
-                    var scale by remember { mutableStateOf(1f) }
-                    var offset by remember { mutableStateOf(Offset.Zero) }
-
-                    val state = rememberTransformableState { zoomChange, offsetChange, _ ->
-                        scale *= zoomChange
-                        offset += offsetChange
-                    }
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                            .graphicsLayer(
-                                scaleX = scale,
-                                scaleY = scale,
-                                translationX = offset.x,
-                                translationY = offset.y
-                            )
-                            .transformable(state = state)
-                    ) {
-                        AsyncImage(
-                            model = pdfImageFactory.invoke(pdfRenderer.openPage(it)),
-                            contentDescription = "${it + 1} / $max"
-                        )
-                        Text(
-                            text = "${it + 1} / $max",
-                            fontSize = 10.sp
-                        )
-                    }
+                    AsyncImage(
+                        model = pdfImageFactory.invoke(pdfRenderer.openPage(it)),
+                        contentDescription = "${it + 1} / $max"
+                    )
+                    Text(
+                        text = "${it + 1} / $max",
+                        fontSize = 10.sp
+                    )
                 }
             }
         }
