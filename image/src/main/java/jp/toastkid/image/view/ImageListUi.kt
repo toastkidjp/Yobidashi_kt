@@ -161,67 +161,65 @@ internal fun ImageListUi(
     val listState = rememberLazyListState()
     val preferenceApplier = PreferenceApplier(LocalContext.current)
 
-    Surface {
-        val chunked = images.chunked(2)
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .background(Color.Transparent)
-        ) {
-            items(chunked) { itemRow ->
-                Row {
-                    itemRow.forEach { image ->
-                        Surface(
-                            elevation = 4.dp,
+    val chunked = images.chunked(2)
+    LazyColumn(
+        state = listState,
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .background(Color.Transparent)
+    ) {
+        items(chunked) { itemRow ->
+            Row {
+                itemRow.forEach { image ->
+                    Surface(
+                        elevation = 4.dp,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp)
+                    ) {
+                        Column(
                             modifier = Modifier
-                                .weight(1f)
+                                .combinedClickable(
+                                    true,
+                                    onClick = {
+                                        if (image.isBucket) {
+                                            CoroutineScope(Dispatchers.IO).launch {
+                                                imageLoaderUseCase(image.name)
+                                            }
+                                        } else {
+                                            showPreview(images.indexOf(image))
+                                        }
+                                    },
+                                    onLongClick = {
+                                        preferenceApplier.addExcludeItem(image.path)
+                                        imageLoaderUseCase()
+                                    }
+                                )
                                 .padding(4.dp)
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .combinedClickable(
-                                        true,
-                                        onClick = {
-                                            if (image.isBucket) {
-                                                CoroutineScope(Dispatchers.IO).launch {
-                                                    imageLoaderUseCase(image.name)
-                                                }
-                                            } else {
-                                                showPreview(images.indexOf(image))
-                                            }
-                                        },
-                                        onLongClick = {
-                                            preferenceApplier.addExcludeItem(image.path)
-                                            imageLoaderUseCase()
-                                        }
-                                    )
-                                    .padding(4.dp)
-                            ) {
-                                AsyncImage(
-                                    model = ImageRequest.Builder(LocalContext.current)
-                                        .data(image.path)
-                                        .crossfade(true)
-                                        .placeholder(R.drawable.ic_image)
-                                        .build(),
-                                    contentDescription = image.name,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier.height(152.dp)
-                                )
-                                Text(
-                                    text = image.makeDisplayName(),
-                                    fontSize = 14.sp,
-                                    maxLines = 2,
-                                    modifier = Modifier.padding(4.dp)
-                                )
-                            }
+                            AsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(image.path)
+                                    .crossfade(true)
+                                    .placeholder(R.drawable.ic_image)
+                                    .build(),
+                                contentDescription = image.name,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.height(152.dp)
+                            )
+                            Text(
+                                text = image.makeDisplayName(),
+                                fontSize = 14.sp,
+                                maxLines = 2,
+                                modifier = Modifier.padding(4.dp)
+                            )
                         }
                     }
                 }
             }
         }
-        BackHandler(true) {
-            onBackPress()
-        }
+    }
+    BackHandler(true) {
+        onBackPress()
     }
 }
