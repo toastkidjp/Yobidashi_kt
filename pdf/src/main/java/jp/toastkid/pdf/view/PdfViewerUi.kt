@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
@@ -61,7 +62,7 @@ fun PdfViewerUi(uri: Uri) {
     ScrollerUseCase(
         viewModelProvider.get(ContentViewModel::class.java),
         listState
-    ).invoke(context)
+    ).invoke(LocalLifecycleOwner.current)
 
     PdfPageList(pdfRenderer, listState)
 }
