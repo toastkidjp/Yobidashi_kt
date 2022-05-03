@@ -26,7 +26,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.ui.theme.AppTheme
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
 import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
@@ -35,9 +34,7 @@ import jp.toastkid.yobidashi.main.ui.Content
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.Callback
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity(), Callback {
 
@@ -70,8 +67,6 @@ class MainActivity : ComponentActivity(), Callback {
 
     private var backgroundPath: MutableState<String>? = null
 
-    private var coroutineScope: CoroutineScope? = null
-
     /**
      * Disposables.
      */
@@ -89,15 +84,6 @@ class MainActivity : ComponentActivity(), Callback {
         })
 
         browserViewModel = activityViewModelProvider.get(BrowserViewModel::class.java)
-        browserViewModel?.preview?.observe(this, Observer {
-            val uri = it?.getContentIfNotHandled() ?: return@Observer
-            contentViewModel?.setBottomSheetContent {
-                FloatingPreviewUi(uri)
-            }
-            coroutineScope?.launch {
-                contentViewModel?.switchBottomSheet()
-            }
-        })
         browserViewModel?.download?.observe(this, Observer {
             val url = it?.getContentIfNotHandled() ?: return@Observer
             downloadPermissionRequestLauncher.launch(url)
@@ -167,11 +153,7 @@ class MainActivity : ComponentActivity(), Callback {
         this.filterColor?.value = preferenceApplier.useColorFilter()
     }
 
-    override fun onCloseOnly() {
-        coroutineScope?.launch {
-            contentViewModel?.hideBottomSheet()
-        }
-    }
+    override fun onCloseOnly() = Unit
 
     override fun onCloseTabListDialogFragment(lastTabId: String) {
 
