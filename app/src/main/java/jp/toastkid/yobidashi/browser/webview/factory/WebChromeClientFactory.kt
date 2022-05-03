@@ -20,6 +20,7 @@ import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
+import java.util.concurrent.TimeUnit
 
 class WebChromeClientFactory(
         private val browserHeaderViewModel: BrowserHeaderViewModel? = null,
@@ -43,6 +44,9 @@ class WebChromeClientFactory(
             val urlStr = view?.url
             if (urlStr != null && favicon != null) {
                 val file = faviconApplier?.assignFile(urlStr) ?: return
+                if (System.currentTimeMillis() - file.lastModified() < TimeUnit.HOURS.toMillis(6)) {
+                    return
+                }
                 bitmapCompressor(favicon, file)
             }
         }
