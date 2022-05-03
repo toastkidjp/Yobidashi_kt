@@ -53,6 +53,7 @@ import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
+import jp.toastkid.yobidashi.settings.view.TextMenu
 import kotlin.math.roundToInt
 
 @Composable
@@ -368,14 +369,10 @@ internal fun BrowserSettingUi() {
                 }
 
                 item {
-                    Text(
-                        stringResource(id = R.string.title_clear_cache),
-                        modifier = Modifier.padding(16.dp)
-                            .clickable {
-                                WebView(activityContext).clearCache(true)
-                                contentViewModel?.snackShort(R.string.done_clear)
-                            }
-                    )
+                    TextMenu(R.string.title_clear_cache) {
+                        WebView(activityContext).clearCache(true)
+                        contentViewModel?.snackShort(R.string.done_clear)
+                    }
                 }
 
                 item {
@@ -383,14 +380,10 @@ internal fun BrowserSettingUi() {
                 }
 
                 item {
-                    Text(
-                        stringResource(id = R.string.title_clear_form_data),
-                        modifier = Modifier.padding(16.dp)
-                            .clickable {
-                                WebView(activityContext).clearFormData()
-                                contentViewModel?.snackShort(R.string.done_clear)
-                            }
-                    )
+                    TextMenu(R.string.title_clear_form_data) {
+                        WebView(activityContext).clearFormData()
+                        contentViewModel?.snackShort(R.string.done_clear)
+                    }
                 }
 
                 item {
@@ -398,15 +391,11 @@ internal fun BrowserSettingUi() {
                 }
 
                 item {
-                    Text(
-                        stringResource(id = R.string.title_clear_cache),
-                        modifier = Modifier.padding(16.dp)
-                            .clickable {
-                                CookieManager.getInstance().removeAllCookies {
-                                    contentViewModel?.snackShort(R.string.done_clear)
-                                }
-                            }
-                    )
+                    TextMenu(R.string.title_clear_coolie) {
+                        CookieManager.getInstance().removeAllCookies {
+                            contentViewModel?.snackShort(R.string.done_clear)
+                        }
+                    }
                 }
             }
         }

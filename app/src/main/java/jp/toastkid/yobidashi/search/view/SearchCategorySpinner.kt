@@ -12,8 +12,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
@@ -47,7 +51,7 @@ internal fun SearchCategorySpinner(
                 spinnerOpen.value = true
             }
             .width(dimensionResource(id = R.dimen.search_category_spinner_width))
-            .fillMaxHeight()
+            .height(dimensionResource(id = R.dimen.toolbar_height))
             .background(colorResource(id = R.color.spinner_background))
     ) {
         val category = SearchCategory.findByCategory(currentCategory?.value)
@@ -68,28 +72,27 @@ internal fun SearchCategorySpinner(
         ) {
             val searchCategories = SearchCategory.values()
                 .filterNot { initialDisables?.contains(it.name) ?: false }
-            searchCategories.forEach { searchCategory ->
-                DropdownMenuItem(
-                    onClick = {
-                        currentCategory?.value = searchCategory.name
-                        onSelect(searchCategory)
-                        spinnerOpen.value = false
+            LazyColumn(modifier = Modifier.size(256.dp)) {
+                items(searchCategories, { it.id }) { searchCategory ->
+                    DropdownMenuItem(
+                        onClick = {
+                            currentCategory?.value = searchCategory.name
+                            onSelect(searchCategory)
+                            spinnerOpen.value = false
+                        }
+                    ) {
+                        AsyncImage(
+                            model = searchCategory.iconId,
+                            contentDescription = stringResource(id = searchCategory.id),
+                            modifier = Modifier.width(40.dp)
+                        )
+                        Text(
+                            stringResource(id = searchCategory.id),
+                            color = colorResource(id = R.color.black),
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(8.dp)
+                        )
                     }
-                ) {
-                    AsyncImage(
-                        model = searchCategory.iconId,
-                        contentDescription = stringResource(id = searchCategory.id),
-                        modifier = Modifier.width(40.dp)
-                    )
-                    Text(
-                        stringResource(id = searchCategory.id),
-                        color = colorResource(id = R.color.black),
-                        fontSize = 20.sp,
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                            .padding(8.dp)
-                    )
                 }
             }
         }

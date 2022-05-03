@@ -270,7 +270,7 @@ fun SearchInputUi(
     viewModel.putQuery
         .observe(context, Observer { event ->
             val query = event?.getContentIfNotHandled() ?: return@Observer
-            inputState.value = TextFieldValue(query, )
+            inputState.value = TextFieldValue(query, TextRange(query.length), TextRange.Zero)
         })
 
     val isEnableSuggestion = remember { mutableStateOf(preferenceApplier.isEnableSuggestion) }

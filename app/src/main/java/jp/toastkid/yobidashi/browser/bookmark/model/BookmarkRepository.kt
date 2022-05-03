@@ -22,6 +22,9 @@ interface BookmarkRepository {
     @Query("SELECT * FROM Bookmark")
     fun all(): List<Bookmark>
 
+    @Query("SELECT title FROM Bookmark WHERE folder <> 0")
+    fun folders(): List<String>
+
     @Query("SELECT * FROM Bookmark WHERE parent = :folderName")
     fun findByParent(folderName: String): List<Bookmark>
 
