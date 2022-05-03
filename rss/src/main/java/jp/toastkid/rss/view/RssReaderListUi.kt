@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -59,7 +60,7 @@ fun RssReaderListUi() {
     val context = LocalContext.current
     val items = remember { mutableStateListOf<Item>() }
 
-    LaunchedEffect(key1 = "", block = {
+    LaunchedEffect(LocalLifecycleOwner.current, block = {
         CoroutineScope(Dispatchers.IO).launch {
             items.clear()
 
