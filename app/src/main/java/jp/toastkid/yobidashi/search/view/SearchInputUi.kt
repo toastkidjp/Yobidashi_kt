@@ -14,6 +14,7 @@ import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -69,6 +70,8 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
+import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
 import jp.toastkid.yobidashi.search.url_suggestion.QueryUseCase
 import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
@@ -139,117 +142,133 @@ fun SearchInputUi(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    appBarViewModel.replace {
-        val spinnerOpen = remember { mutableStateOf(false) }
+    if (viewModel.openFavoriteSearch.value.not()) {
+        appBarViewModel.replace {
+            val spinnerOpen = remember { mutableStateOf(false) }
 
-        val useVoice = remember { mutableStateOf(false) }
+            val useVoice = remember { mutableStateOf(false) }
 
-        val focusRequester = remember { FocusRequester() }
+            val focusRequester = remember { FocusRequester() }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(dimensionResource(id = R.dimen.toolbar_height))
-        ) {
-            SearchCategorySpinner(spinnerOpen, categoryName)
-
-            TextField(
-                value = inputState.value,
-                onValueChange = { text ->
-                    inputState.value = text
-                    useVoice.value = text.text.isBlank()
-                    queryingUseCase.send(text.text)
-                },
-                label = {
-                    Text(
-                        stringResource(id = R.string.title_search),
-                        color = MaterialTheme.colors.onPrimary
-                    )
-                },
-                singleLine = true,
-                textStyle = TextStyle(
-                    color = MaterialTheme.colors.onPrimary,
-                    textAlign = TextAlign.Start,
-                ),
-                trailingIcon = {
-                    Icon(
-                        Icons.Filled.Clear,
-                        contentDescription = "clear text",
-                        tint = MaterialTheme.colors.onPrimary,
-                        modifier = Modifier
-                            //.offset(x = 8.dp)
-                            .clickable {
-                                inputState.value = TextFieldValue()
-                            }
-                    )
-                },
-                maxLines = 1,
-                keyboardActions = KeyboardActions {
-                    keyboardController?.hide()
-                    search(context, contentViewModel, currentUrl, categoryName.value, inputState.value.text)
-                },
-                keyboardOptions = KeyboardOptions(
-                    autoCorrect = true,
-                    imeAction = ImeAction.Search
-                ),
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 4.dp)
-                    .background(Color.Transparent)
-                    .focusRequester(focusRequester)
-            )
+                    .fillMaxWidth()
+                    .height(dimensionResource(id = R.dimen.toolbar_height))
+            ) {
+                SearchCategorySpinner(spinnerOpen, categoryName)
 
-            Icon(
-                painterResource(id = if (useVoice.value) R.drawable.ic_mic else R.drawable.ic_search_white),
-                contentDescription = stringResource(id = R.string.title_search_action),
-                tint = MaterialTheme.colors.onPrimary,
-                modifier = Modifier
-                    .width(32.dp)
-                    .fillMaxHeight()
-                    .align(Alignment.CenterVertically)
-                    .combinedClickable(
-                        true,
-                        onClick = {
-                            keyboardController?.hide()
+                TextField(
+                    value = inputState.value,
+                    onValueChange = { text ->
+                        inputState.value = text
+                        useVoice.value = text.text.isBlank()
+                        queryingUseCase.send(text.text)
+                    },
+                    label = {
+                        Text(
+                            stringResource(id = R.string.title_search),
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                    },
+                    singleLine = true,
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colors.onPrimary,
+                        textAlign = TextAlign.Start,
+                    ),
+                    trailingIcon = {
+                        Icon(
+                            Icons.Filled.Clear,
+                            contentDescription = "clear text",
+                            tint = MaterialTheme.colors.onPrimary,
+                            modifier = Modifier
+                                //.offset(x = 8.dp)
+                                .clickable {
+                                    inputState.value = TextFieldValue()
+                                }
+                        )
+                    },
+                    maxLines = 1,
+                    keyboardActions = KeyboardActions {
+                        keyboardController?.hide()
+                        search(context, contentViewModel, currentUrl, categoryName.value, inputState.value.text)
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = true,
+                        imeAction = ImeAction.Search
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 4.dp)
+                        .background(Color.Transparent)
+                        .focusRequester(focusRequester)
+                )
 
-                            if (useVoice.value) {
-                                invokeVoiceSearch(voiceSearchLauncher)
-                                return@combinedClickable
+                Icon(
+                    painterResource(id = if (useVoice.value) R.drawable.ic_mic else R.drawable.ic_search_white),
+                    contentDescription = stringResource(id = R.string.title_search_action),
+                    tint = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier
+                        .width(32.dp)
+                        .fillMaxHeight()
+                        .align(Alignment.CenterVertically)
+                        .combinedClickable(
+                            true,
+                            onClick = {
+                                keyboardController?.hide()
+
+                                if (useVoice.value) {
+                                    invokeVoiceSearch(voiceSearchLauncher)
+                                    return@combinedClickable
+                                }
+
+                                search(
+                                    context,
+                                    contentViewModel,
+                                    currentUrl,
+                                    categoryName.value,
+                                    inputState.value.text
+                                )
+                            },
+                            onLongClick = {
+                                search(
+                                    context,
+                                    contentViewModel,
+                                    currentUrl,
+                                    categoryName.value,
+                                    inputState.value.text,
+                                    true
+                                )
                             }
+                        )
+                )
+            }
 
-                            search(
-                                context,
-                                contentViewModel,
-                                currentUrl,
-                                categoryName.value,
-                                inputState.value.text
-                            )
-                        },
-                        onLongClick = {
-                            search(
-                                context,
-                                contentViewModel,
-                                currentUrl,
-                                categoryName.value,
-                                inputState.value.text,
-                                true
-                            )
-                        }
-                    )
-            )
+            LaunchedEffect(key1 = "first_launch", block = {
+                focusRequester.requestFocus()
+            })
         }
-
-        LaunchedEffect(key1 = "first_launch", block = {
-            focusRequester.requestFocus()
-        })
     }
 
     queryingUseCase.withDebounce()
 
-    SearchContentsUi(viewModel, currentTitle, currentUrl)
+    if (viewModel.enableBackHandler().not()) {
+        SearchContentsUi(viewModel, currentTitle, currentUrl)
+    }
 
     queryingUseCase.send("")
+
+    if (viewModel.openSearchHistory.value) {
+        SearchHistoryListUi()
+    }
+
+    if (viewModel.openFavoriteSearch.value) {
+        FavoriteSearchListUi()
+    }
+    
+    BackHandler(viewModel.enableBackHandler()) {
+        viewModel.closeOption()
+    }
 
     val localLifecycleOwner = LocalLifecycleOwner.current
 
@@ -318,14 +337,13 @@ fun SearchInputUi(
         OptionMenu(
             titleId = R.string.title_favorite_search,
             action = {
-                contentViewModel.nextRoute("search/favorite/list")
-
+                viewModel.openFavoriteSearch()
             }
         ),
         OptionMenu(
             titleId = R.string.title_search_history,
             action = {
-                contentViewModel.nextRoute("search/history/list")
+                viewModel.openSearchHistory()
             }
         )
     )
