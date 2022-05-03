@@ -45,11 +45,9 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.rss.R
 import jp.toastkid.rss.api.RssReaderApi
 import jp.toastkid.rss.model.Item
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
@@ -61,16 +59,14 @@ fun RssReaderListUi() {
     val items = remember { mutableStateListOf<Item>() }
 
     LaunchedEffect(LocalLifecycleOwner.current, block = {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             items.clear()
 
             val readRssReaderTargets = PreferenceApplier(context).readRssReaderTargets()
             readRssReaderTargets.asFlow()
                 .mapNotNull { RssReaderApi().invoke(it) }
                 .collect {
-                    withContext(Dispatchers.Main) {
-                        items.addAll(it.items)
-                    }
+                    items.addAll(it.items)
                 }
         }
     })
