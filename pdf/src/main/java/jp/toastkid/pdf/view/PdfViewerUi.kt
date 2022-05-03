@@ -8,25 +8,30 @@
 
 package jp.toastkid.pdf.view
 
+import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
@@ -43,6 +48,7 @@ import jp.toastkid.pdf.PdfImageFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 @Composable
@@ -71,10 +77,22 @@ fun PdfViewerUi(uri: Uri) {
 private fun PdfPageList(pdfRenderer: PdfRenderer, listState: LazyListState) {
     val pdfImageFactory = PdfImageFactory()
 
+    val images = remember { mutableStateListOf<Bitmap>() }
+    LaunchedEffect(pdfRenderer) {
+        withContext(Dispatchers.IO) {
+            images.addAll(
+                (0 until pdfRenderer.pageCount).map {
+                    pdfImageFactory.invoke(pdfRenderer.openPage(it))
+                }
+            )
+        }
+    }
+
+    val max = images.size
     LazyColumn(state = listState) {
-        val max = pdfRenderer.pageCount
-        items(max) {
+        itemsIndexed(images) { index, bitmap ->
             Surface(
+                elevation = 4.dp,
                 modifier = Modifier
                     .padding(
                         start = 16.dp,
@@ -91,8 +109,9 @@ private fun PdfPageList(pdfRenderer: PdfRenderer, listState: LazyListState) {
                     offset += offsetChange
                 }
 
-                Column(
-                    modifier = Modifier.fillMaxWidth()
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .graphicsLayer(
                             scaleX = scale,
                             scaleY = scale,
@@ -102,12 +121,13 @@ private fun PdfPageList(pdfRenderer: PdfRenderer, listState: LazyListState) {
                         .transformable(state = state)
                 ) {
                     AsyncImage(
-                        model = pdfImageFactory.invoke(pdfRenderer.openPage(it)),
-                        contentDescription = "${it + 1} / $max"
+                        model = bitmap,
+                        contentDescription = "${index + 1} / $max"
                     )
                     Text(
-                        text = "${it + 1} / $max",
-                        fontSize = 10.sp
+                        text = "${index + 1} / $max",
+                        fontSize = 10.sp,
+                        modifier = Modifier.align(Alignment.BottomEnd)
                     )
                 }
             }
