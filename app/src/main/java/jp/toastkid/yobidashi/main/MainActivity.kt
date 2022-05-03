@@ -32,11 +32,9 @@ import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.main.ui.Content
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
-import jp.toastkid.yobidashi.tab.model.Tab
-import jp.toastkid.yobidashi.tab.tab_list.Callback
 import kotlinx.coroutines.Job
 
-class MainActivity : ComponentActivity(), Callback {
+class MainActivity : ComponentActivity() {
 
     /**
      * Preferences wrapper.
@@ -152,34 +150,6 @@ class MainActivity : ComponentActivity(), Callback {
     private fun updateColorFilter() {
         this.filterColor?.value = preferenceApplier.useColorFilter()
     }
-
-    override fun onCloseOnly() = Unit
-
-    override fun onCloseTabListDialogFragment(lastTabId: String) {
-
-    }
-
-    override fun onOpenEditor() = Unit
-
-    override fun onOpenPdf() = Unit
-
-    override fun openNewTabFromTabList() = Unit
-
-    override fun tabIndexFromTabList() = 0
-
-    override fun currentTabIdFromTabList() = "0"
-
-    override fun replaceTabFromTabList(tab: Tab) = Unit
-
-    override fun getTabByIndexFromTabList(position: Int): Tab? = null
-
-    override fun closeTabFromTabList(position: Int) = Unit
-
-    override fun getTabAdapterSizeFromTabList(): Int = 0
-
-    override fun swapTabsFromTabList(from: Int, to: Int) = Unit
-
-    override fun tabIndexOfFromTabList(tab: Tab): Int = 0
 
     override fun onPause() {
         super.onPause()
