@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -135,7 +136,7 @@ binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CY
     }
 
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
-    ScrollerUseCase(contentViewModel, scrollState).invoke(context)
+    ScrollerUseCase(contentViewModel, scrollState).invoke(LocalLifecycleOwner.current)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
