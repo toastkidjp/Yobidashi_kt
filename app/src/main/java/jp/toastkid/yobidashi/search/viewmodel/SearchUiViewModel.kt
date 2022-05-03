@@ -64,4 +64,29 @@ class SearchUiViewModel : ViewModel() {
     fun putQuery(query: String) {
         _putQuery.postValue(Event(query))
     }
+
+    fun enableBackHandler() =
+        openSearchHistory.value || openFavoriteSearch.value
+
+    fun closeOption() {
+        _openSearchHistory.value = false
+        _openFavoriteSearch.value = false
+    }
+
+    private val _openSearchHistory = mutableStateOf(false)
+
+    val openSearchHistory: State<Boolean> = _openSearchHistory
+
+    fun openSearchHistory() {
+        _openSearchHistory.value = true
+    }
+
+    private val _openFavoriteSearch = mutableStateOf(false)
+
+    val openFavoriteSearch: State<Boolean> = _openFavoriteSearch
+
+    fun openFavoriteSearch() {
+        _openFavoriteSearch.value = true
+    }
+
 }
