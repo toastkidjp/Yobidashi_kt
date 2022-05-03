@@ -88,8 +88,8 @@ private fun RssReaderList(items: List<Item>) {
             Surface(
                 modifier = Modifier
                     .padding(
-                        start = 16.dp,
-                        end = 16.dp,
+                        start = 8.dp,
+                        end = 8.dp,
                         top = 2.dp,
                         bottom = 2.dp
                     )
