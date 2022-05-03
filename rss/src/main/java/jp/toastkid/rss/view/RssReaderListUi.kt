@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -87,77 +86,75 @@ private fun RssReaderList(items: List<Item>) {
 
     val listState = rememberLazyListState()
 
-    MaterialTheme {
-        LazyColumn(state = listState) {
-            items(items) {
-                Surface(
-                    modifier = Modifier
-                        .padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            top = 2.dp,
-                            bottom = 2.dp
-                        )
-                        .combinedClickable(
-                            enabled = true,
-                            onClick = {
-                                browserViewModel.open(it.link.toUri())
-                            },
-                            onLongClick = {
-                                browserViewModel.openBackground(it.link.toUri())
-                            }
-                        ),
-                    elevation = 4.dp
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                    ) {
-                        AsyncImage(
-                            R.drawable.ic_rss_feed,
-                            contentDescription = stringResource(id = R.string.image),
-                            modifier = Modifier.width(32.dp),
-                            colorFilter = ColorFilter.tint(
-                                colorResource(id = R.color.colorPrimary),
-                                BlendMode.SrcIn
-                            )
-                        )
-                        Column {
-                            Text(
-                                text = it.title,
-                                fontSize = 18.sp,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                            )
-                            Text(
-                                text = it.link,
-                                color = colorResource(R.color.link_blue),
-                                fontSize = 12.sp,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1
-                            )
-                            Text(
-                                text = it.content.toString(),
-                                fontSize = 14.sp,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 3,
-                            )
-                            Text(
-                                text = it.source,
-                                fontSize = 12.sp,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                            )
-                            Text(
-                                text = it.date,
-                                color = colorResource(R.color.darkgray_scale),
-                                fontSize = 12.sp,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                            )
+    LazyColumn(state = listState) {
+        items(items) {
+            Surface(
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 2.dp,
+                        bottom = 2.dp
+                    )
+                    .combinedClickable(
+                        enabled = true,
+                        onClick = {
+                            browserViewModel.open(it.link.toUri())
+                        },
+                        onLongClick = {
+                            browserViewModel.openBackground(it.link.toUri())
                         }
+                    ),
+                elevation = 4.dp
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                ) {
+                    AsyncImage(
+                        R.drawable.ic_rss_feed,
+                        contentDescription = stringResource(id = R.string.image),
+                        modifier = Modifier.width(32.dp),
+                        colorFilter = ColorFilter.tint(
+                            colorResource(id = R.color.colorPrimary),
+                            BlendMode.SrcIn
+                        )
+                    )
+                    Column {
+                        Text(
+                            text = it.title,
+                            fontSize = 18.sp,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                        )
+                        Text(
+                            text = it.link,
+                            color = colorResource(R.color.link_blue),
+                            fontSize = 12.sp,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
+                        )
+                        Text(
+                            text = it.content.toString(),
+                            fontSize = 14.sp,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 3,
+                        )
+                        Text(
+                            text = it.source,
+                            fontSize = 12.sp,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                        )
+                        Text(
+                            text = it.date,
+                            color = colorResource(R.color.darkgray_scale),
+                            fontSize = 12.sp,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                        )
                     }
                 }
             }
