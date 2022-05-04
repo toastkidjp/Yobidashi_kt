@@ -48,6 +48,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.load.LoadedAction
 
 /**
@@ -92,7 +93,7 @@ internal fun DisplaySettingUi() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .clickable { applyDarkMode() }
+                        .clickable { DarkModeApplier().invoke(preferenceApplier, activityContext) }
                 ) {
                     Icon(
                         painterResource(id = R.drawable.ic_dark_mode_black),
