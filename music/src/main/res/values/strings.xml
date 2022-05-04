@@ -1,6 +1,7 @@
 <resources>
     <string name="action_pause">Pause</string>
     <string name="action_play">Play</string>
+    <string name="action_stop">Stop</string>
     <string name="action_shuffle">Shuffle</string>
     <string name="title_audio_player">Audio player</string>
     <string name="message_audio_file_is_not_found">Audio file is not found.</string>

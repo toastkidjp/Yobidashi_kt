@@ -206,7 +206,7 @@ internal fun MusicList(
             ) {
                 AsyncImage(
                     R.drawable.ic_stop,
-                    contentDescription = "TODO",
+                    contentDescription = stringResource(id = R.string.action_stop),
                     colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
                     modifier = Modifier
                         .width(44.dp)
@@ -214,7 +214,7 @@ internal fun MusicList(
                 )
                 AsyncImage(
                     if (viewModel.playing) R.drawable.ic_pause else R.drawable.ic_play_media,
-                    contentDescription = "TODO",
+                    contentDescription = stringResource(id = R.string.action_pause),
                     colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
                     modifier = Modifier
                         .width(44.dp)
@@ -223,7 +223,7 @@ internal fun MusicList(
                 )
                 AsyncImage(
                     R.drawable.ic_shuffle,
-                    contentDescription = "TODO",
+                    contentDescription = stringResource(id = R.string.action_shuffle),
                     colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
                     modifier = Modifier
                         .width(44.dp)
