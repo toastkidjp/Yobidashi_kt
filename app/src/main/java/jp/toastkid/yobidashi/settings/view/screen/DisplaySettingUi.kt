@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.settings.view.screen
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
@@ -34,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -43,13 +43,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
@@ -60,7 +58,7 @@ import jp.toastkid.yobidashi.settings.background.load.LoadedAction
  */
 @Composable
 internal fun DisplaySettingUi() {
-    val activityContext = LocalContext.current as? FragmentActivity ?: return
+    val activityContext = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(activityContext)
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
 
@@ -93,7 +91,6 @@ internal fun DisplaySettingUi() {
         Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
             LazyColumn(
                 Modifier.background(colorResource(id = R.color.setting_background))
-                    .nestedScroll(rememberViewInteropNestedScrollConnection())
             ) {
                 item {
                     Row(

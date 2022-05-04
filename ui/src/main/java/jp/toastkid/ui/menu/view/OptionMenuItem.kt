@@ -19,14 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.model.OptionMenu
-import jp.toastkid.ui.R
 
 @Composable
 fun OptionMenuItem(optionMenu: OptionMenu) {
@@ -48,7 +46,6 @@ fun OptionMenuItem(optionMenu: OptionMenu) {
         Text(
             title,
             fontSize = 16.sp,
-            color = colorResource(id = R.color.black),
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 4.dp)

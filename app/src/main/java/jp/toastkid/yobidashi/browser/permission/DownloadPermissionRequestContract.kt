@@ -9,13 +9,13 @@
 package jp.toastkid.yobidashi.browser.permission
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 
 class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<Boolean, String?>>() {
 
@@ -35,7 +35,7 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return true to url
         }
-        if (resultCode != AppCompatActivity.RESULT_OK) return false to url
+        if (resultCode != Activity.RESULT_OK) return false to url
         val granted = intent
             ?.getIntArrayExtra(ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
             ?.getOrNull(0) == PackageManager.PERMISSION_GRANTED

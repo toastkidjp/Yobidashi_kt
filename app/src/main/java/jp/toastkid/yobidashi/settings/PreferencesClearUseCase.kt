@@ -7,8 +7,9 @@
  */
 package jp.toastkid.yobidashi.settings
 
-import androidx.fragment.app.FragmentActivity
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
@@ -18,15 +19,26 @@ import jp.toastkid.yobidashi.appwidget.search.Updater
  * @author toastkidjp
  */
 class PreferencesClearUseCase(
-    private val fragmentActivity: FragmentActivity,
-    private val viewModelProvider: ViewModelProvider = ViewModelProvider(fragmentActivity)
+    private val context: Context,
+    private val contentViewModel: ContentViewModel?
 ) {
 
     operator fun invoke() {
-        PreferenceApplier(fragmentActivity).clear()
-        Updater().update(fragmentActivity)
-        viewModelProvider.get(ContentViewModel::class.java)
-            .snackShort(R.string.done_clear)
+        PreferenceApplier(context).clear()
+        Updater().update(context)
+        contentViewModel?.snackShort(R.string.done_clear)
+    }
+
+    companion object {
+
+        fun make(context: Context): PreferencesClearUseCase {
+            return PreferencesClearUseCase(
+                context,
+                (context as? ViewModelStoreOwner)?.let {
+                    ViewModelProvider(it).get(ContentViewModel::class.java)
+                }
+            )
+        }
     }
 
 }

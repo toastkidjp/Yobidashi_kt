@@ -11,8 +11,8 @@ package jp.toastkid.yobidashi.browser.webview.usecase
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
@@ -67,7 +67,7 @@ class SelectedTextUseCase(
     companion object {
 
         fun make(context: Context?): SelectedTextUseCase? =
-            (context as? FragmentActivity)?.let { activity ->
+            (context as? ViewModelStoreOwner)?.let { activity ->
                 val viewModelProvider = ViewModelProvider(activity)
                 return SelectedTextUseCase(
                     stringResolver = { resource, additional -> context.getString(resource, additional) },

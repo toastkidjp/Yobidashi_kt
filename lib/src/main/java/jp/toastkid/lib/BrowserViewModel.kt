@@ -9,6 +9,8 @@ package jp.toastkid.lib
 
 import android.net.Uri
 import android.os.Message
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -66,6 +68,37 @@ class BrowserViewModel : ViewModel() {
 
     fun download(url: String) {
         _download.postValue(Event(url))
+    }
+
+    private val _error = mutableStateOf("")
+    val openErrorDialog = mutableStateOf(false)
+
+    val error: State<String> = _error
+
+    fun setError(text: String) {
+        _error.value = text
+        openErrorDialog.value = true
+    }
+
+    fun clearError() {
+        _error.value = ""
+        openErrorDialog.value = false
+    }
+
+    private val _longTapActionParameters =
+        mutableStateOf(Triple<String?, String?, String?>(null, null, null))
+    val openLongTapDialog = mutableStateOf(false)
+
+    val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
+
+    fun setLongTapParameters(title: String?, anchor: String?, imageUrl: String?) {
+        _longTapActionParameters.value = Triple(title, anchor, imageUrl)
+        openLongTapDialog.value = true
+    }
+
+    fun clearLongTapParameters() {
+        _longTapActionParameters.value = Triple(null, null, null)
+        openLongTapDialog.value = false
     }
 
 }

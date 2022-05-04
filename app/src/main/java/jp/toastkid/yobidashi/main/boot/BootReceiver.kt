@@ -10,8 +10,6 @@ package jp.toastkid.yobidashi.main.boot
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
 /**
  * Implement for re-showing notification widget on reboot.
@@ -23,10 +21,6 @@ class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null) {
             return
-        }
-
-        if (PreferenceApplier(context).useNotificationWidget()) {
-            NotificationWidget.show(context)
         }
     }
 }

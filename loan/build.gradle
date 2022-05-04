@@ -43,11 +43,9 @@ android {
 dependencies {
     implementation project(":lib")
 
-    implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
     implementation "androidx.compose.material:material:$libVersions.compose"
-    implementation "androidx.compose.ui:ui-tooling:$libVersions.compose"
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"

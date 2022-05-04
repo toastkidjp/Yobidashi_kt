@@ -42,14 +42,13 @@ dependencies {
     implementation project(":lib")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
     implementation "androidx.compose.material:material:$libVersions.compose"
-    implementation "androidx.compose.ui:ui-tooling:$libVersions.compose"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
+    implementation 'androidx.activity:activity-compose:1.4.0'
 
     implementation 'com.squareup.moshi:moshi:1.8.0'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'

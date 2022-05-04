@@ -2,44 +2,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="AppTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="SettingCardStyle">
-        <item name="android:background">@color/white</item>
-    </style>
-
-    <style name="EditTextStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="colorControlActivated">@color/cyan_bg</item>
-        <item name="android:textColorHighlight">@color/cyan_bg</item>
-    </style>
-
-    <style name="OneLineTextMenu">
-        <item name="android:background">@drawable/ripple_transparent</item>
-        <item name="android:padding">16dp</item>
-        <item name="android:gravity">center_vertical</item>
-    </style>
-
-    <style name="AppTheme.Splash">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.Splash" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="Border">
-        <item name="android:textColorSecondary">@color/darkgray_scale</item>
-        <item name="colorControlNormal">@color/colorPrimary</item>
-    </style>
-
-    <style name="AppTheme.Translucent" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.Translucent" parent="AppTheme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -47,30 +23,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowContentTransitions">true</item>
-    </style>
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
-    <style name="errorText">
-        <item name="android:textColor">@android:color/holo_red_dark</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="BackgroundEmphasisStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:button">@android:color/transparent</item>
-        <item name="android:background">@drawable/emphasis</item>
-    </style>
-
-    <style name="BarcodeReaderSubMenuStyle">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">44dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/ripple_transparent</item>
-        <item name="android:textSize">24sp</item>
     </style>
 
     <style name="FunctionsNotificationImageStyle">
@@ -91,21 +43,8 @@
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="PopupWindowVisibilityAnimation">
-        <item name="android:windowEnterAnimation">@anim/slide_up</item>
-        <item name="android:windowExitAnimation">@anim/slide_down</item>
-    </style>
-
-    <style name="SettingTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
-    </style>
-
-    <style name="TabListBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog" />
-
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="colorControlNormal">@color/filter_white</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
 

@@ -42,8 +42,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
@@ -60,7 +60,7 @@ import kotlin.math.roundToInt
 internal fun BrowserSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
-    val contentViewModel = (activityContext as? FragmentActivity)?.let {
+    val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
         ViewModelProvider(activityContext).get(ContentViewModel::class.java)
     }
 

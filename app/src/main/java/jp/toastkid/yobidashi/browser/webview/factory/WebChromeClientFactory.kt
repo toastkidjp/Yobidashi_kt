@@ -13,8 +13,8 @@ import android.os.Message
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
@@ -65,7 +65,7 @@ class WebChromeClientFactory(
         ): Boolean {
             view?.stopLoading()
 
-            (view?.context as? FragmentActivity)?.also { fragmentActivity ->
+            (view?.context as? ViewModelStoreOwner)?.also { fragmentActivity ->
                 ViewModelProvider(fragmentActivity)
                         .get(BrowserViewModel::class.java)
                         .openNewWindow(resultMsg)

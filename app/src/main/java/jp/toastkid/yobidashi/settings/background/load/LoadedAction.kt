@@ -1,21 +1,17 @@
 package jp.toastkid.yobidashi.settings.background.load
 
 import android.app.Activity
-import android.graphics.Bitmap
+import android.content.Context
 import android.net.Uri
-import android.view.View
 import androidx.core.graphics.drawable.toBitmap
-import androidx.fragment.app.FragmentActivity
 import coil.imageLoader
 import coil.request.ImageRequest
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.image.ImageStoreUseCase
-import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.lib.window.WindowRectCalculatorCompat
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.settings.background.ImageDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,8 +31,8 @@ import java.io.IOException
  */
 internal class LoadedAction (
         private val uri: Uri?,
-        private val parent: View,
-        private val colorPair: ColorPair,
+        private val context: Context,
+        private val contentViewModel: ContentViewModel,
         private val onLoadedAction: () -> Unit,
         private val fileDir: String
 ) {
@@ -53,8 +49,6 @@ internal class LoadedAction (
         if (uri == null) {
             return
         }
-
-        val context = parent.context
 
         CoroutineScope(Dispatchers.Main).launch {
             val bitmap = try {
@@ -81,7 +75,7 @@ internal class LoadedAction (
             }
 
             onLoadedAction()
-            bitmap?.let { informDone(it) }
+            bitmap?.let { contentViewModel.snackShort(R.string.message_done_set_image) }
         }
     }
 
@@ -89,31 +83,7 @@ internal class LoadedAction (
      * Inform failed.
      */
     private fun informFailed() {
-        Toaster.snackShort(parent, R.string.message_failed_read_image, colorPair)
-    }
-
-    /**
-     * Inform done with action.
-     *
-     * @param image
-     */
-    private fun informDone(image: Bitmap) {
-        Toaster.snackLong(
-                parent,
-                R.string.message_done_set_image,
-                R.string.display,
-                { v ->
-                    val viewContext = v.context
-                    if (viewContext is FragmentActivity) {
-                        ImageDialogFragment.withBitmap(image)
-                                .show(
-                                        viewContext.supportFragmentManager,
-                                        ImageDialogFragment::class.java.simpleName
-                                )
-                    }
-                },
-                colorPair
-        )
+        contentViewModel.snackShort(R.string.message_failed_read_image)
     }
 
 }

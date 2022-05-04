@@ -1,13 +1,15 @@
 package jp.toastkid.yobidashi.libs.clip
 
+import android.content.Context
 import android.net.Uri
 import android.view.View
 import androidx.core.net.toUri
-import com.google.android.material.snackbar.Snackbar
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 
 /**
@@ -23,12 +25,12 @@ class ClippingUrlOpener {
      * @param view [View](Nullable)
      * @param onClick callback
      */
-    operator fun invoke(view: View?, onClick: (Uri) -> Unit) {
-        if (view == null || NetworkChecker.isNotAvailable(view.context)) {
+    operator fun invoke(context: Context?, onClick: (Uri) -> Unit) {
+        if (context == null || NetworkChecker.isNotAvailable(context)) {
             return
         }
 
-        val activityContext = view.context
+        val activityContext = context
         val clipboardContent = Clipboard.getPrimary(activityContext)?.toString() ?: return
         val preferenceApplier = PreferenceApplier(activityContext)
         val lastClipped = preferenceApplier.lastClippedWord()
@@ -39,24 +41,27 @@ class ClippingUrlOpener {
 
         preferenceApplier.setLastClippedWord(clipboardContent)
 
-        feedbackToUser(view, clipboardContent, onClick)
+        feedbackToUser(context, clipboardContent, onClick)
     }
 
     private fun shouldNotFeedback(clipboardContent: String, lastClippedWord: String) =
-            Urls.isInvalidUrl(clipboardContent) || clipboardContent == lastClippedWord
+            Urls.isInvalidUrl(clipboardContent)
+                    || clipboardContent == lastClippedWord
+                    || clipboardContent.length > 100
 
     private fun feedbackToUser(
-            view: View,
+            context: Context,
             clipboardContent: String,
             onClick: (Uri) -> Unit
     ) {
-        Toaster.withAction(
-            view,
-            view.context.getString(R.string.message_clipping_url_open, clipboardContent),
-            R.string.open,
-            { onClick(clipboardContent.toUri()) },
-            PreferenceApplier(view.context).colorPair(),
-            Snackbar.LENGTH_LONG
+        val contentViewModel = (context as? ViewModelStoreOwner)?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java)
+        }
+
+        contentViewModel?.snackWithAction(
+            context.getString(R.string.message_clipping_url_open, clipboardContent),
+            context.getString(R.string.open),
+            { onClick(clipboardContent.toUri()) }
         )
     }
 

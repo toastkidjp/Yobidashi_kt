@@ -4,9 +4,8 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.storage.FilesDir
-import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
+import jp.toastkid.yobidashi.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,7 +28,7 @@ class DefaultBackgroundImagePreparation {
      */
     operator fun invoke(context: Context, callback: (File) -> Unit): Job =
             CoroutineScope(Dispatchers.Default).launch {
-                val filesDir = FilesDir(context, DisplayingSettingFragment.getBackgroundDirectory())
+                val filesDir = FilesDir(context, BACKGROUND_DIR)
 
                 val defaultFile = filesDir.assignNewFile("rose")
 
@@ -55,6 +54,10 @@ class DefaultBackgroundImagePreparation {
     }
 
     companion object {
+        /**
+         * Background image dir.
+         */
+        private const val BACKGROUND_DIR: String = "background_dir"
 
         private val images = mapOf(
                 "rose" to R.mipmap.rose,

@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.appwidget.search
 
 import android.appwidget.AppWidgetManager
-import android.content.ContextWrapper
+import android.content.Context
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
@@ -15,9 +15,9 @@ internal class Updater {
     /**
      * Do update app-widget.
      *
-     * @param wrapper [ContextWrapper]
+     * @param wrapper [Context]
      */
-    fun update(wrapper: ContextWrapper) {
+    fun update(wrapper: Context) {
         Provider.updateWidget(
                 wrapper.applicationContext,
                 AppWidgetManager.getInstance(wrapper),

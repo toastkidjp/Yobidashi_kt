@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.settings.view.screen
 
-import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
@@ -44,8 +44,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import com.godaddy.android.colorpicker.ClassicColorPicker
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -53,14 +54,13 @@ import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.EditorFontSize
-import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragment
 import jp.toastkid.yobidashi.settings.view.ColorPaletteUi
 
 @Composable
 internal fun EditorSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
-    val contentViewModel = (activityContext as? FragmentActivity)?.let {
+    val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
         ViewModelProvider(activityContext).get(ContentViewModel::class.java)
     }
     val backgroundColor = preferenceApplier.editorBackgroundColor()
@@ -129,7 +129,10 @@ internal fun EditorSettingUi() {
                     R.drawable.ic_cursor_black,
                     R.string.title_cursor_color,
                     iconTint
-                ) { showCursorColorSetting(activityContext, cursorColor) }
+                ) {
+                    preferenceApplier.setEditorCursorColor(it.toArgb())
+                    cursorColor.value = it
+                }
             }
 
             item {
@@ -142,7 +145,10 @@ internal fun EditorSettingUi() {
                     R.drawable.ic_highlight_black,
                     R.string.title_highlight_color,
                     iconTint
-                ) { showCursorColorSetting(activityContext, highlightColor) }
+                ) {
+                    preferenceApplier.setEditorHighlightColor(it.toArgb())
+                    highlightColor.value = it
+                }
             }
 
             item {
@@ -208,20 +214,23 @@ internal fun EditorSettingUi() {
     }
 }
 
-
 @Composable
 private fun ColorChooserMenu(
     colorState: MutableState<Color>,
     @DrawableRes iconId: Int,
     @StringRes textId: Int,
     iconTint: Color,
-    onClick: () -> Unit
+    onNewColor: (Color) -> Unit
 ) {
+    val openColorChooserDialog = remember { mutableStateOf(false) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .height(48.dp)
-            .clickable(onClick = onClick)
+            .clickable {
+                openColorChooserDialog.value = true
+            }
             .background(colorResource(id = R.color.setting_background))
     ) {
         Icon(
@@ -250,25 +259,65 @@ private fun ColorChooserMenu(
 
         }
     }
+
+    ComponentColorSettingDialog(
+        openColorChooserDialog,
+        colorState.value
+    ) {
+        onNewColor(it)
+    }
 }
 
-fun showCursorColorSetting(context: Context, colorState: MutableState<Color>) {
-    val fragmentActivity = context as? FragmentActivity
-    val supportFragmentManager = fragmentActivity?.supportFragmentManager ?: return
-    supportFragmentManager.setFragmentResultListener(
-        "color",
-        fragmentActivity,
-        { key, result ->
-            val color = result.getInt(key)
-            PreferenceApplier(fragmentActivity).setEditorCursorColor(color)
-            colorState.value = Color(color)
-            supportFragmentManager.clearFragmentResult("color")
-        }
-    )
+@Composable
+private fun ComponentColorSettingDialog(
+    openColorChooserDialog: MutableState<Boolean>,
+    currentColor: Color,
+    onNewColor: (Color) -> Unit
+) {
+    if (openColorChooserDialog.value) {
+        val preferenceApplier = PreferenceApplier(LocalContext.current)
+        val buttonColor = Color(preferenceApplier.color)
 
-    ColorChooserDialogFragment.withCurrentColor(colorState.value.toArgb())
-        .show(
-            supportFragmentManager,
-            ColorChooserDialogFragment::class.java.canonicalName
+        val choosingColor = remember { mutableStateOf(currentColor) }
+
+        AlertDialog(
+            onDismissRequest = { openColorChooserDialog.value = false },
+            title = {
+                Text(stringResource(id = R.string.title_dialog_color_chooser))
+            },
+            text = {
+                ClassicColorPicker(
+                    color = choosingColor.value,
+                    onColorChanged = { hsvColor ->
+                        choosingColor.value = hsvColor.toColor()
+                    },
+                    modifier = Modifier.height(200.dp)
+                )
+            },
+            confirmButton = {
+                Text(
+                    text = stringResource(id = jp.toastkid.ui.R.string.ok),
+                    color = buttonColor,
+                    modifier = Modifier
+                        .clickable {
+                            val newColor = choosingColor.value
+                            onNewColor(newColor)
+                            openColorChooserDialog.value = false
+                        }
+                        .padding(4.dp)
+                )
+            },
+            dismissButton = {
+                Text(
+                    text = stringResource(id = jp.toastkid.ui.R.string.cancel),
+                    color = buttonColor,
+                    modifier = Modifier
+                        .clickable {
+                            openColorChooserDialog.value = false
+                        }
+                        .padding(4.dp)
+                )
+            }
         )
+    }
 }

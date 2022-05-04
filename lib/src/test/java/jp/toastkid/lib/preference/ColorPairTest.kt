@@ -12,7 +12,6 @@ import android.graphics.Color
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.widget.TextView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -74,35 +73,6 @@ class ColorPairTest {
         verify (exactly = 1) { textView.setTextColor(any<Int>()) }
         verify (exactly = 1) { textView.getCompoundDrawables() }
     }
-
-    @Test
-    fun applyTo() {
-        val fab = mockk<FloatingActionButton>()
-        every { fab.setBackgroundTintList(any()) }.answers { Unit }
-        every { fab.getDrawable() }.answers { mockk() }
-        every { fab.setImageDrawable(any()) }.answers { Unit }
-
-        colorPair.applyTo(fab)
-
-        verify (exactly = 1) { fab.setBackgroundTintList(any()) }
-        verify (exactly = 1) { fab.getDrawable() }
-        verify (exactly = 1) { fab.setImageDrawable(any()) }
-    }
-
-    @Test
-    fun applyReverseTo() {
-        val fab = mockk<FloatingActionButton>()
-        every { fab.setBackgroundTintList(any()) }.answers { Unit }
-        every { fab.getDrawable() }.answers { mockk() }
-        every { fab.setImageDrawable(any()) }.answers { Unit }
-
-        colorPair.applyReverseTo(fab)
-
-        verify (exactly = 1) { fab.setBackgroundTintList(any()) }
-        verify (exactly = 1) { fab.getDrawable() }
-        verify (exactly = 1) { fab.setImageDrawable(any()) }
-    }
-
 
     @After
     fun tearDown() {

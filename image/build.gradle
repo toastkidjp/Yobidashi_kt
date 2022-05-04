@@ -45,8 +45,6 @@ dependencies {
     implementation project(":ui")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
-
     // Compose dependencies.
     implementation "androidx.compose.material:material:$libVersions.compose"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"

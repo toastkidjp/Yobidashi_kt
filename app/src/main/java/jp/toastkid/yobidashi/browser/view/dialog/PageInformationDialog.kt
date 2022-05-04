@@ -83,7 +83,7 @@ internal fun PageInformationDialog(
                             AsyncImage(
                                 model = favicon,
                                 contentDescription = stringResource(id = R.string.title_icon),
-                                modifier = Modifier.padding(end = 8.dp)
+                                modifier = Modifier.size(44.dp).padding(end = 8.dp)
                             )
                             Text(
                                 title,

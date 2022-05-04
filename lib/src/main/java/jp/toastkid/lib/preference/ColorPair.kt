@@ -1,12 +1,9 @@
 package jp.toastkid.lib.preference
 
-import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.core.graphics.drawable.DrawableCompat
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
  * Color pair of toolbar and so on...
@@ -35,24 +32,4 @@ class ColorPair(
         }
     }
 
-    /**
-     * Apply colors to passed [FloatingActionButton].
-     *
-     * @param floatingActionButton [FloatingActionButton]
-     */
-    fun applyTo(floatingActionButton: FloatingActionButton?) {
-        floatingActionButton?.backgroundTintList = ColorStateList.valueOf(bgColor)
-        floatingActionButton?.drawable?.also {
-            DrawableCompat.setTint(it, fontColor)
-            floatingActionButton.setImageDrawable(it)
-        }
-    }
-
-    fun applyReverseTo(floatingActionButton: FloatingActionButton?) {
-        floatingActionButton?.backgroundTintList = ColorStateList.valueOf(fontColor)
-        floatingActionButton?.drawable?.also {
-            DrawableCompat.setTint(it, bgColor)
-            floatingActionButton.setImageDrawable(it)
-        }
-    }
 }

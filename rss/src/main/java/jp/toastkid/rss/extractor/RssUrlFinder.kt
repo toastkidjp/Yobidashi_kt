@@ -10,7 +10,6 @@ package jp.toastkid.rss.extractor
 import android.content.Context
 import android.view.View
 import androidx.annotation.VisibleForTesting
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.api.html.HtmlApi
@@ -31,6 +30,7 @@ class RssUrlFinder(
     private val preferenceApplier: PreferenceApplier,
     private val urlValidator: RssUrlValidator = RssUrlValidator(),
     private val rssUrlExtractor: RssUrlExtractor = RssUrlExtractor(),
+    @VisibleForTesting
     private val htmlApi: HtmlApi = HtmlApi(),
     @VisibleForTesting
     private val contentViewModelFactory: (ViewModelStoreOwner) -> ContentViewModel? = {
@@ -91,7 +91,7 @@ class RssUrlFinder(
     }
 
     private fun obtainContentViewModel(context: Context) =
-        (context as? FragmentActivity)?.let {
+        (context as? ViewModelStoreOwner)?.let {
             contentViewModelFactory(it)
         }
 }

@@ -346,7 +346,7 @@
     <string name="title_dark_mode">Use dark mode</string>
     <string name="undo">undo</string>
     <string name="title_context_editor_add_order">Add order</string>
-    <string name="title_context_editor_unordered_list">Unordered list</string>
+    <string name="title_context_editor_unordered_list">To list</string>
     <string name="title_context_editor_convert_to_table">To table</string>
     <string name="title_context_editor_add_quote">Add quote</string>
     <string name="title_context_editor_double_quote">Double quote</string>
@@ -386,5 +386,13 @@
     <string name="message_backup_is_empty">Backup is empty.</string>
     <string name="apply_dark_mode">Apply dark mode</string>
     <string name="error_content_is_empty">Error: Content is empty. Please would you make sure of content area.</string>
+
+    <string name="row_dialog_open_new">Open new tab</string>
+    <string name="row_dialog_open_background">Open background tab</string>
+    <string name="row_dialog_image_search">Image search</string>
+    <string name="row_dialog_preview">Preview</string>
+    <string name="row_dialog_download">Download this image file</string>
+    <string name="row_dialog_copy">Copy URL</string>
+    <string name="row_dialog_copy_text">Copy Text</string>
 
 </resources>

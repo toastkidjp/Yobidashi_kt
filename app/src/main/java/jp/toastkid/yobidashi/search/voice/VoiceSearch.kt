@@ -4,11 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
 
 /**
  * Voice search use case.
@@ -39,12 +41,13 @@ class VoiceSearch {
      * @param colorPair [ColorPair]
      */
     fun suggestInstallGoogleApp(parent: View, colorPair: ColorPair) {
-        Toaster.withAction(
-            parent,
-            R.string.message_install_suggestion_google_app,
-            R.string.install,
-            { launchGooglePlay(parent) },
-            colorPair
+        val contentViewModel = (parent.context as? ViewModelStoreOwner)?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java)
+        }
+        contentViewModel?.snackWithAction(
+            parent.context.getString(R.string.message_install_suggestion_google_app),
+            parent.context.getString(R.string.install),
+            { launchGooglePlay(parent) }
         )
     }
 

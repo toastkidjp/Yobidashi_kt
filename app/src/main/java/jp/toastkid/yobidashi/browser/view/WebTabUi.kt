@@ -38,6 +38,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -68,6 +69,7 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.rss.extractor.RssUrlFinder
+import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
@@ -78,6 +80,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
+import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
@@ -127,6 +130,27 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     val readerModeText = remember { mutableStateOf("") }
     if (readerModeText.value.isNotBlank()) {
         ReaderModeUi(browserModule.currentTitle(), readerModeText)
+    }
+
+    val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
+    if (browserViewModel.openErrorDialog.value) {
+        ConfirmDialog(
+            browserViewModel.openErrorDialog,
+            stringResource(id = R.string.title_ssl_connection_error),
+            browserViewModel.error.value
+        ) {
+            browserViewModel.clearError()
+        }
+    }
+
+    if (browserViewModel.openLongTapDialog.value) {
+        val value = browserViewModel.longTapActionParameters.value
+        AnchorLongTapDialog(
+            browserViewModel.openLongTapDialog,
+            value.first,
+            value.second,
+            value.third
+        )
     }
 
     initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }
@@ -247,6 +271,7 @@ private fun initializeHeaderViewModels(
 
     val tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
+    val pageSearcherViewModel = viewModelProvider.get(PageSearcherViewModel::class.java)
 
     viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
         appBarViewModel?.replace {
@@ -426,6 +451,19 @@ private fun initializeHeaderViewModels(
                     )
                 }
             }
+
+            DisposableEffect("remove_observers") {
+                onDispose {
+                    contentViewModel.toTop.removeObservers(activity)
+                    contentViewModel.toBottom.removeObservers(activity)
+                    contentViewModel.share.removeObservers(activity)
+
+                    pageSearcherViewModel.find.removeObservers(activity)
+                    pageSearcherViewModel.upward.removeObservers(activity)
+                    pageSearcherViewModel.downward.removeObservers(activity)
+                    pageSearcherViewModel.clear.removeObservers(activity)
+                }
+            }
         }
     }
 
@@ -443,7 +481,7 @@ private fun initializeHeaderViewModels(
             browserModule.loadWithNewTab(it.first, it.second)
         })
 
-    viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
+    pageSearcherViewModel.also { viewModel ->
         viewModel.find.observe(activity, Observer {
             browserModule.find(it)
         })

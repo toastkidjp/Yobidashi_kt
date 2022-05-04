@@ -8,7 +8,7 @@
 
 package jp.toastkid.yobidashi.settings
 
-import androidx.fragment.app.FragmentActivity
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -34,7 +34,7 @@ class PreferencesClearUseCaseTest {
     private lateinit var preferencesClearUseCase: PreferencesClearUseCase
 
     @MockK
-    private lateinit var fragmentActivity: FragmentActivity
+    private lateinit var context: Context
 
     @MockK
     private lateinit var viewModelProvider: ViewModelProvider
@@ -45,7 +45,7 @@ class PreferencesClearUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { fragmentActivity.getSharedPreferences(any(), any()) }.returns(mockk())
+        every { context.getSharedPreferences(any(), any()) }.returns(mockk())
         every { viewModelProvider.get(any<Class<ContentViewModel>>()) }
             .returns(contentViewModel)
         every { contentViewModel.snackShort(any<Int>()) }.returns(Unit)
@@ -65,8 +65,7 @@ class PreferencesClearUseCaseTest {
     fun testInvoke() {
         preferencesClearUseCase.invoke()
 
-        verify(exactly = 1) { fragmentActivity.getSharedPreferences(any(), any()) }
-        verify(exactly = 1) { viewModelProvider.get(any<Class<ContentViewModel>>()) }
+        verify(exactly = 1) { context.getSharedPreferences(any(), any()) }
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 1) { anyConstructed<PreferenceApplier>().clear() }
         verify(exactly = 1) { anyConstructed<Updater>().update(any()) }

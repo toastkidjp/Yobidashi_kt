@@ -381,4 +381,12 @@
     <string name="apply_dark_mode">ダークモードにする</string>
     <string name="error_content_is_empty">エラー：コンテンツが空です。やり直してください</string>
 
+    <string name="row_dialog_open_new">新しいタブで開く</string>
+    <string name="row_dialog_open_background">バックグラウンドで開く</string>
+    <string name="row_dialog_image_search">この画像で検索</string>
+    <string name="row_dialog_preview">ちょっと見る</string>
+    <string name="row_dialog_download">画像をダウンロード</string>
+    <string name="row_dialog_copy">リンク先のURLをコピー</string>
+    <string name="row_dialog_copy_text">テキストをコピー</string>
+
 </resources>

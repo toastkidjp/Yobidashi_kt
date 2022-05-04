@@ -8,8 +8,6 @@
 
 package jp.toastkid.yobidashi.settings.view.screen
 
-import android.content.Context
-import android.text.Html
 import androidx.annotation.ColorInt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,12 +33,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentActivity
 import coil.compose.AsyncImage
 import jp.toastkid.lib.color.IconColorFinder
-import jp.toastkid.lib.dialog.ConfirmDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
+import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
@@ -57,6 +54,8 @@ internal fun OtherSettingUi() {
     val intentFactory = SettingsIntentFactory()
 
     val wifiOnly = remember { mutableStateOf(preferenceApplier.wifiOnly) }
+
+    val openConfirmDialog = remember { mutableStateOf(false) }
 
     MaterialTheme() {
         Surface(elevation = 4.dp, modifier = Modifier.padding(16.dp)) {
@@ -228,13 +227,20 @@ internal fun OtherSettingUi() {
                 item {
                     WithIcon(
                         R.string.title_clear_settings,
-                        { clearSettings(activityContext) },
+                        { openConfirmDialog.value = true },
                         iconTint,
                         R.drawable.ic_close_black
                     )
                 }
             }
         }
+    }
+
+    DestructiveChangeConfirmDialog(
+        visibleState = openConfirmDialog,
+        titleId = R.string.title_clear_settings
+    ) {
+        PreferencesClearUseCase.make(activityContext).invoke()
     }
 }
 
@@ -262,29 +268,3 @@ private fun NewTabSettingItem(
         }
     }
 }
-
-/**
- * Clear all settings.
- */
-private fun clearSettings(context: Context) {
-    val activity = context as? FragmentActivity ?: return
-
-    activity.supportFragmentManager.setFragmentResultListener(
-        "clear_setting",
-        activity,
-        { key, result ->
-            PreferencesClearUseCase(activity).invoke()
-        }
-    )
-
-    ConfirmDialogFragment.show(
-        activity.supportFragmentManager,
-        activity.getString(R.string.title_clear_settings),
-        Html.fromHtml(
-            activity.getString(R.string.confirm_clear_all_settings),
-            Html.FROM_HTML_MODE_COMPACT
-        ),
-        "clear_setting"
-    )
-}
-

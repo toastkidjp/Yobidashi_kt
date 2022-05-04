@@ -16,19 +16,13 @@ import android.os.Looper
 import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.core.net.toUri
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
-import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragment
-import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
-import jp.toastkid.yobidashi.browser.webview.dialog.ImageAnchorTypeLongTapDialogFragment
-import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
 
 /**
  * [WebView] factory.
@@ -74,59 +68,43 @@ internal class WebViewFactory {
                 WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
                     val url = hitResult.extra ?: return@setOnLongClickListener false
                     webView.requestFocusNodeHref(handler.obtainMessage())
-                    if (context is FragmentActivity) {
-                        if (longTapItemHolder.anchor.isEmpty()) {
-                            handler.postDelayed({
-                                showImageAnchorDialog(url, context)
-                                longTapItemHolder.reset()
-                            }, 300L)
+                    if (longTapItemHolder.anchor.isEmpty()) {
+                        handler.postDelayed({
+                            showImageAnchorDialog(url, context)
+                            longTapItemHolder.reset()
+                        }, 300L)
 
-                            return@setOnLongClickListener true
-                        }
-                        showImageAnchorDialog(url, context)
+                        return@setOnLongClickListener true
                     }
+                    showImageAnchorDialog(url, context)
                     false
                 }
                 WebView.HitTestResult.IMAGE_TYPE -> {
                     val url = hitResult.extra ?: return@setOnLongClickListener false
-                    if (context is FragmentActivity) {
-                        showDialogFragment(
-                                ImageTypeLongTapDialogFragment.make(url),
-                                context.supportFragmentManager
-                        )
-                    }
+                    extractViewModel(context)?.setLongTapParameters(
+                        longTapItemHolder.title,
+                        longTapItemHolder.anchor,
+                        url
+                    )
                     true
                 }
                 WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
                     webView.requestFocusNodeHref(handler.obtainMessage())
 
-                    if (context is FragmentActivity) {
-                        handler.postDelayed(
-                                {
-                                    showDialogFragment(
-                                            AnchorTypeLongTapDialogFragment
-                                                    .make(longTapItemHolder.title, longTapItemHolder.anchor),
-                                            context.supportFragmentManager
-                                    )
-                                    longTapItemHolder.reset()
-                                },
-                                300L
-                        )
-                        return@setOnLongClickListener true
-                    }
+                    handler.postDelayed(
+                        {
+                            extractViewModel(context)?.setLongTapParameters(
+                                longTapItemHolder.title,
+                                longTapItemHolder.anchor,
+                                null
+                            )
+                            longTapItemHolder.reset()
+                        },
+                        300L
+                    )
                     false
                 }
                 else -> {
-                    val extra = hitResult.extra ?: return@setOnLongClickListener false
-
-                    if (context is FragmentActivity) {
-                        ElseCaseLongTapDialogFragment
-                                .make(preferenceApplier.getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(), extra)
-                                .show(
-                                        context.supportFragmentManager,
-                                        ElseCaseLongTapDialogFragment::class.java.simpleName
-                                )
-                    }
                     false
                 }
             }
@@ -148,7 +126,7 @@ internal class WebViewFactory {
                     currentContext.startActivity(intent)
                 }
                 else -> {
-                    (context as? FragmentActivity)?.let {
+                    (context as? ViewModelStoreOwner)?.let {
                         ViewModelProvider(it).get(BrowserViewModel::class.java).download(url)
                     }
                 }
@@ -161,40 +139,20 @@ internal class WebViewFactory {
     /**
      * Show image anchor type dialog.
      *
-     * @param url URL string
-     * @param fragmentActivity [FragmentActivity]
+     * @param imageUrl URL string
+     * @param context [Context]
      */
-    private fun showImageAnchorDialog(url: String, fragmentActivity: FragmentActivity) {
-        val dialogFragment = ImageAnchorTypeLongTapDialogFragment.make(
-                longTapItemHolder.title,
-                url,
-                longTapItemHolder.anchor
-        )
-
-        showDialogFragment(
-                dialogFragment,
-                fragmentActivity.supportFragmentManager
+    private fun showImageAnchorDialog(imageUrl: String, context: Context) {
+        extractViewModel(context)?.setLongTapParameters(
+            longTapItemHolder.title,
+            longTapItemHolder.anchor,
+            imageUrl
         )
     }
 
-    /**
-     * Show dialog fragment.
-     *
-     * @param dialogFragment [DialogFragment]
-     * @param supportFragmentManager [FragmentManager]
-     */
-    private fun showDialogFragment(
-            dialogFragment: DialogFragment,
-            supportFragmentManager: FragmentManager?
-    ) {
-        val fragmentManager = supportFragmentManager ?: return
-        if (fragmentManager.isDestroyed) {
-            return
+    private fun extractViewModel(context: Context?) =
+        (context as? ViewModelStoreOwner)?.let {
+            ViewModelProvider(it).get(BrowserViewModel::class.java)
         }
-        dialogFragment.show(
-                fragmentManager,
-                dialogFragment::class.java.simpleName
-        )
-    }
 
 }

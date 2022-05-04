@@ -35,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,11 +57,13 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.media.R
 import jp.toastkid.media.music.MediaPlayerService
 import jp.toastkid.media.music.popup.MediaPlayerPopupViewModel
 import jp.toastkid.media.music.popup.playback.speed.PlayingSpeed
+import kotlinx.coroutines.launch
 
 @Composable
 fun MusicListUi() {
@@ -164,6 +167,9 @@ internal fun MusicList(
     val viewModel = (context as? ComponentActivity)?.let {
         ViewModelProvider(it).get(MediaPlayerPopupViewModel::class.java)
     }
+    val contentViewModel = (context as? ComponentActivity)?.let {
+        ViewModelProvider(it).get(ContentViewModel::class.java)
+    }
     val preferenceApplier = PreferenceApplier(context)
     val iconColor = preferenceApplier.colorPair().fontColor()
     var expanded by remember { mutableStateOf(false) }
@@ -173,6 +179,8 @@ internal fun MusicList(
     }
 
     val musicsState = viewModel?.musics?.observeAsState() ?: return
+
+    val coroutineScope = rememberCoroutineScope()
 
     //TODO: AsyncImage -> Icon
 
@@ -249,14 +257,19 @@ internal fun MusicList(
                     }
                 }
 
-                /*AsyncImage(
+                AsyncImage(
                     R.drawable.ic_close,
-                    contentDescription = "TODO",
+                    contentDescription = stringResource(id = R.string.close),
                     colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
                     modifier = Modifier
                         .width(44.dp)
                         .fillMaxHeight()
-                )*/
+                        .clickable {
+                            coroutineScope.launch {
+                                contentViewModel?.hideBottomSheet()
+                            }
+                        }
+                )
             }
         }
 

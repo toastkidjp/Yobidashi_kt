@@ -8,7 +8,14 @@
 
 package jp.toastkid.article_viewer.article.list.view
 
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.text.format.DateFormat
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorInt
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -20,16 +27,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,21 +56,252 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import jp.toastkid.article_viewer.R
+import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
+import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModelFactory
 import jp.toastkid.article_viewer.article.list.SearchResult
+import jp.toastkid.article_viewer.article.list.date.DateFilterDialogUi
+import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.menu.MenuPopupActionUseCase
+import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogUi
+import jp.toastkid.article_viewer.article.list.usecase.UpdateUseCase
+import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
+import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
+import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
+import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.model.OptionMenu
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
+import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ArticleListUi() {
+    val context = LocalContext.current as? ComponentActivity ?: return
+    val dataBase = AppDatabase.find(context)
+
+    val articleRepository = dataBase.articleRepository()
+
+    val preferenceApplier = PreferenceApplier(context)
+
+    val bookmarkRepository = AppDatabase.find(context).bookmarkRepository()
+
+    val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
+
+    val viewModel = ArticleListFragmentViewModelFactory(
+        articleRepository,
+        bookmarkRepository,
+        preferenceApplier
+    )
+        .create(ArticleListFragmentViewModel::class.java)
+
+    val progressBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            viewModel?.hideProgress()
+            showFeedback()
+        }
+
+        private fun showFeedback() {
+            contentViewModel?.snackShort(R.string.message_done_import)
+        }
+    }
+
+    context.registerReceiver(
+        progressBroadcastReceiver,
+        ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
+    )
+
+    ViewModelProvider(context).get(AppBarViewModel::class.java)
+        .replace {
+            AppBarContent(viewModel)
+            val openSortDialog = remember { mutableStateOf(false) }
+
+            if (openSortDialog.value) {
+                SortSettingDialogUi(preferenceApplier, openSortDialog, onSelect = {
+                    viewModel?.sort(it)
+                })
+            }
+
+            val openDateDialog = remember { mutableStateOf(false) }
+
+            if (openDateDialog.value) {
+                DateFilterDialogUi(
+                    preferenceApplier.colorPair(),
+                    openDateDialog,
+                    DateSelectedActionUseCase(articleRepository, contentViewModel)
+                )
+            }
+        }
+
+    val itemFlowState = remember { mutableStateOf<Flow<PagingData<SearchResult>>?>(null) }
+
+    viewModel.dataSource.observe(context, {
+        itemFlowState.value = it.flow
+    })
+
+    val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
+        articleRepository,
+        bookmarkRepository,
+        {
+            contentViewModel?.snackWithAction(
+                "Deleted: \"${it.title}\".",
+                "UNDO"
+            ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
+        }
+    )
+
+    ArticleListUi(
+        itemFlowState.value,
+        rememberLazyListState(),
+        contentViewModel,
+        menuPopupUseCase,
+        preferenceApplier.color
+    )
+
+    LaunchedEffect(key1 = "first_launch", block = {
+        viewModel.search("")
+    })
+}
+
+@Composable
+private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
+    val activityContext = LocalContext.current as? ComponentActivity ?: return
+    val preferenceApplier = PreferenceApplier(activityContext)
+
+    var searchInput by remember { mutableStateOf("") }
+    var searchResult by remember { mutableStateOf("") }
+    Row {
+        Column {
+            TextField(
+                value = searchInput,
+                onValueChange = {
+                    searchInput = it
+                    CoroutineScope(Dispatchers.Default).launch {
+                        //inputChannel.send(it)
+                    }
+                },
+                label = { stringResource(id = R.string.hint_search_articles) },
+                singleLine = true,
+                keyboardActions = KeyboardActions{
+                    viewModel?.search(searchInput)
+                },
+                colors = TextFieldDefaults.textFieldColors(textColor = Color(preferenceApplier.fontColor)),
+                trailingIcon = {
+                    Icon(
+                    Icons.Filled.Clear,
+                    tint = Color(preferenceApplier.fontColor),
+                    contentDescription = "clear text",
+                    modifier = Modifier
+                        .offset(x = 8.dp)
+                        .clickable {
+                            searchInput = ""
+                        }
+                )
+                }
+            )
+            Text(text = searchResult, color = Color.White)
+        }
+    }
+
+    viewModel?.progressVisibility?.observe(activityContext, {
+        it?.getContentIfNotHandled()?.let { isVisible ->
+            //TODO binding.progressCircular.isVisible = isVisible
+        }
+    })
+    viewModel?.progress?.observe(activityContext, {
+        it?.getContentIfNotHandled()?.let { message ->
+            searchResult = message
+        }
+    })
+    viewModel?.messageId?.observe(activityContext, {
+        it?.getContentIfNotHandled()?.let { messageId ->
+            searchResult = activityContext.getString(messageId)
+        }
+    })
+
+    val setTargetLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@rememberLauncherForActivityResult
+            }
+
+            UpdateUseCase(viewModel) { activityContext }.invokeIfNeed(it.data?.data)
+        }
+
+    val useTitleFilter = remember { mutableStateOf(preferenceApplier.useTitleFilter()) }
+    val openSortDialog = remember { mutableStateOf(false) }
+    val openDateDialog = remember { mutableStateOf(false) }
+
+    val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+    contentViewModel.optionMenus(
+        OptionMenu(
+            titleId = R.string.action_all_article,
+            action = {
+                viewModel.search("")
+            }
+        ),
+        OptionMenu(
+            titleId = R.string.action_set_target,
+            action = {
+                setTargetLauncher.launch(ZipFileChooserIntentFactory()())
+            }
+        ),
+        OptionMenu(
+            titleId = R.string.action_sort,
+            action = {
+                openSortDialog.value = true
+            }
+        ),
+        OptionMenu(
+            titleId = R.string.action_date_filter,
+            action = {
+                openDateDialog.value = true
+            }
+        ),
+        OptionMenu(
+            titleId = R.string.action_switch_title_filter,
+            action = {
+                val newState = !useTitleFilter.value
+                preferenceApplier.switchUseTitleFilter(newState)
+                useTitleFilter.value = newState
+            },
+            checkState = useTitleFilter
+        )
+    )
+
+    if (openSortDialog.value) {
+        SortSettingDialogUi(preferenceApplier, openSortDialog, onSelect = {
+            viewModel.sort(it)
+        })
+    }
+
+
+    if (openDateDialog.value) {
+        DateFilterDialogUi(
+            preferenceApplier.colorPair(),
+            openDateDialog,
+            DateSelectedActionUseCase(AppDatabase.find(activityContext).articleRepository(), contentViewModel)
+        )
+    }
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -78,6 +325,10 @@ internal fun ArticleListUi(
             }
         }
     }
+
+    val lifecycleOwner =
+        LocalContext.current as? LifecycleOwner ?: return
+    ScrollerUseCase(contentViewModel, listState).invoke(lifecycleOwner)
 }
 
 @OptIn(ExperimentalFoundationApi::class)

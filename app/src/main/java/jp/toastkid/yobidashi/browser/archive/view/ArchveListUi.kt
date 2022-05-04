@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,7 +40,6 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.ui.list.SwipeToDismissItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
@@ -68,9 +66,7 @@ fun ArchiveListUi() {
 
     val preferenceApplier = PreferenceApplier(activityContext)
 
-    LazyColumn(
-        modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
-    ) {
+    LazyColumn {
         items(items) { archiveFile ->
             val dismissState = DismissState(
                 initialValue = DismissValue.Default,
