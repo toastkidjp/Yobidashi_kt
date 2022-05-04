@@ -318,7 +318,7 @@ private fun initializeHeaderViewModels(
                     LinearProgressIndicator(
                         progress = (progress.value?.toFloat() ?: 100f) / 100f,
                         color = Color(preferenceApplier.fontColor),
-                        modifier = Modifier.height(1.dp)
+                        modifier = Modifier.height(1.dp).fillMaxWidth()
                     )
                 }
 
