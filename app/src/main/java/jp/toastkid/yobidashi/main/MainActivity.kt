@@ -8,10 +8,7 @@
 
 package jp.toastkid.yobidashi.main
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -44,12 +41,6 @@ class MainActivity : ComponentActivity() {
     private var contentViewModel: ContentViewModel? = null
 
     private var browserViewModel: BrowserViewModel? = null
-
-    private val musicPlayerBroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            //TODO musicPlayerUseCase?.invoke(binding.root)
-        }
-    }
 
     private val downloadPermissionRequestLauncher =
         registerForActivityResult(DownloadPermissionRequestContract()) {
@@ -92,8 +83,6 @@ class MainActivity : ComponentActivity() {
             .observe(this, {
                 updateColorFilter()
             })
-
-        registerReceiver(musicPlayerBroadcastReceiver, IntentFilter("jp.toastkid.music.action.open"))
 
         processShortcut(intent)
 
@@ -160,7 +149,6 @@ class MainActivity : ComponentActivity() {
         disposables.cancel()
         GlobalWebViewPool.dispose()
         downloadPermissionRequestLauncher.unregister()
-        unregisterReceiver(musicPlayerBroadcastReceiver)
         super.onDestroy()
     }
 
