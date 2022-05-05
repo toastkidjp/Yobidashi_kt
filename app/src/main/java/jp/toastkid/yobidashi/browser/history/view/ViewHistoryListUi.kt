@@ -21,11 +21,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
+import jp.toastkid.lib.view.list.ListActionAttachment
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.history.ViewHistory
@@ -42,6 +44,7 @@ fun ViewHistoryListUi() {
 
     val database = DatabaseFinder().invoke(context)
     val viewHistoryRepository = database.viewHistoryRepository()
+    val fullItems = mutableListOf<ViewHistory>()
     val viewHistoryItems = remember { mutableStateListOf<ViewHistory>() }
     val listState = rememberLazyListState()
 
@@ -50,8 +53,9 @@ fun ViewHistoryListUi() {
             val loaded = withContext(Dispatchers.IO) {
                 viewHistoryRepository.reversed()
             }
-            viewHistoryItems.clear()
-            viewHistoryItems.addAll(loaded)
+            fullItems.clear()
+            fullItems.addAll(loaded)
+            viewHistoryItems.addAll(fullItems)
         }
     })
 
@@ -80,6 +84,15 @@ fun ViewHistoryListUi() {
             clearConfirmDialogState.value = true
         })
     )
+
+    ListActionAttachment.make(context)
+        .invoke(
+            listState,
+            LocalLifecycleOwner.current,
+            viewHistoryItems,
+            fullItems,
+            { item, word -> item.title.contains(word) || item.url.contains(word) }
+        )
 
     DestructiveChangeConfirmDialog(
         clearConfirmDialogState,
