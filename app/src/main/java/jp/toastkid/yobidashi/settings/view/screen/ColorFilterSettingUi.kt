@@ -38,21 +38,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterUseCase
-import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import kotlin.math.roundToInt
 
 @Composable
@@ -66,24 +65,14 @@ internal fun ColorFilterSettingUi() {
         remember { mutableStateOf(OverlayColorFilterUseCase.getDefaultAlpha().toFloat() / 255f) }
     val check = remember { mutableStateOf(preferenceApplier.useColorFilter()) }
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val overlayColorFilterViewModel = (activityContext as? ViewModelStoreOwner)?.let { activity ->
-        val viewModel = ViewModelProvider(activity).get(OverlayColorFilterViewModel::class.java)
-
-        viewModel
-            .newColor
-            .observe(
-                lifecycleOwner,
-                { sample.value = preferenceApplier.filterColor(Color.Transparent.toArgb()) }
-            )
-
-        viewModel
+    val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let{
+        viewModel(ContentViewModel::class.java, activityContext)
     }
 
     val useCase = OverlayColorFilterUseCase(
         preferenceApplier,
         { ContextCompat.getColor(activityContext, it) },
-        overlayColorFilterViewModel
+        contentViewModel
     )
 
     Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
@@ -91,7 +80,8 @@ internal fun ColorFilterSettingUi() {
             val onClick = {
                 val newState = !preferenceApplier.useColorFilter()
                 preferenceApplier.setUseColorFilter(newState)
-                overlayColorFilterViewModel?.update()
+                contentViewModel?.refresh()
+
                 check.value = preferenceApplier.useColorFilter()
             }
             Row(

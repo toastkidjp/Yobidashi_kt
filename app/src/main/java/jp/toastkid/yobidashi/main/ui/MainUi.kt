@@ -12,6 +12,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -115,6 +116,7 @@ import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.lib.viewmodel.WebSearchViewModel
 import jp.toastkid.loan.view.LoanCalculatorUi
@@ -137,6 +139,7 @@ import jp.toastkid.yobidashi.browser.view.WebTabUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.calendar.view.CalendarUi
 import jp.toastkid.yobidashi.editor.view.EditorTabUi
+import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
 import jp.toastkid.yobidashi.menu.Menu
@@ -163,7 +166,11 @@ internal fun Content() {
     val snackbarHostState = SnackbarHostState()
     val activity = LocalContext.current as? ComponentActivity ?: return
 
+    val preferenceApplier = PreferenceApplier(activity)
+
     val contentViewModel = ViewModelProvider(activity).get(ContentViewModel::class.java)
+    contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
+    contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
 
     val tabListViewModel = viewModel(TabListViewModel::class.java, activity)
 
@@ -177,7 +184,6 @@ internal fun Content() {
         )
     }
 
-    val preferenceApplier = PreferenceApplier(activity)
     val navigationHostController = rememberNavController()
     navigationHostController.enableOnBackPressed(false)
 
@@ -217,6 +223,20 @@ internal fun Content() {
     contentViewModel.replaceToCurrentTab.observe(activity, {
         it.getContentIfNotHandled() ?: return@observe
         replaceToCurrentTab(tabs, navigationHostController)
+    })
+    contentViewModel.refresh.observe(activity, {
+        val colorPair = preferenceApplier.colorPair()
+        WindowOptionColorApplier()(activity.window, colorPair)
+
+        RecentAppColoringUseCase(
+            activity::getString,
+            { activity.resources },
+            activity::setTaskDescription,
+            Build.VERSION.SDK_INT
+        ).invoke(preferenceApplier.color)
+
+        contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
+        contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
     })
 
     val loadingViewModel = viewModel(LoadingViewModel::class.java, activity)
@@ -321,14 +341,6 @@ internal fun Content() {
     })
     val pageSearcherInput = remember { mutableStateOf("") }
 
-    val color = remember {
-        mutableStateOf(preferenceApplier.useColorFilter())
-    }
-
-    val backgroundPath = remember {
-        mutableStateOf(preferenceApplier.backgroundImagePath)
-    }
-
     val coroutineScope = rememberCoroutineScope()
 
     contentViewModel?.switchTabList?.observe(activity, Observer {
@@ -393,11 +405,10 @@ internal fun Content() {
     })
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         AsyncImage(
-            backgroundPath.value, // TODO add contentViewModel
+            contentViewModel.backgroundImagePath.value,
             contentDescription = stringResource(R.string.content_description_background),
             alignment = Alignment.Center,
             contentScale = ContentScale.Crop,
@@ -920,7 +931,7 @@ internal fun Content() {
                     }
                 }
 
-                if (color.value) {
+                if (contentViewModel.useScreenFilter.value) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
