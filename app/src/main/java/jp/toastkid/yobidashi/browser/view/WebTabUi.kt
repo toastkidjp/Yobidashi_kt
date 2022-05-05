@@ -101,7 +101,14 @@ fun WebTabUi(uri: Uri, tabId: String) {
 */
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
-    val webViewContainer = remember { FrameLayout(activityContext) }
+    val webViewContainer = remember {
+        val frameLayout = FrameLayout(activityContext)
+        frameLayout.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
+        frameLayout
+    }
 
     val browserModule = BrowserModule(activityContext, webViewContainer)
 
