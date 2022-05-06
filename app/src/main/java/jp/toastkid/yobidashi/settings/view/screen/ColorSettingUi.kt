@@ -106,6 +106,7 @@ internal fun ColorSettingUi() {
                         fontColor
                     )
                     contentViewModel?.snackShort(R.string.settings_color_done_commit)
+                    contentViewModel?.refresh()
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val savedColor =
@@ -128,6 +129,7 @@ internal fun ColorSettingUi() {
 
                     //activity?.let { Updater().update(it) }
                     contentViewModel?.snackShort(R.string.settings_color_done_reset)
+                    contentViewModel?.refresh()
                 }
             )
         }
@@ -167,6 +169,7 @@ internal fun ColorSettingUi() {
                                     Color(savedColor.fontColor)
                                 )
                                 contentViewModel?.snackShort(R.string.settings_color_done_commit)
+                                contentViewModel?.refresh()
                             }
                             .weight(1f)
                             .padding(8.dp)
