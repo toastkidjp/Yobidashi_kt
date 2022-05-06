@@ -86,6 +86,8 @@ import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -280,6 +282,25 @@ fun WebTabUi(uri: Uri, tabId: String) {
                     contentViewModel
                         .snackShort(activityContext.getString(R.string.message_replace_home_url, it))
                 }
+            }),
+            OptionMenu(titleId = R.string.menu_random_wikipedia, action = {
+                if (PreferenceApplier(activityContext).wifiOnly &&
+                    NetworkChecker.isUnavailableWiFi(activityContext)
+                ) {
+                    contentViewModel.snackShort(R.string.message_wifi_not_connecting)
+                    return@OptionMenu
+                }
+
+                RandomWikipedia()
+                    .fetchWithAction { title, link ->
+                        browserViewModel.open(link)
+                        contentViewModel.snackShort(
+                            activityContext.getString(
+                                R.string.message_open_random_wikipedia,
+                                title
+                            )
+                        )
+                    }
             })
         )
     })
