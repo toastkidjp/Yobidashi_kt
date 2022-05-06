@@ -288,28 +288,4 @@ private fun commitNewColor(
 
     currentBackgroundColor?.value = bgColor
     currentFontColor?.value = fontColor
-
-    //TODO activity?.let { Updater().update(it) }
 }
-
-/*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return when (item.itemId) {
-        R.id.color_settings_toolbar_menu_add_recommend -> {
-            ConfirmDialogFragment.show(
-                parentFragmentManager,
-                getString(R.string.title_add_recommended_colors),
-                getString(R.string.message_add_recommended_colors),
-                "add_recommended_colors"
-            )
-            true
-        }
-        R.id.color_settings_toolbar_menu_add_random -> {
-            RandomColorInsertion(repository)() {
-                adapter?.refresh()
-            }
-            snackShort(R.string.done_addition)
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }
-}*/
