@@ -10,9 +10,8 @@ package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
@@ -63,16 +62,9 @@ fun SettingTopUi() {
         )
 
         ScrollableTabRow(
-            backgroundColor = Color(preferenceApplier.color),
             selectedTabIndex = selectedIndex.value,
-            edgePadding = 4.dp,
-            divider = {
-                Divider(
-                    color = Color(preferenceApplier.fontColor),
-                    thickness = 1.dp
-                )
-            },
-            modifier = Modifier.height(44.dp)
+            edgePadding = 8.dp,
+            modifier = Modifier.fillMaxHeight()
         ) {
             pages.forEachIndexed { index, page ->
                 Tab(
