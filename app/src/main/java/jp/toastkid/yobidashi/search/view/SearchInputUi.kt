@@ -37,6 +37,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +50,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
@@ -242,9 +244,15 @@ fun SearchInputUi(
             )
         }
 
+        val focusManager = LocalFocusManager.current
         LaunchedEffect(key1 = "first_launch", block = {
             focusRequester.requestFocus()
-            keyboardController?.show()
+        })
+
+        DisposableEffect(key1 = "clear_focus", effect = {
+            onDispose {
+                focusManager.clearFocus(true)
+            }
         })
     }
 

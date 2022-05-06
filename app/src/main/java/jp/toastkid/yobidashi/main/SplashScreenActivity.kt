@@ -10,14 +10,15 @@ package jp.toastkid.yobidashi.main
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 
-class SplashScreenActivity : AppCompatActivity() {
+class SplashScreenActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val intent = getIntent()
+
         val startIntent = Intent(this, MainActivity::class.java)
             .setAction(intent.action)
             .setData(intent.data)

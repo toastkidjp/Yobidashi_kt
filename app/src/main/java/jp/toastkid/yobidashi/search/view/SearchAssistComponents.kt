@@ -16,10 +16,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.DismissState
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
-import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,7 +55,8 @@ internal fun SearchItemContent(
         return
     }
 
-    val dismissState = rememberDismissState(
+    val dismissState = DismissState(
+        initialValue = DismissValue.Default,
         confirmStateChange = { dismissValue ->
             if (dismissValue == DismissValue.DismissedToStart) {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -151,7 +152,8 @@ internal fun BindItemContent(
         else -> null
     }
 
-    val dismissState = rememberDismissState(
+    val dismissState = DismissState(
+        initialValue = DismissValue.Default,
         confirmStateChange = { dismissValue ->
             if (dismissValue == DismissValue.DismissedToStart) {
                 CoroutineScope(Dispatchers.IO).launch {

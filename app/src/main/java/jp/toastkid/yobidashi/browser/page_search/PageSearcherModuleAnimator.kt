@@ -33,9 +33,6 @@ class PageSearcherModuleAnimator {
         }
     }
 
-    /**
-     * Hide module.
-     */
     @UiThread
     fun hide(view: View?, editText: EditText?, height: Float) {
         view?.animate()?.let {

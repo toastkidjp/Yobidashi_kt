@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -88,131 +87,130 @@ internal fun ColorSettingUi() {
 
     val openConfirmDialog = remember { mutableStateOf(false) }
 
-    MaterialTheme() {
-        LazyColumn(
-            modifier = Modifier
-                .nestedScroll(rememberViewInteropNestedScrollConnection())
-                .padding(start = 8.dp, end = 8.dp)
-        ) {
-            item {
-                ColorPaletteUi(
-                    currentBackgroundColor,
-                    currentFontColor,
-                    initialBgColor,
-                    initialFontColor,
-                    onCommit = {
-                        val bgColor = currentBackgroundColor.value
-                        val fontColor = currentFontColor.value
+    LazyColumn(
+        modifier = Modifier
+            .nestedScroll(rememberViewInteropNestedScrollConnection())
+            .padding(start = 8.dp, end = 8.dp)
+    ) {
+        item {
+            ColorPaletteUi(
+                currentBackgroundColor,
+                currentFontColor,
+                initialBgColor,
+                initialFontColor,
+                onCommit = {
+                    val bgColor = currentBackgroundColor.value
+                    val fontColor = currentFontColor.value
 
-                        commitNewColor(
-                            preferenceApplier,
-                            currentBackgroundColor,
-                            currentFontColor,
-                            bgColor,
-                            fontColor
-                        )
-                        contentViewModel?.snackShort(R.string.settings_color_done_commit)
+                    commitNewColor(
+                        preferenceApplier,
+                        currentBackgroundColor,
+                        currentFontColor,
+                        bgColor,
+                        fontColor
+                    )
+                    contentViewModel?.snackShort(R.string.settings_color_done_commit)
 
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val savedColor =
-                                SavedColor.make(
-                                    bgColor.toArgb(),
-                                    fontColor.toArgb()
-                                )
-                            repository.add(savedColor)
-                            reload(repository, savedColors)
-                        }
-                    },
-                    onReset = {
-                        commitNewColor(
-                            preferenceApplier,
-                            currentBackgroundColor,
-                            currentFontColor,
-                            Color(initialBgColor),
-                            Color(initialFontColor)
-                        )
-
-                        //activity?.let { Updater().update(it) }
-                        contentViewModel?.snackShort(R.string.settings_color_done_reset)
-                    }
-                )
-            }
-
-            if (savedColors.isNotEmpty()) {
-                item {
-                    Surface(
-                        elevation = 4.dp,
-                        modifier = Modifier
-                            .height(44.dp)
-                            .fillMaxWidth()
-                            .padding(top = 8.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                stringResource(id = R.string.settings_color_saved_title),
-                                fontSize = 18.sp,
-                                modifier = Modifier.padding(16.dp)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val savedColor =
+                            SavedColor.make(
+                                bgColor.toArgb(),
+                                fontColor.toArgb()
                             )
-                        }
+                        repository.add(savedColor)
+                        reload(repository, savedColors)
+                    }
+                },
+                onReset = {
+                    commitNewColor(
+                        preferenceApplier,
+                        currentBackgroundColor,
+                        currentFontColor,
+                        Color(initialBgColor),
+                        Color(initialFontColor)
+                    )
+
+                    //activity?.let { Updater().update(it) }
+                    contentViewModel?.snackShort(R.string.settings_color_done_reset)
+                }
+            )
+        }
+
+        if (savedColors.isNotEmpty()) {
+            item {
+                Surface(
+                    elevation = 4.dp,
+                    modifier = Modifier
+                        .height(44.dp)
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            stringResource(id = R.string.settings_color_saved_title),
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(16.dp)
+                        )
                     }
                 }
             }
+        }
 
-            items(savedColors) { savedColorRow ->
-                Row {
-                    savedColorRow.forEach { savedColor ->
-                        Surface(
-                            elevation = 4.dp,
+        items(savedColors) { savedColorRow ->
+            Row {
+                savedColorRow.forEach { savedColor ->
+                    Surface(
+                        elevation = 4.dp,
+                        modifier = Modifier
+                            .clickable {
+                                commitNewColor(
+                                    preferenceApplier,
+                                    currentBackgroundColor,
+                                    currentFontColor,
+                                    Color(savedColor.bgColor),
+                                    Color(savedColor.fontColor)
+                                )
+                                contentViewModel?.snackShort(R.string.settings_color_done_commit)
+                            }
+                            .weight(1f)
+                            .padding(8.dp)
+                    ) {
+                        Box(
                             modifier = Modifier
-                                .clickable {
-                                    commitNewColor(
-                                        preferenceApplier,
-                                        currentBackgroundColor,
-                                        currentFontColor,
-                                        Color(savedColor.bgColor),
-                                        Color(savedColor.fontColor)
-                                    )
-                                    contentViewModel?.snackShort(R.string.settings_color_done_commit)
-                                }
-                                .weight(1f)
+                                .height(100.dp)
+                                .background(Color(savedColor.bgColor))
                                 .padding(8.dp)
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .height(100.dp)
-                                    .background(Color(savedColor.bgColor))
-                                    .padding(8.dp)
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.sample_a),
-                                    color = Color(savedColor.fontColor),
-                                    modifier = Modifier.align(
-                                        Alignment.Center
-                                    )
+                            Text(
+                                text = stringResource(id = R.string.sample_a),
+                                color = Color(savedColor.fontColor),
+                                modifier = Modifier.align(
+                                    Alignment.Center
                                 )
-                                Icon(painterResource(id = R.drawable.ic_remove_circle),
-                                    contentDescription = stringResource(
-                                        id = R.string.delete
-                                    ),
-                                    modifier = Modifier
-                                        .width(40.dp)
-                                        .height(40.dp)
-                                        .clickable {
-                                            coroutineScope.launch {
-                                                withContext(Dispatchers.IO) {
-                                                    repository.delete(savedColor)
-                                                    reload(repository, savedColors)
-                                                }
+                            )
+                            Icon(painterResource(id = R.drawable.ic_remove_circle),
+                                contentDescription = stringResource(
+                                    id = R.string.delete
+                                ),
+                                modifier = Modifier
+                                    .width(40.dp)
+                                    .height(40.dp)
+                                    .clickable {
+                                        coroutineScope.launch {
+                                            withContext(Dispatchers.IO) {
+                                                repository.delete(savedColor)
+                                                reload(repository, savedColors)
                                             }
                                         }
-                                        .align(Alignment.TopEnd))
-                            }
+                                    }
+                                    .align(Alignment.TopEnd))
                         }
                     }
                 }
             }
         }
     }
+
 
     viewModel(modelClass = ContentViewModel::class.java).optionMenus(
         OptionMenu(

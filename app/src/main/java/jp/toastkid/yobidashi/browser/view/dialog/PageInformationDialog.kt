@@ -33,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -71,7 +70,6 @@ internal fun PageInformationDialog(
         onDismissRequest = { openState.value = false },
         content = {
             Surface(
-                color = colorResource(id = R.color.soft_background),
                 elevation = 4.dp
             ) {
                 Box() {
@@ -101,7 +99,6 @@ internal fun PageInformationDialog(
                             Text(
                                 text = "URL: $url",
                                 fontSize = 16.sp,
-                                color = colorResource(id = R.color.black),
                                 modifier = Modifier.padding(top = 4.dp)
                             )
 
@@ -119,7 +116,6 @@ internal fun PageInformationDialog(
                                     )
                                 }",
                                 fontSize = 16.sp,
-                                color = colorResource(id = R.color.black),
                                 modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
                             )
                         }
@@ -131,7 +127,7 @@ internal fun PageInformationDialog(
                     ) {
                         Text(
                             text = stringResource(id = R.string.button_clip_cookie),
-                            color = colorResource(id = R.color.colorPrimary),
+                            color = MaterialTheme.colors.primary,
                             modifier = Modifier
                                 .clickable {
                                     openState.value = false
@@ -142,7 +138,7 @@ internal fun PageInformationDialog(
 
                         Text(
                             text = stringResource(id = R.string.close),
-                            color = colorResource(id = R.color.colorPrimary),
+                            color = MaterialTheme.colors.primary,
                             modifier = Modifier
                                 .clickable {
                                     openState.value = false

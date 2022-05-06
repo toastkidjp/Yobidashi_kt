@@ -101,4 +101,20 @@ class BrowserViewModel : ViewModel() {
         openLongTapDialog.value = false
     }
 
+    private val _loadWithNewTab = MutableLiveData<Event<Pair<Uri, String>>>()
+
+    val loadWithNewTab: LiveData<Event<Pair<Uri, String>>> = _loadWithNewTab
+
+    fun loadWithNewTab(next: Pair<Uri, String>) {
+        _loadWithNewTab.postValue(Event(next))
+    }
+
+    private val _switchWebViewToCurrent = MutableLiveData<Event<String>>()
+
+    val switchWebViewToCurrent: LiveData<Event<String>> = _switchWebViewToCurrent
+
+    fun switchWebViewToCurrent(tabId: String) {
+        _switchWebViewToCurrent.postValue(Event(tabId))
+    }
+
 }

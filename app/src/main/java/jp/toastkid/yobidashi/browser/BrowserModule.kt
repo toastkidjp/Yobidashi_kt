@@ -124,6 +124,10 @@ class BrowserModule(
         }
     }
 
+    fun switchWebViewToCurrent(tabId: String) {
+        webViewReplacementUseCase(tabId)
+    }
+
     private fun loadUrl(url: String) {
         if (url.isEmpty()) {
             return
