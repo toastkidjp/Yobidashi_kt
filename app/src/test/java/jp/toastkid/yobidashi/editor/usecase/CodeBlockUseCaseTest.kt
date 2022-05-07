@@ -50,4 +50,5 @@ class CodeBlockUseCaseTest {
 
         verify { editText.text.replace(any(), any(), "```${lineSeparator}test$lineSeparator```") }
     }
+
 }
