@@ -44,10 +44,10 @@ class TextCountUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { editText.getText() }.returns(editable)
-        every { editText.getContext() }.returns(context)
-        every { editText.getSelectionStart() }.returns(0)
-        every { editText.getSelectionEnd() }.returns(20)
+        every { editText.text }.returns(editable)
+        every { editText.context }.returns(context)
+        every { editText.selectionStart }.returns(0)
+        every { editText.selectionEnd }.returns(20)
         every { editable.substring(any(), any()) }.returns("Earn this, earn it.")
         every { context.getString(any(), any()) }.returns("count: 20")
         every { contentViewModel.snackShort(any<String>()) }.just(Runs)
@@ -62,10 +62,10 @@ class TextCountUseCaseTest {
     fun testInvoke() {
         textCountUseCase.invoke(editText, contentViewModel)
 
-        verify(exactly = 1) { editText.getText() }
-        verify(exactly = 1) { editText.getContext() }
-        verify(exactly = 1) { editText.getSelectionStart() }
-        verify(exactly = 1) { editText.getSelectionEnd() }
+        verify(exactly = 1) { editText.text }
+        verify(exactly = 1) { editText.context }
+        verify(exactly = 1) { editText.selectionStart }
+        verify(exactly = 1) { editText.selectionEnd }
         verify(exactly = 1) { editable.substring(any(), any()) }
         verify(exactly = 1) { context.getString(any(), any()) }
         verify(exactly = 1) { contentViewModel.snackShort(any<String>()) }
