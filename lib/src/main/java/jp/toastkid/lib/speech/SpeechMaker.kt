@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.libs.speech
+package jp.toastkid.libs.speech
 
 import android.content.Context
 import android.speech.tts.TextToSpeech

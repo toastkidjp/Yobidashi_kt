@@ -23,10 +23,19 @@
     <string name="commit">決定</string>
     <string name="reset">戻す</string>
     <string name="clip">クリップボードにコピー</string>
+    <string name="undo">戻す</string>
+    <string name="save">保存</string>
+    <string name="load">読込</string>
+    <string name="confirmation">確認</string>
+    <string name="clear_all">すべて削除</string>
+    <string name="tab_list">タブ一覧</string>
+
+    <string name="message_confirm_exit">アプリを終了しますか？</string>
 
     <string name="message_requires_permission_storage">
         メモを使用するにはストレージの権限が必要です。</string>
     <string name="message_clip_to">%s をクリップボードにコピーしました。</string>
+    <string name="message_character_count">文字数:\n%d</string>
 
     <string name="favorite_search_addition_dialog_empty_message">キーワードを入力してください。</string>
     <string name="done_addition">追加しました。</string>

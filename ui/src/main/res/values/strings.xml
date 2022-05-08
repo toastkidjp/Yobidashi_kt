@@ -8,4 +8,5 @@
 
 <resources>
     <string name="message_confirmation">Caution: This operation cannot undo.</string>
+    <string name="title_dialog_input_file_name">Input file name</string>
 </resources>
