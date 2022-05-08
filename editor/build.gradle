@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 2022 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply from: '../jacoco.gradle'
+apply from: '../detekt.gradle'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdk
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdk
+    }
+
+    buildTypes {
+        release {
+        }
+    }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "$libVersions.compose"
+    }
+
+    afterEvaluate {
+        generateReleaseBuildConfig.enabled = false
+        generateDebugBuildConfig.enabled = false
+    }
+}
+
+dependencies {
+    implementation project(":lib")
+    implementation project(":ui")
+    implementation project(":search")
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.core:core-ktx:$libVersions.ktx"
+
+    // Compose dependencies.
+    implementation "androidx.compose.material:material:$libVersions.compose"
+    implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation "androidx.navigation:navigation-compose:$libVersions.navigation_compose"
+
+    implementation "com.jakewharton.timber:timber:$libVersions.timber"
+    implementation "org.jsoup:jsoup:$libVersions.jsoup"
+
+    testImplementation "junit:junit:$libVersions.junit"
+    testImplementation "io.mockk:mockk:$libVersions.mockk"
+}

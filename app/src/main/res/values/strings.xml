@@ -61,7 +61,6 @@
     <string name="unit_id_interstitial">ca-app-pub-5751262573448755/4657576229</string>
     <string name="unit_id_banner_ad">ca-app-pub-5751262573448755/3489764085</string>
 
-    <string name="clear_all">Clear All</string>
     <string name="add_background_image">Add Background Image</string>
     <string name="message_change_background_image">It has changed background image.</string>
     <string name="title_background_image_setting">Background Image Setting</string>
@@ -79,8 +78,6 @@
     <string name="message_clear_daily_alarm">It has canceled daily alarm.</string>
     <string name="title_settings_date_and_time">Date and Time Settings</string>
     <string name="date_format">E, MM/dd/yyyy HH:mm:ss</string>
-    <string name="last_saved">"Last saved:\n"</string>
-    <string name="editor_date_format">HH:mm:ss</string>
     <string name="title_package_name_filter">Package name filter</string>
 
     <string name="top_mark">↑</string>
@@ -207,8 +204,6 @@
     <string name="message_add_bookmark">Would you like to add bookmark?</string>
     <string name="hint_find_in_page">Input keyword</string>
     <string name="title_tab_histories">Tab histories</string>
-    <string name="confirmation">Confirmation</string>
-    <string name="message_confirm_exit">Would you like to exit this app?</string>
     <string name="title_settings_display">Display setting</string>
     <string name="message_empty_histories">There are no histories.</string>
 
@@ -229,23 +224,9 @@
     <string name="title_screen_mode_fixed">Fixed</string>
     <string name="message_has_opened_fragment">It has been opened.</string>
     <string name="title_editor">Text Editor</string>
-    <string name="done_load">It has loaded.</string>
-    <string name="done_save">It has saved to file.</string>
-    <string name="save">Save</string>
-    <string name="save_as">Save as</string>
-    <string name="load_as">Load As</string>
-    <string name="load_from_storage">Load from storage</string>
-    <string name="export_to_article_viewer">Export to Article viewer</string>
-    <string name="restore">Restore</string>
-    <string name="title_dialog_input_file_name">Input file name</string>
-    <string name="load">Load</string>
-    <string name="tab_list">Tab</string>
-    <string name="message_cannot_read_file">It could not read text from file...</string>
-    <string name="title_clear_text">Clear text</string>
     <string name="save_backup">Backup</string>
     <string name="title_torch">Torch</string>
     <string name="title_count">Count</string>
-    <string name="message_character_count">Characters:\n%d</string>
     <string name="title_add_folder">Add Folder</string>
     <string name="title_import_bookmark">Import Bookmark</string>
     <string name="title_export_bookmark">Export Bookmark</string>
@@ -300,9 +281,7 @@
     <string name="thumbnail">thumbnail</string>
     <string name="title_use_search_query_extractor">Use search query extractor</string>
     <string name="message_unabled_voice_search">This function cannot use, Please check voice recording setting.</string>
-    <string name="hint_editor_input">Please input your text anything...</string>
-    <string name="paste_as_quotation">Paste as Quotation</string>
-    <string name="paste_url_with_title">Paste URL with title</string>
+
     <string name="title_font_size">Font size</string>
     <string name="subhead_editor">Editor</string>
     <string name="retry">Retry</string>
@@ -344,7 +323,6 @@
     <string name="title_image_viewer">Image Viewer</string>
 
     <string name="title_dark_mode">Use dark mode</string>
-    <string name="undo">undo</string>
     <string name="title_context_editor_add_order">Add order</string>
     <string name="title_context_editor_unordered_list">To list</string>
     <string name="title_context_editor_convert_to_table">To table</string>
@@ -383,9 +361,7 @@
     <string name="message_clipping_url_open">Would you like to open "%s"?</string>
     <string name="hourly_trends">Hourly trends</string>
     <string name="sample_text_color_filter">A</string>
-    <string name="message_backup_is_empty">Backup is empty.</string>
     <string name="apply_dark_mode">Apply dark mode</string>
-    <string name="error_content_is_empty">Error: Content is empty. Please would you make sure of content area.</string>
 
     <string name="row_dialog_open_new">Open new tab</string>
     <string name="row_dialog_open_background">Open background tab</string>
