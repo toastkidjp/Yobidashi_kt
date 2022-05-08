@@ -8,6 +8,7 @@
 package jp.toastkid.image.list
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.runtime.MutableState
 import jp.toastkid.image.Image
 import jp.toastkid.lib.preference.PreferenceApplier
 
@@ -19,6 +20,7 @@ internal class ImageLoaderUseCase(
         private val submitImages: (List<Image>) -> Unit,
         private val bucketLoader: BucketLoader,
         private val imageLoader: ImageLoader,
+        private val backHandlerState: MutableState<Boolean>,
         private val refreshContent: () -> Unit,
         @VisibleForTesting private val parentExtractor: ParentExtractor = ParentExtractor()
 ) {
@@ -43,6 +45,7 @@ internal class ImageLoaderUseCase(
         submitImages(newList)
 
         currentBucket = bucket
+        backHandlerState.value = currentBucket != null
         refreshContent()
     }
 
@@ -51,13 +54,14 @@ internal class ImageLoaderUseCase(
     }
 
     fun back(onExit: () -> Unit) {
-        if (currentBucket.isNullOrBlank()) {
+        if (currentBucket == null) {
             onExit()
             return
         }
 
         clearCurrentBucket()
         invoke()
+        backHandlerState.value = currentBucket != null
     }
 
 }
