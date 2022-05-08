@@ -107,6 +107,7 @@ import jp.toastkid.about.view.AboutThisAppUi
 import jp.toastkid.article_viewer.article.detail.view.ArticleContentUi
 import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.barcode.view.BarcodeReaderUi
+import jp.toastkid.editor.view.EditorTabUi
 import jp.toastkid.image.view.ImageListTopUi
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
@@ -138,7 +139,6 @@ import jp.toastkid.yobidashi.browser.history.view.ViewHistoryListUi
 import jp.toastkid.yobidashi.browser.view.WebTabUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.calendar.view.CalendarUi
-import jp.toastkid.yobidashi.editor.view.EditorTabUi
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
