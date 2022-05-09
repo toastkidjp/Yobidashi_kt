@@ -1054,6 +1054,7 @@ private fun showSnackbar(
 ) {
     if (snackbarEvent.actionLabel == null) {
         CoroutineScope(Dispatchers.Main).launch {
+            snackbarHostState.currentSnackbarData?.dismiss()
             snackbarHostState.showSnackbar(snackbarEvent.message)
         }
         return
