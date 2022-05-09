@@ -94,7 +94,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -943,13 +942,11 @@ internal fun Content() {
     }
 
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    val lifecycleObserver = object : LifecycleEventObserver {
-        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-            when (event) {
-                Lifecycle.Event.ON_RESUME -> tabs.setCount()
-                Lifecycle.Event.ON_PAUSE -> tabs.saveTabList()
-                Lifecycle.Event.ON_DESTROY -> tabs.dispose()
-            }
+    val lifecycleObserver = LifecycleEventObserver { source, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> tabs.setCount()
+            Lifecycle.Event.ON_PAUSE -> tabs.saveTabList()
+            Lifecycle.Event.ON_DESTROY -> tabs.dispose()
         }
     }
     DisposableEffect(activity) {
