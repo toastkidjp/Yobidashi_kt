@@ -95,8 +95,8 @@ private fun PdfPageList(pdfRenderer: PdfRenderer, listState: LazyListState) {
                 elevation = 4.dp,
                 modifier = Modifier
                     .padding(
-                        start = 16.dp,
-                        end = 16.dp,
+                        start = 8.dp,
+                        end = 8.dp,
                         top = 2.dp,
                         bottom = 2.dp
                     )
