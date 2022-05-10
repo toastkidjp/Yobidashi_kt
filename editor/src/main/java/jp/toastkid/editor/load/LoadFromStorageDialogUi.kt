@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.DismissState
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -26,8 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import jp.toastkid.editor.R
+import jp.toastkid.ui.list.SwipeToDismissItem
+import timber.log.Timber
 import java.io.File
+import java.io.IOException
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun LoadFromStorageDialogUi(
     openDialog: MutableState<Boolean>,
@@ -58,15 +65,35 @@ internal fun LoadFromStorageDialogUi(
                         )
                     }
                 }
-                items(files) {
-                    Text(
-                        text = it.name,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.clickable {
-                            onSelect(it)
-                            openDialog.value = false
-                        }.padding(16.dp)
+                items(files) { file ->
+                    val dismissState = DismissState(
+                        initialValue = DismissValue.Default,
+                        confirmStateChange = { dismissValue ->
+                            if (dismissValue == DismissValue.DismissedToStart) {
+                                try {
+                                    file.delete()
+                                } catch (e: IOException) {
+                                    Timber.e(e)
+                                }
+                            }
+                            true
+                        }
+                    )
+                    SwipeToDismissItem(
+                        dismissState = dismissState,
+                        dismissContent = {
+                            Text(
+                                text = file.name,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier
+                                    .clickable {
+                                        onSelect(file)
+                                        openDialog.value = false
+                                    }
+                                    .padding(16.dp)
+                            )
+                        }
                     )
                 }
             }
