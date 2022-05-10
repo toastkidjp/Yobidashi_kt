@@ -53,7 +53,7 @@ internal fun OtherSettingUi() {
 
     val openConfirmDialog = remember { mutableStateOf(false) }
 
-    Surface(elevation = 4.dp, modifier = Modifier.padding(16.dp)) {
+    Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         LazyColumn {
             item {
                 jp.toastkid.yobidashi.settings.view.CheckableRow(
