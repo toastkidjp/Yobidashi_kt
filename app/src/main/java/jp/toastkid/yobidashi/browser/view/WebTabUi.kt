@@ -111,7 +111,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
         frameLayout
     }
 
-    val browserModule = BrowserModule(activityContext, webViewContainer)
+    val browserModule = remember { BrowserModule(activityContext, webViewContainer) }
 
     val browserHeaderViewModel =
         viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
