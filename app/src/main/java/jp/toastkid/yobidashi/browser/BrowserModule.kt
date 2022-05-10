@@ -118,7 +118,6 @@ class BrowserModule(
     }
 
     fun loadWithNewTab(uri: Uri, tabId: String) {
-        browserHeaderViewModel?.resetContent()
         if (webViewReplacementUseCase(tabId)) {
             loadUrl(uri.toString())
         }
