@@ -85,7 +85,6 @@ import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
@@ -228,7 +227,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val storagePermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it) {
-                Toaster.tShort(activityContext, R.string.message_requires_permission_storage)
+                contentViewModel.snackShort(R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 
