@@ -38,10 +38,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import coil.compose.AsyncImage
 import jp.toastkid.barcode.generator.BarcodeGenerator
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -162,8 +164,8 @@ internal fun PageInformationDialog(
 private fun clipText(context: Context, copyText: String?) {
     copyText?.also { Clipboard.clip(context, it) }
 
-    Toaster.tShort(
-        context,
-        "It has copied URL to clipboard.${System.lineSeparator()}$copyText"
-    )
+    (context as? ViewModelStoreOwner)?.let {
+        ViewModelProvider(it).get(ContentViewModel::class.java)
+            .snackShort("It has copied URL to clipboard.${System.lineSeparator()}$copyText")
+    }
 }
