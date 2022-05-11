@@ -23,7 +23,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi.R
@@ -39,53 +38,51 @@ internal fun InputFileNameDialogUi(
     }
 
     val input = remember { mutableStateOf(defaultInput) }
-    MaterialTheme {
-        AlertDialog(
-            onDismissRequest = { openDialog.value = false },
-            title = {
-                stringResource(id = R.string.title_dialog_input_file_name)
-            },
-            text = {
-                TextField(
-                    value = input.value,
-                    onValueChange = { text ->
-                        input.value = text
-                    },
-                    singleLine = true,
-                    trailingIcon = {
-                        Icon(
-                            Icons.Filled.Clear,
-                            contentDescription = "clear text",
-                            modifier = Modifier
-                                .offset(x = 8.dp)
-                                .clickable {
-                                    input.value = ""
-                                }
-                        )
+    AlertDialog(
+        onDismissRequest = { openDialog.value = false },
+        title = {
+            stringResource(id = R.string.title_dialog_input_file_name)
+        },
+        text = {
+            TextField(
+                value = input.value,
+                onValueChange = { text ->
+                    input.value = text
+                },
+                singleLine = true,
+                trailingIcon = {
+                    Icon(
+                        Icons.Filled.Clear,
+                        contentDescription = "clear text",
+                        modifier = Modifier
+                            .offset(x = 8.dp)
+                            .clickable {
+                                input.value = ""
+                            }
+                    )
+                }
+            )
+        },
+        confirmButton = {
+            Text(
+                text = stringResource(id = R.string.save),
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier.clickable {
+                    if (input.value.isNotBlank()) {
+                        onCommit(input.value)
                     }
-                )
-            },
-            confirmButton = {
-                Text(
-                    text = stringResource(id = R.string.save),
-                    color = colorResource(id = R.color.colorPrimary),
-                    modifier = Modifier.clickable {
-                        if (input.value.isNotBlank()) {
-                            onCommit(input.value)
-                        }
-                        openDialog.value = false
-                    }.padding(4.dp)
-                )
-            },
-            dismissButton = {
-                Text(
-                    text = stringResource(id = R.string.cancel),
-                    color = colorResource(id = R.color.colorPrimary),
-                    modifier = Modifier.clickable {
-                        openDialog.value = false
-                    }.padding(4.dp)
-                )
-            }
-        )
-    }
+                    openDialog.value = false
+                }.padding(4.dp)
+            )
+        },
+        dismissButton = {
+            Text(
+                text = stringResource(id = R.string.cancel),
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier.clickable {
+                    openDialog.value = false
+                }.padding(4.dp)
+            )
+        }
+    )
 }

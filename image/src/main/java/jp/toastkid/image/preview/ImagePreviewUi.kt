@@ -46,13 +46,14 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int, onBackPress:
     val coroutineScope = rememberCoroutineScope()
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .components {
+        .components(
             ComponentRegistry.Builder()
                 .add(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) ImageDecoderDecoder.Factory()
                     else GifDecoder.Factory()
                 )
-        }
+                .build()
+        )
         .build()
 
     MaterialTheme {
