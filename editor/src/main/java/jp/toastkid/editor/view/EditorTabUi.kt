@@ -13,6 +13,7 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.text.format.DateFormat
+import android.view.View
 import android.widget.EditText
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -39,7 +40,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -50,10 +50,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -95,6 +100,15 @@ fun EditorTabUi(path: String?) {
     val viewModelProvider = ViewModelProvider(context)
 
     val editText = remember { EditText(context) }
+    val nestedScrollDispatcher = NestedScrollDispatcher()
+    val scrollListener =
+        View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            nestedScrollDispatcher.dispatchPreScroll(
+                Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
+                NestedScrollSource.Fling
+            )
+        }
+    editText.setOnScrollChangeListener(scrollListener)
 
     val finder = EditTextFinder(editText)
 
@@ -163,7 +177,10 @@ fun EditorTabUi(path: String?) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(preferenceApplier.editorBackgroundColor()))
-            .verticalScroll(rememberScrollState())
+            .nestedScroll(
+                object : NestedScrollConnection{},
+                nestedScrollDispatcher
+            )
             .padding(8.dp)
     )
 
