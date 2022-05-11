@@ -63,9 +63,6 @@ internal fun EditorSettingUi() {
     val backgroundColor = preferenceApplier.editorBackgroundColor()
     val fontColor = preferenceApplier.editorFontColor()
 
-    val initialBgColor = backgroundColor
-    val initialFontColor = fontColor
-
     val iconTint = Color(IconColorFinder.from(activityContext).invoke())
 
     val currentBackgroundColor =
@@ -93,8 +90,8 @@ internal fun EditorSettingUi() {
             ColorPaletteUi(
                 currentBackgroundColor,
                 currentFontColor,
-                initialBgColor,
-                initialFontColor,
+                backgroundColor,
+                fontColor,
                 onCommit = {
                     preferenceApplier.setEditorBackgroundColor(currentBackgroundColor.value.toArgb())
                     preferenceApplier.setEditorFontColor(currentFontColor.value.toArgb())
@@ -102,11 +99,11 @@ internal fun EditorSettingUi() {
                     contentViewModel?.snackShort(R.string.settings_color_done_commit)
                 },
                 onReset = {
-                    preferenceApplier.setEditorBackgroundColor(initialBgColor)
-                    preferenceApplier.setEditorFontColor(initialFontColor)
+                    preferenceApplier.setEditorBackgroundColor(backgroundColor)
+                    preferenceApplier.setEditorFontColor(fontColor)
 
-                    currentBackgroundColor.value = Color(initialBgColor)
-                    currentFontColor.value = Color(initialFontColor)
+                    currentBackgroundColor.value = Color(backgroundColor)
+                    currentFontColor.value = Color(fontColor)
 
                     contentViewModel?.snackShort(R.string.settings_color_done_reset)
                 }
