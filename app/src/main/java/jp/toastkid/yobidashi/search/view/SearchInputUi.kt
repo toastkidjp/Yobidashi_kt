@@ -123,22 +123,24 @@ fun SearchInputUi(
             viewModel.suggestions.addAll(result)
         }
 
-    val database = DatabaseFinder().invoke(context)
-    val queryingUseCase = QueryingUseCase(
-        viewModel,
-        preferenceApplier,
-        QueryUseCase(
-            {
-                viewModel.urlItems.clear()
-                viewModel.urlItems.addAll(it)
-            },
-            database.bookmarkRepository(),
-            database.viewHistoryRepository(),
-            { }
-        ),
-        database.favoriteSearchRepository(),
-        database.searchHistoryRepository()
-    )
+    val database = remember { DatabaseFinder().invoke(context) }
+    val queryingUseCase = remember {
+        QueryingUseCase(
+            viewModel,
+            preferenceApplier,
+            QueryUseCase(
+                {
+                    viewModel.urlItems.clear()
+                    viewModel.urlItems.addAll(it)
+                },
+                database.bookmarkRepository(),
+                database.viewHistoryRepository(),
+                { }
+            ),
+            database.favoriteSearchRepository(),
+            database.searchHistoryRepository()
+        )
+    }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
