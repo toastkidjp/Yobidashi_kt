@@ -177,11 +177,11 @@ fun EditorTabUi(path: String?) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(preferenceApplier.editorBackgroundColor()))
+            .padding(8.dp)
             .nestedScroll(
                 object : NestedScrollConnection{},
                 nestedScrollDispatcher
             )
-            .padding(8.dp)
     )
 
     val pageSearcherViewModel =
