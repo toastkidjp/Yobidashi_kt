@@ -12,11 +12,9 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import io.mockk.MockKAnnotations
-import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
@@ -24,7 +22,6 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.Toaster
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -62,8 +59,6 @@ class DownloadActionTest {
 
         mockkObject(NetworkChecker)
         every { NetworkChecker.isUnavailableWiFi(any()) }.returns(false)
-        mockkObject(Toaster)
-        every { Toaster.tShort(any(), any<Int>()) }.just(Runs)
 
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(uri)
@@ -88,15 +83,12 @@ class DownloadActionTest {
         every { NetworkChecker.isUnavailableWiFi(any()) }.returns(true)
 
         downloadAction.invoke("https://www.search.yahoo.co.jp")
-
-        verify { Toaster.tShort(any(), any<Int>()) }
     }
 
     @Test
     fun testEnqueueAndMakingFolderCase() {
         downloadAction.invoke("https://www.search.yahoo.co.jp")
 
-        verify(inverse = true) { Toaster.tShort(any(), any<Int>()) }
         verify { folder.mkdirs() }
         verify { downloadManager.enqueue(any()) }
     }
@@ -106,7 +98,6 @@ class DownloadActionTest {
         every { folder.exists() }.returns(true)
         downloadAction.invoke("https://www.search.yahoo.co.jp")
 
-        verify(inverse = true) { Toaster.tShort(any(), any<Int>()) }
         verify(inverse = true) { folder.mkdirs() }
         verify { downloadManager.enqueue(any()) }
     }
