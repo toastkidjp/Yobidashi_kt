@@ -104,6 +104,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
     }
 
     val browserModule = remember { BrowserModule(activityContext, webViewContainer) }
+    browserModule.applyNewAlpha()
+    browserModule.resizePool(PreferenceApplier(activityContext).poolSize)
 
     val browserHeaderViewModel =
         viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
