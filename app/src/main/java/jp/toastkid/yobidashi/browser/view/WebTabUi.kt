@@ -47,7 +47,6 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -93,13 +92,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun WebTabUi(uri: Uri, tabId: String) {
-/*TODO swipe refresher
-        binding?.swipeRefresher?.let {
-            it.setOnRefreshListener { reload() }
-            it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
-            it.setDistanceToTriggerSync(500)
-        }
-*/
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
     val webViewContainer = remember {
@@ -119,10 +111,12 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val nestedScrollDispatcher = NestedScrollDispatcher()
     val scrollListener =
         View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            nestedScrollDispatcher.dispatchPreScroll(
+            if (scrollY == 0) {
+                //TODO swipeRefreshState.isRefreshing = true
+            }
+            browserModule.nestedScrollDispatcher().dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
             )
@@ -140,10 +134,13 @@ fun WebTabUi(uri: Uri, tabId: String) {
             GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
             webViewContainer
         },
+        update = {
+            GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
+        },
         modifier = Modifier
             .nestedScroll(
                 connection = object : NestedScrollConnection {},
-                dispatcher = nestedScrollDispatcher
+                dispatcher = browserModule.nestedScrollDispatcher()
             )
     )
 
