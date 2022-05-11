@@ -102,12 +102,10 @@ fun SearchInputUi(
         )
     }
 
-    val inputState = remember {
-        val text = inputQuery ?: ""
-        mutableStateOf(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
-    }
-
     val viewModel = viewModel(SearchUiViewModel::class.java)
+
+    val text = inputQuery ?: ""
+    viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
 
     val voiceSearchLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
@@ -162,9 +160,9 @@ fun SearchInputUi(
                 SearchCategorySpinner(spinnerOpen, categoryName)
 
                 TextField(
-                    value = inputState.value,
+                    value = viewModel.input.value,
                     onValueChange = { text ->
-                        inputState.value = text
+                        viewModel.setInput(text)
                         useVoice.value = text.text.isBlank()
                         queryingUseCase.send(text.text)
                     },
@@ -187,14 +185,14 @@ fun SearchInputUi(
                             modifier = Modifier
                                 //.offset(x = 8.dp)
                                 .clickable {
-                                    inputState.value = TextFieldValue()
+                                    viewModel.setInput(TextFieldValue())
                                 }
                         )
                     },
                     maxLines = 1,
                     keyboardActions = KeyboardActions {
                         keyboardController?.hide()
-                        search(context, contentViewModel, currentUrl, categoryName.value, inputState.value.text)
+                        search(context, contentViewModel, currentUrl, categoryName.value, viewModel.input.value.text)
                     },
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = true,
@@ -230,7 +228,7 @@ fun SearchInputUi(
                                     contentViewModel,
                                     currentUrl,
                                     categoryName.value,
-                                    inputState.value.text
+                                    viewModel.input.value.text
                                 )
                             },
                             onLongClick = {
@@ -239,7 +237,7 @@ fun SearchInputUi(
                                     contentViewModel,
                                     currentUrl,
                                     categoryName.value,
-                                    inputState.value.text,
+                                    viewModel.input.value.text,
                                     true
                                 )
                             }
@@ -292,7 +290,7 @@ fun SearchInputUi(
     viewModel.putQuery
         .observe(localLifecycleOwner, Observer { event ->
             val query = event?.getContentIfNotHandled() ?: return@Observer
-            inputState.value = TextFieldValue(query, TextRange(query.length), TextRange.Zero)
+            viewModel.setInput(TextFieldValue(query, TextRange(query.length), TextRange.Zero))
         })
 
     val isEnableSuggestion = remember { mutableStateOf(preferenceApplier.isEnableSuggestion) }
@@ -302,7 +300,7 @@ fun SearchInputUi(
         OptionMenu(
             titleId = R.string.title_context_editor_double_quote,
             action = {
-                val queryOrEmpty = inputState.value.text
+                val queryOrEmpty = viewModel.input.value.text
                 if (queryOrEmpty.isNotBlank()) {
                     viewModel.putQuery("\"$queryOrEmpty\"")
                 }
