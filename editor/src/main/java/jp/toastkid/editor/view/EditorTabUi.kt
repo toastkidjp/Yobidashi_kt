@@ -177,7 +177,7 @@ fun EditorTabUi(path: String?) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(preferenceApplier.editorBackgroundColor()))
-            .padding(8.dp)
+            .padding(horizontal = 8.dp, vertical = 2.dp)
             .nestedScroll(
                 object : NestedScrollConnection{},
                 nestedScrollDispatcher
