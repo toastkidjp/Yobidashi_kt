@@ -32,14 +32,6 @@ class SearchUiViewModel : ViewModel() {
         _input.value = textInputValue
     }
 
-    private val _query = mutableStateOf("")
-
-    val query: State<String> = _query
-
-    fun setQuery(query: String) {
-        _query.value = query
-    }
-
     val urlItems = mutableStateListOf<UrlItem>()
 
     val trends = mutableStateListOf<Trend>()
