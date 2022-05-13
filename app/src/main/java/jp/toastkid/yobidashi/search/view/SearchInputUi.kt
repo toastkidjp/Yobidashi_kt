@@ -122,8 +122,9 @@ fun SearchInputUi(
             viewModel.suggestions.addAll(result)
         }
 
-    val database = remember { DatabaseFinder().invoke(context) }
     val queryingUseCase = remember {
+        val database = DatabaseFinder().invoke(context)
+
         QueryingUseCase(
             viewModel,
             preferenceApplier,
