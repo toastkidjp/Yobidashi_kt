@@ -9,27 +9,20 @@
 package jp.toastkid.yobidashi.search.history
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
@@ -54,42 +47,35 @@ fun SearchHistoryListUi() {
 
     val openConfirmDialog = remember { mutableStateOf(false) }
 
-    Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .background(colorResource(id = R.color.setting_background))
-                .nestedScroll(rememberViewInteropNestedScrollConnection())
-        ) {
-            coroutineScope.launch {
-                val loaded = withContext(Dispatchers.IO) {
-                    searchHistoryRepository.findAll()
-                }
-                searchHistoryItems.clear()
-                searchHistoryItems.addAll(loaded)
-            }
-
-            items(searchHistoryItems, { it.key }) { searchHistory ->
-                SearchItemContent(
-                    searchHistory.query,
-                    searchHistory.category,
-                    {
-                        SearchAction(
-                            context,
-                            searchHistory.category ?: "",
-                            searchHistory.query ?: "",
-                            onBackground = it
-                        ).invoke()
-                    },
-                    {
-                        searchHistoryRepository.delete(searchHistory)
-                        searchHistoryItems.remove(searchHistory)
-                    },
-                    searchHistory.timestamp
-                )
-            }
+    LazyColumn(state = listState) {
+        items(searchHistoryItems, { it.key }) { searchHistory ->
+            SearchItemContent(
+                searchHistory.query,
+                searchHistory.category,
+                {
+                    SearchAction(
+                        context,
+                        searchHistory.category ?: "",
+                        searchHistory.query ?: "",
+                        onBackground = it
+                    ).invoke()
+                },
+                {
+                    searchHistoryRepository.delete(searchHistory)
+                    searchHistoryItems.remove(searchHistory)
+                },
+                searchHistory.timestamp
+            )
         }
     }
+
+    LaunchedEffect(key1 = "initial_load", block = {
+        val loaded = withContext(Dispatchers.IO) {
+            searchHistoryRepository.findAll()
+        }
+        searchHistoryItems.clear()
+        searchHistoryItems.addAll(loaded)
+    })
 
     viewModel(modelClass = ContentViewModel::class.java).optionMenus(
         OptionMenu(

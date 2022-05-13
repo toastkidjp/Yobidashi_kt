@@ -9,11 +9,9 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -22,8 +20,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
@@ -38,7 +34,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -46,13 +41,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.yobidashi.R
@@ -215,40 +208,31 @@ private fun FavoriteSearchItemList(
 
     val listState = rememberLazyListState()
 
-    MaterialTheme() {
-        Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier
-                    .background(colorResource(id = R.color.setting_background))
-                    .nestedScroll(rememberViewInteropNestedScrollConnection())
-            ) {
-                reload(repository, favoriteSearchItems)
+    LazyColumn(state = listState) {
+        reload(repository, favoriteSearchItems)
 
-                items(favoriteSearchItems) { favoriteSearch ->
-                    SearchItemContent(
-                        favoriteSearch.query,
-                        favoriteSearch.category,
-                        {
-                            SearchAction(
-                                context,
-                                favoriteSearch.category ?: "",
-                                favoriteSearch.query ?: "",
-                                onBackground = it
-                            ).invoke()
-                            SearchAction(
-                                context,
-                                favoriteSearch.category ?: "",
-                                favoriteSearch.query ?: ""
-                            ).invoke()
-                        },
-                        {
-                            repository.delete(favoriteSearch)
-                            favoriteSearchItems.remove(favoriteSearch)
-                        }
-                    )
+        items(favoriteSearchItems) { favoriteSearch ->
+            SearchItemContent(
+                favoriteSearch.query,
+                favoriteSearch.category,
+                {
+                    SearchAction(
+                        context,
+                        favoriteSearch.category ?: "",
+                        favoriteSearch.query ?: "",
+                        onBackground = it
+                    ).invoke()
+                    SearchAction(
+                        context,
+                        favoriteSearch.category ?: "",
+                        favoriteSearch.query ?: ""
+                    ).invoke()
+                },
+                {
+                    repository.delete(favoriteSearch)
+                    favoriteSearchItems.remove(favoriteSearch)
                 }
-            }
+            )
         }
     }
 }

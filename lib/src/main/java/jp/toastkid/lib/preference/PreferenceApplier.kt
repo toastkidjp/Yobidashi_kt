@@ -270,7 +270,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun editorBackgroundColor(): Int {
-        return preferences.getInt(Key.EDITOR_BACKGROUND_COLOR.name, Color.WHITE)
+        return preferences.getInt(Key.EDITOR_BACKGROUND_COLOR.name, 0xAAFFFFFF.toInt())
     }
 
     fun setEditorFontColor(@ColorInt newValue: Int) {

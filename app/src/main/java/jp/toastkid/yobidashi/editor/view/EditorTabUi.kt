@@ -87,13 +87,14 @@ import jp.toastkid.yobidashi.editor.load.StorageFilesFinder
 import jp.toastkid.yobidashi.editor.usecase.FileActionUseCase
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EditorTabUi(path: String?) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
     val viewModelProvider = ViewModelProvider(context)
 
-    val editText = EditText(context)
+    val editText = remember { EditText(context) }
 
     val finder = EditTextFinder(editText)
 
@@ -179,9 +180,6 @@ fun EditorTabUi(path: String?) {
     })
 
     val dialogState = remember { mutableStateOf(false) }
-    BackHandler {
-        dialogState.value = true
-    }
 
     ConfirmDialog(
         dialogState,
@@ -190,9 +188,35 @@ fun EditorTabUi(path: String?) {
     ) {
         context.finish()
     }
+
+    BackHandler {
+        dialogState.value = true
+    }
+
+    val localLifecycle = LocalLifecycleOwner.current.lifecycle
+
+    val openInputFileNameDialog = remember { mutableStateOf(false) }
+    val observer = object : LifecycleEventObserver {
+        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                fileActionUseCase.save(openInputFileNameDialog)
+            }
+        }
+    }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    DisposableEffect(key1 = "hide_keyboard") {
+        localLifecycle.addObserver(observer)
+
+        onDispose {
+            fileActionUseCase.save(openInputFileNameDialog)
+            localLifecycle.removeObserver(observer)
+            keyboardController?.hide()
+        }
+    }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(
     contentViewModel: ContentViewModel,
@@ -323,31 +347,6 @@ private fun AppBarContent(
     ) {
         fileActionUseCase.setText("")
     }
-
-    val observer = object : LifecycleEventObserver {
-        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-            if (event == Lifecycle.Event.ON_PAUSE) {
-                fileActionUseCase.save(openInputFileNameDialog)
-            }
-        }
-    }
-
-    val localLifecycle = LocalLifecycleOwner.current.lifecycle
-
-    val keyboardController = LocalSoftwareKeyboardController.current
-    DisposableEffect(key1 = "hide_keyboard") {
-        localLifecycle.addObserver(observer)
-
-        onDispose {
-            fileActionUseCase.save(openInputFileNameDialog)
-            localLifecycle.removeObserver(observer)
-            keyboardController?.hide()
-        }
-    }
-
-    /*TODO if (fileActionUseCase.path.value.isEmpty()) {
-        textSetter("")
-    }*/
 }
 
 @Composable

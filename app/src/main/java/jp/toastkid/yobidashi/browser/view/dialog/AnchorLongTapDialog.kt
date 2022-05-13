@@ -64,10 +64,7 @@ internal fun AnchorLongTapDialog(
             visibleState.value = false
         },
         content = {
-            Surface(
-                color = colorResource(id = R.color.soft_background),
-                elevation = 4.dp
-            ) {
+            Surface(elevation = 4.dp) {
                 Box() {
                     Column() {
                         Row(

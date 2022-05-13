@@ -15,6 +15,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -62,11 +63,11 @@ internal fun ColorFilterSettingUi() {
     val sample =
         remember { mutableStateOf(preferenceApplier.filterColor(Color.Transparent.toArgb())) }
     val sliderValue =
-        remember { mutableStateOf(OverlayColorFilterUseCase.getDefaultAlpha().toFloat()) }
+        remember { mutableStateOf(OverlayColorFilterUseCase.getDefaultAlpha().toFloat() / 255f) }
     val check = remember { mutableStateOf(preferenceApplier.useColorFilter()) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val overlayColorFilterViewModel =(activityContext as? ViewModelStoreOwner)?.let { activity ->
+    val overlayColorFilterViewModel = (activityContext as? ViewModelStoreOwner)?.let { activity ->
         val viewModel = ViewModelProvider(activity).get(OverlayColorFilterViewModel::class.java)
 
         viewModel
@@ -85,113 +86,122 @@ internal fun ColorFilterSettingUi() {
         overlayColorFilterViewModel
     )
 
-    MaterialTheme() {
-        Surface(elevation = 4.dp, modifier = Modifier.padding(16.dp)) {
-            Column(Modifier.background(colorResource(id = R.color.setting_background))) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+    Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
+        Column {
+            val onClick = {
+                val newState = !preferenceApplier.useColorFilter()
+                preferenceApplier.setUseColorFilter(newState)
+                overlayColorFilterViewModel?.update()
+                check.value = preferenceApplier.useColorFilter()
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onClick)
+                    .padding(start = 16.dp, end = 16.dp)
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.ic_color_filter_black),
+                    contentDescription = stringResource(id = R.string.title_color_filter),
+                    tint = Color(IconColorFinder.from(activityContext).invoke())
+                )
+                Text(
+                    text = stringResource(id = R.string.title_color_filter),
+                    modifier = Modifier.weight(1f)
+                )
+                Checkbox(
+                    checked = check.value,
+                    onCheckedChange = { onClick() },
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            val newState = !preferenceApplier.useColorFilter()
-                            preferenceApplier.setUseColorFilter(newState)
-                            overlayColorFilterViewModel?.update()
-                            check.value = preferenceApplier.useColorFilter()
-                        }
-                        .padding(start = 16.dp, end = 16.dp)
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.ic_color_filter_black),
-                        contentDescription = stringResource(id = R.string.title_color_filter),
-                        tint = Color(IconColorFinder.from(activityContext).invoke())
-                    )
-                    Text(
-                        text = stringResource(id = R.string.title_color_filter),
-                        modifier = Modifier.weight(1f)
-                    )
-                    Checkbox(
-                        checked = check.value,
-                        onCheckedChange = {},
-                        modifier = Modifier
-                            .width(44.dp)
-                            .align(Alignment.CenterVertically)
-                    )
-                }
+                        .width(44.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
 
-                InsetDivider()
+            InsetDivider()
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp)
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(40.dp)
                 ) {
                     Text(
                         text = stringResource(id = R.string.sample_text_color_filter),
-                        textAlign = TextAlign.Center,
-                        color = colorResource(id = R.color.black),
+                        maxLines = 1
+                    )
+                    Box(
                         modifier = Modifier
-                            .size(40.dp)
+                            .fillMaxSize()
                             .background(Color(sample.value))
-                    )
-                    Text(
-                        text = stringResource(id = R.string.title_filter_color),
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 4.dp, end = 4.dp)
-                    )
-                    Button(
-                        onClick = {
-                            useCase.setDefault()
-                            sliderValue.value = OverlayColorFilterUseCase
-                                .getDefaultAlpha()
-                                .toFloat()
-                        },
-                        colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = Color(preferenceApplier.color),
-                            contentColor = Color(preferenceApplier.fontColor),
-                            disabledContentColor = Color.LightGray
-                        ),
-                        modifier = Modifier
-                            .wrapContentWidth()
-                            .padding(8.dp)
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.title_default),
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    ) { }
                 }
 
-                InsetDivider()
-
-                Row(
-                    modifier = Modifier.horizontalScroll(rememberScrollState())
-                        .padding(start = 16.dp, end = 16.dp, top = 4.dp)
-                ) {
-                    ColorFilterItem(R.color.default_color_filter) { useCase.setYellow() }
-                    ColorFilterItem(R.color.red_yellow) { useCase.setRedYellow() }
-                    ColorFilterItem(R.color.deep_orange_500_dd) { useCase.setOrange() }
-                    ColorFilterItem(R.color.darkgray_scale) { useCase.setDark() }
-                    ColorFilterItem(R.color.red_200_dd) { useCase.setRed() }
-                    ColorFilterItem(R.color.lime_bg) { useCase.setGreen() }
-                    ColorFilterItem(R.color.light_blue_200_dd) { useCase.setBlue() }
-                }
-
-                Slider(
-                    value = sliderValue.value,
-                    onValueChange = {
-                        sliderValue.value = it
-                        useCase.setAlpha(((255) * it).roundToInt())
-                    },
-                    steps = 256,
-                    modifier = Modifier.padding(
-                        top = 8.dp,
-                        bottom = 8.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
+                Text(
+                    text = stringResource(id = R.string.title_filter_color),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 4.dp, end = 4.dp)
                 )
+                Button(
+                    onClick = {
+                        useCase.setDefault()
+                        sliderValue.value = OverlayColorFilterUseCase
+                            .getDefaultAlpha()
+                            .toFloat()
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        backgroundColor = MaterialTheme.colors.primary,
+                        contentColor = MaterialTheme.colors.onPrimary,
+                        disabledContentColor = Color.LightGray
+                    ),
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.title_default),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
+
+            InsetDivider()
+
+            Row(
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .padding(start = 16.dp, end = 16.dp, top = 4.dp)
+            ) {
+                ColorFilterItem(R.color.default_color_filter) { useCase.setYellow() }
+                ColorFilterItem(R.color.red_yellow) { useCase.setRedYellow() }
+                ColorFilterItem(R.color.deep_orange_500_dd) { useCase.setOrange() }
+                ColorFilterItem(R.color.darkgray_scale) { useCase.setDark() }
+                ColorFilterItem(R.color.red_200_dd) { useCase.setRed() }
+                ColorFilterItem(R.color.lime_bg) { useCase.setGreen() }
+                ColorFilterItem(R.color.light_blue_200_dd) { useCase.setBlue() }
+            }
+
+            Slider(
+                value = sliderValue.value,
+                onValueChange = {
+                    sliderValue.value = it
+                    useCase.setAlpha(((255) * it).roundToInt())
+                },
+                steps = 256,
+                modifier = Modifier.padding(
+                    top = 8.dp,
+                    bottom = 8.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
+            )
         }
     }
 }

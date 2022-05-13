@@ -18,7 +18,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorInt
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -37,7 +36,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -55,9 +53,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -85,7 +81,6 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -314,15 +309,10 @@ internal fun ArticleListUi(
 ) {
     val articles = flow?.collectAsLazyPagingItems() ?: return
 
-    MaterialTheme {
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
-        ) {
-            items(articles, { it.id }) {
-                it ?: return@items
-                ListItem(it, contentViewModel, menuPopupUseCase, menuIconColor)
-            }
+    LazyColumn(state = listState) {
+        items(articles, { it.id }) {
+            it ?: return@items
+            ListItem(it, contentViewModel, menuPopupUseCase, menuIconColor)
         }
     }
 
@@ -348,7 +338,7 @@ private fun ListItem(
     Surface(
         elevation = 4.dp,
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 2.dp)
+            .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
             .combinedClickable(
                 onClick = { contentViewModel?.newArticle(article.title) },
                 onLongClick = { contentViewModel?.newArticleOnBackground(article.title) }
@@ -402,9 +392,7 @@ private fun ListItem(
                 )
                 DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .background(colorResource(id = R.color.soft_background))
+                    onDismissRequest = { expanded = false }
                 ) {
                     items.forEachIndexed { index, s ->
                         DropdownMenuItem(onClick = {

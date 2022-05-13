@@ -46,7 +46,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
@@ -258,9 +257,7 @@ private fun BoardItem(
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(colorResource(id = R.color.soft_background))
+                modifier = Modifier.fillMaxWidth()
             ) {
                 items.forEachIndexed { index, s ->
                     DropdownMenuItem(onClick = {
