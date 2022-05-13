@@ -141,6 +141,9 @@ fun SearchInputUi(
             database.searchHistoryRepository()
         )
     }
+    LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
+        queryingUseCase.withDebounce()
+    })
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -252,13 +255,9 @@ fun SearchInputUi(
         }
     }
 
-    queryingUseCase.withDebounce()
-
     if (viewModel.enableBackHandler().not()) {
         SearchContentsUi(viewModel, currentTitle, currentUrl)
     }
-
-    queryingUseCase.send("")
 
     if (viewModel.openSearchHistory.value) {
         SearchHistoryListUi()
