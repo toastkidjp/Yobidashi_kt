@@ -15,14 +15,19 @@ import android.os.Handler
 import android.os.Looper
 import android.view.ViewGroup
 import android.webkit.WebView
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.webkit.WebViewCompat
+import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
+import timber.log.Timber
 
 /**
  * [WebView] factory.
@@ -59,6 +64,7 @@ internal class WebViewFactory {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
         )
+        webView.setBackgroundColor(Color.Transparent.toArgb())
 
         val preferenceApplier = PreferenceApplier(context)
 
@@ -131,6 +137,14 @@ internal class WebViewFactory {
                     }
                 }
             }
+        }
+
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.START_SAFE_BROWSING)) {
+            WebViewCompat.startSafeBrowsing(context, { success ->
+                if (!success) {
+                    Timber.d("Unable to initialize Safe Browsing!")
+                }
+            })
         }
 
         return webView
