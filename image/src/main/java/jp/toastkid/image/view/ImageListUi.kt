@@ -132,13 +132,12 @@ fun ImageListTopUi() {
     } else {
         ImageListUi(
             imageLoaderUseCase,
-            images,
-            {
-                index.value = it
-                preview.value = true
-                backHandlerState.value = true
-            }
-        )
+            images
+        ) {
+            index.value = it
+            preview.value = true
+            backHandlerState.value = true
+        }
     }
 
     BackHandler(backHandlerState.value) {
