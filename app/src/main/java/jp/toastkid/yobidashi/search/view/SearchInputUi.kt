@@ -104,9 +104,6 @@ fun SearchInputUi(
 
     val viewModel = viewModel(SearchUiViewModel::class.java)
 
-    val text = inputQuery ?: ""
-    viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
-
     val voiceSearchLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
             if (activityResult.resultCode != Activity.RESULT_OK) {
@@ -141,9 +138,6 @@ fun SearchInputUi(
             database.searchHistoryRepository()
         )
     }
-    LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
-        queryingUseCase.withDebounce()
-    })
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -287,6 +281,12 @@ fun SearchInputUi(
                 searchEvent.background
             )
         })
+
+    LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
+        val text = inputQuery ?: ""
+        viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
+        queryingUseCase.withDebounce()
+    })
 
     val isEnableSuggestion = remember { mutableStateOf(preferenceApplier.isEnableSuggestion) }
     val isEnableSearchHistory = remember { mutableStateOf(preferenceApplier.isEnableSearchHistory) }
