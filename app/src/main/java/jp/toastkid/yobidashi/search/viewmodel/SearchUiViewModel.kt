@@ -11,6 +11,7 @@ package jp.toastkid.yobidashi.search.viewmodel
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,6 +31,10 @@ class SearchUiViewModel : ViewModel() {
 
     fun setInput(textInputValue: TextFieldValue) {
         _input.value = textInputValue
+    }
+
+    fun putQuery(query: String) {
+        _input.value = TextFieldValue(query, TextRange(query.length), TextRange.Zero)
     }
 
     val urlItems = mutableStateListOf<UrlItem>()
@@ -56,14 +61,6 @@ class SearchUiViewModel : ViewModel() {
 
     fun searchOnBackground(query: String) {
         _search.postValue(Event(SearchEvent(query, background = true)))
-    }
-
-    private val _putQuery = MutableLiveData<Event<String>>()
-
-    val putQuery: LiveData<Event<String>> = _putQuery
-
-    fun putQuery(query: String) {
-        _putQuery.postValue(Event(query))
     }
 
     fun enableBackHandler() =

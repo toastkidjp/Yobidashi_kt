@@ -288,11 +288,6 @@ fun SearchInputUi(
                 searchEvent.background
             )
         })
-    viewModel.putQuery
-        .observe(localLifecycleOwner, Observer { event ->
-            val query = event?.getContentIfNotHandled() ?: return@Observer
-            viewModel.setInput(TextFieldValue(query, TextRange(query.length), TextRange.Zero))
-        })
 
     val isEnableSuggestion = remember { mutableStateOf(preferenceApplier.isEnableSuggestion) }
     val isEnableSearchHistory = remember { mutableStateOf(preferenceApplier.isEnableSearchHistory) }
