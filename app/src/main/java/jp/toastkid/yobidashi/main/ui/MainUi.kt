@@ -18,6 +18,9 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -98,10 +101,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import jp.toastkid.about.view.AboutThisAppUi
 import jp.toastkid.article_viewer.article.detail.view.ArticleContentUi
 import jp.toastkid.article_viewer.article.list.view.ArticleListUi
@@ -159,7 +162,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 internal fun Content() {
     val snackbarHostState = SnackbarHostState()
@@ -183,7 +186,7 @@ internal fun Content() {
         )
     }
 
-    val navigationHostController = rememberNavController()
+    val navigationHostController = rememberAnimatedNavController()
     navigationHostController.enableOnBackPressed(false)
 
     tabListViewModel
@@ -402,6 +405,8 @@ internal fun Content() {
         tabs.openNewWindowWebTab(message)
         browserViewModel?.switchWebViewToCurrent(tabs.currentTabId())
     })
+
+    val height = activity.resources.displayMetrics.heightPixels
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -652,7 +657,7 @@ internal fun Content() {
                     .fillMaxSize()
                     .nestedScroll(nestedScrollConnection)
             ) {
-                NavHost(
+                AnimatedNavHost(
                     navController = navigationHostController,
                     startDestination = "empty",
                     modifier = Modifier
@@ -660,12 +665,19 @@ internal fun Content() {
                 ) {
                     contentViewModel?.clearOptionMenus()
 
-                    composable("empty") {
+                    composable("empty")  {
 
                     }
-                    composable("tab/web/current") {
+                    composable(
+                        "tab/web/current",
+                        enterTransition = {
+                            slideInVertically(initialOffsetY = { height })
+                        },
+                        exitTransition = {
+                            slideOutVertically(targetOffsetY = { height })
+                        }
+                    ) {
                         val currentTab = tabs.currentTab() as? WebTab ?: return@composable
-                        focusManager.clearFocus(true)
                         WebTabUi(currentTab.latest.url().toUri(), currentTab.id())
                     }
                     composable("tab/pdf/current") {
