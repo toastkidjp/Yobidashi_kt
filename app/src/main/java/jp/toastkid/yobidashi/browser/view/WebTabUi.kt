@@ -50,6 +50,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -171,8 +172,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
         )
     }
 
-    initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }
-
     BackHandler(browserHeaderViewModel.enableBackPress.value) {
         if (readerModeText.value.isNotBlank()) {
             readerModeText.value = ""
@@ -186,42 +185,49 @@ fun WebTabUi(uri: Uri, tabId: String) {
     }
 
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
-    contentViewModel.toTop.observe(lifecycleOwner, {
-        it.getContentIfNotHandled() ?: return@observe
-        browserModule.pageUp()
-    })
-    contentViewModel.toBottom.observe(lifecycleOwner, {
-        it.getContentIfNotHandled() ?: return@observe
-        browserModule.pageDown()
-    })
-    contentViewModel.share.observe(lifecycleOwner, {
-        it.getContentIfNotHandled() ?: return@observe
-        activityContext.startActivity(
-            ShareIntentFactory()(browserModule.makeShareMessage())
-        )
-    })
-
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
-    pageSearcherViewModel.also { viewModel ->
-        viewModel.find.observe(lifecycleOwner, Observer {
-            val word = it.getContentIfNotHandled() ?: return@Observer
-            browserModule.find(word)
+    val focusManager = LocalFocusManager.current
+    LaunchedEffect(key1 = lifecycleOwner, block = {
+        focusManager.clearFocus(true)
+
+        initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }
+
+        contentViewModel.toTop.observe(lifecycleOwner, {
+            it.getContentIfNotHandled() ?: return@observe
+            browserModule.pageUp()
+        })
+        contentViewModel.toBottom.observe(lifecycleOwner, {
+            it.getContentIfNotHandled() ?: return@observe
+            browserModule.pageDown()
+        })
+        contentViewModel.share.observe(lifecycleOwner, {
+            it.getContentIfNotHandled() ?: return@observe
+            activityContext.startActivity(
+                ShareIntentFactory()(browserModule.makeShareMessage())
+            )
         })
 
-        viewModel.upward.observe(lifecycleOwner, Observer {
-            it.getContentIfNotHandled() ?: return@Observer
-            browserModule.findUp()
-        })
+        pageSearcherViewModel.also { viewModel ->
+            viewModel.find.observe(lifecycleOwner, Observer {
+                val word = it.getContentIfNotHandled() ?: return@Observer
+                browserModule.find(word)
+            })
 
-        viewModel.downward.observe(lifecycleOwner, Observer {
-            it.getContentIfNotHandled() ?: return@Observer
-            browserModule.findDown()
-        })
+            viewModel.upward.observe(lifecycleOwner, Observer {
+                it.getContentIfNotHandled() ?: return@Observer
+                browserModule.findUp()
+            })
 
-        viewModel.clear.observe(lifecycleOwner, Observer {
-            browserModule.clearMatches()
-        })
-    }
+            viewModel.downward.observe(lifecycleOwner, Observer {
+                it.getContentIfNotHandled() ?: return@Observer
+                browserModule.findDown()
+            })
+
+            viewModel.clear.observe(lifecycleOwner, Observer {
+                browserModule.clearMatches()
+            })
+        }
+    })
 
     val storagePermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
