@@ -28,6 +28,7 @@ import kotlinx.coroutines.withContext
  */
 class RssUrlFinder(
     private val preferenceApplier: PreferenceApplier,
+    private val contentViewModel: ContentViewModel,
     private val urlValidator: RssUrlValidator = RssUrlValidator(),
     private val rssUrlExtractor: RssUrlExtractor = RssUrlExtractor(),
     @VisibleForTesting
@@ -51,13 +52,11 @@ class RssUrlFinder(
             return
         }
 
-        val snackbarParent = snackbarParentSupplier() ?: return
         val colorPair = preferenceApplier.colorPair()
 
         if (urlValidator(currentUrl)) {
             preferenceApplier.saveNewRssReaderTargets(currentUrl)
-            obtainContentViewModel(snackbarParent.context)
-                    ?.snackShort("Added $currentUrl")
+            contentViewModel.snackShort("Added $currentUrl")
             return
         }
 
@@ -70,24 +69,23 @@ class RssUrlFinder(
                 }
                 rssUrlExtractor(response.body?.string())
             }
-            storeToPreferences(rssItems, snackbarParent, colorPair)
+            storeToPreferences(rssItems, null, colorPair)
         }
     }
 
     private fun storeToPreferences(
             urls: List<String>?,
-            snackbarParent: View,
+            snackbarParent: View?,
             colorPair: ColorPair
     ) {
         urls?.firstOrNull { urlValidator(it) }
                 ?.let {
                     preferenceApplier.saveNewRssReaderTargets(it)
-                    obtainContentViewModel(snackbarParent.context)?.snackShort("Added $it")
+                    contentViewModel.snackShort("Added $it")
                     return
                 }
 
-        obtainContentViewModel(snackbarParent.context)
-            ?.snackShort(R.string.message_failure_extracting_rss)
+        contentViewModel.snackShort(R.string.message_failure_extracting_rss)
     }
 
     private fun obtainContentViewModel(context: Context) =
