@@ -95,8 +95,8 @@ dependencies {
     implementation "androidx.compose.material:material:$libVersions.compose"
     implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
     implementation 'androidx.activity:activity-compose:1.4.0'
-    implementation "androidx.navigation:navigation-compose:$libVersions.navigation_compose"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
+    implementation "com.google.accompanist:accompanist-navigation-animation:0.23.1"
     implementation "com.google.accompanist:accompanist-flowlayout:0.24.5-alpha"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
     implementation 'com.godaddy.android.colorpicker:compose-color-picker:0.4.2'
