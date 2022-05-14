@@ -216,7 +216,10 @@ class WebViewClientFactory(
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
                 callback?.backToSafety(true)
+            } else {
+                view?.goBack()
             }
+
             contentViewModel?.snackShort("Unsafe web page blocked.")
         }
 
