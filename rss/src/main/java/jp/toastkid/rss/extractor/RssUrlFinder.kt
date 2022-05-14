@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.api.html.HtmlApi
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.rss.R
 import kotlinx.coroutines.CoroutineDispatcher
@@ -69,14 +68,12 @@ class RssUrlFinder(
                 }
                 rssUrlExtractor(response.body?.string())
             }
-            storeToPreferences(rssItems, null, colorPair)
+            storeToPreferences(rssItems)
         }
     }
 
     private fun storeToPreferences(
-            urls: List<String>?,
-            snackbarParent: View?,
-            colorPair: ColorPair
+            urls: List<String>?
     ) {
         urls?.firstOrNull { urlValidator(it) }
                 ?.let {
