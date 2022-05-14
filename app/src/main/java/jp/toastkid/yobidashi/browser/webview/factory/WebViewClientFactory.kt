@@ -210,12 +210,14 @@ class WebViewClientFactory(
         ) {
             // The "true" argument indicates that your app reports incidents like
             // this one to Safe Browsing.
-            if (WebViewFeature.isFeatureSupported(WebViewFeature.SAFE_BROWSING_RESPONSE_BACK_TO_SAFETY)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                    callback?.backToSafety(true)
-                }
-                contentViewModel?.snackShort("Unsafe web page blocked.")
+            if (!WebViewFeature.isFeatureSupported(WebViewFeature.SAFE_BROWSING_RESPONSE_BACK_TO_SAFETY)) {
+                return
             }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                callback?.backToSafety(true)
+            }
+            contentViewModel?.snackShort("Unsafe web page blocked.")
         }
 
     }
