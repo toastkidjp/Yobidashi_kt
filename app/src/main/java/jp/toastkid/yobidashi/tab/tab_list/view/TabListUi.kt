@@ -211,46 +211,6 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
             tabAdapter.saveTabList()
         }
     }
-
-    /*
-
-    adapter = Adapter(activityContext, callback as Callback)
-    adapter.setCurrentIndex(index)
-
-    binding = DataBindingUtil.inflate(
-            LayoutInflater.from(activityContext),
-            LAYOUT_ID,
-            null,
-            false
-    )
-
-    binding.dialog = this
-
-    initRecyclerView(binding.recyclerView)
-
-    colorPair.applyTo(binding.addArticleTab)
-    colorPair.applyTo(binding.addPdfTab)
-    colorPair.applyTo(binding.addEditorTab)
-    colorPair.applyTo(binding.addTab)
-    colorPair.applyTo(binding.clearTabs)
-
-    binding.recyclerView.layoutManager?.scrollToPosition(index - 1)
-    binding.recyclerView.scheduleLayoutAnimation()
-    if (firstLaunch) {
-        Toaster.snackShort(
-                binding.snackbarParent,
-                R.string.message_tutorial_remove_tab,
-                colorPair
-        )
-        firstLaunch = false
-    }
-    lastTabId = callback?.currentTabIdFromTabList() ?: ""
-
-    BackgroundImageLoaderUseCase().invoke(
-            binding.background,
-            PreferenceApplier(activityContext).backgroundImagePath
-    )
-     */
 }
 
 private fun closeOnly(
