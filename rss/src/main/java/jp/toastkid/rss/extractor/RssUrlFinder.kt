@@ -7,7 +7,6 @@
  */
 package jp.toastkid.rss.extractor
 
-import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -81,8 +80,4 @@ class RssUrlFinder(
         contentViewModel.snackShort(R.string.message_failure_extracting_rss)
     }
 
-    private fun obtainContentViewModel(context: Context) =
-        (context as? ViewModelStoreOwner)?.let {
-            contentViewModelFactory(it)
-        }
 }
