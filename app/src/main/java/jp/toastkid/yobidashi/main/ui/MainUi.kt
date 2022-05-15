@@ -406,8 +406,6 @@ internal fun Content() {
         browserViewModel?.switchWebViewToCurrent(tabs.currentTabId())
     })
 
-    val height = activity.resources.displayMetrics.heightPixels
-
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -671,10 +669,10 @@ internal fun Content() {
                     composable(
                         "tab/web/current",
                         enterTransition = {
-                            slideInVertically(initialOffsetY = { height })
+                            slideInVertically(initialOffsetY = { it })
                         },
                         exitTransition = {
-                            slideOutVertically(targetOffsetY = { height })
+                            slideOutVertically(targetOffsetY = { it })
                         }
                     ) {
                         val currentTab = tabs.currentTab() as? WebTab ?: return@composable
