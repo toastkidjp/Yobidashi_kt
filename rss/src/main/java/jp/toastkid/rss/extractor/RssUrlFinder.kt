@@ -51,8 +51,6 @@ class RssUrlFinder(
             return
         }
 
-        val colorPair = preferenceApplier.colorPair()
-
         if (urlValidator(currentUrl)) {
             preferenceApplier.saveNewRssReaderTargets(currentUrl)
             contentViewModel.snackShort("Added $currentUrl")
