@@ -34,6 +34,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Surface
 import androidx.compose.material.SwipeableState
@@ -49,6 +50,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -73,10 +75,10 @@ import jp.toastkid.yobidashi.tab.TabThumbnails
 import jp.toastkid.yobidashi.tab.model.Tab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.io.File
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun TabListUi(tabAdapter: TabAdapter) {
     val context = LocalContext.current as? ComponentActivity ?: return
@@ -111,104 +113,32 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                 val currentIndex = tabAdapter.index()
 
                 itemsIndexed(tabs) { position, tab ->
-                    val visibilityState = remember { mutableStateOf(true) }
-                    val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
-                        if (it == 1) {
-                            visibilityState.value = false
+                    val backgroundColor = if (currentIndex == position)
+                        Color(
+                            ColorUtils.setAlphaComponent(
+                                MaterialTheme.colors.primary.toArgb(),
+                                128
+                            )
+                        )
+                    else
+                        Color.Transparent
+
+                    TabItem(
+                        tab,
+                        tabThumbnails.assignNewFile(tab.thumbnailPath()),
+                        backgroundColor,
+                        anchors,
+                        onClick = {
+                            tabAdapter.replace(tab)
+                            if (initialIndex != tabAdapter.currentTabId()) {
+                                contentViewModel.replaceToCurrentTab()
+                            }
+                            closeOnly(coroutineScope, contentViewModel)
+                        },
+                        onClose = {
                             tabAdapter.closeTab(tabAdapter.indexOf(tab))
                         }
-                        true
-                    })
-
-                    AnimatedVisibility(
-                        visibilityState.value,
-                        enter = slideInVertically(initialOffsetY = { it }),
-                        exit = shrinkHorizontally(shrinkTowards = Alignment.Start)
-                    ) {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .width(dimensionResource(id = R.dimen.tab_list_item_width))
-                                .height(dimensionResource(R.dimen.tab_list_item_height))
-                                .clickable {
-                                    tabAdapter.replace(tab)
-                                    if (initialIndex != tabAdapter.currentTabId()) {
-                                        contentViewModel.replaceToCurrentTab()
-                                    }
-                                    closeOnly(coroutineScope, contentViewModel)
-                                }
-                                .background(
-                                    if (currentIndex == position)
-                                        Color(
-                                            ColorUtils.setAlphaComponent(
-                                                colorPair.bgColor(),
-                                                128
-                                            )
-                                        )
-                                    else
-                                        Color.Transparent
-                                )
-                                .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
-                                .swipeable(
-                                    swipeableState,
-                                    anchors = anchors,
-                                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                                    resistance = ResistanceConfig(0.5f),
-                                    orientation = Orientation.Vertical
-                                )
-                        ) {
-                            Surface(
-                                elevation = 4.dp,
-                                modifier = Modifier
-                                    .width(112.dp)
-                                    .height(152.dp)
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .width(112.dp)
-                                        .height(152.dp)
-                                        .padding(4.dp)
-                                        .align(Alignment.BottomCenter)
-                                ) {
-                                    AsyncImage(
-                                        model = tabThumbnails.assignNewFile(tab.thumbnailPath()),
-                                        contentDescription = tab.title(),
-                                        contentScale = ContentScale.FillHeight,
-                                        placeholder = painterResource(id = R.drawable.ic_yobidashi),
-                                        modifier = Modifier
-                                            .padding(top = 4.dp)
-                                            .align(Alignment.TopCenter)
-                                    )
-                                    Text(
-                                        text = tab.title(),
-                                        color = Color(colorPair.fontColor()),
-                                        maxLines = 2,
-                                        fontSize = 14.sp,
-                                        overflow = TextOverflow.Ellipsis,
-                                        modifier = Modifier
-                                            .align(Alignment.BottomCenter)
-                                            .background(Color(colorPair.bgColor()))
-                                            .padding(4.dp)
-                                    )
-                                }
-                            }
-
-                            Icon(
-                                painterResource(id = R.drawable.ic_remove_circle),
-                                tint = Color(colorPair.fontColor()),
-                                contentDescription = stringResource(id = R.string.delete),
-                                modifier = Modifier
-                                    .align(Alignment.TopEnd)
-                                    .padding(4.dp)
-                                    .clickable {
-                                        val removeIndex =
-                                            tabAdapter?.indexOf(tab) ?: return@clickable
-                                        tabAdapter.closeTab(removeIndex)
-                                        refresh(tabAdapter, tabs)
-                                    }
-                            )
-                        }
-                    }
+                    )
                 }
             }
 
@@ -329,6 +259,87 @@ private fun closeOnly(
 ) {
     coroutineScope.launch {
         contentViewModel.hideBottomSheet()
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun TabItem(
+    tab: Tab,
+    thumbnail: File,
+    backgroundColor: Color,
+    anchors: Map<Float, Int>,
+    onClick: (Tab) -> Unit,
+    onClose: (Tab) -> Unit
+) {
+    val visibilityState = remember { mutableStateOf(true) }
+    val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
+        if (it == 1) {
+            visibilityState.value = false
+            onClose(tab)
+        }
+        true
+    })
+
+    AnimatedVisibility(
+        visibilityState.value,
+        enter = slideInVertically(initialOffsetY = { it }),
+        exit = shrinkHorizontally(shrinkTowards = Alignment.Start)
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .width(dimensionResource(id = R.dimen.tab_list_item_width))
+                .height(dimensionResource(R.dimen.tab_list_item_height))
+                .clickable {
+                    onClick(tab)
+                }
+                .background(backgroundColor)
+                .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
+                .swipeable(
+                    swipeableState,
+                    anchors = anchors,
+                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                    resistance = ResistanceConfig(0.5f),
+                    orientation = Orientation.Vertical
+                )
+        ) {
+            Surface(
+                elevation = 4.dp,
+                modifier = Modifier
+                    .width(112.dp)
+                    .height(152.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(112.dp)
+                        .height(152.dp)
+                        .padding(4.dp)
+                        .align(Alignment.BottomCenter)
+                ) {
+                    AsyncImage(
+                        model = thumbnail,
+                        contentDescription = tab.title(),
+                        contentScale = ContentScale.FillHeight,
+                        placeholder = painterResource(id = R.drawable.ic_yobidashi),
+                        modifier = Modifier
+                            .padding(top = 4.dp)
+                            .align(Alignment.TopCenter)
+                    )
+                    Text(
+                        text = tab.title(),
+                        color = MaterialTheme.colors.onPrimary,
+                        maxLines = 2,
+                        fontSize = 14.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .background(MaterialTheme.colors.primary)
+                            .padding(4.dp)
+                    )
+                }
+            }
+        }
     }
 }
 
