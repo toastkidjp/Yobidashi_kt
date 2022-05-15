@@ -275,9 +275,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
                     PreferenceApplier(activityContext),
                     contentViewModel
                 )
-                    .invoke(browserModule.currentUrl()) {
-                        null//TODO
-                    }
+                    .invoke(browserModule.currentUrl())
             }),
             OptionMenu(titleId = R.string.title_replace_home, action = {
                 browserModule.currentUrl()?.let {

@@ -8,7 +8,6 @@
 package jp.toastkid.rss.extractor
 
 import android.content.Context
-import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -44,8 +43,7 @@ class RssUrlFinder(
 
 
     operator fun invoke(
-        currentUrl: String?,
-        snackbarParentSupplier: () -> View?
+        currentUrl: String?
     ) {
         if (currentUrl.isNullOrBlank()) {
             return
