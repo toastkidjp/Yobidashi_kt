@@ -1068,6 +1068,7 @@ private fun showSnackbar(
     }
 
     CoroutineScope(Dispatchers.Main).launch {
+        snackbarHostState.currentSnackbarData?.dismiss()
         val snackbarResult = snackbarHostState.showSnackbar(
             snackbarEvent.message,
             snackbarEvent.actionLabel ?: "",
