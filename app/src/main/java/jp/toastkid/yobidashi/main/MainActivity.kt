@@ -23,14 +23,8 @@ import jp.toastkid.yobidashi.main.ui.Content
 
 class MainActivity : ComponentActivity() {
 
-    private var browserViewModel: BrowserViewModel? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val activityViewModelProvider = ViewModelProvider(this)
-
-        browserViewModel = activityViewModelProvider.get(BrowserViewModel::class.java)
 
         processShortcut(intent)
 
@@ -62,7 +56,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        ClippingUrlOpener()(this) { browserViewModel?.open(it) }
+
+        ClippingUrlOpener()(this) { ViewModelProvider(this).get(BrowserViewModel::class.java)?.open(it) }
     }
 
     override fun onPause() {
