@@ -29,8 +29,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -60,15 +58,8 @@ import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.search.trend.Trend
-import jp.toastkid.yobidashi.search.trend.TrendApi
 import jp.toastkid.yobidashi.search.url_suggestion.ItemDeletionUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.io.IOException
 
 @OptIn(
     ExperimentalComposeUiApi::class,
@@ -93,29 +84,7 @@ internal fun SearchContentsUi(
     val fullContentUri =
         "https://trends.google.co.jp/trends/trendingsearches/realtime"
 
-    val trendApi = TrendApi()
-
     val keyboardController = LocalSoftwareKeyboardController.current
-
-    LaunchedEffect(
-        key1 = "",
-        block = {
-            CoroutineScope(Dispatchers.IO).launch {
-                val trendItems = try {
-                    trendApi()
-                } catch (e: IOException) {
-                    Timber.e(e)
-                    null
-                }
-                viewModel.trends.clear()
-                val taken = trendItems?.take(10)
-                if (taken.isNullOrEmpty()) {
-                    return@launch
-                }
-                viewModel.trends.addAll(taken)
-            }
-        }
-    )
 
     val contentViewModel = viewModel(
         ContentViewModel::class.java,

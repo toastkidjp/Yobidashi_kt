@@ -73,11 +73,16 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
+import jp.toastkid.yobidashi.search.trend.TrendApi
 import jp.toastkid.yobidashi.search.url_suggestion.QueryUseCase
 import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.IOException
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -284,6 +289,21 @@ fun SearchInputUi(
         })
 
     LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
+        CoroutineScope(Dispatchers.IO).launch {
+            val trendItems = try {
+                TrendApi()()
+            } catch (e: IOException) {
+                Timber.e(e)
+                null
+            }
+            viewModel.trends.clear()
+            val taken = trendItems?.take(10)
+            if (taken.isNullOrEmpty()) {
+                return@launch
+            }
+            viewModel.trends.addAll(taken)
+        }
+
         queryingUseCase.withDebounce()
 
         val text = inputQuery ?: ""
