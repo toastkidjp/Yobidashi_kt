@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class QueryingUseCase(
     private val searchUiViewModel: SearchUiViewModel,
@@ -106,7 +105,7 @@ class QueryingUseCase(
                 .distinctUntilChanged()
                 .debounce(400)
                 .collect {
-                    withContext(mainDispatcher) { invoke(it) }
+                    invoke(it)
                 }
         }
     }
