@@ -79,12 +79,14 @@ import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
@@ -129,6 +131,21 @@ fun WebTabUi(uri: Uri, tabId: String) {
         val newTabId = it?.getContentIfNotHandled() ?: return@observe
         browserModule.switchWebViewToCurrent(newTabId)
         GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
+    })
+
+    val downloadPermissionRequestLauncher =
+        rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
+            if (it.first.not()) {
+                ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+                    .snackShort(R.string.message_requires_permission_storage)
+                return@rememberLauncherForActivityResult
+            }
+            val url = it.second ?: return@rememberLauncherForActivityResult
+            DownloadAction(activityContext).invoke(url)
+        }
+    browserViewModel?.download?.observe(lifecycleOwner, Observer {
+        val url = it?.getContentIfNotHandled() ?: return@Observer
+        downloadPermissionRequestLauncher.launch(url)
     })
 
     AndroidView(
