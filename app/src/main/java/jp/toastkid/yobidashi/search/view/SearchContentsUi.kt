@@ -81,9 +81,6 @@ internal fun SearchContentsUi(
 
     val itemDeletionUseCase = ItemDeletionUseCase(bookmarkRepository, viewHistoryRepository)
 
-    val fullContentUri =
-        "https://trends.google.co.jp/trends/trendingsearches/realtime"
-
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val contentViewModel = viewModel(
@@ -240,7 +237,7 @@ internal fun SearchContentsUi(
                     return@item
                 }
                 HeaderWithLink(R.string.hourly_trends, R.string.open) {
-                    viewModel?.search(fullContentUri)
+                    viewModel?.search("https://trends.google.co.jp/trends/trendingsearches/realtime")
                 }
             }
 
