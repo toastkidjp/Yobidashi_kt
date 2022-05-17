@@ -16,15 +16,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -88,21 +87,21 @@ internal fun SearchContentsUi(
         LocalContext.current as ViewModelStoreOwner
     )
 
-    LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(top = 8.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
         if (preferenceApplier.isEnableUrlModule()) {
-            item {
-                UrlCard(currentTitle, currentUrl, { viewModel.putQuery(it) })
-            }
+            UrlCard(currentTitle, currentUrl, { viewModel.putQuery(it) })
         }
 
         if (viewModel.urlItems.isNotEmpty()) {
-            item {
-                HeaderWithLink(R.string.title_view_history, R.string.link_open_history) {
-                    contentViewModel.nextRoute("web/history/list")
-                }
+            HeaderWithLink(R.string.title_view_history, R.string.link_open_history) {
+                contentViewModel.nextRoute("web/history/list")
             }
 
-            items(viewModel.urlItems, { it.itemId() }) { urlItem ->
+            viewModel.urlItems.forEach { urlItem ->
                 BindItemContent(
                     urlItem,
                     onClick = {
@@ -122,17 +121,15 @@ internal fun SearchContentsUi(
         }
 
         if (viewModel.favoriteSearchItems.isNotEmpty()) {
-            item {
-                HeaderWithLink(
-                    R.string.title_favorite_search,
-                    R.string.open,
-                    {
-                        viewModel.openFavoriteSearch()
-                    }
-                )
-            }
+            HeaderWithLink(
+                R.string.title_favorite_search,
+                R.string.open,
+                {
+                    viewModel.openFavoriteSearch()
+                }
+            )
 
-            items(viewModel.favoriteSearchItems.take(5)) { favoriteSearch ->
+            viewModel.favoriteSearchItems.take(5).forEach { favoriteSearch ->
                 SearchItemContent(
                     favoriteSearch.query,
                     favoriteSearch.category,
@@ -153,17 +150,15 @@ internal fun SearchContentsUi(
         }
 
         if (viewModel.searchHistories.isNotEmpty()) {
-            item {
-                HeaderWithLink(
-                    R.string.title_search_history,
-                    R.string.open,
-                    {
-                        viewModel.openSearchHistory()
-                    }
-                )
-            }
+            HeaderWithLink(
+                R.string.title_search_history,
+                R.string.open,
+                {
+                    viewModel.openSearchHistory()
+                }
+            )
 
-            items(viewModel.searchHistories.take(5)) { searchHistory ->
+            viewModel.searchHistories.take(5).forEach { searchHistory ->
                 SearchItemContent(
                     searchHistory.query,
                     searchHistory.category,
@@ -185,64 +180,54 @@ internal fun SearchContentsUi(
         }
 
         if (viewModel.suggestions.isNotEmpty()) {
-            item {
-                Header(R.string.title_search_suggestion)
-            }
+            Header(R.string.title_search_suggestion)
 
-            item {
-                FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
-                    viewModel.suggestions.take(10).forEach {
-                        ItemCard {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.combinedClickable(
-                                    true,
-                                    onClick = {
-                                        keyboardController?.hide()
-                                        viewModel?.putQuery(it)
-                                        viewModel?.search(it)
-                                    },
-                                    onLongClick = {
-                                        viewModel?.searchOnBackground(it)
-                                    }
-                                )
-                            ) {
-                                Text(
-                                    text = it,
-                                    fontSize = 16.sp,
-                                    modifier = Modifier
-                                        .wrapContentWidth()
-                                )
-                                Text(
-                                    text = stringResource(id = R.string.plus),
-                                    color = colorResource(id = R.color.white),
-                                    fontSize = 20.sp,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .width(36.dp)
-                                        .height(32.dp)
-                                        .background(colorResource(id = R.color.pre4_ripple))
-                                        .clickable { viewModel?.putQuery("$it ") }
-                                )
-                            }
+            FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
+                viewModel.suggestions.take(10).forEach {
+                    ItemCard {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.combinedClickable(
+                                true,
+                                onClick = {
+                                    keyboardController?.hide()
+                                    viewModel?.putQuery(it)
+                                    viewModel?.search(it)
+                                },
+                                onLongClick = {
+                                    viewModel?.searchOnBackground(it)
+                                }
+                            )
+                        ) {
+                            Text(
+                                text = it,
+                                fontSize = 16.sp,
+                                modifier = Modifier
+                                    .wrapContentWidth()
+                            )
+                            Text(
+                                text = stringResource(id = R.string.plus),
+                                color = colorResource(id = R.color.white),
+                                fontSize = 20.sp,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .width(36.dp)
+                                    .height(32.dp)
+                                    .background(colorResource(id = R.color.pre4_ripple))
+                                    .clickable { viewModel?.putQuery("$it ") }
+                            )
                         }
                     }
                 }
             }
         }
 
-        if (preferenceApplier.isEnableTrendModule()) {
-            item {
-                if (viewModel.trends.isEmpty()) {
-                    return@item
-                }
-                HeaderWithLink(R.string.hourly_trends, R.string.open) {
-                    viewModel?.search("https://trends.google.co.jp/trends/trendingsearches/realtime")
-                }
+        if (preferenceApplier.isEnableTrendModule() && viewModel.trends.isNotEmpty()) {
+            HeaderWithLink(R.string.hourly_trends, R.string.open) {
+                viewModel?.search("https://trends.google.co.jp/trends/trendingsearches/realtime")
             }
 
-            item {
-                FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
+            FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
                     viewModel.trends.take(10).forEach {
                         ItemCard {
                             Row(
@@ -287,7 +272,7 @@ internal fun SearchContentsUi(
                         }
                     }
                 }
-            }
+
         }
     }
 }
