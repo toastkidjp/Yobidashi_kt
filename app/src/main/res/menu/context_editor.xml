@@ -9,7 +9,6 @@
         android:id="@+id/context_edit_insert_as_plain"
         android:title="@string/insert_as_plain"
         android:orderInCategory="100"
-        app:showAsAction="always"
         android:icon="@drawable/ic_insert_plain"
         />
 
@@ -17,7 +16,6 @@
         android:id="@+id/context_edit_paste_as_quotation"
         android:title="@string/paste_as_quotation"
         android:orderInCategory="100"
-        app:showAsAction="always"
         android:icon="@drawable/ic_quote"
         tools:ignore="AlwaysShowAction"
         />
@@ -26,7 +24,6 @@
         android:id="@+id/context_edit_duplicate_current_line"
         android:title="@string/duplicate_current_line"
         android:orderInCategory="100"
-        app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
         />
 
@@ -34,7 +31,6 @@
         android:id="@+id/context_edit_select_current_line"
         android:title="@string/select_current_line"
         android:orderInCategory="100"
-        app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
         />
 
@@ -42,7 +38,6 @@
         android:id="@+id/context_edit_horizontal_rule"
         android:title="@string/horizontal_rule"
         android:orderInCategory="100"
-        app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
         />
 
@@ -50,7 +45,6 @@
         android:id="@+id/context_edit_delete_line"
         android:title="@string/delete_current_line"
         android:orderInCategory="100"
-        app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
         />
 

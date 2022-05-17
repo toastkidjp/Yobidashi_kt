@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.browser.view
 
 import android.Manifest
 import android.net.Uri
-import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -89,7 +88,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun WebTabUi(uri: Uri, tabId: String? = null) {
+fun WebTabUi(uri: Uri, tabId: String) {
 /*TODO swipe refresher
         binding?.swipeRefresher?.let {
             it.setOnRefreshListener { reload() }
@@ -100,21 +99,29 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
     val webViewContainer = remember { FrameLayout(activityContext) }
+
     val browserModule = BrowserModule(activityContext, webViewContainer)
+
+    val browserHeaderViewModel =
+        viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
+
+    val currentWebView = remember { mutableStateOf(GlobalWebViewPool.getLatest()) }
+    val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    browserViewModel.switchWebViewToCurrent.observe(lifecycleOwner, {
+        val newTabId = it?.getContentIfNotHandled() ?: return@observe
+        browserModule.switchWebViewToCurrent(newTabId)
+        currentWebView.value = GlobalWebViewPool.getLatest()
+    })
 
     val baseOffset = -100.dp.value.toInt()
 
-    val currentWebView = remember { mutableStateOf<WebView?>(null) }
-
     AndroidView(
         factory = {
-            webViewContainer
-        },
-        update = {
-            tabId?.let {
-                browserModule.loadWithNewTab(uri, tabId)
-            }
+            browserModule.loadWithNewTab(uri, tabId)
             currentWebView.value = GlobalWebViewPool.getLatest()
+            webViewContainer
         },
         modifier = Modifier
             .scrollable(
@@ -131,7 +138,6 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
         ReaderModeUi(browserModule.currentTitle(), readerModeText)
     }
 
-    val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
     if (browserViewModel.openErrorDialog.value) {
         ConfirmDialog(
             browserViewModel.openErrorDialog,
@@ -153,24 +159,6 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     }
 
     initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }
-
-    val browserHeaderViewModel =
-        viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    browserViewModel
-        .loadWithNewTab
-        .observe(lifecycleOwner, {
-            val pair = it?.getContentIfNotHandled() ?: return@observe
-            browserModule.loadWithNewTab(pair.first, pair.second)
-            currentWebView.value = GlobalWebViewPool.getLatest()
-        })
-
-    browserViewModel.switchWebViewToCurrent.observe(lifecycleOwner, {
-        val newTabId = it?.getContentIfNotHandled() ?: return@observe
-        browserModule.switchWebViewToCurrent(newTabId)
-        currentWebView.value = GlobalWebViewPool.getLatest()
-    })
 
     BackHandler(browserHeaderViewModel.enableBackPress.value) {
         if (readerModeText.value.isNotBlank()) {
@@ -203,14 +191,17 @@ fun WebTabUi(uri: Uri, tabId: String? = null) {
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
     pageSearcherViewModel.also { viewModel ->
         viewModel.find.observe(lifecycleOwner, Observer {
-            browserModule.find(it)
+            val word = it.getContentIfNotHandled() ?: return@Observer
+            browserModule.find(word)
         })
 
         viewModel.upward.observe(lifecycleOwner, Observer {
+            it.getContentIfNotHandled() ?: return@Observer
             browserModule.findUp()
         })
 
         viewModel.downward.observe(lifecycleOwner, Observer {
+            it.getContentIfNotHandled() ?: return@Observer
             browserModule.findDown()
         })
 

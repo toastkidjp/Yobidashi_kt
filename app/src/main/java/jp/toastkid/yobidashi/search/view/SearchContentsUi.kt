@@ -37,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -54,7 +53,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
@@ -119,11 +117,7 @@ internal fun SearchContentsUi(
         }
     )
 
-    LazyColumn(
-        contentPadding = PaddingValues(top = 8.dp),
-        modifier = Modifier
-            .nestedScroll(rememberViewInteropNestedScrollConnection())
-    ) {
+    LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
         if (preferenceApplier.isEnableUrlModule()) {
             item {
                 UrlCard(currentTitle, currentUrl, { viewModel.putQuery(it) })
@@ -393,7 +387,9 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
 @Composable
 private fun Header(headerTextId: Int) {
     Surface(
-        elevation = 4.dp
+        elevation = 4.dp,
+        modifier = Modifier
+            .padding(start = 8.dp, end = 8.dp)
     ) {
         Text(
             text = stringResource(id = headerTextId),
@@ -408,7 +404,9 @@ private fun Header(headerTextId: Int) {
 @Composable
 private fun HeaderWithLink(headerTextId: Int, linkTextId: Int, onLinkClick: () -> Unit) {
     Surface(
-        elevation = 4.dp
+        elevation = 4.dp,
+        modifier = Modifier
+            .padding(start = 8.dp, end = 8.dp)
     ) {
         Box(
             modifier = Modifier

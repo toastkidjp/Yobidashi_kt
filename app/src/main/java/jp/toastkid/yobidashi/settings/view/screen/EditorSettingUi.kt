@@ -34,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -49,7 +48,6 @@ import com.godaddy.android.colorpicker.ClassicColorPicker
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.EditorFontSize
@@ -89,9 +87,7 @@ internal fun EditorSettingUi() {
         remember { mutableStateOf(false) }
 
     LazyColumn(
-        modifier = Modifier
-            .nestedScroll(rememberViewInteropNestedScrollConnection())
-            .padding(start = 8.dp, end = 8.dp)
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
     ) {
         item {
             ColorPaletteUi(

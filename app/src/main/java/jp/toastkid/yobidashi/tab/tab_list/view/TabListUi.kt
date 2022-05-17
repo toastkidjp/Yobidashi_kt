@@ -37,8 +37,10 @@ import androidx.compose.material.SwipeableState
 import androidx.compose.material.Text
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,31 +61,37 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.TabThumbnails
 import jp.toastkid.yobidashi.tab.model.Tab
-import jp.toastkid.yobidashi.tab.tab_list.Callback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun TabListUi() {
+internal fun TabListUi(tabAdapter: TabAdapter) {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val callback = context as? Callback ?: return
     val preferenceApplier = PreferenceApplier(context)
     val colorPair = preferenceApplier.colorPair()
     val tabThumbnails = TabThumbnails.with(LocalContext.current)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
-    val currentTabId = remember { contentViewModel.currentTabId }
-    val state = rememberLazyListState(max(0, callback?.tabIndexFromTabList() - 1))
+    val tabListViewModel = viewModel(TabListViewModel::class.java, context)
+    val coroutineScope = rememberCoroutineScope()
+
+    val state = rememberLazyListState(max(0, tabAdapter.index() - 1))
 
     val tabs = remember { mutableStateListOf<Tab>() }
-    refresh(callback, tabs)
+    refresh(tabAdapter, tabs)
 
     val sizePx = with(LocalDensity.current) { dimensionResource(R.dimen.tab_list_item_height).toPx() }
     val anchors = mapOf(0f to 0, -sizePx to 1)
+
+    val initialIndex = tabAdapter.currentTabId()
 
     Box {
         AsyncImage(
@@ -96,13 +104,13 @@ internal fun TabListUi() {
 
         Column() {
             LazyRow(state = state, contentPadding = PaddingValues(horizontal = 4.dp)) {
-                val currentIndex = callback?.tabIndexFromTabList()
+                val currentIndex = tabAdapter.index()
 
                 itemsIndexed(tabs) { position, tab ->
                     val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
                         if (it == 1) {
-                            callback.closeTabFromTabList(callback.tabIndexOfFromTabList(tab))
-                            refresh(callback, tabs)
+                            tabAdapter.closeTab(tabAdapter.indexOf(tab))
+                            refresh(tabAdapter, tabs)
                         }
                         true
                     })
@@ -112,9 +120,11 @@ internal fun TabListUi() {
                             .width(dimensionResource(id = R.dimen.tab_list_item_width))
                             .height(dimensionResource(R.dimen.tab_list_item_height))
                             .clickable {
-                                callback?.replaceTabFromTabList(tab)
-                                callback?.onCloseTabListDialogFragment(currentTabId.value)
-                                callback?.onCloseOnly()
+                                tabAdapter.replace(tab)
+                                if (initialIndex != tabAdapter.currentTabId()) {
+                                    contentViewModel.replaceToCurrentTab()
+                                }
+                                closeOnly(coroutineScope, contentViewModel)
                             }
                             .background(
                                 if (currentIndex == position)
@@ -176,9 +186,9 @@ internal fun TabListUi() {
                                 .padding(4.dp)
                                 .clickable {
                                     val removeIndex =
-                                        callback?.tabIndexOfFromTabList(tab) ?: return@clickable
-                                    callback?.closeTabFromTabList(removeIndex)
-                                    refresh(callback, tabs)
+                                        tabAdapter?.indexOf(tab) ?: return@clickable
+                                    tabAdapter.closeTab(removeIndex)
+                                    refresh(tabAdapter, tabs)
                                 }
                         )
                     }
@@ -190,7 +200,9 @@ internal fun TabListUi() {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
-                modifier = Modifier.padding(8.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
             ) {
                 TabActionFab(
                     R.drawable.ic_edit,
@@ -200,7 +212,7 @@ internal fun TabListUi() {
                     Modifier.padding(4.dp)
                 ) {
                     contentViewModel.openEditorTab()
-                    callback.onCloseOnly()
+                    closeOnly(coroutineScope, contentViewModel)
                 }
                 TabActionFab(
                     R.drawable.ic_pdf,
@@ -210,7 +222,7 @@ internal fun TabListUi() {
                     Modifier.padding(4.dp)
                 ) {
                     contentViewModel.openPdf()
-                    callback.onCloseOnly()
+                    closeOnly(coroutineScope, contentViewModel)
                 }
                 TabActionFab(
                     R.drawable.ic_article,
@@ -220,7 +232,7 @@ internal fun TabListUi() {
                     Modifier.padding(4.dp)
                 ) {
                     contentViewModel.openArticleList()
-                    callback.onCloseOnly()
+                    closeOnly(coroutineScope, contentViewModel)
                 }
                 val browserViewModel = viewModel(BrowserViewModel::class.java, context)
                 TabActionFab(
@@ -231,7 +243,7 @@ internal fun TabListUi() {
                     Modifier.padding(4.dp)
                 ) {
                     browserViewModel.open(preferenceApplier.homeUrl.toUri())
-                    callback.onCloseOnly()
+                    closeOnly(coroutineScope, contentViewModel)
                 }
                 TabActionFab(
                     R.drawable.ic_add_tab,
@@ -240,10 +252,16 @@ internal fun TabListUi() {
                     backgroundColor,
                     Modifier.padding(4.dp)
                 ) {
-                    callback.openNewTabFromTabList()
-                    callback.onCloseOnly()
+                    tabListViewModel.openNewTab()
+                    closeOnly(coroutineScope, contentViewModel)
                 }
             }
+        }
+    }
+
+    DisposableEffect(tabAdapter) {
+        onDispose {
+            tabAdapter.saveTabList()
         }
     }
 
@@ -288,6 +306,15 @@ internal fun TabListUi() {
      */
 }
 
+private fun closeOnly(
+    coroutineScope: CoroutineScope,
+    contentViewModel: ContentViewModel
+) {
+    coroutineScope.launch {
+        contentViewModel.hideBottomSheet()
+    }
+}
+
 @Composable
 private fun TabActionFab(
     iconId: Int,
@@ -310,11 +337,11 @@ private fun TabActionFab(
     }
 }
 
-private fun refresh(callback: Callback, tabs: SnapshotStateList<Tab>) {
+private fun refresh(callback: TabAdapter, tabs: SnapshotStateList<Tab>) {
     tabs.clear()
 
-    (0 until (callback?.getTabAdapterSizeFromTabList() ?: 0)).forEach {
-        val tab = callback?.getTabByIndexFromTabList(it) ?: return@forEach
+    (0 until callback.size()).forEach {
+        val tab = callback.getTabByIndex(it) ?: return@forEach
         tabs.add(tab)
     }
 }

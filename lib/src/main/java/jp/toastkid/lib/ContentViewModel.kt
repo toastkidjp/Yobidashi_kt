@@ -202,4 +202,12 @@ class ContentViewModel : ViewModel() {
         fabScale.value = 1f
     }
 
+    private val _replaceToCurrentTab = MutableLiveData<Event<Unit>>()
+
+    val replaceToCurrentTab: LiveData<Event<Unit>> = _replaceToCurrentTab
+
+    fun replaceToCurrentTab() {
+        _replaceToCurrentTab.postValue(Event(Unit))
+    }
+
 }

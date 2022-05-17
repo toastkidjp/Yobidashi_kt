@@ -6,20 +6,17 @@
         android:id="@+id/context_edit_url_open_new"
         android:title="Open"
         android:orderInCategory="100"
-        app:showAsAction="always"
         />
     <item
         android:id="@+id/context_edit_url_open_background"
         android:title="Open background"
         android:orderInCategory="100"
-        app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
         />
     <item
         android:id="@+id/context_edit_url_preview"
         android:title="Preview"
         android:orderInCategory="100"
-        app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
         />
 </menu>

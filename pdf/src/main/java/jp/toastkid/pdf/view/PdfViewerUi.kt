@@ -31,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +38,6 @@ import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.pdf.PdfImageFactory
 import kotlinx.coroutines.CoroutineScope
@@ -74,10 +72,7 @@ private fun PdfPageList(pdfRenderer: PdfRenderer, listState: LazyListState) {
     val pdfImageFactory = PdfImageFactory()
 
     MaterialTheme {
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
-        ) {
+        LazyColumn(state = listState) {
             val max = pdfRenderer.pageCount
             items(max) {
                 Surface(

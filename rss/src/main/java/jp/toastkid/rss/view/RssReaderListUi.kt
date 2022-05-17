@@ -31,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -43,7 +42,6 @@ import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.rss.R
 import jp.toastkid.rss.api.RssReaderApi
 import jp.toastkid.rss.model.Item
@@ -90,10 +88,7 @@ private fun RssReaderList(items: List<Item>) {
     val listState = rememberLazyListState()
 
     MaterialTheme {
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
-        ) {
+        LazyColumn(state = listState) {
             items(items) {
                 Surface(
                     modifier = Modifier

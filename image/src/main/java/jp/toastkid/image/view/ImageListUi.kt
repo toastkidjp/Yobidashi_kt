@@ -33,7 +33,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -51,7 +50,6 @@ import jp.toastkid.image.list.ImageLoaderUseCase
 import jp.toastkid.image.preview.ImagePreviewUi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -109,7 +107,7 @@ fun ImageListTopUi() {
     (context as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(PageSearcherViewModel::class.java)
             .also { viewModel ->
-                val keyword = viewModel.find.observeAsState().value
+                val keyword = viewModel.find.observeAsState().value?.getContentIfNotHandled()
                 if (keyword.isNullOrBlank()) {
                     return@also
                 }
@@ -168,8 +166,7 @@ internal fun ImageListUi(
         LazyColumn(
             state = listState,
             modifier = Modifier
-                .nestedScroll(rememberViewInteropNestedScrollConnection())
-                .padding(start = 16.dp, end = 16.dp)
+                .padding(horizontal = 8.dp)
                 .background(Color.Transparent)
         ) {
             items(chunked) { itemRow ->
