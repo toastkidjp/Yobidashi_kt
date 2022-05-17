@@ -83,7 +83,6 @@ import kotlin.math.roundToInt
 internal fun TabListUi(tabAdapter: TabAdapter) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
-    val colorPair = preferenceApplier.colorPair()
     val tabThumbnails = TabThumbnails.with(LocalContext.current)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val tabListViewModel = viewModel(TabListViewModel::class.java, context)
