@@ -99,21 +99,3 @@ private fun SwitchContentWithTabIndex(selectedIndex: MutableState<Int>) {
         else -> DisplaySettingUi()
     }
 }
-
-/*
-TODO
-override fun onDetach() {
-    activity?.let {
-        ViewModelProvider(it).get(ContentViewModel::class.java).refresh()
-    }
-    super.onDetach()
-}
-
-fun setFrom(javaClass: Class<Fragment>?) {
-    if (arguments == null) {
-        arguments = Bundle()
-    }
-
-    InitialIndexSettingUseCase().put(arguments, javaClass)
-}
-*/
