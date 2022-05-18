@@ -228,50 +228,50 @@ internal fun SearchContentsUi(
             }
 
             FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
-                    viewModel.trends.take(10).forEach {
-                        ItemCard {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.combinedClickable(
-                                    true,
-                                    onClick = {
-                                        keyboardController?.hide()
-                                        viewModel?.search(it.link)
-                                    },
-                                    onLongClick = {
-                                        viewModel?.searchOnBackground(it.link)
-                                    }
-                                )
-                            ) {
-                                AsyncImage(
-                                    model = it.image,
-                                    contentDescription = it.title,
-                                    modifier = Modifier.width(40.dp)
-                                )
-                                Text(
-                                    text = it.title,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    fontSize = 16.sp,
-                                    modifier = Modifier
-                                        .wrapContentWidth()
-                                        .padding(start = 4.dp)
-                                )
-                                Text(
-                                    text = stringResource(id = R.string.plus),
-                                    color = colorResource(id = R.color.white),
-                                    fontSize = 20.sp,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .width(36.dp)
-                                        .height(32.dp)
-                                        .background(colorResource(id = R.color.pre4_ripple))
-                                        .clickable { viewModel?.putQuery("${it.title} ") }
-                                )
-                            }
+                viewModel.trends.take(10).forEach {
+                    ItemCard {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.combinedClickable(
+                                true,
+                                onClick = {
+                                    keyboardController?.hide()
+                                    viewModel?.search(it.link)
+                                },
+                                onLongClick = {
+                                    viewModel?.searchOnBackground(it.link)
+                                }
+                            )
+                        ) {
+                            AsyncImage(
+                                model = it.image,
+                                contentDescription = it.title,
+                                modifier = Modifier.width(40.dp)
+                            )
+                            Text(
+                                text = it.title,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                fontSize = 16.sp,
+                                modifier = Modifier
+                                    .wrapContentWidth()
+                                    .padding(start = 4.dp)
+                            )
+                            Text(
+                                text = stringResource(id = R.string.plus),
+                                color = colorResource(id = R.color.white),
+                                fontSize = 20.sp,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .width(36.dp)
+                                    .height(32.dp)
+                                    .background(colorResource(id = R.color.pre4_ripple))
+                                    .clickable { viewModel?.putQuery("${it.title} ") }
+                            )
                         }
                     }
                 }
+            }
 
         }
     }
