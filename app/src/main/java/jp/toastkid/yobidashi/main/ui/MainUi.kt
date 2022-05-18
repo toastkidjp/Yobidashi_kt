@@ -190,15 +190,15 @@ internal fun Content() {
     navigationHostController.enableOnBackPressed(false)
 
     tabListViewModel
-        ?.openNewTab
-        ?.observe(activity, {
+        .openNewTab
+        .observe(activity, {
             it.getContentIfNotHandled() ?: return@observe
             openNewTab(preferenceApplier, tabs, navigationHostController)
         })
 
     tabListViewModel
-        ?.saveEditorTab
-        ?.observe(
+        .saveEditorTab
+        .observe(
             activity,
             Observer {
                 val currentTab = tabs.currentTab() as? EditorTab ?: return@Observer
