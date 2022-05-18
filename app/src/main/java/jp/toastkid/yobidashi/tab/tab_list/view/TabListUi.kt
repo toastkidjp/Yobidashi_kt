@@ -43,7 +43,6 @@ import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -97,6 +96,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
     val anchors = mapOf(0f to 0, -sizePx to 1)
 
     val initialIndex = tabAdapter.currentTabId()
+    val deletedTabIds = remember { mutableStateListOf<String>() }
 
     Box {
         AsyncImage(
@@ -127,6 +127,9 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                         tabThumbnails.assignNewFile(tab.thumbnailPath()),
                         backgroundColor,
                         anchors,
+                        visibility = {
+                            deletedTabIds.contains(it.id()).not()
+                        },
                         onClick = {
                             tabAdapter.replace(tab)
                             if (initialIndex != tabAdapter.currentTabId()) {
@@ -135,6 +138,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                             closeOnly(coroutineScope, contentViewModel)
                         },
                         onClose = {
+                            deletedTabIds.add(tab.id())
                             tabAdapter.closeTab(tabAdapter.indexOf(tab))
                         }
                     )
@@ -228,20 +232,19 @@ private fun TabItem(
     thumbnail: File,
     backgroundColor: Color,
     anchors: Map<Float, Int>,
+    visibility: (Tab) -> Boolean,
     onClick: (Tab) -> Unit,
     onClose: (Tab) -> Unit
 ) {
-    val visibilityState = remember { mutableStateOf(true) }
     val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
         if (it == 1) {
-            visibilityState.value = false
             onClose(tab)
         }
         true
     })
 
     AnimatedVisibility(
-        visibilityState.value,
+        visibility(tab),
         enter = slideInVertically(initialOffsetY = { it }),
         exit = shrinkHorizontally(shrinkTowards = Alignment.Start)
     ) {
