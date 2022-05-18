@@ -36,7 +36,6 @@ class QueryingUseCase(
     private val suggestionApi: SuggestionApi = SuggestionApi(),
     private val channel: Channel<String> = Channel(),
     private val cache: LruCache<String, List<String>> = LruCache<String, List<String>>(30),
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
