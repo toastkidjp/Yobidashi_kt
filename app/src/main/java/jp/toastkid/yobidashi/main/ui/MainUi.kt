@@ -215,7 +215,7 @@ internal fun Content() {
                 preferenceApplier,
                 {
                     tabs.openNewWebTab(it.toString())
-                    contentViewModel?.replaceToCurrentTab()
+                    contentViewModel.replaceToCurrentTab()
                 }
             ).invoke(query)
         })
