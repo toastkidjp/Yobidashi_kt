@@ -175,7 +175,7 @@ internal fun DisplaySettingUi() {
                             Box(Modifier.clickable {
                                 preferenceApplier.backgroundImagePath = imageFile.path
                                 contentViewModel
-                                    ?.snackShort(R.string.message_change_background_image)
+                                    .snackShort(R.string.message_change_background_image)
                             }) {
                                 Column() {
                                     AsyncImage(
