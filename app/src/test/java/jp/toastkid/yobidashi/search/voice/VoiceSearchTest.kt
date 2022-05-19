@@ -56,7 +56,7 @@ class VoiceSearchTest {
     //TODO fix it
     @Test
     fun testSuggestInstallGoogleApp() {
-        voiceSearch.suggestInstallGoogleApp(mockk(), mockk())
+        voiceSearch.suggestInstallGoogleApp(mockk())
     }
 
 }

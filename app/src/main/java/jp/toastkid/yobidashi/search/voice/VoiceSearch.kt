@@ -39,7 +39,7 @@ class VoiceSearch {
      * @param parent Snackbar parent
      * @param colorPair [ColorPair]
      */
-    fun suggestInstallGoogleApp(parent: View, colorPair: ColorPair) {
+    fun suggestInstallGoogleApp(parent: View) {
         val contentViewModel = (parent.context as? ViewModelStoreOwner)?.let {
             ViewModelProvider(it).get(ContentViewModel::class.java)
         }
