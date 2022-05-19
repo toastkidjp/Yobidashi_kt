@@ -129,7 +129,7 @@ internal fun PageInformationDialog(
                     ) {
                         Text(
                             text = stringResource(id = R.string.button_clip_cookie),
-                            color = MaterialTheme.colors.primary,
+                            color = MaterialTheme.colors.onSurface,
                             modifier = Modifier
                                 .clickable {
                                     openState.value = false
@@ -140,7 +140,7 @@ internal fun PageInformationDialog(
 
                         Text(
                             text = stringResource(id = R.string.close),
-                            color = MaterialTheme.colors.primary,
+                            color = MaterialTheme.colors.onSurface,
                             modifier = Modifier
                                 .clickable {
                                     openState.value = false
