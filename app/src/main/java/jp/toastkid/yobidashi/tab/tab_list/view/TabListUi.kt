@@ -296,6 +296,7 @@ private fun TabItem(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
                             .padding(4.dp)
                     )
