@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
-import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 
@@ -37,7 +36,6 @@ class VoiceSearch {
      * Show Google App install suggestion by [com.google.android.material.snackbar.Snackbar].
      *
      * @param parent Snackbar parent
-     * @param colorPair [ColorPair]
      */
     fun suggestInstallGoogleApp(parent: View) {
         val contentViewModel = (parent.context as? ViewModelStoreOwner)?.let {
