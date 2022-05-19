@@ -43,6 +43,7 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -405,7 +406,7 @@ private fun EditorDialog(
                 ) {
                     Text(
                         text = stringResource(id = R.string.cancel),
-                        color = colorResource(id = R.color.colorPrimary),
+                        color = MaterialTheme.colors.onSurface,
                         modifier = Modifier
                             .clickable {
                                 openEditor.value = false
@@ -415,7 +416,7 @@ private fun EditorDialog(
 
                     Text(
                         text = stringResource(id = R.string.ok),
-                        color = colorResource(id = R.color.colorPrimary),
+                        color = MaterialTheme.colors.onSurface,
                         modifier = Modifier
                             .clickable {
                                 openEditor.value = false
