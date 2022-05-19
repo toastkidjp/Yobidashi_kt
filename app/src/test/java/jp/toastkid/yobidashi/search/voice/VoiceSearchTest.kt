@@ -47,7 +47,7 @@ class VoiceSearchTest {
 
     @Test
     fun makeIntent() {
-        voiceSearch.makeIntent(context)
+        voiceSearch.makeIntent()
 
         verify(atLeast = 1) { anyConstructed<Intent>().putExtra(any(), any<String>()) }
         verify(atLeast = 1) { context.getPackageName() }
