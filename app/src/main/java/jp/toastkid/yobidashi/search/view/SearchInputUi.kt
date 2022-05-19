@@ -11,13 +11,10 @@ package jp.toastkid.yobidashi.search.view
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -110,21 +107,6 @@ fun SearchInputUi(
 
     val viewModel = viewModel(SearchUiViewModel::class.java)
 
-    val voiceSearchLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-            if (activityResult.resultCode != Activity.RESULT_OK) {
-                return@rememberLauncherForActivityResult
-            }
-            val result =
-                activityResult?.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            if (result == null || result.size == 0) {
-                return@rememberLauncherForActivityResult
-            }
-
-            viewModel.suggestions.clear()
-            viewModel.suggestions.addAll(result)
-        }
-
     val queryingUseCase = remember {
         val database = DatabaseFinder().invoke(context)
 
@@ -157,6 +139,21 @@ fun SearchInputUi(
                 val spinnerOpen = remember { mutableStateOf(false) }
 
                 val useVoice = remember { mutableStateOf(false) }
+
+                val voiceSearchLauncher =
+                    rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+                        if (activityResult.resultCode != Activity.RESULT_OK) {
+                            return@rememberLauncherForActivityResult
+                        }
+                        val result =
+                            activityResult?.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                        if (result == null || result.size == 0) {
+                            return@rememberLauncherForActivityResult
+                        }
+
+                        viewModel.suggestions.clear()
+                        viewModel.suggestions.addAll(result)
+                    }
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -226,7 +223,11 @@ fun SearchInputUi(
                                     keyboardController?.hide()
 
                                     if (useVoice.value) {
-                                        invokeVoiceSearch(voiceSearchLauncher)
+                                        try {
+                                            voiceSearchLauncher.launch(VoiceSearch().makeIntent())
+                                        } catch (e: ActivityNotFoundException) {
+                                            Timber.e(e)
+                                        }
                                         return@combinedClickable
                                     }
 
@@ -372,16 +373,6 @@ fun SearchInputUi(
             }
         )
     )
-}
-
-private fun invokeVoiceSearch(
-    voiceSearchLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
-) {
-    try {
-        voiceSearchLauncher.launch(VoiceSearch().makeIntent())
-    } catch (e: ActivityNotFoundException) {
-        Timber.e(e)
-    }
 }
 
 private inline fun search(
