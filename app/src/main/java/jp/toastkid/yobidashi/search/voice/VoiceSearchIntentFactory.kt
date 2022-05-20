@@ -10,7 +10,7 @@ import jp.toastkid.yobidashi.BuildConfig
  *
  * @author toastkidjp
  */
-class VoiceSearch {
+class VoiceSearchIntentFactory {
 
     /**
      * Make intent.
@@ -18,7 +18,7 @@ class VoiceSearch {
      * @param context
      * @return [Intent]
      */
-    fun makeIntent(): Intent =
+    operator fun invoke(): Intent =
             Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
                 it.putExtra(
                         RecognizerIntent.EXTRA_LANGUAGE_MODEL,

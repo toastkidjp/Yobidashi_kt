@@ -23,7 +23,7 @@ import org.junit.Test
 
 class VoiceSearchTest {
 
-    private lateinit var voiceSearch: VoiceSearch
+    private lateinit var voiceSearchIntentFactory: VoiceSearchIntentFactory
 
     @MockK
     private lateinit var context: Context
@@ -32,7 +32,7 @@ class VoiceSearchTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        voiceSearch = VoiceSearch()
+        voiceSearchIntentFactory = VoiceSearchIntentFactory()
 
         mockkConstructor(Intent::class)
         every { anyConstructed<Intent>().putExtra(any(), any<String>()) }.returns(mockk())
@@ -47,7 +47,7 @@ class VoiceSearchTest {
 
     @Test
     fun makeIntent() {
-        voiceSearch.makeIntent()
+        voiceSearchIntentFactory.invoke()
 
         verify(atLeast = 1) { anyConstructed<Intent>().putExtra(any(), any<String>()) }
         verify(atLeast = 1) { context.getPackageName() }
