@@ -20,7 +20,7 @@ class IconColorFinder(
 ) {
 
     operator fun invoke(): Int {
-        val nightMode = DisplayMode(configuration).isNightMode()
+        val nightMode = DisplayMode(configuration).isNightMode() || preferenceApplier.useDarkMode()
         return if (nightMode) preferenceApplier.fontColor else preferenceApplier.color
     }
 
