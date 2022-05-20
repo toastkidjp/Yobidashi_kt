@@ -85,7 +85,7 @@ internal fun EditorSettingUi() {
 
     Surface(
         elevation = 4.dp,
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)
     ) {
         LazyColumn() {
             item {
