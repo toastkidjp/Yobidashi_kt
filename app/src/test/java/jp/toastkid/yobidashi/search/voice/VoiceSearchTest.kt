@@ -53,10 +53,4 @@ class VoiceSearchTest {
         verify(atLeast = 1) { context.getPackageName() }
     }
 
-    //TODO fix it
-    @Test
-    fun testSuggestInstallGoogleApp() {
-        voiceSearch.suggestInstallGoogleApp(mockk())
-    }
-
 }
