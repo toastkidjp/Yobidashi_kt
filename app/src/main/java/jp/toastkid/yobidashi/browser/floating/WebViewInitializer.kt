@@ -9,13 +9,16 @@ package jp.toastkid.yobidashi.browser.floating
 
 import android.annotation.TargetApi
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.block.AdRemover
 
 /**
@@ -44,6 +47,7 @@ class WebViewInitializer(
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
+                viewModel.newIcon(null)
                 viewModel.newUrl(url)
             }
 
@@ -72,9 +76,26 @@ class WebViewInitializer(
                 viewModel.newTitle(title)
             }
 
-            override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
-                super.onReceivedIcon(view, icon)
-                viewModel.newIcon(icon)
+            private val faviconApplier = FaviconApplier(context)
+
+            private val bitmapCompressor = BitmapCompressor()
+
+            override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
+                val urlStr = view?.url
+                if (viewModel.icon.value != null) {
+                    return
+                }
+
+                if (urlStr != null && favicon != null) {
+                    val file = faviconApplier.assignFile(urlStr) ?: return
+                    if (file.exists() && file.length() != 0L) {
+                        viewModel.newIcon(BitmapFactory.decodeFile(file.absolutePath))
+                        return
+                    }
+
+                    bitmapCompressor.invoke(favicon, file)
+                    viewModel.newIcon(favicon)
+                }
             }
 
             override fun onProgressChanged(view: WebView?, newProgress: Int) {

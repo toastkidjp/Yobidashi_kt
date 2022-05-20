@@ -26,20 +26,15 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.ui.theme.AppTheme
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
 import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.main.ui.Content
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
-import jp.toastkid.yobidashi.tab.model.Tab
-import jp.toastkid.yobidashi.tab.tab_list.Callback
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity(), Callback {
+class MainActivity : ComponentActivity() {
 
     /**
      * Preferences wrapper.
@@ -70,8 +65,6 @@ class MainActivity : ComponentActivity(), Callback {
 
     private var backgroundPath: MutableState<String>? = null
 
-    private var coroutineScope: CoroutineScope? = null
-
     /**
      * Disposables.
      */
@@ -89,15 +82,6 @@ class MainActivity : ComponentActivity(), Callback {
         })
 
         browserViewModel = activityViewModelProvider.get(BrowserViewModel::class.java)
-        browserViewModel?.preview?.observe(this, Observer {
-            val uri = it?.getContentIfNotHandled() ?: return@Observer
-            contentViewModel?.setBottomSheetContent {
-                FloatingPreviewUi(uri)
-            }
-            coroutineScope?.launch {
-                contentViewModel?.switchBottomSheet()
-            }
-        })
         browserViewModel?.download?.observe(this, Observer {
             val url = it?.getContentIfNotHandled() ?: return@Observer
             downloadPermissionRequestLauncher.launch(url)
@@ -166,38 +150,6 @@ class MainActivity : ComponentActivity(), Callback {
     private fun updateColorFilter() {
         this.filterColor?.value = preferenceApplier.useColorFilter()
     }
-
-    override fun onCloseOnly() {
-        coroutineScope?.launch {
-            contentViewModel?.hideBottomSheet()
-        }
-    }
-
-    override fun onCloseTabListDialogFragment(lastTabId: String) {
-
-    }
-
-    override fun onOpenEditor() = Unit
-
-    override fun onOpenPdf() = Unit
-
-    override fun openNewTabFromTabList() = Unit
-
-    override fun tabIndexFromTabList() = 0
-
-    override fun currentTabIdFromTabList() = "0"
-
-    override fun replaceTabFromTabList(tab: Tab) = Unit
-
-    override fun getTabByIndexFromTabList(position: Int): Tab? = null
-
-    override fun closeTabFromTabList(position: Int) = Unit
-
-    override fun getTabAdapterSizeFromTabList(): Int = 0
-
-    override fun swapTabsFromTabList(from: Int, to: Int) = Unit
-
-    override fun tabIndexOfFromTabList(tab: Tab): Int = 0
 
     override fun onPause() {
         super.onPause()

@@ -25,7 +25,6 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -42,9 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -59,7 +56,6 @@ import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.scroll.rememberViewInteropNestedScrollConnection
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.model.TodoTask
@@ -152,15 +148,10 @@ private fun TaskList(
 
     val tasks = flow?.collectAsLazyPagingItems() ?: return
 
-    MaterialTheme {
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.nestedScroll(rememberViewInteropNestedScrollConnection())
-        ) {
-            items(tasks) { task ->
-                task ?: return@items
-                TaskListItem(task, color, menuUseCase)
-            }
+    LazyColumn(state = listState) {
+        items(tasks) { task ->
+            task ?: return@items
+            TaskListItem(task, color, menuUseCase)
         }
     }
 }
@@ -238,9 +229,7 @@ private fun TaskListItem(
                 )
                 DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .background(colorResource(id = R.color.soft_background))
+                    onDismissRequest = { expanded = false }
                 ) {
                     items.forEachIndexed { index, s ->
                         DropdownMenuItem(onClick = {

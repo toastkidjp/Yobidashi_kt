@@ -45,57 +45,52 @@ internal fun DateFilterDialogUi(
     var year by remember { mutableStateOf(0) }
     var monthOfYear by remember { mutableStateOf(0) }
     var dayOfMonth by remember { mutableStateOf(0) }
-    MaterialTheme() {
-        Dialog(
-            onDismissRequest = {
-                openDialog.value = false
-            }
-        ) {
-            Surface(
-                modifier = Modifier.background(colorResource(id = R.color.soft_background)),
-                elevation = 4.dp
-            ) {
-                Column {
-                    AndroidView(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        factory = { context ->
-                            val today = Calendar.getInstance()
-                            val datePicker = DatePicker(context)
-                            datePicker.init(
-                                today.get(Calendar.YEAR),
-                                today.get(Calendar.MONTH),
-                                today.get(Calendar.DAY_OF_MONTH)
-                            ) { _, y, m, d ->
-                                year = y
-                                monthOfYear = m
-                                dayOfMonth = d
-                            }
-                            datePicker
+    Dialog(
+        onDismissRequest = {
+            openDialog.value = false
+        }
+    ) {
+        Surface(elevation = 4.dp) {
+            Column {
+                AndroidView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    factory = { context ->
+                        val today = Calendar.getInstance()
+                        val datePicker = DatePicker(context)
+                        datePicker.init(
+                            today.get(Calendar.YEAR),
+                            today.get(Calendar.MONTH),
+                            today.get(Calendar.DAY_OF_MONTH)
+                        ) { _, y, m, d ->
+                            year = y
+                            monthOfYear = m
+                            dayOfMonth = d
                         }
-                    )
-
-                    Button(
-                        onClick = {
-                            openDialog.value = false
-                            dateSelectedActionUseCase.invoke(
-                                year,
-                                monthOfYear,
-                                dayOfMonth
-                            )
-                        },
-                        colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = Color(colorPair.bgColor()),
-                            contentColor = Color(colorPair.fontColor()),
-                            disabledContentColor = Color.LightGray
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.open)
-                        )
+                        datePicker
                     }
+                )
+
+                Button(
+                    onClick = {
+                        openDialog.value = false
+                        dateSelectedActionUseCase.invoke(
+                            year,
+                            monthOfYear,
+                            dayOfMonth
+                        )
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        backgroundColor = MaterialTheme.colors.primary,
+                        contentColor = MaterialTheme.colors.onPrimary,
+                        disabledContentColor = Color.LightGray
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.open)
+                    )
                 }
             }
         }

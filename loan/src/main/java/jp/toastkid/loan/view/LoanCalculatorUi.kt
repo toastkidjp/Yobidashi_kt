@@ -8,7 +8,6 @@
 
 package jp.toastkid.loan.view
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -83,79 +82,80 @@ fun LoanCalculatorUi() {
         }
     ).invoke()
 
-    Column(
-        Modifier
-            .background(color = Color(0xbbFFFFFF))
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        Text(text = result, fontSize = 18.sp, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(
-            value = loanAmount,
-            onValueChange = {
-                loanAmount = format(it)
-                onChange(inputChannel, it)
-            },
-            label = { Text(text = stringResource(R.string.hint_loan_amount)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = loanTerm,
-            onValueChange = {
-                loanTerm = format(it)
-                onChange(inputChannel, it)
-            },
-            label = { Text(text = stringResource(R.string.hint_loan_term)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = interestRate,
-            onValueChange = {
-                interestRate = it
-                onChange(inputChannel, it)
-            },
-            label = { Text(text = stringResource(R.string.hint_interest_rate)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = downPayment,
-            onValueChange = {
-                downPayment = format(it)
-                onChange(inputChannel, it)
-            },
-            label = { Text(text = stringResource(R.string.hint_down_payment)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = managementFee,
-            onValueChange = {
-                managementFee = format(it)
-                onChange(inputChannel, it)
-            },
-            label = { Text(text = "Management fee (Monthly)") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = renovationReserves,
-            onValueChange = {
-                renovationReserves = format(it)
-                onChange(inputChannel, it)
-            },
-            label = { Text(text = "Renovation reserves (Monthly)") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
+    Surface(elevation = 4.dp) {
+        Column(
+            Modifier
+                .padding(8.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Text(text = result, fontSize = 18.sp, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(
+                value = loanAmount,
+                onValueChange = {
+                    loanAmount = format(it)
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = stringResource(R.string.hint_loan_amount)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = loanTerm,
+                onValueChange = {
+                    loanTerm = format(it)
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = stringResource(R.string.hint_loan_term)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = interestRate,
+                onValueChange = {
+                    interestRate = it
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = stringResource(R.string.hint_interest_rate)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = downPayment,
+                onValueChange = {
+                    downPayment = format(it)
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = stringResource(R.string.hint_down_payment)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = managementFee,
+                onValueChange = {
+                    managementFee = format(it)
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = "Management fee (Monthly)") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = renovationReserves,
+                onValueChange = {
+                    renovationReserves = format(it)
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = "Renovation reserves (Monthly)") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 

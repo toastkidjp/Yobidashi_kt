@@ -57,6 +57,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -139,7 +140,7 @@ fun BookmarkListUi() {
             Timber.e(e)
         }
     }
-    ScrollerUseCase(contentViewModel, listState).invoke(activityContext)
+    ScrollerUseCase(contentViewModel, listState).invoke(LocalLifecycleOwner.current)
 
     val openClearDialogState = remember { mutableStateOf(false) }
     val openAddFolderDialogState = remember { mutableStateOf(false) }

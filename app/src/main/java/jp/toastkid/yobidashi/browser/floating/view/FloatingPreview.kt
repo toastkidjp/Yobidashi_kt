@@ -116,7 +116,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
         )
     }
 
-    LaunchedEffect(key1 = "load", block = {
+    LaunchedEffect(webView.hashCode(), block = {
         webView.loadUrl(uri.toString())
     })
 

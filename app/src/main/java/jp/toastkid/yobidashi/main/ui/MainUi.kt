@@ -131,6 +131,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.archive.view.ArchiveListUi
 import jp.toastkid.yobidashi.browser.bookmark.view.BookmarkListUi
+import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
 import jp.toastkid.yobidashi.browser.history.view.ViewHistoryListUi
 import jp.toastkid.yobidashi.browser.view.WebTabUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
@@ -354,7 +355,15 @@ internal fun Content() {
         tabs.openNewWebTab(uri.toString())
         replaceToCurrentTab(tabs, navigationHostController)
     })
-
+    browserViewModel?.preview?.observe(activity, Observer {
+        val uri = it?.getContentIfNotHandled() ?: return@Observer
+        contentViewModel?.setBottomSheetContent {
+            FloatingPreviewUi(uri)
+        }
+        coroutineScope?.launch {
+            contentViewModel?.switchBottomSheet()
+        }
+    })
     browserViewModel?.openBackground?.observe(activity, Observer {
         val urlString = it?.getContentIfNotHandled()?.toString() ?: return@Observer
         val callback = tabs.openBackgroundTab(urlString, urlString)

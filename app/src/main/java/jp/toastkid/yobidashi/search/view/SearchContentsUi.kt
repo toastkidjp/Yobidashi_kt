@@ -47,6 +47,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
 import jp.toastkid.lib.ContentViewModel
@@ -117,6 +119,11 @@ internal fun SearchContentsUi(
         }
     )
 
+    val contentViewModel = viewModel(
+        ContentViewModel::class.java,
+        LocalContext.current as ViewModelStoreOwner
+    )
+
     LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
         if (preferenceApplier.isEnableUrlModule()) {
             item {
@@ -127,7 +134,7 @@ internal fun SearchContentsUi(
         if (viewModel.urlItems.isNotEmpty()) {
             item {
                 HeaderWithLink(R.string.title_view_history, R.string.link_open_history) {
-                    //TODO module.openHistory()
+                    contentViewModel.nextRoute("web/history/list")
                 }
             }
 
@@ -152,7 +159,13 @@ internal fun SearchContentsUi(
 
         if (viewModel.favoriteSearchItems.isNotEmpty()) {
             item {
-                Header(R.string.title_favorite_search)
+                HeaderWithLink(
+                    R.string.title_favorite_search,
+                    R.string.open,
+                    {
+                        viewModel.openFavoriteSearch()
+                    }
+                )
             }
 
             items(viewModel.favoriteSearchItems.take(5)) { favoriteSearch ->
@@ -177,7 +190,13 @@ internal fun SearchContentsUi(
 
         if (viewModel.searchHistories.isNotEmpty()) {
             item {
-                Header(R.string.title_search_history)
+                HeaderWithLink(
+                    R.string.title_search_history,
+                    R.string.open,
+                    {
+                        viewModel.openSearchHistory()
+                    }
+                )
             }
 
             items(viewModel.searchHistories.take(5)) { searchHistory ->
