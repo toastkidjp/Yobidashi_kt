@@ -140,11 +140,11 @@ internal class WebViewFactory {
         }
 
         if (WebViewFeature.isFeatureSupported(WebViewFeature.START_SAFE_BROWSING)) {
-            WebViewCompat.startSafeBrowsing(context, { success ->
+            WebViewCompat.startSafeBrowsing(context) { success ->
                 if (!success) {
                     Timber.d("Unable to initialize Safe Browsing!")
                 }
-            })
+            }
         }
 
         return webView
