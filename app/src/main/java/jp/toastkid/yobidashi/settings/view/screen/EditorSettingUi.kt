@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -26,6 +25,7 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -84,117 +83,119 @@ internal fun EditorSettingUi() {
     val fontSizeOpen =
         remember { mutableStateOf(false) }
 
-    LazyColumn(
+    Surface(
+        elevation = 4.dp,
         modifier = Modifier.padding(start = 8.dp, end = 8.dp)
     ) {
-        item {
-            ColorPaletteUi(
-                currentBackgroundColor,
-                currentFontColor,
-                backgroundColor,
-                fontColor,
-                onCommit = {
-                    preferenceApplier.setEditorBackgroundColor(currentBackgroundColor.value.toArgb())
-                    preferenceApplier.setEditorFontColor(currentFontColor.value.toArgb())
+        LazyColumn() {
+            item {
+                ColorPaletteUi(
+                    currentBackgroundColor,
+                    currentFontColor,
+                    backgroundColor,
+                    fontColor,
+                    onCommit = {
+                        preferenceApplier.setEditorBackgroundColor(currentBackgroundColor.value.toArgb())
+                        preferenceApplier.setEditorFontColor(currentFontColor.value.toArgb())
 
-                    contentViewModel?.snackShort(R.string.settings_color_done_commit)
-                },
-                onReset = {
-                    preferenceApplier.setEditorBackgroundColor(backgroundColor)
-                    preferenceApplier.setEditorFontColor(fontColor)
+                        contentViewModel?.snackShort(R.string.settings_color_done_commit)
+                    },
+                    onReset = {
+                        preferenceApplier.setEditorBackgroundColor(backgroundColor)
+                        preferenceApplier.setEditorFontColor(fontColor)
 
-                    currentBackgroundColor.value = Color(backgroundColor)
-                    currentFontColor.value = Color(fontColor)
+                        currentBackgroundColor.value = Color(backgroundColor)
+                        currentFontColor.value = Color(fontColor)
 
-                    contentViewModel?.snackShort(R.string.settings_color_done_reset)
-                }
-            )
-        }
-
-        item {
-            InsetDivider()
-        }
-
-        item {
-            ColorChooserMenu(
-                cursorColor,
-                R.drawable.ic_cursor_black,
-                R.string.title_cursor_color,
-                iconTint
-            ) {
-                preferenceApplier.setEditorCursorColor(it.toArgb())
-                cursorColor.value = it
-            }
-        }
-
-        item {
-            InsetDivider()
-        }
-
-        item {
-            ColorChooserMenu(
-                highlightColor,
-                R.drawable.ic_highlight_black,
-                R.string.title_highlight_color,
-                iconTint
-            ) {
-                preferenceApplier.setEditorHighlightColor(it.toArgb())
-                highlightColor.value = it
-            }
-        }
-
-        item {
-            InsetDivider()
-        }
-
-        item {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .height(48.dp)
-                    .clickable(onClick = { fontSizeOpen.value = true })
-                    .background(colorResource(id = R.color.setting_background))
-            ) {
-                Icon(
-                    painterResource(id = R.drawable.ic_edit),
-                    tint = iconTint,
-                    contentDescription = stringResource(id = R.string.title_font_size)
+                        contentViewModel?.snackShort(R.string.settings_color_done_reset)
+                    }
                 )
+            }
 
-                Text(
-                    stringResource(id = R.string.title_font_size),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 4.dp)
-                )
+            item {
+                InsetDivider()
+            }
 
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(dimensionResource(id = R.dimen.search_category_spinner_width))
-                        .padding(end = 8.dp)
+            item {
+                ColorChooserMenu(
+                    cursorColor,
+                    R.drawable.ic_cursor_black,
+                    R.string.title_cursor_color,
+                    iconTint
                 ) {
-                    Text("${fontSize.value}")
-                    DropdownMenu(
-                        expanded = fontSizeOpen.value,
-                        onDismissRequest = { fontSizeOpen.value = false }
+                    preferenceApplier.setEditorCursorColor(it.toArgb())
+                    cursorColor.value = it
+                }
+            }
+
+            item {
+                InsetDivider()
+            }
+
+            item {
+                ColorChooserMenu(
+                    highlightColor,
+                    R.drawable.ic_highlight_black,
+                    R.string.title_highlight_color,
+                    iconTint
+                ) {
+                    preferenceApplier.setEditorHighlightColor(it.toArgb())
+                    highlightColor.value = it
+                }
+            }
+
+            item {
+                InsetDivider()
+            }
+
+            item {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .height(48.dp)
+                        .clickable(onClick = { fontSizeOpen.value = true })
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_edit),
+                        tint = iconTint,
+                        contentDescription = stringResource(id = R.string.title_font_size)
+                    )
+
+                    Text(
+                        stringResource(id = R.string.title_font_size),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 4.dp)
+                    )
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .size(dimensionResource(id = R.dimen.search_category_spinner_width))
+                            .padding(end = 8.dp)
                     ) {
-                        EditorFontSize.values().forEach {
-                            DropdownMenuItem(
-                                onClick = {
-                                    preferenceApplier.setEditorFontSize(it.size)
-                                    fontSize.value = it.size
-                                    fontSizeOpen.value = false
+                        Text("${fontSize.value}")
+                        DropdownMenu(
+                            expanded = fontSizeOpen.value,
+                            onDismissRequest = { fontSizeOpen.value = false }
+                        ) {
+                            EditorFontSize.values().forEach {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        preferenceApplier.setEditorFontSize(it.size)
+                                        fontSize.value = it.size
+                                        fontSizeOpen.value = false
+                                    }
+                                ) {
+                                    Text(
+                                        "${it.size}",
+                                        fontSize = it.size.sp,
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .fillMaxHeight()
+                                            .padding(8.dp)
+                                    )
                                 }
-                            ) {
-                                Text(
-                                    "${it.size}",
-                                    fontSize = it.size.sp,
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .fillMaxHeight()
-                                        .padding(8.dp)
-                                )
                             }
                         }
                     }
@@ -221,7 +222,6 @@ private fun ColorChooserMenu(
             .clickable {
                 openColorChooserDialog.value = true
             }
-            .background(colorResource(id = R.color.setting_background))
     ) {
         Icon(
             painterResource(id = iconId),
