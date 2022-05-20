@@ -143,11 +143,13 @@ internal fun ColorSettingUi() {
                         .fillMaxWidth()
                         .padding(top = 8.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(8.dp)
+                    ) {
                         Text(
                             stringResource(id = R.string.settings_color_saved_title),
-                            fontSize = 18.sp,
-                            modifier = Modifier.padding(16.dp)
+                            fontSize = 18.sp
                         )
                     }
                 }
