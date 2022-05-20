@@ -270,7 +270,7 @@ private suspend fun reload(
     withContext(Dispatchers.IO) {
         savedColors.clear()
         savedColors.addAll(
-            repository.findAll().windowed(3, 3)
+            repository.findAll().chunked(3)
         )
     }
 }
