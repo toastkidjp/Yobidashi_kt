@@ -25,6 +25,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -265,7 +266,7 @@ private fun ComponentColorSettingDialog(
 ) {
     if (openColorChooserDialog.value) {
         val preferenceApplier = PreferenceApplier(LocalContext.current)
-        val buttonColor = Color(preferenceApplier.color)
+        val buttonColor = MaterialTheme.colors.onSurface
 
         val choosingColor = remember { mutableStateOf(currentColor) }
 
