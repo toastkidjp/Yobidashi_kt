@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.search.voice
 
 import android.content.Intent
 import android.speech.RecognizerIntent
-import android.view.View
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.yobidashi.BuildConfig
 
@@ -27,15 +26,6 @@ class VoiceSearch {
                 )
                 it.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, BuildConfig.APPLICATION_ID)
             }
-
-    /**
-     * Launch Google Play App.
-     *
-     * @param parent Snackbar parent
-     */
-    private fun launchGooglePlay(parent: View) {
-        parent.context.startActivity(makeGoogleAppInstallIntent())
-    }
 
     /**
      * Make Google App [Intent].
