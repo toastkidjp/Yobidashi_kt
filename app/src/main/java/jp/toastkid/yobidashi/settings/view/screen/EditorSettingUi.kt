@@ -158,7 +158,8 @@ internal fun EditorSettingUi() {
                     Icon(
                         painterResource(id = R.drawable.ic_edit),
                         tint = iconTint,
-                        contentDescription = stringResource(id = R.string.title_font_size)
+                        contentDescription = stringResource(id = R.string.title_font_size),
+                        modifier = Modifier.padding(start = 16.dp)
                     )
 
                     Text(
@@ -226,7 +227,8 @@ private fun ColorChooserMenu(
         Icon(
             painterResource(id = iconId),
             tint = iconTint,
-            contentDescription = stringResource(id = textId)
+            contentDescription = stringResource(id = textId),
+            modifier = Modifier.padding(start = 16.dp)
         )
 
         Text(
