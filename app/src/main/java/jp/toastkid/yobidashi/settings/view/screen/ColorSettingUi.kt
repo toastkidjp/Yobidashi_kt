@@ -86,7 +86,7 @@ internal fun ColorSettingUi() {
     val openConfirmDialog = remember { mutableStateOf(false) }
 
     LazyColumn(
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)
     ) {
         item {
             ColorPaletteUi(
