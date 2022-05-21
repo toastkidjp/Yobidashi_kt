@@ -46,10 +46,12 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.load.LoadedAction
+import jp.toastkid.yobidashi.settings.view.WithIcon
 
 /**
  * TODO implement clear setting menu.
@@ -84,6 +86,8 @@ internal fun DisplaySettingUi() {
         )
             .invoke()
     }
+
+    val openClearImagesDialog = remember { mutableStateOf(false) }
 
     Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         LazyColumn {
@@ -132,6 +136,17 @@ internal fun DisplaySettingUi() {
                             .padding(start = 4.dp)
                     )
                 }
+
+                InsetDivider()
+
+                WithIcon(
+                    textId = R.string.title_delete_all,
+                    clickable = {
+                        openClearImagesDialog.value = true
+                    },
+                    iconId = R.drawable.ic_clear_form,
+                    iconTint = iconColor
+                )
 
                 InsetDivider()
 
@@ -197,7 +212,9 @@ internal fun DisplaySettingUi() {
                                 Icon(
                                     painterResource(id = R.drawable.ic_remove_circle),
                                     contentDescription = stringResource(id = R.string.delete),
-                                    modifier = Modifier.size(40.dp).align(Alignment.TopEnd)
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .align(Alignment.TopEnd)
                                         .clickable {
                                             if (!imageFile.exists()) {
                                                 contentViewModel
@@ -223,6 +240,16 @@ internal fun DisplaySettingUi() {
         }
     }
 
+    if (openClearImagesDialog.value) {
+        DestructiveChangeConfirmDialog(
+            openClearImagesDialog,
+            R.string.clear_all
+        ) {
+            filesDir.clean()
+            files.value = loadFileChunk(filesDir)
+            contentViewModel?.snackShort(R.string.message_success_image_removal)
+        }
+    }
 }
 
 private fun loadFileChunk(filesDir: FilesDir) =
