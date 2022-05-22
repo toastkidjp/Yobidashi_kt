@@ -35,7 +35,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -153,7 +152,7 @@ fun MusicListUi() {
         },
         { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         {
-            val mediaUri = mediaPlayerPopupViewModel.musics.value?.random()?.description?.mediaUri
+            val mediaUri = mediaPlayerPopupViewModel.musics.random()?.description?.mediaUri
             if (mediaUri == null || mediaUri == Uri.EMPTY) {
                 return@MusicList
             }
@@ -191,8 +190,6 @@ internal fun MusicList(
         context.sendBroadcast(MediaPlayerService.makeSpeedIntent(speed))
     }
 
-    val musicsState = viewModel?.musics?.observeAsState() ?: return
-
     val coroutineScope = rememberCoroutineScope()
 
     //TODO: AsyncImage -> Icon
@@ -214,7 +211,7 @@ internal fun MusicList(
                     .fillMaxHeight()
             )
             AsyncImage(
-                if (viewModel.playing) R.drawable.ic_pause else R.drawable.ic_play_media,
+                if (viewModel?.playing == true) R.drawable.ic_pause else R.drawable.ic_play_media,
                 contentDescription = stringResource(id = R.string.action_pause),
                 colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
                 modifier = Modifier
@@ -282,7 +279,7 @@ internal fun MusicList(
             )
         }
         LazyColumn {
-            items(musicsState.value ?: emptyList()) { music ->
+            items(viewModel?.musics ?: emptyList()) { music ->
                 Surface(
                     elevation = 4.dp,
                     modifier = Modifier
