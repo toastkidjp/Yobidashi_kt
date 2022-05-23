@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.image.BitmapCompressor
@@ -16,7 +17,6 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
@@ -62,7 +62,7 @@ class TabAdapter(
 
     private val disposables = Job()
 
-    private var browserHeaderViewModel: BrowserHeaderViewModel? = null
+    private var browserViewModel: BrowserViewModel? = null
 
     private var appBarViewModel: AppBarViewModel? = null
 
@@ -80,7 +80,7 @@ class TabAdapter(
 
         if (viewContext is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
-            browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
+            browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
             appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
 
@@ -91,7 +91,7 @@ class TabAdapter(
                         FaviconApplier(viewContext),
                         preferenceApplier,
                         loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java),
-                        browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java),
+                        browserViewModel = viewModelProvider.get(BrowserViewModel::class.java),
                         currentView = { GlobalWebViewPool.getLatest() }
                     )
             )

@@ -16,8 +16,8 @@ import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
@@ -28,13 +28,13 @@ import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
  * @author toastkidjp
  */
 class WebViewReplacementUseCase(
-        private val webViewContainer: FrameLayout?,
-        private val webViewStateUseCase: WebViewStateUseCase,
-        private val makeWebView: () -> WebView,
-        private val browserHeaderViewModel: BrowserHeaderViewModel?,
-        private val preferenceApplier: PreferenceApplier,
-        private val slideUpFromBottom: Animation,
-        private val darkThemeApplier: DarkModeApplier = DarkModeApplier()
+    private val webViewContainer: FrameLayout?,
+    private val webViewStateUseCase: WebViewStateUseCase,
+    private val makeWebView: () -> WebView,
+    private val browserViewModel: BrowserViewModel?,
+    private val preferenceApplier: PreferenceApplier,
+    private val slideUpFromBottom: Animation,
+    private val darkThemeApplier: DarkModeApplier = DarkModeApplier()
 ) {
 
     /**
@@ -62,10 +62,10 @@ class WebViewReplacementUseCase(
             (it.parent as? ViewGroup)?.removeAllViews()
             darkThemeApplier(it, preferenceApplier.useDarkMode())
             webViewContainer?.addView(it)
-            browserHeaderViewModel?.setBackButtonIsEnabled(it.canGoBack())
-            browserHeaderViewModel?.setForwardButtonIsEnabled(it.canGoForward())
-            browserHeaderViewModel?.nextTitle(it.title)
-            browserHeaderViewModel?.nextUrl(it.url)
+            browserViewModel?.setBackButtonIsEnabled(it.canGoBack())
+            browserViewModel?.setForwardButtonIsEnabled(it.canGoForward())
+            browserViewModel?.nextTitle(it.title)
+            browserViewModel?.nextUrl(it.url)
 
             //webViewContainer?.startAnimation(slideUpFromBottom)
 

@@ -17,15 +17,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.image.BitmapCompressor
-import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import java.util.concurrent.TimeUnit
 
 class WebChromeClientFactory(
-        private val browserHeaderViewModel: BrowserHeaderViewModel? = null,
-        private val faviconApplier: FaviconApplier? = null,
-        private val customViewSwitcher: CustomViewSwitcher? = null
+    private val browserViewModel: BrowserViewModel? = null,
+    private val faviconApplier: FaviconApplier? = null,
+    private val customViewSwitcher: CustomViewSwitcher? = null
 ) {
 
     operator fun invoke(): WebChromeClient = object : WebChromeClient() {
@@ -35,8 +34,8 @@ class WebChromeClientFactory(
         override fun onProgressChanged(view: WebView, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
 
-            browserHeaderViewModel?.updateProgress(newProgress)
-            browserHeaderViewModel?.stopProgress(newProgress < 65)
+            browserViewModel?.updateProgress(newProgress)
+            browserViewModel?.stopProgress(newProgress < 65)
         }
 
         override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
