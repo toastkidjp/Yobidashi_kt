@@ -109,4 +109,66 @@ class BrowserViewModel : ViewModel() {
         _switchWebViewToCurrent.postValue(Event(tabId))
     }
 
+    //TODO WIP
+
+    private val _title = mutableStateOf("")
+    val title: State<String> = _title
+
+    fun nextTitle(nextTitle: String?) {
+        if (nextTitle.isNullOrBlank()) {
+            return
+        }
+        _title.value = nextTitle ?: ""
+    }
+
+    private val _url = mutableStateOf("")
+    val url: State<String> = _url
+
+    fun nextUrl(nextUrl: String?) {
+        if (nextUrl.isNullOrBlank()) {
+            return
+        }
+        _url.value = nextUrl ?: ""
+    }
+
+    private val _enableBackPress = mutableStateOf(false)
+
+    val enableBackPress: State<Boolean> = _enableBackPress
+
+    fun setEnableBackPress(newState: Boolean) {
+        _enableBackPress.value = newState
+    }
+
+    private val _enableForward = mutableStateOf(false)
+
+    val enableForward: State<Boolean> = _enableForward
+
+    fun setForwardButtonIsEnabled(newState: Boolean) {
+        _enableForward.value = newState
+    }
+
+    private val _enableBack = mutableStateOf(false)
+
+    val enableBack: State<Boolean> = _enableBack
+
+    fun setBackButtonIsEnabled(newState: Boolean) {
+        _enableBack.value = newState
+        setEnableBackPress(newState)
+    }
+
+    private val _progress = mutableStateOf(0)
+
+    val progress: State<Int> = _progress
+
+    fun updateProgress(newProgress: Int) {
+        _progress.value = newProgress
+    }
+
+    private val _stopProgress = mutableStateOf(Event(false))
+
+    val stopProgress: State<Event<Boolean>> = _stopProgress
+
+    fun stopProgress(stop: Boolean) {
+        _stopProgress.value = Event(stop)
+    }
 }
