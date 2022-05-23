@@ -13,30 +13,12 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
  * @author toastkidjp
  */
 class MediaPlayerPopupViewModel : ViewModel() {
-
-    private val _clickItem = MutableLiveData<MediaBrowserCompat.MediaItem>()
-
-    val clickItem: LiveData<MediaBrowserCompat.MediaItem> = _clickItem
-
-    fun clickItem(item: MediaBrowserCompat.MediaItem) {
-        _clickItem.postValue(item)
-    }
-
-    private val _lyrics = MutableLiveData<String>()
-
-    val clickLyrics: LiveData<String> = _lyrics
-
-    fun clickLyrics(name: CharSequence?) {
-        name?.also { _lyrics.postValue(it.toString()) }
-    }
 
     private val _musics = mutableStateListOf<MediaBrowserCompat.MediaItem>()
 
