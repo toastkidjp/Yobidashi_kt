@@ -18,7 +18,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import org.junit.After
 import org.junit.Before
@@ -46,9 +45,6 @@ class WebViewClientFactoryTest {
 
     @MockK
     private lateinit var rssAddingSuggestion: RssAddingSuggestion
-
-    @MockK
-    private lateinit var loadingViewModel: LoadingViewModel
 
     @MockK
     private lateinit var currentView: () -> WebView
