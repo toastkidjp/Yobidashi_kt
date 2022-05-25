@@ -56,7 +56,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ImageListTopUi() {
+fun ImageListUi() {
     val context = LocalContext.current
 
     val contentResolver = context.contentResolver ?: return
