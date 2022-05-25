@@ -12,6 +12,7 @@ import jp.toastkid.yobidashi.tab.History
 /**
  * @author toastkidjp
  */
+@Deprecated("")
 data class LoadInformation(
         val tabId: String,
         val history: History,
