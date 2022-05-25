@@ -33,13 +33,11 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
-import jp.toastkid.yobidashi.tab.History
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,7 +50,6 @@ class WebViewClientFactory(
     private val preferenceApplier: PreferenceApplier,
     private val browserViewModel: BrowserViewModel? = null,
     private val rssAddingSuggestion: RssAddingSuggestion? = null,
-    private val loadingViewModel: LoadingViewModel? = null,
     private val currentView: () -> WebView? = { null }
 ) {
 
@@ -82,7 +79,7 @@ class WebViewClientFactory(
             val tabId = GlobalWebViewPool.getTabId(view)
             if (tabId?.isNotBlank() == true) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    loadingViewModel?.finished(tabId, History.make(title, urlStr))
+                    browserViewModel?.finished(tabId, title, urlStr)
                 }
             }
 

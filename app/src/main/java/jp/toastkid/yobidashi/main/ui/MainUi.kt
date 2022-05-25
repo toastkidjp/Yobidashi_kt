@@ -112,7 +112,7 @@ import jp.toastkid.article_viewer.article.detail.view.ArticleContentUi
 import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.barcode.view.BarcodeReaderUi
 import jp.toastkid.editor.view.EditorTabUi
-import jp.toastkid.image.view.ImageListTopUi
+import jp.toastkid.image.view.ImageListUi
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -135,7 +135,6 @@ import jp.toastkid.todo.view.list.TaskListUi
 import jp.toastkid.ui.menu.view.OptionMenuItem
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.archive.view.ArchiveListUi
 import jp.toastkid.yobidashi.browser.bookmark.view.BookmarkListUi
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
@@ -151,6 +150,7 @@ import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
 import jp.toastkid.yobidashi.search.view.SearchInputUi
 import jp.toastkid.yobidashi.settings.view.screen.SettingTopUi
+import jp.toastkid.yobidashi.tab.History
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
@@ -242,24 +242,6 @@ internal fun Content() {
         contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
         contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
     })
-
-    val loadingViewModel = viewModel(LoadingViewModel::class.java, activity)
-    LaunchedEffect(loadingViewModel) {
-        loadingViewModel
-            .onPageFinished
-            .collect {
-                if (it.expired()) {
-                    return@collect
-                }
-
-                tabs.updateWebTab(it.tabId to it.history)
-                if (tabs.currentTabId() == it.tabId) {
-                    val currentWebView =
-                        GlobalWebViewPool.get(tabs.currentTabId()) ?: return@collect
-                    tabs.saveNewThumbnail(currentWebView)
-                }
-            }
-    }
 
     val activityResultLauncher: ActivityResultLauncher<Intent>? =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -407,6 +389,22 @@ internal fun Content() {
         tabs.openNewWindowWebTab(message)
         browserViewModel?.switchWebViewToCurrent(tabs.currentTabId())
     })
+    LaunchedEffect(browserViewModel) {
+        browserViewModel
+            .onPageFinished
+            .observe(activity, {
+                if (it.expired()) {
+                    return@observe
+                }
+
+                tabs.updateWebTab(it.tabId to History(it.title, it.url))
+                if (tabs.currentTabId() == it.tabId) {
+                    val currentWebView =
+                        GlobalWebViewPool.get(tabs.currentTabId()) ?: return@observe
+                    tabs.saveNewThumbnail(currentWebView)
+                }
+            })
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -700,7 +698,7 @@ internal fun Content() {
                         BarcodeReaderUi()
                     }
                     composable("tool/image/list") {
-                        ImageListTopUi()
+                        ImageListUi()
                     }
                     composable("tool/rss/list") {
                         RssReaderListUi()

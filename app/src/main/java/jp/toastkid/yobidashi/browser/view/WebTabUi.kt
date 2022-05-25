@@ -75,7 +75,6 @@ import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserModule
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
@@ -88,9 +87,6 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun WebTabUi(uri: Uri, tabId: String) {
@@ -240,6 +236,12 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserModule.clearMatches()
             })
         }
+
+        browserViewModel
+            .onPageFinished
+            .observe(lifecycleOwner) {
+                browserModule.saveArchiveForAutoArchive()
+            }
     })
 
     val storagePermissionRequestLauncher =
@@ -523,14 +525,6 @@ private fun initializeHeaderViewModels(
                 }
             }
         }
-    }
-
-    CoroutineScope(Dispatchers.Main).launch {
-        viewModelProvider.get(LoadingViewModel::class.java)
-            .onPageFinished
-            .collect {
-                browserModule.saveArchiveForAutoArchive()
-            }
     }
 }
 

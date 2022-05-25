@@ -62,8 +62,6 @@ class BrowserModule(
 
     private var browserViewModel: BrowserViewModel? = null
 
-    private var loadingViewModel: LoadingViewModel? = null
-
     /**
      * Animation of slide up bottom.
      */
@@ -88,7 +86,6 @@ class BrowserModule(
         if (context is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(context)
             browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
-            loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java)
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
 
@@ -100,7 +97,6 @@ class BrowserModule(
                     preferenceApplier,
                     browserViewModel,
                     rssAddingSuggestion,
-                    loadingViewModel
                 ) { currentView() },
                 webChromeClientFactory = WebChromeClientFactory(
                         browserViewModel,
