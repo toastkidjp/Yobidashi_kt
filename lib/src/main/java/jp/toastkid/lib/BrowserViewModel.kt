@@ -15,6 +15,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
+import jp.toastkid.lib.model.LoadInformation
 
 /**
  * @author toastkidjp
@@ -171,4 +172,13 @@ class BrowserViewModel : ViewModel() {
     fun stopProgress(stop: Boolean) {
         _stopProgress.value = Event(stop)
     }
+
+    private val _onPageFinished =
+        MutableLiveData<LoadInformation>()
+
+    val onPageFinished: LiveData<LoadInformation> = _onPageFinished
+
+    fun finished(tabId: String, title: String, url: String) =
+        _onPageFinished.postValue(LoadInformation(tabId, title, url))
+
 }
