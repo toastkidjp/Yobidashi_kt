@@ -26,7 +26,7 @@ class ScrollerUseCase(
         })
         contentViewModel?.toBottom?.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled() ?: return@observe
-            scroller.toTop()
+            scroller.toBottom()
         })
     }
 

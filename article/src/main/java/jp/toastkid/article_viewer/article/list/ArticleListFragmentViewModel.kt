@@ -7,6 +7,8 @@
  */
 package jp.toastkid.article_viewer.article.list
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,15 +33,15 @@ class ArticleListFragmentViewModel(
 
     private val tokenizer = NgramTokenizer()
 
-    private val _progressVisibility = MutableLiveData<Event<Boolean>>()
-    val progressVisibility : LiveData<Event<Boolean>> = _progressVisibility
+    private val _progressVisibility = mutableStateOf(false)
+    val progressVisibility : State<Boolean> = _progressVisibility
 
     fun showProgress() {
-        _progressVisibility.postValue(Event(true))
+        _progressVisibility.value = true
     }
 
     fun hideProgress() {
-        _progressVisibility.postValue(Event(false))
+        _progressVisibility.value = false
     }
 
     private val _progress = MutableLiveData<Event<String>>()

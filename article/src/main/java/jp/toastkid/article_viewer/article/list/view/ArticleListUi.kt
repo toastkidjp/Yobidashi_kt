@@ -33,9 +33,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -54,11 +56,11 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -163,13 +165,22 @@ fun ArticleListUi() {
         }
     )
 
-    ArticleListUi(
-        itemFlowState.value,
-        rememberLazyListState(),
-        contentViewModel,
-        menuPopupUseCase,
-        preferenceApplier.color
-    )
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        ArticleListUi(
+            itemFlowState.value,
+            rememberLazyListState(),
+            contentViewModel,
+            menuPopupUseCase,
+            preferenceApplier.color
+        )
+
+        if (viewModel.progressVisibility.value) {
+            CircularProgressIndicator(color = MaterialTheme.colors.primary)
+        }
+    }
 
     LaunchedEffect(key1 = "first_launch", block = {
         viewModel.search("")
@@ -216,11 +227,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
         }
     }
 
-    viewModel?.progressVisibility?.observe(activityContext, {
-        it?.getContentIfNotHandled()?.let { isVisible ->
-            //TODO binding.progressCircular.isVisible = isVisible
-        }
-    })
     viewModel?.progress?.observe(activityContext, {
         it?.getContentIfNotHandled()?.let { message ->
             searchResult = message
@@ -316,8 +322,7 @@ internal fun ArticleListUi(
         }
     }
 
-    val lifecycleOwner =
-        LocalContext.current as? LifecycleOwner ?: return
+    val lifecycleOwner = LocalLifecycleOwner.current
     ScrollerUseCase(contentViewModel, listState).invoke(lifecycleOwner)
 }
 

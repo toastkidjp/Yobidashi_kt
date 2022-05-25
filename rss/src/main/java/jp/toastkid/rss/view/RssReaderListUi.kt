@@ -42,6 +42,7 @@ import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.list.ListActionAttachment
 import jp.toastkid.rss.R
 import jp.toastkid.rss.api.RssReaderApi
 import jp.toastkid.rss.model.Item
@@ -50,9 +51,6 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 
-/**
- * TODO implement setting with compose.
- */
 @Composable
 fun RssReaderListUi() {
     val context = LocalContext.current
@@ -76,12 +74,16 @@ fun RssReaderListUi() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun RssReaderList(items: List<Item>) {
+private fun RssReaderList(fullItems: List<Item>) {
     val activity = LocalContext.current as? ComponentActivity ?: return
-    val browserViewModel = ViewModelProvider(activity)
+    val viewModelProvider = ViewModelProvider(activity)
+    val browserViewModel = viewModelProvider
         .get(BrowserViewModel::class.java)
 
     val listState = rememberLazyListState()
+
+    val items = remember { mutableStateListOf<Item>() }
+    items.addAll(fullItems)
 
     LazyColumn(state = listState) {
         items(items) {
@@ -157,4 +159,13 @@ private fun RssReaderList(items: List<Item>) {
             }
         }
     }
+
+    ListActionAttachment.make(activity)
+        .invoke(
+            listState,
+            LocalLifecycleOwner.current,
+            items,
+            fullItems,
+            { item, word -> item.title.contains(word) || item.description.contains(word) }
+        )
 }

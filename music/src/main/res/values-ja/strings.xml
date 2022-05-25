@@ -1,6 +1,7 @@
 <resources>
     <string name="action_pause">一時停止</string>
     <string name="action_play">再生</string>
+    <string name="action_stop">停止</string>
     <string name="action_shuffle">シャッフル</string>
     <string name="title_audio_player">音楽プレイヤー</string>
     <string name="message_audio_file_is_not_found">音楽ファイルが見つかりませんでした。</string>

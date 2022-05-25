@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.browser.view
 
 import android.Manifest
 import android.net.Uri
+import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -19,9 +20,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,9 +42,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -98,38 +101,48 @@ fun WebTabUi(uri: Uri, tabId: String) {
 */
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
-    val webViewContainer = remember { FrameLayout(activityContext) }
+    val webViewContainer = remember {
+        val frameLayout = FrameLayout(activityContext)
+        frameLayout.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
+        frameLayout
+    }
 
     val browserModule = BrowserModule(activityContext, webViewContainer)
 
     val browserHeaderViewModel =
         viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
 
-    val currentWebView = remember { mutableStateOf(GlobalWebViewPool.getLatest()) }
     val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    val nestedScrollDispatcher = NestedScrollDispatcher()
+    val scrollListener =
+        View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            nestedScrollDispatcher.dispatchPreScroll(
+                Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
+                NestedScrollSource.Fling
+            )
+        }
 
     browserViewModel.switchWebViewToCurrent.observe(lifecycleOwner, {
         val newTabId = it?.getContentIfNotHandled() ?: return@observe
         browserModule.switchWebViewToCurrent(newTabId)
-        currentWebView.value = GlobalWebViewPool.getLatest()
+        GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
     })
-
-    val baseOffset = -100.dp.value.toInt()
 
     AndroidView(
         factory = {
             browserModule.loadWithNewTab(uri, tabId)
-            currentWebView.value = GlobalWebViewPool.getLatest()
+            GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
             webViewContainer
         },
         modifier = Modifier
-            .scrollable(
-                state = rememberScrollableState { delta ->
-                    currentWebView.value?.flingScroll(0, delta.toInt() * baseOffset)
-                    delta
-                },
-                Orientation.Vertical
+            .nestedScroll(
+                connection = object : NestedScrollConnection {},
+                dispatcher = nestedScrollDispatcher
             )
     )
 
@@ -318,7 +331,9 @@ private fun initializeHeaderViewModels(
                     LinearProgressIndicator(
                         progress = (progress.value?.toFloat() ?: 100f) / 100f,
                         color = Color(preferenceApplier.fontColor),
-                        modifier = Modifier.height(1.dp)
+                        modifier = Modifier
+                            .height(1.dp)
+                            .fillMaxWidth()
                     )
                 }
 

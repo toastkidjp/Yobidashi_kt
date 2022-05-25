@@ -210,4 +210,20 @@ class ContentViewModel : ViewModel() {
         _replaceToCurrentTab.postValue(Event(Unit))
     }
 
+    private val _useScreenFilter = mutableStateOf(false)
+
+    val useScreenFilter: State<Boolean> = _useScreenFilter
+
+    fun setScreenFilterColor(use: Boolean) {
+        _useScreenFilter.value = use
+    }
+
+    private val _backgroundImagePath = mutableStateOf("")
+
+    val backgroundImagePath: State<String> = _backgroundImagePath
+
+    fun setBackgroundImagePath(path: String) {
+        _backgroundImagePath.value = path
+    }
+
 }

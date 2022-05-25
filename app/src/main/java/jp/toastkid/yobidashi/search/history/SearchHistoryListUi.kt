@@ -19,10 +19,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
+import jp.toastkid.lib.view.list.ListActionAttachment
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
@@ -39,6 +42,7 @@ fun SearchHistoryListUi() {
 
     val database = DatabaseFinder().invoke(LocalContext.current)
     val searchHistoryRepository = database.searchHistoryRepository()
+    val fullItems = mutableListOf<SearchHistory>()
     val searchHistoryItems = remember { mutableStateListOf<SearchHistory>() }
 
     val coroutineScope = rememberCoroutineScope()
@@ -75,6 +79,7 @@ fun SearchHistoryListUi() {
         }
         searchHistoryItems.clear()
         searchHistoryItems.addAll(loaded)
+        fullItems.addAll(loaded)
     })
 
     viewModel(modelClass = ContentViewModel::class.java).optionMenus(
@@ -100,5 +105,18 @@ fun SearchHistoryListUi() {
                     .snackShort(R.string.settings_color_delete)
             }
         }
+    }
+
+    val viewLifecycleOwner = LocalLifecycleOwner.current
+    val viewModelStoreOwner = context as? ViewModelStoreOwner
+    if (viewModelStoreOwner != null) {
+        ListActionAttachment.make(viewModelStoreOwner)
+            .invoke(
+                listState,
+                viewLifecycleOwner,
+                searchHistoryItems,
+                fullItems,
+                { item, word -> item.query?.contains(word) == true }
+            )
     }
 }
