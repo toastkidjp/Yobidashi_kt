@@ -123,7 +123,6 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
-import jp.toastkid.lib.viewmodel.WebSearchViewModel
 import jp.toastkid.loan.view.LoanCalculatorUi
 import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.media.music.view.MusicListUi
@@ -208,19 +207,6 @@ internal fun Content() {
                 tabs.saveTabList()
             }
         )
-
-    viewModel(WebSearchViewModel::class.java, activity)
-        .search
-        .observe(activity, { event ->
-            val query = event?.getContentIfNotHandled() ?: return@observe
-            WebSearchResultTabOpenerUseCase(
-                preferenceApplier,
-                {
-                    tabs.openNewWebTab(it.toString())
-                    contentViewModel.replaceToCurrentTab()
-                }
-            ).invoke(query)
-        })
 
     initializeContentViewModel(activity, tabs, navigationHostController, snackbarHostState)
 
@@ -403,6 +389,18 @@ internal fun Content() {
                         GlobalWebViewPool.get(tabs.currentTabId()) ?: return@observe
                     tabs.saveNewThumbnail(currentWebView)
                 }
+            })
+        browserViewModel
+            .search
+            .observe(activity, { event ->
+                val query = event?.getContentIfNotHandled() ?: return@observe
+                WebSearchResultTabOpenerUseCase(
+                    preferenceApplier,
+                    {
+                        tabs.openNewWebTab(it.toString())
+                        contentViewModel.replaceToCurrentTab()
+                    }
+                ).invoke(query)
             })
     }
 

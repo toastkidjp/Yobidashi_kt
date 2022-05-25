@@ -181,4 +181,12 @@ class BrowserViewModel : ViewModel() {
     fun finished(tabId: String, title: String, url: String) =
         _onPageFinished.postValue(LoadInformation(tabId, title, url))
 
+    private val _search = MutableLiveData<Event<String>>()
+
+    val search: LiveData<Event<String>> = _search
+
+    fun search(query: String) {
+        _search.postValue(Event(query))
+    }
+
 }
