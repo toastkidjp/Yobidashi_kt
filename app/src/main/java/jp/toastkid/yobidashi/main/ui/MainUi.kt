@@ -145,6 +145,7 @@ import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
 import jp.toastkid.yobidashi.menu.Menu
+import jp.toastkid.yobidashi.number.NumberPlaceUi
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
 import jp.toastkid.yobidashi.search.view.SearchInputUi
@@ -700,6 +701,9 @@ internal fun Content() {
                     composable("tool/rss/list") {
                         RssReaderListUi()
                     }
+                    composable("tool/number/place") {
+                        NumberPlaceUi()
+                    }
                     composable("tool/task/list") {
                         TaskListUi()
                     }
@@ -831,6 +835,12 @@ internal fun Content() {
                                                     navigate(
                                                         navigationHostController,
                                                         "tool/rss/list"
+                                                    )
+                                                }
+                                                Menu.NUMBER_PLACE -> {
+                                                    navigate(
+                                                        navigationHostController,
+                                                        "tool/number/place"
                                                     )
                                                 }
                                                 Menu.AUDIO -> {
