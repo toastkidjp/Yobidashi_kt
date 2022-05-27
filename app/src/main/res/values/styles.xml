@@ -4,9 +4,6 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.Splash" parent="AppTheme">
@@ -19,9 +16,6 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
 
@@ -44,7 +38,6 @@
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
-        <item name="colorControlNormal">@color/filter_white</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
 
