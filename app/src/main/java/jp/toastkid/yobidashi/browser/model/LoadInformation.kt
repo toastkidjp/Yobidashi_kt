@@ -19,6 +19,4 @@ data class LoadInformation(
         private val lastUpdated: Long = System.currentTimeMillis()
 ) {
 
-    fun expired() = System.currentTimeMillis() - lastUpdated > 3000L
-
 }
