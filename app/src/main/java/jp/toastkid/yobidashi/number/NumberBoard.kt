@@ -92,7 +92,7 @@ class NumberBoard {
 
     fun masked(): NumberBoard {
         val newBoard = NumberBoard()
-        newBoard.copy(this)
+        newBoard.copyFrom(this)
         val random = Random()
         val randomPair = mutableSetOf<String>()
 
@@ -108,7 +108,7 @@ class NumberBoard {
         return newBoard
     }
 
-    private fun copy(base: NumberBoard) {
+    fun copyFrom(base: NumberBoard) {
         (0 until BOARD_SIZE).forEach { x ->
             (0 until BOARD_SIZE).forEach { y ->
                 this.rows[x][y] = base.rows[x][y]
