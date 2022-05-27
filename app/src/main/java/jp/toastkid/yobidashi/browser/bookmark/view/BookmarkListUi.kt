@@ -450,7 +450,7 @@ private fun EditorDialog(
                         Modifier
                             .padding(bottom = 60.dp)
                             .defaultMinSize(200.dp)
-                            .background(colorResource(id = R.color.spinner_background))
+                            .background(Color(0xDDFFFFFF))
                             .clickable { openChooser.value = true }
                     ) {
                         Text(
