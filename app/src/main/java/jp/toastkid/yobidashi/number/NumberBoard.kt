@@ -141,6 +141,10 @@ class NumberBoard {
         return true
     }
 
+    fun place(rowIndex: Int, columnIndex: Int, number: Int) {
+        rows[rowIndex][columnIndex] = number
+    }
+
     companion object {
 
         private const val BOARD_SIZE = 9
