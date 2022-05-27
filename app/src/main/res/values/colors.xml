@@ -3,7 +3,6 @@
     <color name="textPrimary">#FFE0E0E0</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000B00</color>
-    <color name="spinner_background">#DDFFFFFF</color>
     <color name="filter_white_aa">#AAFFFFFF</color>
     <color name="default_color_filter">#22777700</color>
 </resources>
