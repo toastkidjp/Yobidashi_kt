@@ -494,7 +494,6 @@ internal fun Content() {
                                                 contentDescription = "clear text",
                                                 tint = Color(preferenceApplier.fontColor),
                                                 modifier = Modifier
-                                                    //.offset(x = 8.dp)
                                                     .clickable {
                                                         pageSearcherInput.value = ""
                                                         pageSearcherViewModel.clearInput()
