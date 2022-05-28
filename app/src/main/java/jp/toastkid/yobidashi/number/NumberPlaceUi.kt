@@ -30,11 +30,9 @@ import jp.toastkid.lib.ContentViewModel
 
 @Composable
 fun NumberPlaceUi() {
-    val correct = getValidBoard()
-    val masked = correct.masked()
-    val solving = NumberBoard()
-    solving.copyFrom(masked)
     val fontSize = 28.sp
+
+    val viewModel = viewModel(NumberPlaceViewModel::class.java)
 
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, it)
@@ -44,7 +42,7 @@ fun NumberPlaceUi() {
         elevation = 4.dp
     ) {
         Column() {
-            masked.rows().forEachIndexed { rowIndex, row ->
+            viewModel.masked().rows().forEachIndexed { rowIndex, row ->
                 Row() {
                     row.forEachIndexed { columnIndex, cellValue ->
                         if (cellValue == -1) {
@@ -67,13 +65,11 @@ fun NumberPlaceUi() {
                                         DropdownMenuItem(onClick = {
                                             number.value = "$it"
                                             open.value = false
-                                            solving.place(rowIndex, columnIndex, it)
-                                            if (solving.fulfilled().not()) {
-                                                return@DropdownMenuItem
+                                            viewModel.place(rowIndex, columnIndex, it) { done ->
+                                                contentViewModel?.snackShort(
+                                                    if (done) "Well done!" else "Incorrect..."
+                                                )
                                             }
-                                            contentViewModel?.snackShort(
-                                                if (solving.isCorrect(correct)) "Well done!" else "Incorrect..."
-                                            )
                                         }) {
                                             Text(
                                                 text = "$it",
@@ -95,15 +91,4 @@ fun NumberPlaceUi() {
             }
         }
     }
-}
-
-private fun getValidBoard(): NumberBoard {
-    val board = NumberBoard()
-    repeat(50000) {
-        board.placeRandom()
-        if (board.validBoard()) {
-            return board
-        }
-    }
-    return board
 }
