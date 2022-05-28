@@ -145,6 +145,10 @@ class NumberBoard {
         rows[rowIndex][columnIndex] = number
     }
 
+    fun fulfilled(): Boolean {
+        return this.rows.none { it.contains(-1) }
+    }
+
     companion object {
 
         private const val BOARD_SIZE = 9
