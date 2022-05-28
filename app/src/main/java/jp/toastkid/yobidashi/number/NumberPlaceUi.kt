@@ -11,7 +11,12 @@ package jp.toastkid.yobidashi.number
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Surface
@@ -43,7 +48,9 @@ fun NumberPlaceUi() {
     ) {
         Column() {
             viewModel.masked().rows().forEachIndexed { rowIndex, row ->
-                Row() {
+                Row(
+                    modifier = Modifier.height(IntrinsicSize.Min)
+                ) {
                     row.forEachIndexed { columnIndex, cellValue ->
                         if (cellValue == -1) {
                             val open = remember { mutableStateOf(false) }
@@ -86,8 +93,15 @@ fun NumberPlaceUi() {
                                 modifier = Modifier.weight(1f)
                             )
                         }
+
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .width(if (columnIndex % 3 == 2) 2.dp else 1.dp)
+                        )
                     }
                 }
+                Divider(thickness = if (rowIndex % 3 == 2) 2.dp else 1.dp)
             }
         }
     }
