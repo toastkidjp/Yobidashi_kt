@@ -21,23 +21,33 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.lib.ContentViewModel
 
 @Composable
 fun NumberPlaceUi() {
     val correct = getValidBoard()
     val masked = correct.masked()
+    val solving = NumberBoard()
+    solving.copyFrom(masked)
     val fontSize = 28.sp
+
+    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, it)
+    }
 
     Surface(
         elevation = 4.dp
     ) {
         Column() {
-            masked.rows().forEach { row ->
+            masked.rows().forEachIndexed { rowIndex, row ->
                 Row() {
-                    row.forEach {
-                        if (it == -1) {
+                    row.forEachIndexed { columnIndex, cellValue ->
+                        if (cellValue == -1) {
                             val open = remember { mutableStateOf(false) }
                             val number = remember { mutableStateOf("_") }
                             Box(
@@ -57,6 +67,13 @@ fun NumberPlaceUi() {
                                         DropdownMenuItem(onClick = {
                                             number.value = "$it"
                                             open.value = false
+                                            solving.place(rowIndex, columnIndex, it)
+                                            if (solving.fulfilled().not()) {
+                                                return@DropdownMenuItem
+                                            }
+                                            contentViewModel?.snackShort(
+                                                if (solving.isCorrect(correct)) "Well done!" else "Incorrect..."
+                                            )
                                         }) {
                                             Text(
                                                 text = "$it",
@@ -68,7 +85,7 @@ fun NumberPlaceUi() {
                             }
                         } else {
                             Text(
-                                it.toString(),
+                                cellValue.toString(),
                                 fontSize = fontSize,
                                 modifier = Modifier.weight(1f)
                             )
