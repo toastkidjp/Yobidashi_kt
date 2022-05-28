@@ -24,9 +24,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
@@ -56,6 +58,7 @@ fun NumberPlaceUi() {
                             val open = remember { mutableStateOf(false) }
                             val number = remember { mutableStateOf("_") }
                             Box(
+                                contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                     .weight(1f)
                                     .clickable {
@@ -65,7 +68,8 @@ fun NumberPlaceUi() {
                                 Text(
                                     number.value,
                                     color = Color(0xFF444499),
-                                    fontSize = fontSize
+                                    fontSize = fontSize,
+                                    textAlign = TextAlign.Center
                                 )
                                 DropdownMenu(open.value, onDismissRequest = { open.value = false }) {
                                     (1..9).forEach {
@@ -80,7 +84,8 @@ fun NumberPlaceUi() {
                                         }) {
                                             Text(
                                                 text = "$it",
-                                                fontSize = fontSize
+                                                fontSize = fontSize,
+                                                textAlign = TextAlign.Center
                                             )
                                         }
                                     }
@@ -90,6 +95,7 @@ fun NumberPlaceUi() {
                             Text(
                                 cellValue.toString(),
                                 fontSize = fontSize,
+                                textAlign = TextAlign.Center,
                                 modifier = Modifier.weight(1f)
                             )
                         }
