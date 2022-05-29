@@ -23,6 +23,10 @@ class NumberPlaceViewModel : ViewModel() {
     init {
         _correct.value = getValidBoard()
         _masked.value = _correct.value.masked()
+        initializeSolving()
+    }
+
+    fun initializeSolving() {
         _solving.value.copyFrom(_masked.value)
     }
 

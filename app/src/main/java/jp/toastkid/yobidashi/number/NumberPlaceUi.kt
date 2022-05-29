@@ -23,6 +23,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,6 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.model.OptionMenu
+import jp.toastkid.yobidashi.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -46,6 +49,8 @@ fun NumberPlaceUi() {
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, it)
     }
+
+    val numberStates = mutableListOf<MutableState<String>>()
 
     Surface(
         elevation = 4.dp
@@ -59,6 +64,7 @@ fun NumberPlaceUi() {
                         if (cellValue == -1) {
                             val open = remember { mutableStateOf(false) }
                             val number = remember { mutableStateOf("_") }
+                            numberStates.add(number)
                             Box(
                                 contentAlignment = Alignment.Center,
                                 modifier = Modifier
@@ -72,7 +78,11 @@ fun NumberPlaceUi() {
                                                 "Would you like to use hint?",
                                                 "Use",
                                                 {
-                                                    viewModel.useHint(rowIndex, columnIndex, number) { done ->
+                                                    viewModel.useHint(
+                                                        rowIndex,
+                                                        columnIndex,
+                                                        number
+                                                    ) { done ->
                                                         contentViewModel?.snackShort(
                                                             if (done) "Well done!" else "Incorrect..."
                                                         )
@@ -128,4 +138,18 @@ fun NumberPlaceUi() {
             }
         }
     }
+
+    contentViewModel?.optionMenus(
+        OptionMenu(
+            titleId = R.string.menu_other_board,
+            action = {
+                contentViewModel.nextRoute("tool/number/place")
+            }),
+        OptionMenu(
+            titleId = R.string.clear_all,
+            action = {
+                viewModel.initializeSolving()
+                numberStates.forEach { it.value = "_" }
+            })
+    )
 }
