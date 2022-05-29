@@ -90,13 +90,13 @@ class NumberBoard {
         return queue
     }
 
-    fun masked(): NumberBoard {
+    fun masked(maskNumberCount: Int = 50): NumberBoard {
         val newBoard = NumberBoard()
         newBoard.copyFrom(this)
         val random = Random()
         val randomPair = mutableSetOf<String>()
 
-        while (randomPair.size < 20) {
+        while (randomPair.size < maskNumberCount) {
             randomPair.add("${random.nextInt(9)}_${random.nextInt(9)}")
         }
         randomPair.map {
