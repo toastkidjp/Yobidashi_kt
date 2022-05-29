@@ -94,7 +94,7 @@ fun NumberPlaceUi() {
                             ) {
                                 Text(
                                     number.value,
-                                    color = Color(0xFF444499),
+                                    color = Color(0xFFAA99FF),
                                     fontSize = fontSize,
                                     textAlign = TextAlign.Center
                                 )
