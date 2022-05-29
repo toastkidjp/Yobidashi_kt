@@ -10,9 +10,8 @@ package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
@@ -27,24 +26,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.settings.initial.InitialIndexSettingUseCase
 
 @Composable
 fun SettingTopUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
-    val initialIndexSettingUseCase = InitialIndexSettingUseCase()
+    val appBarViewModel = (activityContext as? ViewModelStoreOwner)?.let {
+        viewModel(AppBarViewModel::class.java, activityContext)
+    }
+
+    val selectedIndex = remember { mutableStateOf(0) }
 
     Column(
         modifier = Modifier
             .background(Color.Transparent)
     ) {
-        val selectedIndex = remember { mutableStateOf(0) }
+        SwitchContentWithTabIndex(selectedIndex)
+    }
 
+    appBarViewModel?.replace {
         val pages = arrayOf(
             R.string.subhead_displaying,
             R.string.title_settings_color,
@@ -56,16 +62,9 @@ fun SettingTopUi() {
         )
 
         ScrollableTabRow(
-            backgroundColor = Color(preferenceApplier.color),
             selectedTabIndex = selectedIndex.value,
-            edgePadding = 4.dp,
-            divider = {
-                Divider(
-                    color = Color(preferenceApplier.fontColor),
-                    thickness = 1.dp
-                )
-            },
-            modifier = Modifier.height(44.dp)
+            edgePadding = 8.dp,
+            modifier = Modifier.fillMaxHeight()
         ) {
             pages.forEachIndexed { index, page ->
                 Tab(
@@ -83,8 +82,6 @@ fun SettingTopUi() {
                 }
             }
         }
-
-        SwitchContentWithTabIndex(selectedIndex)
     }
 
     val viewModel = viewModel(ContentViewModel::class.java)
@@ -111,7 +108,7 @@ private fun SwitchContentWithTabIndex(selectedIndex: MutableState<Int>) {
 }
 
 /*
-
+TODO
 override fun onDetach() {
     activity?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java).refresh()

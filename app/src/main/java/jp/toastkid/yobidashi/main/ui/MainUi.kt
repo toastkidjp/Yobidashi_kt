@@ -711,7 +711,7 @@ internal fun Content() {
                     composable("tool/loan") {
                         LoanCalculatorUi()
                     }
-                    composable("tool/calendar") {
+                    composable("tab/calendar") {
                         CalendarUi()
                     }
                     composable("setting/top") {
@@ -1093,7 +1093,7 @@ private fun replaceToCurrentTab(tabs: TabAdapter, navigationHostController: NavH
             navigate(navigationHostController, "tab/article/content/${tab.title()}")
         }
         is CalendarTab -> {
-            navigate(navigationHostController, "tool/calendar")
+            navigate(navigationHostController, "tab/calendar")
         }
         is EditorTab -> {
             navigate(navigationHostController, "tab/editor/current")

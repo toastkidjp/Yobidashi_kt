@@ -55,7 +55,7 @@ class NotificationFactory(
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                         .setMediaSession(mediaSessionSupplier().sessionToken)
-                        .setShowActionsInCompactView(0, 1)
+                        .setShowActionsInCompactView(0)
                 )
                 .setColor(preferenceApplier.color)
                 .setSmallIcon(R.drawable.ic_music)

@@ -106,6 +106,7 @@ internal fun ColorSettingUi() {
                         fontColor
                     )
                     contentViewModel?.snackShort(R.string.settings_color_done_commit)
+                    contentViewModel?.refresh()
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val savedColor =
@@ -128,6 +129,7 @@ internal fun ColorSettingUi() {
 
                     //activity?.let { Updater().update(it) }
                     contentViewModel?.snackShort(R.string.settings_color_done_reset)
+                    contentViewModel?.refresh()
                 }
             )
         }
@@ -167,6 +169,7 @@ internal fun ColorSettingUi() {
                                     Color(savedColor.fontColor)
                                 )
                                 contentViewModel?.snackShort(R.string.settings_color_done_commit)
+                                contentViewModel?.refresh()
                             }
                             .weight(1f)
                             .padding(8.dp)
@@ -288,28 +291,4 @@ private fun commitNewColor(
 
     currentBackgroundColor?.value = bgColor
     currentFontColor?.value = fontColor
-
-    //TODO activity?.let { Updater().update(it) }
 }
-
-/*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return when (item.itemId) {
-        R.id.color_settings_toolbar_menu_add_recommend -> {
-            ConfirmDialogFragment.show(
-                parentFragmentManager,
-                getString(R.string.title_add_recommended_colors),
-                getString(R.string.message_add_recommended_colors),
-                "add_recommended_colors"
-            )
-            true
-        }
-        R.id.color_settings_toolbar_menu_add_random -> {
-            RandomColorInsertion(repository)() {
-                adapter?.refresh()
-            }
-            snackShort(R.string.done_addition)
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }
-}*/
