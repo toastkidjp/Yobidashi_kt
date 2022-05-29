@@ -82,19 +82,18 @@ fun NumberPlaceUi() {
                                         onLongClick = {
                                             contentViewModel?.snackWithAction(
                                                 "Would you like to use hint?",
-                                                "Use",
-                                                {
-                                                    viewModel.useHint(
-                                                        rowIndex,
-                                                        columnIndex,
-                                                        number
-                                                    ) { done ->
-                                                        contentViewModel?.snackShort(
-                                                            if (done) "Well done!" else "Incorrect..."
-                                                        )
-                                                    }
+                                                "Use"
+                                            ) {
+                                                viewModel.useHint(
+                                                    rowIndex,
+                                                    columnIndex,
+                                                    number
+                                                ) { done ->
+                                                    contentViewModel?.snackShort(
+                                                        if (done) "Well done!" else "Incorrect..."
+                                                    )
                                                 }
-                                            )
+                                            }
                                         }
                                     )
                             ) {
