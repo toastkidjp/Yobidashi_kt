@@ -20,9 +20,9 @@ class NumberPlaceViewModel : ViewModel() {
 
     private val _solving = mutableStateOf(NumberBoard())
 
-    init {
+    fun initialize(maskingCount: Int) {
         _correct.value = getValidBoard()
-        _masked.value = _correct.value.masked()
+        _masked.value = _correct.value.masked(maskingCount)
         initializeSolving()
     }
 
