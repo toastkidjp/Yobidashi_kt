@@ -42,7 +42,7 @@ import jp.toastkid.yobidashi.R
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NumberPlaceUi() {
-    val fontSize = 28.sp
+    val fontSize = 32.sp
 
     val viewModel = viewModel(NumberPlaceViewModel::class.java)
 
