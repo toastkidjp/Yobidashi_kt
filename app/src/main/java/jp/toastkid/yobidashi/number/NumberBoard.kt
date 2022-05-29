@@ -90,7 +90,7 @@ class NumberBoard {
         return queue
     }
 
-    fun masked(maskNumberCount: Int = 50): NumberBoard {
+    fun masked(maskNumberCount: Int): NumberBoard {
         val newBoard = NumberBoard()
         newBoard.copyFrom(this)
         val random = Random()
