@@ -8,7 +8,8 @@
 
 package jp.toastkid.yobidashi.number
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -35,6 +36,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NumberPlaceUi() {
     val fontSize = 28.sp
@@ -61,9 +63,24 @@ fun NumberPlaceUi() {
                                 contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                     .weight(1f)
-                                    .clickable {
-                                        open.value = true
-                                    }
+                                    .combinedClickable(
+                                        onClick = {
+                                            open.value = true
+                                        },
+                                        onLongClick = {
+                                            contentViewModel?.snackWithAction(
+                                                "Would you like to use hint?",
+                                                "Use",
+                                                {
+                                                    viewModel.useHint(rowIndex, columnIndex, number) { done ->
+                                                        contentViewModel?.snackShort(
+                                                            if (done) "Well done!" else "Incorrect..."
+                                                        )
+                                                    }
+                                                }
+                                            )
+                                        }
+                                    )
                             ) {
                                 Text(
                                     number.value,

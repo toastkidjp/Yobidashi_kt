@@ -149,6 +149,10 @@ class NumberBoard {
         return this.rows.none { it.contains(-1) }
     }
 
+    fun pick(rowIndex: Int, columnIndex: Int): Int {
+        return this.rows[rowIndex][columnIndex]
+    }
+
     companion object {
 
         private const val BOARD_SIZE = 9

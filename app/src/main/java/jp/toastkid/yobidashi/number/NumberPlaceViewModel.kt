@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.number
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
@@ -45,6 +46,12 @@ class NumberPlaceViewModel : ViewModel() {
         }
 
         onSolved(_solving.value.isCorrect(_correct.value))
+    }
+
+    fun useHint(rowIndex: Int, columnIndex: Int, numberState: MutableState<String>, onSolved: (Boolean) -> Unit) {
+        val it = _correct.value.pick(rowIndex, columnIndex)
+        numberState.value = "$it"
+        place(rowIndex, columnIndex, it, onSolved)
     }
 
 }
