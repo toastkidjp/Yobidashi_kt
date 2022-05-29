@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.number
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
@@ -35,8 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -44,7 +48,9 @@ import jp.toastkid.yobidashi.R
 fun NumberPlaceUi() {
     val fontSize = 32.sp
 
+    val preferenceApplier = PreferenceApplier(LocalContext.current)
     val viewModel = viewModel(NumberPlaceViewModel::class.java)
+    viewModel.initialize(preferenceApplier.getMaskingCount())
 
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, it)
@@ -152,4 +158,48 @@ fun NumberPlaceUi() {
                 numberStates.forEach { it.value = "_" }
             })
     )
+
+    (LocalContext.current as? ViewModelStoreOwner)?.let {
+        viewModel(AppBarViewModel::class.java, it)
+            .replace {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    val openMaskingCount = remember { mutableStateOf(false) }
+                    val maskingCount = remember { mutableStateOf("${preferenceApplier.getMaskingCount()}") }
+
+                    Text(
+                        "Masking count: ",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+
+                    Box(
+                        modifier = Modifier.padding(start = 4.dp).clickable {
+                            openMaskingCount.value = true
+                        }
+                    ) {
+                        Text(
+                            maskingCount.value,
+                            textAlign = TextAlign.Center,
+                            fontSize = fontSize
+                        )
+                        DropdownMenu(openMaskingCount.value, onDismissRequest = { openMaskingCount.value = false }) {
+                            (1..64).forEach {
+                                DropdownMenuItem(onClick = {
+                                    maskingCount.value = "$it"
+                                    openMaskingCount.value = false
+                                    preferenceApplier.setMaskingCount(it)
+                                    contentViewModel?.nextRoute("tool/number/place")
+                                }) {
+                                    Text(
+                                        text = "$it",
+                                        fontSize = fontSize,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+    }
 }
