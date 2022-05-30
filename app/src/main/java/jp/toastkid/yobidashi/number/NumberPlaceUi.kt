@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
@@ -71,10 +72,21 @@ fun NumberPlaceUi() {
                             val open = remember { mutableStateOf(false) }
                             val number = remember { mutableStateOf("_") }
                             numberStates.add(number)
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .weight(1f)
+
+                            MaskedCell(
+                                open,
+                                number,
+                                {
+                                    number.value = "$it"
+                                    open.value = false
+                                    viewModel.place(rowIndex, columnIndex, it) { done ->
+                                        contentViewModel?.snackShort(
+                                            if (done) "Well done!" else "Incorrect..."
+                                        )
+                                    }
+                                },
+                                fontSize,
+                                modifier = Modifier.weight(1f)
                                     .combinedClickable(
                                         onClick = {
                                             open.value = true
@@ -96,33 +108,7 @@ fun NumberPlaceUi() {
                                             }
                                         }
                                     )
-                            ) {
-                                Text(
-                                    number.value,
-                                    color = Color(0xFFAA99FF),
-                                    fontSize = fontSize,
-                                    textAlign = TextAlign.Center
-                                )
-                                DropdownMenu(open.value, onDismissRequest = { open.value = false }) {
-                                    (1..9).forEach {
-                                        DropdownMenuItem(onClick = {
-                                            number.value = "$it"
-                                            open.value = false
-                                            viewModel.place(rowIndex, columnIndex, it) { done ->
-                                                contentViewModel?.snackShort(
-                                                    if (done) "Well done!" else "Incorrect..."
-                                                )
-                                            }
-                                        }) {
-                                            Text(
-                                                text = "$it",
-                                                fontSize = fontSize,
-                                                textAlign = TextAlign.Center
-                                            )
-                                        }
-                                    }
-                                }
-                            }
+                            )
                         } else {
                             Text(
                                 cellValue.toString(),
@@ -200,5 +186,39 @@ fun NumberPlaceUi() {
                     }
                 }
             }
+    }
+}
+
+@Composable
+private fun MaskedCell(
+    openState: MutableState<Boolean>,
+    numberState: MutableState<String>,
+    onMenuItemClick: (Int) -> Unit,
+    fontSize: TextUnit,
+    modifier: Modifier
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        Text(
+            numberState.value,
+            color = Color(0xFFAA99FF),
+            fontSize = fontSize,
+            textAlign = TextAlign.Center
+        )
+        DropdownMenu(openState.value, onDismissRequest = { openState.value = false }) {
+            (1..9).forEach {
+                DropdownMenuItem(onClick = {
+                    onMenuItemClick(it)
+                }) {
+                    Text(
+                        text = "$it",
+                        fontSize = fontSize,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
     }
 }
