@@ -121,11 +121,11 @@ fun NumberPlaceUi() {
                         Divider(
                             modifier = Modifier
                                 .fillMaxHeight()
-                                .width(if (columnIndex % 3 == 2) 2.dp else 1.dp)
+                                .width(calculateThickness(columnIndex))
                         )
                     }
                 }
-                Divider(thickness = if (rowIndex % 3 == 2) 2.dp else 1.dp)
+                Divider(thickness = calculateThickness(rowIndex))
             }
         }
     }
@@ -151,6 +151,8 @@ fun NumberPlaceUi() {
             }
     }
 }
+
+private fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.dp else 1.dp
 
 @Composable
 private fun AppBarContent(
