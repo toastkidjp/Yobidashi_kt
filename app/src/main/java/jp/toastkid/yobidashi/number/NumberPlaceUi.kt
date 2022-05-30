@@ -147,45 +147,58 @@ fun NumberPlaceUi() {
     (LocalContext.current as? ViewModelStoreOwner)?.let {
         viewModel(AppBarViewModel::class.java, it)
             .replace {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    val openMaskingCount = remember { mutableStateOf(false) }
-                    val maskingCount = remember { mutableStateOf("${preferenceApplier.getMaskingCount()}") }
+                AppBarContent(preferenceApplier, fontSize, contentViewModel)
+            }
+    }
+}
 
-                    Text(
-                        "Masking count: ",
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
+@Composable
+private fun AppBarContent(
+    preferenceApplier: PreferenceApplier,
+    fontSize: TextUnit,
+    contentViewModel: ContentViewModel?
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        val openMaskingCount = remember { mutableStateOf(false) }
+        val maskingCount = remember { mutableStateOf("${preferenceApplier.getMaskingCount()}") }
 
-                    Box(
-                        modifier = Modifier.padding(start = 4.dp).clickable {
-                            openMaskingCount.value = true
-                        }
-                    ) {
+        Text(
+            "Masking count: ",
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .padding(start = 4.dp)
+                .clickable {
+                    openMaskingCount.value = true
+                }
+        ) {
+            Text(
+                maskingCount.value,
+                textAlign = TextAlign.Center,
+                fontSize = fontSize
+            )
+            DropdownMenu(
+                openMaskingCount.value,
+                onDismissRequest = { openMaskingCount.value = false }) {
+                (1..64).forEach {
+                    DropdownMenuItem(onClick = {
+                        maskingCount.value = "$it"
+                        openMaskingCount.value = false
+                        preferenceApplier.setMaskingCount(it)
+                        contentViewModel?.nextRoute("tool/number/place")
+                    }) {
                         Text(
-                            maskingCount.value,
-                            textAlign = TextAlign.Center,
-                            fontSize = fontSize
+                            text = "$it",
+                            fontSize = fontSize,
+                            textAlign = TextAlign.Center
                         )
-                        DropdownMenu(openMaskingCount.value, onDismissRequest = { openMaskingCount.value = false }) {
-                            (1..64).forEach {
-                                DropdownMenuItem(onClick = {
-                                    maskingCount.value = "$it"
-                                    openMaskingCount.value = false
-                                    preferenceApplier.setMaskingCount(it)
-                                    contentViewModel?.nextRoute("tool/number/place")
-                                }) {
-                                    Text(
-                                        text = "$it",
-                                        fontSize = fontSize,
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            }
-                        }
                     }
                 }
             }
+        }
     }
 }
 
