@@ -82,6 +82,8 @@ fun NumberPlaceUi() {
                 Row(
                     modifier = Modifier.height(IntrinsicSize.Min)
                 ) {
+                    VerticalDivider(0)
+
                     row.forEachIndexed { columnIndex, cellValue ->
                         if (cellValue == -1) {
                             val open = remember { mutableStateOf(false) }
