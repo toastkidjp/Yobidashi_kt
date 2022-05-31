@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -69,7 +71,7 @@ fun NumberPlaceUi() {
     Surface(
         elevation = 4.dp
     ) {
-        Column() {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
             viewModel.masked().rows().forEachIndexed { rowIndex, row ->
                 Row(
                     modifier = Modifier.height(IntrinsicSize.Min)
