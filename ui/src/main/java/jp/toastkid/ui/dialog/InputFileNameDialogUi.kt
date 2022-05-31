@@ -41,7 +41,10 @@ fun InputFileNameDialogUi(
     AlertDialog(
         onDismissRequest = { openDialog.value = false },
         title = {
-            stringResource(id = R.string.title_dialog_input_file_name)
+            Text(
+                stringResource(id = R.string.title_dialog_input_file_name),
+                style = MaterialTheme.typography.h5
+            )
         },
         text = {
             TextField(
@@ -66,7 +69,6 @@ fun InputFileNameDialogUi(
         confirmButton = {
             Text(
                 text = stringResource(id = R.string.save),
-                color = MaterialTheme.colors.primary,
                 modifier = Modifier.clickable {
                     if (input.value.isNotBlank()) {
                         onCommit(input.value)
@@ -78,7 +80,6 @@ fun InputFileNameDialogUi(
         dismissButton = {
             Text(
                 text = stringResource(id = R.string.cancel),
-                color = MaterialTheme.colors.primary,
                 modifier = Modifier.clickable {
                     openDialog.value = false
                 }.padding(4.dp)
