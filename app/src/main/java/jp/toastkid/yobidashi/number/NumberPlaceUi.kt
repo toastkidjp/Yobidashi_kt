@@ -137,7 +137,7 @@ fun NumberPlaceUi() {
                         )
                     }
                 }
-                Divider(thickness = calculateThickness(rowIndex))
+                HorizontalDivider(rowIndex)
             }
         }
     }
@@ -162,6 +162,11 @@ fun NumberPlaceUi() {
                 AppBarContent(preferenceApplier, fontSize, contentViewModel)
             }
     }
+}
+
+@Composable
+private fun HorizontalDivider(rowIndex: Int) {
+    Divider(thickness = calculateThickness(rowIndex))
 }
 
 private fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.dp else 1.dp
