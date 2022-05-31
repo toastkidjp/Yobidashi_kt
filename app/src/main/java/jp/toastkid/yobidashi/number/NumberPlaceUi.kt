@@ -72,9 +72,12 @@ fun NumberPlaceUi() {
         elevation = 4.dp
     ) {
         Column(
-            Modifier.verticalScroll(rememberScrollState())
+            Modifier
+                .verticalScroll(rememberScrollState())
                 .padding(8.dp)
         ) {
+            HorizontalDivider(0)
+
             viewModel.masked().rows().forEachIndexed { rowIndex, row ->
                 Row(
                     modifier = Modifier.height(IntrinsicSize.Min)
@@ -98,7 +101,8 @@ fun NumberPlaceUi() {
                                     }
                                 },
                                 fontSize,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier
+                                    .weight(1f)
                                     .combinedClickable(
                                         onClick = {
                                             open.value = true
