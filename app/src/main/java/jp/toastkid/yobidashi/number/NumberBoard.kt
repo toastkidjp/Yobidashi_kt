@@ -34,15 +34,15 @@ class NumberBoard {
     fun placeRandom() {
         fillZero()
 
-        (0 until BOARD_SIZE).forEach { x ->
-            (0 until BOARD_SIZE).forEach { y ->
-                if (rows[y][x] == 0) {
-                    val boxNumbers = getIntInBox(x, y)
-                    val verticalNumbers = getIntVertical(x)
-                    val horizontalNumbers = rows[y]
-                    val next = makeRandomWithout(boxNumbers.union(verticalNumbers).union(horizontalNumbers))
-                    rows[y][x] = next
-                }
+        iterate { x, y ->
+            if (rows[y][x] == 0) {
+                val boxNumbers = getIntInBox(x, y)
+                val verticalNumbers = getIntVertical(x)
+                val horizontalNumbers = rows[y]
+                val next = makeRandomWithout(
+                    boxNumbers.union(verticalNumbers).union(horizontalNumbers)
+                )
+                rows[y][x] = next
             }
         }
     }
@@ -109,10 +109,8 @@ class NumberBoard {
     }
 
     fun copyFrom(base: NumberBoard) {
-        (0 until BOARD_SIZE).forEach { x ->
-            (0 until BOARD_SIZE).forEach { y ->
-                this.rows[x][y] = base.rows[x][y]
-            }
+        iterate { x, y ->
+            this.rows[x][y] = base.rows[x][y]
         }
     }
 
@@ -151,6 +149,14 @@ class NumberBoard {
 
     fun pick(rowIndex: Int, columnIndex: Int): Int {
         return this.rows[rowIndex][columnIndex]
+    }
+
+    private fun iterate(action: (Int, Int) -> Unit) {
+        (0 until BOARD_SIZE).forEach { x ->
+            (0 until BOARD_SIZE).forEach { y ->
+                action(x, y)
+            }
+        }
     }
 
     companion object {
