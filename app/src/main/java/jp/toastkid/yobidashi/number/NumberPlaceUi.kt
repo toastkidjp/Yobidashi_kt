@@ -25,6 +25,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +44,8 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -51,7 +54,11 @@ fun NumberPlaceUi() {
 
     val preferenceApplier = PreferenceApplier(LocalContext.current)
     val viewModel = viewModel(NumberPlaceViewModel::class.java)
-    viewModel.initialize(preferenceApplier.getMaskingCount())
+    LaunchedEffect(key1 = viewModel, block = {
+        withContext(Dispatchers.IO) {
+            viewModel.initialize(preferenceApplier.getMaskingCount())
+        }
+    })
 
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, it)
