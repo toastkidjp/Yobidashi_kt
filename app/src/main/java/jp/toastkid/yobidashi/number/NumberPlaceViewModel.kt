@@ -52,7 +52,12 @@ class NumberPlaceViewModel : ViewModel() {
         onSolved(_solving.value.isCorrect(_correct.value))
     }
 
-    fun useHint(rowIndex: Int, columnIndex: Int, numberState: MutableState<String>, onSolved: (Boolean) -> Unit) {
+    fun useHint(
+        rowIndex: Int,
+        columnIndex: Int,
+        numberState: MutableState<String>,
+        onSolved: (Boolean) -> Unit
+    ) {
         val it = _correct.value.pick(rowIndex, columnIndex)
         numberState.value = "$it"
         place(rowIndex, columnIndex, it, onSolved)
