@@ -134,11 +134,7 @@ fun NumberPlaceUi() {
                             )
                         }
 
-                        Divider(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(calculateThickness(columnIndex))
-                        )
+                        VerticalDivider(columnIndex)
                     }
                 }
                 HorizontalDivider(rowIndex)
@@ -166,6 +162,15 @@ fun NumberPlaceUi() {
                 AppBarContent(preferenceApplier, fontSize, contentViewModel)
             }
     }
+}
+
+@Composable
+private fun VerticalDivider(columnIndex: Int) {
+    Divider(
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(calculateThickness(columnIndex))
+    )
 }
 
 @Composable
