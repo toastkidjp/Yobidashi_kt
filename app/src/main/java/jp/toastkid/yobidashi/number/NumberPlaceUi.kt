@@ -71,7 +71,10 @@ fun NumberPlaceUi() {
     Surface(
         elevation = 4.dp
     ) {
-        Column(Modifier.verticalScroll(rememberScrollState())) {
+        Column(
+            Modifier.verticalScroll(rememberScrollState())
+                .padding(8.dp)
+        ) {
             viewModel.masked().rows().forEachIndexed { rowIndex, row ->
                 Row(
                     modifier = Modifier.height(IntrinsicSize.Min)
