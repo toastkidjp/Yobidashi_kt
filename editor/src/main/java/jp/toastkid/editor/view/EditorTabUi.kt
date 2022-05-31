@@ -115,14 +115,16 @@ fun EditorTabUi(path: String?) {
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
     val tabListViewModel = ViewModelProvider(context).get(TabListViewModel::class.java)
 
-    val fileActionUseCase = FileActionUseCase(
-        context,
-        contentViewModel,
-        remember { mutableStateOf(path ?: "") },
-        { editText.text.toString() },
-        { editText.setText(it) },
-        { tabListViewModel.saveEditorTab(it) }
-    )
+    val fileActionUseCase = remember {
+        FileActionUseCase(
+            context,
+            contentViewModel,
+            mutableStateOf(path ?: ""),
+            { editText.text.toString() },
+            { editText.setText(it) },
+            { tabListViewModel.saveEditorTab(it) }
+        )
+    }
 
     viewModelProvider.get(AppBarViewModel::class.java)
         .replace {
@@ -146,7 +148,7 @@ fun EditorTabUi(path: String?) {
         val title =
             if (path?.contains("/") == true) path.substring(path.lastIndexOf("/") + 1)
             else path
-        val content = editText.text.toString()
+        val content = fileActionUseCase.getText()
         if (content.isEmpty()) {
             contentViewModel.snackShort(R.string.error_content_is_empty)
             return@observe
@@ -169,17 +171,15 @@ fun EditorTabUi(path: String?) {
             editText.highlightColor = preferenceApplier.editorHighlightColor(
                 ContextCompat.getColor(context, R.color.light_blue_200_dd)
             )
-            editText
-        },
-        update = {
             fileActionUseCase.readCurrentFile()
+            editText
         },
         modifier = Modifier
             .fillMaxSize()
             .background(Color(preferenceApplier.editorBackgroundColor()))
             .padding(horizontal = 8.dp, vertical = 2.dp)
             .nestedScroll(
-                object : NestedScrollConnection{},
+                object : NestedScrollConnection {},
                 nestedScrollDispatcher
             )
     )
@@ -225,13 +225,14 @@ fun EditorTabUi(path: String?) {
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
-    DisposableEffect(key1 = "hide_keyboard") {
+    DisposableEffect(key1 = editText) {
         localLifecycle.addObserver(observer)
 
         onDispose {
             fileActionUseCase.save(openInputFileNameDialog)
             localLifecycle.removeObserver(observer)
             keyboardController?.hide()
+            contentViewModel?.share?.removeObservers(localLifecycleOwner)
         }
     }
 }
