@@ -14,42 +14,23 @@ import androidx.lifecycle.ViewModel
 
 class NumberPlaceViewModel : ViewModel() {
 
-    private val _correct = mutableStateOf(NumberBoard())
-
-    private val _masked = mutableStateOf(NumberBoard())
-
-    private val _solving = mutableStateOf(NumberBoard())
+    private val _game = mutableStateOf(NumberPlaceGame())
+    private val _mask = mutableStateOf(NumberBoard())
 
     fun initialize(maskingCount: Int) {
-        _correct.value = getValidBoard()
-        _masked.value = _correct.value.masked(maskingCount)
-        initializeSolving()
+        _game.value.initialize(maskingCount)
+        _mask.value = _game.value.masked()
     }
 
     fun initializeSolving() {
-        _solving.value.copyFrom(_masked.value)
+        _game.value.initializeSolving()
+        _mask.value = _game.value.masked()
     }
 
-    fun masked() = _masked.value
-
-    private fun getValidBoard(): NumberBoard {
-        val board = NumberBoard()
-        repeat(50000) {
-            board.placeRandom()
-            if (board.validBoard()) {
-                return board
-            }
-        }
-        return board
-    }
+    fun masked() = _mask.value
 
     fun place(rowIndex: Int, columnIndex: Int, it: Int, onSolved: (Boolean) -> Unit) {
-        _solving.value.place(rowIndex, columnIndex, it)
-        if (_solving.value.fulfilled().not()) {
-            return
-        }
-
-        onSolved(_solving.value.isCorrect(_correct.value))
+        _game.value.place(rowIndex, columnIndex, it, onSolved)
     }
 
     fun useHint(
@@ -58,9 +39,13 @@ class NumberPlaceViewModel : ViewModel() {
         numberState: MutableState<String>,
         onSolved: (Boolean) -> Unit
     ) {
-        val it = _correct.value.pick(rowIndex, columnIndex)
+        val it = _game.value.pickCorrect(rowIndex, columnIndex)
         numberState.value = "$it"
-        place(rowIndex, columnIndex, it, onSolved)
+        _game.value.place(rowIndex, columnIndex, it, onSolved)
+    }
+
+    fun setGame(game: NumberPlaceGame) {
+        _game.value = game
     }
 
 }
