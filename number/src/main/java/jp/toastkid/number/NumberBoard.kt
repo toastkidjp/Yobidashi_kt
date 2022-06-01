@@ -12,9 +12,9 @@ import java.util.LinkedList
 import java.util.Queue
 import java.util.Random
 
-class NumberBoard {
-
+data class NumberBoard(
     private val rows: MutableList<MutableList<Int>> = mutableListOf()
+) {
 
     init {
         fillZero()
