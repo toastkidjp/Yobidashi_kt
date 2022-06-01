@@ -50,13 +50,18 @@ import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NumberPlaceUi() {
+fun NumberPlaceUi(game: NumberPlaceGame? = null) {
     val fontSize = 32.sp
 
     val preferenceApplier = PreferenceApplier(LocalContext.current)
     val viewModel = viewModel(NumberPlaceViewModel::class.java)
     LaunchedEffect(key1 = viewModel, block = {
+        if (game != null) {
+            viewModel.setGame(game)
+            return@LaunchedEffect
+        }
         withContext(Dispatchers.IO) {
+            viewModel.setGame(NumberPlaceGame())
             viewModel.initialize(preferenceApplier.getMaskingCount())
         }
     })
