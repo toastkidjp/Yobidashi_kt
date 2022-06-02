@@ -156,7 +156,6 @@ import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
-import jp.toastkid.yobidashi.tab.model.NumberPlaceGameTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.view.TabListUi
@@ -702,9 +701,8 @@ internal fun Content() {
                     composable("tool/rss/list") {
                         RssReaderListUi()
                     }
-                    composable("tab/number/place") {
-                        val currentTab = tabs.currentTab() as? NumberPlaceGameTab
-                        NumberPlaceUi(currentTab?.game())
+                    composable("tool/number/place") {
+                        NumberPlaceUi()
                     }
                     composable("tool/task/list") {
                         TaskListUi()
@@ -842,7 +840,7 @@ internal fun Content() {
                                                 Menu.NUMBER_PLACE -> {
                                                     navigate(
                                                         navigationHostController,
-                                                        "tab/number/place"
+                                                        "tool/number/place"
                                                     )
                                                 }
                                                 Menu.AUDIO -> {
@@ -1123,9 +1121,6 @@ private fun replaceToCurrentTab(tabs: TabAdapter, navigationHostController: NavH
         }
         is EditorTab -> {
             navigate(navigationHostController, "tab/editor/current")
-        }
-        is NumberPlaceGameTab -> {
-            navigate(navigationHostController, "tab/number/place")
         }
     }
 }
