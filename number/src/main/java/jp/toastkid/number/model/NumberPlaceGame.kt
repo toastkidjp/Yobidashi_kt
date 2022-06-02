@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.number
+package jp.toastkid.number.model
 
 data class NumberPlaceGame(
     private val correct: NumberBoard = NumberBoard(),

@@ -11,6 +11,8 @@ package jp.toastkid.number
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import jp.toastkid.number.model.NumberBoard
+import jp.toastkid.number.model.NumberPlaceGame
 
 class NumberPlaceViewModel : ViewModel() {
 

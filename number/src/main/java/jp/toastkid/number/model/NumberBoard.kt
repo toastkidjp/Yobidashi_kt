@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.number
+package jp.toastkid.number.model
 
 import java.util.LinkedList
 import java.util.Queue

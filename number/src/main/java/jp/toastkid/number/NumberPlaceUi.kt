@@ -45,6 +45,7 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.number.model.NumberPlaceGame
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
