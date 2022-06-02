@@ -49,9 +49,9 @@ data class NumberBoard(
 
     private fun makeRandomWithout(existsNumbers: Set<Int>): Int {
         val uniqueQueue = makeRandomUniqueQueue(BOARD_SIZE)
-        var n = uniqueQueue.poll()
+        var n = uniqueQueue.poll() ?: -1
         while (existsNumbers.contains(n)) {
-            n = uniqueQueue.poll()
+            n = uniqueQueue.poll() ?: -1
         }
         return n ?: -1
     }
