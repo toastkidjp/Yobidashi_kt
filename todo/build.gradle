@@ -45,12 +45,12 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "androidx.core:core-ktx:$libVersions.ktx"
-    implementation "androidx.paging:paging-runtime:$libVersions.paging"
+    implementation "androidx.paging:paging-common:$libVersions.paging"
+    implementation "androidx.paging:paging-common-ktx:$libVersions.paging"
 
     implementation "androidx.compose.material:material:$libVersions.compose"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
     implementation "androidx.paging:paging-compose:$libVersions.paging_compose"
-    implementation "androidx.paging:paging-runtime-ktx:$libVersions.paging"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
     implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
     implementation 'androidx.activity:activity-compose:1.4.0'

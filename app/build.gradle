@@ -85,6 +85,7 @@ dependencies {
     implementation project(":about")
     implementation project(":barcode")
     implementation project(":ui")
+    implementation project(":editor")
 
     implementation "androidx.exifinterface:exifinterface:$libVersions.exifinterface"
     implementation "androidx.work:work-runtime:2.7.0"
@@ -93,8 +94,6 @@ dependencies {
     // Compose dependencies.
     implementation "androidx.compose.material:material:$libVersions.compose"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
-    implementation "androidx.paging:paging-compose:$libVersions.paging_compose"
-    implementation "androidx.paging:paging-runtime-ktx:$libVersions.paging"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
     implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
     implementation 'com.godaddy.android.colorpicker:compose-color-picker:0.4.2'

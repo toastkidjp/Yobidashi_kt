@@ -66,16 +66,15 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
     implementation "androidx.compose.material:material:$libVersions.compose"
-    implementation "androidx.compose.ui:ui-tooling:$libVersions.compose"
     implementation 'androidx.activity:activity-compose:1.4.0'
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
     implementation "androidx.paging:paging-compose:$libVersions.paging_compose"
-    implementation "androidx.paging:paging-runtime-ktx:$libVersions.paging"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
     implementation "com.halilibo.compose-richtext:richtext-commonmark:0.11.0"
     implementation "com.halilibo.compose-richtext:richtext-ui-material:0.11.0"
 
-    implementation "androidx.paging:paging-runtime:$libVersions.paging"
+    implementation "androidx.paging:paging-common:$libVersions.paging"
+    implementation "androidx.paging:paging-common-ktx:$libVersions.paging"
     implementation "androidx.room:room-runtime:$libVersions.room"
     implementation "androidx.room:room-paging:$libVersions.room"
     kapt "androidx.room:room-compiler:$libVersions.room"

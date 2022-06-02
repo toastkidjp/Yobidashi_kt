@@ -8,6 +8,7 @@ import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
@@ -31,7 +32,6 @@ import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import timber.log.Timber
@@ -43,6 +43,7 @@ class BrowserModule(
     private val context: Context,
     private val webViewContainer: FrameLayout?
 ) {
+    private val nestedScrollDispatcher = NestedScrollDispatcher()
 
     private val preferenceApplier = PreferenceApplier(context)
 
@@ -118,7 +119,6 @@ class BrowserModule(
     }
 
     fun loadWithNewTab(uri: Uri, tabId: String) {
-        browserHeaderViewModel?.resetContent()
         if (webViewReplacementUseCase(tabId)) {
             loadUrl(uri.toString())
         }
@@ -146,7 +146,7 @@ class BrowserModule(
         }
 
         if (preferenceApplier.wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
-            Toaster.tShort(context, R.string.message_wifi_not_connecting)
+            contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
             return
         }
 
@@ -166,7 +166,7 @@ class BrowserModule(
      */
     fun reload() {
         if (preferenceApplier.wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
-            Toaster.tShort(context, R.string.message_wifi_not_connecting)
+            contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
             return
         }
         currentView()?.reload()
@@ -325,5 +325,7 @@ class BrowserModule(
     fun downloadAllImages() {
         AllImageDownloaderUseCase(DownloadAction(context)).invoke(currentView())
     }
+
+    fun nestedScrollDispatcher() = nestedScrollDispatcher
 
 }

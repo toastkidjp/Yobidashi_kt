@@ -10,7 +10,6 @@ package jp.toastkid.image.view
 
 import android.Manifest
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -68,17 +67,22 @@ fun ImageListTopUi() {
 
     val images = remember { mutableStateListOf<Image>() }
 
+    val backHandlerState = remember { mutableStateOf(false) }
+
     val imageLoader = ImageLoader(contentResolver)
-    val imageLoaderUseCase = ImageLoaderUseCase(
-        preferenceApplier,
-        {
-            images.clear()
-            images.addAll(it)
-        },
-        BucketLoader(contentResolver),
-        imageLoader,
-        { }
-    )
+    val imageLoaderUseCase = remember {
+        ImageLoaderUseCase(
+            preferenceApplier,
+            {
+                images.clear()
+                images.addAll(it)
+            },
+            BucketLoader(contentResolver),
+            imageLoader,
+            backHandlerState,
+            { }
+        )
+    }
 
     val imageFilterUseCase = ImageFilterUseCase(
         preferenceApplier,
@@ -125,29 +129,26 @@ fun ImageListTopUi() {
 
     if (preview.value) {
         ImagePreviewUi(images, index.value)
-        return
+    } else {
+        ImageListUi(
+            imageLoaderUseCase,
+            images,
+            {
+                index.value = it
+                preview.value = true
+                backHandlerState.value = true
+            }
+        )
     }
 
-    val current = LocalOnBackPressedDispatcherOwner.current
-
-    ImageListUi(
-        imageLoaderUseCase,
-        images,
-        {
-            index.value = it
-            preview.value = true
-        },
-        {
-            if (index.value != -1) {
-                index.value = -1
-                preview.value = false
-            } else {
-                imageLoaderUseCase.back {
-                    current?.onBackPressedDispatcher?.onBackPressed()
-                }
-            }
+    BackHandler(backHandlerState.value) {
+        if (index.value != -1) {
+            index.value = -1
+            preview.value = false
+        } else {
+            imageLoaderUseCase.back {}
         }
-    )
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -155,8 +156,7 @@ fun ImageListTopUi() {
 internal fun ImageListUi(
     imageLoaderUseCase: ImageLoaderUseCase,
     images: List<Image>,
-    showPreview: (Int) -> Unit,
-    onBackPress: () -> Unit
+    showPreview: (Int) -> Unit
 ) {
     val listState = rememberLazyListState()
     val preferenceApplier = PreferenceApplier(LocalContext.current)
@@ -218,8 +218,5 @@ internal fun ImageListUi(
                 }
             }
         }
-    }
-    BackHandler(true) {
-        onBackPress()
     }
 }

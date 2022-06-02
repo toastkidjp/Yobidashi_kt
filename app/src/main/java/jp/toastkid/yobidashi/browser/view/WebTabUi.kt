@@ -47,7 +47,6 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -85,7 +84,6 @@ import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
@@ -94,13 +92,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun WebTabUi(uri: Uri, tabId: String) {
-/*TODO swipe refresher
-        binding?.swipeRefresher?.let {
-            it.setOnRefreshListener { reload() }
-            it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
-            it.setDistanceToTriggerSync(500)
-        }
-*/
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
     val webViewContainer = remember {
@@ -112,7 +103,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
         frameLayout
     }
 
-    val browserModule = BrowserModule(activityContext, webViewContainer)
+    val browserModule = remember { BrowserModule(activityContext, webViewContainer) }
+    browserModule.applyNewAlpha()
+    browserModule.resizePool(PreferenceApplier(activityContext).poolSize)
 
     val browserHeaderViewModel =
         viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
@@ -120,10 +113,12 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val nestedScrollDispatcher = NestedScrollDispatcher()
     val scrollListener =
         View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            nestedScrollDispatcher.dispatchPreScroll(
+            if (scrollY == 0) {
+                //TODO swipeRefreshState.isRefreshing = true
+            }
+            browserModule.nestedScrollDispatcher().dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
             )
@@ -141,10 +136,13 @@ fun WebTabUi(uri: Uri, tabId: String) {
             GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
             webViewContainer
         },
+        update = {
+            GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
+        },
         modifier = Modifier
             .nestedScroll(
                 connection = object : NestedScrollConnection {},
-                dispatcher = nestedScrollDispatcher
+                dispatcher = browserModule.nestedScrollDispatcher()
             )
     )
 
@@ -228,7 +226,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val storagePermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it) {
-                Toaster.tShort(activityContext, R.string.message_requires_permission_storage)
+                contentViewModel.snackShort(R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 

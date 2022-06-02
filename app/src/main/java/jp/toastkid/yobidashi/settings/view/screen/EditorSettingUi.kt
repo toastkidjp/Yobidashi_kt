@@ -45,12 +45,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.godaddy.android.colorpicker.ClassicColorPicker
+import jp.toastkid.editor.EditorFontSize
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.editor.EditorFontSize
 import jp.toastkid.yobidashi.settings.view.ColorPaletteUi
 
 @Composable

@@ -75,6 +75,7 @@ import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
+import jp.toastkid.ui.dialog.InputFileNameDialogUi
 import jp.toastkid.ui.list.SwipeToDismissItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
@@ -84,7 +85,6 @@ import jp.toastkid.yobidashi.browser.bookmark.ExportedFileParser
 import jp.toastkid.yobidashi.browser.bookmark.Exporter
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
-import jp.toastkid.yobidashi.editor.InputFileNameDialogUi
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

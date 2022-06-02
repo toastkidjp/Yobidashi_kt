@@ -148,12 +148,14 @@ internal fun AnchorLongTapDialog(
                             if (clipLink != null) {
                                 SingleLineText(R.string.row_dialog_copy) {
                                     Clipboard.clip(context, clipLink)
+                                    visibleState.value = false
                                 }
                             }
 
                             if (title != null && title.isNotBlank()) {
                                 SingleLineText(R.string.row_dialog_copy_text) {
                                     Clipboard.clip(context, title)
+                                    visibleState.value = false
                                 }
                             }
                         }

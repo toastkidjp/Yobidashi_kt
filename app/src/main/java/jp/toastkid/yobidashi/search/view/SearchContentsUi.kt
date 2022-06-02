@@ -224,43 +224,43 @@ internal fun SearchContentsUi(
             item {
                 Header(R.string.title_search_suggestion)
             }
-        }
 
-        item {
-            FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
-                viewModel.suggestions.take(10).forEach {
-                    ItemCard {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.combinedClickable(
-                                true,
-                                onClick = {
-                                    keyboardController?.hide()
-                                    viewModel?.putQuery(it)
-                                    viewModel?.search(it)
-                                },
-                                onLongClick = {
-                                    viewModel?.searchOnBackground(it)
-                                }
-                            )
-                        ) {
-                            Text(
-                                text = it,
-                                fontSize = 16.sp,
-                                modifier = Modifier
-                                    .wrapContentWidth()
-                            )
-                            Text(
-                                text = stringResource(id = R.string.plus),
-                                color = colorResource(id = R.color.white),
-                                fontSize = 20.sp,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .width(36.dp)
-                                    .height(32.dp)
-                                    .background(colorResource(id = R.color.pre4_ripple))
-                                    .clickable { viewModel?.putQuery("$it ") }
-                            )
+            item {
+                FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
+                    viewModel.suggestions.take(10).forEach {
+                        ItemCard {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.combinedClickable(
+                                    true,
+                                    onClick = {
+                                        keyboardController?.hide()
+                                        viewModel?.putQuery(it)
+                                        viewModel?.search(it)
+                                    },
+                                    onLongClick = {
+                                        viewModel?.searchOnBackground(it)
+                                    }
+                                )
+                            ) {
+                                Text(
+                                    text = it,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier
+                                        .wrapContentWidth()
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.plus),
+                                    color = colorResource(id = R.color.white),
+                                    fontSize = 20.sp,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .width(36.dp)
+                                        .height(32.dp)
+                                        .background(colorResource(id = R.color.pre4_ripple))
+                                        .clickable { viewModel?.putQuery("$it ") }
+                                )
+                            }
                         }
                     }
                 }
@@ -386,9 +386,11 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                     .clickable {
                         Clipboard.clip(context, currentUrl)
                         val activity = context as? ComponentActivity ?: return@clickable
-                        ViewModelProvider(activity).get(ContentViewModel::class.java).snackShort(
-                            context.getString(R.string.message_clip_to, currentUrl)
-                        )
+                        ViewModelProvider(activity)
+                            .get(ContentViewModel::class.java)
+                            .snackShort(
+                                context.getString(R.string.message_clip_to, currentUrl)
+                            )
                     }
             )
             Image(

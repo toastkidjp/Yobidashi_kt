@@ -94,7 +94,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -107,6 +106,7 @@ import jp.toastkid.about.view.AboutThisAppUi
 import jp.toastkid.article_viewer.article.detail.view.ArticleContentUi
 import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.barcode.view.BarcodeReaderUi
+import jp.toastkid.editor.view.EditorTabUi
 import jp.toastkid.image.view.ImageListTopUi
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
@@ -138,7 +138,6 @@ import jp.toastkid.yobidashi.browser.history.view.ViewHistoryListUi
 import jp.toastkid.yobidashi.browser.view.WebTabUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.calendar.view.CalendarUi
-import jp.toastkid.yobidashi.editor.view.EditorTabUi
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
@@ -943,13 +942,11 @@ internal fun Content() {
     }
 
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    val lifecycleObserver = object : LifecycleEventObserver {
-        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-            when (event) {
-                Lifecycle.Event.ON_RESUME -> tabs.setCount()
-                Lifecycle.Event.ON_PAUSE -> tabs.saveTabList()
-                Lifecycle.Event.ON_DESTROY -> tabs.dispose()
-            }
+    val lifecycleObserver = LifecycleEventObserver { source, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> tabs.setCount()
+            Lifecycle.Event.ON_PAUSE -> tabs.saveTabList()
+            Lifecycle.Event.ON_DESTROY -> tabs.dispose()
         }
     }
     DisposableEffect(activity) {
@@ -1054,6 +1051,7 @@ private fun showSnackbar(
 ) {
     if (snackbarEvent.actionLabel == null) {
         CoroutineScope(Dispatchers.Main).launch {
+            snackbarHostState.currentSnackbarData?.dismiss()
             snackbarHostState.showSnackbar(snackbarEvent.message)
         }
         return

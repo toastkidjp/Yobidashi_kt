@@ -24,10 +24,19 @@
     <string name="commit">Commit</string>
     <string name="reset">Reset</string>
     <string name="clip">Clip</string>
+    <string name="undo">undo</string>
+    <string name="save">Save</string>
+    <string name="load">Load</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="clear_all">Clear All</string>
+    <string name="tab_list">Tab</string>
+
+    <string name="message_confirm_exit">Would you like to exit this app?</string>
 
     <string name="message_requires_permission_storage">
         If you want to use this function, you should permit using storage to this app.</string>
     <string name="message_clip_to">Clip \'%s\'.</string>
+    <string name="message_character_count">Characters:\n%d</string>
 
     <string name="favorite_search_addition_dialog_empty_message">Please could you input any keyword?</string>
     <string name="done_addition">It has done addition!</string>

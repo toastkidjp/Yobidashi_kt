@@ -8,4 +8,5 @@
 
 <resources>
     <string name="message_confirmation">注意：この操作は取り消せません。</string>
+    <string name="title_dialog_input_file_name">ファイル名入力</string>
 </resources>
