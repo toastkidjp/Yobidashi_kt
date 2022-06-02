@@ -29,6 +29,7 @@ import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.NumberPlaceGameTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
@@ -220,6 +221,13 @@ class TabAdapter(
 
     fun openCalendar() {
         val newTab = CalendarTab.withTitle(contextSupplier().getString(R.string.title_calendar))
+        tabList.add(newTab)
+        setCount()
+        setIndexByTab(newTab)
+    }
+
+    fun openNewNumberPlaceGameTab() {
+        val newTab = NumberPlaceGameTab()
         tabList.add(newTab)
         setCount()
         setIndexByTab(newTab)

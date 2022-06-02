@@ -9,6 +9,7 @@ import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.NumberPlaceGameTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
@@ -94,6 +95,7 @@ class TabList private constructor() {
                     is ArticleTab -> articleTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     is ArticleListTab -> articleListTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     is CalendarTab -> calendarTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    is NumberPlaceGameTab -> numberPlaceGameTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     else -> ByteArray(0)
                 }
                 source?.let {
@@ -192,6 +194,10 @@ class TabList private constructor() {
             Moshi.Builder().build().adapter(CalendarTab::class.java)
         }
 
+        private val numberPlaceGameTabJsonAdapter: JsonAdapter<NumberPlaceGameTab> by lazy {
+            Moshi.Builder().build().adapter(NumberPlaceGameTab::class.java)
+        }
+
         private var itemsDir: File? = null
 
         internal fun loadOrInit(context: Context): TabList {
@@ -237,6 +243,7 @@ class TabList private constructor() {
                             json.contains("articleTab") -> articleTabJsonAdapter.fromJson(json)
                             json.contains("articleListTab") -> articleListTabJsonAdapter.fromJson(json)
                             json.contains("calendarTab") -> calendarTabJsonAdapter.fromJson(json)
+                            json.contains("numberPlaceGameTab") -> numberPlaceGameTabJsonAdapter.fromJson(json)
                             else -> webTabJsonAdapter.fromJson(json)
                         }
                     }
