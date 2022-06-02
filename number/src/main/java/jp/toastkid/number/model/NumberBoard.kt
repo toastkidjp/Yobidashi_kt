@@ -129,7 +129,7 @@ data class NumberBoard(
         }
 
         this.rows.forEachIndexed { rowNumber, row ->
-            correct.rows.get(rowNumber).forEachIndexed { columnIndex, column ->
+            correct.rows[rowNumber].forEachIndexed { columnIndex, column ->
                 if (column != row.get(columnIndex)) {
                     return false
                 }
