@@ -20,7 +20,7 @@ data class NumberBoard(
         fillZero()
     }
 
-    private fun fillZero() {
+    fun fillZero() {
         rows.clear()
 
         (0 until BOARD_SIZE).forEach { x ->
@@ -32,9 +32,8 @@ data class NumberBoard(
     }
 
     fun placeRandom() {
-        fillZero()
-
         iterate { x, y ->
+            println("tomato $x $y")
             if (rows[y][x] == 0) {
                 val boxNumbers = getIntInBox(x, y)
                 val verticalNumbers = getIntVertical(x)
@@ -49,9 +48,9 @@ data class NumberBoard(
 
     private fun makeRandomWithout(existsNumbers: Set<Int>): Int {
         val uniqueQueue = makeRandomUniqueQueue(BOARD_SIZE)
-        var n = uniqueQueue.poll() ?: -1
+        var n = uniqueQueue.poll()
         while (existsNumbers.contains(n)) {
-            n = uniqueQueue.poll() ?: -1
+            n = uniqueQueue.poll()
         }
         return n ?: -1
     }
