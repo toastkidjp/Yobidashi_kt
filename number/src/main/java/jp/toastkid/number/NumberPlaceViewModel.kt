@@ -9,6 +9,7 @@
 package jp.toastkid.number
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import jp.toastkid.number.model.NumberBoard
@@ -18,15 +19,20 @@ class NumberPlaceViewModel : ViewModel() {
 
     private val _game = mutableStateOf(NumberPlaceGame())
     private val _mask = mutableStateOf(NumberBoard())
+    private val _loading = mutableStateOf(false)
 
     fun initialize(maskingCount: Int) {
+        _loading.value = true
         _game.value.initialize(maskingCount)
         _mask.value = _game.value.masked()
+        _loading.value = false
     }
 
     fun initializeSolving() {
+        _loading.value = true
         _game.value.initializeSolving()
         _mask.value = _game.value.masked()
+        _loading.value = false
     }
 
     fun masked() = _mask.value
@@ -49,5 +55,7 @@ class NumberPlaceViewModel : ViewModel() {
     fun setGame(game: NumberPlaceGame) {
         _game.value = game
     }
+
+    fun loading(): State<Boolean> = _loading
 
 }
