@@ -106,15 +106,7 @@ fun NumberPlaceUi(game: NumberPlaceGame? = null) {
                                         number.value = "$it"
                                         open.value = false
                                         viewModel.place(rowIndex, columnIndex, it) { done ->
-                                            contentViewModel?.snackWithAction(
-                                                if (done) "Well done!" else "Incorrect...",
-                                                if (done) "Next game" else "",
-                                                {
-                                                    if (done) {
-                                                        contentViewModel.nextRoute("tool/number/place")
-                                                    }
-                                                }
-                                            )
+                                            showMessageSnackbar(contentViewModel, done)
                                         }
                                     },
                                     fontSize,
@@ -134,15 +126,7 @@ fun NumberPlaceUi(game: NumberPlaceGame? = null) {
                                                         columnIndex,
                                                         number
                                                     ) { done ->
-                                                        contentViewModel?.snackWithAction(
-                                                            if (done) "Well done!" else "Incorrect...",
-                                                            if (done) "Next game" else "",
-                                                            {
-                                                                if (done) {
-                                                                    contentViewModel.nextRoute("tool/number/place")
-                                                                }
-                                                            }
-                                                        )
+                                                        showMessageSnackbar(contentViewModel, done)
                                                     }
                                                 }
                                             }
@@ -191,6 +175,21 @@ fun NumberPlaceUi(game: NumberPlaceGame? = null) {
                 AppBarContent(preferenceApplier, fontSize, contentViewModel)
             }
     }
+}
+
+private fun showMessageSnackbar(
+    contentViewModel: ContentViewModel?,
+    done: Boolean
+) {
+    contentViewModel?.snackWithAction(
+        if (done) "Well done!" else "Incorrect...",
+        if (done) "Next game" else "",
+        {
+            if (done) {
+                contentViewModel.nextRoute("tool/number/place")
+            }
+        }
+    )
 }
 
 @Composable
