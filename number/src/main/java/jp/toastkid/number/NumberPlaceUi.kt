@@ -106,8 +106,14 @@ fun NumberPlaceUi(game: NumberPlaceGame? = null) {
                                         number.value = "$it"
                                         open.value = false
                                         viewModel.place(rowIndex, columnIndex, it) { done ->
-                                            contentViewModel?.snackShort(
-                                                if (done) "Well done!" else "Incorrect..."
+                                            contentViewModel?.snackWithAction(
+                                                if (done) "Well done!" else "Incorrect...",
+                                                if (done) "Next game" else "",
+                                                {
+                                                    if (done) {
+                                                        contentViewModel.nextRoute("tool/number/place")
+                                                    }
+                                                }
                                             )
                                         }
                                     },
