@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -76,81 +77,90 @@ fun NumberPlaceUi(game: NumberPlaceGame? = null) {
     Surface(
         elevation = 4.dp
     ) {
-        Column(
-            Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(8.dp)
+        Box(
+            contentAlignment = Alignment.Center
         ) {
-            HorizontalDivider(0)
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(8.dp)
+            ) {
+                HorizontalDivider(0)
 
-            viewModel.masked().rows().forEachIndexed { rowIndex, row ->
-                Row(
-                    modifier = Modifier.height(IntrinsicSize.Min)
-                ) {
-                    VerticalDivider(0)
+                viewModel.masked().rows().forEachIndexed { rowIndex, row ->
+                    Row(
+                        modifier = Modifier.height(IntrinsicSize.Min)
+                    ) {
+                        VerticalDivider(0)
 
-                    row.forEachIndexed { columnIndex, cellValue ->
-                        if (cellValue == -1) {
-                            val open = remember { mutableStateOf(false) }
-                            val number = remember { mutableStateOf("_") }
-                            numberStates.add(number)
+                        row.forEachIndexed { columnIndex, cellValue ->
+                            if (cellValue == -1) {
+                                val open = remember { mutableStateOf(false) }
+                                val number = remember { mutableStateOf("_") }
+                                numberStates.add(number)
 
-                            MaskedCell(
-                                open,
-                                number,
-                                {
-                                    number.value = "$it"
-                                    open.value = false
-                                    viewModel.place(rowIndex, columnIndex, it) { done ->
-                                        contentViewModel?.snackShort(
-                                            if (done) "Well done!" else "Incorrect..."
-                                        )
-                                    }
-                                },
-                                fontSize,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .combinedClickable(
-                                        onClick = {
-                                            open.value = true
-                                        },
-                                        onLongClick = {
-                                            contentViewModel?.snackWithAction(
-                                                "Would you like to use hint?",
-                                                "Use"
-                                            ) {
-                                                viewModel.useHint(
-                                                    rowIndex,
-                                                    columnIndex,
-                                                    number
-                                                ) { done ->
-                                                    contentViewModel?.snackWithAction(
-                                                        if (done) "Well done!" else "Incorrect...",
-                                                        if (done) "Next game" else "",
-                                                        {
-                                                            if (done) {
-                                                                contentViewModel.nextRoute("tool/number/place")
+                                MaskedCell(
+                                    open,
+                                    number,
+                                    {
+                                        number.value = "$it"
+                                        open.value = false
+                                        viewModel.place(rowIndex, columnIndex, it) { done ->
+                                            contentViewModel?.snackShort(
+                                                if (done) "Well done!" else "Incorrect..."
+                                            )
+                                        }
+                                    },
+                                    fontSize,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .combinedClickable(
+                                            onClick = {
+                                                open.value = true
+                                            },
+                                            onLongClick = {
+                                                contentViewModel?.snackWithAction(
+                                                    "Would you like to use hint?",
+                                                    "Use"
+                                                ) {
+                                                    viewModel.useHint(
+                                                        rowIndex,
+                                                        columnIndex,
+                                                        number
+                                                    ) { done ->
+                                                        contentViewModel?.snackWithAction(
+                                                            if (done) "Well done!" else "Incorrect...",
+                                                            if (done) "Next game" else "",
+                                                            {
+                                                                if (done) {
+                                                                    contentViewModel.nextRoute("tool/number/place")
+                                                                }
                                                             }
-                                                        }
-                                                    )
+                                                        )
+                                                    }
                                                 }
                                             }
-                                        }
-                                    )
-                            )
-                        } else {
-                            Text(
-                                cellValue.toString(),
-                                fontSize = fontSize,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
+                                        )
+                                )
+                            } else {
+                                Text(
+                                    cellValue.toString(),
+                                    fontSize = fontSize,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
 
-                        VerticalDivider(columnIndex)
+                            VerticalDivider(columnIndex)
+                        }
                     }
+                    HorizontalDivider(rowIndex)
                 }
-                HorizontalDivider(rowIndex)
+            }
+
+            if (viewModel.loading().value) {
+                CircularProgressIndicator(
+                )
             }
         }
     }
