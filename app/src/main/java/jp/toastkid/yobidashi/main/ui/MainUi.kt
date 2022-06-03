@@ -911,7 +911,7 @@ internal fun Content() {
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                         modifier = Modifier
-                                            .size(72.dp)
+                                            .size(76.dp)
                                             .padding(4.dp)
                                     ) {
                                         Icon(
@@ -927,7 +927,7 @@ internal fun Content() {
                                             maxLines = 2,
                                             overflow = TextOverflow.Ellipsis,
                                             textAlign = TextAlign.Center,
-                                            modifier = Modifier.padding(8.dp)
+                                            modifier = Modifier.fillMaxWidth().padding(8.dp)
                                         )
                                     }
                                 }
