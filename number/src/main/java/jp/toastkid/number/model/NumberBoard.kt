@@ -33,7 +33,6 @@ data class NumberBoard(
 
     fun placeRandom() {
         iterate { x, y ->
-            println("tomato $x $y")
             if (rows[y][x] == 0) {
                 val boxNumbers = getIntInBox(x, y)
                 val verticalNumbers = getIntVertical(x)
