@@ -32,6 +32,7 @@ data class NumberPlaceGame(
             if (board.validBoard()) {
                 return
             }
+            board.fillZero()
         }
         return
     }
