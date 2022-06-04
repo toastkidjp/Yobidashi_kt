@@ -41,7 +41,7 @@ class PreferenceApplier(private val context: Context) {
         WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS, IMAGE_VIEWER_EXCLUDED_PATHS,
         IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE, USE_TITLE_FILTER,
         ARTICLE_LIST_SORT_TYPE, LAST_CLIPPED_WORD,
-        NUMBER_PLACE_MASKING_COUNT
+        NUMBER_PLACE_MASKING_COUNT, NUMBER_PLACE_LAST_GAME_PATH
     }
 
     private val preferences: SharedPreferences =
@@ -461,6 +461,18 @@ class PreferenceApplier(private val context: Context) {
 
     fun getMaskingCount(): Int {
         return preferences.getInt(Key.NUMBER_PLACE_MASKING_COUNT.name, 20)
+    }
+
+    fun setLastNumberPlaceGamePath(path: String) {
+        preferences.edit().putString(Key.NUMBER_PLACE_LAST_GAME_PATH.name, path).apply()
+    }
+
+    fun lastNumberPlaceGamePath(): String? {
+        return preferences.getString(Key.NUMBER_PLACE_LAST_GAME_PATH.name, "")
+    }
+
+    fun clearLastNumberPlaceGamePath() {
+        preferences.edit().remove(Key.NUMBER_PLACE_LAST_GAME_PATH.name).apply()
     }
 
 }
