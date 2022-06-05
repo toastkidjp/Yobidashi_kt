@@ -18,7 +18,9 @@ class GameRepositoryImplementation : GameRepository {
 
     override fun save(file: File, game: NumberPlaceGame) {
         val encodeToString = Json.encodeToString(game)
-        file.printWriter().println(encodeToString)
+        val printWriter = file.printWriter()
+        printWriter.println(encodeToString)
+        printWriter.flush()
     }
 
     override fun load(file: File): NumberPlaceGame? {
