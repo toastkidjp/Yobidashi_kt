@@ -8,10 +8,12 @@
 
 package jp.toastkid.number.model
 
+import kotlinx.serialization.Serializable
 import java.util.LinkedList
 import java.util.Queue
 import java.util.Random
 
+@Serializable
 data class NumberBoard(
     private val rows: MutableList<MutableList<Int>> = mutableListOf()
 ) {
