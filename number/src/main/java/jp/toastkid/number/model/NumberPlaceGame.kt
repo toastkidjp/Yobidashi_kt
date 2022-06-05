@@ -8,6 +8,9 @@
 
 package jp.toastkid.number.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class NumberPlaceGame(
     private val correct: NumberBoard = NumberBoard(),
     private val masked: NumberBoard = NumberBoard(),
