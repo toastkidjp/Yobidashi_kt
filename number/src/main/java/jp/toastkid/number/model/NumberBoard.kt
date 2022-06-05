@@ -19,7 +19,9 @@ data class NumberBoard(
 ) {
 
     init {
-        fillZero()
+        if (rows.isEmpty()) {
+            fillZero()
+        }
     }
 
     fun fillZero() {
