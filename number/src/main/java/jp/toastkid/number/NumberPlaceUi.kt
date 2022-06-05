@@ -47,10 +47,10 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.number.factory.GameFileProvider
 import jp.toastkid.number.repository.GameRepositoryImplementation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.File
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -62,9 +62,8 @@ fun NumberPlaceUi() {
     val preferenceApplier = PreferenceApplier(LocalContext.current)
     val viewModel = viewModel(NumberPlaceViewModel::class.java)
     LaunchedEffect(key1 = viewModel, block = {
-        val gamePath = preferenceApplier.lastNumberPlaceGamePath()
-        if (gamePath?.isNotBlank() == true) {
-            val file = File(context.filesDir, "number/place/games/$gamePath")
+        val file = GameFileProvider().invoke(context.filesDir, preferenceApplier)
+        if (file != null) {
             val game = GameRepositoryImplementation().load(file)
             if (game != null) {
                 viewModel.setGame(game)
