@@ -8,12 +8,16 @@
 
 package jp.toastkid.number
 
+import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.number.model.NumberBoard
 import jp.toastkid.number.model.NumberPlaceGame
+import jp.toastkid.number.repository.GameRepositoryImplementation
+import java.io.File
 
 class NumberPlaceViewModel : ViewModel() {
 
@@ -57,5 +61,25 @@ class NumberPlaceViewModel : ViewModel() {
     }
 
     fun loading(): State<Boolean> = _loading
+
+    fun saveCurrentGame(context: Context) {
+        val preferenceApplier = PreferenceApplier(context)
+        if (preferenceApplier.lastNumberPlaceGamePath().isNullOrBlank()) {
+            val dir = File(context.filesDir, "number/place/games")
+            if (dir.exists().not()) {
+                dir.mkdirs()
+            }
+
+            val file = File(dir, "saved_game")
+
+            if (file.exists().not()) {
+                file.createNewFile()
+            }
+            preferenceApplier.setLastNumberPlaceGamePath(file.name)
+        }
+
+        val pathname = preferenceApplier.lastNumberPlaceGamePath() ?: return
+        GameRepositoryImplementation().save(File(context.filesDir, "number/place/games/$pathname"), _game.value)
+    }
 
 }
