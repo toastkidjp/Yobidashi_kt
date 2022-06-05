@@ -85,4 +85,8 @@ class NumberPlaceViewModel : ViewModel() {
         GameRepositoryImplementation().save(File(context.filesDir, "number/place/games/$pathname"), _game.value)
     }
 
+    fun pickSolving(rowIndex: Int, columnIndex: Int): Int {
+        return _game.value.pickSolving(rowIndex, columnIndex)
+    }
+
 }

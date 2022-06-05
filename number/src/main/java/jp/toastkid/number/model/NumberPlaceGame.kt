@@ -53,4 +53,8 @@ data class NumberPlaceGame(
         return correct.pick(rowIndex, columnIndex)
     }
 
+    fun pickSolving(rowIndex: Int, columnIndex: Int): Int {
+        return solving.pick(rowIndex, columnIndex)
+    }
+
 }

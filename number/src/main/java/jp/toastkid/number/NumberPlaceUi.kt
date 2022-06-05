@@ -28,6 +28,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -46,25 +47,33 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.number.model.NumberPlaceGame
+import jp.toastkid.number.repository.GameRepositoryImplementation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NumberPlaceUi(game: NumberPlaceGame? = null) {
+fun NumberPlaceUi() {
     val fontSize = 32.sp
+
+    val context = LocalContext.current
 
     val preferenceApplier = PreferenceApplier(LocalContext.current)
     val viewModel = viewModel(NumberPlaceViewModel::class.java)
     LaunchedEffect(key1 = viewModel, block = {
-        if (game != null) {
-            viewModel.setGame(game)
-            return@LaunchedEffect
+        val gamePath = preferenceApplier.lastNumberPlaceGamePath()
+        if (gamePath?.isNotBlank() == true) {
+            val file = File(context.filesDir, "number/place/games/$gamePath")
+            val game = GameRepositoryImplementation().load(file)
+            if (game != null) {
+                viewModel.setGame(game)
+                return@LaunchedEffect
+            }
         }
         withContext(Dispatchers.IO) {
-            viewModel.setGame(NumberPlaceGame())
             viewModel.initialize(preferenceApplier.getMaskingCount())
+            viewModel.saveCurrentGame(context)
         }
     })
 
@@ -98,6 +107,11 @@ fun NumberPlaceUi(game: NumberPlaceGame? = null) {
                                 val open = remember { mutableStateOf(false) }
                                 val number = remember { mutableStateOf("_") }
                                 numberStates.add(number)
+
+                                val solving = viewModel.pickSolving(rowIndex, columnIndex)
+                                if (solving != -1) {
+                                    number.value = "$solving"
+                                }
 
                                 MaskedCell(
                                     open,
@@ -159,6 +173,7 @@ fun NumberPlaceUi(game: NumberPlaceGame? = null) {
         OptionMenu(
             titleId = R.string.menu_other_board,
             action = {
+                preferenceApplier.clearLastNumberPlaceGamePath()
                 contentViewModel.nextRoute("tool/number/place")
             }),
         OptionMenu(
@@ -175,6 +190,12 @@ fun NumberPlaceUi(game: NumberPlaceGame? = null) {
                 AppBarContent(preferenceApplier, fontSize, contentViewModel)
             }
     }
+
+    DisposableEffect(key1 = viewModel, effect = {
+        onDispose {
+            viewModel.saveCurrentGame(context)
+        }
+    })
 }
 
 private fun showMessageSnackbar(
@@ -244,6 +265,7 @@ private fun AppBarContent(
                         maskingCount.value = "$it"
                         openMaskingCount.value = false
                         preferenceApplier.setMaskingCount(it)
+                        preferenceApplier.clearLastNumberPlaceGamePath()
                         contentViewModel?.nextRoute("tool/number/place")
                     }) {
                         Text(
