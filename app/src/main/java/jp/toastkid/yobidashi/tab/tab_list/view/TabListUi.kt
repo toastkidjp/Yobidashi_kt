@@ -107,7 +107,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
             modifier = Modifier.heightIn(max = 236.dp)
         )
 
-        Column() {
+        Column {
             LazyRow(state = state, contentPadding = PaddingValues(horizontal = 4.dp)) {
                 val currentIndex = tabAdapter.index()
 
