@@ -16,6 +16,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
+import android.webkit.SafeBrowsingResponse
 import android.webkit.SslErrorHandler
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -25,6 +26,7 @@ import android.webkit.WebViewClient
 import androidx.core.app.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -199,5 +201,27 @@ class WebViewClientFactory(
                         }
                     }
                 } ?: super.shouldOverrideUrlLoading(view, url)
+
+        override fun onSafeBrowsingHit(
+            view: WebView?,
+            request: WebResourceRequest?,
+            threatType: Int,
+            callback: SafeBrowsingResponse?
+        ) {
+            // The "true" argument indicates that your app reports incidents like
+            // this one to Safe Browsing.
+            if (!WebViewFeature.isFeatureSupported(WebViewFeature.SAFE_BROWSING_RESPONSE_BACK_TO_SAFETY)) {
+                return
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                callback?.backToSafety(true)
+            } else {
+                view?.goBack()
+            }
+
+            contentViewModel?.snackShort("Unsafe web page blocked.")
+        }
+
     }
 }

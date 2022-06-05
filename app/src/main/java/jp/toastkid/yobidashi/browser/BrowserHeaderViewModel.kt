@@ -39,13 +39,6 @@ class BrowserHeaderViewModel : ViewModel() {
         _url.postValue(nextUrl ?: "")
     }
 
-    private val _reset = MutableLiveData<Unit>()
-    val reset: LiveData<Unit> = _reset
-
-    fun resetContent() {
-        _reset.postValue(Unit)
-    }
-
     private val _enableBackPress = mutableStateOf(false)
 
     val enableBackPress: State<Boolean> = _enableBackPress

@@ -18,7 +18,6 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineDispatcher
@@ -56,9 +55,6 @@ class FavoriteSearchInsertionTest {
         every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
         every { appDatabase.favoriteSearchRepository() }.returns(repository)
         every { repository.insert(any()) }.just(Runs)
-
-        mockkObject(Toaster)
-        every { Toaster.tShort(any(), any<String>()) }.just(Runs)
     }
 
     @After
@@ -82,7 +78,6 @@ class FavoriteSearchInsertionTest {
         verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
         verify(exactly = 1) { appDatabase.favoriteSearchRepository() }
         verify(exactly = 1) { repository.insert(any()) }
-        verify(exactly = 1) { Toaster.tShort(any(), any<String>()) }
     }
 
 }

@@ -95,8 +95,6 @@ internal fun SearchContentsUi(
 
     val trendApi = TrendApi()
 
-    val trends = remember { mutableListOf<Trend>() }
-
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(
@@ -109,12 +107,12 @@ internal fun SearchContentsUi(
                     Timber.e(e)
                     null
                 }
-                trends.clear()
+                viewModel.trends.clear()
                 val taken = trendItems?.take(10)
                 if (taken.isNullOrEmpty()) {
                     return@launch
                 }
-                trends.addAll(taken)
+                viewModel.trends.addAll(taken)
             }
         }
     )
@@ -269,7 +267,7 @@ internal fun SearchContentsUi(
 
         if (preferenceApplier.isEnableTrendModule()) {
             item {
-                if (trends.isEmpty()) {
+                if (viewModel.trends.isEmpty()) {
                     return@item
                 }
                 HeaderWithLink(R.string.hourly_trends, R.string.open) {
@@ -279,7 +277,7 @@ internal fun SearchContentsUi(
 
             item {
                 FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
-                    trends.take(10).forEach {
+                    viewModel.trends.take(10).forEach {
                         ItemCard {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,

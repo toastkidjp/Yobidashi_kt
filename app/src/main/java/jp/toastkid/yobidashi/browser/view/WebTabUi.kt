@@ -265,7 +265,10 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserModule.saveArchive()
             }),
             OptionMenu(titleId = R.string.title_add_to_rss_reader, action = {
-                RssUrlFinder(PreferenceApplier(activityContext))
+                RssUrlFinder(
+                    PreferenceApplier(activityContext),
+                    contentViewModel
+                )
                     .invoke(browserModule.currentUrl()) {
                         null//TODO
                     }

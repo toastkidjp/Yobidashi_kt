@@ -26,7 +26,6 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -148,17 +147,15 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActio
 
     val tasks = flow?.collectAsLazyPagingItems() ?: return
 
-    MaterialTheme {
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(tasks) { task ->
-                task ?: return@items
-                BoardItem(
-                    task,
-                    repository,
-                    color,
-                    menuUseCase
-                )
-            }
+    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        items(tasks) { task ->
+            task ?: return@items
+            BoardItem(
+                task,
+                repository,
+                color,
+                menuUseCase
+            )
         }
     }
 }
