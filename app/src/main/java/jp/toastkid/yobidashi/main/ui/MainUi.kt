@@ -794,7 +794,7 @@ internal fun Content() {
                         modifier = Modifier.fillMaxSize()
                     ) {
                         val menuCount = Menu.values().size
-                        val tooBigCount = menuCount * 5
+                        val tooBigCount = menuCount * 10
                         LazyRow(
                             state = rememberLazyListState(tooBigCount / 2),
                             modifier = Modifier
