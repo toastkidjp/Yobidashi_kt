@@ -29,7 +29,7 @@ data class NumberBoard(
 
         (0 until BOARD_SIZE).forEach { x ->
             rows.add(mutableListOf())
-            (0 until BOARD_SIZE).forEach { y ->
+            (0 until BOARD_SIZE).forEach { _ ->
                 rows[x].add(0)
             }
         }
