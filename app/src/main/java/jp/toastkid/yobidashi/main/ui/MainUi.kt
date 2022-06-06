@@ -811,7 +811,7 @@ internal fun Content() {
                                         .clickable {
                                             when (menu) {
                                                 Menu.TOP -> {
-                                                    contentViewModel?.toTop()
+                                                    contentViewModel.toTop()
                                                 }
                                                 Menu.BOTTOM -> {
                                                     contentViewModel?.toBottom()
