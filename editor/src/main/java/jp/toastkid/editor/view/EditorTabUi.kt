@@ -129,7 +129,7 @@ fun EditorTabUi(path: String?) {
     viewModelProvider.get(AppBarViewModel::class.java)
         .replace {
             AppBarContent(
-                viewModelProvider.get(ContentViewModel::class.java),
+                contentViewModel,
                 fileActionUseCase
             )
         }
