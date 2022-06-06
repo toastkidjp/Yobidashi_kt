@@ -783,7 +783,7 @@ internal fun Content() {
                         return@LaunchedEffect
                     }
 
-                    if (navigationHostController?.currentDestination?.route == "empty") {
+                    if (navigationHostController.currentDestination?.route == "empty") {
                         replaceToCurrentTab(tabs, navigationHostController)
                     }
                 })
