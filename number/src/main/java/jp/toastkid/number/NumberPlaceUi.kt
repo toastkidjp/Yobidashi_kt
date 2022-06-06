@@ -203,13 +203,12 @@ private fun showMessageSnackbar(
 ) {
     contentViewModel?.snackWithAction(
         if (done) "Well done!" else "Incorrect...",
-        if (done) "Next game" else "",
-        {
-            if (done) {
-                contentViewModel.nextRoute("tool/number/place")
-            }
+        if (done) "Next game" else ""
+    ) {
+        if (done) {
+            contentViewModel.nextRoute("tool/number/place")
         }
-    )
+    }
 }
 
 @Composable
