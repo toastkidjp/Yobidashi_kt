@@ -8,6 +8,7 @@
 
 package jp.toastkid.number
 
+import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -172,11 +173,7 @@ fun NumberPlaceUi() {
         OptionMenu(
             titleId = R.string.menu_other_board,
             action = {
-                preferenceApplier.clearLastNumberPlaceGamePath()
-                val file = GameFileProvider().invoke(context.filesDir, preferenceApplier)
-                file?.let {
-                    GameRepositoryImplementation().delete(file)
-                }
+                deleteCurrentGame(context)
                 contentViewModel.nextRoute("tool/number/place")
             }),
         OptionMenu(
@@ -199,6 +196,15 @@ fun NumberPlaceUi() {
             viewModel.saveCurrentGame(context)
         }
     })
+}
+
+private fun deleteCurrentGame(context: Context) {
+    val preferenceApplier = PreferenceApplier(context)
+    preferenceApplier.clearLastNumberPlaceGamePath()
+    val file = GameFileProvider().invoke(context.filesDir, preferenceApplier)
+    file?.let {
+        GameRepositoryImplementation().delete(file)
+    }
 }
 
 private fun showMessageSnackbar(
@@ -269,9 +275,7 @@ private fun AppBarContent(
                         maskingCount.value = "$it"
                         openMaskingCount.value = false
                         preferenceApplier.setMaskingCount(it)
-                        preferenceApplier.clearLastNumberPlaceGamePath()
-                        val file = GameFileProvider().invoke(context.filesDir, preferenceApplier)
-                        GameRepositoryImplementation().delete(file)
+                        deleteCurrentGame(context)
                         contentViewModel?.nextRoute("tool/number/place")
                     }) {
                         Text(
