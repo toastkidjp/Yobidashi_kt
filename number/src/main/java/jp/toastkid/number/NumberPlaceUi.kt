@@ -173,6 +173,10 @@ fun NumberPlaceUi() {
             titleId = R.string.menu_other_board,
             action = {
                 preferenceApplier.clearLastNumberPlaceGamePath()
+                val file = GameFileProvider().invoke(context.filesDir, preferenceApplier)
+                file?.let {
+                    GameRepositoryImplementation().delete(file)
+                }
                 contentViewModel.nextRoute("tool/number/place")
             }),
         OptionMenu(
@@ -233,6 +237,8 @@ private fun AppBarContent(
     fontSize: TextUnit,
     contentViewModel: ContentViewModel?
 ) {
+    val context = LocalContext.current
+
     Row(verticalAlignment = Alignment.CenterVertically) {
         val openMaskingCount = remember { mutableStateOf(false) }
         val maskingCount = remember { mutableStateOf("${preferenceApplier.getMaskingCount()}") }
@@ -264,6 +270,8 @@ private fun AppBarContent(
                         openMaskingCount.value = false
                         preferenceApplier.setMaskingCount(it)
                         preferenceApplier.clearLastNumberPlaceGamePath()
+                        val file = GameFileProvider().invoke(context.filesDir, preferenceApplier)
+                        GameRepositoryImplementation().delete(file)
                         contentViewModel?.nextRoute("tool/number/place")
                     }) {
                         Text(
