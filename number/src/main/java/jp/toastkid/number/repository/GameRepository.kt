@@ -17,6 +17,6 @@ interface GameRepository {
 
     fun load(file: File): NumberPlaceGame?
 
-    fun delete(file: File): Boolean
+    fun delete(file: File?): Boolean
 
 }
