@@ -9,6 +9,9 @@
 package jp.toastkid.yobidashi.tab.tab_list.view
 
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -39,6 +42,7 @@ import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -107,90 +111,103 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                 val currentIndex = tabAdapter.index()
 
                 itemsIndexed(tabs) { position, tab ->
+                    val visibilityState = remember { mutableStateOf(true) }
                     val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
                         if (it == 1) {
+                            visibilityState.value = false
                             tabAdapter.closeTab(tabAdapter.indexOf(tab))
-                            refresh(tabAdapter, tabs)
                         }
                         true
                     })
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .width(dimensionResource(id = R.dimen.tab_list_item_width))
-                            .height(dimensionResource(R.dimen.tab_list_item_height))
-                            .clickable {
-                                tabAdapter.replace(tab)
-                                if (initialIndex != tabAdapter.currentTabId()) {
-                                    contentViewModel.replaceToCurrentTab()
-                                }
-                                closeOnly(coroutineScope, contentViewModel)
-                            }
-                            .background(
-                                if (currentIndex == position)
-                                    Color(ColorUtils.setAlphaComponent(colorPair.bgColor(), 128))
-                                else
-                                    Color.Transparent
-                            )
-                            .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
-                            .swipeable(
-                                swipeableState,
-                                anchors = anchors,
-                                thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                                resistance = ResistanceConfig(0.5f),
-                                orientation = Orientation.Vertical
-                            )
+
+                    AnimatedVisibility(
+                        visibilityState.value,
+                        enter = slideInVertically(initialOffsetY = { it }),
+                        exit = shrinkHorizontally(shrinkTowards = Alignment.Start)
                     ) {
-                        Surface(
-                            elevation = 4.dp,
+                        Box(
+                            contentAlignment = Alignment.Center,
                             modifier = Modifier
-                                .width(112.dp)
-                                .height(152.dp)
+                                .width(dimensionResource(id = R.dimen.tab_list_item_width))
+                                .height(dimensionResource(R.dimen.tab_list_item_height))
+                                .clickable {
+                                    tabAdapter.replace(tab)
+                                    if (initialIndex != tabAdapter.currentTabId()) {
+                                        contentViewModel.replaceToCurrentTab()
+                                    }
+                                    closeOnly(coroutineScope, contentViewModel)
+                                }
+                                .background(
+                                    if (currentIndex == position)
+                                        Color(
+                                            ColorUtils.setAlphaComponent(
+                                                colorPair.bgColor(),
+                                                128
+                                            )
+                                        )
+                                    else
+                                        Color.Transparent
+                                )
+                                .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
+                                .swipeable(
+                                    swipeableState,
+                                    anchors = anchors,
+                                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                                    resistance = ResistanceConfig(0.5f),
+                                    orientation = Orientation.Vertical
+                                )
                         ) {
-                            Box(
+                            Surface(
+                                elevation = 4.dp,
                                 modifier = Modifier
                                     .width(112.dp)
                                     .height(152.dp)
-                                    .padding(4.dp)
-                                    .align(Alignment.BottomCenter)
                             ) {
-                                AsyncImage(
-                                    model = tabThumbnails.assignNewFile(tab.thumbnailPath()),
-                                    contentDescription = tab.title(),
-                                    contentScale = ContentScale.FillHeight,
-                                    placeholder = painterResource(id = R.drawable.ic_yobidashi),
+                                Box(
                                     modifier = Modifier
-                                        .padding(top = 4.dp)
-                                        .align(Alignment.TopCenter)
-                                )
-                                Text(
-                                    text = tab.title(),
-                                    color = Color(colorPair.fontColor()),
-                                    maxLines = 2,
-                                    fontSize = 14.sp,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier
-                                        .align(Alignment.BottomCenter)
-                                        .background(Color(colorPair.bgColor()))
+                                        .width(112.dp)
+                                        .height(152.dp)
                                         .padding(4.dp)
-                                )
-                            }
-                        }
-
-                        Icon(
-                            painterResource(id = R.drawable.ic_remove_circle),
-                            tint = Color(colorPair.fontColor()),
-                            contentDescription = stringResource(id = R.string.delete),
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                                .padding(4.dp)
-                                .clickable {
-                                    val removeIndex =
-                                        tabAdapter?.indexOf(tab) ?: return@clickable
-                                    tabAdapter.closeTab(removeIndex)
-                                    refresh(tabAdapter, tabs)
+                                        .align(Alignment.BottomCenter)
+                                ) {
+                                    AsyncImage(
+                                        model = tabThumbnails.assignNewFile(tab.thumbnailPath()),
+                                        contentDescription = tab.title(),
+                                        contentScale = ContentScale.FillHeight,
+                                        placeholder = painterResource(id = R.drawable.ic_yobidashi),
+                                        modifier = Modifier
+                                            .padding(top = 4.dp)
+                                            .align(Alignment.TopCenter)
+                                    )
+                                    Text(
+                                        text = tab.title(),
+                                        color = Color(colorPair.fontColor()),
+                                        maxLines = 2,
+                                        fontSize = 14.sp,
+                                        overflow = TextOverflow.Ellipsis,
+                                        modifier = Modifier
+                                            .align(Alignment.BottomCenter)
+                                            .background(Color(colorPair.bgColor()))
+                                            .padding(4.dp)
+                                    )
                                 }
-                        )
+                            }
+
+                            Icon(
+                                painterResource(id = R.drawable.ic_remove_circle),
+                                tint = Color(colorPair.fontColor()),
+                                contentDescription = stringResource(id = R.string.delete),
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(4.dp)
+                                    .clickable {
+                                        val removeIndex =
+                                            tabAdapter?.indexOf(tab) ?: return@clickable
+                                        tabAdapter.closeTab(removeIndex)
+                                        refresh(tabAdapter, tabs)
+                                    }
+                            )
+                        }
                     }
                 }
             }

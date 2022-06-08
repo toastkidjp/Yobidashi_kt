@@ -141,112 +141,115 @@ fun SearchInputUi(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    val localLifecycleOwner = LocalLifecycleOwner.current
+
     if (viewModel.openFavoriteSearch.value.not()) {
-        appBarViewModel.replace {
-            val spinnerOpen = remember { mutableStateOf(false) }
+        LaunchedEffect(key1 = localLifecycleOwner, block = {
+            appBarViewModel.replace {
+                val focusRequester = remember { FocusRequester() }
 
-            val useVoice = remember { mutableStateOf(false) }
+                val spinnerOpen = remember { mutableStateOf(false) }
 
-            val focusRequester = remember { FocusRequester() }
+                val useVoice = remember { mutableStateOf(false) }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(dimensionResource(id = R.dimen.toolbar_height))
-            ) {
-                SearchCategorySpinner(spinnerOpen, categoryName)
-
-                TextField(
-                    value = viewModel.input.value,
-                    onValueChange = { text ->
-                        viewModel.setInput(text)
-                        useVoice.value = text.text.isBlank()
-                        queryingUseCase.send(text.text)
-                    },
-                    label = {
-                        Text(
-                            stringResource(id = R.string.title_search),
-                            color = MaterialTheme.colors.onPrimary
-                        )
-                    },
-                    singleLine = true,
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colors.onPrimary,
-                        textAlign = TextAlign.Start,
-                    ),
-                    trailingIcon = {
-                        Icon(
-                            Icons.Filled.Clear,
-                            contentDescription = "clear text",
-                            tint = MaterialTheme.colors.onPrimary,
-                            modifier = Modifier
-                                //.offset(x = 8.dp)
-                                .clickable {
-                                    viewModel.setInput(TextFieldValue())
-                                }
-                        )
-                    },
-                    maxLines = 1,
-                    keyboardActions = KeyboardActions {
-                        keyboardController?.hide()
-                        search(context, contentViewModel, currentUrl, categoryName.value, viewModel.input.value.text)
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        autoCorrect = true,
-                        imeAction = ImeAction.Search
-                    ),
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 4.dp)
-                        .background(Color.Transparent)
-                        .focusRequester(focusRequester)
-                )
+                        .fillMaxWidth()
+                        .height(dimensionResource(id = R.dimen.toolbar_height))
+                ) {
+                    SearchCategorySpinner(spinnerOpen, categoryName)
 
-                Icon(
-                    painterResource(id = if (useVoice.value) R.drawable.ic_mic else R.drawable.ic_search_white),
-                    contentDescription = stringResource(id = R.string.title_search_action),
-                    tint = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier
-                        .width(32.dp)
-                        .fillMaxHeight()
-                        .align(Alignment.CenterVertically)
-                        .combinedClickable(
-                            true,
-                            onClick = {
-                                keyboardController?.hide()
+                    TextField(
+                        value = viewModel.input.value,
+                        onValueChange = { text ->
+                            viewModel.setInput(text)
+                            useVoice.value = text.text.isBlank()
+                            queryingUseCase.send(text.text)
+                        },
+                        label = {
+                            Text(
+                                stringResource(id = R.string.title_search),
+                                color = MaterialTheme.colors.onPrimary
+                            )
+                        },
+                        singleLine = true,
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colors.onPrimary,
+                            textAlign = TextAlign.Start,
+                        ),
+                        trailingIcon = {
+                            Icon(
+                                Icons.Filled.Clear,
+                                contentDescription = "clear text",
+                                tint = MaterialTheme.colors.onPrimary,
+                                modifier = Modifier
+                                    //.offset(x = 8.dp)
+                                    .clickable {
+                                        viewModel.setInput(TextFieldValue())
+                                    }
+                            )
+                        },
+                        maxLines = 1,
+                        keyboardActions = KeyboardActions {
+                            keyboardController?.hide()
+                            search(context, contentViewModel, currentUrl, categoryName.value, viewModel.input.value.text)
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            autoCorrect = true,
+                            imeAction = ImeAction.Search
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 4.dp)
+                            .background(Color.Transparent)
+                            .focusRequester(focusRequester)
+                    )
 
-                                if (useVoice.value) {
-                                    invokeVoiceSearch(voiceSearchLauncher)
-                                    return@combinedClickable
+                    Icon(
+                        painterResource(id = if (useVoice.value) R.drawable.ic_mic else R.drawable.ic_search_white),
+                        contentDescription = stringResource(id = R.string.title_search_action),
+                        tint = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier
+                            .width(32.dp)
+                            .fillMaxHeight()
+                            .align(Alignment.CenterVertically)
+                            .combinedClickable(
+                                true,
+                                onClick = {
+                                    keyboardController?.hide()
+
+                                    if (useVoice.value) {
+                                        invokeVoiceSearch(voiceSearchLauncher)
+                                        return@combinedClickable
+                                    }
+
+                                    search(
+                                        context,
+                                        contentViewModel,
+                                        currentUrl,
+                                        categoryName.value,
+                                        viewModel.input.value.text
+                                    )
+                                },
+                                onLongClick = {
+                                    search(
+                                        context,
+                                        contentViewModel,
+                                        currentUrl,
+                                        categoryName.value,
+                                        viewModel.input.value.text,
+                                        true
+                                    )
                                 }
-
-                                search(
-                                    context,
-                                    contentViewModel,
-                                    currentUrl,
-                                    categoryName.value,
-                                    viewModel.input.value.text
-                                )
-                            },
-                            onLongClick = {
-                                search(
-                                    context,
-                                    contentViewModel,
-                                    currentUrl,
-                                    categoryName.value,
-                                    viewModel.input.value.text,
-                                    true
-                                )
-                            }
-                        )
-                )
+                            )
+                    )
+                }
+                LaunchedEffect(key1 = focusRequester, block = {
+                    focusRequester.requestFocus()
+                })
             }
-
-            LaunchedEffect(key1 = "first_launch", block = {
-                focusRequester.requestFocus()
-            })
-        }
+        })
     }
 
     if (viewModel.enableBackHandler().not()) {
@@ -265,8 +268,6 @@ fun SearchInputUi(
         viewModel.closeOption()
     }
 
-    val localLifecycleOwner = LocalLifecycleOwner.current
-
     viewModel.search
         .observe(localLifecycleOwner, Observer { event ->
             keyboardController?.hide()
@@ -283,9 +284,10 @@ fun SearchInputUi(
         })
 
     LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
+        queryingUseCase.withDebounce()
+
         val text = inputQuery ?: ""
         viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
-        queryingUseCase.withDebounce()
     })
 
     val isEnableSuggestion = remember { mutableStateOf(preferenceApplier.isEnableSuggestion) }
