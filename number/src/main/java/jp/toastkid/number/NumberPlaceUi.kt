@@ -120,7 +120,7 @@ fun NumberPlaceUi() {
                                         number.value = "$it"
                                         open.value = false
                                         viewModel.place(rowIndex, columnIndex, it) { done ->
-                                            showMessageSnackbar(contentViewModel, done)
+                                            showMessageSnackbar(context, contentViewModel, done)
                                         }
                                     },
                                     fontSize,
@@ -140,7 +140,7 @@ fun NumberPlaceUi() {
                                                         columnIndex,
                                                         number
                                                     ) { done ->
-                                                        showMessageSnackbar(contentViewModel, done)
+                                                        showMessageSnackbar(context, contentViewModel, done)
                                                     }
                                                 }
                                             }
@@ -208,6 +208,7 @@ private fun deleteCurrentGame(context: Context) {
 }
 
 private fun showMessageSnackbar(
+    context: Context,
     contentViewModel: ContentViewModel?,
     done: Boolean
 ) {
@@ -216,6 +217,7 @@ private fun showMessageSnackbar(
         if (done) "Next game" else ""
     ) {
         if (done) {
+            deleteCurrentGame(context)
             contentViewModel.nextRoute("tool/number/place")
         }
     }
