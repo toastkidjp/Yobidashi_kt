@@ -13,6 +13,8 @@ import java.io.File
 
 class GameFileProvider {
 
+    private val FIXED_FILE_NAME = "saved_game"
+
     operator fun invoke(filesDir: File, preferenceApplier: PreferenceApplier): File? {
         if (preferenceApplier.lastNumberPlaceGamePath().isNullOrBlank()) {
             val dir = File(filesDir, FOLDER_NAME)
@@ -20,7 +22,7 @@ class GameFileProvider {
                 dir.mkdirs()
             }
 
-            val file = File(dir, "saved_game")
+            val file = File(dir, FIXED_FILE_NAME)
 
             if (file.exists().not()) {
                 file.createNewFile()
