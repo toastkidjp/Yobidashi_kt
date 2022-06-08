@@ -16,6 +16,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -63,6 +64,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -809,102 +811,14 @@ internal fun Content() {
                                     modifier = Modifier
                                         .padding(4.dp)
                                         .clickable {
-                                            when (menu) {
-                                                Menu.TOP -> {
-                                                    contentViewModel.toTop()
-                                                }
-                                                Menu.BOTTOM -> {
-                                                    contentViewModel?.toBottom()
-                                                }
-                                                Menu.SHARE -> {
-                                                    contentViewModel?.share()
-                                                }
-                                                Menu.CODE_READER -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/barcode_reader"
-                                                    )
-                                                }
-                                                Menu.LOAN_CALCULATOR -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/loan"
-                                                    )
-                                                }
-                                                Menu.RSS_READER -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/rss/list"
-                                                    )
-                                                }
-                                                Menu.NUMBER_PLACE -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/number/place"
-                                                    )
-                                                }
-                                                Menu.AUDIO -> {
-                                                    mediaPermissionRequestLauncher.launch {
-                                                        if (it.not()) {
-                                                            contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                                            return@launch
-                                                        }
-
-                                                        contentViewModel?.setBottomSheetContent { MusicListUi() }
-                                                        coroutineScope?.launch {
-                                                            contentViewModel?.switchBottomSheet()
-                                                        }
-                                                    }
-                                                }
-                                                Menu.BOOKMARK -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "web/bookmark/list"
-                                                    )
-                                                }
-                                                Menu.VIEW_HISTORY -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "web/history/list"
-                                                    )
-                                                }
-                                                Menu.IMAGE_VIEWER -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/image/list"
-                                                    )
-                                                }
-                                                Menu.CALENDAR -> {
-                                                    contentViewModel?.openCalendar()
-                                                }
-                                                Menu.WEB_SEARCH -> {
-                                                    contentViewModel?.webSearch()
-                                                }
-                                                Menu.ABOUT_THIS_APP -> {
-                                                    navigate(navigationHostController, "about")
-                                                }
-                                                Menu.TODO_TASKS_BOARD -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/task/board"
-                                                    )
-                                                }
-                                                Menu.TODO_TASKS -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/task/list"
-                                                    )
-                                                }
-                                                Menu.VIEW_ARCHIVE -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "web/archive/list"
-                                                    )
-                                                }
-                                                Menu.FIND_IN_PAGE -> {
-                                                    openFindInPageState.value = true
-                                                }
-                                            }
+                                            onClickMainMenuItem(
+                                                menu,
+                                                contentViewModel,
+                                                navigationHostController,
+                                                mediaPermissionRequestLauncher,
+                                                coroutineScope,
+                                                openFindInPageState
+                                            )
                                             openMenu.value = false
                                         }
                                 ) {
@@ -963,6 +877,112 @@ internal fun Content() {
         lifecycle.addObserver(lifecycleObserver)
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+}
+
+private fun onClickMainMenuItem(
+    menu: Menu,
+    contentViewModel: ContentViewModel,
+    navigationHostController: NavHostController,
+    mediaPermissionRequestLauncher: ManagedActivityResultLauncher<((Boolean) -> Unit)?, Pair<Boolean, ((Boolean) -> Unit)?>>,
+    coroutineScope: CoroutineScope,
+    openFindInPageState: MutableState<Boolean>
+) {
+    when (menu) {
+        Menu.TOP -> {
+            contentViewModel.toTop()
+        }
+        Menu.BOTTOM -> {
+            contentViewModel?.toBottom()
+        }
+        Menu.SHARE -> {
+            contentViewModel?.share()
+        }
+        Menu.CODE_READER -> {
+            navigate(
+                navigationHostController,
+                "tool/barcode_reader"
+            )
+        }
+        Menu.LOAN_CALCULATOR -> {
+            navigate(
+                navigationHostController,
+                "tool/loan"
+            )
+        }
+        Menu.RSS_READER -> {
+            navigate(
+                navigationHostController,
+                "tool/rss/list"
+            )
+        }
+        Menu.NUMBER_PLACE -> {
+            navigate(
+                navigationHostController,
+                "tool/number/place"
+            )
+        }
+        Menu.AUDIO -> {
+            mediaPermissionRequestLauncher.launch {
+                if (it.not()) {
+                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                    return@launch
+                }
+
+                contentViewModel?.setBottomSheetContent { MusicListUi() }
+                coroutineScope?.launch {
+                    contentViewModel?.switchBottomSheet()
+                }
+            }
+        }
+        Menu.BOOKMARK -> {
+            navigate(
+                navigationHostController,
+                "web/bookmark/list"
+            )
+        }
+        Menu.VIEW_HISTORY -> {
+            navigate(
+                navigationHostController,
+                "web/history/list"
+            )
+        }
+        Menu.IMAGE_VIEWER -> {
+            navigate(
+                navigationHostController,
+                "tool/image/list"
+            )
+        }
+        Menu.CALENDAR -> {
+            contentViewModel?.openCalendar()
+        }
+        Menu.WEB_SEARCH -> {
+            contentViewModel?.webSearch()
+        }
+        Menu.ABOUT_THIS_APP -> {
+            navigate(navigationHostController, "about")
+        }
+        Menu.TODO_TASKS_BOARD -> {
+            navigate(
+                navigationHostController,
+                "tool/task/board"
+            )
+        }
+        Menu.TODO_TASKS -> {
+            navigate(
+                navigationHostController,
+                "tool/task/list"
+            )
+        }
+        Menu.VIEW_ARCHIVE -> {
+            navigate(
+                navigationHostController,
+                "web/archive/list"
+            )
+        }
+        Menu.FIND_IN_PAGE -> {
+            openFindInPageState.value = true
         }
     }
 }
