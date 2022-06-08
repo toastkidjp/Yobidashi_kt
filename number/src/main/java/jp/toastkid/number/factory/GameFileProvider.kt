@@ -36,7 +36,7 @@ class GameFileProvider {
 
         private const val FOLDER_NAME = "number/place/games"
 
-        private val FIXED_FILE_NAME = "saved_game"
+        private const val FIXED_FILE_NAME = "saved_game"
 
     }
 }
