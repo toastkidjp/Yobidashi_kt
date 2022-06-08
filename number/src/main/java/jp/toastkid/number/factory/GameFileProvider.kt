@@ -13,8 +13,6 @@ import java.io.File
 
 class GameFileProvider {
 
-    private val FIXED_FILE_NAME = "saved_game"
-
     operator fun invoke(filesDir: File, preferenceApplier: PreferenceApplier): File? {
         if (preferenceApplier.lastNumberPlaceGamePath().isNullOrBlank()) {
             val dir = File(filesDir, FOLDER_NAME)
@@ -37,6 +35,8 @@ class GameFileProvider {
     companion object {
 
         private const val FOLDER_NAME = "number/place/games"
+
+        private val FIXED_FILE_NAME = "saved_game"
 
     }
 }
