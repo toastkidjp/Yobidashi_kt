@@ -29,7 +29,7 @@ class GameFileProvider {
         }
 
         val pathname = preferenceApplier.lastNumberPlaceGamePath() ?: return null
-        return File(filesDir, "number/place/games/$pathname")
+        return File(filesDir, "$FOLDER_NAME/$pathname")
     }
 
     companion object {
