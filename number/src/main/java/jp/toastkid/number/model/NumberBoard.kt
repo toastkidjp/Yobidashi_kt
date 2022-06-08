@@ -116,11 +116,6 @@ data class NumberBoard(
         }
     }
 
-    fun validBoard() =
-        (0 until BOARD_SIZE).none { x ->
-            rows[x].contains(-1)
-        }
-
     fun rows(): MutableList<MutableList<Int>> {
         return rows
     }
