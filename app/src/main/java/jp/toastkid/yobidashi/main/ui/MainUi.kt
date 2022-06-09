@@ -467,43 +467,13 @@ internal fun Content() {
                             }
                         }
 
-                        val openOptionMenu = remember { mutableStateOf(false) }
-
-                        Box(modifier = Modifier
-                            .width(32.dp)
-                            .clickable { openOptionMenu.value = true }) {
-                            Icon(
-                                painterResource(id = R.drawable.ic_option_menu),
-                                contentDescription = stringResource(id = R.string.title_option_menu),
-                                tint = tint
-                            )
-
-                            val commonOptionMenuItems = listOf(
-                                OptionMenu(
-                                    titleId = R.string.title_tab_list,
-                                    action = { contentViewModel?.switchTabList() }),
-                                OptionMenu(
-                                    titleId = R.string.title_settings,
-                                    action = { navigate(navigationHostController, "setting/top") }),
-                                OptionMenu(titleId = R.string.exit, action = { activity.finish() })
-                            )
-                            val menus = contentViewModel?.optionMenus
-                            val optionMenuItems =
-                                menus?.union(commonOptionMenuItems)?.distinct()
-
-                            DropdownMenu(
-                                expanded = openOptionMenu.value,
-                                onDismissRequest = { openOptionMenu.value = false }) {
-                                optionMenuItems?.forEach {
-                                    DropdownMenuItem(onClick = {
-                                        openOptionMenu.value = false
-                                        it.action()
-                                    }) {
-                                        OptionMenuItem(it)
-                                    }
-                                }
-                            }
-                        }
+                        OverflowMenu(
+                            tint,
+                            contentViewModel,
+                            navigationHostController,
+                            activity,
+                            action
+                        )
                     }
                 },
                 snackbarHost = {
@@ -787,6 +757,53 @@ internal fun Content() {
         lifecycle.addObserver(lifecycleObserver)
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+}
+
+@Composable
+private fun OverflowMenu(
+    tint: Color,
+    contentViewModel: ContentViewModel,
+    navigationHostController: NavHostController,
+    activity: ComponentActivity,
+    action: OptionMenu
+) {
+    val openOptionMenu = remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier
+        .width(32.dp)
+        .clickable { openOptionMenu.value = true }) {
+        Icon(
+            painterResource(id = R.drawable.ic_option_menu),
+            contentDescription = stringResource(id = R.string.title_option_menu),
+            tint = tint
+        )
+
+        val commonOptionMenuItems = listOf(
+            OptionMenu(
+                titleId = R.string.title_tab_list,
+                action = { contentViewModel?.switchTabList() }),
+            OptionMenu(
+                titleId = R.string.title_settings,
+                action = { navigate(navigationHostController, "setting/top") }),
+            OptionMenu(titleId = R.string.exit, action = { activity.finish() })
+        )
+        val menus = contentViewModel?.optionMenus
+        val optionMenuItems =
+            menus?.union(commonOptionMenuItems)?.distinct()
+
+        DropdownMenu(
+            expanded = openOptionMenu.value,
+            onDismissRequest = { openOptionMenu.value = false }) {
+            optionMenuItems?.forEach {
+                DropdownMenuItem(onClick = {
+                    openOptionMenu.value = false
+                    it.action()
+                }) {
+                    OptionMenuItem(it)
+                }
+            }
         }
     }
 }
