@@ -470,7 +470,7 @@ internal fun Content() {
                         OverflowMenu(
                             tint,
                             contentViewModel,
-                            navigationHostController,
+                            { navigate(navigationHostController, "setting/top") },
                             activity
                         )
                     }
@@ -720,7 +720,9 @@ internal fun Content() {
                                             maxLines = 2,
                                             overflow = TextOverflow.Ellipsis,
                                             textAlign = TextAlign.Center,
-                                            modifier = Modifier.fillMaxWidth().padding(8.dp)
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp)
                                         )
                                     }
                                 }
@@ -764,7 +766,7 @@ internal fun Content() {
 private fun OverflowMenu(
     tint: Color,
     contentViewModel: ContentViewModel,
-    navigationHostController: NavHostController,
+    openSetting: () -> Unit,
     activity: ComponentActivity
 ) {
     val openOptionMenu = remember { mutableStateOf(false) }
@@ -784,7 +786,7 @@ private fun OverflowMenu(
                 action = { contentViewModel?.switchTabList() }),
             OptionMenu(
                 titleId = R.string.title_settings,
-                action = { navigate(navigationHostController, "setting/top") }),
+                action = openSetting),
             OptionMenu(titleId = R.string.exit, action = { activity.finish() })
         )
         val menus = contentViewModel?.optionMenus
