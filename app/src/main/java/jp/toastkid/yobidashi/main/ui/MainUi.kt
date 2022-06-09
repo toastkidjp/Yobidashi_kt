@@ -471,8 +471,7 @@ internal fun Content() {
                             tint,
                             contentViewModel,
                             navigationHostController,
-                            activity,
-                            action
+                            activity
                         )
                     }
                 },
@@ -766,8 +765,7 @@ private fun OverflowMenu(
     tint: Color,
     contentViewModel: ContentViewModel,
     navigationHostController: NavHostController,
-    activity: ComponentActivity,
-    action: OptionMenu
+    activity: ComponentActivity
 ) {
     val openOptionMenu = remember { mutableStateOf(false) }
 
