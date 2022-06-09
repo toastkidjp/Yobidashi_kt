@@ -28,7 +28,7 @@ class TabListViewModel : ViewModel() {
         _saveEditorTab.postValue(nextFile)
     }
 
-    private val _tabCount = mutableStateOf<Int>(0)
+    private val _tabCount = mutableStateOf(0)
 
     val tabCount: MutableState<Int> = _tabCount
 
