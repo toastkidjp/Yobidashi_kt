@@ -1122,7 +1122,6 @@ private fun showSnackbar(
  * Replace visibilities for current tab.
  */
 private fun replaceToCurrentTab(tabs: TabAdapter, navigationHostController: NavHostController) {
-    //tabReplacingUseCase.invoke(withAnimation)
     when (val tab = tabs.currentTab()) {
         is WebTab -> {
             navigate(navigationHostController, "tab/web/current")
