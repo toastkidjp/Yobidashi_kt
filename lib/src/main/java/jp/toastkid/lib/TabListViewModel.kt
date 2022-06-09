@@ -7,7 +7,7 @@
  */
 package jp.toastkid.lib
 
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,7 +30,7 @@ class TabListViewModel : ViewModel() {
 
     private val _tabCount = mutableStateOf(0)
 
-    val tabCount: MutableState<Int> = _tabCount
+    val tabCount: State<Int> = _tabCount
 
     fun tabCount(count: Int) {
         _tabCount.value = count
