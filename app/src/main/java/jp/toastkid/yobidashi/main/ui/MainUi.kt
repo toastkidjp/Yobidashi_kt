@@ -460,8 +460,7 @@ internal fun Content() {
                                 FindInPage(
                                     openFindInPageState,
                                     tint,
-                                    pageSearcherInput,
-                                    preferenceApplier
+                                    pageSearcherInput
                                 )
                             } else {
                                 headerViewModel.appBarContent.value()
@@ -796,8 +795,7 @@ internal fun Content() {
 private fun FindInPage(
     openFindInPageState: MutableState<Boolean>,
     tint: Color,
-    pageSearcherInput: MutableState<String>,
-    preferenceApplier: PreferenceApplier
+    pageSearcherInput: MutableState<String>
 ) {
     val activity = LocalContext.current as? ViewModelStoreOwner ?: return
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
