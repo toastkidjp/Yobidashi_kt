@@ -1122,26 +1122,30 @@ private fun showSnackbar(
  * Replace visibilities for current tab.
  */
 private fun replaceToCurrentTab(tabs: TabAdapter, navigationHostController: NavHostController) {
-    when (val tab = tabs.currentTab()) {
+    val route = when (val tab = tabs.currentTab()) {
         is WebTab -> {
-            navigate(navigationHostController, "tab/web/current")
+            "tab/web/current"
         }
         is PdfTab -> {
-            navigate(navigationHostController, "tab/pdf/current")
+            "tab/pdf/current"
         }
         is ArticleListTab -> {
-            navigate(navigationHostController, "tab/article/list")
+            "tab/article/list"
         }
         is ArticleTab -> {
-            navigate(navigationHostController, "tab/article/content/${tab.title()}")
+            "tab/article/content/${tab.title()}"
         }
         is CalendarTab -> {
-            navigate(navigationHostController, "tab/calendar")
+            "tab/calendar"
         }
         is EditorTab -> {
-            navigate(navigationHostController, "tab/editor/current")
+            "tab/editor/current"
         }
-    }
+        else -> {
+            null
+        }
+    } ?: return
+    navigate(navigationHostController, route)
 }
 
 private fun openNewTab(
