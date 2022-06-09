@@ -24,19 +24,22 @@ class GameFileProvider {
         preferenceApplier: PreferenceApplier,
         filesDir: File
     ) {
-        if (preferenceApplier.lastNumberPlaceGamePath().isNullOrBlank()) {
-            val dir = File(filesDir, FOLDER_NAME)
-            if (dir.exists().not()) {
-                dir.mkdirs()
-            }
-
-            val file = File(dir, FIXED_FILE_NAME)
-
-            if (file.exists().not()) {
-                file.createNewFile()
-            }
-            preferenceApplier.setLastNumberPlaceGamePath(file.name)
+        val lastNumberPlaceGamePath = preferenceApplier.lastNumberPlaceGamePath()
+        if (lastNumberPlaceGamePath?.isNotEmpty() == true) {
+            return
         }
+
+        val dir = File(filesDir, FOLDER_NAME)
+        if (dir.exists().not()) {
+            dir.mkdirs()
+        }
+
+        val file = File(dir, FIXED_FILE_NAME)
+
+        if (file.exists().not()) {
+            file.createNewFile()
+        }
+        preferenceApplier.setLastNumberPlaceGamePath(file.name)
     }
 
     companion object {
