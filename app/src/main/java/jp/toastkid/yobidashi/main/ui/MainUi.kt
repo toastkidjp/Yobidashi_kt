@@ -828,19 +828,19 @@ private fun FindInPage(
             label = {
                 Text(
                     stringResource(id = R.string.hint_find_in_page),
-                    color = Color(preferenceApplier.fontColor)
+                    color = MaterialTheme.colors.onPrimary
                 )
             },
             singleLine = true,
             textStyle = TextStyle(
-                color = Color(preferenceApplier.fontColor),
+                color = MaterialTheme.colors.onPrimary,
                 textAlign = TextAlign.Start,
             ),
             trailingIcon = {
                 Icon(
                     painterResource(R.drawable.ic_clear_form),
                     contentDescription = "clear text",
-                    tint = Color(preferenceApplier.fontColor),
+                    tint = MaterialTheme.colors.onPrimary,
                     modifier = Modifier
                         .clickable {
                             pageSearcherInput.value = ""
