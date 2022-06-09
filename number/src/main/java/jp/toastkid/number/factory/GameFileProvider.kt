@@ -14,6 +14,16 @@ import java.io.File
 class GameFileProvider {
 
     operator fun invoke(filesDir: File, preferenceApplier: PreferenceApplier): File? {
+        makeFolderIfNeed(preferenceApplier, filesDir)
+
+        val pathname = preferenceApplier.lastNumberPlaceGamePath() ?: return null
+        return File(filesDir, "$FOLDER_NAME/$pathname")
+    }
+
+    private fun makeFolderIfNeed(
+        preferenceApplier: PreferenceApplier,
+        filesDir: File
+    ) {
         if (preferenceApplier.lastNumberPlaceGamePath().isNullOrBlank()) {
             val dir = File(filesDir, FOLDER_NAME)
             if (dir.exists().not()) {
@@ -27,9 +37,6 @@ class GameFileProvider {
             }
             preferenceApplier.setLastNumberPlaceGamePath(file.name)
         }
-
-        val pathname = preferenceApplier.lastNumberPlaceGamePath() ?: return null
-        return File(filesDir, "$FOLDER_NAME/$pathname")
     }
 
     companion object {
