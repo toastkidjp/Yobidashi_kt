@@ -471,7 +471,7 @@ internal fun Content() {
                             tint,
                             contentViewModel,
                             { navigate(navigationHostController, "setting/top") },
-                            activity
+                            { activity.finish() }
                         )
                     }
                 },
@@ -767,7 +767,7 @@ private fun OverflowMenu(
     tint: Color,
     contentViewModel: ContentViewModel,
     openSetting: () -> Unit,
-    activity: ComponentActivity
+    finishApp: () -> Unit
 ) {
     val openOptionMenu = remember { mutableStateOf(false) }
 
@@ -787,7 +787,7 @@ private fun OverflowMenu(
             OptionMenu(
                 titleId = R.string.title_settings,
                 action = openSetting),
-            OptionMenu(titleId = R.string.exit, action = { activity.finish() })
+            OptionMenu(titleId = R.string.exit, action = finishApp)
         )
         val menus = contentViewModel?.optionMenus
         val optionMenuItems =
