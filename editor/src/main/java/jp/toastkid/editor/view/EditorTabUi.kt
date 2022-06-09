@@ -44,7 +44,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -305,7 +304,7 @@ private fun AppBarContent(
                     .padding(12.dp)
             )
             Text(
-                text = tabListViewModel.tabCount.observeAsState().value.toString(),
+                text = tabListViewModel.tabCount.value.toString(),
                 color = Color(preferenceApplier.fontColor),
                 fontSize = 12.sp,
                 modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
