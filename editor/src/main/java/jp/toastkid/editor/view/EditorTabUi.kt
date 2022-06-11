@@ -236,6 +236,8 @@ fun EditorTabUi(path: String?) {
             contentViewModel?.share?.removeObservers(localLifecycleOwner)
         }
     }
+
+    contentViewModel.clearOptionMenus()
 }
 
 @OptIn(ExperimentalFoundationApi::class)
