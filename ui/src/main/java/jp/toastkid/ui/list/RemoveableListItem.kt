@@ -135,6 +135,7 @@ fun SwipeToDismissItem(
                             .padding(horizontal = 20.dp)
                             .clickable {
                                 onClickDelete()
+                                endOffset.value = 0f
                             },
                         contentAlignment = Alignment.CenterEnd
                     ) {
