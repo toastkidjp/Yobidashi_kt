@@ -195,7 +195,7 @@ class ContentViewModel : ViewModel() {
 
     val fabScale = mutableStateOf(1f)
 
-    fun resetComponentVisibility() {
+    fun resetSubComponentVisibility() {
         bottomBarOffsetHeightPx.value = 0f
         fabScale.value = 1f
     }
