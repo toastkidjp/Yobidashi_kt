@@ -68,7 +68,11 @@ internal fun SearchItemContent(
     )
 
     SwipeToDismissItem(
-        dismissState = dismissState,
+        onClickDelete = {
+            CoroutineScope(Dispatchers.IO).launch {
+                onDelete()
+            }
+        },
         dismissContent = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -165,7 +169,11 @@ internal fun BindItemContent(
     )
 
     SwipeToDismissItem(
-        dismissState = dismissState,
+        onClickDelete = {
+            CoroutineScope(Dispatchers.IO).launch {
+                onDelete()
+            }
+        },
         dismissContent = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
