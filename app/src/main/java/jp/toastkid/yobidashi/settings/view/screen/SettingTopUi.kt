@@ -85,6 +85,8 @@ fun SettingTopUi() {
             viewModel?.refresh()
         }
     }
+
+    viewModel?.clearOptionMenus()
 }
 
 
