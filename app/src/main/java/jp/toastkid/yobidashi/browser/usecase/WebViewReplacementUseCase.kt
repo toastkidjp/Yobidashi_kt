@@ -15,8 +15,8 @@ import android.widget.FrameLayout
 import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
@@ -72,7 +72,8 @@ class WebViewReplacementUseCase(
             val activity = webViewContainer?.context
             if (activity is ViewModelStoreOwner
                     && ScreenMode.find(preferenceApplier.browserScreenMode()) != ScreenMode.FULL_SCREEN) {
-                ViewModelProvider(activity).get(AppBarViewModel::class.java).show()
+                ViewModelProvider(activity).get(ContentViewModel::class.java)
+                    .resetSubComponentVisibility()
             }
         }
 
