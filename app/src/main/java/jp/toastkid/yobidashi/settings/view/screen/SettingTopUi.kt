@@ -77,10 +77,12 @@ fun SettingTopUi() {
         }
     }
 
-    val viewModel = viewModel(ContentViewModel::class.java)
+    val viewModel = (activityContext as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, it)
+    }
     DisposableEffect(key1 = "refresh") {
         onDispose {
-            viewModel.refresh()
+            viewModel?.refresh()
         }
     }
 }
