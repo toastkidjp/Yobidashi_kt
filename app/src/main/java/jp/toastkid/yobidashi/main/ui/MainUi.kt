@@ -469,7 +469,8 @@ internal fun Content() {
 
                         OverflowMenu(
                             tint,
-                            contentViewModel,
+                            contentViewModel.optionMenus,
+                            { contentViewModel.switchTabList() },
                             { navigate(navigationHostController, "setting/top") },
                             { activity.finish() }
                         )
@@ -540,8 +541,6 @@ internal fun Content() {
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    contentViewModel?.clearOptionMenus()
-
                     composable("empty")  {
 
                     }
@@ -765,7 +764,8 @@ internal fun Content() {
 @Composable
 private fun OverflowMenu(
     tint: Color,
-    contentViewModel: ContentViewModel,
+    menus: List<OptionMenu>,
+    switchTabList: () -> Unit,
     openSetting: () -> Unit,
     finishApp: () -> Unit
 ) {
@@ -783,13 +783,12 @@ private fun OverflowMenu(
         val commonOptionMenuItems = listOf(
             OptionMenu(
                 titleId = R.string.title_tab_list,
-                action = { contentViewModel?.switchTabList() }),
+                action = switchTabList),
             OptionMenu(
                 titleId = R.string.title_settings,
                 action = openSetting),
             OptionMenu(titleId = R.string.exit, action = finishApp)
         )
-        val menus = contentViewModel?.optionMenus
         val optionMenuItems =
             menus?.union(commonOptionMenuItems)?.distinct()
 
