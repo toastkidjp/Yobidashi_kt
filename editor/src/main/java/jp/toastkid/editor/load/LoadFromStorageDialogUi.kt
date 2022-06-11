@@ -80,7 +80,13 @@ internal fun LoadFromStorageDialogUi(
                         }
                     )
                     SwipeToDismissItem(
-                        dismissState = dismissState,
+                        onClickDelete = {
+                            try {
+                                file.delete()
+                            } catch (e: IOException) {
+                                Timber.e(e)
+                            }
+                        },
                         dismissContent = {
                             Text(
                                 text = file.name,
