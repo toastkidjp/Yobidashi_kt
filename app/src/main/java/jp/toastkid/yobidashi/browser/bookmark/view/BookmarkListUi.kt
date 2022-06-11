@@ -296,7 +296,9 @@ private fun BookmarkList(
             val openEditor = remember { mutableStateOf(false) }
 
             SwipeToDismissItem(
-                dismissState,
+                onClickDelete = {
+                    onDelete(bookmark)
+                },
                 dismissContent = {
                     Row(verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
