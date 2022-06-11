@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -45,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -66,6 +68,8 @@ fun SwipeToDismissItem(
         DismissDirection.EndToStart,
         DismissDirection.StartToEnd
     )
+
+    val coroutineScope = rememberCoroutineScope()
 
     Surface(
         modifier = modifier,
@@ -134,8 +138,12 @@ fun SwipeToDismissItem(
                             .background(Color(0xFFDD4444))
                             .padding(horizontal = 20.dp)
                             .clickable {
-                                onClickDelete()
-                                endOffset.value = 0f
+                                coroutineScope.launch {
+                                    state.dismiss(DismissDirection.EndToStart)
+                                    onClickDelete()
+                                    state.reset()
+                                    endOffset.value = 0f
+                                }
                             },
                         contentAlignment = Alignment.CenterEnd
                     ) {
