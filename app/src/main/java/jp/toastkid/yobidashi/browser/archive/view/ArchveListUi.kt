@@ -92,7 +92,13 @@ fun ArchiveListUi() {
                 }
             )
             SwipeToDismissItem(
-                dismissState = dismissState,
+                onClickDelete = {
+                    try {
+                        archiveFile.delete()
+                    } catch (e: IOException) {
+                        Timber.e(e)
+                    }
+                },
                 dismissContent = {
                     Row(
                         Modifier
