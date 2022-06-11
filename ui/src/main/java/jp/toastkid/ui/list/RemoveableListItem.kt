@@ -45,9 +45,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -55,15 +52,15 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SwipeToDismissItem(
-    dismissState: DismissState,
-    dismissContent: @Composable RowScope.() -> Unit,
+    onClickDelete: () -> Unit,
     modifier: Modifier = Modifier
         .padding(
             start = 16.dp,
             end = 16.dp,
             top = 2.dp,
             bottom = 2.dp
-        )
+        ),
+    dismissContent: @Composable RowScope.() -> Unit
 ) {
     val directions: Set<DismissDirection> = setOf(
         DismissDirection.EndToStart,
@@ -137,11 +134,7 @@ fun SwipeToDismissItem(
                             .background(Color(0xFFDD4444))
                             .padding(horizontal = 20.dp)
                             .clickable {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    direction?.let {
-                                        dismissState.dismiss(DismissDirection.EndToStart)
-                                    }
-                                }
+                                onClickDelete()
                             },
                         contentAlignment = Alignment.CenterEnd
                     ) {
