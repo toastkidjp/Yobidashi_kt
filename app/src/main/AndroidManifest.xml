@@ -54,9 +54,7 @@
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="false"
-            >
-
-        </activity>
+            />
 
         <activity-alias
             android:name=".browser.BrowserActivity"

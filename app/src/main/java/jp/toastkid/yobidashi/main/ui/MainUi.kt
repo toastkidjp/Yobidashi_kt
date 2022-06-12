@@ -190,15 +190,15 @@ internal fun Content() {
     navigationHostController.enableOnBackPressed(false)
 
     tabListViewModel
-        ?.openNewTab
-        ?.observe(activity, {
+        .openNewTab
+        .observe(activity, {
             it.getContentIfNotHandled() ?: return@observe
             openNewTab(preferenceApplier, tabs, navigationHostController)
         })
 
     tabListViewModel
-        ?.saveEditorTab
-        ?.observe(
+        .saveEditorTab
+        .observe(
             activity,
             Observer {
                 val currentTab = tabs.currentTab() as? EditorTab ?: return@Observer
@@ -215,7 +215,7 @@ internal fun Content() {
                 preferenceApplier,
                 {
                     tabs.openNewWebTab(it.toString())
-                    contentViewModel?.replaceToCurrentTab()
+                    contentViewModel.replaceToCurrentTab()
                 }
             ).invoke(query)
         })
@@ -405,8 +405,6 @@ internal fun Content() {
         tabs.openNewWindowWebTab(message)
         browserViewModel?.switchWebViewToCurrent(tabs.currentTabId())
     })
-
-    val height = activity.resources.displayMetrics.heightPixels
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -671,10 +669,10 @@ internal fun Content() {
                     composable(
                         "tab/web/current",
                         enterTransition = {
-                            slideInVertically(initialOffsetY = { height })
+                            slideInVertically(initialOffsetY = { it })
                         },
                         exitTransition = {
-                            slideOutVertically(targetOffsetY = { height })
+                            slideOutVertically(targetOffsetY = { it })
                         }
                     ) {
                         val currentTab = tabs.currentTab() as? WebTab ?: return@composable
@@ -1070,6 +1068,7 @@ private fun showSnackbar(
     }
 
     CoroutineScope(Dispatchers.Main).launch {
+        snackbarHostState.currentSnackbarData?.dismiss()
         val snackbarResult = snackbarHostState.showSnackbar(
             snackbarEvent.message,
             snackbarEvent.actionLabel ?: "",

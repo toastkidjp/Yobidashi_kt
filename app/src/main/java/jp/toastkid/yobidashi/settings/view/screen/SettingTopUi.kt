@@ -8,8 +8,6 @@
 
 package jp.toastkid.yobidashi.settings.view.screen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ScrollableTabRow
@@ -43,12 +41,7 @@ fun SettingTopUi() {
 
     val selectedIndex = remember { mutableStateOf(0) }
 
-    Column(
-        modifier = Modifier
-            .background(Color.Transparent)
-    ) {
-        SwitchContentWithTabIndex(selectedIndex)
-    }
+    SwitchContentWithTabIndex(selectedIndex)
 
     appBarViewModel?.replace {
         val pages = arrayOf(
@@ -106,21 +99,3 @@ private fun SwitchContentWithTabIndex(selectedIndex: MutableState<Int>) {
         else -> DisplaySettingUi()
     }
 }
-
-/*
-TODO
-override fun onDetach() {
-    activity?.let {
-        ViewModelProvider(it).get(ContentViewModel::class.java).refresh()
-    }
-    super.onDetach()
-}
-
-fun setFrom(javaClass: Class<Fragment>?) {
-    if (arguments == null) {
-        arguments = Bundle()
-    }
-
-    InitialIndexSettingUseCase().put(arguments, javaClass)
-}
-*/

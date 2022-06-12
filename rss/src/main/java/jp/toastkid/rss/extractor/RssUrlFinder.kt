@@ -7,11 +7,7 @@
  */
 package jp.toastkid.rss.extractor
 
-import android.content.Context
-import android.view.View
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.api.html.HtmlApi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -33,10 +29,6 @@ class RssUrlFinder(
     @VisibleForTesting
     private val htmlApi: HtmlApi = HtmlApi(),
     @VisibleForTesting
-    private val contentViewModelFactory: (ViewModelStoreOwner) -> ContentViewModel? = {
-        ViewModelProvider(it).get(ContentViewModel::class.java)
-    },
-    @VisibleForTesting
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     @VisibleForTesting
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -44,14 +36,11 @@ class RssUrlFinder(
 
 
     operator fun invoke(
-        currentUrl: String?,
-        snackbarParentSupplier: () -> View?
+        currentUrl: String?
     ) {
         if (currentUrl.isNullOrBlank()) {
             return
         }
-
-        val colorPair = preferenceApplier.colorPair()
 
         if (urlValidator(currentUrl)) {
             preferenceApplier.saveNewRssReaderTargets(currentUrl)
@@ -85,8 +74,4 @@ class RssUrlFinder(
         contentViewModel.snackShort(R.string.message_failure_extracting_rss)
     }
 
-    private fun obtainContentViewModel(context: Context) =
-        (context as? ViewModelStoreOwner)?.let {
-            contentViewModelFactory(it)
-        }
 }

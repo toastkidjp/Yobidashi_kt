@@ -13,44 +13,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.theme.AppTheme
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
-import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.main.ui.Content
 
 class MainActivity : ComponentActivity() {
 
-    private var browserViewModel: BrowserViewModel? = null
-
-    private val downloadPermissionRequestLauncher =
-        registerForActivityResult(DownloadPermissionRequestContract()) {
-            if (it.first.not()) {
-                ViewModelProvider(this).get(ContentViewModel::class.java)
-                    .snackShort(R.string.message_requires_permission_storage)
-                return@registerForActivityResult
-            }
-            val url = it.second ?: return@registerForActivityResult
-            DownloadAction(this).invoke(url)
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val activityViewModelProvider = ViewModelProvider(this)
-
-        browserViewModel = activityViewModelProvider.get(BrowserViewModel::class.java)
-        browserViewModel?.download?.observe(this, Observer {
-            val url = it?.getContentIfNotHandled() ?: return@Observer
-            downloadPermissionRequestLauncher.launch(url)
-        })
 
         processShortcut(intent)
 
@@ -82,7 +56,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        ClippingUrlOpener()(this) { browserViewModel?.open(it) }
+
+        ClippingUrlOpener()(this) { ViewModelProvider(this).get(BrowserViewModel::class.java)?.open(it) }
     }
 
     override fun onPause() {
@@ -92,7 +67,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         GlobalWebViewPool.dispose()
-        downloadPermissionRequestLauncher.unregister()
         super.onDestroy()
     }
 
