@@ -50,7 +50,7 @@ class TapActionInitializerTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         tapActionInitializer.invoke(mockk(), remoteViews)
 
         verify(exactly = 1) { anyConstructed<PendingIntentFactory>().setting(any()) }
