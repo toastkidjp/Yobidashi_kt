@@ -30,16 +30,6 @@
             />
 
         <activity
-            android:name=".main.SplashScreenActivity"
-            android:label="${app_name}"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize"
-            android:noHistory="true"
-            android:autoRemoveFromRecents="true"
-            android:exported="true"
-            />
-
-        <activity
             android:name=".main.MainActivity"
             android:label="${app_name}"
             android:configChanges="orientation|screenSize|locale"
