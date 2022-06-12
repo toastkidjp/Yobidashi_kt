@@ -57,6 +57,7 @@ fun SettingTopUi() {
         ScrollableTabRow(
             selectedTabIndex = selectedIndex.value,
             edgePadding = 8.dp,
+            backgroundColor = Color.Transparent,
             modifier = Modifier.fillMaxHeight()
         ) {
             pages.forEachIndexed { index, page ->
