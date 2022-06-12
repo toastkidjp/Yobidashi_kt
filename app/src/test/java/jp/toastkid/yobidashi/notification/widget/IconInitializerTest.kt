@@ -48,7 +48,7 @@ class IconInitializerTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         iconInitializer.invoke(remoteViews, Color.WHITE, 0, 0)
 
         verify(exactly = 1) { vectorToBitmap.invoke(any()) }
