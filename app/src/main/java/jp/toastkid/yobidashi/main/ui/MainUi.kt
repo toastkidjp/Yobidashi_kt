@@ -229,6 +229,8 @@ internal fun Content() {
             Build.VERSION.SDK_INT
         ).invoke(preferenceApplier.color)
 
+        contentViewModel.setColorPair(colorPair)
+
         contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
         contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
     })
@@ -272,8 +274,8 @@ internal fun Content() {
     val offsetY = remember { mutableStateOf(menuFabPosition?.second ?: 0f) }
     val openFindInPageState = remember { mutableStateOf(false) }
 
-    val backgroundColor = Color(preferenceApplier.color)
-    val tint = Color(preferenceApplier.fontColor)
+    val backgroundColor = MaterialTheme.colors.primary
+    val tint = MaterialTheme.colors.onPrimary
 
     val bottomBarHeight = 72.dp
     val bottomBarHeightPx = with(LocalDensity.current) {
@@ -443,7 +445,7 @@ internal fun Content() {
                 backgroundColor = Color.Transparent,
                 bottomBar = {
                     BottomAppBar(
-                        backgroundColor = backgroundColor,
+                        backgroundColor = MaterialTheme.colors.primary,
                         elevation = 4.dp,
                         modifier = Modifier
                             .height(72.dp)
