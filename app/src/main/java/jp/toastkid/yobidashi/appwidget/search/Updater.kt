@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi.appwidget.search
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
 /**
  * App-Widget updater.
@@ -23,9 +21,5 @@ internal class Updater {
                 AppWidgetManager.getInstance(wrapper),
                 RemoteViewsFactory().make(wrapper)
         )
-
-        if (PreferenceApplier(wrapper).useNotificationWidget()) {
-            NotificationWidget.refresh(wrapper)
-        }
     }
 }
