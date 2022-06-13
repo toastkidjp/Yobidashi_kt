@@ -21,7 +21,6 @@ import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -56,9 +55,6 @@ class UpdaterTest {
 
         mockkObject(Provider)
         every { Provider.updateWidget(any(), any(), any()) }.answers { Unit }
-
-        mockkObject(NotificationWidget)
-        every { NotificationWidget.refresh(any()) }.answers { Unit }
     }
 
     @After
@@ -75,7 +71,6 @@ class UpdaterTest {
         verify(exactly = 1) { AppWidgetManager.getInstance(any()) }
         verify(exactly = 1) { anyConstructed<RemoteViewsFactory>().make(any()) }
         verify(exactly = 1) { Provider.updateWidget(any(), any(), any()) }
-        verify(exactly = 1) { NotificationWidget.refresh(any()) }
     }
 
     @Test
@@ -89,7 +84,6 @@ class UpdaterTest {
         verify(exactly = 1) { AppWidgetManager.getInstance(any()) }
         verify(exactly = 1) { anyConstructed<RemoteViewsFactory>().make(any()) }
         verify(exactly = 1) { Provider.updateWidget(any(), any(), any()) }
-        verify(exactly = 0) { NotificationWidget.refresh(any()) }
     }
 
 }
