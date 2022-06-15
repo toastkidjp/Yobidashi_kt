@@ -1,11 +1,6 @@
 <!--suppress AndroidDomInspection -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-    </style>
-
     <style name="FunctionsNotificationImageStyle">
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>
