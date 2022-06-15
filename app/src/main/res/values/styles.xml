@@ -24,9 +24,4 @@
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="AppTheme">
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:statusBarColor">@color/transparent</item>
-    </style>
-
 </resources>
