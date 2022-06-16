@@ -233,7 +233,7 @@ internal fun Content() {
         contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
     })
 
-    val activityResultLauncher: ActivityResultLauncher<Intent>? =
+    val activityResultLauncher: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode != Activity.RESULT_OK) {
                 return@rememberLauncherForActivityResult
