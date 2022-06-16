@@ -95,6 +95,7 @@ fun ArchiveListUi() {
                 onClickDelete = {
                     try {
                         archiveFile.delete()
+                        items.remove(archiveFile)
                     } catch (e: IOException) {
                         Timber.e(e)
                     }
