@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.search.voice
 
-import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import android.view.View
@@ -25,7 +24,7 @@ class VoiceSearch {
      * @param context
      * @return [Intent]
      */
-    fun makeIntent(context: Context? = null): Intent =
+    fun makeIntent(): Intent =
             Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
                 it.putExtra(
                         RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -40,7 +39,7 @@ class VoiceSearch {
      * @param parent Snackbar parent
      * @param colorPair [ColorPair]
      */
-    fun suggestInstallGoogleApp(parent: View, colorPair: ColorPair) {
+    fun suggestInstallGoogleApp(parent: View) {
         val contentViewModel = (parent.context as? ViewModelStoreOwner)?.let {
             ViewModelProvider(it).get(ContentViewModel::class.java)
         }

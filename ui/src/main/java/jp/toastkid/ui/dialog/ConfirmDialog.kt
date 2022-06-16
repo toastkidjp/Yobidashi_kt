@@ -18,10 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.R
 
 @Composable
@@ -47,7 +45,7 @@ fun ConfirmDialog(
     messageColor: Color = Color.Black,
     onClickOk: () -> Unit
 ) {
-    val color = Color(PreferenceApplier(LocalContext.current).color)
+    val color = MaterialTheme.colors.onSurface
 
     if (visibleState.value.not()) {
         return

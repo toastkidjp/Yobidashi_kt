@@ -16,9 +16,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import io.mockk.unmockkObject
 import io.mockk.verify
-import jp.toastkid.yobidashi.libs.Toaster
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -49,7 +47,7 @@ class VoiceSearchTest {
 
     @Test
     fun makeIntent() {
-        voiceSearch.makeIntent(context)
+        voiceSearch.makeIntent()
 
         verify(atLeast = 1) { anyConstructed<Intent>().putExtra(any(), any<String>()) }
         verify(atLeast = 1) { context.getPackageName() }
@@ -58,9 +56,7 @@ class VoiceSearchTest {
     //TODO fix it
     @Test
     fun testSuggestInstallGoogleApp() {
-        voiceSearch.suggestInstallGoogleApp(mockk(), mockk())
-
-        unmockkObject(Toaster)
+        voiceSearch.suggestInstallGoogleApp(mockk())
     }
 
 }
