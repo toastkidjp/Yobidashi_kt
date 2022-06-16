@@ -21,6 +21,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +44,8 @@ internal fun LoadFromStorageDialogUi(
     onSelect: (File) -> Unit
 ) {
     files ?: return
+    val fileItems = remember { mutableStateListOf<File>() }
+    fileItems.addAll(files)
 
     Dialog(
         onDismissRequest = {
@@ -65,7 +69,8 @@ internal fun LoadFromStorageDialogUi(
                         )
                     }
                 }
-                items(files) { file ->
+                println("tomato fileItems ${fileItems.size}")
+                items(fileItems) { file ->
                     val dismissState = DismissState(
                         initialValue = DismissValue.Default,
                         confirmStateChange = { dismissValue ->
@@ -83,6 +88,7 @@ internal fun LoadFromStorageDialogUi(
                         onClickDelete = {
                             try {
                                 file.delete()
+                                fileItems.remove(file)
                             } catch (e: IOException) {
                                 Timber.e(e)
                             }
