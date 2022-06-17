@@ -20,7 +20,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.appwidget.search.Updater
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -52,8 +51,6 @@ class PreferencesClearUseCaseTest {
 
         mockkConstructor(PreferenceApplier::class)
         every { anyConstructed<PreferenceApplier>().clear() }.returns(Unit)
-        mockkConstructor(Updater::class)
-        every { anyConstructed<Updater>().update(any()) }.returns(Unit)
     }
 
     @After
@@ -68,7 +65,6 @@ class PreferencesClearUseCaseTest {
         verify(exactly = 1) { context.getSharedPreferences(any(), any()) }
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 1) { anyConstructed<PreferenceApplier>().clear() }
-        verify(exactly = 1) { anyConstructed<Updater>().update(any()) }
     }
 
 }
