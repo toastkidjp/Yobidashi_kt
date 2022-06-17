@@ -315,11 +315,6 @@ private fun AppBarContent(
             openLoadFromStorageDialog?.value = true
         }
 
-        EditorMenuItem(R.string.export_to_article_viewer, R.drawable.ic_article) {
-            fileActionUseCase.exportToArticleViewer()
-            contentViewModel.snackShort(R.string.done_save)
-        }
-
         Text(
             text = context.getString(R.string.last_saved) + DateFormat.format(" HH:mm:ss", fileActionUseCase.lastSaved.value),
             color = Color(preferenceApplier.fontColor),

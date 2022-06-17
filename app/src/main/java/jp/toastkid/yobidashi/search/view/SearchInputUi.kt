@@ -75,7 +75,7 @@ import jp.toastkid.yobidashi.search.trend.TrendApi
 import jp.toastkid.yobidashi.search.url_suggestion.QueryUseCase
 import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
-import jp.toastkid.yobidashi.search.voice.VoiceSearch
+import jp.toastkid.yobidashi.search.voice.VoiceSearchIntentFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -224,7 +224,7 @@ fun SearchInputUi(
 
                                     if (useVoice.value) {
                                         try {
-                                            voiceSearchLauncher.launch(VoiceSearch().makeIntent())
+                                            voiceSearchLauncher.launch(VoiceSearchIntentFactory().invoke())
                                         } catch (e: ActivityNotFoundException) {
                                             Timber.e(e)
                                         }

@@ -50,7 +50,7 @@ internal fun WithIcon(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clickable(onClick = clickable)
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+            .padding(16.dp)
     ) {
         Icon(
             painterResource(id = iconId),

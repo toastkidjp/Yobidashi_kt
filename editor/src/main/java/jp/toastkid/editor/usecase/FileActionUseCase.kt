@@ -19,7 +19,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.storage.ExternalFileAssignment
 import java.io.File
-import java.util.Calendar
 
 class FileActionUseCase(
     private val context: Context,
@@ -163,14 +162,4 @@ class FileActionUseCase(
 
     fun setText(newText: String) = textSetter(newText)
 
-    fun exportToArticleViewer() {
-        /*TODO ArticleInsertion(context).invoke(
-            makeExportTitle(),
-            getText()
-        )*/
-    }
-
-    private fun makeExportTitle() =
-        if (path.value.isEmpty()) Calendar.getInstance().time.toString()
-        else path.value.split("/").last()
 }

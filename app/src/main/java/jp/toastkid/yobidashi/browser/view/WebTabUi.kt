@@ -61,6 +61,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -482,55 +483,61 @@ private fun initializeHeaderViewModels(
                     }
                 }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .height(32.dp)
-                        .fillMaxWidth()
-                        .clickable {
-                            ViewModelProvider(activity)
-                                .get(ContentViewModel::class.java)
-                                .webSearch()
-                        }
-                    //url_box_background
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.ic_reader_mode),
-                        contentDescription = stringResource(id = R.string.title_menu_reader_mode),
-                        tint = tint,
+                Box {
+                    AsyncImage(
+                        model = R.drawable.url_box_background,
+                        contentDescription = stringResource(id = R.string.search)
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .padding(4.dp)
+                            .height(32.dp)
+                            .fillMaxWidth()
                             .clickable {
-                                browserModule.invokeContentExtraction {
-                                    showReader(it, contentViewModel, resetReaderModeContent)
-                                }
+                                ViewModelProvider(activity)
+                                    .get(ContentViewModel::class.java)
+                                    .webSearch()
                             }
-                    )
-
-                    BrowserTitle(
-                        progress,
-                        headerTitle,
-                        headerUrl,
-                        Modifier.weight(1f)
-                    )
-
-                    val isNotLoading = 70 < progress.value ?: 100
-                    val reloadIconId =
-                        if (isNotLoading) R.drawable.ic_reload else R.drawable.ic_close
-                    Icon(
-                        painterResource(id = reloadIconId),
-                        contentDescription = stringResource(id = R.string.title_menu_reload),
-                        tint = tint,
-                        modifier = Modifier
-                            .clickable {
-                                if (isNotLoading) {
-                                    browserModule.reload()
-                                } else {
-                                    browserModule.stopLoading()
-                                    stopSwipeRefresherLoading()
+                        //url_box_background
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.ic_reader_mode),
+                            contentDescription = stringResource(id = R.string.title_menu_reader_mode),
+                            tint = tint,
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .clickable {
+                                    browserModule.invokeContentExtraction {
+                                        showReader(it, contentViewModel, resetReaderModeContent)
+                                    }
                                 }
-                            }
-                    )
+                        )
+
+                        BrowserTitle(
+                            progress,
+                            headerTitle,
+                            headerUrl,
+                            Modifier.weight(1f)
+                        )
+
+                        val isNotLoading = 70 < progress.value ?: 100
+                        val reloadIconId =
+                            if (isNotLoading) R.drawable.ic_reload else R.drawable.ic_close
+                        Icon(
+                            painterResource(id = reloadIconId),
+                            contentDescription = stringResource(id = R.string.title_menu_reload),
+                            tint = tint,
+                            modifier = Modifier
+                                .clickable {
+                                    if (isNotLoading) {
+                                        browserModule.reload()
+                                    } else {
+                                        browserModule.stopLoading()
+                                        stopSwipeRefresherLoading()
+                                    }
+                                }
+                        )
+                    }
                 }
             }
         }

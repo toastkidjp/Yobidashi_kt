@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
 
-        ClippingUrlOpener()(this) { ViewModelProvider(this).get(BrowserViewModel::class.java)?.open(it) }
+        ClippingUrlOpener()(this) { ViewModelProvider(this).get(BrowserViewModel::class.java).open(it) }
     }
 
     override fun onPause() {

@@ -86,7 +86,7 @@ internal fun ColorSettingUi() {
     val openConfirmDialog = remember { mutableStateOf(false) }
 
     LazyColumn(
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)
     ) {
         item {
             ColorPaletteUi(
@@ -143,11 +143,13 @@ internal fun ColorSettingUi() {
                         .fillMaxWidth()
                         .padding(top = 8.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(8.dp)
+                    ) {
                         Text(
                             stringResource(id = R.string.settings_color_saved_title),
-                            fontSize = 18.sp,
-                            modifier = Modifier.padding(16.dp)
+                            fontSize = 18.sp
                         )
                     }
                 }
@@ -268,7 +270,7 @@ private suspend fun reload(
     withContext(Dispatchers.IO) {
         savedColors.clear()
         savedColors.addAll(
-            repository.findAll().windowed(3, 3)
+            repository.findAll().chunked(3)
         )
     }
 }

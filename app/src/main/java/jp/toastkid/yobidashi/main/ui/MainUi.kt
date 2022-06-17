@@ -13,6 +13,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -100,6 +101,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -666,31 +668,23 @@ internal fun Content() {
                     composable("empty")  {
 
                     }
-                    composable(
-                        "tab/web/current",
-                        enterTransition = {
-                            slideInVertically(initialOffsetY = { it })
-                        },
-                        exitTransition = {
-                            slideOutVertically(targetOffsetY = { it })
-                        }
-                    ) {
-                        val currentTab = tabs.currentTab() as? WebTab ?: return@composable
+                    tabComposable("tab/web/current") {
+                        val currentTab = tabs.currentTab() as? WebTab ?: return@tabComposable
                         WebTabUi(currentTab.latest.url().toUri(), currentTab.id())
                     }
-                    composable("tab/pdf/current") {
-                        val currentTab = tabs.currentTab() as? PdfTab ?: return@composable
+                    tabComposable("tab/pdf/current") {
+                        val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
                         PdfViewerUi(currentTab.getUrl().toUri())
                     }
-                    composable("tab/article/list") {
+                    tabComposable("tab/article/list") {
                         ArticleListUi()
                     }
-                    composable("tab/article/content/{title}") {
-                        val title = it.arguments?.getString("title") ?: return@composable
+                    tabComposable("tab/article/content/{title}") {
+                        val title = it?.getString("title") ?: return@tabComposable
                         ArticleContentUi(title)
                     }
-                    composable("tab/editor/current") {
-                        val currentTab = tabs.currentTab() as? EditorTab ?: return@composable
+                    tabComposable("tab/editor/current") {
+                        val currentTab = tabs.currentTab() as? EditorTab ?: return@tabComposable
                         EditorTabUi(currentTab.path)
                     }
                     composable("web/bookmark/list") {
@@ -964,6 +958,21 @@ internal fun Content() {
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
         }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+private fun NavGraphBuilder.tabComposable(route: String, content: @Composable (Bundle?) -> Unit) {
+    composable(
+        route,
+        enterTransition = {
+            slideInVertically(initialOffsetY = { it })
+        },
+        exitTransition = {
+            slideOutVertically(targetOffsetY = { it })
+        }
+    ) {
+        content(it.arguments)
     }
 }
 
