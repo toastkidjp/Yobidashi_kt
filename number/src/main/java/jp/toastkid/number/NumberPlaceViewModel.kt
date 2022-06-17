@@ -46,6 +46,13 @@ class NumberPlaceViewModel : ViewModel() {
         _loading.value = false
     }
 
+    fun setCorrect() {
+        _loading.value = true
+        _game.value.setCorrect()
+        _mask.value = _game.value.masked()
+        _loading.value = false
+    }
+
     fun masked() = _mask.value
 
     fun loading(): State<Boolean> = _loading
