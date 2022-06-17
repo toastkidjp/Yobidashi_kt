@@ -23,6 +23,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.RadioButton
@@ -40,7 +41,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -97,8 +97,8 @@ internal fun TaskEditorUi(
                         }
                     },
                     colors = TextFieldDefaults.textFieldColors(
-                        textColor = colorResource(id = R.color.colorPrimary),
-                        backgroundColor = colorResource(id = R.color.soft_background)
+                        textColor = MaterialTheme.colors.onSurface,
+                        backgroundColor = MaterialTheme.colors.surface
                     ),
                     trailingIcon = {
                         Icon(
@@ -121,8 +121,8 @@ internal fun TaskEditorUi(
                         }
                     },
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = Color(colorPair.bgColor()),
-                        contentColor = Color(colorPair.fontColor()),
+                        backgroundColor = MaterialTheme.colors.primary,
+                        contentColor = MaterialTheme.colors.onPrimary,
                         disabledContentColor = Color.LightGray)
                 ) {
                     Text(text = stringResource(id = R.string.add), textAlign = TextAlign.Center)
