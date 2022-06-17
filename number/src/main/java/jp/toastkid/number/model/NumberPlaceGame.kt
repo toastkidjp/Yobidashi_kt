@@ -57,4 +57,8 @@ data class NumberPlaceGame(
         return solving.pick(rowIndex, columnIndex)
     }
 
+    fun setCorrect() {
+        solving.copyFrom(correct)
+    }
+
 }
