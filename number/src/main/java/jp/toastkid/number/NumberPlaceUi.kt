@@ -177,6 +177,11 @@ fun NumberPlaceUi() {
                 contentViewModel.nextRoute("tool/number/place")
             }),
         OptionMenu(
+            titleId = R.string.menu_set_correct_answer,
+            action = {
+                viewModel.setCorrect()
+            }),
+        OptionMenu(
             titleId = R.string.clear_all,
             action = {
                 viewModel.initializeSolving()

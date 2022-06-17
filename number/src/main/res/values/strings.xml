@@ -8,4 +8,5 @@
 
 <resources>
     <string name="menu_other_board">Other board</string>
+    <string name="menu_set_correct_answer">Set correct answer</string>
 </resources>
