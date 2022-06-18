@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.tab.tab_list.view
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInVertically
@@ -132,10 +133,12 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                         },
                         onClick = {
                             tabAdapter.replace(tab)
-                            if (initialIndex != tabAdapter.currentTabId()) {
-                                contentViewModel.replaceToCurrentTab()
-                            }
-                            closeOnly(coroutineScope, contentViewModel)
+                            closeTabListWithTabSwitching(
+                                initialIndex,
+                                tabAdapter,
+                                contentViewModel,
+                                coroutineScope
+                            )
                         },
                         onClose = {
                             deletedTabIds.add(tab.id())
@@ -209,11 +212,32 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
         }
     }
 
+    BackHandler {
+        closeTabListWithTabSwitching(
+            initialIndex,
+            tabAdapter,
+            contentViewModel,
+            coroutineScope
+        )
+    }
+
     DisposableEffect(tabAdapter) {
         onDispose {
             tabAdapter.saveTabList()
         }
     }
+}
+
+private fun closeTabListWithTabSwitching(
+    initialIndex: String,
+    tabAdapter: TabAdapter,
+    contentViewModel: ContentViewModel,
+    coroutineScope: CoroutineScope
+) {
+    if (initialIndex != tabAdapter.currentTabId()) {
+        contentViewModel.replaceToCurrentTab()
+    }
+    closeOnly(coroutineScope, contentViewModel)
 }
 
 private fun closeOnly(
