@@ -116,7 +116,6 @@ import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.barcode.view.BarcodeReaderUi
 import jp.toastkid.editor.view.EditorTabUi
 import jp.toastkid.image.view.ImageListUi
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.SnackbarEvent
@@ -261,8 +260,6 @@ internal fun Content() {
         }
 
     val openMenu = remember { mutableStateOf(false) }
-
-    val headerViewModel = ViewModelProvider(activity).get(AppBarViewModel::class.java)
 
     val scaffoldState = rememberScaffoldState()
     val rememberSnackbarHostState = remember { snackbarHostState }
