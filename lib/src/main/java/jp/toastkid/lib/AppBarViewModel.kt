@@ -7,7 +7,6 @@
  */
 package jp.toastkid.lib
 
-import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -23,15 +22,6 @@ class AppBarViewModel : ViewModel() {
     private val appBarComposable = mutableStateOf<@Composable () -> Unit>({})
 
     val appBarContent: State<@Composable () -> Unit> = appBarComposable
-
-    private val _content = MutableLiveData<View>()
-
-    val content: LiveData<View> = _content
-
-    @Deprecated("This function will be deleted.")
-    fun replace(view: View) {
-        _content.postValue(view)
-    }
 
     fun replace(composable: @Composable() () -> Unit) {
         appBarComposable.value = composable
