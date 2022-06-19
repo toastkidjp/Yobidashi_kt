@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
@@ -35,15 +34,15 @@ import jp.toastkid.yobidashi.R
 fun SettingTopUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
-    val appBarViewModel = (activityContext as? ViewModelStoreOwner)?.let {
-        viewModel(AppBarViewModel::class.java, activityContext)
+    val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, activityContext)
     }
 
     val selectedIndex = remember { mutableStateOf(0) }
 
     SwitchContentWithTabIndex(selectedIndex)
 
-    appBarViewModel?.replace {
+    contentViewModel?.replaceAppBarContent {
         val pages = arrayOf(
             R.string.subhead_displaying,
             R.string.title_settings_color,
