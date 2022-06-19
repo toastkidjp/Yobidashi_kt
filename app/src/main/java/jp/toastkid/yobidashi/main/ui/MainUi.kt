@@ -321,7 +321,6 @@ internal fun Content() {
 
     contentViewModel?.switchTabList?.observe(activity, Observer {
         it?.getContentIfNotHandled() ?: return@Observer
-        contentViewModel?.setCurrentTabId(tabs.currentTabId())
         contentViewModel?.setBottomSheetContent { TabListUi(tabs) }
         coroutineScope?.launch {
             contentViewModel?.switchBottomSheet()
