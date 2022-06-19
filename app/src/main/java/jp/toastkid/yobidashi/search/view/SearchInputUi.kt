@@ -60,7 +60,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -94,7 +93,6 @@ fun SearchInputUi(
     val preferenceApplier = PreferenceApplier(context)
 
     val activityViewModelProvider = ViewModelProvider(context)
-    val appBarViewModel = activityViewModelProvider.get(AppBarViewModel::class.java)
     val contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
 
     val categoryName = remember {
@@ -133,7 +131,7 @@ fun SearchInputUi(
 
     if (viewModel.openFavoriteSearch.value.not()) {
         LaunchedEffect(key1 = localLifecycleOwner, block = {
-            appBarViewModel.replace {
+            contentViewModel.replaceAppBarContent {
                 val focusRequester = remember { FocusRequester() }
 
                 val spinnerOpen = remember { mutableStateOf(false) }
