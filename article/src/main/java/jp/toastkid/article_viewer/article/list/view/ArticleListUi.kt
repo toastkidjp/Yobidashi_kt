@@ -79,7 +79,6 @@ import jp.toastkid.article_viewer.article.list.usecase.UpdateUseCase
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
 import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -126,8 +125,7 @@ fun ArticleListUi() {
         ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
     )
 
-    ViewModelProvider(context).get(AppBarViewModel::class.java)
-        .replace {
+    contentViewModel.replaceAppBarContent {
             AppBarContent(viewModel)
             val openSortDialog = remember { mutableStateOf(false) }
 
