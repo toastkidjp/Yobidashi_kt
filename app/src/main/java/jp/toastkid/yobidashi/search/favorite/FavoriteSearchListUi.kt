@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
@@ -35,14 +36,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -72,8 +71,7 @@ fun FavoriteSearchListUi() {
     val database = DatabaseFinder().invoke(activityContext)
     val repository = database.favoriteSearchRepository()
 
-    ViewModelProvider(activityContext).get(AppBarViewModel::class.java)
-        .replace {
+    contentViewModel.replaceAppBarContent {
             val spinnerOpen = remember { mutableStateOf(false) }
 
             val categoryName = remember {
@@ -133,8 +131,8 @@ fun FavoriteSearchListUi() {
                         )
                     },
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = colorResource(id = R.color.soft_background),
-                        contentColor = colorResource(id = R.color.colorPrimary),
+                        backgroundColor = MaterialTheme.colors.surface,
+                        contentColor = MaterialTheme.colors.onSurface,
                         disabledContentColor = Color.LightGray
                     )
                 ) {
