@@ -7,13 +7,10 @@
  */
 package jp.toastkid.lib
 
-import android.content.Context
 import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,17 +31,6 @@ class AppBarViewModel : ViewModel() {
     @Deprecated("This function will be deleted.")
     fun replace(view: View) {
         _content.postValue(view)
-    }
-
-    @Deprecated("This function will be deleted.")
-    fun replace(context: Context, composable: @Composable() () -> Unit) {
-        val appBarComposeView = ComposeView(context)
-        appBarComposeView.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
-        )
-        appBarComposeView.setContent { composable() }
-        //_content.postValue(appBarComposeView)
-        appBarComposable.value = composable
     }
 
     fun replace(composable: @Composable() () -> Unit) {
