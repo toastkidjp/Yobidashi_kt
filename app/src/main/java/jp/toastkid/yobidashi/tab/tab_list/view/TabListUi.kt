@@ -9,7 +9,6 @@
 package jp.toastkid.yobidashi.tab.tab_list.view
 
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInVertically
@@ -43,6 +42,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -133,12 +133,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                         },
                         onClick = {
                             tabAdapter.replace(tab)
-                            closeTabListWithTabSwitching(
-                                initialIndex,
-                                tabAdapter,
-                                contentViewModel,
-                                coroutineScope
-                            )
+                            closeOnly(coroutineScope, contentViewModel)
                         },
                         onClose = {
                             deletedTabIds.add(tab.id())
@@ -212,32 +207,21 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
         }
     }
 
-    BackHandler {
-        closeTabListWithTabSwitching(
-            initialIndex,
-            tabAdapter,
-            contentViewModel,
-            coroutineScope
-        )
-    }
+    LaunchedEffect(key1 = initialIndex, block = {
+        contentViewModel.setHideBottomSheetAction {
+            if (initialIndex != tabAdapter.currentTabId()) {
+                contentViewModel.replaceToCurrentTab()
+            }
+
+            contentViewModel.setHideBottomSheetAction {  }
+        }
+    })
 
     DisposableEffect(tabAdapter) {
         onDispose {
             tabAdapter.saveTabList()
         }
     }
-}
-
-private fun closeTabListWithTabSwitching(
-    initialIndex: String,
-    tabAdapter: TabAdapter,
-    contentViewModel: ContentViewModel,
-    coroutineScope: CoroutineScope
-) {
-    if (initialIndex != tabAdapter.currentTabId()) {
-        contentViewModel.replaceToCurrentTab()
-    }
-    closeOnly(coroutineScope, contentViewModel)
 }
 
 private fun closeOnly(

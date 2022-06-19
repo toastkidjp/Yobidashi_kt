@@ -114,6 +114,12 @@ class ContentViewModel : ViewModel() {
         _bottomSheetContent.value = content
     }
 
+    private val _hideBottomSheetAction = mutableStateOf({})
+
+    fun setHideBottomSheetAction(action: () -> Unit) {
+        _hideBottomSheetAction.value = action
+    }
+
     private val _currentTabId = mutableStateOf("")
 
     val currentTabId: State<String> = _currentTabId
@@ -123,7 +129,15 @@ class ContentViewModel : ViewModel() {
     }
 
     @OptIn(ExperimentalMaterialApi::class)
-    val modalBottomSheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val modalBottomSheetState = ModalBottomSheetState(
+        ModalBottomSheetValue.Hidden,
+        confirmStateChange = {
+            if (it == ModalBottomSheetValue.Hidden) {
+                _hideBottomSheetAction.value()
+            }
+            true
+        }
+    )
 
     @OptIn(ExperimentalMaterialApi::class)
     suspend fun switchBottomSheet() {
@@ -136,6 +150,7 @@ class ContentViewModel : ViewModel() {
 
     @OptIn(ExperimentalMaterialApi::class)
     suspend fun hideBottomSheet() {
+        _hideBottomSheetAction.value()
         modalBottomSheetState.hide()
     }
 
