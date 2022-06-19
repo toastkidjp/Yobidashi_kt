@@ -106,12 +106,11 @@ class BrowserModule(
         )
 
         webViewReplacementUseCase = WebViewReplacementUseCase(
-                webViewContainer,
-                WebViewStateUseCase.make(context),
-                { webViewFactory(context) },
-                browserViewModel,
-                preferenceApplier,
-                slideUpFromBottom
+            webViewContainer,
+            WebViewStateUseCase.make(context),
+            { webViewFactory(context) },
+            browserViewModel,
+            preferenceApplier
         )
     }
 

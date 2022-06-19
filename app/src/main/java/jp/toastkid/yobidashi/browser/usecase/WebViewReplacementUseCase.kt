@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.browser.usecase
 
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
@@ -33,7 +32,6 @@ class WebViewReplacementUseCase(
     private val makeWebView: () -> WebView,
     private val browserViewModel: BrowserViewModel?,
     private val preferenceApplier: PreferenceApplier,
-    private val slideUpFromBottom: Animation,
     private val darkThemeApplier: DarkModeApplier = DarkModeApplier()
 ) {
 
