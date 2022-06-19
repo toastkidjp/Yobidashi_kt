@@ -462,7 +462,7 @@ internal fun Content() {
                                     pageSearcherInput
                                 )
                             } else {
-                                headerViewModel.appBarContent.value()
+                                contentViewModel.appBarContent.value()
                             }
                         }
 
