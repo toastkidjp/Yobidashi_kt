@@ -244,4 +244,12 @@ class ContentViewModel : ViewModel() {
         _backgroundImagePath.value = path
     }
 
+    private val _appBarContent = mutableStateOf<@Composable () -> Unit>({})
+
+    val appBarContent: State<@Composable () -> Unit> = _appBarContent
+
+    fun replaceAppBarContent(composable: @Composable() () -> Unit) {
+        _appBarContent.value = composable
+    }
+
 }
