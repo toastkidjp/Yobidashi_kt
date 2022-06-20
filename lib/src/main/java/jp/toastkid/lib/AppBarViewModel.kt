@@ -7,18 +7,11 @@
  */
 package jp.toastkid.lib
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
  * @author toastkidjp
  */
 class AppBarViewModel : ViewModel() {
-
-    private val _visibility = MutableLiveData<Boolean>()
-
-    fun show() = _visibility.postValue(true)
-
-    fun hide() = _visibility.postValue(false)
 
 }
