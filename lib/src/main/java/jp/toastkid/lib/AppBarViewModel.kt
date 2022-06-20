@@ -7,8 +7,6 @@
  */
 package jp.toastkid.lib
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -16,8 +14,6 @@ import androidx.lifecycle.ViewModel
  * @author toastkidjp
  */
 class AppBarViewModel : ViewModel() {
-
-    private val appBarComposable = mutableStateOf<@Composable () -> Unit>({})
 
     private val _visibility = MutableLiveData<Boolean>()
 
