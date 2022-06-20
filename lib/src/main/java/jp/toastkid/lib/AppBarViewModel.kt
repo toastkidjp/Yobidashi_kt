@@ -22,10 +22,6 @@ class AppBarViewModel : ViewModel() {
 
     val appBarContent: State<@Composable () -> Unit> = appBarComposable
 
-    fun replace(composable: @Composable() () -> Unit) {
-        appBarComposable.value = composable
-    }
-
     private val _visibility = MutableLiveData<Boolean>()
 
     fun show() = _visibility.postValue(true)
