@@ -15,6 +15,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -167,6 +168,7 @@ fun MusicListUi() {
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MusicList(
     onClickItem: (MediaBrowserCompat.MediaItem) -> Unit,
@@ -195,145 +197,144 @@ internal fun MusicList(
 
     //TODO: AsyncImage -> Icon
 
-    LazyColumn {
-        item {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp)
+                .background(MaterialTheme.colors.primary)
+        ) {
+            AsyncImage(
+                R.drawable.ic_stop,
+                contentDescription = stringResource(id = R.string.action_stop),
+                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp)
-                    .background(MaterialTheme.colors.primary)
-            ) {
-                AsyncImage(
-                    R.drawable.ic_stop,
-                    contentDescription = stringResource(id = R.string.action_stop),
-                    colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
-                    modifier = Modifier
-                        .width(44.dp)
-                        .fillMaxHeight()
-                )
-                AsyncImage(
-                    if (viewModel.playing) R.drawable.ic_pause else R.drawable.ic_play_media,
-                    contentDescription = stringResource(id = R.string.action_pause),
-                    colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
-                    modifier = Modifier
-                        .width(44.dp)
-                        .fillMaxHeight()
-                        .clickable { switchState() }
-                )
-                AsyncImage(
-                    R.drawable.ic_shuffle,
-                    contentDescription = stringResource(id = R.string.action_shuffle),
-                    colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
-                    modifier = Modifier
-                        .width(44.dp)
-                        .fillMaxHeight()
-                        .clickable { shuffle() }
-                )
+                    .width(44.dp)
+                    .fillMaxHeight()
+            )
+            AsyncImage(
+                if (viewModel.playing) R.drawable.ic_pause else R.drawable.ic_play_media,
+                contentDescription = stringResource(id = R.string.action_pause),
+                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
+                modifier = Modifier
+                    .width(44.dp)
+                    .fillMaxHeight()
+                    .clickable { switchState() }
+            )
+            AsyncImage(
+                R.drawable.ic_shuffle,
+                contentDescription = stringResource(id = R.string.action_shuffle),
+                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
+                modifier = Modifier
+                    .width(44.dp)
+                    .fillMaxHeight()
+                    .clickable { shuffle() }
+            )
 
-                Box(
-                    modifier = Modifier
-                        .width(88.dp)
-                        .fillMaxHeight()
-                        .padding(8.dp)
-                        .clickable {
-                            expanded = true
-                        }
+            Box(
+                modifier = Modifier
+                    .width(88.dp)
+                    .fillMaxHeight()
+                    .padding(8.dp)
+                    .clickable {
+                        expanded = true
+                    }
+            ) {
+                Text(
+                    text = stringResource(id = currentSpeed),
+                    style = TextStyle(Color(iconColor), fontWeight = FontWeight.Bold),
+                    fontSize = 20.sp,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
                 ) {
-                    Text(
-                        text = stringResource(id = currentSpeed),
-                        style = TextStyle(Color(iconColor), fontWeight = FontWeight.Bold),
-                        fontSize = 20.sp,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        val values = PlayingSpeed.values()
-                        values.forEachIndexed { index, s ->
-                            DropdownMenuItem(onClick = {
-                                currentSpeed = values[index].textId
-                                sendSpeedBroadcast(values[index].speed)
-                                expanded = false
-                            }) {
-                                Text(
-                                    stringResource(id = values[index].textId),
-                                    fontSize = 20.sp
-                                )
-                            }
+                    val values = PlayingSpeed.values()
+                    values.forEachIndexed { index, s ->
+                        DropdownMenuItem(onClick = {
+                            currentSpeed = values[index].textId
+                            sendSpeedBroadcast(values[index].speed)
+                            expanded = false
+                        }) {
+                            Text(
+                                stringResource(id = values[index].textId),
+                                fontSize = 20.sp
+                            )
                         }
                     }
                 }
-
-                AsyncImage(
-                    R.drawable.ic_close,
-                    contentDescription = stringResource(id = R.string.close),
-                    colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
-                    modifier = Modifier
-                        .width(44.dp)
-                        .fillMaxHeight()
-                        .clickable {
-                            coroutineScope.launch {
-                                contentViewModel?.hideBottomSheet()
-                            }
-                        }
-                )
             }
-        }
 
-        items(musicsState.value ?: emptyList()) { music ->
-            Surface(
-                elevation = 4.dp,
+            AsyncImage(
+                R.drawable.ic_close,
+                contentDescription = stringResource(id = R.string.close),
+                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
-            ) {
-                Row(
+                    .width(44.dp)
+                    .fillMaxHeight()
+                    .clickable {
+                        coroutineScope.launch {
+                            contentViewModel?.hideBottomSheet()
+                        }
+                    }
+            )
+        }
+        LazyColumn {
+            items(musicsState.value ?: emptyList()) { music ->
+                Surface(
+                    elevation = 4.dp,
                     modifier = Modifier
-                        .clickable { onClickItem(music) }
-                        .padding(4.dp)
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
                 ) {
-                    AsyncImage(
-                        music.description.iconUri,
-                        contentDescription = "TODO",
-                        contentScale = ContentScale.FillBounds,
-                        alignment = Alignment.Center,
-                        placeholder = painterResource(id = R.drawable.ic_music),
+                    Row(
                         modifier = Modifier
-                            .width(44.dp)
-                            .fillMaxHeight()
-                            .padding(end = 4.dp)
-                    )
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
+                            .clickable { onClickItem(music) }
+                            .padding(4.dp)
                     ) {
-                        Text(
-                            text = music.description.title.toString(),
-                            fontSize = 18.sp,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                        AsyncImage(
+                            music.description.iconUri,
+                            contentDescription = "TODO",
+                            contentScale = ContentScale.FillBounds,
+                            alignment = Alignment.Center,
+                            placeholder = painterResource(id = R.drawable.ic_music),
+                            modifier = Modifier
+                                .width(44.dp)
+                                .fillMaxHeight()
+                                .padding(end = 4.dp)
                         )
-                        Text(
-                            text = music.description.subtitle.toString(),
-                            color = colorResource(id = R.color.link_blue),
-                            fontSize = 12.sp,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                        ) {
+                            Text(
+                                text = music.description.title.toString(),
+                                fontSize = 18.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            Text(
+                                text = music.description.subtitle.toString(),
+                                color = colorResource(id = R.color.link_blue),
+                                fontSize = 12.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                        AsyncImage(
+                            R.drawable.ic_lyrics,
+                            contentDescription = "TODO",
+                            modifier = Modifier
+                                .width(36.dp)
+                                .fillMaxHeight()
+                                .clickable {
+                                    onClickLyrics(music.description.title?.toString() ?: "")
+                                }
                         )
                     }
-                    AsyncImage(
-                        R.drawable.ic_lyrics,
-                        contentDescription = "TODO",
-                        modifier = Modifier
-                            .width(36.dp)
-                            .fillMaxHeight()
-                            .clickable {
-                                onClickLyrics(music.description.title?.toString() ?: "")
-                            }
-                    )
                 }
             }
         }
