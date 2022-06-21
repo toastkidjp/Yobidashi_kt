@@ -289,6 +289,11 @@ fun SearchInputUi(
         })
 
     LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
+        val text = inputQuery ?: ""
+        viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
+
+        queryingUseCase.withDebounce()
+
         CoroutineScope(Dispatchers.IO).launch {
             val trendItems = try {
                 TrendApi()()
@@ -303,11 +308,6 @@ fun SearchInputUi(
             }
             viewModel.trends.addAll(taken)
         }
-
-        queryingUseCase.withDebounce()
-
-        val text = inputQuery ?: ""
-        viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
     })
 
     DisposableEffect(key1 = localLifecycleOwner, effect = {
