@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.main
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -28,8 +27,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        processShortcut(intent)
-
         actionBar?.hide()
 
         setContent {
@@ -43,20 +40,6 @@ class MainActivity : ComponentActivity() {
                 Content()
             }
         }
-    }
-
-    override fun onNewIntent(passedIntent: Intent) {
-        super.onNewIntent(passedIntent)
-        processShortcut(passedIntent)
-    }
-
-    /**
-     * Process intent shortcut.
-     *
-     * @param calledIntent
-     */
-    private fun processShortcut(calledIntent: Intent) {
-
     }
 
     override fun onResume() {
