@@ -41,7 +41,7 @@ class QueryingUseCase(
 
     private var disposables = Job()
 
-    operator fun invoke(keyword: String) {
+    private fun invoke(keyword: String) {
         if (preferenceApplier.isEnableSearchHistory) {
             CoroutineScope(Dispatchers.IO).launch {
                 searchUiViewModel.searchHistories.clear()
