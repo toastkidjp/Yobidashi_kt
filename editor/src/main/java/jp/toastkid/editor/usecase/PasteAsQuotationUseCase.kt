@@ -11,7 +11,7 @@ import android.widget.EditText
 import jp.toastkid.editor.Quotation
 import jp.toastkid.editor.R
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.libs.clip.Clipboard
+import jp.toastkid.lib.clip.Clipboard
 
 /**
  * @author toastkidjp

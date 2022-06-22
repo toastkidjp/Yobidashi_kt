@@ -1,4 +1,4 @@
-package jp.toastkid.libs.clip
+package jp.toastkid.lib.clip
 
 import android.content.ClipData
 import android.content.ClipDescription

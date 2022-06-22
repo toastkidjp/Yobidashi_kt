@@ -24,7 +24,7 @@ import jp.toastkid.editor.OrderedListHeadAdder
 import jp.toastkid.editor.R
 import jp.toastkid.editor.StringSurroundingUseCase
 import jp.toastkid.editor.TableConverter
-import jp.toastkid.libs.clip.Clipboard
+import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.libs.speech.SpeechMaker
 
 /**
