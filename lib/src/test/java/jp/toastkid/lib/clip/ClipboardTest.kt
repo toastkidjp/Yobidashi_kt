@@ -16,7 +16,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.libs.clip.Clipboard
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
