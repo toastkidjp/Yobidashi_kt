@@ -250,8 +250,27 @@ fun SearchInputUi(
                             )
                     )
                 }
-                LaunchedEffect(key1 = focusRequester, block = {
+                LaunchedEffect(key1 = queryingUseCase, block = {
+                    val text = inputQuery ?: ""
+                    viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
                     focusRequester.requestFocus()
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val trendItems = try {
+                            TrendApi()()
+                        } catch (e: IOException) {
+                            Timber.e(e)
+                            null
+                        }
+                        viewModel.trends.clear()
+                        val taken = trendItems?.take(10)
+                        if (taken.isNullOrEmpty()) {
+                            return@launch
+                        }
+                        viewModel.trends.addAll(taken)
+                    }
+
+                    queryingUseCase.withDebounce()
                 })
             }
         })
@@ -288,7 +307,7 @@ fun SearchInputUi(
             )
         })
 
-    LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
+    /*LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
         val text = inputQuery ?: ""
         viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
 
@@ -308,7 +327,7 @@ fun SearchInputUi(
             }
             viewModel.trends.addAll(taken)
         }
-    })
+    })*/
 
     DisposableEffect(key1 = localLifecycleOwner, effect = {
         onDispose {
