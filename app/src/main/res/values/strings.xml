@@ -371,5 +371,6 @@
     <string name="row_dialog_download">Download this image file</string>
     <string name="row_dialog_copy">Copy URL</string>
     <string name="row_dialog_copy_text">Copy Text</string>
+    <string name="message_should_input_keyword">Please input any keyword.</string>
 
 </resources>
