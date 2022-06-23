@@ -136,6 +136,7 @@ fun BookmarkListUi() {
         try {
             CoroutineScope(Dispatchers.IO).launch {
                 bookmarkRepository.delete(it)
+                bookmarks.remove(it)
             }
         } catch (e: IOException) {
             Timber.e(e)
