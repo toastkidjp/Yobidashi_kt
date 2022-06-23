@@ -295,10 +295,6 @@ fun SearchInputUi(
     viewModel.search
         .observe(localLifecycleOwner, Observer { event ->
             val searchEvent = event?.getContentIfNotHandled() ?: return@Observer
-            if (searchEvent.query.isBlank()) {
-                contentViewModel.snackShort(R.string.message_should_input_keyword)
-                return@Observer
-            }
 
             keyboardController?.hide()
 
@@ -407,6 +403,11 @@ private inline fun search(
 ) {
     if (NetworkChecker.isNotAvailable(context)) {
         contentViewModel?.snackShort("Network is not available...")
+        return
+    }
+
+    if (query.isBlank()) {
+        contentViewModel?.snackShort(R.string.message_should_input_keyword)
         return
     }
 
