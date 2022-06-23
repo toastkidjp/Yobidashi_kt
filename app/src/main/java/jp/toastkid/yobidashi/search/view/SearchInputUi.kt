@@ -295,7 +295,7 @@ fun SearchInputUi(
     viewModel.search
         .observe(localLifecycleOwner, Observer { event ->
             val searchEvent = event?.getContentIfNotHandled() ?: return@Observer
-            if (searchEvent.query.isNullOrBlank()) {
+            if (searchEvent.query.isBlank()) {
                 contentViewModel.snackShort("Please input any keyword.")
                 return@Observer
             }
