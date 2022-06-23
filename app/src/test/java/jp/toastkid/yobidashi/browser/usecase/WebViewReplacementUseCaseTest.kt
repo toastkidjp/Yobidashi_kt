@@ -8,11 +8,11 @@
 
 package jp.toastkid.yobidashi.browser.usecase
 
+import android.content.Context
 import android.view.animation.Animation
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.collection.LruCache
-import androidx.fragment.app.FragmentActivity
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -22,8 +22,8 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
@@ -52,7 +52,7 @@ class WebViewReplacementUseCaseTest {
     private lateinit var makeWebView: () -> WebView
 
     @MockK
-    private lateinit var browserHeaderViewModel: BrowserHeaderViewModel
+    private lateinit var browserViewModel: BrowserViewModel
 
     @MockK
     private lateinit var preferenceApplier: PreferenceApplier
@@ -74,7 +74,7 @@ class WebViewReplacementUseCaseTest {
         every { webViewContainer.addView(any()) }.returns(Unit)
         every { webViewContainer.removeAllViews() }.returns(Unit)
         every { webViewContainer.startAnimation(any()) }.returns(Unit)
-        every { webViewContainer.getContext() }.returns(mockk<FragmentActivity>()) // TODO Other case
+        every { webViewContainer.getContext() }.returns(mockk<Context>()) // TODO Other case
 
         every { webView.onResume() }.returns(Unit)
         every { webView.getParent() }.returns(webViewContainer)
@@ -87,10 +87,10 @@ class WebViewReplacementUseCaseTest {
         every { preferenceApplier.useDarkMode() }.returns(true)
         every { preferenceApplier.browserScreenMode() }.returns("fixed")
 
-        every { browserHeaderViewModel.setBackButtonIsEnabled(any()) }.returns(Unit)
-        every { browserHeaderViewModel.setForwardButtonIsEnabled(any()) }.returns(Unit)
-        every { browserHeaderViewModel.nextTitle(any()) }.returns(Unit)
-        every { browserHeaderViewModel.nextUrl(any()) }.returns(Unit)
+        every { browserViewModel.setBackButtonIsEnabled(any()) }.returns(Unit)
+        every { browserViewModel.setForwardButtonIsEnabled(any()) }.returns(Unit)
+        every { browserViewModel.nextTitle(any()) }.returns(Unit)
+        every { browserViewModel.nextUrl(any()) }.returns(Unit)
         every { makeWebView.invoke() }.returns(webView)
         every { webViewStateUseCase.restore(any(), any()) }.returns(Unit)
 
@@ -132,10 +132,10 @@ class WebViewReplacementUseCaseTest {
         verify(exactly = 1) { darkThemeApplier.invoke(any(), any()) }
         verify(exactly = 1) { preferenceApplier.useDarkMode() }
         verify(exactly = 1) { preferenceApplier.browserScreenMode() }
-        verify(exactly = 1) { browserHeaderViewModel.setBackButtonIsEnabled(any()) }
-        verify(exactly = 1) { browserHeaderViewModel.setForwardButtonIsEnabled(any()) }
-        verify(exactly = 1) { browserHeaderViewModel.nextTitle(any()) }
-        verify(exactly = 1) { browserHeaderViewModel.nextUrl(any()) }
+        verify(exactly = 1) { browserViewModel.setBackButtonIsEnabled(any()) }
+        verify(exactly = 1) { browserViewModel.setForwardButtonIsEnabled(any()) }
+        verify(exactly = 1) { browserViewModel.nextTitle(any()) }
+        verify(exactly = 1) { browserViewModel.nextUrl(any()) }
         verify(exactly = 1) { makeWebView.invoke() }
         verify(exactly = 1) { webViewStateUseCase.restore(any(), any()) }
         verify(exactly = 1) { GlobalWebViewPool.containsKey(any()) }

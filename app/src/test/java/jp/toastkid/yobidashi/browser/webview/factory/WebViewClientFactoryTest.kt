@@ -13,13 +13,12 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
-import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.LoadingViewModel
-import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.rss.suggestion.RssAddingSuggestion
+import jp.toastkid.yobidashi.browser.FaviconApplier
+import jp.toastkid.yobidashi.browser.block.AdRemover
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -42,13 +41,10 @@ class WebViewClientFactoryTest {
     private lateinit var preferenceApplier: PreferenceApplier
 
     @MockK
-    private lateinit var browserHeaderViewModel: BrowserHeaderViewModel
+    private lateinit var browserViewModel: BrowserViewModel
 
     @MockK
     private lateinit var rssAddingSuggestion: RssAddingSuggestion
-
-    @MockK
-    private lateinit var loadingViewModel: LoadingViewModel
 
     @MockK
     private lateinit var currentView: () -> WebView

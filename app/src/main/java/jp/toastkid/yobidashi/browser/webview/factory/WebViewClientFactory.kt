@@ -32,15 +32,12 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
-import jp.toastkid.yobidashi.tab.History
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,9 +48,8 @@ class WebViewClientFactory(
     private val adRemover: AdRemover,
     private val faviconApplier: FaviconApplier,
     private val preferenceApplier: PreferenceApplier,
-    private val browserHeaderViewModel: BrowserHeaderViewModel? = null,
+    private val browserViewModel: BrowserViewModel? = null,
     private val rssAddingSuggestion: RssAddingSuggestion? = null,
-    private val loadingViewModel: LoadingViewModel? = null,
     private val currentView: () -> WebView? = { null }
 ) {
 
@@ -66,12 +62,12 @@ class WebViewClientFactory(
             super.onPageStarted(view, url, favicon)
 
             if (view == currentView()) {
-                browserHeaderViewModel?.updateProgress(0)
-                browserHeaderViewModel?.nextUrl(url)
+                browserViewModel?.updateProgress(0)
+                browserViewModel?.nextUrl(url)
             }
 
             rssAddingSuggestion?.invoke(view, url)
-            browserHeaderViewModel?.setBackButtonIsEnabled(view.canGoBack())
+            browserViewModel?.setBackButtonIsEnabled(view.canGoBack())
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
@@ -83,17 +79,17 @@ class WebViewClientFactory(
             val tabId = GlobalWebViewPool.getTabId(view)
             if (tabId?.isNotBlank() == true) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    loadingViewModel?.finished(tabId, History.make(title, urlStr))
+                    browserViewModel?.finished(tabId, title, urlStr)
                 }
             }
 
-            browserHeaderViewModel?.updateProgress(100)
-            browserHeaderViewModel?.stopProgress(true)
+            browserViewModel?.updateProgress(100)
+            browserViewModel?.stopProgress(true)
 
             try {
                 if (view == currentView()) {
-                    browserHeaderViewModel?.nextTitle(title)
-                    browserHeaderViewModel?.nextUrl(urlStr)
+                    browserViewModel?.nextTitle(title)
+                    browserViewModel?.nextUrl(urlStr)
                 }
             } catch (e: Exception) {
                 Timber.e(e)
@@ -118,8 +114,8 @@ class WebViewClientFactory(
                 view: WebView, request: WebResourceRequest, error: WebResourceError) {
             super.onReceivedError(view, request, error)
 
-            browserHeaderViewModel?.updateProgress(100)
-            browserHeaderViewModel?.stopProgress(true)
+            browserViewModel?.updateProgress(100)
+            browserViewModel?.stopProgress(true)
         }
 
         override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {

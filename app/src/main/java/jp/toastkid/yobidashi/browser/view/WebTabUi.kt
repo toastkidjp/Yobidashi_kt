@@ -36,7 +36,6 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -74,10 +73,8 @@ import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.BrowserModule
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
@@ -90,9 +87,6 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun WebTabUi(uri: Uri, tabId: String) {
@@ -110,9 +104,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val browserModule = remember { BrowserModule(activityContext, webViewContainer) }
     browserModule.applyNewAlpha()
     browserModule.resizePool(PreferenceApplier(activityContext).poolSize)
-
-    val browserHeaderViewModel =
-        viewModel(modelClass = BrowserHeaderViewModel::class.java, activityContext)
 
     val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -190,16 +181,16 @@ fun WebTabUi(uri: Uri, tabId: String) {
         )
     }
 
-    BackHandler(browserHeaderViewModel.enableBackPress.value) {
+    BackHandler(browserViewModel.enableBackPress.value) {
         if (readerModeText.value.isNotBlank()) {
             readerModeText.value = ""
             return@BackHandler
         }
         if (browserModule.back()) {
-            browserHeaderViewModel.setEnableBackPress(browserModule.canGoBack())
+            browserViewModel.setEnableBackPress(browserModule.canGoBack())
             return@BackHandler
         }
-        browserHeaderViewModel.setEnableBackPress(false)
+        browserViewModel.setEnableBackPress(false)
     }
 
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
@@ -245,6 +236,12 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserModule.clearMatches()
             })
         }
+
+        browserViewModel
+            .onPageFinished
+            .observe(lifecycleOwner) {
+                browserModule.saveArchiveForAutoArchive()
+            }
     })
 
     val storagePermissionRequestLauncher =
@@ -337,34 +334,21 @@ private fun initializeHeaderViewModels(
 ) {
     val viewModelProvider = ViewModelProvider(activity)
     val appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
-
-    viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
-        viewModel.stopProgress.observe(activity, Observer {
-            val stop = it?.getContentIfNotHandled() ?: return@Observer
-            if (stop.not()
-            //TODO || binding?.swipeRefresher?.isRefreshing == false
-            ) {
-                return@Observer
-            }
-            stopSwipeRefresherLoading()
-        })
-    }
-
     val tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
     val pageSearcherViewModel = viewModelProvider.get(PageSearcherViewModel::class.java)
 
-    viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
+    viewModelProvider.get(BrowserViewModel::class.java).also { viewModel ->
         appBarViewModel?.replace {
             val preferenceApplier = PreferenceApplier(activity)
             val tint = Color(preferenceApplier.fontColor)
 
-            val headerTitle = viewModel.title.observeAsState()
-            val headerUrl = viewModel.url.observeAsState()
-            val progress = viewModel.progress.observeAsState()
-            val enableBack = viewModel.enableBack.observeAsState()
-            val enableForward = viewModel.enableForward.observeAsState()
-            val tabCountState = tabListViewModel?.tabCount?.observeAsState()
+            val headerTitle = viewModel.title
+            val headerUrl = viewModel.url
+            val progress = viewModel.progress
+            val enableBack = viewModel.enableBack
+            val enableForward = viewModel.enableForward
+            val tabCountState = tabListViewModel?.tabCount
 
             Column(
                 modifier = Modifier
@@ -541,14 +525,6 @@ private fun initializeHeaderViewModels(
                 }
             }
         }
-    }
-
-    CoroutineScope(Dispatchers.Main).launch {
-        viewModelProvider.get(LoadingViewModel::class.java)
-            .onPageFinished
-            .collect {
-                browserModule.saveArchiveForAutoArchive()
-            }
     }
 }
 

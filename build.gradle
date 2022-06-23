@@ -40,7 +40,7 @@ buildscript {
     ext.libVersions = [
             coroutines: '1.5.1',
             ktx: '1.1.0',
-            lifecycle: '2.4.0',
+            lifecycle: '2.4.1',
             room: '2.4.0',
             paging: '3.1.0',
             timber: '4.6.0',

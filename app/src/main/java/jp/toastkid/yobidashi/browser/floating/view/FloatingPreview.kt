@@ -75,7 +75,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
                 .padding(8.dp)
         ) {
             AsyncImage(
-                model = viewModel.icon.observeAsState().value,
+                model = viewModel.icon.value,
                 contentDescription = stringResource(id = R.string.image),
                 modifier = Modifier
                     .size(36.dp)

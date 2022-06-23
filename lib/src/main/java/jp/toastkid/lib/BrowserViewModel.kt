@@ -15,6 +15,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
+import jp.toastkid.lib.model.LoadInformation
 
 /**
  * @author toastkidjp
@@ -107,6 +108,85 @@ class BrowserViewModel : ViewModel() {
 
     fun switchWebViewToCurrent(tabId: String) {
         _switchWebViewToCurrent.postValue(Event(tabId))
+    }
+
+    //TODO WIP
+
+    private val _title = mutableStateOf("")
+    val title: State<String> = _title
+
+    fun nextTitle(nextTitle: String?) {
+        if (nextTitle.isNullOrBlank()) {
+            return
+        }
+        _title.value = nextTitle ?: ""
+    }
+
+    private val _url = mutableStateOf("")
+    val url: State<String> = _url
+
+    fun nextUrl(nextUrl: String?) {
+        if (nextUrl.isNullOrBlank()) {
+            return
+        }
+        _url.value = nextUrl ?: ""
+    }
+
+    private val _enableBackPress = mutableStateOf(false)
+
+    val enableBackPress: State<Boolean> = _enableBackPress
+
+    fun setEnableBackPress(newState: Boolean) {
+        _enableBackPress.value = newState
+    }
+
+    private val _enableForward = mutableStateOf(false)
+
+    val enableForward: State<Boolean> = _enableForward
+
+    fun setForwardButtonIsEnabled(newState: Boolean) {
+        _enableForward.value = newState
+    }
+
+    private val _enableBack = mutableStateOf(false)
+
+    val enableBack: State<Boolean> = _enableBack
+
+    fun setBackButtonIsEnabled(newState: Boolean) {
+        _enableBack.value = newState
+        setEnableBackPress(newState)
+    }
+
+    private val _progress = mutableStateOf(0)
+
+    val progress: State<Int> = _progress
+
+    fun updateProgress(newProgress: Int) {
+        _progress.value = newProgress
+    }
+
+    private val _stopProgress = mutableStateOf(Event(false))
+
+    val stopProgress: State<Event<Boolean>> = _stopProgress
+
+    fun stopProgress(stop: Boolean) {
+        _stopProgress.value = Event(stop)
+    }
+
+    private val _onPageFinished =
+        MutableLiveData<LoadInformation>()
+
+    val onPageFinished: LiveData<LoadInformation> = _onPageFinished
+
+    fun finished(tabId: String, title: String, url: String) =
+        _onPageFinished.postValue(LoadInformation(tabId, title, url))
+
+    private val _search = MutableLiveData<Event<String>>()
+
+    val search: LiveData<Event<String>> = _search
+
+    fun search(query: String) {
+        _search.postValue(Event(query))
     }
 
 }

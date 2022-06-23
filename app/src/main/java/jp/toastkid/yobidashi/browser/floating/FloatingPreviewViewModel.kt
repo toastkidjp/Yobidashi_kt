@@ -8,6 +8,8 @@
 package jp.toastkid.yobidashi.browser.floating
 
 import android.graphics.Bitmap
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,12 +27,12 @@ class FloatingPreviewViewModel : ViewModel() {
         title?.let { _title.postValue(it) }
     }
 
-    private val _icon = MutableLiveData<Bitmap?>()
+    private val _icon = mutableStateOf<Bitmap?>(null)
 
-    val icon: LiveData<Bitmap?> = _icon
+    val icon: State<Bitmap?> = _icon
 
     fun newIcon(bitmap: Bitmap?) {
-        _icon.postValue(bitmap)
+        _icon.value = bitmap
     }
 
     private val _url = MutableLiveData<String>()

@@ -3,17 +3,6 @@
     <color name="textPrimary">#FFE0E0E0</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000B00</color>
-    <color name="spinner_background">#DDFFFFFF</color>
-    <color name="search_add_background">#33000000</color>
-    <color name="filter_white_bb">#CCFFFFFF</color>
     <color name="filter_white_aa">#AAFFFFFF</color>
-    <color name="setting_background">#E0FFFFFF</color>
-
-    <color name="share_dialog_button_text">#FFE0E0E0</color>
-
     <color name="default_color_filter">#22777700</color>
-
-    <color name="fs_add_bg">#EEE0E0E0</color>
-    <color name="fs_add_ripple">#CCAAAAAA</color>
-
 </resources>

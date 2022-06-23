@@ -9,10 +9,10 @@ package jp.toastkid.media.music.popup
 
 import android.support.v4.media.MediaBrowserCompat
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 
 /**
@@ -20,28 +20,13 @@ import androidx.lifecycle.ViewModel
  */
 class MediaPlayerPopupViewModel : ViewModel() {
 
-    private val _clickItem = MutableLiveData<MediaBrowserCompat.MediaItem>()
+    private val _musics = mutableStateListOf<MediaBrowserCompat.MediaItem>()
 
-    val clickItem: LiveData<MediaBrowserCompat.MediaItem> = _clickItem
-
-    fun clickItem(item: MediaBrowserCompat.MediaItem) {
-        _clickItem.postValue(item)
-    }
-
-    private val _lyrics = MutableLiveData<String>()
-
-    val clickLyrics: LiveData<String> = _lyrics
-
-    fun clickLyrics(name: CharSequence?) {
-        name?.also { _lyrics.postValue(it.toString()) }
-    }
-
-    private val _musics = MutableLiveData<List<MediaBrowserCompat.MediaItem>>()
-
-    val musics: LiveData<List<MediaBrowserCompat.MediaItem>> = _musics
+    val musics: SnapshotStateList<MediaBrowserCompat.MediaItem> = _musics
 
     fun nextMusics(musics: List<MediaBrowserCompat.MediaItem>) {
-        _musics.postValue(musics)
+        _musics.clear()
+        _musics.addAll(musics)
     }
 
     var playing by mutableStateOf(false)

@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -59,9 +60,7 @@ class BrowserModule(
 
     private val autoArchive = AutoArchive.make(context)
 
-    private var browserHeaderViewModel: BrowserHeaderViewModel? = null
-
-    private var loadingViewModel: LoadingViewModel? = null
+    private var browserViewModel: BrowserViewModel? = null
 
     /**
      * Animation of slide up bottom.
@@ -86,8 +85,7 @@ class BrowserModule(
 
         if (context is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(context)
-            browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
-            loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java)
+            browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
 
@@ -97,12 +95,11 @@ class BrowserModule(
                     adRemover,
                     faviconApplier,
                     preferenceApplier,
-                    browserHeaderViewModel,
+                    browserViewModel,
                     rssAddingSuggestion,
-                    loadingViewModel
                 ) { currentView() },
                 webChromeClientFactory = WebChromeClientFactory(
-                        browserHeaderViewModel,
+                        browserViewModel,
                         faviconApplier,
                         customViewSwitcher
                 )
@@ -112,7 +109,7 @@ class BrowserModule(
                 webViewContainer,
                 WebViewStateUseCase.make(context),
                 { webViewFactory(context) },
-                browserHeaderViewModel,
+                browserViewModel,
                 preferenceApplier,
                 slideUpFromBottom
         )
@@ -154,11 +151,11 @@ class BrowserModule(
     }
 
     private fun updateBackButtonState(newState: Boolean) {
-        browserHeaderViewModel?.setBackButtonIsEnabled(newState)
+        browserViewModel?.setBackButtonIsEnabled(newState)
     }
 
     private fun updateForwardButtonState(newState: Boolean) {
-        browserHeaderViewModel?.setForwardButtonIsEnabled(newState)
+        browserViewModel?.setForwardButtonIsEnabled(newState)
     }
 
     /**
