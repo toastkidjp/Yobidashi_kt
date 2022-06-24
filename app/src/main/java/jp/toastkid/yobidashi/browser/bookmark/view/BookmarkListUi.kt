@@ -37,8 +37,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.DismissState
-import androidx.compose.material.DismissValue
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
@@ -284,16 +282,6 @@ private fun BookmarkList(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp)
     ) {
         items(bookmarks) { bookmark ->
-            DismissState(
-                initialValue = DismissValue.Default,
-                confirmStateChange = { dismissValue ->
-                    if (dismissValue == DismissValue.DismissedToStart) {
-                        onDelete(bookmark)
-                    }
-                    true
-                }
-            )
-
             val openEditor = remember { mutableStateOf(false) }
 
             SwipeToDismissItem(
