@@ -376,7 +376,7 @@ private fun EditorDialog(
 ) {
     val bookmarkRepository = DatabaseFinder().invoke(LocalContext.current).bookmarkRepository()
     val folders = remember { mutableStateListOf<String>() }
-    val currentFolder = remember { mutableStateOf(currentItem.parent) }
+    val moveTo = remember { mutableStateOf(currentItem.parent) }
 
     LaunchedEffect("load_folders") {
         folders.clear()
@@ -410,10 +410,10 @@ private fun EditorDialog(
                         modifier = Modifier
                             .clickable {
                                 openEditor.value = false
-                                if (currentItem.parent != currentFolder.value) {
+                                if (currentItem.parent != moveTo.value) {
                                     moveFolder(
                                         currentItem,
-                                        currentFolder.value,
+                                        moveTo.value,
                                         bookmarkRepository,
                                         bookmarks
                                     )
@@ -444,7 +444,7 @@ private fun EditorDialog(
                             .clickable { openChooser.value = true }
                     ) {
                         Text(
-                            currentFolder.value,
+                            moveTo.value,
                             fontSize = 20.sp
                         )
 
@@ -456,7 +456,7 @@ private fun EditorDialog(
                                 DropdownMenuItem(
                                     onClick = {
                                         openChooser.value = false
-                                        currentFolder.value = it
+                                        moveTo.value = it
                                     }
                                 ) {
                                     Text(
