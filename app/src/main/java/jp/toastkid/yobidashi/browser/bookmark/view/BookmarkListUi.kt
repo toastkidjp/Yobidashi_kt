@@ -284,7 +284,7 @@ private fun BookmarkList(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp)
     ) {
         items(bookmarks) { bookmark ->
-            val dismissState = DismissState(
+            DismissState(
                 initialValue = DismissValue.Default,
                 confirmStateChange = { dismissValue ->
                     if (dismissValue == DismissValue.DismissedToStart) {
