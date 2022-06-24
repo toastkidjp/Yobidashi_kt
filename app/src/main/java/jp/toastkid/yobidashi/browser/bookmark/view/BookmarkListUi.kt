@@ -95,11 +95,11 @@ import timber.log.Timber
 import java.io.IOException
 import java.util.Stack
 
-private var currentFolder: String = Bookmark.getRootFolderName()
-
 @Composable
 fun BookmarkListUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
+
+    val currentFolder = remember { mutableStateOf(Bookmark.getRootFolderName()) }
 
     val bookmarkRepository = DatabaseFinder().invoke(activityContext).bookmarkRepository()
     val bookmarks = remember { mutableStateListOf<Bookmark>() }
@@ -119,7 +119,7 @@ fun BookmarkListUi() {
             }
             bookmark.folder -> {
                 folderHistory.push(bookmark.parent)
-                query(bookmarkRepository, bookmarks, bookmark.title)
+                query(bookmarkRepository, bookmarks, currentFolder, bookmark.title)
             }
             else -> {
                 browserViewModel.openBackground(bookmark.title, Uri.parse(bookmark.url))
@@ -153,7 +153,7 @@ fun BookmarkListUi() {
 
             val uri = it.data?.data ?: return@rememberLauncherForActivityResult
             importBookmark(activityContext, bookmarkRepository, uri) {
-                query(bookmarkRepository, bookmarks)
+                query(bookmarkRepository, bookmarks, currentFolder)
             }
         }
 
@@ -203,7 +203,7 @@ fun BookmarkListUi() {
             exportRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }),
         OptionMenu(titleId = R.string.title_add_default_bookmark, action = {
-            BookmarkInitializer.from(activityContext)() { query(bookmarkRepository, bookmarks) }
+            BookmarkInitializer.from(activityContext)() { query(bookmarkRepository, bookmarks, currentFolder) }
             contentViewModel.snackShort(R.string.done_addition)
         }),
         OptionMenu(titleId = R.string.title_clear_bookmark, action = {
@@ -224,7 +224,7 @@ fun BookmarkListUi() {
                 folder = true
             ).insert()
 
-            query(bookmarkRepository, bookmarks)
+            query(bookmarkRepository, bookmarks, currentFolder)
         }
     })
 
@@ -240,23 +240,22 @@ fun BookmarkListUi() {
         }
     }
 
-    val backHandlerState = remember { mutableStateOf(true) }
-    BackHandler(backHandlerState.value) {
-        query(bookmarkRepository, bookmarks)
-        backHandlerState.value = currentFolder != Bookmark.getRootFolderName()
+    BackHandler(currentFolder.value != Bookmark.getRootFolderName()) {
+        query(bookmarkRepository, bookmarks, currentFolder)
     }
 
     LaunchedEffect(key1 = "first_launch", block = {
-        query(bookmarkRepository, bookmarks)
+        query(bookmarkRepository, bookmarks, currentFolder)
     })
 }
 
 private fun query(
     bookmarkRepository: BookmarkRepository,
     bookmarks: SnapshotStateList<Bookmark>,
+    currentFolder: MutableState<String>,
     title: String = Bookmark.getRootFolderName()
 ) {
-    currentFolder = title
+    currentFolder.value = title
 
     CoroutineScope(Dispatchers.Main).launch {
         val items = withContext(Dispatchers.IO) {
@@ -474,6 +473,9 @@ private fun EditorDialog(
     }
 }
 
+/**
+ * TODO modify state usage
+ */
 private fun moveFolder(
     currentItem: Bookmark,
     newFolder: String,
@@ -484,7 +486,7 @@ private fun moveFolder(
     CoroutineScope(Dispatchers.IO).launch {
         currentItem.parent = newFolder
         bookmarkRepository.add(currentItem)
-        query(bookmarkRepository, bookmarks, folder)
+        query(bookmarkRepository, bookmarks, mutableStateOf(""), folder)
     }
 }
 
