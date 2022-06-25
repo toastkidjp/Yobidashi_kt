@@ -33,7 +33,7 @@ class BookmarkListViewModel : ViewModel() {
 
     fun bookmarks(): SnapshotStateList<Bookmark> = _bookmarks
 
-    fun replaceBookmarkItems(items: Collection<Bookmark>) {
+    private fun replaceBookmarkItems(items: Collection<Bookmark>) {
         _bookmarks.clear()
         _bookmarks.addAll(items)
     }
