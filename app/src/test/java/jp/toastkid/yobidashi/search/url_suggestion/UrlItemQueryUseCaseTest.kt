@@ -28,9 +28,9 @@ import org.junit.Test
 /**
  * @author toastkidjp
  */
-class QueryUseCaseTest {
+class UrlItemQueryUseCaseTest {
 
-    private lateinit var queryUseCase: QueryUseCase
+    private lateinit var urlItemQueryUseCase: UrlItemQueryUseCase
 
     @MockK
     private lateinit var submitItems: (List<UrlItem>) -> Unit
@@ -57,7 +57,7 @@ class QueryUseCaseTest {
         coEvery { switchVisibility.invoke(any()) }.returns(Unit)
         coEvery { rtsSuggestionUseCase.invoke(any(), any()) }.just(Runs)
 
-        queryUseCase = QueryUseCase(
+        urlItemQueryUseCase = UrlItemQueryUseCase(
             submitItems, bookmarkRepository, viewHistoryRepository, switchVisibility,
             rtsSuggestionUseCase,
             Dispatchers.Unconfined, Dispatchers.Unconfined
@@ -71,7 +71,7 @@ class QueryUseCaseTest {
 
     @Test
     fun testInvoke() {
-        queryUseCase.invoke("test")
+        urlItemQueryUseCase.invoke("test")
 
         coVerify(exactly = 1) { submitItems.invoke(any()) }
         coVerify(exactly = 1) { bookmarkRepository.search(any(), any()) }
@@ -81,7 +81,7 @@ class QueryUseCaseTest {
 
     @Test
     fun testBlankCase() {
-        queryUseCase.invoke(" ")
+        urlItemQueryUseCase.invoke(" ")
 
         coVerify(exactly = 1) { submitItems.invoke(any()) }
         coVerify(exactly = 0) { bookmarkRepository.search(any(), any()) }

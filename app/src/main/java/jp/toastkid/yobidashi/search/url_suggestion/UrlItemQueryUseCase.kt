@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class QueryUseCase(
+class UrlItemQueryUseCase(
     private val submitItems: (List<UrlItem>) -> Unit,
     private val bookmarkRepository: BookmarkRepository,
     private val viewHistoryRepository: ViewHistoryRepository,
