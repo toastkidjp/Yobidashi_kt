@@ -455,9 +455,6 @@ private fun EditorDialog(
     }
 }
 
-/**
- * TODO modify state usage
- */
 private fun moveFolder(
     currentItem: Bookmark,
     newFolder: String,
