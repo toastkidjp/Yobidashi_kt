@@ -25,7 +25,7 @@ class BookmarkListViewModel : ViewModel() {
 
     fun currentFolder() = _currentFolder.value
 
-    fun setCurrentFolder(folderName: String) {
+    private fun setCurrentFolder(folderName: String) {
         _currentFolder.value = folderName
     }
 
