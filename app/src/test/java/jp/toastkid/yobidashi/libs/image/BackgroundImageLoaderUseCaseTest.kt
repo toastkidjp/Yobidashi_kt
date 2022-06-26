@@ -59,7 +59,7 @@ class BackgroundImageLoaderUseCaseTest {
         mockkConstructor(ImageRequest.Builder::class)
         every { anyConstructed<ImageRequest.Builder>().data(any()) }.returns(imageRequestBuilder)
         every { imageRequestBuilder.target(any<ImageView>()) }.returns(imageRequestBuilder)
-        every { imageRequestBuilder.size(any(), any()) }.returns(imageRequestBuilder)
+        every { imageRequestBuilder.size(any<Int>(), any()) }.returns(imageRequestBuilder)
         every { imageRequestBuilder.build() }.returns(mockk())
         mockkObject(Coil)
         every { Coil.imageLoader(any()) }.returns(imageLoader)
@@ -80,7 +80,7 @@ class BackgroundImageLoaderUseCaseTest {
 
         verify(exactly = 1) { anyConstructed<ImageRequest.Builder>().data(any()) }
         verify(exactly = 1) { imageRequestBuilder.target(any<ImageView>()) }
-        verify(exactly = 1) { imageRequestBuilder.size(any(), any()) }
+        verify(exactly = 1) { imageRequestBuilder.size(any<Int>(), any()) }
         verify(exactly = 1) { imageRequestBuilder.build() }
         verify(exactly = 1) { imageLoader.enqueue(any()) }
         verify(atLeast = 1) { targetView.getContext() }
@@ -94,7 +94,7 @@ class BackgroundImageLoaderUseCaseTest {
 
         verify(exactly = 0) { anyConstructed<ImageRequest.Builder>().data(any()) }
         verify(exactly = 0) { imageRequestBuilder.target(any<ImageView>()) }
-        verify(exactly = 0) { imageRequestBuilder.size(any(), any()) }
+        verify(exactly = 0) { imageRequestBuilder.size(any<Int>(), any()) }
         verify(exactly = 0) { imageRequestBuilder.build() }
         verify(exactly = 0) { imageLoader.enqueue(any()) }
         verify(exactly = 0) { targetView.getContext() }
@@ -111,7 +111,7 @@ class BackgroundImageLoaderUseCaseTest {
 
         verify(exactly = 1) { anyConstructed<ImageRequest.Builder>().data(any()) }
         verify(exactly = 1) { imageRequestBuilder.target(any<ImageView>()) }
-        verify(exactly = 0) { imageRequestBuilder.size(any(), any()) }
+        verify(exactly = 0) { imageRequestBuilder.size(any<Int>(), any()) }
         verify(exactly = 1) { imageRequestBuilder.build() }
         verify(exactly = 1) { imageLoader.enqueue(any()) }
         verify(atLeast = 1) { targetView.getContext() }
@@ -127,7 +127,7 @@ class BackgroundImageLoaderUseCaseTest {
 
         verify(exactly = 1) { anyConstructed<ImageRequest.Builder>().data(any()) }
         verify(exactly = 1) { imageRequestBuilder.target(any<ImageView>()) }
-        verify(exactly = 0) { imageRequestBuilder.size(any(), any()) }
+        verify(exactly = 0) { imageRequestBuilder.size(any<Int>(), any()) }
         verify(exactly = 1) { imageRequestBuilder.build() }
         verify(exactly = 1) { imageLoader.enqueue(any()) }
         verify(atLeast = 1) { targetView.getContext() }
