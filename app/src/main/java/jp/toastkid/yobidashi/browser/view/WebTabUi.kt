@@ -61,7 +61,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
@@ -333,7 +332,6 @@ private fun initializeHeaderViewModels(
     resetReaderModeContent: (String) -> Unit
 ) {
     val viewModelProvider = ViewModelProvider(activity)
-    val appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
     val tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
     val pageSearcherViewModel = viewModelProvider.get(PageSearcherViewModel::class.java)
