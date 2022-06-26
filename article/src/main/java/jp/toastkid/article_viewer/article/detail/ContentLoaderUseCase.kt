@@ -7,7 +7,6 @@
  */
 package jp.toastkid.article_viewer.article.detail
 
-import android.widget.TextView
 import jp.toastkid.article_viewer.article.ArticleRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +20,6 @@ import kotlinx.coroutines.withContext
 class ContentLoaderUseCase(
     private val repository: ArticleRepository,
    // private val markwon: Markwon,
-    private val contentView: TextView,
     private val subheads: MutableList<String>,
     private val linkGeneratorService: LinkGeneratorService = LinkGeneratorService(),
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
