@@ -9,16 +9,7 @@
 package jp.toastkid.lib.preference
 
 import android.graphics.Color
-import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.Drawable
-import android.widget.TextView
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import io.mockk.verify
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -41,37 +32,6 @@ class ColorPairTest {
     @Test
     fun fontColor() {
         assertEquals(Color.WHITE, colorPair.fontColor())
-    }
-
-    @Test
-    fun setTo() {
-        val textView = mockk<TextView>()
-        every { textView.setBackgroundColor(any()) }.answers { Unit }
-        every { textView.setTextColor(any<Int>()) }.answers { Unit }
-        every { textView.getCompoundDrawables() }.answers { arrayOf() }
-
-        colorPair.setTo(textView)
-
-        verify (exactly = 1) { textView.setBackgroundColor(any()) }
-        verify (exactly = 1) { textView.setTextColor(any<Int>()) }
-        verify (exactly = 1) { textView.getCompoundDrawables() }
-    }
-
-    @Test
-    fun setToWithCompoundDrawable() {
-        val textView = mockk<TextView>()
-        every { textView.setBackgroundColor(any()) }.answers { Unit }
-        every { textView.setTextColor(any<Int>()) }.answers { Unit }
-        val compoundDrawable = mockk<Drawable>()
-        every { compoundDrawable.colorFilter = any() }.just(Runs)
-        every { textView.getCompoundDrawables() }.answers { arrayOf(compoundDrawable) }
-        mockkConstructor(PorterDuffColorFilter::class)
-
-        colorPair.setTo(textView)
-
-        verify (exactly = 1) { textView.setBackgroundColor(any()) }
-        verify (exactly = 1) { textView.setTextColor(any<Int>()) }
-        verify (exactly = 1) { textView.getCompoundDrawables() }
     }
 
     @After

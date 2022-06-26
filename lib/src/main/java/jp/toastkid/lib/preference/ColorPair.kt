@@ -1,8 +1,5 @@
 package jp.toastkid.lib.preference
 
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.widget.TextView
 import androidx.annotation.ColorInt
 
 /**
@@ -18,18 +15,5 @@ class ColorPair(
     @ColorInt fun bgColor():   Int = bgColor
 
     @ColorInt fun fontColor(): Int = fontColor
-
-    /**
-     * Set background and text color.
-     *
-     * @param tv
-     */
-    fun setTo(tv: TextView?) {
-        tv?.setBackgroundColor(bgColor)
-        tv?.setTextColor(fontColor)
-        tv?.compoundDrawables?.forEach {
-            it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)
-        }
-    }
 
 }
