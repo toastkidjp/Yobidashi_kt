@@ -2,14 +2,11 @@ package jp.toastkid.article_viewer.article.detail
 
 import android.widget.TextView
 import io.mockk.MockKAnnotations
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.just
 import io.mockk.unmockkAll
-import io.noties.markwon.Markwon
 import jp.toastkid.article_viewer.article.ArticleRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -27,9 +24,11 @@ class ContentLoaderUseCaseTest {
 
     @MockK
     private lateinit var repository: ArticleRepository
+/*
 
     @MockK
     private lateinit var markwon: Markwon
+*/
 
     @MockK
     private lateinit var contentView: TextView
@@ -53,8 +52,8 @@ class ContentLoaderUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        coEvery { markwon.setMarkdown(any(), any()) }.just(Runs)
-        coEvery { linkGeneratorService.invoke(any()) }.just(Runs)
+        //coEvery { markwon.setMarkdown(any(), any()) }.just(Runs)
+        coEvery { linkGeneratorService.invoke(any()) }.returns("test")
     }
 
     @Test
@@ -64,7 +63,7 @@ class ContentLoaderUseCaseTest {
         contentLoaderUseCase.invoke("test")
 
         coVerify(exactly = 1) { repository.findContentByTitle(any()) }
-        coVerify(exactly = 1) { markwon.setMarkdown(any(), any()) }
+      //  coVerify(exactly = 1) { markwon.setMarkdown(any(), any()) }
         coVerify(exactly = 1) { linkGeneratorService.invoke(any()) }
     }
 
@@ -74,7 +73,7 @@ class ContentLoaderUseCaseTest {
 
         contentLoaderUseCase.invoke("test")
         coVerify(exactly = 1) { repository.findContentByTitle(any()) }
-        coVerify(exactly = 0) { markwon.setMarkdown(any(), any()) }
+      //  coVerify(exactly = 0) { markwon.setMarkdown(any(), any()) }
         coVerify(exactly = 0) { linkGeneratorService.invoke(any()) }
     }
 
