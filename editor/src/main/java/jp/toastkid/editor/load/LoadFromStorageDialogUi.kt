@@ -69,7 +69,7 @@ internal fun LoadFromStorageDialogUi(
                         )
                     }
                 }
-                println("tomato fileItems ${fileItems.size}")
+
                 items(fileItems) { file ->
                     val dismissState = DismissState(
                         initialValue = DismissValue.Default,
