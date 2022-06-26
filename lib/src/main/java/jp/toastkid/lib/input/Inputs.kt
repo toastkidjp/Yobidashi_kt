@@ -10,8 +10,6 @@ package jp.toastkid.lib.input
 
 import android.content.Context
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 
 /**
@@ -39,13 +37,4 @@ object Inputs {
         return inputMethodManager
     }
 
-    /**
-     * Show software keyboard for input dialog.
-     * You should call this method from `onActivityCreated(savedInstanceState: Bundle?)`.
-     *
-     * @param window Nullable [Window] for calling setSoftInputMode.
-     */
-    fun showKeyboardForInputDialog(window: Window?) {
-        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-    }
 }

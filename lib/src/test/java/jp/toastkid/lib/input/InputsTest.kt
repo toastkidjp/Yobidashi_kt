@@ -66,11 +66,4 @@ class InputsTest {
         verify(exactly = 1) { inputMethodManager.hideSoftInputFromWindow(any(), any()) }
     }
 
-    @Test
-    fun testShowKeyboardForInputDialog() {
-        Inputs.showKeyboardForInputDialog(window)
-
-        verify(exactly = 1) { window.setSoftInputMode(any()) }
-    }
-
 }
