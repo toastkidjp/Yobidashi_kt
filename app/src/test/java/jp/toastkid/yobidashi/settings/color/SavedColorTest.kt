@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi.settings.color
 
+import android.graphics.Color
 import android.widget.TextView
 import io.mockk.MockKAnnotations
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -23,12 +23,9 @@ class SavedColorTest {
 
     @Test
     fun test() {
-        every { textView.setTextColor(any<Int>()) }.answers { Unit }
-        every { textView.setBackgroundColor(any()) }.answers { Unit }
+        val savedColor = SavedColor.make(Color.BLACK, Color.WHITE)
 
-        SavedColor().setTo(textView)
-
-        verify(exactly = 1) { textView.setTextColor(any<Int>()) }
-        verify(exactly = 1) { textView.setBackgroundColor(any()) }
+        assertEquals(Color.BLACK, savedColor.bgColor)
+        assertEquals(Color.WHITE, savedColor.fontColor)
     }
 }
