@@ -21,7 +21,6 @@ class ContentLoaderUseCase(
     private val repository: ArticleRepository,
    // private val markwon: Markwon,
     private val subheads: MutableList<String>,
-    private val linkGeneratorService: LinkGeneratorService = LinkGeneratorService(),
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
