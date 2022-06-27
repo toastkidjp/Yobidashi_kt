@@ -144,7 +144,7 @@ fun SearchInputUi(
                             return@rememberLauncherForActivityResult
                         }
                         val result =
-                            activityResult?.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                            activityResult.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                         if (result == null || result.size == 0) {
                             return@rememberLauncherForActivityResult
                         }
