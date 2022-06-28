@@ -43,7 +43,6 @@ dependencies {
     implementation project(":ui")
     implementation project(":search")
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.core:core-ktx:$libVersions.ktx"
 
     // Compose dependencies.
