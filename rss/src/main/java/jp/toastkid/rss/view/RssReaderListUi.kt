@@ -85,7 +85,7 @@ private fun RssReaderList(fullItems: List<Item>) {
     items.addAll(fullItems)
 
     LazyColumn(state = listState) {
-        items(items) {
+        items(items, { it.title + it.link + it.source }) {
             Surface(
                 modifier = Modifier
                     .padding(
