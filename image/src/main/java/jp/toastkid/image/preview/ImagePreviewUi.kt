@@ -48,7 +48,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int, onBackPress:
             .fillMaxSize()
             .background(Color.Transparent)
     ) {
-        items(images) { image ->
+        items(images, { it.path }) { image ->
             var scale by remember { mutableStateOf(1f) }
             var rotation by remember { mutableStateOf(0f) }
             var offset by remember { mutableStateOf(Offset.Zero) }
