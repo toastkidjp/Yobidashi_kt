@@ -178,7 +178,7 @@ internal fun MusicList(
     val context = LocalContext.current
     val viewModel = (context as? ComponentActivity)?.let {
         ViewModelProvider(it).get(MediaPlayerPopupViewModel::class.java)
-    }
+    } ?: return
     val contentViewModel = (context as? ComponentActivity)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
