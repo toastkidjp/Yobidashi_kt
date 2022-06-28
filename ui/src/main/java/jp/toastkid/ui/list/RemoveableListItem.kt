@@ -126,7 +126,7 @@ fun SwipeToDismissItem(
                             else -> Color(0x88DD4444)
                         }
                     )
-                    val direction = state.dismissDirection
+
                     val scale by animateFloatAsState(
                         if (state.targetValue == DismissValue.Default) 0.75f else 1f
                     )
