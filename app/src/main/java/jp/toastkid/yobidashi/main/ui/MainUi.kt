@@ -126,6 +126,7 @@ import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.loan.view.LoanCalculatorUi
 import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.media.music.view.MusicListUi
+import jp.toastkid.number.NumberPlaceUi
 import jp.toastkid.pdf.view.PdfViewerUi
 import jp.toastkid.rss.view.RssReaderListUi
 import jp.toastkid.search.SearchQueryExtractor
@@ -145,7 +146,6 @@ import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
 import jp.toastkid.yobidashi.menu.Menu
-import jp.toastkid.yobidashi.number.NumberPlaceUi
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
 import jp.toastkid.yobidashi.search.view.SearchInputUi
@@ -911,7 +911,7 @@ internal fun Content() {
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                         modifier = Modifier
-                                            .size(72.dp)
+                                            .size(76.dp)
                                             .padding(4.dp)
                                     ) {
                                         Icon(
@@ -927,7 +927,7 @@ internal fun Content() {
                                             maxLines = 2,
                                             overflow = TextOverflow.Ellipsis,
                                             textAlign = TextAlign.Center,
-                                            modifier = Modifier.padding(8.dp)
+                                            modifier = Modifier.fillMaxWidth().padding(8.dp)
                                         )
                                     }
                                 }
@@ -956,6 +956,7 @@ internal fun Content() {
             Lifecycle.Event.ON_RESUME -> tabs.setCount()
             Lifecycle.Event.ON_PAUSE -> tabs.saveTabList()
             Lifecycle.Event.ON_DESTROY -> tabs.dispose()
+            else -> Unit
         }
     }
     DisposableEffect(activity) {

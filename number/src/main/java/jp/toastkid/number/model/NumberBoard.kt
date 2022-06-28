@@ -6,21 +6,21 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.number
+package jp.toastkid.number.model
 
 import java.util.LinkedList
 import java.util.Queue
 import java.util.Random
 
-class NumberBoard {
-
+data class NumberBoard(
     private val rows: MutableList<MutableList<Int>> = mutableListOf()
+) {
 
     init {
         fillZero()
     }
 
-    private fun fillZero() {
+    fun fillZero() {
         rows.clear()
 
         (0 until BOARD_SIZE).forEach { x ->
@@ -32,17 +32,15 @@ class NumberBoard {
     }
 
     fun placeRandom() {
-        fillZero()
-
-        (0 until BOARD_SIZE).forEach { x ->
-            (0 until BOARD_SIZE).forEach { y ->
-                if (rows[y][x] == 0) {
-                    val boxNumbers = getIntInBox(x, y)
-                    val verticalNumbers = getIntVertical(x)
-                    val horizontalNumbers = rows[y]
-                    val next = makeRandomWithout(boxNumbers.union(verticalNumbers).union(horizontalNumbers))
-                    rows[y][x] = next
-                }
+        iterate { x, y ->
+            if (rows[y][x] == 0) {
+                val boxNumbers = getIntInBox(x, y)
+                val verticalNumbers = getIntVertical(x)
+                val horizontalNumbers = rows[y]
+                val next = makeRandomWithout(
+                    boxNumbers.union(verticalNumbers).union(horizontalNumbers)
+                )
+                rows[y][x] = next
             }
         }
     }
@@ -90,7 +88,7 @@ class NumberBoard {
         return queue
     }
 
-    fun masked(maskNumberCount: Int = 50): NumberBoard {
+    fun masked(maskNumberCount: Int): NumberBoard {
         val newBoard = NumberBoard()
         newBoard.copyFrom(this)
         val random = Random()
@@ -109,10 +107,8 @@ class NumberBoard {
     }
 
     fun copyFrom(base: NumberBoard) {
-        (0 until BOARD_SIZE).forEach { x ->
-            (0 until BOARD_SIZE).forEach { y ->
-                this.rows[x][y] = base.rows[x][y]
-            }
+        iterate { x, y ->
+            this.rows[x][y] = base.rows[x][y]
         }
     }
 
@@ -131,7 +127,7 @@ class NumberBoard {
         }
 
         this.rows.forEachIndexed { rowNumber, row ->
-            correct.rows.get(rowNumber).forEachIndexed { columnIndex, column ->
+            correct.rows[rowNumber].forEachIndexed { columnIndex, column ->
                 if (column != row.get(columnIndex)) {
                     return false
                 }
@@ -151,6 +147,14 @@ class NumberBoard {
 
     fun pick(rowIndex: Int, columnIndex: Int): Int {
         return this.rows[rowIndex][columnIndex]
+    }
+
+    private fun iterate(action: (Int, Int) -> Unit) {
+        (0 until BOARD_SIZE).forEach { x ->
+            (0 until BOARD_SIZE).forEach { y ->
+                action(x, y)
+            }
+        }
     }
 
     companion object {

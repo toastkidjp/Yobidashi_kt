@@ -304,7 +304,6 @@
     <string name="launcher">Launcher</string>
     <string name="barcode">Barcode</string>
     <string name="title_number_place">Number Place</string>
-    <string name="menu_other_board">Other board</string>
     <string name="title_rss_reader">RSS Reader</string>
     <string name="title_add_to_rss_reader">Add to RSS Reader</string>
     <string name="message_rss_reader_launch_failed">You should add any RSS link via header\'s menu if you want to use this function.</string>

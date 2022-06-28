@@ -373,7 +373,7 @@ private fun initializeHeaderViewModels(
                         R.drawable.ic_back,
                         R.string.back,
                         tint,
-                        enableBack.value ?: false
+                        enableBack.value
                     ) { browserModule.back() }
                     HeaderSubButton(
                         R.drawable.ic_forward,

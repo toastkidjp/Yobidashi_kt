@@ -86,6 +86,7 @@ dependencies {
     implementation project(":barcode")
     implementation project(":ui")
     implementation project(":editor")
+    implementation project(":number")
 
     implementation "androidx.exifinterface:exifinterface:$libVersions.exifinterface"
     implementation "androidx.work:work-runtime:2.7.1"

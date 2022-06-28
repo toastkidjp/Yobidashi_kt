@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -207,13 +208,13 @@ internal fun SearchContentsUi(
                             )
                             Text(
                                 text = stringResource(id = R.string.plus),
-                                color = colorResource(id = R.color.white),
+                                color = MaterialTheme.colors.surface,
                                 fontSize = 20.sp,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .width(36.dp)
                                     .height(32.dp)
-                                    .background(colorResource(id = R.color.pre4_ripple))
+                                    .background(MaterialTheme.colors.onSurface)
                                     .clickable { viewModel?.putQuery("$it ") }
                             )
                         }
