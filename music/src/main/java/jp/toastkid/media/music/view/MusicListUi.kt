@@ -279,7 +279,7 @@ internal fun MusicList(
             )
         }
         LazyColumn {
-            items(viewModel.musics) { music ->
+            items(viewModel.musics, { it.description.mediaId ?: "" }) { music ->
                 Surface(
                     elevation = 4.dp,
                     modifier = Modifier
