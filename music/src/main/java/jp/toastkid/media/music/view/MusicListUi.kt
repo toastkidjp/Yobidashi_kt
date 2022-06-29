@@ -358,7 +358,7 @@ private fun play(
 
     mediaController.transportControls.play()
 
-    mediaPlayerPopupViewModel?.playing = true
+    mediaPlayerPopupViewModel.playing = true
 }
 
 private fun pause(
