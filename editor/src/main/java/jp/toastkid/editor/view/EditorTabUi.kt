@@ -399,15 +399,6 @@ private fun EditorMenuItem(
 }
 
 /**
- * Clear current file path and reset edit-text.
- */
-private fun clearPath() {
-    //path = ""
-    //clearInput()
-    //TODO menuBinding.lastSaved.text = ""
-}
-
-/**
  * Insert text to [EditText].
  * @param text insert text
  */
