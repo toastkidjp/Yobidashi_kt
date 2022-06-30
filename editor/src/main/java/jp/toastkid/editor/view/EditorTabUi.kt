@@ -311,8 +311,6 @@ private fun AppBarContent(
             )
         }
 
-        //EditorMenuItem(R.string.restore, R.drawable.ic_restore) { restore() }
-
         EditorMenuItem(R.string.load_from_storage, R.drawable.ic_load) {
             openLoadFromStorageDialog.value = true
         }
