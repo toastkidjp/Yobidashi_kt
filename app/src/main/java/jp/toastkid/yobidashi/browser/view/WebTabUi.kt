@@ -185,11 +185,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
             readerModeText.value = ""
             return@BackHandler
         }
-        if (browserModule.back()) {
-            browserViewModel.setEnableBackPress(browserModule.canGoBack())
-            return@BackHandler
-        }
-        browserViewModel.setEnableBackPress(false)
+        val back = browserModule.back()
+        browserViewModel.setEnableBackPress(browserModule.canGoBack())
+        println("tomato web backhandler $back")
     }
 
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
