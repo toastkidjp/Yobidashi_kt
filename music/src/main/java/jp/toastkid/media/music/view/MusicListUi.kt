@@ -369,7 +369,7 @@ private fun pause(
 
     mediaController.transportControls.pause()
 
-    mediaPlayerPopupViewModel?.playing = false
+    mediaPlayerPopupViewModel.playing = false
 }
 
 private fun attemptToGetMediaController(activity: ComponentActivity) =
