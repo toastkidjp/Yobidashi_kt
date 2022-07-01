@@ -119,7 +119,7 @@ class BrowserViewModel : ViewModel() {
         if (nextTitle.isNullOrBlank()) {
             return
         }
-        _title.value = nextTitle ?: ""
+        _title.value = nextTitle
     }
 
     private val _url = mutableStateOf("")
