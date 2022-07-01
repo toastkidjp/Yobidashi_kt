@@ -8,12 +8,16 @@
 
 package jp.toastkid.number
 
+import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.number.factory.GameFileProvider
 import jp.toastkid.number.model.NumberBoard
 import jp.toastkid.number.model.NumberPlaceGame
+import jp.toastkid.number.repository.GameRepositoryImplementation
 
 class NumberPlaceViewModel : ViewModel() {
 
@@ -53,9 +57,22 @@ class NumberPlaceViewModel : ViewModel() {
     }
 
     fun setGame(game: NumberPlaceGame) {
+        _loading.value = true
         _game.value = game
+        _mask.value = _game.value.masked()
+        _loading.value = false
     }
 
     fun loading(): State<Boolean> = _loading
+
+    fun saveCurrentGame(context: Context) {
+        val preferenceApplier = PreferenceApplier(context)
+        val file = GameFileProvider().invoke(context.filesDir, preferenceApplier) ?: return
+        GameRepositoryImplementation().save(file, _game.value)
+    }
+
+    fun pickSolving(rowIndex: Int, columnIndex: Int): Int {
+        return _game.value.pickSolving(rowIndex, columnIndex)
+    }
 
 }

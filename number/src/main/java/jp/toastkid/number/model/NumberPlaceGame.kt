@@ -8,6 +8,9 @@
 
 package jp.toastkid.number.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class NumberPlaceGame(
     private val correct: NumberBoard = NumberBoard(),
     private val masked: NumberBoard = NumberBoard(),
@@ -48,6 +51,10 @@ data class NumberPlaceGame(
 
     fun pickCorrect(rowIndex: Int, columnIndex: Int): Int {
         return correct.pick(rowIndex, columnIndex)
+    }
+
+    fun pickSolving(rowIndex: Int, columnIndex: Int): Int {
+        return solving.pick(rowIndex, columnIndex)
     }
 
 }
