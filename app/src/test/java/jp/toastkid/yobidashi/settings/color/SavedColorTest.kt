@@ -1,9 +1,7 @@
 package jp.toastkid.yobidashi.settings.color
 
 import android.graphics.Color
-import android.widget.TextView
 import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -12,9 +10,6 @@ import org.junit.Test
  * @author toastkidjp
  */
 class SavedColorTest {
-
-    @MockK
-    private lateinit var textView: TextView
 
     @Before
     fun setUp() {
