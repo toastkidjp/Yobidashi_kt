@@ -71,8 +71,8 @@ import kotlinx.coroutines.launch
 fun MusicListUi() {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val viewModelProvider = ViewModelProvider(activity)
-    val browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
-    val mediaPlayerPopupViewModel = viewModelProvider?.get(MediaPlayerPopupViewModel::class.java)
+    val browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
+    val mediaPlayerPopupViewModel = viewModelProvider.get(MediaPlayerPopupViewModel::class.java)
 
     var mediaBrowser: MediaBrowserCompat? = null
 
