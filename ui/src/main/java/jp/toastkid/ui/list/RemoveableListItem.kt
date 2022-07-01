@@ -92,7 +92,7 @@ fun SwipeToDismissItem(
         val state = remember {
             DismissState(
                 initialValue = DismissValue.Default,
-                confirmStateChange = { _ ->
+                confirmStateChange = {
                     endOffset.value < marginEnd && endOffset.value != 0f
                 }
             )
