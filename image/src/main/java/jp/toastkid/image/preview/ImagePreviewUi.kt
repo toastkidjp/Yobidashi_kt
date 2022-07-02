@@ -40,7 +40,7 @@ import jp.toastkid.image.factory.GifImageLoaderFactory
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int, onBackPress: () -> Unit = {}) {
     val listState = rememberLazyListState(initialIndex)
-    val coroutineScope = rememberCoroutineScope()
+    rememberCoroutineScope()
 
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
 
