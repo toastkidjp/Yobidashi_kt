@@ -125,11 +125,11 @@ fun EditorTabUi(path: String?) {
     }
 
     contentViewModel.replaceAppBarContent {
-            AppBarContent(
-                contentViewModel,
-                fileActionUseCase
-            )
-        }
+        AppBarContent(
+            contentViewModel,
+            fileActionUseCase
+        )
+    }
 
     val localLifecycleOwner = LocalLifecycleOwner.current
     contentViewModel.toTop.observe(localLifecycleOwner, {
