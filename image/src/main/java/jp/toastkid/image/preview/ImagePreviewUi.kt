@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -38,7 +37,7 @@ import jp.toastkid.image.factory.GifImageLoaderFactory
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int, onBackPress: () -> Unit = {}) {
+internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val listState = rememberLazyListState(initialIndex)
 
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
