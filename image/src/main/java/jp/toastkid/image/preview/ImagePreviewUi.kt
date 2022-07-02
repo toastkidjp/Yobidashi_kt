@@ -10,6 +10,7 @@ package jp.toastkid.image.preview
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -74,6 +76,14 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int, onBackPress:
                         translationY = offset.y
                     )
                     .transformable(state = state)
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = { /* Called when the gesture starts */ },
+                            onDoubleTap = { scale = 1f },
+                            onLongPress = { /* Called on Long Press */ },
+                            onTap = { /* Called on Tap */ }
+                        )
+                    }
                     .padding(end = 16.dp)
             )
         }
