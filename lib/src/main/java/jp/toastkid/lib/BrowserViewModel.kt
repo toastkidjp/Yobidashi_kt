@@ -134,8 +134,6 @@ class BrowserViewModel : ViewModel() {
 
     private val _enableBackPress = mutableStateOf(false)
 
-    val enableBackPress: State<Boolean> = _enableBackPress
-
     private val _enableForward = mutableStateOf(false)
 
     val enableForward: State<Boolean> = _enableForward
