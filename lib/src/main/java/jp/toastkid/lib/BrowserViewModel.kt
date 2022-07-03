@@ -136,7 +136,7 @@ class BrowserViewModel : ViewModel() {
 
     val enableBackPress: State<Boolean> = _enableBackPress
 
-    fun setEnableBackPress(newState: Boolean) {
+    private fun setEnableBackPress(newState: Boolean) {
         _enableBackPress.value = newState
     }
 
