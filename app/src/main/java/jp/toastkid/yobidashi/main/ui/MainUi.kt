@@ -632,7 +632,7 @@ internal fun Content() {
                     }
 
                     val route =
-                        navigationHostController?.currentBackStackEntry?.destination?.route
+                        navigationHostController.currentBackStackEntry?.destination?.route
 
                     if (route?.startsWith("tab/web") == true) {
                         val latest = GlobalWebViewPool.getLatest()
