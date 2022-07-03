@@ -637,7 +637,7 @@ internal fun Content() {
                     if (route?.startsWith("tab/web") == true) {
                         val latest = GlobalWebViewPool.getLatest()
                         if (latest?.canGoBack() == true) {
-                            latest?.goBack()
+                            latest.goBack()
                             return@BackHandler
                         }
                     }
