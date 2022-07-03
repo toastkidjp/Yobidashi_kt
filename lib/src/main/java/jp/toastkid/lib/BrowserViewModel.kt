@@ -132,8 +132,6 @@ class BrowserViewModel : ViewModel() {
         _url.value = nextUrl ?: ""
     }
 
-    private val _enableBackPress = mutableStateOf(false)
-
     private val _enableForward = mutableStateOf(false)
 
     val enableForward: State<Boolean> = _enableForward
