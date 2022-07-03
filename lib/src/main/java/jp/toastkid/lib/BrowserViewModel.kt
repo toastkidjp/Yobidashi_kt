@@ -154,7 +154,6 @@ class BrowserViewModel : ViewModel() {
 
     fun setBackButtonIsEnabled(newState: Boolean) {
         _enableBack.value = newState
-        setEnableBackPress(newState)
     }
 
     private val _progress = mutableStateOf(0)
