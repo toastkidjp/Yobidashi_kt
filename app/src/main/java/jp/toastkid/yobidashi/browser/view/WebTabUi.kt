@@ -100,7 +100,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
         frameLayout
     }
 
-    val browserModule = remember { BrowserModule(activityContext, webViewContainer) }
+    val browserModule = remember { BrowserModule(webViewContainer) }
     browserModule.applyNewAlpha()
     browserModule.resizePool(PreferenceApplier(activityContext).poolSize)
 
