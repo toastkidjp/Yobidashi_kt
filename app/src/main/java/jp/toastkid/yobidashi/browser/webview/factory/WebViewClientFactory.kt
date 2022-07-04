@@ -180,11 +180,14 @@ class WebViewClientFactory(
                                 context,
                                 Intent(Intent.ACTION_DIAL, uri)
                             )
-b                            view?.reload()
+                            view?.reload()
                             true
                         }
                         "mailto" -> {
-                            context?.startActivity(Intent(Intent.ACTION_SENDTO, uri))
+                            startOtherAppWithIntent(
+                                context,
+                                Intent(Intent.ACTION_SENDTO, uri)
+                            )
                             view?.reload()
                             true
                         }
