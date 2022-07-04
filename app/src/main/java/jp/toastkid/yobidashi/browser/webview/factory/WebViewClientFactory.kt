@@ -174,6 +174,7 @@ class WebViewClientFactory(
                                 context,
                                 Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
                             )
+                            true
                         }
                         "tel" -> {
                             startOtherAppWithIntent(
@@ -223,13 +224,11 @@ class WebViewClientFactory(
     private fun startOtherAppWithIntent(context: Context?, intent: Intent?) =
         try {
             context?.startActivity(intent)
-            true
         } catch (e: ActivityNotFoundException) {
             Timber.w(e)
 
             context?.let {
                 contentViewModel?.snackShort(context.getString(R.string.message_cannot_launch_app))
             }
-            true
         }
 }
