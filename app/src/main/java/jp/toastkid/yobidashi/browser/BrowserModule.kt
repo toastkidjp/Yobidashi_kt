@@ -41,7 +41,7 @@ import timber.log.Timber
  */
 class BrowserModule(
     private val context: Context,
-    private val webViewContainer: FrameLayout?
+    private val webViewContainer: FrameLayout
 ) {
     private val nestedScrollDispatcher = NestedScrollDispatcher()
 
