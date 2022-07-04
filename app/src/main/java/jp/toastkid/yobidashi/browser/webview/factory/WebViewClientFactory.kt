@@ -176,8 +176,11 @@ class WebViewClientFactory(
                             )
                         }
                         "tel" -> {
-                            context?.startActivity(Intent(Intent.ACTION_DIAL, uri))
-                            view?.reload()
+                            startOtherAppWithIntent(
+                                context,
+                                Intent(Intent.ACTION_DIAL, uri)
+                            )
+b                            view?.reload()
                             true
                         }
                         "mailto" -> {
