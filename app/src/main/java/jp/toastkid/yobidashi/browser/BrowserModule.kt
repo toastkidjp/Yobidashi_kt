@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.browser
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.webkit.ValueCallback
@@ -40,9 +39,11 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class BrowserModule(
-    private val context: Context,
     private val webViewContainer: FrameLayout
 ) {
+
+    private val context = webViewContainer.context
+
     private val nestedScrollDispatcher = NestedScrollDispatcher()
 
     private val preferenceApplier = PreferenceApplier(context)
