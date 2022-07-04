@@ -170,17 +170,10 @@ class WebViewClientFactory(
 
                     when (uri.scheme) {
                         "market", "intent" -> {
-                            try {
-                                context?.startActivity(Intent.parseUri(url, Intent.URI_INTENT_SCHEME))
-                                true
-                            } catch (e: ActivityNotFoundException) {
-                                Timber.w(e)
-
-                                context?.let {
-                                    contentViewModel?.snackShort(context.getString(R.string.message_cannot_launch_app))
-                                }
-                                true
-                            }
+                            startOtherAppWithIntent(
+                                context,
+                                Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+                            )
                         }
                         "tel" -> {
                             context?.startActivity(Intent(Intent.ACTION_DIAL, uri))
@@ -220,4 +213,17 @@ class WebViewClientFactory(
         }
 
     }
+
+    private fun startOtherAppWithIntent(context: Context?, intent: Intent?) =
+        try {
+            context?.startActivity(intent)
+            true
+        } catch (e: ActivityNotFoundException) {
+            Timber.w(e)
+
+            context?.let {
+                contentViewModel?.snackShort(context.getString(R.string.message_cannot_launch_app))
+            }
+            true
+        }
 }
