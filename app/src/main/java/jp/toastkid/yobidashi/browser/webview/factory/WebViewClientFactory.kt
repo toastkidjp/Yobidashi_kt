@@ -68,6 +68,7 @@ class WebViewClientFactory(
 
             rssAddingSuggestion?.invoke(view, url)
             browserViewModel?.setBackButtonIsEnabled(view.canGoBack())
+            browserViewModel?.setForwardButtonIsEnabled(view.canGoForward())
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
