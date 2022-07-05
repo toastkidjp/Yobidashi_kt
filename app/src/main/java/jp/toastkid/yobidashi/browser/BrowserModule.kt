@@ -251,11 +251,6 @@ class BrowserModule(
         GlobalWebViewPool.onResume()
     }
 
-    fun onPause() {
-        GlobalWebViewPool.storeStates(context)
-        GlobalWebViewPool.onPause()
-    }
-
     fun onDestroy() {
         webViewContainer?.removeAllViews()
     }
