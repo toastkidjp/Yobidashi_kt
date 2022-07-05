@@ -80,9 +80,9 @@ fun MusicListUi() {
 
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
             when (state?.state) {
-                PlaybackStateCompat.STATE_PLAYING -> mediaPlayerPopupViewModel?.playing = true
+                PlaybackStateCompat.STATE_PLAYING -> mediaPlayerPopupViewModel.playing = true
                 PlaybackStateCompat.STATE_PAUSED,
-                PlaybackStateCompat.STATE_STOPPED -> mediaPlayerPopupViewModel?.playing = false
+                PlaybackStateCompat.STATE_STOPPED -> mediaPlayerPopupViewModel.playing = false
                 else -> Unit
             }
         }
