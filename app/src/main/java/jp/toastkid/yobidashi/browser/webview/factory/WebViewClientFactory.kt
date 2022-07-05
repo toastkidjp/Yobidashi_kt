@@ -135,7 +135,6 @@ class WebViewClientFactory(
                 .setError(TlsErrorMessageGenerator().invoke(context, error))
         }
 
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                 if (preferenceApplier.adRemove) {
                     adRemover(request.url.toString())
