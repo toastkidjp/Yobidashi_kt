@@ -328,7 +328,6 @@ private fun initializeHeaderViewModels(
     val viewModelProvider = ViewModelProvider(activity)
     val tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
-    val pageSearcherViewModel = viewModelProvider.get(PageSearcherViewModel::class.java)
 
     viewModelProvider.get(BrowserViewModel::class.java).also { viewModel ->
         contentViewModel?.replaceAppBarContent {
