@@ -158,8 +158,6 @@ class BrowserViewModel : ViewModel() {
 
     private val _stopProgress = mutableStateOf(Event(false))
 
-    val stopProgress: State<Event<Boolean>> = _stopProgress
-
     fun stopProgress(stop: Boolean) {
         _stopProgress.value = Event(stop)
     }
