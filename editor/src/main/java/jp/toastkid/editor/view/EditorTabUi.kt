@@ -129,7 +129,7 @@ fun EditorTabUi(path: String?) {
     viewModelProvider.get(AppBarViewModel::class.java)
         .replace {
             AppBarContent(
-                viewModelProvider.get(ContentViewModel::class.java),
+                contentViewModel,
                 fileActionUseCase
             )
         }
@@ -163,6 +163,7 @@ fun EditorTabUi(path: String?) {
             editText.setTextColor(preferenceApplier.editorFontColor())
             editText.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
             editText.typeface = Typeface.MONOSPACE
+            editText.hint = context.getString(R.string.hint_editor_input)
 
             CursorColorSetter().invoke(
                 editText,
@@ -182,6 +183,7 @@ fun EditorTabUi(path: String?) {
                 nestedScrollDispatcher
             )
             .padding(horizontal = 8.dp, vertical = 2.dp)
+            .padding(bottom = 16.dp)
     )
 
     val pageSearcherViewModel =

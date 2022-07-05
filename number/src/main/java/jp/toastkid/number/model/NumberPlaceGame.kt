@@ -32,7 +32,7 @@ data class NumberPlaceGame(
     private fun getValidBoard(board: NumberBoard) {
         repeat(50000) {
             board.placeRandom()
-            if (board.validBoard()) {
+            if (board.fulfilled()) {
                 return
             }
             board.fillZero()

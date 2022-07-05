@@ -15,12 +15,12 @@ class GameFileProvider {
 
     operator fun invoke(filesDir: File, preferenceApplier: PreferenceApplier): File? {
         if (preferenceApplier.lastNumberPlaceGamePath().isNullOrBlank()) {
-            val dir = File(filesDir, "number/place/games")
+            val dir = File(filesDir, FOLDER_NAME)
             if (dir.exists().not()) {
                 dir.mkdirs()
             }
 
-            val file = File(dir, "saved_game")
+            val file = File(dir, FIXED_FILE_NAME)
 
             if (file.exists().not()) {
                 file.createNewFile()
@@ -29,7 +29,14 @@ class GameFileProvider {
         }
 
         val pathname = preferenceApplier.lastNumberPlaceGamePath() ?: return null
-        return File(filesDir, "number/place/games/$pathname")
+        return File(filesDir, "$FOLDER_NAME/$pathname")
     }
 
+    companion object {
+
+        private const val FOLDER_NAME = "number/place/games"
+
+        private val FIXED_FILE_NAME = "saved_game"
+
+    }
 }

@@ -39,7 +39,16 @@ class NumberPlaceViewModel : ViewModel() {
         _loading.value = false
     }
 
+    fun setGame(game: NumberPlaceGame) {
+        _loading.value = true
+        _game.value = game
+        _mask.value = _game.value.masked()
+        _loading.value = false
+    }
+
     fun masked() = _mask.value
+
+    fun loading(): State<Boolean> = _loading
 
     fun place(rowIndex: Int, columnIndex: Int, it: Int, onSolved: (Boolean) -> Unit) {
         _game.value.place(rowIndex, columnIndex, it, onSolved)
@@ -55,15 +64,6 @@ class NumberPlaceViewModel : ViewModel() {
         numberState.value = "$it"
         _game.value.place(rowIndex, columnIndex, it, onSolved)
     }
-
-    fun setGame(game: NumberPlaceGame) {
-        _loading.value = true
-        _game.value = game
-        _mask.value = _game.value.masked()
-        _loading.value = false
-    }
-
-    fun loading(): State<Boolean> = _loading
 
     fun saveCurrentGame(context: Context) {
         val preferenceApplier = PreferenceApplier(context)

@@ -783,7 +783,7 @@ internal fun Content() {
                         return@LaunchedEffect
                     }
 
-                    if (navigationHostController?.currentDestination?.route == "empty") {
+                    if (navigationHostController.currentDestination?.route == "empty") {
                         replaceToCurrentTab(tabs, navigationHostController)
                     }
                 })
@@ -794,7 +794,7 @@ internal fun Content() {
                         modifier = Modifier.fillMaxSize()
                     ) {
                         val menuCount = Menu.values().size
-                        val tooBigCount = menuCount * 5
+                        val tooBigCount = menuCount * 10
                         LazyRow(
                             state = rememberLazyListState(tooBigCount / 2),
                             modifier = Modifier
@@ -811,7 +811,7 @@ internal fun Content() {
                                         .clickable {
                                             when (menu) {
                                                 Menu.TOP -> {
-                                                    contentViewModel?.toTop()
+                                                    contentViewModel.toTop()
                                                 }
                                                 Menu.BOTTOM -> {
                                                     contentViewModel?.toBottom()

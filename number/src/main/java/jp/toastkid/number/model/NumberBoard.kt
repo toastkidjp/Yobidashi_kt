@@ -29,7 +29,7 @@ data class NumberBoard(
 
         (0 until BOARD_SIZE).forEach { x ->
             rows.add(mutableListOf())
-            (0 until BOARD_SIZE).forEach { y ->
+            (0 until BOARD_SIZE).forEach {
                 rows[x].add(0)
             }
         }
@@ -115,11 +115,6 @@ data class NumberBoard(
             this.rows[x][y] = base.rows[x][y]
         }
     }
-
-    fun validBoard() =
-        (0 until BOARD_SIZE).none { x ->
-            rows[x].contains(-1)
-        }
 
     fun rows(): MutableList<MutableList<Int>> {
         return rows

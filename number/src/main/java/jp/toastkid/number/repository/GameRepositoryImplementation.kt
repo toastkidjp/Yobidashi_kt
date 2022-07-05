@@ -35,4 +35,8 @@ class GameRepositoryImplementation : GameRepository {
         return Json.decodeFromString(string)
     }
 
+    override fun delete(file: File?): Boolean {
+        return file?.delete() ?: false
+    }
+
 }
