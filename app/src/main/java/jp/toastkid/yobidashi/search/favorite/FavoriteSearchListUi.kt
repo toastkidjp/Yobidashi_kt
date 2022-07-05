@@ -209,7 +209,7 @@ private fun FavoriteSearchItemList(
     LazyColumn(state = listState) {
         reload(repository, favoriteSearchItems)
 
-        items(favoriteSearchItems) { favoriteSearch ->
+        items(favoriteSearchItems, { it.id }) { favoriteSearch ->
             SearchItemContent(
                 favoriteSearch.query,
                 favoriteSearch.category,
