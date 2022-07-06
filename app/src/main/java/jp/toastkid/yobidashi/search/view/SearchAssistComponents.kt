@@ -14,6 +14,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
@@ -71,6 +72,7 @@ internal fun SearchItemContent(
                         onClick(true)
                     }
                 )
+                    .heightIn(min = 44.dp)
             ) {
                 AsyncImage(
                     SearchCategory.findByCategory(category).iconId,
