@@ -108,7 +108,7 @@ fun SwipeToDismissItem(
                 anchors = anchors,
                 thresholds = { from, to ->
                     val dir = getDismissDirection(from, to)
-                    FixedThreshold(if (dir == DismissDirection.EndToStart) 3000000.dp else 30000.dp)
+                    FixedThreshold(3000000.dp)
                 },
                 orientation = Orientation.Horizontal,
                 enabled = state.currentValue == DismissValue.Default,
