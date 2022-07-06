@@ -77,8 +77,12 @@ fun SwipeToDismissItem(
         val width = LocalConfiguration.current.screenWidthDp.toFloat()
         val marginEnd = 60.dp.value
         val anchors = mutableMapOf(0f to DismissValue.Default)
-        if (DismissDirection.StartToEnd in directions) anchors += width to DismissValue.DismissedToEnd
-        if (DismissDirection.EndToStart in directions) anchors += -width to DismissValue.DismissedToStart
+        if (DismissDirection.StartToEnd in directions) {
+            anchors += width to DismissValue.DismissedToEnd
+        }
+        if (DismissDirection.EndToStart in directions) {
+            anchors += -width to DismissValue.DismissedToStart
+        }
 
         val minFactor =
             if (DismissDirection.EndToStart in directions) SwipeableDefaults.StandardResistanceFactor
