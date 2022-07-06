@@ -54,13 +54,7 @@ import kotlin.math.roundToInt
 @Composable
 fun SwipeToDismissItem(
     onClickDelete: () -> Unit,
-    modifier: Modifier = Modifier
-        .padding(
-            start = 16.dp,
-            end = 16.dp,
-            top = 2.dp,
-            bottom = 2.dp
-        ),
+    modifier: Modifier = Modifier,
     dismissContent: @Composable RowScope.() -> Unit
 ) {
     val directions: Set<DismissDirection> = setOf(
