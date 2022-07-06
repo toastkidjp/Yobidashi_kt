@@ -124,11 +124,10 @@ internal fun SearchContentsUi(
         if (viewModel.favoriteSearchItems.isNotEmpty()) {
             HeaderWithLink(
                 R.string.title_favorite_search,
-                R.string.open,
-                {
-                    viewModel.openFavoriteSearch()
-                }
-            )
+                R.string.open
+            ) {
+                viewModel.openFavoriteSearch()
+            }
 
             viewModel.favoriteSearchItems.take(5).forEach { favoriteSearch ->
                 SearchItemContent(
