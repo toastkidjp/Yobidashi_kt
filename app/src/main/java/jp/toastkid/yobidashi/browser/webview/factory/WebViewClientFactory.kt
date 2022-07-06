@@ -142,16 +142,6 @@ class WebViewClientFactory(
                     super.shouldInterceptRequest(view, request)
                 }
 
-        @Suppress("OverridingDeprecatedMember")
-        @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
-        override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
-                if (preferenceApplier.adRemove) {
-                    adRemover(url)
-                } else {
-                    @Suppress("DEPRECATION")
-                    super.shouldInterceptRequest(view, url)
-                }
-
         @Suppress("DEPRECATION")
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
