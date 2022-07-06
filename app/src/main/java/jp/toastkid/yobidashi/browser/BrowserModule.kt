@@ -252,7 +252,7 @@ class BrowserModule(
     }
 
     fun onDestroy() {
-        webViewContainer?.removeAllViews()
+        webViewContainer.removeAllViews()
     }
 
     /**
