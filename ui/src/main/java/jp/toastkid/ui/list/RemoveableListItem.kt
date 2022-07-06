@@ -100,7 +100,7 @@ fun SwipeToDismissItem(
             Modifier.swipeable(
                 state = state,
                 anchors = anchors,
-                thresholds = { from, to ->
+                thresholds = { _, to ->
                     FixedThreshold(3000000.dp)
                 },
                 orientation = Orientation.Horizontal,
