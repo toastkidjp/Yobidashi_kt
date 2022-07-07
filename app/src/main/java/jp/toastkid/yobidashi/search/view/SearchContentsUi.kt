@@ -213,7 +213,7 @@ internal fun SearchContentsUi(
                                     .width(36.dp)
                                     .height(32.dp)
                                     .background(MaterialTheme.colors.onSurface)
-                                    .clickable { viewModel?.putQuery("$it ") }
+                                    .clickable { viewModel.putQuery("$it ") }
                             )
                         }
                     }
