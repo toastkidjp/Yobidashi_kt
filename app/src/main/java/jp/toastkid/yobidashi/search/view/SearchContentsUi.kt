@@ -152,11 +152,10 @@ internal fun SearchContentsUi(
         if (viewModel.searchHistories.isNotEmpty()) {
             HeaderWithLink(
                 R.string.title_search_history,
-                R.string.open,
-                {
-                    viewModel.openSearchHistory()
-                }
-            )
+                R.string.open
+            ) {
+                viewModel.openSearchHistory()
+            }
 
             viewModel.searchHistories.take(5).forEach { searchHistory ->
                 SearchItemContent(
