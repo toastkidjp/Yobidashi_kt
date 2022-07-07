@@ -94,7 +94,7 @@ internal fun SearchContentsUi(
             .verticalScroll(rememberScrollState())
     ) {
         if (preferenceApplier.isEnableUrlModule()) {
-            UrlCard(currentTitle, currentUrl, { viewModel.putQuery(it) })
+            UrlCard(currentTitle, currentUrl) { viewModel.putQuery(it) }
         }
 
         if (viewModel.urlItems.isNotEmpty()) {
