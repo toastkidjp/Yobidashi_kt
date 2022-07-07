@@ -190,11 +190,11 @@ internal fun SearchContentsUi(
                                 true,
                                 onClick = {
                                     keyboardController?.hide()
-                                    viewModel?.putQuery(it)
-                                    viewModel?.search(it)
+                                    viewModel.putQuery(it)
+                                    viewModel.search(it)
                                 },
                                 onLongClick = {
-                                    viewModel?.searchOnBackground(it)
+                                    viewModel.searchOnBackground(it)
                                 }
                             )
                         ) {
