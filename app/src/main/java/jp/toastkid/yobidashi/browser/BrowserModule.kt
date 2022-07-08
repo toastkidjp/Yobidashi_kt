@@ -247,10 +247,6 @@ class BrowserModule(
         currentView()?.stopLoading()
     }
 
-    fun onDestroy() {
-        webViewContainer.removeAllViews()
-    }
-
     /**
      * Return current [WebView].
      *
