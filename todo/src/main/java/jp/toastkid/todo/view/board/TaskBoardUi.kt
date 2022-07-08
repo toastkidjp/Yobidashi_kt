@@ -148,7 +148,7 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActio
     val tasks = flow?.collectAsLazyPagingItems() ?: return
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(tasks) { task ->
+        items(tasks, { it.id }) { task ->
             task ?: return@items
             BoardItem(
                 task,
