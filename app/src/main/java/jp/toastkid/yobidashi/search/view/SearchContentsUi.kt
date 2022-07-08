@@ -302,7 +302,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                     modifier = Modifier.padding(start = 4.dp, end = 4.dp)
                 )
                 Text(
-                    text = currentUrl ?: "",
+                    text = currentUrl,
                     color = colorResource(id = R.color.link_blue),
                     fontSize = 14.sp,
                     maxLines = 3,
