@@ -44,7 +44,7 @@ import coil.compose.AsyncImage
 import jp.toastkid.barcode.generator.BarcodeGenerator
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.lib.clip.Clipboard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
