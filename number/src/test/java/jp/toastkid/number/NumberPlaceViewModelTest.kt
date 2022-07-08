@@ -11,6 +11,7 @@ package jp.toastkid.yobidashi.number
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
+import jp.toastkid.number.NumberPlaceViewModel
 import org.junit.Assert.assertFalse
 
 class NumberPlaceViewModelTest {
