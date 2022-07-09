@@ -330,7 +330,7 @@ private fun initializeHeaderViewModels(
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
 
     viewModelProvider.get(BrowserViewModel::class.java).also { viewModel ->
-        contentViewModel?.replaceAppBarContent {
+        contentViewModel.replaceAppBarContent {
             val preferenceApplier = PreferenceApplier(activity)
             val tint = Color(preferenceApplier.fontColor)
 
