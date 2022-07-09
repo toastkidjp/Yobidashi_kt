@@ -74,7 +74,7 @@ fun ConfirmDialog(
                         onClickOk()
                         visibleState.value = false
                     }
-                    .padding(4.dp)
+                    .padding(8.dp)
             )
         },
         dismissButton = {
@@ -85,7 +85,7 @@ fun ConfirmDialog(
                     .clickable {
                         visibleState.value = false
                     }
-                    .padding(4.dp)
+                    .padding(8.dp)
             )
         }
     )
