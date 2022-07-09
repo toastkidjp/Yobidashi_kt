@@ -181,7 +181,6 @@ fun EditorTabUi(path: String?) {
                 nestedScrollDispatcher
             )
             .padding(horizontal = 8.dp, vertical = 2.dp)
-            .padding(bottom = 4.dp)
     )
 
     val pageSearcherViewModel =
