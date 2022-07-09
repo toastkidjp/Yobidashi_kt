@@ -186,7 +186,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
         }
     }
 
-    val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+    val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
