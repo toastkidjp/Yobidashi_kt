@@ -57,6 +57,7 @@ fun SettingTopUi() {
         ScrollableTabRow(
             selectedTabIndex = selectedIndex.value,
             edgePadding = 8.dp,
+            backgroundColor = Color.Transparent,
             modifier = Modifier.fillMaxHeight()
         ) {
             pages.forEachIndexed { index, page ->
@@ -77,12 +78,16 @@ fun SettingTopUi() {
         }
     }
 
-    val viewModel = viewModel(ContentViewModel::class.java)
+    val viewModel = (activityContext as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, it)
+    }
     DisposableEffect(key1 = "refresh") {
         onDispose {
-            viewModel.refresh()
+            viewModel?.refresh()
         }
     }
+
+    viewModel?.clearOptionMenus()
 }
 
 

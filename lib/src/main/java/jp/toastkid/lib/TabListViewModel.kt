@@ -7,6 +7,8 @@
  */
 package jp.toastkid.lib
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,12 +28,12 @@ class TabListViewModel : ViewModel() {
         _saveEditorTab.postValue(nextFile)
     }
 
-    private val _tabCount = MutableLiveData<Int>()
+    private val _tabCount = mutableStateOf(0)
 
-    val tabCount: LiveData<Int> = _tabCount
+    val tabCount: State<Int> = _tabCount
 
     fun tabCount(count: Int) {
-        _tabCount.postValue(count)
+        _tabCount.value = count
     }
 
     private val _openNewTab = MutableLiveData<Event<Unit>>()

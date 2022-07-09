@@ -16,6 +16,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -63,6 +64,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -100,6 +102,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -226,6 +229,8 @@ internal fun Content() {
             Build.VERSION.SDK_INT
         ).invoke(preferenceApplier.color)
 
+        contentViewModel.setColorPair(colorPair)
+
         contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
         contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
     })
@@ -269,8 +274,8 @@ internal fun Content() {
     val offsetY = remember { mutableStateOf(menuFabPosition?.second ?: 0f) }
     val openFindInPageState = remember { mutableStateOf(false) }
 
-    val backgroundColor = Color(preferenceApplier.color)
-    val tint = Color(preferenceApplier.fontColor)
+    val backgroundColor = MaterialTheme.colors.primary
+    val tint = MaterialTheme.colors.onPrimary
 
     val bottomBarHeight = 72.dp
     val bottomBarHeightPx = with(LocalDensity.current) {
@@ -440,7 +445,7 @@ internal fun Content() {
                 backgroundColor = Color.Transparent,
                 bottomBar = {
                     BottomAppBar(
-                        backgroundColor = backgroundColor,
+                        backgroundColor = MaterialTheme.colors.primary,
                         elevation = 4.dp,
                         modifier = Modifier
                             .height(72.dp)
@@ -454,144 +459,23 @@ internal fun Content() {
                     ) {
                         Box(modifier = Modifier.weight(1f)) {
                             if (openFindInPageState.value) {
-                                val closeAction = {
-                                    pageSearcherViewModel.clearInput()
-                                    pageSearcherViewModel.hide()
-                                    openFindInPageState.value = false
-                                }
-
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        painterResource(id = R.drawable.ic_close),
-                                        contentDescription = stringResource(id = R.string.content_description_close_find_area),
-                                        tint = tint,
-                                        modifier = Modifier
-                                            .clickable(onClick = closeAction)
-                                            .padding(start = 16.dp)
-                                    )
-
-                                    val focusRequester = remember { FocusRequester() }
-
-                                    TextField(
-                                        value = pageSearcherInput.value,
-                                        onValueChange = { text ->
-                                            pageSearcherInput.value = text
-                                            pageSearcherViewModel.find(text)
-                                        },
-                                        label = {
-                                            Text(
-                                                stringResource(id = R.string.hint_find_in_page),
-                                                color = Color(preferenceApplier.fontColor)
-                                            )
-                                        },
-                                        singleLine = true,
-                                        textStyle = TextStyle(
-                                            color = Color(preferenceApplier.fontColor),
-                                            textAlign = TextAlign.Start,
-                                        ),
-                                        trailingIcon = {
-                                            Icon(
-                                                painterResource(R.drawable.ic_clear_form),
-                                                contentDescription = "clear text",
-                                                tint = Color(preferenceApplier.fontColor),
-                                                modifier = Modifier
-                                                    .clickable {
-                                                        pageSearcherInput.value = ""
-                                                        pageSearcherViewModel.clearInput()
-                                                    }
-                                            )
-                                        },
-                                        maxLines = 1,
-                                        keyboardActions = KeyboardActions {
-                                            pageSearcherViewModel.findDown(pageSearcherInput.value)
-                                        },
-                                        keyboardOptions = KeyboardOptions(
-                                            autoCorrect = true,
-                                            imeAction = ImeAction.Search
-                                        ),
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .padding(end = 4.dp)
-                                            .background(Color.Transparent)
-                                            .focusRequester(focusRequester)
-                                    )
-                                    Icon(
-                                        painterResource(id = R.drawable.ic_up),
-                                        contentDescription = stringResource(id = R.string.content_description_find_upward),
-                                        tint = tint,
-                                        modifier = Modifier
-                                            .clickable {
-                                                pageSearcherViewModel.findUp(
-                                                    pageSearcherInput.value
-                                                )
-                                            }
-                                            .padding(8.dp)
-                                    )
-                                    Icon(
-                                        painterResource(id = R.drawable.ic_down),
-                                        contentDescription = stringResource(id = R.string.content_description_find_downward),
-                                        tint = tint,
-                                        modifier = Modifier
-                                            .clickable {
-                                                pageSearcherViewModel.findDown(
-                                                    pageSearcherInput.value
-                                                )
-                                            }
-                                            .padding(8.dp)
-                                    )
-
-                                    BackHandler(openFindInPageState.value) {
-                                        closeAction()
-                                    }
-
-                                    LaunchedEffect(key1 = "find_in_page_first_launch", block = {
-                                        if (openFindInPageState.value) {
-                                            focusRequester.requestFocus()
-                                        }
-                                    })
-                                }
+                                FindInPage(
+                                    openFindInPageState,
+                                    tint,
+                                    pageSearcherInput
+                                )
                             } else {
                                 headerViewModel.appBarContent.value()
                             }
                         }
 
-                        val openOptionMenu = remember { mutableStateOf(false) }
-
-                        Box(modifier = Modifier
-                            .width(32.dp)
-                            .clickable { openOptionMenu.value = true }) {
-                            Icon(
-                                painterResource(id = R.drawable.ic_option_menu),
-                                contentDescription = stringResource(id = R.string.title_option_menu),
-                                tint = tint
-                            )
-
-                            val commonOptionMenuItems = listOf(
-                                OptionMenu(
-                                    titleId = R.string.title_tab_list,
-                                    action = { contentViewModel?.switchTabList() }),
-                                OptionMenu(
-                                    titleId = R.string.title_settings,
-                                    action = { navigate(navigationHostController, "setting/top") }),
-                                OptionMenu(titleId = R.string.exit, action = { activity.finish() })
-                            )
-                            val menus = contentViewModel?.optionMenus
-                            val optionMenuItems =
-                                menus?.union(commonOptionMenuItems)?.distinct()
-
-                            DropdownMenu(
-                                expanded = openOptionMenu.value,
-                                onDismissRequest = { openOptionMenu.value = false }) {
-                                optionMenuItems?.forEach {
-                                    DropdownMenuItem(onClick = {
-                                        openOptionMenu.value = false
-                                        it.action()
-                                    }) {
-                                        OptionMenuItem(it)
-                                    }
-                                }
-                            }
-                        }
+                        OverflowMenu(
+                            tint,
+                            contentViewModel.optionMenus,
+                            { contentViewModel.switchTabList() },
+                            { navigate(navigationHostController, "setting/top") },
+                            { activity.finish() }
+                        )
                     }
                 },
                 snackbarHost = {
@@ -659,8 +543,6 @@ internal fun Content() {
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    contentViewModel?.clearOptionMenus()
-
                     composable("empty")  {
 
                     }
@@ -809,102 +691,14 @@ internal fun Content() {
                                     modifier = Modifier
                                         .padding(4.dp)
                                         .clickable {
-                                            when (menu) {
-                                                Menu.TOP -> {
-                                                    contentViewModel.toTop()
-                                                }
-                                                Menu.BOTTOM -> {
-                                                    contentViewModel?.toBottom()
-                                                }
-                                                Menu.SHARE -> {
-                                                    contentViewModel?.share()
-                                                }
-                                                Menu.CODE_READER -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/barcode_reader"
-                                                    )
-                                                }
-                                                Menu.LOAN_CALCULATOR -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/loan"
-                                                    )
-                                                }
-                                                Menu.RSS_READER -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/rss/list"
-                                                    )
-                                                }
-                                                Menu.NUMBER_PLACE -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/number/place"
-                                                    )
-                                                }
-                                                Menu.AUDIO -> {
-                                                    mediaPermissionRequestLauncher.launch {
-                                                        if (it.not()) {
-                                                            contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                                            return@launch
-                                                        }
-
-                                                        contentViewModel?.setBottomSheetContent { MusicListUi() }
-                                                        coroutineScope?.launch {
-                                                            contentViewModel?.switchBottomSheet()
-                                                        }
-                                                    }
-                                                }
-                                                Menu.BOOKMARK -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "web/bookmark/list"
-                                                    )
-                                                }
-                                                Menu.VIEW_HISTORY -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "web/history/list"
-                                                    )
-                                                }
-                                                Menu.IMAGE_VIEWER -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/image/list"
-                                                    )
-                                                }
-                                                Menu.CALENDAR -> {
-                                                    contentViewModel?.openCalendar()
-                                                }
-                                                Menu.WEB_SEARCH -> {
-                                                    contentViewModel?.webSearch()
-                                                }
-                                                Menu.ABOUT_THIS_APP -> {
-                                                    navigate(navigationHostController, "about")
-                                                }
-                                                Menu.TODO_TASKS_BOARD -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/task/board"
-                                                    )
-                                                }
-                                                Menu.TODO_TASKS -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "tool/task/list"
-                                                    )
-                                                }
-                                                Menu.VIEW_ARCHIVE -> {
-                                                    navigate(
-                                                        navigationHostController,
-                                                        "web/archive/list"
-                                                    )
-                                                }
-                                                Menu.FIND_IN_PAGE -> {
-                                                    openFindInPageState.value = true
-                                                }
-                                            }
+                                            onClickMainMenuItem(
+                                                menu,
+                                                contentViewModel,
+                                                navigationHostController,
+                                                mediaPermissionRequestLauncher,
+                                                coroutineScope,
+                                                openFindInPageState
+                                            )
                                             openMenu.value = false
                                         }
                                 ) {
@@ -927,7 +721,9 @@ internal fun Content() {
                                             maxLines = 2,
                                             overflow = TextOverflow.Ellipsis,
                                             textAlign = TextAlign.Center,
-                                            modifier = Modifier.fillMaxWidth().padding(8.dp)
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp)
                                         )
                                     }
                                 }
@@ -963,6 +759,264 @@ internal fun Content() {
         lifecycle.addObserver(lifecycleObserver)
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+}
+
+@Composable
+private fun OverflowMenu(
+    tint: Color,
+    menus: List<OptionMenu>,
+    switchTabList: () -> Unit,
+    openSetting: () -> Unit,
+    finishApp: () -> Unit
+) {
+    val openOptionMenu = remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier
+        .width(32.dp)
+        .clickable { openOptionMenu.value = true }) {
+        Icon(
+            painterResource(id = R.drawable.ic_option_menu),
+            contentDescription = stringResource(id = R.string.title_option_menu),
+            tint = tint
+        )
+
+        val commonOptionMenuItems = listOf(
+            OptionMenu(
+                titleId = R.string.title_tab_list,
+                action = switchTabList),
+            OptionMenu(
+                titleId = R.string.title_settings,
+                action = openSetting),
+            OptionMenu(titleId = R.string.exit, action = finishApp)
+        )
+        val optionMenuItems =
+            menus?.union(commonOptionMenuItems)?.distinct()
+
+        DropdownMenu(
+            expanded = openOptionMenu.value,
+            onDismissRequest = { openOptionMenu.value = false }) {
+            optionMenuItems?.forEach {
+                DropdownMenuItem(onClick = {
+                    openOptionMenu.value = false
+                    it.action()
+                }) {
+                    OptionMenuItem(it)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun FindInPage(
+    openFindInPageState: MutableState<Boolean>,
+    tint: Color,
+    pageSearcherInput: MutableState<String>
+) {
+    val activity = LocalContext.current as? ViewModelStoreOwner ?: return
+    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
+    val closeAction = {
+        pageSearcherViewModel.clearInput()
+        pageSearcherViewModel.hide()
+        openFindInPageState.value = false
+    }
+
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            painterResource(id = R.drawable.ic_close),
+            contentDescription = stringResource(id = R.string.content_description_close_find_area),
+            tint = tint,
+            modifier = Modifier
+                .clickable(onClick = closeAction)
+                .padding(start = 16.dp)
+        )
+
+        val focusRequester = remember { FocusRequester() }
+
+        TextField(
+            value = pageSearcherInput.value,
+            onValueChange = { text ->
+                pageSearcherInput.value = text
+                pageSearcherViewModel.find(text)
+            },
+            label = {
+                Text(
+                    stringResource(id = R.string.hint_find_in_page),
+                    color = MaterialTheme.colors.onPrimary
+                )
+            },
+            singleLine = true,
+            textStyle = TextStyle(
+                color = MaterialTheme.colors.onPrimary,
+                textAlign = TextAlign.Start,
+            ),
+            trailingIcon = {
+                Icon(
+                    painterResource(R.drawable.ic_clear_form),
+                    contentDescription = "clear text",
+                    tint = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier
+                        .clickable {
+                            pageSearcherInput.value = ""
+                            pageSearcherViewModel.clearInput()
+                        }
+                )
+            },
+            maxLines = 1,
+            keyboardActions = KeyboardActions {
+                pageSearcherViewModel.findDown(pageSearcherInput.value)
+            },
+            keyboardOptions = KeyboardOptions(
+                autoCorrect = true,
+                imeAction = ImeAction.Search
+            ),
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 4.dp)
+                .background(Color.Transparent)
+                .focusRequester(focusRequester)
+        )
+        Icon(
+            painterResource(id = R.drawable.ic_up),
+            contentDescription = stringResource(id = R.string.content_description_find_upward),
+            tint = tint,
+            modifier = Modifier
+                .clickable {
+                    pageSearcherViewModel.findUp(
+                        pageSearcherInput.value
+                    )
+                }
+                .padding(8.dp)
+        )
+        Icon(
+            painterResource(id = R.drawable.ic_down),
+            contentDescription = stringResource(id = R.string.content_description_find_downward),
+            tint = tint,
+            modifier = Modifier
+                .clickable {
+                    pageSearcherViewModel.findDown(
+                        pageSearcherInput.value
+                    )
+                }
+                .padding(8.dp)
+        )
+
+        BackHandler(openFindInPageState.value) {
+            closeAction()
+        }
+
+        LaunchedEffect(key1 = "find_in_page_first_launch", block = {
+            if (openFindInPageState.value) {
+                focusRequester.requestFocus()
+            }
+        })
+    }
+}
+
+private fun onClickMainMenuItem(
+    menu: Menu,
+    contentViewModel: ContentViewModel,
+    navigationHostController: NavHostController,
+    mediaPermissionRequestLauncher: ManagedActivityResultLauncher<((Boolean) -> Unit)?, Pair<Boolean, ((Boolean) -> Unit)?>>,
+    coroutineScope: CoroutineScope,
+    openFindInPageState: MutableState<Boolean>
+) {
+    when (menu) {
+        Menu.TOP -> {
+            contentViewModel.toTop()
+        }
+        Menu.BOTTOM -> {
+            contentViewModel?.toBottom()
+        }
+        Menu.SHARE -> {
+            contentViewModel?.share()
+        }
+        Menu.CODE_READER -> {
+            navigate(
+                navigationHostController,
+                "tool/barcode_reader"
+            )
+        }
+        Menu.LOAN_CALCULATOR -> {
+            navigate(
+                navigationHostController,
+                "tool/loan"
+            )
+        }
+        Menu.RSS_READER -> {
+            navigate(
+                navigationHostController,
+                "tool/rss/list"
+            )
+        }
+        Menu.NUMBER_PLACE -> {
+            navigate(
+                navigationHostController,
+                "tool/number/place"
+            )
+        }
+        Menu.AUDIO -> {
+            mediaPermissionRequestLauncher.launch {
+                if (it.not()) {
+                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                    return@launch
+                }
+
+                contentViewModel?.setBottomSheetContent { MusicListUi() }
+                coroutineScope?.launch {
+                    contentViewModel?.switchBottomSheet()
+                }
+            }
+        }
+        Menu.BOOKMARK -> {
+            navigate(
+                navigationHostController,
+                "web/bookmark/list"
+            )
+        }
+        Menu.VIEW_HISTORY -> {
+            navigate(
+                navigationHostController,
+                "web/history/list"
+            )
+        }
+        Menu.IMAGE_VIEWER -> {
+            navigate(
+                navigationHostController,
+                "tool/image/list"
+            )
+        }
+        Menu.CALENDAR -> {
+            contentViewModel?.openCalendar()
+        }
+        Menu.WEB_SEARCH -> {
+            contentViewModel?.webSearch()
+        }
+        Menu.ABOUT_THIS_APP -> {
+            navigate(navigationHostController, "about")
+        }
+        Menu.TODO_TASKS_BOARD -> {
+            navigate(
+                navigationHostController,
+                "tool/task/board"
+            )
+        }
+        Menu.TODO_TASKS -> {
+            navigate(
+                navigationHostController,
+                "tool/task/list"
+            )
+        }
+        Menu.VIEW_ARCHIVE -> {
+            navigate(
+                navigationHostController,
+                "web/archive/list"
+            )
+        }
+        Menu.FIND_IN_PAGE -> {
+            openFindInPageState.value = true
         }
     }
 }
@@ -1102,27 +1156,30 @@ private fun showSnackbar(
  * Replace visibilities for current tab.
  */
 private fun replaceToCurrentTab(tabs: TabAdapter, navigationHostController: NavHostController) {
-    //tabReplacingUseCase.invoke(withAnimation)
-    when (val tab = tabs.currentTab()) {
+    val route = when (val tab = tabs.currentTab()) {
         is WebTab -> {
-            navigate(navigationHostController, "tab/web/current")
+            "tab/web/current"
         }
         is PdfTab -> {
-            navigate(navigationHostController, "tab/pdf/current")
+            "tab/pdf/current"
         }
         is ArticleListTab -> {
-            navigate(navigationHostController, "tab/article/list")
+            "tab/article/list"
         }
         is ArticleTab -> {
-            navigate(navigationHostController, "tab/article/content/${tab.title()}")
+            "tab/article/content/${tab.title()}"
         }
         is CalendarTab -> {
-            navigate(navigationHostController, "tab/calendar")
+            "tab/calendar"
         }
         is EditorTab -> {
-            navigate(navigationHostController, "tab/editor/current")
+            "tab/editor/current"
         }
-    }
+        else -> {
+            null
+        }
+    } ?: return
+    navigate(navigationHostController, route)
 }
 
 private fun openNewTab(

@@ -14,7 +14,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.theme.AppTheme
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
@@ -29,7 +31,13 @@ class MainActivity : ComponentActivity() {
         processShortcut(intent)
 
         setContent {
-            AppTheme(isSystemInDarkTheme() || PreferenceApplier(this).useDarkMode()) {
+            val preferenceApplier = PreferenceApplier(this)
+            val contentViewModel = viewModel(ContentViewModel::class.java, this)
+            contentViewModel.setColorPair(preferenceApplier.colorPair())
+            AppTheme(
+                contentViewModel.colorPair(),
+                isSystemInDarkTheme() || preferenceApplier.useDarkMode()
+            ) {
                 Content()
             }
         }

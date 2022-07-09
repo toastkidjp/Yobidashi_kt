@@ -18,31 +18,39 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 
 @Composable
 fun AppTheme(
+    colorState: State<ColorPair>,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    val colorPair = colorState.value
     val preferenceApplier = PreferenceApplier(LocalContext.current)
+
+    val primary = Color(colorPair.bgColor())
+    val onPrimary = Color(colorPair.fontColor())
+
     val colors =
         if (darkTheme)
             darkColors(
-                primary = Color(preferenceApplier.color),
+                primary = primary,
                 surface = Color(0xFF0F0F0F),
                 background = Color(0xFF0F0F0F),
-                onPrimary = Color(preferenceApplier.fontColor),
+                onPrimary = onPrimary,
                 onSurface = Color(0xFFF0F0F0),
                 onBackground = Color(0xFFF0F0F0)
             )
         else
             lightColors(
-                primary = Color(preferenceApplier.color),
-                onPrimary = Color(preferenceApplier.fontColor),
+                primary = primary,
+                onPrimary = onPrimary,
                 surface = Color(0xFFF0F0F0),
                 background = Color(0xFFF0F0F0),
                 onSurface = Color(0xFF000B00),

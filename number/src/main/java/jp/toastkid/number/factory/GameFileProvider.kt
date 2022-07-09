@@ -14,29 +14,39 @@ import java.io.File
 class GameFileProvider {
 
     operator fun invoke(filesDir: File, preferenceApplier: PreferenceApplier): File? {
-        if (preferenceApplier.lastNumberPlaceGamePath().isNullOrBlank()) {
-            val dir = File(filesDir, FOLDER_NAME)
-            if (dir.exists().not()) {
-                dir.mkdirs()
-            }
-
-            val file = File(dir, FIXED_FILE_NAME)
-
-            if (file.exists().not()) {
-                file.createNewFile()
-            }
-            preferenceApplier.setLastNumberPlaceGamePath(file.name)
-        }
+        makeFolderIfNeed(preferenceApplier, filesDir)
 
         val pathname = preferenceApplier.lastNumberPlaceGamePath() ?: return null
         return File(filesDir, "$FOLDER_NAME/$pathname")
+    }
+
+    private fun makeFolderIfNeed(
+        preferenceApplier: PreferenceApplier,
+        filesDir: File
+    ) {
+        val lastNumberPlaceGamePath = preferenceApplier.lastNumberPlaceGamePath()
+        if (lastNumberPlaceGamePath?.isNotEmpty() == true) {
+            return
+        }
+
+        val dir = File(filesDir, FOLDER_NAME)
+        if (dir.exists().not()) {
+            dir.mkdirs()
+        }
+
+        val file = File(dir, FIXED_FILE_NAME)
+
+        if (file.exists().not()) {
+            file.createNewFile()
+        }
+        preferenceApplier.setLastNumberPlaceGamePath(file.name)
     }
 
     companion object {
 
         private const val FOLDER_NAME = "number/place/games"
 
-        private val FIXED_FILE_NAME = "saved_game"
+        private const val FIXED_FILE_NAME = "saved_game"
 
     }
 }

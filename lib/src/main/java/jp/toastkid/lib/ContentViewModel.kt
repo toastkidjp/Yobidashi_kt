@@ -13,19 +13,30 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.lib.model.OptionMenu
+import jp.toastkid.lib.preference.ColorPair
 
 /**
  * @author toastkidjp
  */
 class ContentViewModel : ViewModel() {
+
+    private val colorPair = mutableStateOf(ColorPair(Color.White.toArgb(), Color.Black.toArgb()))
+
+    fun colorPair(): State<ColorPair> {
+        return colorPair
+    }
+
+    fun setColorPair(colorPair: ColorPair) {
+        this.colorPair.value = colorPair
+    }
 
     private val _snackbar = MutableLiveData<Event<SnackbarEvent>>()
 
@@ -180,9 +191,9 @@ class ContentViewModel : ViewModel() {
         _openCalendar.postValue(Event(Unit))
     }
 
-    private val _optionMenus = mutableStateListOf<OptionMenu>()
+    private val _optionMenus = mutableListOf<OptionMenu>()
 
-    val optionMenus: SnapshotStateList<OptionMenu> = _optionMenus
+    val optionMenus: List<OptionMenu> = _optionMenus
 
     fun optionMenus(vararg menus: OptionMenu) {
         _optionMenus.clear()
@@ -197,7 +208,7 @@ class ContentViewModel : ViewModel() {
 
     val fabScale = mutableStateOf(1f)
 
-    fun resetComponentVisibility() {
+    fun resetSubComponentVisibility() {
         bottomBarOffsetHeightPx.value = 0f
         fabScale.value = 1f
     }
