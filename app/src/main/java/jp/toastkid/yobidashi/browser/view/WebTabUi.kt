@@ -339,7 +339,7 @@ private fun initializeHeaderViewModels(
             val progress = viewModel.progress
             val enableBack = viewModel.enableBack
             val enableForward = viewModel.enableForward
-            val tabCountState = tabListViewModel?.tabCount
+            val tabCountState = tabListViewModel.tabCount
 
             Column(
                 modifier = Modifier
