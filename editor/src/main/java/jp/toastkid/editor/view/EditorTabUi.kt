@@ -161,6 +161,7 @@ fun EditorTabUi(path: String?) {
             editText.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
             editText.typeface = Typeface.MONOSPACE
             editText.hint = context.getString(R.string.hint_editor_input)
+            editText.setHintTextColor(preferenceApplier.editorFontColor())
 
             CursorColorSetter().invoke(
                 editText,
