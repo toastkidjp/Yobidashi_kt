@@ -10,7 +10,7 @@
 buildscript {
     final byte verMajor  = 2
     final byte verMiddle = 0
-    final byte verMinor  = 22
+    final byte verMinor  = 23
 
     if (verMiddle >= 100 || verMinor >= 10_000) {
         throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
