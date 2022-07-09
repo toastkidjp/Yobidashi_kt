@@ -644,7 +644,7 @@ internal fun Content() {
 
                     navigationHostController?.popBackStack()
                     if (route == "setting/top") {
-                        contentViewModel?.refresh()
+                        contentViewModel.refresh()
                     }
 
                     if (route?.startsWith("tab/") == true) {
