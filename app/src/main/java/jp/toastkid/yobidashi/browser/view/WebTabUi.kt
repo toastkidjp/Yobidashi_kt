@@ -332,11 +332,8 @@ private fun initializeHeaderViewModels(
     viewModelProvider.get(BrowserViewModel::class.java).also { viewModel ->
         contentViewModel.replaceAppBarContent {
             AppBarContent(
-                activity,
                 viewModel,
-                tabListViewModel,
                 browserModule,
-                contentViewModel,
                 resetReaderModeContent
             )
         }
@@ -346,11 +343,8 @@ private fun initializeHeaderViewModels(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(
-    activity: ComponentActivity,
     viewModel: BrowserViewModel,
-    tabListViewModel: TabListViewModel,
     browserModule: BrowserModule,
-    contentViewModel: ContentViewModel,
     resetReaderModeContent: (String) -> Unit
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
