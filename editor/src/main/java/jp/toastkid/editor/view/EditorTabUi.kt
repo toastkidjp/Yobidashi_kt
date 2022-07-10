@@ -70,7 +70,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.editor.CursorColorSetter
 import jp.toastkid.editor.EditTextFinder
@@ -215,11 +214,9 @@ fun EditorTabUi(path: String?) {
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
     val openInputFileNameDialog = remember { mutableStateOf(false) }
-    val observer = object : LifecycleEventObserver {
-        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-            if (event == Lifecycle.Event.ON_PAUSE) {
-                fileActionUseCase.save(openInputFileNameDialog)
-            }
+    val observer = LifecycleEventObserver { source, event ->
+        if (event == Lifecycle.Event.ON_PAUSE) {
+            fileActionUseCase.save(openInputFileNameDialog)
         }
     }
 
