@@ -394,11 +394,3 @@ private fun EditorMenuItem(
         )
     }
 }
-
-/**
- * Insert text to [EditText].
- * @param text insert text
- */
-fun insert(text: CharSequence?) {
-    //TODO editorInput.insert(binding.editorInput.selectionStart, text)
-}
