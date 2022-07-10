@@ -353,6 +353,11 @@ private fun AppBarContent(
     contentViewModel: ContentViewModel,
     resetReaderModeContent: (String) -> Unit
 ) {
+    val activity = LocalContext.current as? ComponentActivity ?: return
+
+    val tabListViewModel = viewModel(TabListViewModel::class.java, activity)
+    val contentViewModel = viewModel(ContentViewModel::class.java, activity)
+
     val preferenceApplier = PreferenceApplier(activity)
     val tint = Color(preferenceApplier.fontColor)
 
