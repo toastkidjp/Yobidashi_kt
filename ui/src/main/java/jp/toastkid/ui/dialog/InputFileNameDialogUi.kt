@@ -80,9 +80,11 @@ fun InputFileNameDialogUi(
         dismissButton = {
             Text(
                 text = stringResource(id = R.string.cancel),
-                modifier = Modifier.clickable {
-                    openDialog.value = false
-                }.padding(4.dp)
+                modifier = Modifier
+                    .clickable {
+                        openDialog.value = false
+                    }
+                    .padding(4.dp)
             )
         }
     )
