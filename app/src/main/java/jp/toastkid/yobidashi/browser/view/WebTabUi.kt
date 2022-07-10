@@ -331,189 +331,209 @@ private fun initializeHeaderViewModels(
 
     viewModelProvider.get(BrowserViewModel::class.java).also { viewModel ->
         contentViewModel.replaceAppBarContent {
-            val preferenceApplier = PreferenceApplier(activity)
-            val tint = Color(preferenceApplier.fontColor)
+            AppBarContent(
+                activity,
+                viewModel,
+                tabListViewModel,
+                browserModule,
+                contentViewModel,
+                resetReaderModeContent
+            )
+        }
+    }
+}
 
-            val headerTitle = viewModel.title
-            val headerUrl = viewModel.url
-            val progress = viewModel.progress
-            val enableBack = viewModel.enableBack
-            val enableForward = viewModel.enableForward
-            val tabCountState = tabListViewModel.tabCount
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun AppBarContent(
+    activity: ComponentActivity,
+    viewModel: BrowserViewModel,
+    tabListViewModel: TabListViewModel,
+    browserModule: BrowserModule,
+    contentViewModel: ContentViewModel,
+    resetReaderModeContent: (String) -> Unit
+) {
+    val preferenceApplier = PreferenceApplier(activity)
+    val tint = Color(preferenceApplier.fontColor)
 
-            Column(
+    val headerTitle = viewModel.title
+    val headerUrl = viewModel.url
+    val progress = viewModel.progress
+    val enableBack = viewModel.enableBack
+    val enableForward = viewModel.enableForward
+    val tabCountState = tabListViewModel.tabCount
+
+    Column(
+        modifier = Modifier
+            .height(76.dp)
+            .fillMaxWidth()
+    ) {
+        if (progress.value ?: 0 < 70) {
+            LinearProgressIndicator(
+                progress = (progress.value?.toFloat() ?: 100f) / 100f,
+                color = Color(preferenceApplier.fontColor),
                 modifier = Modifier
-                    .height(76.dp)
+                    .height(1.dp)
                     .fillMaxWidth()
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.horizontalScroll(rememberScrollState())
+        ) {
+            HeaderSubButton(
+                R.drawable.ic_back,
+                R.string.back,
+                tint,
+                enableBack.value
+            ) { browserModule.back() }
+            HeaderSubButton(
+                R.drawable.ic_forward,
+                R.string.title_menu_forward,
+                tint,
+                enableForward.value ?: false
+            ) { browserModule.forward() }
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(44.dp)
+                    .padding(8.dp)
+                    .combinedClickable(
+                        true,
+                        onClick = { contentViewModel?.switchTabList() },
+                        onLongClick = { tabListViewModel?.openNewTab() }
+                    )
             ) {
-                if (progress.value ?: 0 < 70) {
-                    LinearProgressIndicator(
-                        progress = (progress.value?.toFloat() ?: 100f) / 100f,
-                        color = Color(preferenceApplier.fontColor),
-                        modifier = Modifier
-                            .height(1.dp)
-                            .fillMaxWidth()
+                Image(
+                    painterResource(R.drawable.ic_tab),
+                    contentDescription = stringResource(id = R.string.tab_list),
+                    colorFilter = ColorFilter.tint(
+                        Color(preferenceApplier.fontColor),
+                        BlendMode.SrcIn
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                )
+                Text(
+                    text = "${tabCountState?.value ?: 0}",
+                    color = Color(preferenceApplier.fontColor),
+                    fontSize = 10.sp,
+                    modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
+                )
+            }
+            Box {
+                val open = remember { mutableStateOf(false) }
+                HeaderSubButton(
+                    R.drawable.ic_user_agent,
+                    R.string.title_user_agent,
+                    tint
+                ) { open.value = true }
+                UserAgentDropdown(open) {
+                    preferenceApplier.setUserAgent(it.name)
+                    browserModule.resetUserAgent(it.text())
+                    contentViewModel?.snackShort(
+                        activity.getString(
+                            R.string.format_result_user_agent,
+                            it.title()
+                        )
                     )
                 }
+            }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.horizontalScroll(rememberScrollState())
-                ) {
-                    HeaderSubButton(
-                        R.drawable.ic_back,
-                        R.string.back,
-                        tint,
-                        enableBack.value
-                    ) { browserModule.back() }
-                    HeaderSubButton(
-                        R.drawable.ic_forward,
-                        R.string.title_menu_forward,
-                        tint,
-                        enableForward.value ?: false
-                    ) { browserModule.forward() }
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .size(44.dp)
-                            .padding(8.dp)
-                            .combinedClickable(
-                                true,
-                                onClick = { contentViewModel?.switchTabList() },
-                                onLongClick = { tabListViewModel?.openNewTab() }
-                            )
-                    ) {
-                        Image(
-                            painterResource(R.drawable.ic_tab),
-                            contentDescription = stringResource(id = R.string.tab_list),
-                            colorFilter = ColorFilter.tint(
-                                Color(preferenceApplier.fontColor),
-                                BlendMode.SrcIn
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight()
-                        )
-                        Text(
-                            text = "${tabCountState?.value ?: 0}",
-                            color = Color(preferenceApplier.fontColor),
-                            fontSize = 10.sp,
-                            modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
-                        )
-                    }
-                    Box {
-                        val open = remember { mutableStateOf(false) }
-                        HeaderSubButton(
-                            R.drawable.ic_user_agent,
-                            R.string.title_user_agent,
-                            tint
-                        ) { open.value = true }
-                        UserAgentDropdown(open) {
-                            preferenceApplier.setUserAgent(it.name)
-                            browserModule.resetUserAgent(it.text())
-                            contentViewModel?.snackShort(
-                                activity.getString(
-                                    R.string.format_result_user_agent,
-                                    it.title()
-                                )
-                            )
-                        }
-                    }
+            val openPageInformation = remember { mutableStateOf(false) }
+            HeaderSubButton(
+                R.drawable.ic_info,
+                R.string.title_menu_page_information,
+                tint
+            ) {
+                openPageInformation.value = true
+            }
 
-                    val openPageInformation = remember { mutableStateOf(false) }
-                    HeaderSubButton(
-                        R.drawable.ic_info,
-                        R.string.title_menu_page_information,
-                        tint
-                    ) {
-                        openPageInformation.value = true
-                    }
-
-                    if (openPageInformation.value) {
-                        val pageInformation = browserModule.makeCurrentPageInformation()
-                        if (pageInformation.isEmpty.not()) {
-                            PageInformationDialog(openPageInformation, pageInformation)
-                        }
-                    }
-
-                    val browserViewModel = viewModel(BrowserViewModel::class.java, activity)
-                    HeaderSubButton(
-                        R.drawable.ic_home,
-                        R.string.title_load_home,
-                        tint
-                    ) {
-                        browserViewModel
-                            .open(preferenceApplier.homeUrl.toUri())
-                    }
-
-                    HeaderSubButton(
-                        R.drawable.ic_code,
-                        R.string.title_menu_html_source,
-                        tint
-                    ) {
-                        browserModule.invokeHtmlSourceExtraction {
-                            val replace = it.replace("\\u003C", "<")
-                            showReader(replace, contentViewModel, resetReaderModeContent)
-                        }
-                    }
+            if (openPageInformation.value) {
+                val pageInformation = browserModule.makeCurrentPageInformation()
+                if (pageInformation.isEmpty.not()) {
+                    PageInformationDialog(openPageInformation, pageInformation)
                 }
+            }
 
-                Box {
-                    AsyncImage(
-                        model = R.drawable.url_box_background,
-                        contentDescription = stringResource(id = R.string.search)
-                    )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .height(32.dp)
-                            .fillMaxWidth()
-                            .clickable {
-                                ViewModelProvider(activity)
-                                    .get(ContentViewModel::class.java)
-                                    .webSearch()
+            val browserViewModel = viewModel(BrowserViewModel::class.java, activity)
+            HeaderSubButton(
+                R.drawable.ic_home,
+                R.string.title_load_home,
+                tint
+            ) {
+                browserViewModel
+                    .open(preferenceApplier.homeUrl.toUri())
+            }
+
+            HeaderSubButton(
+                R.drawable.ic_code,
+                R.string.title_menu_html_source,
+                tint
+            ) {
+                browserModule.invokeHtmlSourceExtraction {
+                    val replace = it.replace("\\u003C", "<")
+                    showReader(replace, contentViewModel, resetReaderModeContent)
+                }
+            }
+        }
+
+        Box {
+            AsyncImage(
+                model = R.drawable.url_box_background,
+                contentDescription = stringResource(id = R.string.search)
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .height(32.dp)
+                    .fillMaxWidth()
+                    .clickable {
+                        ViewModelProvider(activity)
+                            .get(ContentViewModel::class.java)
+                            .webSearch()
+                    }
+                //url_box_background
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.ic_reader_mode),
+                    contentDescription = stringResource(id = R.string.title_menu_reader_mode),
+                    tint = tint,
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .clickable {
+                            browserModule.invokeContentExtraction {
+                                showReader(it, contentViewModel, resetReaderModeContent)
                             }
-                        //url_box_background
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.ic_reader_mode),
-                            contentDescription = stringResource(id = R.string.title_menu_reader_mode),
-                            tint = tint,
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .clickable {
-                                    browserModule.invokeContentExtraction {
-                                        showReader(it, contentViewModel, resetReaderModeContent)
-                                    }
-                                }
-                        )
+                        }
+                )
 
-                        BrowserTitle(
-                            progress,
-                            headerTitle,
-                            headerUrl,
-                            Modifier.weight(1f)
-                        )
+                BrowserTitle(
+                    progress,
+                    headerTitle,
+                    headerUrl,
+                    Modifier.weight(1f)
+                )
 
-                        val isNotLoading = 70 < progress.value ?: 100
-                        val reloadIconId =
-                            if (isNotLoading) R.drawable.ic_reload else R.drawable.ic_close
-                        Icon(
-                            painterResource(id = reloadIconId),
-                            contentDescription = stringResource(id = R.string.title_menu_reload),
-                            tint = tint,
-                            modifier = Modifier
-                                .clickable {
-                                    if (isNotLoading) {
-                                        browserModule.reload()
-                                    } else {
-                                        browserModule.stopLoading()
-                                        stopSwipeRefresherLoading()
-                                    }
-                                }
-                        )
-                    }
-                }
+                val isNotLoading = 70 < progress.value ?: 100
+                val reloadIconId =
+                    if (isNotLoading) R.drawable.ic_reload else R.drawable.ic_close
+                Icon(
+                    painterResource(id = reloadIconId),
+                    contentDescription = stringResource(id = R.string.title_menu_reload),
+                    tint = tint,
+                    modifier = Modifier
+                        .clickable {
+                            if (isNotLoading) {
+                                browserModule.reload()
+                            } else {
+                                browserModule.stopLoading()
+                                stopSwipeRefresherLoading()
+                            }
+                        }
+                )
             }
         }
     }
