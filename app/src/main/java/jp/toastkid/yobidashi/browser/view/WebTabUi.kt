@@ -326,7 +326,6 @@ private fun initializeHeaderViewModels(
     resetReaderModeContent: (String) -> Unit
 ) {
     val viewModelProvider = ViewModelProvider(activity)
-    val tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
 
     viewModelProvider.get(BrowserViewModel::class.java).also { viewModel ->
