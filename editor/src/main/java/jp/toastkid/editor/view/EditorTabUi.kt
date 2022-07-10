@@ -288,7 +288,7 @@ private fun AppBarContent(
                 .combinedClickable(
                     true,
                     onClick = { contentViewModel.switchTabList() },
-                    onLongClick = { tabListViewModel?.openNewTab() }
+                    onLongClick = { tabListViewModel.openNewTab() }
                 )
         ) {
             Image(
