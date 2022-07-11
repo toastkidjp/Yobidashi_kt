@@ -651,7 +651,7 @@ internal fun Content() {
                         tabs.closeTab(tabs.index())
 
                         if (tabs.isEmpty()) {
-                            contentViewModel?.switchTabList()
+                            contentViewModel.switchTabList()
                             openNewTab(preferenceApplier, tabs, navigationHostController)
                             return@BackHandler
                         }
