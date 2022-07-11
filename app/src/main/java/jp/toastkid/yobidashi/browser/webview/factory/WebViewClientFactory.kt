@@ -142,7 +142,6 @@ class WebViewClientFactory(
                     super.shouldInterceptRequest(view, request)
                 }
 
-        @Suppress("DEPRECATION")
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
             request?.url?.toString()?.let { url ->
@@ -179,10 +178,10 @@ class WebViewClientFactory(
                             true
                         }
                         else -> {
-                            super.shouldOverrideUrlLoading(view, url)
+                            super.shouldOverrideUrlLoading(view, request)
                         }
                     }
-                } ?: super.shouldOverrideUrlLoading(view, request?.url?.toString())
+                } ?: super.shouldOverrideUrlLoading(view, request)
 
         override fun onSafeBrowsingHit(
             view: WebView?,
