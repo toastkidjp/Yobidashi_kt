@@ -142,7 +142,6 @@ class WebViewClientFactory(
                     super.shouldInterceptRequest(view, request)
                 }
 
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
             request?.url?.toString()?.let { url ->
                     val context: Context? = view?.context
