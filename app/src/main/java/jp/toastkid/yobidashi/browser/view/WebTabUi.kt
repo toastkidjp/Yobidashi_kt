@@ -326,26 +326,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-private fun initializeHeaderViewModels(
-    activity: ComponentActivity,
-    browserModule: BrowserModule,
-    resetReaderModeContent: (String) -> Unit
-) {
-    val viewModelProvider = ViewModelProvider(activity)
-    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
-
-    viewModelProvider.get(BrowserViewModel::class.java).also { viewModel ->
-        contentViewModel.replaceAppBarContent {
-            AppBarContent(
-                viewModel,
-                browserModule,
-                resetReaderModeContent
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(
     viewModel: BrowserViewModel,
