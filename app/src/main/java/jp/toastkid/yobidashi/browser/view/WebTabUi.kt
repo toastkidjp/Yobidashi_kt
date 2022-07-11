@@ -192,7 +192,13 @@ fun WebTabUi(uri: Uri, tabId: String) {
     LaunchedEffect(key1 = lifecycleOwner, block = {
         focusManager.clearFocus(true)
 
-        initializeHeaderViewModels(activityContext, browserModule) { readerModeText.value = it }
+        contentViewModel.replaceAppBarContent {
+            AppBarContent(
+                browserViewModel,
+                browserModule,
+                { readerModeText.value = it }
+            )
+        }
 
         contentViewModel.toTop.observe(lifecycleOwner, {
             it.getContentIfNotHandled() ?: return@observe
