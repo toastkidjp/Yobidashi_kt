@@ -479,11 +479,13 @@ internal fun Content() {
                                         modifier = Modifier.weight(1f)
                                     )
                                     if (it.actionLabel != null) {
-                                        Text(it.actionLabel ?: "", modifier = Modifier
-                                            .clickable {
-                                                it.performAction()
-                                            }
-                                            .wrapContentWidth())
+                                        Text(
+                                            it.actionLabel ?: "",
+                                            modifier = Modifier
+                                                .clickable {
+                                                    it.performAction()
+                                                }
+                                                .wrapContentWidth())
                                     }
                                 }
                             }
