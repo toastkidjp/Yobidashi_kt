@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.browser.webview.factory
 
-import android.annotation.TargetApi
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
