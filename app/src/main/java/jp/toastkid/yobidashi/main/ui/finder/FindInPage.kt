@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.main.finder
+package jp.toastkid.yobidashi.main.ui.finder
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background

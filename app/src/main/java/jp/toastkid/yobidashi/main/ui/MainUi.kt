@@ -137,7 +137,7 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.calendar.view.CalendarUi
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
-import jp.toastkid.yobidashi.main.finder.FindInPage
+import jp.toastkid.yobidashi.main.ui.finder.FindInPage
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
