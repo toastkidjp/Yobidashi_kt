@@ -127,9 +127,7 @@ internal fun FindInPage(
             tint = tint,
             modifier = Modifier
                 .clickable {
-                    pageSearcherViewModel.findDown(
-                        pageSearcherInput.value
-                    )
+                    pageSearcherViewModel.findDown(pageSearcherInput.value)
                 }
                 .padding(8.dp)
         )
