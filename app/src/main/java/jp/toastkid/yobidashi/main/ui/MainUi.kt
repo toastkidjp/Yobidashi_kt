@@ -616,7 +616,7 @@ internal fun Content() {
                     }
                     if (bottomSheetState.isVisible) {
                         coroutineScope.launch {
-                            contentViewModel?.hideBottomSheet()
+                            contentViewModel.hideBottomSheet()
                         }
                         return@BackHandler
                     }
