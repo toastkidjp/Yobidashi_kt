@@ -13,7 +13,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -21,8 +20,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -90,24 +87,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import jp.toastkid.about.view.AboutThisAppUi
-import jp.toastkid.article_viewer.article.detail.view.ArticleContentUi
-import jp.toastkid.article_viewer.article.list.view.ArticleListUi
-import jp.toastkid.barcode.view.BarcodeReaderUi
-import jp.toastkid.editor.view.EditorTabUi
-import jp.toastkid.image.view.ImageListUi
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.SnackbarEvent
@@ -116,34 +103,18 @@ import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
-import jp.toastkid.loan.view.LoanCalculatorUi
 import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.media.music.view.MusicListUi
-import jp.toastkid.number.NumberPlaceUi
-import jp.toastkid.pdf.view.PdfViewerUi
-import jp.toastkid.rss.view.RssReaderListUi
 import jp.toastkid.search.SearchQueryExtractor
-import jp.toastkid.todo.view.board.TaskBoardUi
-import jp.toastkid.todo.view.list.TaskListUi
 import jp.toastkid.ui.menu.view.OptionMenuItem
-import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.archive.view.ArchiveListUi
-import jp.toastkid.yobidashi.browser.bookmark.view.BookmarkListUi
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
-import jp.toastkid.yobidashi.browser.history.view.ViewHistoryListUi
-import jp.toastkid.yobidashi.browser.view.WebTabUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.calendar.view.CalendarUi
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.ui.finder.FindInPage
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
 import jp.toastkid.yobidashi.menu.Menu
-import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
-import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
-import jp.toastkid.yobidashi.search.view.SearchInputUi
-import jp.toastkid.yobidashi.settings.view.screen.SettingTopUi
 import jp.toastkid.yobidashi.tab.History
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
@@ -525,89 +496,7 @@ internal fun Content() {
                     .fillMaxSize()
                     .nestedScroll(nestedScrollConnection)
             ) {
-                AnimatedNavHost(
-                    navController = navigationHostController,
-                    startDestination = "empty",
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    composable("empty")  {
-
-                    }
-                    tabComposable("tab/web/current") {
-                        val currentTab = tabs.currentTab() as? WebTab ?: return@tabComposable
-                        WebTabUi(currentTab.latest.url().toUri(), currentTab.id())
-                    }
-                    tabComposable("tab/pdf/current") {
-                        val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
-                        PdfViewerUi(currentTab.getUrl().toUri())
-                    }
-                    tabComposable("tab/article/list") {
-                        ArticleListUi()
-                    }
-                    tabComposable("tab/article/content/{title}") {
-                        val title = it?.getString("title") ?: return@tabComposable
-                        ArticleContentUi(title)
-                    }
-                    tabComposable("tab/editor/current") {
-                        val currentTab = tabs.currentTab() as? EditorTab ?: return@tabComposable
-                        EditorTabUi(currentTab.path)
-                    }
-                    composable("web/bookmark/list") {
-                        BookmarkListUi()
-                    }
-                    composable("web/history/list") {
-                        ViewHistoryListUi()
-                    }
-                    composable("web/archive/list") {
-                        ArchiveListUi()
-                    }
-                    composable("tool/barcode_reader") {
-                        BarcodeReaderUi()
-                    }
-                    composable("tool/image/list") {
-                        ImageListUi()
-                    }
-                    composable("tool/rss/list") {
-                        RssReaderListUi()
-                    }
-                    composable("tool/number/place") {
-                        NumberPlaceUi()
-                    }
-                    composable("tool/task/list") {
-                        TaskListUi()
-                    }
-                    composable("tool/task/board") {
-                        TaskBoardUi()
-                    }
-                    composable("tool/loan") {
-                        LoanCalculatorUi()
-                    }
-                    composable("tab/calendar") {
-                        CalendarUi()
-                    }
-                    composable("setting/top") {
-                        SettingTopUi()
-                    }
-                    composable("search/top") {
-                        SearchInputUi()
-                    }
-                    composable("search/with/?query={query}&title={title}&url={url}") {
-                        val query = it.arguments?.getString("query")
-                        val title = Uri.decode(it.arguments?.getString("title"))
-                        val url = Uri.decode(it.arguments?.getString("url"))
-                        SearchInputUi(query, title, url)
-                    }
-                    composable("search/history/list") {
-                        SearchHistoryListUi()
-                    }
-                    composable("search/favorite/list") {
-                        FavoriteSearchListUi()
-                    }
-                    composable("about") {
-                        AboutThisAppUi(BuildConfig.VERSION_NAME)
-                    }
-                }
+                NavigationalContent(navigationHostController, tabs)
 
                 BackHandler(true) {
                     if (openMenu.value) {
@@ -911,21 +800,6 @@ private fun onClickMainMenuItem(
         Menu.FIND_IN_PAGE -> {
             openFindInPageState.value = true
         }
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-private fun NavGraphBuilder.tabComposable(route: String, content: @Composable (Bundle?) -> Unit) {
-    composable(
-        route,
-        enterTransition = {
-            slideInVertically(initialOffsetY = { it })
-        },
-        exitTransition = {
-            slideOutVertically(targetOffsetY = { it })
-        }
-    ) {
-        content(it.arguments)
     }
 }
 
