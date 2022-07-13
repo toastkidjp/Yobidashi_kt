@@ -466,7 +466,7 @@ internal fun Content() {
                         }
                     }
 
-                    navigationHostController?.popBackStack()
+                    navigationHostController.popBackStack()
                     if (route == "setting/top") {
                         contentViewModel.refresh()
                     }
