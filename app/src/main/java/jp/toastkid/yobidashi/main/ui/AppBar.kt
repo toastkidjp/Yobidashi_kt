@@ -110,7 +110,7 @@ private fun OverflowMenu(
             OptionMenu(titleId = R.string.exit, action = finishApp)
         )
         val optionMenuItems =
-            menus?.union(commonOptionMenuItems)?.distinct()
+            menus.union(commonOptionMenuItems).distinct()
 
         DropdownMenu(
             expanded = openOptionMenu.value,
