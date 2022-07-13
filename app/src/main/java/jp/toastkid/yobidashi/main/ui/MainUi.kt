@@ -15,7 +15,6 @@ import android.net.Uri
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,17 +23,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -46,13 +40,11 @@ import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -76,10 +68,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
@@ -95,8 +84,6 @@ import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
-import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
-import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
@@ -104,7 +91,6 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
-import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.tab.History
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
@@ -251,11 +237,6 @@ internal fun Content() {
             }
         }
     }
-
-    val mediaPermissionRequestLauncher =
-        rememberLauncherForActivityResult(ReadAudioPermissionRequestContract()) {
-            it.second?.invoke(it.first)
-        }
 
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -519,68 +500,11 @@ internal fun Content() {
                 })
 
                 if (openMenu.value) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        val menuCount = Menu.values().size
-                        val tooBigCount = menuCount * 10
-                        LazyRow(
-                            state = rememberLazyListState(tooBigCount / 2),
-                            modifier = Modifier
-                                .wrapContentHeight()
-                                .fillMaxWidth()
-                        ) {
-                            items(tooBigCount) { longIndex ->
-                                val menu = Menu.values().get(longIndex % menuCount)
-                                Surface(
-                                    color = backgroundColor,
-                                    elevation = 4.dp,
-                                    modifier = Modifier
-                                        .padding(4.dp)
-                                        .clickable {
-                                            onClickMainMenuItem(
-                                                menu,
-                                                contentViewModel,
-                                                navigationHostController,
-                                                mediaPermissionRequestLauncher,
-                                                coroutineScope,
-                                                openFindInPageState
-                                            )
-                                            openMenu.value = false
-                                        }
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        modifier = Modifier
-                                            .size(76.dp)
-                                            .padding(4.dp)
-                                    ) {
-                                        Icon(
-                                            painterResource(id = menu.iconId),
-                                            contentDescription = stringResource(id = menu.titleId),
-                                            tint = tint,
-                                            modifier = Modifier.size(28.dp)
-                                        )
-                                        Text(
-                                            stringResource(id = menu.titleId),
-                                            color = tint,
-                                            fontSize = 12.sp,
-                                            maxLines = 2,
-                                            overflow = TextOverflow.Ellipsis,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(8.dp)
-                                        )
-                                    }
-                                }
-                                BackHandler(openMenu.value) {
-                                    openMenu.value = false
-                                }
-                            }
-                        }
-                    }
+                    MainMenu(
+                        openFindInPageState,
+                        { navigate(navigationHostController, it) },
+                        { openMenu.value = false }
+                    )
                 }
 
                 if (contentViewModel.useScreenFilter.value) {
@@ -607,112 +531,6 @@ internal fun Content() {
         lifecycle.addObserver(lifecycleObserver)
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
-        }
-    }
-}
-
-private fun onClickMainMenuItem(
-    menu: Menu,
-    contentViewModel: ContentViewModel,
-    navigationHostController: NavHostController,
-    mediaPermissionRequestLauncher: ManagedActivityResultLauncher<((Boolean) -> Unit)?, Pair<Boolean, ((Boolean) -> Unit)?>>,
-    coroutineScope: CoroutineScope,
-    openFindInPageState: MutableState<Boolean>
-) {
-    when (menu) {
-        Menu.TOP -> {
-            contentViewModel.toTop()
-        }
-        Menu.BOTTOM -> {
-            contentViewModel?.toBottom()
-        }
-        Menu.SHARE -> {
-            contentViewModel?.share()
-        }
-        Menu.CODE_READER -> {
-            navigate(
-                navigationHostController,
-                "tool/barcode_reader"
-            )
-        }
-        Menu.LOAN_CALCULATOR -> {
-            navigate(
-                navigationHostController,
-                "tool/loan"
-            )
-        }
-        Menu.RSS_READER -> {
-            navigate(
-                navigationHostController,
-                "tool/rss/list"
-            )
-        }
-        Menu.NUMBER_PLACE -> {
-            navigate(
-                navigationHostController,
-                "tool/number/place"
-            )
-        }
-        Menu.AUDIO -> {
-            mediaPermissionRequestLauncher.launch {
-                if (it.not()) {
-                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                    return@launch
-                }
-
-                contentViewModel?.setBottomSheetContent { MusicListUi() }
-                coroutineScope?.launch {
-                    contentViewModel?.switchBottomSheet()
-                }
-            }
-        }
-        Menu.BOOKMARK -> {
-            navigate(
-                navigationHostController,
-                "web/bookmark/list"
-            )
-        }
-        Menu.VIEW_HISTORY -> {
-            navigate(
-                navigationHostController,
-                "web/history/list"
-            )
-        }
-        Menu.IMAGE_VIEWER -> {
-            navigate(
-                navigationHostController,
-                "tool/image/list"
-            )
-        }
-        Menu.CALENDAR -> {
-            contentViewModel?.openCalendar()
-        }
-        Menu.WEB_SEARCH -> {
-            contentViewModel?.webSearch()
-        }
-        Menu.ABOUT_THIS_APP -> {
-            navigate(navigationHostController, "about")
-        }
-        Menu.TODO_TASKS_BOARD -> {
-            navigate(
-                navigationHostController,
-                "tool/task/board"
-            )
-        }
-        Menu.TODO_TASKS -> {
-            navigate(
-                navigationHostController,
-                "tool/task/list"
-            )
-        }
-        Menu.VIEW_ARCHIVE -> {
-            navigate(
-                navigationHostController,
-                "web/archive/list"
-            )
-        }
-        Menu.FIND_IN_PAGE -> {
-            openFindInPageState.value = true
         }
     }
 }
