@@ -134,7 +134,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
             val url = it.second ?: return@rememberLauncherForActivityResult
             DownloadAction(activityContext).invoke(url)
         }
-    browserViewModel.download?.observe(lifecycleOwner, Observer {
+    browserViewModel.download.observe(lifecycleOwner, Observer {
         val url = it?.getContentIfNotHandled() ?: return@Observer
         downloadPermissionRequestLauncher.launch(url)
     })
