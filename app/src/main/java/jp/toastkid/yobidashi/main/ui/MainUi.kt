@@ -584,7 +584,7 @@ private fun initializeContentViewModel(
         }
     })
 
-    contentViewModel?.newArticle?.observe(activity, Observer {
+    contentViewModel.newArticle.observe(activity, Observer {
         val titleAndOnBackground = it?.getContentIfNotHandled() ?: return@Observer
 
         val title = titleAndOnBackground.first
