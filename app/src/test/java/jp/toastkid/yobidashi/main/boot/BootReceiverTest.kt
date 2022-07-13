@@ -6,11 +6,9 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -29,9 +27,6 @@ class BootReceiverTest {
 
         every { context.getSharedPreferences(any(), any()) }.answers { mockk() }
 
-        mockkObject(NotificationWidget)
-        every { NotificationWidget.show(any()) }.returns(Unit)
-
         mockkConstructor(PreferenceApplier::class)
     }
 
@@ -47,7 +42,6 @@ class BootReceiverTest {
         BootReceiver().onReceive(context, mockk())
 
         verify(exactly = 1) { anyConstructed<PreferenceApplier>().useNotificationWidget() }
-        verify(exactly = 1) { NotificationWidget.show(any()) }
     }
 
     @Test
@@ -57,7 +51,6 @@ class BootReceiverTest {
         BootReceiver().onReceive(context, mockk())
 
         verify(exactly = 1) { anyConstructed<PreferenceApplier>().useNotificationWidget() }
-        verify(exactly = 0) { NotificationWidget.show(any()) }
     }
 
 }

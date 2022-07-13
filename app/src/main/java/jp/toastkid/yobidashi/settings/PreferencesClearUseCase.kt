@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.appwidget.search.Updater
 
 /**
  * @author toastkidjp
@@ -25,7 +24,6 @@ class PreferencesClearUseCase(
 
     operator fun invoke() {
         PreferenceApplier(context).clear()
-        Updater().update(context)
         contentViewModel?.snackShort(R.string.done_clear)
     }
 

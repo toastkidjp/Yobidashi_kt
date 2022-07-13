@@ -95,6 +95,7 @@ fun ArchiveListUi() {
                 onClickDelete = {
                     try {
                         archiveFile.delete()
+                        items.remove(archiveFile)
                     } catch (e: IOException) {
                         Timber.e(e)
                     }
@@ -125,7 +126,7 @@ fun ArchiveListUi() {
                                 .padding(start = 8.dp, end = 8.dp)
                         ) {
                             Text(
-                                text = archiveFile.name, maxLines = 1, fontSize = 16.sp,
+                                text = archiveFile.nameWithoutExtension, maxLines = 1, fontSize = 16.sp,
                                 overflow = TextOverflow.Ellipsis
                             )
 

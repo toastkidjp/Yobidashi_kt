@@ -124,7 +124,6 @@ import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.loan.view.LoanCalculatorUi
 import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
@@ -220,7 +219,6 @@ internal fun Content() {
     })
     contentViewModel.refresh.observe(activity, {
         val colorPair = preferenceApplier.colorPair()
-        WindowOptionColorApplier()(activity.window, colorPair)
 
         RecentAppColoringUseCase(
             activity::getString,
@@ -235,7 +233,7 @@ internal fun Content() {
         contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
     })
 
-    val activityResultLauncher: ActivityResultLauncher<Intent>? =
+    val activityResultLauncher: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode != Activity.RESULT_OK) {
                 return@rememberLauncherForActivityResult

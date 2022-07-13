@@ -7,5 +7,6 @@
   -->
 
 <resources>
-    <string name="menu_other_board">�ʂ̖��</string>
+    <string name="menu_other_board">別の問題</string>
+    <string name="menu_set_correct_answer">Set correct answer</string>
 </resources>

@@ -30,6 +30,8 @@ class MainActivity : ComponentActivity() {
 
         processShortcut(intent)
 
+        actionBar?.hide()
+
         setContent {
             val preferenceApplier = PreferenceApplier(this)
             val contentViewModel = viewModel(ContentViewModel::class.java, this)

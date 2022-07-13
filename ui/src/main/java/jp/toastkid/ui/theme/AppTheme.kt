@@ -8,6 +8,7 @@
 
 package jp.toastkid.ui.theme
 
+import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.WindowOptionColorApplier
 
 @Composable
 fun AppTheme(
@@ -33,6 +35,10 @@ fun AppTheme(
 ) {
     val colorPair = colorState.value
     val preferenceApplier = PreferenceApplier(LocalContext.current)
+
+    (LocalContext.current as? Activity)?.window?.let {
+        WindowOptionColorApplier()(it, colorPair)
+    }
 
     val primary = Color(colorPair.bgColor())
     val onPrimary = Color(colorPair.fontColor())
