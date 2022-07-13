@@ -8,9 +8,11 @@
 
 package jp.toastkid.yobidashi.main.ui
 
+import android.Manifest
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,14 +41,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.media.music.popup.permission.ReadAudioPermissionRequestContract
 import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.menu.Menu
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun MainMenu(
+fun MainMenu(
     openFindInPageState: MutableState<Boolean>,
     navigate: (String) -> Unit,
     hideMenu: () -> Unit
@@ -57,8 +58,17 @@ internal fun MainMenu(
     val coroutineScope = rememberCoroutineScope()
 
     val mediaPermissionRequestLauncher =
-        rememberLauncherForActivityResult(ReadAudioPermissionRequestContract()) {
-            it.second?.invoke(it.first)
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+            println("tomato result $it")
+            if (it.not()) {
+                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                return@rememberLauncherForActivityResult
+            }
+
+            contentViewModel?.setBottomSheetContent { MusicListUi() }
+            coroutineScope?.launch {
+                contentViewModel?.switchBottomSheet()
+            }
         }
 
     Box(
@@ -85,17 +95,7 @@ internal fun MainMenu(
                                 menu,
                                 contentViewModel,
                                 {
-                                    mediaPermissionRequestLauncher.launch {
-                                        if (it.not()) {
-                                            contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                            return@launch
-                                        }
-
-                                        contentViewModel?.setBottomSheetContent { MusicListUi() }
-                                        coroutineScope?.launch {
-                                            contentViewModel?.switchBottomSheet()
-                                        }
-                                    }
+                                    mediaPermissionRequestLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                                 },
                                 navigate,
                                 openFindInPageState
