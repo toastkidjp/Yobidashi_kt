@@ -115,7 +115,7 @@ private fun OverflowMenu(
         DropdownMenu(
             expanded = openOptionMenu.value,
             onDismissRequest = { openOptionMenu.value = false }) {
-            optionMenuItems?.forEach {
+            optionMenuItems.forEach {
                 DropdownMenuItem(onClick = {
                     openOptionMenu.value = false
                     it.action()
