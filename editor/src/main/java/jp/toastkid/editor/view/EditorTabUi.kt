@@ -278,7 +278,7 @@ private fun AppBarContent(
 
         EditorMenuItem(R.string.save, R.drawable.ic_save) { fileActionUseCase.save(openInputFileNameDialog) }
 
-        EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog?.value = true }
+        EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog.value = true }
 
         Box(
             contentAlignment = Alignment.Center,
