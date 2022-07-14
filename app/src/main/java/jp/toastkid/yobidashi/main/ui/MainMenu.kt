@@ -128,7 +128,7 @@ private fun onClickMainMenuItem(
             contentViewModel.toBottom()
         }
         Menu.SHARE -> {
-            contentViewModel?.share()
+            contentViewModel.share()
         }
         Menu.CODE_READER -> {
             navigate(
