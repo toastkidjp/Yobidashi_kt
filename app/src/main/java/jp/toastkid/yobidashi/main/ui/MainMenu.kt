@@ -26,7 +26,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -49,8 +48,6 @@ fun MainMenu(
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
-
-    rememberCoroutineScope()
 
     Box(
         contentAlignment = Alignment.Center,
