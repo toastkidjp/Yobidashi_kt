@@ -84,6 +84,7 @@ import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
@@ -337,6 +338,19 @@ internal fun Content() {
             })
     }
 
+    val mediaPermissionRequestLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it.not()) {
+                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                return@rememberLauncherForActivityResult
+            }
+
+            contentViewModel?.setBottomSheetContent { MusicListUi() }
+            coroutineScope?.launch {
+                contentViewModel?.switchBottomSheet()
+            }
+        }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -503,6 +517,9 @@ internal fun Content() {
                     MainMenu(
                         openFindInPageState,
                         { navigate(navigationHostController, it) },
+                        {
+                            mediaPermissionRequestLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        },
                         { openMenu.value = false }
                     )
                 }
@@ -566,7 +583,7 @@ private fun initializeContentViewModel(
         val messageId = it?.getContentIfNotHandled() ?: return@Observer
         showSnackbar(snackbarHostState, SnackbarEvent(activity.getString(messageId)))
     })
-    contentViewModel?.webSearch?.observe(activity, {
+    contentViewModel.webSearch.observe(activity, {
         it?.getContentIfNotHandled() ?: return@observe
         when (navigationHostController?.currentDestination?.route) {
             "tab/web/current" -> {
