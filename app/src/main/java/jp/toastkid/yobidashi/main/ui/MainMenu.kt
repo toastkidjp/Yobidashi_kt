@@ -125,7 +125,7 @@ private fun onClickMainMenuItem(
             contentViewModel.toTop()
         }
         Menu.BOTTOM -> {
-            contentViewModel?.toBottom()
+            contentViewModel.toBottom()
         }
         Menu.SHARE -> {
             contentViewModel?.share()
