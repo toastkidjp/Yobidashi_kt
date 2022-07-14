@@ -50,7 +50,7 @@ fun MainMenu(
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
-    val coroutineScope = rememberCoroutineScope()
+    rememberCoroutineScope()
 
     Box(
         contentAlignment = Alignment.Center,
