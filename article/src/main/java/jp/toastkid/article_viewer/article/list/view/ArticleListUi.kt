@@ -202,7 +202,12 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                         //inputChannel.send(it)
                     }
                 },
-                label = { stringResource(id = R.string.hint_search_articles) },
+                label = {
+                    Text(
+                        stringResource(id = R.string.hint_search_articles),
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                },
                 singleLine = true,
                 keyboardActions = KeyboardActions{
                     viewModel?.search(searchInput)
