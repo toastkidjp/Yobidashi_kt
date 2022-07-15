@@ -322,6 +322,7 @@ internal fun MusicList(
                         AsyncImage(
                             R.drawable.ic_lyrics,
                             contentDescription = "TODO",
+                            colorFilter = ColorFilter.tint(Color(iconColor)),
                             modifier = Modifier
                                 .width(36.dp)
                                 .fillMaxHeight()
