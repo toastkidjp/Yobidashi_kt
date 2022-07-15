@@ -150,6 +150,7 @@ fun MusicListUi() {
         {
             browserViewModel.preview("https://www.google.com/search?q=$it Lyrics".toUri())
         },
+        { stop(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         {
             val mediaUri = mediaPlayerPopupViewModel.musics.random()?.description?.mediaUri
@@ -172,6 +173,7 @@ fun MusicListUi() {
 internal fun MusicList(
     onClickItem: (MediaBrowserCompat.MediaItem) -> Unit,
     onClickLyrics: (String) -> Unit,
+    stop: () -> Unit,
     switchState: () -> Unit,
     shuffle: () -> Unit
 ) {
@@ -209,6 +211,7 @@ internal fun MusicList(
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
+                    .clickable { stop() }
             )
             Icon(
                 painterResource(if (viewModel?.playing == true) R.drawable.ic_pause else R.drawable.ic_play_media),
@@ -348,6 +351,17 @@ fun switchState(
         PlaybackStateCompat.STATE_PAUSED -> play(mediaController, mediaPlayerPopupViewModel)
         else -> Unit
     }
+}
+
+private fun stop(
+    mediaController: MediaControllerCompat,
+    mediaPlayerPopupViewModel: MediaPlayerPopupViewModel
+) {
+    mediaController.metadata ?: return
+
+    mediaController.transportControls.stop()
+
+    mediaPlayerPopupViewModel.playing = false
 }
 
 private fun play(
