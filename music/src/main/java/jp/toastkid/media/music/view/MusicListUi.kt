@@ -30,6 +30,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -201,10 +202,10 @@ internal fun MusicList(
                 .height(52.dp)
                 .background(MaterialTheme.colors.primary)
         ) {
-            AsyncImage(
-                R.drawable.ic_stop,
+            Icon(
+                painterResource(id = R.drawable.ic_stop),
                 contentDescription = stringResource(id = R.string.action_stop),
-                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
+                tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
