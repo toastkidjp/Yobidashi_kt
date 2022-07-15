@@ -14,7 +14,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -453,54 +452,46 @@ internal fun Content() {
             ) {
                 NavigationalContent(navigationHostController, tabs)
 
-                BackHandler(true) {
-                    if (openMenu.value) {
-                        openMenu.value = false
-                        return@BackHandler
-                    }
-                    if (bottomSheetState.isVisible) {
-                        coroutineScope.launch {
-                            contentViewModel.hideBottomSheet()
+                MainBackHandler(
+                    {
+                        if (openMenu.value) {
+                            openMenu.value = false
+                            return@MainBackHandler true
+                        } else {
+                            return@MainBackHandler false
                         }
-                        return@BackHandler
-                    }
-                    if (openFindInPageState.value) {
-                        openFindInPageState.value = false
-                        return@BackHandler
-                    }
-
-                    val route =
+                    },
+                    {
+                        if (bottomSheetState.isVisible) {
+                            coroutineScope.launch {
+                                contentViewModel.hideBottomSheet()
+                            }
+                            return@MainBackHandler true
+                        } else {
+                            return@MainBackHandler false
+                        }
+                    },
+                    {
+                        if (openFindInPageState.value) {
+                            openFindInPageState.value = false
+                            return@MainBackHandler true
+                        } else {
+                            return@MainBackHandler false
+                        }
+                    },
+                    {
                         navigationHostController.currentBackStackEntry?.destination?.route
-
-                    if (route?.startsWith("tab/web") == true) {
-                        val latest = GlobalWebViewPool.getLatest()
-                        if (latest?.canGoBack() == true) {
-                            latest.goBack()
-                            return@BackHandler
-                        }
-                    }
-
-                    navigationHostController.popBackStack()
-                    if (route == "setting/top") {
-                        contentViewModel.refresh()
-                    }
-
-                    if (route?.startsWith("tab/") == true) {
+                    },
+                    {
+                        navigationHostController.popBackStack()
+                    },
+                    {
                         tabs.closeTab(tabs.index())
-
-                        if (tabs.isEmpty()) {
-                            contentViewModel.switchTabList()
-                            openNewTab(preferenceApplier, tabs, navigationHostController)
-                            return@BackHandler
-                        }
-                        replaceToCurrentTab(tabs, navigationHostController)
-                        return@BackHandler
+                    },
+                    {
+                        tabs.isEmpty()
                     }
-
-                    if (route == "empty" || route == null) {
-                        activity.finish()
-                    }
-                }
+                )
 
                 LaunchedEffect(key1 = "first_launch", block = {
                     if (tabs.isEmpty()) {
