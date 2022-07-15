@@ -219,10 +219,10 @@ internal fun MusicList(
                     .fillMaxHeight()
                     .clickable { switchState() }
             )
-            AsyncImage(
-                R.drawable.ic_shuffle,
+            Icon(
+                painterResource(R.drawable.ic_shuffle),
                 contentDescription = stringResource(id = R.string.action_shuffle),
-                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
+                tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
