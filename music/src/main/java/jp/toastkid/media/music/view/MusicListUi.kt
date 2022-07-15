@@ -210,10 +210,10 @@ internal fun MusicList(
                     .width(44.dp)
                     .fillMaxHeight()
             )
-            AsyncImage(
-                if (viewModel?.playing == true) R.drawable.ic_pause else R.drawable.ic_play_media,
+            Icon(
+                painterResource(if (viewModel?.playing == true) R.drawable.ic_pause else R.drawable.ic_play_media),
                 contentDescription = stringResource(id = R.string.action_pause),
-                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
+                tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
