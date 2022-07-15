@@ -320,10 +320,10 @@ internal fun MusicList(
                                 overflow = TextOverflow.Ellipsis
                             )
                         }
-                        AsyncImage(
-                            R.drawable.ic_lyrics,
+                        Icon(
+                            painterResource(id = R.drawable.ic_lyrics),
                             contentDescription = "TODO",
-                            colorFilter = ColorFilter.tint(Color(iconColor)),
+                            tint = Color(iconColor),
                             modifier = Modifier
                                 .width(36.dp)
                                 .fillMaxHeight()
