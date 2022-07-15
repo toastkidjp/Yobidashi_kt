@@ -42,9 +42,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -267,10 +265,10 @@ internal fun MusicList(
                 }
             }
 
-            AsyncImage(
-                R.drawable.ic_close,
+            Icon(
+                painterResource(id = R.drawable.ic_close),
                 contentDescription = stringResource(id = R.string.close),
-                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
+                tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
