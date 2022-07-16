@@ -23,10 +23,5 @@
     <dimen name="close_icon_size">32dp</dimen>
     <dimen name="tab_list_item_width">120dp</dimen>
     <dimen name="tab_list_item_height">160dp</dimen>
-    <dimen name="tab_list_peek_height">220dp</dimen>
-
-    <dimen name="floating_preview_header_height">44dp</dimen>
-
-    <dimen name="menu_font_size">12sp</dimen>
 
 </resources>
