@@ -212,7 +212,7 @@ internal fun MusicList(
                     .clickable { stop() }
             )
             Icon(
-                painterResource(if (viewModel?.playing == true) R.drawable.ic_pause else R.drawable.ic_play_media),
+                painterResource(if (viewModel.playing == true) R.drawable.ic_pause else R.drawable.ic_play_media),
                 contentDescription = stringResource(id = R.string.action_pause),
                 tint = Color(iconColor),
                 modifier = Modifier
