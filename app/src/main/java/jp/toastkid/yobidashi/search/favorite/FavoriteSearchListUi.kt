@@ -173,7 +173,8 @@ private fun addItem(
     repository: FavoriteSearchRepository,
     favoriteSearchItems: SnapshotStateList<FavoriteSearch>
 ) {
-    if (input.value.isEmpty()) {
+    val newWord = input.value.trim()
+    if (newWord.isEmpty()) {
         contentViewModel.snackShort(
             R.string.favorite_search_addition_dialog_empty_message
         )
@@ -183,14 +184,14 @@ private fun addItem(
     FavoriteSearchInsertion(
         activityContext,
         categoryName.value,
-        input.value
+        newWord
     ).invoke()
 
     reload(repository, favoriteSearchItems)
 
     val message = MessageFormat.format(
         activityContext.getString(R.string.favorite_search_addition_successful_format),
-        input.value
+        newWord
     )
     contentViewModel.snackShort(message)
 }
