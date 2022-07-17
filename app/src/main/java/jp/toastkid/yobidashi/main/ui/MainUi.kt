@@ -581,8 +581,10 @@ private fun initializeContentViewModel(
                 val currentTabWebView = GlobalWebViewPool.getLatest() ?: return@observe
                 val currentTitle = Uri.encode(currentTabWebView.title)
                 val currentUrl = Uri.encode(currentTabWebView.url)
-                val query = Uri.encode(SearchQueryExtractor().invoke(currentTabWebView.url))
-                    //?.replace("\n", "") ?: ""
+                val query = Uri.encode(
+                    SearchQueryExtractor().invoke(currentTabWebView.url)
+                        ?.replace("\n", "")
+                )
                 navigate(
                     navigationHostController,
                     "search/with/?query=$query&title=$currentTitle&url=$currentUrl"
