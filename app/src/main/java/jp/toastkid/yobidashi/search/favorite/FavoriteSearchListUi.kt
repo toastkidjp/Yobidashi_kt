@@ -40,7 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -63,7 +63,7 @@ fun FavoriteSearchListUi() {
 
     val preferenceApplier = PreferenceApplier(activityContext)
 
-    val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+    val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
     val favoriteSearchItems = remember { mutableStateListOf<FavoriteSearch>() }
 
