@@ -574,7 +574,7 @@ private fun initializeContentViewModel(
         val messageId = it?.getContentIfNotHandled() ?: return@Observer
         showSnackbar(snackbarHostState, SnackbarEvent(activity.getString(messageId)))
     })
-    contentViewModel.webSearch.observe(activity, {
+    contentViewModel.webSearch.observe(activity) {
         it?.getContentIfNotHandled() ?: return@observe
         when (navigationHostController.currentDestination?.route) {
             "tab/web/current" -> {
@@ -593,7 +593,7 @@ private fun initializeContentViewModel(
             else ->
                 navigate(navigationHostController, "search/top")
         }
-    })
+    }
 
     contentViewModel.newArticle.observe(activity, Observer {
         val titleAndOnBackground = it?.getContentIfNotHandled() ?: return@Observer
