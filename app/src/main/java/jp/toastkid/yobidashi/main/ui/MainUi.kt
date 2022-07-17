@@ -576,7 +576,7 @@ private fun initializeContentViewModel(
     })
     contentViewModel.webSearch.observe(activity, {
         it?.getContentIfNotHandled() ?: return@observe
-        when (navigationHostController?.currentDestination?.route) {
+        when (navigationHostController.currentDestination?.route) {
             "tab/web/current" -> {
                 val currentTabWebView = GlobalWebViewPool.getLatest() ?: return@observe
                 val currentTitle = Uri.encode(currentTabWebView.title)
