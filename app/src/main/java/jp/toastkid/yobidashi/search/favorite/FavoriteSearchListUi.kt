@@ -203,7 +203,7 @@ private fun FavoriteSearchItemList(
 ) {
     val context = LocalContext.current
 
-    val coroutineScope = rememberCoroutineScope()
+    rememberCoroutineScope()
 
     val listState = rememberLazyListState()
 
