@@ -583,7 +583,7 @@ private fun initializeContentViewModel(
                 val currentUrl = Uri.encode(currentTabWebView.url)
                 val query = Uri.encode(
                     SearchQueryExtractor().invoke(currentTabWebView.url)
-                        ?.replace("\n", "")
+                        ?.replace("\n", "") ?: ""
                 )
                 navigate(
                     navigationHostController,
