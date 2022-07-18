@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi.tab.model
 
 import jp.toastkid.yobidashi.tab.History
+import kotlinx.serialization.Required
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -10,10 +12,13 @@ import java.util.UUID
  * @author toastkidjp
  */
 @Serializable
+@SerialName("web")
 internal class WebTab: Tab {
 
+    @Required
     private val histories: MutableList<History> = mutableListOf()
 
+    @Required
     private val id: String = UUID.randomUUID().toString()
 
     @Synchronized override fun back(): String {
