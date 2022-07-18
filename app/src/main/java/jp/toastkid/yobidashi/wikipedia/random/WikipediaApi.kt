@@ -8,9 +8,11 @@
 package jp.toastkid.yobidashi.wikipedia.random
 
 import androidx.annotation.WorkerThread
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import jp.toastkid.yobidashi.wikipedia.random.model.Article
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 
 /**
  * Wikipedia API.
@@ -21,11 +23,7 @@ class WikipediaApi(
         /**
          * Wikipedia URL decider.
          */
-        private val urlDecider: UrlDecider = UrlDecider(),
-        /**
-         * Converter factory.
-         */
-        private val converterFactory: MoshiConverterFactory = MoshiConverterFactory.create()
+        private val urlDecider: UrlDecider = UrlDecider()
 ) {
 
     /**
@@ -35,7 +33,10 @@ class WikipediaApi(
     operator fun invoke(): Array<Article>? {
         val retrofit = Retrofit.Builder()
                 .baseUrl(urlDecider())
-                .addConverterFactory(converterFactory)
+                .addConverterFactory(
+                    Json {ignoreUnknownKeys = true }
+                        .asConverterFactory("application/json".toMediaType())
+                )
                 .build()
 
         val service = retrofit.create(WikipediaService::class.java)
