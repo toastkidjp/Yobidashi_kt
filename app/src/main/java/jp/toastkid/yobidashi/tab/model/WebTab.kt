@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.tab.model
 
 import jp.toastkid.yobidashi.tab.History
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
 /**
@@ -8,6 +9,7 @@ import java.util.UUID
  *
  * @author toastkidjp
  */
+@Serializable
 internal class WebTab: Tab {
 
     private val histories: MutableList<History> = mutableListOf()

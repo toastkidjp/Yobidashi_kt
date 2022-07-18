@@ -1,5 +1,8 @@
 package jp.toastkid.yobidashi.tab.model
 
+import androidx.annotation.Keep
+import kotlinx.serialization.Required
+import kotlinx.serialization.Serializable
 import java.io.File
 import java.util.UUID
 
@@ -8,8 +11,11 @@ import java.util.UUID
  *
  * @author toastkidjp
  */
+@Serializable
 internal class EditorTab: Tab {
 
+    @Required
+    @Keep
     private val editorTab: Boolean = true
 
     private val id: String = UUID.randomUUID().toString()
