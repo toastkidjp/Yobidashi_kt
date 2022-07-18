@@ -10,6 +10,7 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
+import kotlinx.serialization.Required
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
@@ -36,6 +37,7 @@ class TabList {
     @Transient
     private val tabs: MutableList<Tab> = mutableListOf()
 
+    @Required
     @Keep
     private var index: Int = 0
 
