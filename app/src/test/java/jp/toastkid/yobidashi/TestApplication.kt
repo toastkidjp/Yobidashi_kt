@@ -16,11 +16,6 @@ import java.lang.reflect.Method
  */
 class TestApplication : Application(), TestLifecycleApplication {
 
-    override fun onCreate() {
-        super.onCreate()
-        setTheme(R.style.AppTheme)
-    }
-
     override fun beforeTest(method: Method?) = Unit
 
     override fun prepareTest(test: Any?) = Unit
