@@ -122,7 +122,7 @@ fun BookmarkListUi() {
                 viewModel.query(bookmarkRepository, bookmark.title)
             }
             else -> {
-                browserViewModel.openBackground(bookmark.title, Uri.parse(bookmark.url))
+                browserViewModel.open(Uri.parse(bookmark.url))
             }
         }
     }
