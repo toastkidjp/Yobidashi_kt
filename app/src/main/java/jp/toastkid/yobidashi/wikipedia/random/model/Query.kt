@@ -7,9 +7,12 @@
  */
 package jp.toastkid.yobidashi.wikipedia.random.model
 
+import kotlinx.serialization.Serializable
+
 /**
  * @author toastkidjp
  */
+@Serializable
 class Query {
     var random: Array<Article>? = null
 }
