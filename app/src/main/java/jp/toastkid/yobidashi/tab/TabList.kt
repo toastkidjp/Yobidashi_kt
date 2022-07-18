@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi.tab
 
 import android.content.Context
 import androidx.annotation.Keep
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
@@ -12,6 +10,11 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import okio.buffer
 import okio.sink
 import okio.source
@@ -27,7 +30,8 @@ import kotlin.concurrent.withLock
  *
  * @author toastkidjp
  */
-class TabList private constructor() {
+@Serializable
+class TabList {
 
     @Transient
     private val tabs: MutableList<Tab> = mutableListOf()
@@ -72,7 +76,7 @@ class TabList private constructor() {
      * Save current state to file.
      */
     internal fun save() {
-        val json = jsonAdapter.toJson(this)
+        val json = jsonSerializer.encodeToString(this)
         tabsFile?.let {
             it.sink().use {  sink ->
                 sink.buffer().use { buffered ->
@@ -88,12 +92,12 @@ class TabList private constructor() {
             }
             tabs.forEach { tab ->
                 val source: ByteArray? = when (tab) {
-                    is WebTab -> webTabJsonAdapter.toJson(tab)?.toByteArray(charset)
-                    is EditorTab -> editorTabJsonAdapter.toJson(tab)?.toByteArray(charset)
-                    is PdfTab -> pdfTabJsonAdapter.toJson(tab)?.toByteArray(charset)
-                    is ArticleTab -> articleTabJsonAdapter.toJson(tab)?.toByteArray(charset)
-                    is ArticleListTab -> articleListTabJsonAdapter.toJson(tab)?.toByteArray(charset)
-                    is CalendarTab -> calendarTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    is WebTab -> jsonSerializer.encodeToString(tab)?.toByteArray(charset)
+                    is EditorTab -> jsonSerializer.encodeToString(tab)?.toByteArray(charset)
+                    is PdfTab -> jsonSerializer.encodeToString(tab)?.toByteArray(charset)
+                    is ArticleTab -> jsonSerializer.encodeToString(tab)?.toByteArray(charset)
+                    is ArticleListTab -> jsonSerializer.encodeToString(tab)?.toByteArray(charset)
+                    is CalendarTab -> jsonSerializer.encodeToString(tab)?.toByteArray(charset)
                     else -> ByteArray(0)
                 }
                 source?.let {
@@ -164,32 +168,8 @@ class TabList private constructor() {
 
         private val charset = charset("UTF-8")
 
-        private val jsonAdapter: JsonAdapter<TabList> by lazy {
-            Moshi.Builder().build().adapter(TabList::class.java)
-        }
-
-        private val webTabJsonAdapter: JsonAdapter<WebTab> by lazy {
-            Moshi.Builder().build().adapter(WebTab::class.java)
-        }
-
-        private val editorTabJsonAdapter: JsonAdapter<EditorTab> by lazy {
-            Moshi.Builder().build().adapter(EditorTab::class.java)
-        }
-
-        private val pdfTabJsonAdapter: JsonAdapter<PdfTab> by lazy {
-            Moshi.Builder().build().adapter(PdfTab::class.java)
-        }
-
-        private val articleTabJsonAdapter: JsonAdapter<ArticleTab> by lazy {
-            Moshi.Builder().build().adapter(ArticleTab::class.java)
-        }
-
-        private val articleListTabJsonAdapter: JsonAdapter<ArticleListTab> by lazy {
-            Moshi.Builder().build().adapter(ArticleListTab::class.java)
-        }
-
-        private val calendarTabJsonAdapter: JsonAdapter<CalendarTab> by lazy {
-            Moshi.Builder().build().adapter(CalendarTab::class.java)
+        private val jsonSerializer = Json {
+            ignoreUnknownKeys = true
         }
 
         private var itemsDir: File? = null
@@ -206,7 +186,7 @@ class TabList private constructor() {
                         if (file == null) TabList() 
                         else file.source().use {  source ->
                             source.buffer().use { bufferedSource ->
-                                jsonAdapter.fromJson(bufferedSource)
+                                jsonSerializer.decodeFromString(bufferedSource.readUtf8())
                             }
                         } ?: TabList()
 
@@ -231,13 +211,14 @@ class TabList private constructor() {
                                 bufferedSource.readUtf8()
                             }
                         }
+
                         when {
-                            json.contains("editorTab") -> editorTabJsonAdapter.fromJson(json)
-                            json.contains("pdfTab") -> pdfTabJsonAdapter.fromJson(json)
-                            json.contains("articleTab") -> articleTabJsonAdapter.fromJson(json)
-                            json.contains("articleListTab") -> articleListTabJsonAdapter.fromJson(json)
-                            json.contains("calendarTab") -> calendarTabJsonAdapter.fromJson(json)
-                            else -> webTabJsonAdapter.fromJson(json)
+                            json.contains("editorTab") -> jsonSerializer.decodeFromString<EditorTab>(json)
+                            json.contains("pdfTab") -> jsonSerializer.decodeFromString<PdfTab>(json)
+                            json.contains("articleTab") -> jsonSerializer.decodeFromString<ArticleTab>(json)
+                            json.contains("articleListTab") -> jsonSerializer.decodeFromString<ArticleListTab>(json)
+                            json.contains("calendarTab") -> jsonSerializer.decodeFromString<CalendarTab>(json)
+                            else -> jsonSerializer.decodeFromString<WebTab>(json)
                         }
                     }
         }
