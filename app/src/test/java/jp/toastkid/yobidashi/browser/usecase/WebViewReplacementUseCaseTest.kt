@@ -9,7 +9,6 @@
 package jp.toastkid.yobidashi.browser.usecase
 
 import android.content.Context
-import android.view.animation.Animation
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.collection.LruCache
@@ -56,9 +55,6 @@ class WebViewReplacementUseCaseTest {
 
     @MockK
     private lateinit var preferenceApplier: PreferenceApplier
-
-    @MockK
-    private lateinit var slideUpFromBottom: Animation
 
     @MockK
     private lateinit var darkThemeApplier: DarkModeApplier

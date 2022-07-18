@@ -339,7 +339,7 @@ private fun initializeHeaderViewModels(
     val pageSearcherViewModel = viewModelProvider.get(PageSearcherViewModel::class.java)
 
     viewModelProvider.get(BrowserViewModel::class.java).also { viewModel ->
-        appBarViewModel?.replace {
+        contentViewModel?.replaceAppBarContent {
             val preferenceApplier = PreferenceApplier(activity)
             val tint = Color(preferenceApplier.fontColor)
 

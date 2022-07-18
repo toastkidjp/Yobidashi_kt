@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class QueryUseCase(
+class UrlItemQueryUseCase(
     private val submitItems: (List<UrlItem>) -> Unit,
     private val bookmarkRepository: BookmarkRepository,
     private val viewHistoryRepository: ViewHistoryRepository,
@@ -33,7 +33,7 @@ class QueryUseCase(
         CoroutineScope(mainDispatcher).launch {
             val newItems = mutableListOf<UrlItem>()
 
-            rtsSuggestionUseCase.invoke(q.toString(), { newItems.add(0, it) })
+            rtsSuggestionUseCase.invoke(q.toString()) { newItems.add(0, it) }
 
             withContext(ioDispatcher) {
                 if (q.isBlank()) {

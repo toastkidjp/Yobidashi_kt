@@ -55,18 +55,6 @@ internal fun SearchItemContent(
         return
     }
 
-    val dismissState = DismissState(
-        initialValue = DismissValue.Default,
-        confirmStateChange = { dismissValue ->
-            if (dismissValue == DismissValue.DismissedToStart) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    onDelete()
-                }
-            }
-            true
-        }
-    )
-
     SwipeToDismissItem(
         onClickDelete = {
             CoroutineScope(Dispatchers.IO).launch {

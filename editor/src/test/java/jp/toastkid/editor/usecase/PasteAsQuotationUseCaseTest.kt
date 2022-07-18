@@ -19,7 +19,7 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.libs.clip.Clipboard
+import jp.toastkid.lib.clip.Clipboard
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

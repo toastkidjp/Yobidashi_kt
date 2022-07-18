@@ -60,7 +60,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -72,7 +71,7 @@ import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
 import jp.toastkid.yobidashi.search.trend.TrendApi
-import jp.toastkid.yobidashi.search.url_suggestion.QueryUseCase
+import jp.toastkid.yobidashi.search.url_suggestion.UrlItemQueryUseCase
 import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import jp.toastkid.yobidashi.search.voice.VoiceSearchIntentFactory
@@ -94,7 +93,6 @@ fun SearchInputUi(
     val preferenceApplier = PreferenceApplier(context)
 
     val activityViewModelProvider = ViewModelProvider(context)
-    val appBarViewModel = activityViewModelProvider.get(AppBarViewModel::class.java)
     val contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
 
     val categoryName = remember {
@@ -113,7 +111,7 @@ fun SearchInputUi(
         QueryingUseCase(
             viewModel,
             preferenceApplier,
-            QueryUseCase(
+            UrlItemQueryUseCase(
                 {
                     viewModel.urlItems.clear()
                     viewModel.urlItems.addAll(it)
@@ -133,7 +131,7 @@ fun SearchInputUi(
 
     if (viewModel.openFavoriteSearch.value.not()) {
         LaunchedEffect(key1 = localLifecycleOwner, block = {
-            appBarViewModel.replace {
+            contentViewModel.replaceAppBarContent {
                 val focusRequester = remember { FocusRequester() }
 
                 val spinnerOpen = remember { mutableStateOf(false) }
@@ -252,8 +250,27 @@ fun SearchInputUi(
                             )
                     )
                 }
-                LaunchedEffect(key1 = focusRequester, block = {
+                LaunchedEffect(key1 = queryingUseCase, block = {
+                    val text = inputQuery ?: ""
+                    viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
                     focusRequester.requestFocus()
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val trendItems = try {
+                            TrendApi()()
+                        } catch (e: IOException) {
+                            Timber.e(e)
+                            null
+                        }
+                        viewModel.trends.clear()
+                        val taken = trendItems?.take(10)
+                        if (taken.isNullOrEmpty()) {
+                            return@launch
+                        }
+                        viewModel.trends.addAll(taken)
+                    }
+
+                    queryingUseCase.withDebounce()
                 })
             }
         })
@@ -277,9 +294,10 @@ fun SearchInputUi(
 
     viewModel.search
         .observe(localLifecycleOwner, Observer { event ->
+            val searchEvent = event?.getContentIfNotHandled() ?: return@Observer
+
             keyboardController?.hide()
 
-            val searchEvent = event?.getContentIfNotHandled() ?: return@Observer
             search(
                 context,
                 contentViewModel,
@@ -290,7 +308,12 @@ fun SearchInputUi(
             )
         })
 
-    LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
+    /*LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
+        val text = inputQuery ?: ""
+        viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
+
+        queryingUseCase.withDebounce()
+
         CoroutineScope(Dispatchers.IO).launch {
             val trendItems = try {
                 TrendApi()()
@@ -305,12 +328,7 @@ fun SearchInputUi(
             }
             viewModel.trends.addAll(taken)
         }
-
-        queryingUseCase.withDebounce()
-
-        val text = inputQuery ?: ""
-        viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
-    })
+    })*/
 
     DisposableEffect(key1 = localLifecycleOwner, effect = {
         onDispose {
@@ -385,6 +403,11 @@ private inline fun search(
 ) {
     if (NetworkChecker.isNotAvailable(context)) {
         contentViewModel?.snackShort("Network is not available...")
+        return
+    }
+
+    if (query.isBlank()) {
+        contentViewModel?.snackShort(R.string.message_should_input_keyword)
         return
     }
 

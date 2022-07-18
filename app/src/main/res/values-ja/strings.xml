@@ -365,5 +365,6 @@
     <string name="row_dialog_download">画像をダウンロード</string>
     <string name="row_dialog_copy">リンク先のURLをコピー</string>
     <string name="row_dialog_copy_text">テキストをコピー</string>
+    <string name="message_should_input_keyword">Please input any keyword.</string>
 
 </resources>

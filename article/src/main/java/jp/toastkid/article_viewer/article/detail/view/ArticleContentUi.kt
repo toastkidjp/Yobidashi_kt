@@ -61,7 +61,6 @@ import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.LinkBehaviorService
 import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
@@ -100,7 +99,7 @@ fun ArticleContentUi(title: String) {
         }
     })
 
-    viewModelProvider.get(AppBarViewModel::class.java).replace {
+    viewModelProvider.get(ContentViewModel::class.java).replaceAppBarContent {
         AppBarContent(viewModel)
     }
 

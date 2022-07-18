@@ -79,7 +79,6 @@ import jp.toastkid.editor.R
 import jp.toastkid.editor.load.LoadFromStorageDialogUi
 import jp.toastkid.editor.load.StorageFilesFinder
 import jp.toastkid.editor.usecase.FileActionUseCase
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.intent.GetContentIntentFactory
@@ -125,8 +124,7 @@ fun EditorTabUi(path: String?) {
         )
     }
 
-    viewModelProvider.get(AppBarViewModel::class.java)
-        .replace {
+    contentViewModel.replaceAppBarContent {
             AppBarContent(
                 contentViewModel,
                 fileActionUseCase

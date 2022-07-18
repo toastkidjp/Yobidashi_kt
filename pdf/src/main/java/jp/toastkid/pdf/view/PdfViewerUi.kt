@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.pdf.PdfImageFactory
@@ -63,7 +62,7 @@ fun PdfViewerUi(uri: Uri) {
             ?: return
 
     val viewModelProvider = ViewModelProvider(context)
-    viewModelProvider.get(AppBarViewModel::class.java).replace { AppBarUi(listState) }
+    viewModelProvider.get(ContentViewModel::class.java).replaceAppBarContent { AppBarUi(listState) }
 
     ScrollerUseCase(
         viewModelProvider.get(ContentViewModel::class.java),

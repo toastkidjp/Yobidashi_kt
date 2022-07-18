@@ -18,7 +18,7 @@ import jp.toastkid.editor.usecase.MenuActionInvokerUseCase
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
-import jp.toastkid.libs.clip.Clipboard
+import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.libs.speech.SpeechMaker
 
 /**

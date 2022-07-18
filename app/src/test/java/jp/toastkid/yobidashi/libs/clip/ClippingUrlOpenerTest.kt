@@ -19,6 +19,7 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import org.junit.After

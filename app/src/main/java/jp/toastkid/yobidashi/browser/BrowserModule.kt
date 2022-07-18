@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.browser
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.view.animation.AnimationUtils
 import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.FrameLayout
@@ -62,12 +61,6 @@ class BrowserModule(
 
     private var browserViewModel: BrowserViewModel? = null
 
-    /**
-     * Animation of slide up bottom.
-     */
-    private val slideUpFromBottom
-            = AnimationUtils.loadAnimation(context, R.anim.slide_up)
-
     private val webViewReplacementUseCase: WebViewReplacementUseCase
 
     private val idGenerator = IdGenerator()
@@ -106,12 +99,11 @@ class BrowserModule(
         )
 
         webViewReplacementUseCase = WebViewReplacementUseCase(
-                webViewContainer,
-                WebViewStateUseCase.make(context),
-                { webViewFactory(context) },
-                browserViewModel,
-                preferenceApplier,
-                slideUpFromBottom
+            webViewContainer,
+            WebViewStateUseCase.make(context),
+            { webViewFactory(context) },
+            browserViewModel,
+            preferenceApplier
         )
     }
 

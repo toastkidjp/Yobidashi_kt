@@ -13,7 +13,7 @@ import androidx.annotation.VisibleForTesting
 import jp.toastkid.editor.R
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
-import jp.toastkid.libs.clip.Clipboard
+import jp.toastkid.lib.clip.Clipboard
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

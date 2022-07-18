@@ -58,7 +58,7 @@ import androidx.paging.cachedIn
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
-import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDataAccessor
@@ -121,8 +121,8 @@ fun TaskBoardUi() {
         })
     })
 
-    ViewModelProvider(context).get(AppBarViewModel::class.java)
-        .replace {
+    ViewModelProvider(context).get(ContentViewModel::class.java)
+        .replaceAppBarContent {
             AppBarUi { taskAdditionDialogFragmentViewModel?.setTask(null) }
         }
 

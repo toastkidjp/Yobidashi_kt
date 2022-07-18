@@ -42,6 +42,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -132,9 +133,6 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                         },
                         onClick = {
                             tabAdapter.replace(tab)
-                            if (initialIndex != tabAdapter.currentTabId()) {
-                                contentViewModel.replaceToCurrentTab()
-                            }
                             closeOnly(coroutineScope, contentViewModel)
                         },
                         onClose = {
@@ -208,6 +206,16 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
             }
         }
     }
+
+    LaunchedEffect(key1 = initialIndex, block = {
+        contentViewModel.setHideBottomSheetAction {
+            if (initialIndex != tabAdapter.currentTabId()) {
+                contentViewModel.replaceToCurrentTab()
+            }
+
+            contentViewModel.setHideBottomSheetAction {  }
+        }
+    })
 
     DisposableEffect(tabAdapter) {
         onDispose {

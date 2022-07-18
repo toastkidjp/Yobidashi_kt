@@ -15,7 +15,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchRepository
 import jp.toastkid.yobidashi.search.history.SearchHistoryRepository
-import jp.toastkid.yobidashi.search.url_suggestion.QueryUseCase
+import jp.toastkid.yobidashi.search.url_suggestion.UrlItemQueryUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 class QueryingUseCase(
     private val searchUiViewModel: SearchUiViewModel,
     private val preferenceApplier: PreferenceApplier,
-    private val queryUseCase: QueryUseCase,
+    private val urlItemQueryUseCase: UrlItemQueryUseCase,
     private val favoriteSearchRepository: FavoriteSearchRepository,
     private val searchHistoryRepository: SearchHistoryRepository,
     private val suggestionApi: SuggestionApi = SuggestionApi(),
@@ -41,7 +41,7 @@ class QueryingUseCase(
 
     private var disposables = Job()
 
-    operator fun invoke(keyword: String) {
+    private fun invoke(keyword: String) {
         if (preferenceApplier.isEnableSearchHistory) {
             CoroutineScope(Dispatchers.IO).launch {
                 searchUiViewModel.searchHistories.clear()
@@ -69,7 +69,7 @@ class QueryingUseCase(
         }
 
         if (preferenceApplier.isEnableViewHistory) {
-            queryUseCase.invoke(keyword)
+            urlItemQueryUseCase.invoke(keyword)
         }
 
         if (preferenceApplier.isEnableSuggestion) {

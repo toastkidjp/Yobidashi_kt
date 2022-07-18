@@ -50,13 +50,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
-import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.url_suggestion.ItemDeletionUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel

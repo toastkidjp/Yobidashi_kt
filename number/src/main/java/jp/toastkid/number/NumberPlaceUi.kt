@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -189,11 +188,8 @@ fun NumberPlaceUi() {
             })
     )
 
-    (LocalContext.current as? ViewModelStoreOwner)?.let {
-        viewModel(AppBarViewModel::class.java, it)
-            .replace {
-                AppBarContent(preferenceApplier, fontSize, contentViewModel)
-            }
+    contentViewModel?.replaceAppBarContent {
+        AppBarContent(preferenceApplier, fontSize, contentViewModel)
     }
 
     DisposableEffect(key1 = viewModel, effect = {

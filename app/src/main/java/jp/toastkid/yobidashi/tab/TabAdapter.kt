@@ -8,7 +8,6 @@ import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
@@ -63,8 +62,6 @@ class TabAdapter(
 
     private var browserViewModel: BrowserViewModel? = null
 
-    private var appBarViewModel: AppBarViewModel? = null
-
     private val bitmapCompressor = BitmapCompressor()
 
     private var tabListViewModel: TabListViewModel? = null
@@ -80,7 +77,6 @@ class TabAdapter(
         if (viewContext is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
             browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
-            appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
 
             webViewFactory = WebViewFactoryUseCase(

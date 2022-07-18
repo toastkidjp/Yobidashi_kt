@@ -114,16 +114,22 @@ class ContentViewModel : ViewModel() {
         _bottomSheetContent.value = content
     }
 
-    private val _currentTabId = mutableStateOf("")
+    private val _hideBottomSheetAction = mutableStateOf({})
 
-    val currentTabId: State<String> = _currentTabId
-
-    fun setCurrentTabId(tabId: String) {
-        _currentTabId.value = tabId
+    fun setHideBottomSheetAction(action: () -> Unit) {
+        _hideBottomSheetAction.value = action
     }
 
     @OptIn(ExperimentalMaterialApi::class)
-    val modalBottomSheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val modalBottomSheetState = ModalBottomSheetState(
+        ModalBottomSheetValue.Hidden,
+        confirmStateChange = {
+            if (it == ModalBottomSheetValue.Hidden) {
+                _hideBottomSheetAction.value()
+            }
+            true
+        }
+    )
 
     @OptIn(ExperimentalMaterialApi::class)
     suspend fun switchBottomSheet() {
@@ -136,6 +142,7 @@ class ContentViewModel : ViewModel() {
 
     @OptIn(ExperimentalMaterialApi::class)
     suspend fun hideBottomSheet() {
+        _hideBottomSheetAction.value()
         modalBottomSheetState.hide()
     }
 
@@ -235,6 +242,14 @@ class ContentViewModel : ViewModel() {
 
     fun setBackgroundImagePath(path: String) {
         _backgroundImagePath.value = path
+    }
+
+    private val _appBarContent = mutableStateOf<@Composable () -> Unit>({})
+
+    val appBarContent: State<@Composable () -> Unit> = _appBarContent
+
+    fun replaceAppBarContent(composable: @Composable() () -> Unit) {
+        _appBarContent.value = composable
     }
 
 }
