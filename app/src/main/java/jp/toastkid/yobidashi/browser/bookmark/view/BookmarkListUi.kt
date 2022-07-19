@@ -370,7 +370,7 @@ private fun EditorDialog(
 
     Dialog(onDismissRequest = { openEditor.value = false }) {
         Surface(elevation = 4.dp) {
-            Box() {
+            Box {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End,
