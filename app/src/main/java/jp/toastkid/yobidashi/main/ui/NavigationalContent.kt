@@ -16,6 +16,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -70,17 +71,21 @@ internal fun NavigationalContent(
         tabComposable("tab/pdf/current") {
             val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
             PdfViewerUi(currentTab.getUrl().toUri())
+            tabs.saveNewThumbnail(LocalView.current)
         }
         tabComposable("tab/article/list") {
             ArticleListUi()
+            tabs.saveNewThumbnail(LocalView.current)
         }
         tabComposable("tab/article/content/{title}") {
             val title = it?.getString("title") ?: return@tabComposable
             ArticleContentUi(title)
+            tabs.saveNewThumbnail(LocalView.current)
         }
         tabComposable("tab/editor/current") {
             val currentTab = tabs.currentTab() as? EditorTab ?: return@tabComposable
             EditorTabUi(currentTab.path)
+            tabs.saveNewThumbnail(LocalView.current)
         }
         composable("web/bookmark/list") {
             BookmarkListUi()
@@ -114,6 +119,7 @@ internal fun NavigationalContent(
         }
         composable("tab/calendar") {
             CalendarUi()
+            tabs.saveNewThumbnail(LocalView.current)
         }
         composable("setting/top") {
             SettingTopUi()
