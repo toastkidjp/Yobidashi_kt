@@ -303,7 +303,7 @@ internal fun Content() {
             contentViewModel.replaceToCurrentTab()
         }
     })
-    browserViewModel?.openNewWindow?.observe(activity, Observer {
+    browserViewModel.openNewWindow.observe(activity, Observer {
         val message = it?.getContentIfNotHandled() ?: return@Observer
         tabs.openNewWindowWebTab(message)
         browserViewModel?.switchWebViewToCurrent(tabs.currentTabId())
