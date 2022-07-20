@@ -306,7 +306,7 @@ internal fun Content() {
     browserViewModel.openNewWindow.observe(activity, Observer {
         val message = it?.getContentIfNotHandled() ?: return@Observer
         tabs.openNewWindowWebTab(message)
-        browserViewModel?.switchWebViewToCurrent(tabs.currentTabId())
+        browserViewModel.switchWebViewToCurrent(tabs.currentTabId())
     })
     LaunchedEffect(browserViewModel) {
         browserViewModel
