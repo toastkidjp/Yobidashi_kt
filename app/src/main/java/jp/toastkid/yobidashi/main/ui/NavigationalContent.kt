@@ -147,7 +147,6 @@ internal fun NavigationalContent(
 
 }
 
-@Composable
 private fun takeScreenshot(tabs: TabAdapter, view: View) {
     tabs.saveNewThumbnail(view)
 }
