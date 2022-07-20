@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.main.ui
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -71,21 +72,21 @@ internal fun NavigationalContent(
         tabComposable("tab/pdf/current") {
             val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
             PdfViewerUi(currentTab.getUrl().toUri())
-            takeScreenshot(tabs)
+            takeScreenshot(tabs, LocalView.current)
         }
         tabComposable("tab/article/list") {
             ArticleListUi()
-            takeScreenshot(tabs)
+            takeScreenshot(tabs, LocalView.current)
         }
         tabComposable("tab/article/content/{title}") {
             val title = it?.getString("title") ?: return@tabComposable
             ArticleContentUi(title)
-            takeScreenshot(tabs)
+            takeScreenshot(tabs, LocalView.current)
         }
         tabComposable("tab/editor/current") {
             val currentTab = tabs.currentTab() as? EditorTab ?: return@tabComposable
             EditorTabUi(currentTab.path)
-            takeScreenshot(tabs)
+            takeScreenshot(tabs, LocalView.current)
         }
         composable("web/bookmark/list") {
             BookmarkListUi()
@@ -119,7 +120,7 @@ internal fun NavigationalContent(
         }
         composable("tab/calendar") {
             CalendarUi()
-            takeScreenshot(tabs)
+            takeScreenshot(tabs, LocalView.current)
         }
         composable("setting/top") {
             SettingTopUi()
@@ -147,8 +148,8 @@ internal fun NavigationalContent(
 }
 
 @Composable
-private fun takeScreenshot(tabs: TabAdapter) {
-    tabs.saveNewThumbnail(LocalView.current)
+private fun takeScreenshot(tabs: TabAdapter, view: View) {
+    tabs.saveNewThumbnail(view)
 }
 
 @OptIn(ExperimentalAnimationApi::class)
