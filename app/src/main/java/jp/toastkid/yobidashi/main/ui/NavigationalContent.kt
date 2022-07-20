@@ -71,21 +71,21 @@ internal fun NavigationalContent(
         tabComposable("tab/pdf/current") {
             val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
             PdfViewerUi(currentTab.getUrl().toUri())
-            tabs.saveNewThumbnail(LocalView.current)
+            takeScreenshot(tabs)
         }
         tabComposable("tab/article/list") {
             ArticleListUi()
-            tabs.saveNewThumbnail(LocalView.current)
+            takeScreenshot(tabs)
         }
         tabComposable("tab/article/content/{title}") {
             val title = it?.getString("title") ?: return@tabComposable
             ArticleContentUi(title)
-            tabs.saveNewThumbnail(LocalView.current)
+            takeScreenshot(tabs)
         }
         tabComposable("tab/editor/current") {
             val currentTab = tabs.currentTab() as? EditorTab ?: return@tabComposable
             EditorTabUi(currentTab.path)
-            tabs.saveNewThumbnail(LocalView.current)
+            takeScreenshot(tabs)
         }
         composable("web/bookmark/list") {
             BookmarkListUi()
@@ -119,7 +119,7 @@ internal fun NavigationalContent(
         }
         composable("tab/calendar") {
             CalendarUi()
-            tabs.saveNewThumbnail(LocalView.current)
+            takeScreenshot(tabs)
         }
         composable("setting/top") {
             SettingTopUi()
@@ -144,6 +144,11 @@ internal fun NavigationalContent(
         }
     }
 
+}
+
+@Composable
+private fun takeScreenshot(tabs: TabAdapter) {
+    tabs.saveNewThumbnail(LocalView.current)
 }
 
 @OptIn(ExperimentalAnimationApi::class)
