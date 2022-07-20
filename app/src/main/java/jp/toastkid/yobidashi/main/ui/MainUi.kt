@@ -292,7 +292,7 @@ internal fun Content() {
             contentViewModel.replaceToCurrentTab()
         }
     })
-    browserViewModel?.openBackgroundWithTitle?.observe(activity, Observer {
+    browserViewModel.openBackgroundWithTitle.observe(activity, Observer {
         val pair = it?.getContentIfNotHandled() ?: return@Observer
         val callback = tabs.openBackgroundTab(pair.first, pair.second.toString())
         contentViewModel.snackWithAction(
