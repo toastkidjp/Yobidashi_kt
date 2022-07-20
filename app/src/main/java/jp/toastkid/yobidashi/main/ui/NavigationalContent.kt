@@ -148,7 +148,9 @@ internal fun NavigationalContent(
 }
 
 private fun takeScreenshot(tabs: TabAdapter, view: View) {
-    tabs.saveNewThumbnail(view)
+    view.post {
+        tabs.saveNewThumbnail(view)
+    }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
