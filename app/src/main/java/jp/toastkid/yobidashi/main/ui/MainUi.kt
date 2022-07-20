@@ -281,7 +281,7 @@ internal fun Content() {
             contentViewModel?.switchBottomSheet()
         }
     })
-    browserViewModel?.openBackground?.observe(activity, Observer {
+    browserViewModel.openBackground.observe(activity, Observer {
         val urlString = it?.getContentIfNotHandled()?.toString() ?: return@Observer
         val callback = tabs.openBackgroundTab(urlString, urlString)
         contentViewModel.snackWithAction(
