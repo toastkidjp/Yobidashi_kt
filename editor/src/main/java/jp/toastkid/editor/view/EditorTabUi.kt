@@ -348,7 +348,9 @@ private fun AppBarContent(
     InputFileNameDialogUi(
         openInputFileNameDialog,
         onCommit = {
-            fileActionUseCase.assignNewFile(it)
+            val appropriateName =
+                if (it.endsWith(".md") || it.endsWith(".txt")) it else "$it.txt"
+            fileActionUseCase.assignNewFile(appropriateName)
             fileActionUseCase.save(openInputFileNameDialog)
         }
     )
