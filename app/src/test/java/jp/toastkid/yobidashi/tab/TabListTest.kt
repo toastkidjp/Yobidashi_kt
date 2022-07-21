@@ -1,7 +1,9 @@
 package jp.toastkid.yobidashi.tab
 
-import com.squareup.moshi.Moshi
 import jp.toastkid.yobidashi.tab.model.WebTab
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.json.JSONException
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -24,11 +26,11 @@ class TabListTest {
         tabList.add(WebTab())
         tabList.add(makeTab())
 
-        val adapter = Moshi.Builder().build().adapter(TabList::class.java)
-        val json = adapter.toJson(tabList)
+        val adapter = Json { ignoreUnknownKeys = true }
+        val json = adapter.encodeToString(tabList)
         assertEquals(0, JSONObject(json).getInt("index"))
 
-        val fromJson = adapter.fromJson(json)
+        val fromJson = adapter.decodeFromString<TabList>(json)
         assertEquals(0, fromJson?.size())
     }
 
