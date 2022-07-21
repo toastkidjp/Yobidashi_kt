@@ -88,6 +88,7 @@ internal fun LoadFromStorageDialogUi(
                                         onSelect(file)
                                         openDialog.value = false
                                     }
+                                    .fillParentMaxWidth()
                                     .padding(16.dp)
                             )
                         }
