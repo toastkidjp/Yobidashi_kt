@@ -52,7 +52,7 @@ buildscript {
             coil_compose: '2.0.0-rc01',
             paging_compose: '1.0.0-alpha14',
             junit: '4.12',
-            robolectric: '4.2.1',
+            robolectric: '4.8.1',
             mockk: '1.10.6',
             coroutines_test: '1.5.1'
     ]
