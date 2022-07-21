@@ -162,6 +162,7 @@ fun EditorTabUi(path: String?) {
             editText.typeface = Typeface.MONOSPACE
             editText.hint = context.getString(R.string.hint_editor_input)
             editText.setHintTextColor(preferenceApplier.editorFontColor())
+            editText.isNestedScrollingEnabled = true
 
             CursorColorSetter().invoke(
                 editText,
