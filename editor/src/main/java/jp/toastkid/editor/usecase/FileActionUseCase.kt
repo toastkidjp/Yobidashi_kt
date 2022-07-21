@@ -78,7 +78,7 @@ class FileActionUseCase(
      * @param data [Uri]
      */
     fun readFromFileUri(data: Uri) {
-        val context = context ?: return
+        val context = context
 
         FileExtractorFromUri(context, data)?.let {
             if (it == path.value) {
