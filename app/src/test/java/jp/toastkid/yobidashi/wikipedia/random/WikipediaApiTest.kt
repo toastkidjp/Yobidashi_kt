@@ -22,7 +22,6 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 
 class WikipediaApiTest {
 
@@ -31,9 +30,6 @@ class WikipediaApiTest {
 
     @MockK
     private lateinit var urlDecider: UrlDecider
-
-    @MockK
-    private lateinit var converterFactory: MoshiConverterFactory
 
     @MockK
     private lateinit var requestBuilder: Retrofit.Builder
