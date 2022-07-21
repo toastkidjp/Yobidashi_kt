@@ -35,7 +35,7 @@ class FileActionUseCase(
      * Save current content to file.
      */
     fun save(openInputFileNameDialog: MutableState<Boolean>) {
-        if (path.value.isNullOrBlank()) {
+        if (path.value.isBlank()) {
             openInputFileNameDialog.value = true
             return
         }
