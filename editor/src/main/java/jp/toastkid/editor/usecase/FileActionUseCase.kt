@@ -146,7 +146,7 @@ class FileActionUseCase(
      * @param id
      */
     private fun snackText(@StringRes id: Int) {
-        contentViewModel?.snackShort(id)
+        contentViewModel.snackShort(id)
     }
 
     /**
