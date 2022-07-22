@@ -140,6 +140,17 @@ class FileActionUseCase(
         saveToFile(path.value)
     }
 
+    fun makeNewFileWithName(
+        fileName: String,
+        fileActionUseCase: FileActionUseCase,
+        openInputFileNameDialog: MutableState<Boolean>
+    ) {
+        val appropriateName =
+            if (fileName.endsWith(".md") || fileName.endsWith(".txt")) fileName else "$fileName.txt"
+        fileActionUseCase.assignNewFile(appropriateName)
+        fileActionUseCase.save(openInputFileNameDialog)
+    }
+
     /**
      * Show snackbar with specified id text.
      *
