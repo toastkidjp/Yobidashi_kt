@@ -146,7 +146,8 @@ class FileActionUseCase(
         openInputFileNameDialog: MutableState<Boolean>
     ) {
         val appropriateName =
-            if (fileName.endsWith(".md") || fileName.endsWith(".txt")) fileName else "$fileName.txt"
+            if (fileName.endsWith(".md") || fileName.endsWith(".txt")) fileName
+            else "$fileName.txt"
         fileActionUseCase.assignNewFile(appropriateName)
         fileActionUseCase.save(openInputFileNameDialog)
     }
