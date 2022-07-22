@@ -44,7 +44,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -350,7 +349,7 @@ private fun AppBarContent(
     InputFileNameDialogUi(
         openInputFileNameDialog,
         onCommit = {
-            makeNewFileWithName(it, fileActionUseCase, openInputFileNameDialog)
+            fileActionUseCase.makeNewFileWithName(it, fileActionUseCase, openInputFileNameDialog)
         }
     )
 
@@ -360,17 +359,6 @@ private fun AppBarContent(
     ) {
         fileActionUseCase.setText("")
     }
-}
-
-private fun makeNewFileWithName(
-    fileName: String,
-    fileActionUseCase: FileActionUseCase,
-    openInputFileNameDialog: MutableState<Boolean>
-) {
-    val appropriateName =
-        if (fileName.endsWith(".md") || fileName.endsWith(".txt")) fileName else "$fileName.txt"
-    fileActionUseCase.assignNewFile(appropriateName)
-    fileActionUseCase.save(openInputFileNameDialog)
 }
 
 @Composable
