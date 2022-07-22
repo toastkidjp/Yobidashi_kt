@@ -127,7 +127,7 @@ class FileActionUseCase(
      * @param fileName
      */
     fun assignNewFile(fileName: String) {
-        val context = context ?: return
+        val context = context
         var newFile = externalFileAssignment(context, fileName)
         while (newFile.exists()) {
             newFile = externalFileAssignment(
