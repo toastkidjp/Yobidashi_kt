@@ -105,7 +105,6 @@ fun EditorTabUi(path: String?) {
                 NestedScrollSource.Fling
             )
         }
-    editText.setOnScrollChangeListener(scrollListener)
 
     val finder = EditTextFinder(editText)
 
@@ -170,6 +169,7 @@ fun EditorTabUi(path: String?) {
             editText.highlightColor = preferenceApplier.editorHighlightColor(
                 ContextCompat.getColor(context, R.color.light_blue_200_dd)
             )
+            editText.setOnScrollChangeListener(scrollListener)
             fileActionUseCase.readCurrentFile()
             editText
         },
