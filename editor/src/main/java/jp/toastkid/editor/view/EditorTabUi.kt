@@ -98,13 +98,6 @@ fun EditorTabUi(path: String?) {
 
     val editText = remember { EditText(context) }
     val nestedScrollDispatcher = NestedScrollDispatcher()
-    val scrollListener =
-        View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            nestedScrollDispatcher.dispatchPreScroll(
-                Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
-                NestedScrollSource.Fling
-            )
-        }
 
     val finder = EditTextFinder(editText)
 
@@ -169,6 +162,13 @@ fun EditorTabUi(path: String?) {
             editText.highlightColor = preferenceApplier.editorHighlightColor(
                 ContextCompat.getColor(context, R.color.light_blue_200_dd)
             )
+            val scrollListener =
+                View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                    nestedScrollDispatcher.dispatchPreScroll(
+                        Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
+                        NestedScrollSource.Fling
+                    )
+                }
             editText.setOnScrollChangeListener(scrollListener)
             fileActionUseCase.readCurrentFile()
             editText
