@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
@@ -169,9 +170,17 @@ fun EditorTabUi(path: String?) {
                         NestedScrollSource.Fling
                     )
                 }
-            editText.setOnScrollChangeListener(scrollListener)
+            //editText.setOnScrollChangeListener(scrollListener)
             fileActionUseCase.readCurrentFile()
-            editText
+            val scrollView = NestedScrollView(editText.context)
+            scrollView.addView(editText)
+            scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                nestedScrollDispatcher.dispatchPreScroll(
+                    Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
+                    NestedScrollSource.Fling
+                )
+            }
+            scrollView
         },
         modifier = Modifier
             .fillMaxSize()
