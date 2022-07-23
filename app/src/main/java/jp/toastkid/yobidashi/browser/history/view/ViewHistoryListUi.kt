@@ -117,7 +117,7 @@ private fun List(
     onDelete: (ViewHistory) -> Unit
 ) {
     LazyColumn(state = listState) {
-        items(viewHistoryItems) { viewHistory ->
+        items(viewHistoryItems, { it._id }) { viewHistory ->
             BindItemContent(
                 viewHistory,
                 onClick = {

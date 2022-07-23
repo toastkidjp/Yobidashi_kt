@@ -10,9 +10,6 @@ package jp.toastkid.barcode.view
 
 import android.Manifest
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipDescription
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -53,6 +50,7 @@ import jp.toastkid.barcode.R
 import jp.toastkid.barcode.model.BarcodeAnalyzer
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 
@@ -210,13 +208,7 @@ private fun isGranted(activity: Activity?) =
  * @param text Result text
  */
 private fun clip(context: Context?, text: String) {
-    (context?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager?)
-        ?.setPrimaryClip(
-            ClipData(
-                ClipDescription("text_data", arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)),
-                ClipData.Item(text)
-            )
-        )
+    Clipboard.clip(context, text)
 }
 
 /**

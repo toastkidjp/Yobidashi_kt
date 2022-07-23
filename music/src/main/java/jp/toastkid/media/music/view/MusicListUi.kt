@@ -71,8 +71,8 @@ import kotlinx.coroutines.launch
 fun MusicListUi() {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val viewModelProvider = ViewModelProvider(activity)
-    val browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
-    val mediaPlayerPopupViewModel = viewModelProvider?.get(MediaPlayerPopupViewModel::class.java)
+    val browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
+    val mediaPlayerPopupViewModel = viewModelProvider.get(MediaPlayerPopupViewModel::class.java)
 
     var mediaBrowser: MediaBrowserCompat? = null
 
@@ -178,7 +178,7 @@ internal fun MusicList(
     val context = LocalContext.current
     val viewModel = (context as? ComponentActivity)?.let {
         ViewModelProvider(it).get(MediaPlayerPopupViewModel::class.java)
-    }
+    } ?: return
     val contentViewModel = (context as? ComponentActivity)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
@@ -279,7 +279,7 @@ internal fun MusicList(
             )
         }
         LazyColumn {
-            items(viewModel?.musics ?: emptyList()) { music ->
+            items(viewModel.musics, { it.description.mediaId ?: "" }) { music ->
                 Surface(
                     elevation = 4.dp,
                     modifier = Modifier
@@ -358,7 +358,7 @@ private fun play(
 
     mediaController.transportControls.play()
 
-    mediaPlayerPopupViewModel?.playing = true
+    mediaPlayerPopupViewModel.playing = true
 }
 
 private fun pause(
@@ -369,7 +369,7 @@ private fun pause(
 
     mediaController.transportControls.pause()
 
-    mediaPlayerPopupViewModel?.playing = false
+    mediaPlayerPopupViewModel.playing = false
 }
 
 private fun attemptToGetMediaController(activity: ComponentActivity) =

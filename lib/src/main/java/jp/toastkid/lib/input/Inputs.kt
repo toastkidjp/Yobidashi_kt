@@ -8,29 +8,14 @@
 
 package jp.toastkid.lib.input
 
-import android.app.Activity
 import android.content.Context
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 
 /**
  * @author toastkidjp
  */
 object Inputs {
-
-    /**
-     * Show software keyboard.
-     *
-     * @param activity
-     * @param editText
-     */
-    fun showKeyboard(activity: Activity, editText: EditText) {
-        val inputMethodManager = obtainInputManager(activity)
-        inputMethodManager?.showSoftInput(editText, 0)
-    }
 
     /**
      * Hide software keyboard.
@@ -52,13 +37,4 @@ object Inputs {
         return inputMethodManager
     }
 
-    /**
-     * Show software keyboard for input dialog.
-     * You should call this method from `onActivityCreated(savedInstanceState: Bundle?)`.
-     *
-     * @param window Nullable [Window] for calling setSoftInputMode.
-     */
-    fun showKeyboardForInputDialog(window: Window?) {
-        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-    }
 }

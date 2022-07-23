@@ -8,7 +8,6 @@
 package jp.toastkid.editor
 
 import android.content.res.Resources
-import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable

@@ -286,7 +286,7 @@ internal fun SearchSettingUi() {
                 }
             }
 
-            items(selections) { selection ->
+            items(selections, { it.searchCategory.id }) { selection ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AsyncImage(
                         model = selection.searchCategory.iconId,

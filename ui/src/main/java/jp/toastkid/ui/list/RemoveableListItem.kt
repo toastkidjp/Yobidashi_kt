@@ -8,7 +8,6 @@
 
 package jp.toastkid.ui.list
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -93,7 +92,7 @@ fun SwipeToDismissItem(
         val state = remember {
             DismissState(
                 initialValue = DismissValue.Default,
-                confirmStateChange = { dismissValue ->
+                confirmStateChange = {
                     endOffset.value < marginEnd && endOffset.value != 0f
                 }
             )
@@ -120,13 +119,7 @@ fun SwipeToDismissItem(
             Row(
                 horizontalArrangement = Arrangement.End,
                 content = {
-                    val color by animateColorAsState(
-                        when (state.targetValue) {
-                            DismissValue.DismissedToStart -> Color(0xFFDD4444)
-                            else -> Color(0x88DD4444)
-                        }
-                    )
-                    val direction = state.dismissDirection
+
                     val scale by animateFloatAsState(
                         if (state.targetValue == DismissValue.Default) 0.75f else 1f
                     )

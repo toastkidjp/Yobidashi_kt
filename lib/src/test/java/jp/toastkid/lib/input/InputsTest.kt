@@ -57,15 +57,6 @@ class InputsTest {
     }
 
     @Test
-    fun testShowKeyboard() {
-        Inputs.showKeyboard(context, view)
-
-        verify(exactly = 1) { context.getSystemService(any()) }
-        verify(exactly = 1) { inputMethodManager.isActive }
-        verify(exactly = 1) { inputMethodManager.showSoftInput(any(), any()) }
-    }
-
-    @Test
     fun testHideKeyboard() {
         Inputs.hideKeyboard(view)
 
@@ -73,35 +64,6 @@ class InputsTest {
         verify(exactly = 1) { view.windowToken }
         verify(exactly = 1) { inputMethodManager.isActive }
         verify(exactly = 1) { inputMethodManager.hideSoftInputFromWindow(any(), any()) }
-    }
-
-    @Test
-    fun testShowKeyboardForInputDialog() {
-        Inputs.showKeyboardForInputDialog(window)
-
-        verify(exactly = 1) { window.setSoftInputMode(any()) }
-    }
-
-    @Test
-    fun testObtainNullCase() {
-        every { context.getSystemService(any()) }.returns(null)
-
-        Inputs.showKeyboard(context, view)
-
-        verify(exactly = 1) { context.getSystemService(any()) }
-        verify(exactly = 0) { inputMethodManager.isActive }
-        verify(exactly = 0) { inputMethodManager.showSoftInput(any(), any()) }
-    }
-
-    @Test
-    fun testInactiveCase() {
-        every { inputMethodManager.isActive }.returns(false)
-
-        Inputs.showKeyboard(context, view)
-
-        verify(exactly = 1) { context.getSystemService(any()) }
-        verify(exactly = 1) { inputMethodManager.isActive }
-        verify(exactly = 0) { inputMethodManager.showSoftInput(any(), any()) }
     }
 
 }

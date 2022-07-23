@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.DismissState
-import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -143,18 +141,6 @@ internal fun BindItemContent(
         is ViewHistory -> File(urlItem.favicon)
         else -> null
     }
-
-    val dismissState = DismissState(
-        initialValue = DismissValue.Default,
-        confirmStateChange = { dismissValue ->
-            if (dismissValue == DismissValue.DismissedToStart) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    onDelete()
-                }
-            }
-            true
-        }
-    )
 
     SwipeToDismissItem(
         onClickDelete = {

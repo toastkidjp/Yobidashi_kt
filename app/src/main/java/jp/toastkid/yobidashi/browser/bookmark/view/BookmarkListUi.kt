@@ -262,7 +262,7 @@ private fun BookmarkList(
         state = listState,
         modifier = Modifier.padding(start = 8.dp, end = 8.dp)
     ) {
-        items(viewModel.bookmarks()) { bookmark ->
+        items(viewModel.bookmarks(), { it._id }) { bookmark ->
             val openEditor = remember { mutableStateOf(false) }
 
             SwipeToDismissItem(

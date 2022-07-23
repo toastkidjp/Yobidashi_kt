@@ -61,7 +61,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
@@ -186,11 +185,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
             readerModeText.value = ""
             return@BackHandler
         }
-        if (browserModule.back()) {
-            browserViewModel.setEnableBackPress(browserModule.canGoBack())
-            return@BackHandler
-        }
-        browserViewModel.setEnableBackPress(false)
+        val back = browserModule.back()
+        browserViewModel.setEnableBackPress(browserModule.canGoBack())
+        println("tomato web backhandler $back")
     }
 
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
@@ -232,7 +229,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserModule.findDown()
             })
 
-            viewModel.clear.observe(lifecycleOwner, Observer {
+            viewModel.clear.observe(lifecycleOwner, {
                 browserModule.clearMatches()
             })
         }
@@ -333,7 +330,6 @@ private fun initializeHeaderViewModels(
     resetReaderModeContent: (String) -> Unit
 ) {
     val viewModelProvider = ViewModelProvider(activity)
-    val appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
     val tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
     val pageSearcherViewModel = viewModelProvider.get(PageSearcherViewModel::class.java)

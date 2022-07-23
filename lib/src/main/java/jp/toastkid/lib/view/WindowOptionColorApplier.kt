@@ -7,9 +7,7 @@
  */
 package jp.toastkid.lib.view
 
-import android.os.Build
 import android.view.Window
-import androidx.annotation.RequiresApi
 import androidx.core.graphics.ColorUtils
 import jp.toastkid.lib.preference.ColorPair
 
@@ -18,7 +16,6 @@ import jp.toastkid.lib.preference.ColorPair
  */
 class WindowOptionColorApplier {
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     operator fun invoke(window: Window, colorPair: ColorPair) {
         val color = ColorUtils.setAlphaComponent(colorPair.bgColor(), 255)
         window.statusBarColor     = color
