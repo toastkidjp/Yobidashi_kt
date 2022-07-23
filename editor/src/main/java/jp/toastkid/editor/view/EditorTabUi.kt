@@ -180,6 +180,7 @@ fun EditorTabUi(path: String?) {
                     NestedScrollSource.Fling
                 )
             }
+            scrollView.overScrollMode = ScrollView.OVER_SCROLL_NEVER
             scrollView
         },
         modifier = Modifier
