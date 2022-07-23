@@ -15,6 +15,7 @@ import android.net.Uri
 import android.text.format.DateFormat
 import android.view.View
 import android.widget.EditText
+import android.widget.ScrollView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -68,7 +69,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
@@ -172,7 +172,7 @@ fun EditorTabUi(path: String?) {
                 }
             //editText.setOnScrollChangeListener(scrollListener)
             fileActionUseCase.readCurrentFile()
-            val scrollView = NestedScrollView(editText.context)
+            val scrollView = ScrollView(editText.context)
             scrollView.addView(editText)
             scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
                 nestedScrollDispatcher.dispatchPreScroll(
