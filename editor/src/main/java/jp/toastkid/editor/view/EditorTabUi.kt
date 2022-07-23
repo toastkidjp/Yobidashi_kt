@@ -97,9 +97,7 @@ fun EditorTabUi(path: String?) {
     val viewModelProvider = ViewModelProvider(context)
 
     val editText = remember { EditText(context) }
-    val nestedScrollDispatcher = remember {
-        NestedScrollDispatcher()
-    }
+    val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
 
     val finder = EditTextFinder(editText)
 
