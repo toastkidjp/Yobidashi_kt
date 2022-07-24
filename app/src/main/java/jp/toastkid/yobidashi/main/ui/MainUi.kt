@@ -186,7 +186,7 @@ internal fun Content() {
 
             tabs.openNewPdfTab(uri)
             contentViewModel.replaceToCurrentTab()
-            contentViewModel?.switchTabList()
+            contentViewModel.switchTabList()
         }
 
     val requestPermissionForOpenPdfTab =
