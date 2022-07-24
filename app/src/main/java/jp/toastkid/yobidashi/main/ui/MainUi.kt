@@ -186,9 +186,6 @@ internal fun Content() {
 
             tabs.openNewPdfTab(uri)
             contentViewModel.replaceToCurrentTab()
-            CoroutineScope(Dispatchers.IO).launch {
-                contentViewModel.hideBottomSheet()
-            }
         }
 
     val requestPermissionForOpenPdfTab =
