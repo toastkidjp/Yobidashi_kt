@@ -354,7 +354,7 @@ private fun AppBarContent(
     ) {
         if (progress.value < 70) {
             LinearProgressIndicator(
-                progress = (progress.value?.toFloat() ?: 100f) / 100f,
+                progress = progress.value?.toFloat() / 100f,
                 color = Color(preferenceApplier.fontColor),
                 modifier = Modifier
                     .height(1.dp)
