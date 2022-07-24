@@ -185,7 +185,7 @@ internal fun Content() {
             )
 
             tabs.openNewPdfTab(uri)
-            contentViewModel?.replaceToCurrentTab()
+            contentViewModel.replaceToCurrentTab()
             contentViewModel?.switchTabList()
         }
 
