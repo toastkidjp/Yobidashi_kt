@@ -501,7 +501,7 @@ private fun AppBarContent(
                     Modifier.weight(1f)
                 )
 
-                val isNotLoading = 70 < progress.value ?: 100
+                val isNotLoading = 70 < progress.value
                 val reloadIconId =
                     if (isNotLoading) R.drawable.ic_reload else R.drawable.ic_close
                 Icon(
