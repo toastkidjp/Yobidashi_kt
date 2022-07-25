@@ -376,7 +376,7 @@ private fun AppBarContent(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,
                 tint,
-                enableForward.value ?: false
+                enableForward.value
             ) { browserModule.forward() }
             Box(
                 contentAlignment = Alignment.Center,
