@@ -230,7 +230,7 @@ fun EditorTabUi(path: String?) {
             fileActionUseCase.save(openInputFileNameDialog)
             localLifecycle.removeObserver(observer)
             keyboardController?.hide()
-            contentViewModel?.share?.removeObservers(localLifecycleOwner)
+            contentViewModel.share.removeObservers(localLifecycleOwner)
         }
     }
 
