@@ -24,7 +24,10 @@ class WebTabTest {
             "c":0}],"id":"505efeb5-8694-4486-ba26-6d152cba4a65"}
         """
         val deserialized = Json { ignoreUnknownKeys = true }.decodeFromString<WebTab>(json)
-        assertEquals("【大相撲雑談スレ】名古屋場所 : 2ch大相撲 (記事コメント - 4)", deserialized.latest.title())
+        assertEquals(
+            "【大相撲雑談スレ】名古屋場所 : 2ch大相撲 (記事コメント - 4)",
+            deserialized.latest.title()
+        )
         assertEquals("http://xn--2ch-2d8eo32c60z.xyz/lite/archives/30927298/comments/1083702/?p=4", deserialized.latest.url())
     }
 
