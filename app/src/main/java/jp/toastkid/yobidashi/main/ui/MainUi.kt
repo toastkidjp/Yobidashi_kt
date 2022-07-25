@@ -626,7 +626,7 @@ private fun initializeContentViewModel(
         tabs.openCalendar()
         replaceToCurrentTab(tabs, navigationHostController)
     })
-    contentViewModel?.nextRoute?.observe(activity, {
+    contentViewModel.nextRoute.observe(activity, {
         val route = it?.getContentIfNotHandled() ?: return@observe
         navigate(navigationHostController, route)
     })
