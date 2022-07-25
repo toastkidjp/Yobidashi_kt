@@ -200,6 +200,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     backgroundColor,
                     Modifier.padding(4.dp)
                 ) {
+                    // For suppressing replace screen.
                     contentViewModel.setHideBottomSheetAction {  }
                     tabListViewModel.openNewTab()
                     closeOnly(coroutineScope, contentViewModel)
