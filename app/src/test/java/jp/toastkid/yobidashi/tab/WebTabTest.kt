@@ -28,7 +28,10 @@ class WebTabTest {
             "【大相撲雑談スレ】名古屋場所 : 2ch大相撲 (記事コメント - 4)",
             deserialized.latest.title()
         )
-        assertEquals("http://xn--2ch-2d8eo32c60z.xyz/lite/archives/30927298/comments/1083702/?p=4", deserialized.latest.url())
+        assertEquals(
+            "http://xn--2ch-2d8eo32c60z.xyz/lite/archives/30927298/comments/1083702/?p=4",
+            deserialized.latest.url()
+        )
     }
 
     @Test
