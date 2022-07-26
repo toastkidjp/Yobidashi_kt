@@ -246,12 +246,15 @@ private fun TabItem(
     onClick: (Tab) -> Unit,
     onClose: (Tab) -> Unit
 ) {
-    val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
-        if (it == 1) {
-            onClose(tab)
+    val swipeableState = SwipeableState(
+        initialValue = 0,
+        confirmStateChange = {
+            if (it == 1) {
+                onClose(tab)
+            }
+            true
         }
-        true
-    })
+    )
 
     AnimatedVisibility(
         visibility(tab),
