@@ -153,7 +153,7 @@ fun BarcodeReaderUi() {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             stringResource(id = R.string.clip),
-                            color = Color(preferenceApplier.fontColor),
+                            color = MaterialTheme.colors.onPrimary,
                             fontSize = 16.sp,
                             modifier = Modifier
                                 .padding(16.dp)
