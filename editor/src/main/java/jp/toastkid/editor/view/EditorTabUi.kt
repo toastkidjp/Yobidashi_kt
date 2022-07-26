@@ -259,7 +259,7 @@ private fun AppBarContent(
 
             it.data?.data?.let { uri ->
                 fileActionUseCase.readFromFileUri(uri)
-                openInputFileNameDialog?.value = true
+                openInputFileNameDialog.value = true
             }
         }
 
