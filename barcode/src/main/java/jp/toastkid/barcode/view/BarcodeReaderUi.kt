@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -145,7 +146,7 @@ fun BarcodeReaderUi() {
             ) {
                 Column(
                     modifier = Modifier
-                        .background(Color(preferenceApplier.color))
+                        .background(MaterialTheme.colors.primary)
                         .wrapContentWidth()
                         .padding(16.dp)
                 ) {
