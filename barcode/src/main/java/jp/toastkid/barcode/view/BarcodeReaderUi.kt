@@ -63,8 +63,8 @@ fun BarcodeReaderUi() {
     val onResume = remember { mutableStateOf(isGranted(context)) }
 
     val cameraPermissionRequestLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it) {
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
                 onResume.value = true
                 return@rememberLauncherForActivityResult
             }
