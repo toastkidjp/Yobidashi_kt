@@ -214,4 +214,4 @@ private fun clip(context: Context?, text: String) {
 /**
  * Required permission for this fragment(and function).
  */
-private val cameraPermission = Manifest.permission.CAMERA
+private const val cameraPermission = Manifest.permission.CAMERA
