@@ -417,7 +417,7 @@ private fun AppBarContent(
                 UserAgentDropdown(open) {
                     preferenceApplier.setUserAgent(it.name)
                     browserModule.resetUserAgent(it.text())
-                    contentViewModel?.snackShort(
+                    contentViewModel.snackShort(
                         activity.getString(
                             R.string.format_result_user_agent,
                             it.title()
