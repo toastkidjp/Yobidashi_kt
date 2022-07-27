@@ -97,12 +97,10 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
 
     val state =  rememberReorderableLazyListState(
         onMove = { from, to ->
-            println("tomato move $from $to")
             tabs.add(to.index, tabs.removeAt(from.index))
             tabAdapter.swap(to.index, from.index)
         },
         onDragEnd = { _, _ ->
-            println("tomato end")
             tabAdapter.saveTabList()
         },
         listState = rememberLazyListState(max(0, tabAdapter.index() - 1))
