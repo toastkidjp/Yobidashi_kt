@@ -75,6 +75,10 @@ import jp.toastkid.yobidashi.tab.TabThumbnails
 import jp.toastkid.yobidashi.tab.model.Tab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
 import java.io.File
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -88,10 +92,21 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
     val tabListViewModel = viewModel(TabListViewModel::class.java, context)
     val coroutineScope = rememberCoroutineScope()
 
-    val state = rememberLazyListState(max(0, tabAdapter.index() - 1))
-
     val tabs = remember { mutableStateListOf<Tab>() }
     refresh(tabAdapter, tabs)
+
+    val state =  rememberReorderableLazyListState(
+        onMove = { from, to ->
+            println("tomato move $from $to")
+            tabs.add(to.index, tabs.removeAt(from.index))
+            tabAdapter.swap(to.index, from.index)
+        },
+        onDragEnd = { _, _ ->
+            println("tomato end")
+            tabAdapter.saveTabList()
+        },
+        listState = rememberLazyListState(max(0, tabAdapter.index() - 1))
+    )
 
     val sizePx = with(LocalDensity.current) { dimensionResource(R.dimen.tab_list_item_height).toPx() }
     val anchors = mapOf(0f to 0, -sizePx to 1)
@@ -109,7 +124,13 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
         )
 
         Column {
-            LazyRow(state = state, contentPadding = PaddingValues(horizontal = 4.dp)) {
+            LazyRow(
+                state = state.listState,
+                contentPadding = PaddingValues(horizontal = 4.dp),
+                modifier = Modifier
+                    .reorderable(state)
+                    .detectReorderAfterLongPress(state)
+            ) {
                 val currentIndex = tabAdapter.index()
 
                 itemsIndexed(tabs) { position, tab ->
@@ -123,23 +144,25 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     else
                         Color.Transparent
 
-                    TabItem(
-                        tab,
-                        tabThumbnails.assignNewFile(tab.thumbnailPath()),
-                        backgroundColor,
-                        anchors,
-                        visibility = {
-                            deletedTabIds.contains(it.id()).not()
-                        },
-                        onClick = {
-                            tabAdapter.replace(tab)
-                            closeOnly(coroutineScope, contentViewModel)
-                        },
-                        onClose = {
-                            deletedTabIds.add(tab.id())
-                            tabAdapter.closeTab(tabAdapter.indexOf(tab))
-                        }
-                    )
+                    ReorderableItem(state, key = tab, defaultDraggingModifier = Modifier) { isDragging ->
+                        TabItem(
+                            tab,
+                            tabThumbnails.assignNewFile(tab.thumbnailPath()),
+                            backgroundColor,
+                            anchors,
+                            visibility = {
+                                deletedTabIds.contains(it.id()).not()
+                            },
+                            onClick = {
+                                tabAdapter.replace(tab)
+                                closeOnly(coroutineScope, contentViewModel)
+                            },
+                            onClose = {
+                                deletedTabIds.add(tab.id())
+                                tabAdapter.closeTab(tabAdapter.indexOf(tab))
+                            }
+                        )
+                    }
                 }
             }
 
