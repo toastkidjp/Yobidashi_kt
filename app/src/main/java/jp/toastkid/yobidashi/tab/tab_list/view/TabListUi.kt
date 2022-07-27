@@ -142,7 +142,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     else
                         Color.Transparent
 
-                    ReorderableItem(state, key = tab, defaultDraggingModifier = Modifier) { isDragging ->
+                    ReorderableItem(state, key = tab, defaultDraggingModifier = Modifier) { _ ->
                         TabItem(
                             tab,
                             tabThumbnails.assignNewFile(tab.thumbnailPath()),
