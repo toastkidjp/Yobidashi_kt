@@ -131,7 +131,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
             ) {
                 val currentIndex = tabAdapter.index()
 
-                itemsIndexed(tabs) { position, tab ->
+                itemsIndexed(tabs, { position, tab -> tab.id() }) { position, tab ->
                     val backgroundColor = if (currentIndex == position)
                         Color(
                             ColorUtils.setAlphaComponent(
@@ -142,7 +142,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     else
                         Color.Transparent
 
-                    ReorderableItem(state, key = tab, defaultDraggingModifier = Modifier) { _ ->
+                    ReorderableItem(state, key = tab.id(), defaultDraggingModifier = Modifier) { _ ->
                         TabItem(
                             tab,
                             tabThumbnails.assignNewFile(tab.thumbnailPath()),
