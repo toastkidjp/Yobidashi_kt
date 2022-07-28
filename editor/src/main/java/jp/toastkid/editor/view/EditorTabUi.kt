@@ -222,7 +222,7 @@ fun EditorTabUi(path: String?) {
         }
     }
 
-    val keyboardController = LocalSoftwareKeyboardController.current
+    LocalSoftwareKeyboardController.current
     DisposableEffect(key1 = editText) {
         localLifecycle.addObserver(observer)
 
