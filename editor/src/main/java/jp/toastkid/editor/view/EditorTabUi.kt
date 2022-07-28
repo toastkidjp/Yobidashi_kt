@@ -123,10 +123,10 @@ fun EditorTabUi(path: String?) {
     }
 
     val localLifecycleOwner = LocalLifecycleOwner.current
-    contentViewModel.toTop.observe(localLifecycleOwner, {
+    contentViewModel.toTop.observe(localLifecycleOwner) {
         it.getContentIfNotHandled() ?: return@observe
         editText.setSelection(0)
-    })
+    }
     contentViewModel.toBottom.observe(localLifecycleOwner, {
         it.getContentIfNotHandled() ?: return@observe
         editText.setSelection(editText.text.length)
