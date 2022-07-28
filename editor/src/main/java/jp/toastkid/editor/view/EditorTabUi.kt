@@ -222,7 +222,6 @@ fun EditorTabUi(path: String?) {
         }
     }
 
-    LocalSoftwareKeyboardController.current
     DisposableEffect(key1 = editText) {
         localLifecycle.addObserver(observer)
 
