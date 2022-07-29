@@ -187,8 +187,6 @@ class BrowserModule(
         currentView()?.pageDown(true)
     }
 
-    fun canGoBack() = currentView()?.canGoBack() ?: false
-
     fun back() = currentView()?.let {
         return if (it.canGoBack()) {
             it.goBack()
