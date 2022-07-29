@@ -131,7 +131,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
             ) {
                 val currentIndex = tabAdapter.index()
 
-                itemsIndexed(tabs, { position, tab -> tab.id() }) { position, tab ->
+                itemsIndexed(tabs, { _, tab -> tab.id() }) { position, tab ->
                     val backgroundColor = if (currentIndex == position)
                         Color(
                             ColorUtils.setAlphaComponent(
