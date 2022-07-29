@@ -132,14 +132,6 @@ class BrowserViewModel : ViewModel() {
         _url.value = nextUrl ?: ""
     }
 
-    private val _enableBackPress = mutableStateOf(false)
-
-    val enableBackPress: State<Boolean> = _enableBackPress
-
-    fun setEnableBackPress(newState: Boolean) {
-        _enableBackPress.value = newState
-    }
-
     private val _enableForward = mutableStateOf(false)
 
     val enableForward: State<Boolean> = _enableForward
@@ -154,7 +146,6 @@ class BrowserViewModel : ViewModel() {
 
     fun setBackButtonIsEnabled(newState: Boolean) {
         _enableBack.value = newState
-        setEnableBackPress(newState)
     }
 
     private val _progress = mutableStateOf(0)

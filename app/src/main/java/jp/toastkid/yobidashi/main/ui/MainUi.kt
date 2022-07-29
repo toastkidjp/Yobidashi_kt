@@ -630,12 +630,23 @@ internal fun Content() {
                         openFindInPageState.value = false
                         return@BackHandler
                     }
+
                     val route =
-                        navigationHostController?.currentBackStackEntry?.destination?.route
+                        navigationHostController.currentBackStackEntry?.destination?.route
+
+                    if (route?.startsWith("tab/web") == true) {
+                        val latest = GlobalWebViewPool.getLatest()
+                        if (latest?.canGoBack() == true) {
+                            latest.goBack()
+                            return@BackHandler
+                        }
+                    }
+
                     navigationHostController?.popBackStack()
                     if (route == "setting/top") {
                         contentViewModel?.refresh()
                     }
+
                     if (route?.startsWith("tab/") == true) {
                         tabs.closeTab(tabs.index())
 
