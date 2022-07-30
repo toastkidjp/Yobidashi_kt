@@ -177,6 +177,7 @@ internal fun ImageListUi(
                         modifier = Modifier
                             .weight(1f)
                             .padding(4.dp)
+                            .animateItemPlacement()
                     ) {
                         Column(
                             modifier = Modifier
