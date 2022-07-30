@@ -212,7 +212,10 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 keyboardActions = KeyboardActions{
                     viewModel?.search(searchInput)
                 },
-                colors = TextFieldDefaults.textFieldColors(textColor = Color(preferenceApplier.fontColor)),
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color(preferenceApplier.fontColor),
+                    cursorColor = MaterialTheme.colors.onPrimary
+                ),
                 trailingIcon = {
                     Icon(
                     Icons.Filled.Clear,
