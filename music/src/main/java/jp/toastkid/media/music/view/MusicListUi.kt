@@ -12,6 +12,7 @@ import android.content.ComponentName
 import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
+import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
@@ -110,8 +111,9 @@ fun MusicListUi() {
         override fun onConnected() {
             val mediaBrowser = mediaBrowser ?: return
             activity?.also {
+                val sessionToken: MediaSessionCompat.Token = mediaBrowser?.sessionToken ?: return@also
                 val mediaControllerCompat =
-                    MediaControllerCompat(activity, mediaBrowser?.sessionToken)
+                    MediaControllerCompat(activity, sessionToken)
                 mediaControllerCompat.registerCallback(controllerCallback)
                 MediaControllerCompat.setMediaController(
                     it,
