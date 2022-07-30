@@ -22,10 +22,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -114,6 +116,11 @@ internal fun BrowserSettingUi() {
                             homeUrl.value = it
                         },
                         label = { stringResource(id = R.string.title_home) },
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = MaterialTheme.colors.onSurface,
+                            backgroundColor = MaterialTheme.colors.surface,
+                            cursorColor = MaterialTheme.colors.onSurface
+                        ),
                         keyboardActions = KeyboardActions(onDone = {
                             if (homeUrl.value.isEmpty()) {
                                 contentViewModel?.snackShort(
