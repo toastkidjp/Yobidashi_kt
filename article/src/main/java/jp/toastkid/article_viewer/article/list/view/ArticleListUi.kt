@@ -324,7 +324,9 @@ internal fun ArticleListUi(
     LazyColumn(state = listState) {
         items(articles, { it.id }) {
             it ?: return@items
-            ListItem(it, contentViewModel, menuPopupUseCase, menuIconColor)
+            ListItem(it, contentViewModel, menuPopupUseCase, menuIconColor,
+                Modifier.animateItemPlacement()
+            )
         }
     }
 
@@ -338,7 +340,8 @@ private fun ListItem(
     article: SearchResult,
     contentViewModel: ContentViewModel?,
     menuPopupUseCase: MenuPopupActionUseCase,
-    @ColorInt menuIconColor: Int
+    @ColorInt menuIconColor: Int,
+    modifier: Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(
@@ -348,7 +351,7 @@ private fun ListItem(
 
     Surface(
         elevation = 4.dp,
-        modifier = Modifier
+        modifier = modifier
             .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
             .combinedClickable(
                 onClick = { contentViewModel?.newArticle(article.title) },
