@@ -68,6 +68,7 @@ class WebViewClientFactory(
 
             rssAddingSuggestion?.invoke(view, url)
             browserViewModel?.setBackButtonIsEnabled(view.canGoBack())
+            browserViewModel?.setForwardButtonIsEnabled(view.canGoForward())
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
@@ -134,7 +135,6 @@ class WebViewClientFactory(
                 .setError(TlsErrorMessageGenerator().invoke(context, error))
         }
 
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                 if (preferenceApplier.adRemove) {
                     adRemover(request.url.toString())
@@ -170,25 +170,25 @@ class WebViewClientFactory(
 
                     when (uri.scheme) {
                         "market", "intent" -> {
-                            try {
-                                context?.startActivity(Intent.parseUri(url, Intent.URI_INTENT_SCHEME))
-                                true
-                            } catch (e: ActivityNotFoundException) {
-                                Timber.w(e)
-
-                                context?.let {
-                                    contentViewModel?.snackShort(context.getString(R.string.message_cannot_launch_app))
-                                }
-                                true
-                            }
+                            startOtherAppWithIntent(
+                                context,
+                                Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+                            )
+                            true
                         }
                         "tel" -> {
-                            context?.startActivity(Intent(Intent.ACTION_DIAL, uri))
+                            startOtherAppWithIntent(
+                                context,
+                                Intent(Intent.ACTION_DIAL, uri)
+                            )
                             view?.reload()
                             true
                         }
                         "mailto" -> {
-                            context?.startActivity(Intent(Intent.ACTION_SENDTO, uri))
+                            startOtherAppWithIntent(
+                                context,
+                                Intent(Intent.ACTION_SENDTO, uri)
+                            )
                             view?.reload()
                             true
                         }
@@ -220,4 +220,15 @@ class WebViewClientFactory(
         }
 
     }
+
+    private fun startOtherAppWithIntent(context: Context?, intent: Intent?) =
+        try {
+            context?.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Timber.w(e)
+
+            context?.let {
+                contentViewModel?.snackShort(context.getString(R.string.message_cannot_launch_app))
+            }
+        }
 }

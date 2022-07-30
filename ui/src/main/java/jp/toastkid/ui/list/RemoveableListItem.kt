@@ -119,7 +119,6 @@ fun SwipeToDismissItem(
             Row(
                 horizontalArrangement = Arrangement.End,
                 content = {
-
                     val scale by animateFloatAsState(
                         if (state.targetValue == DismissValue.Default) 0.75f else 1f
                     )

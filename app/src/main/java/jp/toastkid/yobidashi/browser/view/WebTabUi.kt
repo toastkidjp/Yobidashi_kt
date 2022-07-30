@@ -100,7 +100,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
         frameLayout
     }
 
-    val browserModule = remember { BrowserModule(activityContext, webViewContainer) }
+    val browserModule = remember { BrowserModule(webViewContainer) }
     browserModule.applyNewAlpha()
     browserModule.resizePool(PreferenceApplier(activityContext).poolSize)
 
@@ -134,7 +134,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
             val url = it.second ?: return@rememberLauncherForActivityResult
             DownloadAction(activityContext).invoke(url)
         }
-    browserViewModel?.download?.observe(lifecycleOwner, Observer {
+    browserViewModel.download?.observe(lifecycleOwner, Observer {
         val url = it?.getContentIfNotHandled() ?: return@Observer
         downloadPermissionRequestLauncher.launch(url)
     })
@@ -328,7 +328,6 @@ private fun initializeHeaderViewModels(
     val viewModelProvider = ViewModelProvider(activity)
     val tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
-    val pageSearcherViewModel = viewModelProvider.get(PageSearcherViewModel::class.java)
 
     viewModelProvider.get(BrowserViewModel::class.java).also { viewModel ->
         contentViewModel?.replaceAppBarContent {

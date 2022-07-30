@@ -84,16 +84,18 @@ fun ImageListUi() {
         )
     }
 
-    val imageFilterUseCase = ImageFilterUseCase(
-        preferenceApplier,
-        {
-            images.clear()
-            images.addAll(it)
-        },
-        imageLoaderUseCase,
-        imageLoader,
-        { }
-    )
+    val imageFilterUseCase = remember {
+        ImageFilterUseCase(
+            preferenceApplier,
+            {
+                images.clear()
+                images.addAll(it)
+            },
+            imageLoaderUseCase,
+            imageLoader,
+            { }
+        )
+    }
 
     val requestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
