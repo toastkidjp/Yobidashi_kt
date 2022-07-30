@@ -98,7 +98,8 @@ internal fun TaskEditorUi(
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = MaterialTheme.colors.onSurface,
-                        backgroundColor = MaterialTheme.colors.surface
+                        backgroundColor = MaterialTheme.colors.surface,
+                        cursorColor = MaterialTheme.colors.onSurface
                     ),
                     trailingIcon = {
                         Icon(
