@@ -28,6 +28,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -170,6 +171,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color(preferenceApplier.fontColor),
+                    cursorColor = MaterialTheme.colors.onPrimary,
                     unfocusedLabelColor = Color(preferenceApplier.fontColor),
                     focusedIndicatorColor = Color(preferenceApplier.fontColor)
                 ),
