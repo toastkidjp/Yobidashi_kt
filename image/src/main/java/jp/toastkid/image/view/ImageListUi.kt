@@ -16,12 +16,13 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -159,64 +160,61 @@ internal fun ImageListUi(
     images: List<Image>,
     showPreview: (Int) -> Unit
 ) {
-    val listState = rememberLazyListState()
+    val listState = rememberLazyGridState()
     val preferenceApplier = PreferenceApplier(LocalContext.current)
 
     val chunked = images.chunked(2)
-    LazyColumn(
+    LazyVerticalGrid(
         state = listState,
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(8.dp),
         modifier = Modifier
-            .padding(horizontal = 8.dp)
+            //.padding(horizontal = 8.dp)
             .background(Color.Transparent)
     ) {
-        items(chunked) { itemRow ->
-            Row {
-                itemRow.forEach { image ->
-                    Surface(
-                        elevation = 4.dp,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(4.dp)
-                            .animateItemPlacement()
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .combinedClickable(
-                                    true,
-                                    onClick = {
-                                        if (image.isBucket) {
-                                            CoroutineScope(Dispatchers.IO).launch {
-                                                imageLoaderUseCase(image.name)
-                                            }
-                                        } else {
-                                            showPreview(images.indexOf(image))
-                                        }
-                                    },
-                                    onLongClick = {
-                                        preferenceApplier.addExcludeItem(image.path)
-                                        imageLoaderUseCase()
+        items(images) { image ->
+            Surface(
+                elevation = 4.dp,
+                modifier = Modifier
+                    .padding(4.dp)
+                    .animateItemPlacement()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .combinedClickable(
+                            true,
+                            onClick = {
+                                if (image.isBucket) {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        imageLoaderUseCase(image.name)
                                     }
-                                )
-                                .padding(4.dp)
-                        ) {
-                            AsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(image.path)
-                                    .crossfade(true)
-                                    .placeholder(R.drawable.ic_image)
-                                    .build(),
-                                contentDescription = image.name,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.height(152.dp)
-                            )
-                            Text(
-                                text = image.makeDisplayName(),
-                                fontSize = 14.sp,
-                                maxLines = 2,
-                                modifier = Modifier.padding(4.dp)
-                            )
-                        }
-                    }
+                                } else {
+                                    showPreview(images.indexOf(image))
+                                }
+                            },
+                            onLongClick = {
+                                preferenceApplier.addExcludeItem(image.path)
+                                imageLoaderUseCase()
+                            }
+                        )
+                        .padding(4.dp)
+                ) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(image.path)
+                            .crossfade(true)
+                            .placeholder(R.drawable.ic_image)
+                            .build(),
+                        contentDescription = image.name,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.height(152.dp)
+                    )
+                    Text(
+                        text = image.makeDisplayName(),
+                        fontSize = 14.sp,
+                        maxLines = 2,
+                        modifier = Modifier.padding(4.dp)
+                    )
                 }
             }
         }
