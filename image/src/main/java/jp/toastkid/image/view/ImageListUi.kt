@@ -168,7 +168,6 @@ internal fun ImageListUi(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier
-            //.padding(horizontal = 8.dp)
             .background(Color.Transparent)
     ) {
         items(images, { it.path }) { image ->
