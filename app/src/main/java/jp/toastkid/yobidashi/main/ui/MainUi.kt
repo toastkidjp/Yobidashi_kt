@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.main.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -447,7 +448,7 @@ internal fun Content() {
                 modifier = Modifier
                     .fillMaxSize()
                     .nestedScroll(nestedScrollConnection)
-            ) {
+            ) { paddingValue ->
                 NavigationalContent(navigationHostController, tabs)
 
                 MainBackHandler(
@@ -485,6 +486,9 @@ internal fun Content() {
                     },
                     {
                         tabs.closeTab(tabs.index())
+                    },
+                    {
+                        tabs.currentTab() is WebTab
                     },
                     {
                         tabs.isEmpty()
