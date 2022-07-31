@@ -172,7 +172,7 @@ internal fun ImageListUi(
             //.padding(horizontal = 8.dp)
             .background(Color.Transparent)
     ) {
-        items(images) { image ->
+        items(images, { it.path }) { image ->
             Surface(
                 elevation = 4.dp,
                 modifier = Modifier
