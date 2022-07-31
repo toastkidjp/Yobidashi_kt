@@ -267,7 +267,6 @@ private fun ComponentColorSettingDialog(
     onNewColor: (Color) -> Unit
 ) {
     if (openColorChooserDialog.value) {
-        PreferenceApplier(LocalContext.current)
         val buttonColor = MaterialTheme.colors.onSurface
 
         val choosingColor = remember { mutableStateOf(currentColor) }
