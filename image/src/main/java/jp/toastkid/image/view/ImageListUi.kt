@@ -163,7 +163,6 @@ internal fun ImageListUi(
     val listState = rememberLazyGridState()
     val preferenceApplier = PreferenceApplier(LocalContext.current)
 
-    images.chunked(2)
     LazyVerticalGrid(
         state = listState,
         columns = GridCells.Fixed(2),
