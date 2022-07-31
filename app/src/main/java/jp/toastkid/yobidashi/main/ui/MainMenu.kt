@@ -101,7 +101,7 @@ fun MainMenu(
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp)
+                                .padding(top = 8.dp)
                         )
                     }
                 }
