@@ -167,8 +167,7 @@ internal fun ImageListUi(
         state = listState,
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(8.dp),
-        modifier = Modifier
-            .background(Color.Transparent)
+        modifier = Modifier.background(Color.Transparent)
     ) {
         items(images, { it.path }) { image ->
             Surface(
