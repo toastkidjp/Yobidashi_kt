@@ -149,7 +149,7 @@ private fun TaskList(
     val tasks = flow?.collectAsLazyPagingItems() ?: return
 
     LazyColumn(state = listState) {
-        items(tasks) { task ->
+        items(tasks, { it.id }) { task ->
             task ?: return@items
             TaskListItem(task, color, menuUseCase)
         }

@@ -94,7 +94,7 @@ internal fun SearchContentsUi(
             .verticalScroll(rememberScrollState())
     ) {
         if (preferenceApplier.isEnableUrlModule()) {
-            UrlCard(currentTitle, currentUrl, { viewModel.putQuery(it) })
+            UrlCard(currentTitle, currentUrl) { viewModel.putQuery(it) }
         }
 
         if (viewModel.urlItems.isNotEmpty()) {
@@ -124,11 +124,10 @@ internal fun SearchContentsUi(
         if (viewModel.favoriteSearchItems.isNotEmpty()) {
             HeaderWithLink(
                 R.string.title_favorite_search,
-                R.string.open,
-                {
-                    viewModel.openFavoriteSearch()
-                }
-            )
+                R.string.open
+            ) {
+                viewModel.openFavoriteSearch()
+            }
 
             viewModel.favoriteSearchItems.take(5).forEach { favoriteSearch ->
                 SearchItemContent(
@@ -153,11 +152,10 @@ internal fun SearchContentsUi(
         if (viewModel.searchHistories.isNotEmpty()) {
             HeaderWithLink(
                 R.string.title_search_history,
-                R.string.open,
-                {
-                    viewModel.openSearchHistory()
-                }
-            )
+                R.string.open
+            ) {
+                viewModel.openSearchHistory()
+            }
 
             viewModel.searchHistories.take(5).forEach { searchHistory ->
                 SearchItemContent(
@@ -192,11 +190,11 @@ internal fun SearchContentsUi(
                                 true,
                                 onClick = {
                                     keyboardController?.hide()
-                                    viewModel?.putQuery(it)
-                                    viewModel?.search(it)
+                                    viewModel.putQuery(it)
+                                    viewModel.search(it)
                                 },
                                 onLongClick = {
-                                    viewModel?.searchOnBackground(it)
+                                    viewModel.searchOnBackground(it)
                                 }
                             )
                         ) {
@@ -215,7 +213,7 @@ internal fun SearchContentsUi(
                                     .width(36.dp)
                                     .height(32.dp)
                                     .background(MaterialTheme.colors.onSurface)
-                                    .clickable { viewModel?.putQuery("$it ") }
+                                    .clickable { viewModel.putQuery("$it ") }
                             )
                         }
                     }
@@ -237,10 +235,10 @@ internal fun SearchContentsUi(
                                 true,
                                 onClick = {
                                     keyboardController?.hide()
-                                    viewModel?.search(it.link)
+                                    viewModel.search(it.link)
                                 },
                                 onLongClick = {
-                                    viewModel?.searchOnBackground(it.link)
+                                    viewModel.searchOnBackground(it.link)
                                 }
                             )
                         ) {
@@ -304,7 +302,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                     modifier = Modifier.padding(start = 4.dp, end = 4.dp)
                 )
                 Text(
-                    text = currentUrl ?: "",
+                    text = currentUrl,
                     color = colorResource(id = R.color.link_blue),
                     fontSize = 14.sp,
                     maxLines = 3,

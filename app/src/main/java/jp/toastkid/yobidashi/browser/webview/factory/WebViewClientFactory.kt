@@ -142,24 +142,10 @@ class WebViewClientFactory(
                     super.shouldInterceptRequest(view, request)
                 }
 
-        @Suppress("OverridingDeprecatedMember")
-        @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
-        override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
-                if (preferenceApplier.adRemove) {
-                    adRemover(url)
-                } else {
-                    @Suppress("DEPRECATION")
-                    super.shouldInterceptRequest(view, url)
-                }
-
         @Suppress("DEPRECATION")
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
-                shouldOverrideUrlLoading(view, request?.url?.toString())
-
-        @Suppress("OverridingDeprecatedMember", "DEPRECATION")
-        override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean =
-                url?.let {
+            request?.url?.toString()?.let { url ->
                     val context: Context? = view?.context
                     val uri: Uri = Uri.parse(url)
 
@@ -196,7 +182,7 @@ class WebViewClientFactory(
                             super.shouldOverrideUrlLoading(view, url)
                         }
                     }
-                } ?: super.shouldOverrideUrlLoading(view, url)
+                } ?: super.shouldOverrideUrlLoading(view, request?.url?.toString())
 
         override fun onSafeBrowsingHit(
             view: WebView?,

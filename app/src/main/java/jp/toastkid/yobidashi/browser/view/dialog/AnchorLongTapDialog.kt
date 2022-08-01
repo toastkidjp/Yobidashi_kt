@@ -36,10 +36,10 @@ import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.search.ImageSearchUrlGenerator
 import jp.toastkid.ui.parts.SingleLineText
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.clip.Clipboard
 
 @Composable
 internal fun AnchorLongTapDialog(

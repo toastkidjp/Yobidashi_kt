@@ -54,13 +54,7 @@ import kotlin.math.roundToInt
 @Composable
 fun SwipeToDismissItem(
     onClickDelete: () -> Unit,
-    modifier: Modifier = Modifier
-        .padding(
-            start = 16.dp,
-            end = 16.dp,
-            top = 2.dp,
-            bottom = 2.dp
-        ),
+    modifier: Modifier = Modifier,
     dismissContent: @Composable RowScope.() -> Unit
 ) {
     val directions: Set<DismissDirection> = setOf(
@@ -77,8 +71,12 @@ fun SwipeToDismissItem(
         val width = LocalConfiguration.current.screenWidthDp.toFloat()
         val marginEnd = 60.dp.value
         val anchors = mutableMapOf(0f to DismissValue.Default)
-        if (DismissDirection.StartToEnd in directions) anchors += width to DismissValue.DismissedToEnd
-        if (DismissDirection.EndToStart in directions) anchors += -width to DismissValue.DismissedToStart
+        if (DismissDirection.StartToEnd in directions) {
+            anchors += width to DismissValue.DismissedToEnd
+        }
+        if (DismissDirection.EndToStart in directions) {
+            anchors += -width to DismissValue.DismissedToStart
+        }
 
         val minFactor =
             if (DismissDirection.EndToStart in directions) SwipeableDefaults.StandardResistanceFactor
@@ -102,9 +100,8 @@ fun SwipeToDismissItem(
             Modifier.swipeable(
                 state = state,
                 anchors = anchors,
-                thresholds = { from, to ->
-                    val dir = getDismissDirection(from, to)
-                    FixedThreshold(if (dir == DismissDirection.EndToStart) 3000000.dp else 30000.dp)
+                thresholds = { _, _ ->
+                    FixedThreshold(3000000.dp)
                 },
                 orientation = Orientation.Horizontal,
                 enabled = state.currentValue == DismissValue.Default,
@@ -166,25 +163,5 @@ fun SwipeToDismissItem(
             )
         }
 
-    }
-}
-
-private fun getDismissDirection(from: DismissValue, to: DismissValue): DismissDirection? {
-    return when {
-        // settled at the default state
-        from == to && from == DismissValue.Default -> null
-        // has been dismissed to the end
-        from == to && from == DismissValue.DismissedToEnd -> DismissDirection.StartToEnd
-        // has been dismissed to the start
-        from == to && from == DismissValue.DismissedToStart -> DismissDirection.EndToStart
-        // is currently being dismissed to the end
-        from == DismissValue.Default && to == DismissValue.DismissedToEnd -> DismissDirection.StartToEnd
-        // is currently being dismissed to the start
-        from == DismissValue.Default && to == DismissValue.DismissedToStart -> DismissDirection.EndToStart
-        // has been dismissed to the end but is now animated back to default
-        from == DismissValue.DismissedToEnd && to == DismissValue.Default -> DismissDirection.StartToEnd
-        // has been dismissed to the start but is now animated back to default
-        from == DismissValue.DismissedToStart && to == DismissValue.Default -> DismissDirection.EndToStart
-        else -> null
     }
 }

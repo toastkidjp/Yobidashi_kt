@@ -129,7 +129,7 @@ class BrowserViewModel : ViewModel() {
         if (nextUrl.isNullOrBlank()) {
             return
         }
-        _url.value = nextUrl ?: ""
+        _url.value = nextUrl
     }
 
     private val _enableForward = mutableStateOf(false)
