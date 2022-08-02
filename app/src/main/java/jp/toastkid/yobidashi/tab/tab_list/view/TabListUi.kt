@@ -230,7 +230,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
         }
     }
 
-    LaunchedEffect(key1 = initialIndex, block = {
+    LaunchedEffect(initialIndex, block = {
         contentViewModel.setHideBottomSheetAction {
             if (initialIndex != tabAdapter.currentTabId()) {
                 contentViewModel.replaceToCurrentTab()
