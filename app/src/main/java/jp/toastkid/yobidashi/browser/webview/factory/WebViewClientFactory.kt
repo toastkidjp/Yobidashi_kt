@@ -146,6 +146,12 @@ class WebViewClientFactory(
                     val context: Context? = view?.context
                     val uri: Uri = Uri.parse(url)
 
+                if (uri.host?.endsWith(".xyz") == true || uri.host == "rt.gsspat.jp") {
+                    view?.stopLoading()
+                    contentViewModel?.snackShort("It has canceled load inappropriate Web site. : $uri")
+                    return@let true
+                }
+
                     if (RedirectionUseCase.isTarget(uri)) {
                         RedirectionUseCase().invoke(view, uri)
                         return@let false
