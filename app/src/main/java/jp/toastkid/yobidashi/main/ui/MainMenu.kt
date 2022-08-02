@@ -169,7 +169,7 @@ private fun onClickMainMenuItem(
             )
         }
         Menu.CALENDAR -> {
-            contentViewModel?.openCalendar()
+            contentViewModel.openCalendar()
         }
         Menu.WEB_SEARCH -> {
             contentViewModel?.webSearch()
