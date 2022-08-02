@@ -621,7 +621,7 @@ private fun initializeContentViewModel(
 
         replaceToCurrentTab(tabs, navigationHostController)
     })
-    contentViewModel?.openArticleList?.observe(activity, {
+    contentViewModel.openArticleList?.observe(activity, {
         it?.getContentIfNotHandled() ?: return@observe
         tabs.openArticleList()
         replaceToCurrentTab(tabs, navigationHostController)
