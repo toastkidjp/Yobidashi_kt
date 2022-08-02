@@ -164,7 +164,7 @@ internal fun ImageListUi(
     LazyVerticalGrid(
         state = listState,
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp),
+        contentPadding = PaddingValues(8.dp)
     ) {
         items(images, { it.path }) { image ->
             Surface(
