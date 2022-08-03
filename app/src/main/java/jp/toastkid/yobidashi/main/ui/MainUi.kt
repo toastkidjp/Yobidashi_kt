@@ -454,14 +454,6 @@ internal fun Content() {
 
                 MainBackHandler(
                     {
-                        if (openMenu.value) {
-                            openMenu.value = false
-                            return@MainBackHandler true
-                        } else {
-                            return@MainBackHandler false
-                        }
-                    },
-                    {
                         if (bottomSheetState.isVisible) {
                             coroutineScope.launch {
                                 contentViewModel.hideBottomSheet()
@@ -490,11 +482,10 @@ internal fun Content() {
                     },
                     {
                         tabs.currentTab() is WebTab
-                    },
-                    {
-                        tabs.isEmpty()
                     }
-                )
+                ) {
+                    tabs.isEmpty()
+                }
 
                 LaunchedEffect(key1 = "first_launch", block = {
                     if (tabs.isEmpty()) {
