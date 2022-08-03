@@ -33,10 +33,6 @@ internal fun MainBackHandler(
     val tabListViewModel = viewModel(TabListViewModel::class.java, activity)
 
     BackHandler(true) {
-        if (closeMenuIfNeed()) {
-            return@BackHandler
-        }
-
         if (closeBottomSheetIfNeed()) {
             return@BackHandler
         }
