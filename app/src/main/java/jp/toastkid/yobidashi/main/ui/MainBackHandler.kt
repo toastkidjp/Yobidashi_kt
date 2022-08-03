@@ -36,10 +36,6 @@ internal fun MainBackHandler(
             return@BackHandler
         }
 
-        if (closeFindInPageIfNeed()) {
-            return@BackHandler
-        }
-
         val route = currentRoute()
 
         if (route?.startsWith("tab/web") == true) {
