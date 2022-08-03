@@ -31,10 +31,6 @@ internal fun MainBackHandler(
     val tabListViewModel = viewModel(TabListViewModel::class.java, activity)
 
     BackHandler(true) {
-        if (closeBottomSheetIfNeed()) {
-            return@BackHandler
-        }
-
         val route = currentRoute()
 
         if (route?.startsWith("tab/web") == true) {
