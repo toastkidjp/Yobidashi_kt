@@ -464,14 +464,6 @@ internal fun Content() {
                         }
                     },
                     {
-                        if (openFindInPageState.value) {
-                            openFindInPageState.value = false
-                            return@MainBackHandler true
-                        } else {
-                            return@MainBackHandler false
-                        }
-                    },
-                    {
                         navigationHostController.currentBackStackEntry?.destination?.route
                     },
                     {
