@@ -351,6 +351,8 @@ internal fun Content() {
             }
         }
 
+    val bottomSheetState = contentViewModel?.modalBottomSheetState ?: return
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -361,8 +363,6 @@ internal fun Content() {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-
-        val bottomSheetState = contentViewModel?.modalBottomSheetState ?: return
 
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
@@ -452,33 +452,6 @@ internal fun Content() {
             ) { paddingValue ->
                 NavigationalContent(navigationHostController, tabs)
 
-                MainBackHandler(
-                    {
-                        if (bottomSheetState.isVisible) {
-                            coroutineScope.launch {
-                                contentViewModel.hideBottomSheet()
-                            }
-                            return@MainBackHandler true
-                        } else {
-                            return@MainBackHandler false
-                        }
-                    },
-                    {
-                        navigationHostController.currentBackStackEntry?.destination?.route
-                    },
-                    {
-                        navigationHostController.popBackStack()
-                    },
-                    {
-                        tabs.closeTab(tabs.index())
-                    },
-                    {
-                        tabs.currentTab() is WebTab
-                    }
-                ) {
-                    tabs.isEmpty()
-                }
-
                 LaunchedEffect(key1 = "first_launch", block = {
                     if (tabs.isEmpty()) {
                         tabListViewModel.openNewTab()
@@ -510,6 +483,33 @@ internal fun Content() {
                 }
             }
         }
+    }
+
+    MainBackHandler(
+        {
+            if (bottomSheetState.isVisible) {
+                coroutineScope.launch {
+                    contentViewModel.hideBottomSheet()
+                }
+                return@MainBackHandler true
+            } else {
+                return@MainBackHandler false
+            }
+        },
+        {
+            navigationHostController.currentBackStackEntry?.destination?.route
+        },
+        {
+            navigationHostController.popBackStack()
+        },
+        {
+            tabs.closeTab(tabs.index())
+        },
+        {
+            tabs.currentTab() is WebTab
+        }
+    ) {
+        tabs.isEmpty()
     }
 
     val lifecycle = LocalLifecycleOwner.current.lifecycle
