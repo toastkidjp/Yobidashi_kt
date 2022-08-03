@@ -20,7 +20,6 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 @Composable
 internal fun MainBackHandler(
     closeBottomSheetIfNeed: () -> Boolean,
-    closeFindInPageIfNeed: () -> Boolean,
     currentRoute: () -> String?,
     navigationPopBackStack: () -> Unit,
     closeTab: () -> Unit,
