@@ -53,9 +53,6 @@ import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.load.LoadedAction
 import jp.toastkid.yobidashi.settings.view.WithIcon
 
-/**
- * TODO implement clear setting menu.
- */
 @Composable
 internal fun DisplaySettingUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
