@@ -494,16 +494,6 @@ internal fun Content() {
 
     MainBackHandler(
         {
-            if (bottomSheetState.isVisible) {
-                coroutineScope.launch {
-                    contentViewModel.hideBottomSheet()
-                }
-                return@MainBackHandler true
-            } else {
-                return@MainBackHandler false
-            }
-        },
-        {
             navigationHostController.currentBackStackEntry?.destination?.route
         },
         {
