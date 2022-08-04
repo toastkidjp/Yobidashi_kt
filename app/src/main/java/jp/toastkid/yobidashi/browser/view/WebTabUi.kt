@@ -186,7 +186,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
         }
     }
 
-    val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+    val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
@@ -330,7 +330,7 @@ private fun initializeHeaderViewModels(
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
 
     viewModelProvider.get(BrowserViewModel::class.java).also { viewModel ->
-        contentViewModel?.replaceAppBarContent {
+        contentViewModel.replaceAppBarContent {
             val preferenceApplier = PreferenceApplier(activity)
             val tint = Color(preferenceApplier.fontColor)
 
@@ -339,7 +339,7 @@ private fun initializeHeaderViewModels(
             val progress = viewModel.progress
             val enableBack = viewModel.enableBack
             val enableForward = viewModel.enableForward
-            val tabCountState = tabListViewModel?.tabCount
+            val tabCountState = tabListViewModel.tabCount
 
             Column(
                 modifier = Modifier

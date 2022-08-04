@@ -223,7 +223,7 @@ internal fun SearchContentsUi(
 
         if (preferenceApplier.isEnableTrendModule() && viewModel.trends.isNotEmpty()) {
             HeaderWithLink(R.string.hourly_trends, R.string.open) {
-                viewModel?.search("https://trends.google.co.jp/trends/trendingsearches/realtime")
+                viewModel.search("https://trends.google.co.jp/trends/trendingsearches/realtime")
             }
 
             FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {

@@ -161,6 +161,7 @@ fun EditorTabUi(path: String?) {
             editText.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
             editText.typeface = Typeface.MONOSPACE
             editText.hint = context.getString(R.string.hint_editor_input)
+            editText.setHintTextColor(preferenceApplier.editorFontColor())
 
             CursorColorSetter().invoke(
                 editText,
@@ -180,7 +181,6 @@ fun EditorTabUi(path: String?) {
                 nestedScrollDispatcher
             )
             .padding(horizontal = 8.dp, vertical = 2.dp)
-            .padding(bottom = 4.dp)
     )
 
     val pageSearcherViewModel =
