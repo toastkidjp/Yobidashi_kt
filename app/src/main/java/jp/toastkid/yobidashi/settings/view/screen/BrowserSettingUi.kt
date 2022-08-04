@@ -156,7 +156,6 @@ internal fun BrowserSettingUi() {
                 CheckableRow(
                     useJavaScript,
                     {
-                        val preferenceApplier = preferenceApplier
                         val newState = !preferenceApplier.useJavaScript()
                         preferenceApplier.setUseJavaScript(newState)
                         @StringRes val messageId: Int = if (newState)
