@@ -172,7 +172,7 @@ private fun onClickMainMenuItem(
             contentViewModel.openCalendar()
         }
         Menu.WEB_SEARCH -> {
-            contentViewModel?.webSearch()
+            contentViewModel.webSearch()
         }
         Menu.ABOUT_THIS_APP -> {
             navigate("about")
