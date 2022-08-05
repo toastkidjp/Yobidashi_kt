@@ -180,7 +180,7 @@ internal fun DisplaySettingUi() {
             }
 
             LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                items(files) { imageFile ->
+                items(files, { it.absolutePath }) { imageFile ->
                     Surface(elevation = 4.dp, modifier = Modifier
                         .height(200.dp)
                         .weight(1f)
