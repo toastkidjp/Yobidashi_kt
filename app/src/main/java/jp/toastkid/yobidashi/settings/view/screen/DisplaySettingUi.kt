@@ -250,7 +250,6 @@ internal fun DisplaySettingUi() {
         ) {
             filesDir.clean()
             files.clear()
-            files.addAll(loadFileChunk(filesDir))
             contentViewModel?.snackShort(R.string.message_success_image_removal)
         }
     }
