@@ -155,7 +155,7 @@ internal fun ColorSettingUi() {
         }
 
         LazyVerticalGrid(columns = GridCells.Fixed(3)) {
-            items(savedColors) { savedColor ->
+            items(savedColors, { it.id }) { savedColor ->
                 Surface(
                     elevation = 4.dp,
                     modifier = Modifier
