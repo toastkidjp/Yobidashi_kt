@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -60,6 +61,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ColorSettingUi() {
     val context = LocalContext.current
@@ -172,6 +174,7 @@ internal fun ColorSettingUi() {
                         }
                         .weight(1f)
                         .padding(8.dp)
+                        .animateItemPlacement()
                 ) {
                     Box(
                         modifier = Modifier
