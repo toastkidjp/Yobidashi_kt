@@ -22,12 +22,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -52,6 +54,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.load.LoadedAction
 import jp.toastkid.yobidashi.settings.view.WithIcon
+import java.io.File
 
 @Composable
 internal fun DisplaySettingUi() {
@@ -63,9 +66,7 @@ internal fun DisplaySettingUi() {
 
     val iconColor = Color(IconColorFinder.from(activityContext).invoke())
 
-    val files = remember {
-        mutableStateOf(loadFileChunk(filesDir))
-    }
+    val files = remember { mutableStateListOf<File>().also { it.addAll(loadFileChunk(filesDir)) } }
 
     val addingLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -78,7 +79,10 @@ internal fun DisplaySettingUi() {
             it.data?.data,
             activityContext,
             contentViewModel,
-            { files.value = loadFileChunk(filesDir) },
+            {
+                files.clear()
+                files.addAll(loadFileChunk(filesDir))
+            },
             BACKGROUND_DIR
         )
             .invoke()
@@ -87,153 +91,151 @@ internal fun DisplaySettingUi() {
     val openClearImagesDialog = remember { mutableStateOf(false) }
 
     Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
-        LazyColumn {
-            item {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .clickable { DarkModeApplier().invoke(preferenceApplier, activityContext) }
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.ic_dark_mode_black),
-                        tint = iconColor,
-                        contentDescription = stringResource(id = R.string.apply_dark_mode)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.apply_dark_mode),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 4.dp)
-                    )
-                }
-
-                InsetDivider()
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .clickable {
-                            preferenceApplier.removeBackgroundImagePath()
-                            contentViewModel.snackShort(R.string.message_reset_bg_image)
-                        }
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.ic_close_black),
-                        tint = iconColor,
-                        contentDescription = stringResource(id = R.string.title_bg_reset)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.title_bg_reset),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 4.dp)
-                    )
-                }
-
-                InsetDivider()
-
-                WithIcon(
-                    textId = R.string.title_delete_all,
-                    clickable = {
-                        openClearImagesDialog.value = true
-                    },
-                    iconId = R.drawable.ic_clear_form,
-                    iconTint = iconColor
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .clickable { DarkModeApplier().invoke(preferenceApplier, activityContext) }
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.ic_dark_mode_black),
+                    tint = iconColor,
+                    contentDescription = stringResource(id = R.string.apply_dark_mode)
                 )
-
-                InsetDivider()
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Text(
+                    text = stringResource(id = R.string.apply_dark_mode),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.ic_image),
-                        tint = iconColor,
-                        contentDescription = stringResource(id = R.string.title_background_image_setting)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.title_background_image_setting),
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 4.dp)
-                    )
-                    Icon(
-                        painterResource(id = R.drawable.ic_add_white),
-                        tint = iconColor,
-                        contentDescription = stringResource(id = R.string.add_background_image),
-                        modifier = Modifier.clickable { addingLauncher.launch(makePickImage()) }
-                    )
-                }
+                        .padding(start = 4.dp)
+                )
             }
 
-            if (files.value.isEmpty()) {
-                return@LazyColumn
+            InsetDivider()
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .clickable {
+                        preferenceApplier.removeBackgroundImagePath()
+                        contentViewModel.snackShort(R.string.message_reset_bg_image)
+                    }
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.ic_close_black),
+                    tint = iconColor,
+                    contentDescription = stringResource(id = R.string.title_bg_reset)
+                )
+                Text(
+                    text = stringResource(id = R.string.title_bg_reset),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 4.dp)
+                )
             }
 
-            items(files.value) { column ->
-                Row() {
-                    column.forEach { imageFile ->
-                        Surface(elevation = 4.dp, modifier = Modifier
-                            .height(200.dp)
-                            .weight(1f)
-                            .padding(4.dp)) {
-                            Box(Modifier.clickable {
-                                preferenceApplier.backgroundImagePath = imageFile.path
-                                contentViewModel
-                                    .snackShort(R.string.message_change_background_image)
-                            }) {
-                                Column() {
-                                    AsyncImage(
-                                        model = imageFile,
-                                        contentDescription = imageFile.name,
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier
-                                            .height(150.dp)
-                                            .padding(4.dp)
-                                    )
-                                    Text(
-                                        imageFile.nameWithoutExtension,
-                                        maxLines = 2,
-                                        fontSize = 14.sp,
-                                        overflow = TextOverflow.Ellipsis,
-                                        modifier = Modifier.padding(4.dp)
-                                    )
-                                }
-                                Icon(
-                                    painterResource(id = R.drawable.ic_remove_circle),
-                                    contentDescription = stringResource(id = R.string.delete),
+            InsetDivider()
+
+            WithIcon(
+                textId = R.string.title_delete_all,
+                clickable = {
+                    openClearImagesDialog.value = true
+                },
+                iconId = R.drawable.ic_clear_form,
+                iconTint = iconColor
+            )
+
+            InsetDivider()
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.ic_image),
+                    tint = iconColor,
+                    contentDescription = stringResource(id = R.string.title_background_image_setting)
+                )
+                Text(
+                    text = stringResource(id = R.string.title_background_image_setting),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 4.dp)
+                )
+                Icon(
+                    painterResource(id = R.drawable.ic_add_white),
+                    tint = iconColor,
+                    contentDescription = stringResource(id = R.string.add_background_image),
+                    modifier = Modifier.clickable { addingLauncher.launch(makePickImage()) }
+                )
+            }
+
+            if (files.isEmpty()) {
+                return@Column
+            }
+
+            LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+                items(files) { imageFile ->
+                    Surface(elevation = 4.dp, modifier = Modifier
+                        .height(200.dp)
+                        .weight(1f)
+                        .padding(4.dp)) {
+                        Box(Modifier.clickable {
+                            preferenceApplier.backgroundImagePath = imageFile.path
+                            contentViewModel
+                                .snackShort(R.string.message_change_background_image)
+                        }) {
+                            Column() {
+                                AsyncImage(
+                                    model = imageFile,
+                                    contentDescription = imageFile.name,
+                                    contentScale = ContentScale.Crop,
                                     modifier = Modifier
-                                        .size(40.dp)
-                                        .align(Alignment.TopEnd)
-                                        .clickable {
-                                            if (!imageFile.exists()) {
-                                                contentViewModel
-                                                    ?.snackShort(R.string.message_cannot_found_image)
-                                                return@clickable
-                                            }
-                                            val successRemove = imageFile.delete()
-                                            if (!successRemove) {
-                                                contentViewModel
-                                                    ?.snackShort(R.string.message_failed_image_removal)
-                                                return@clickable
-                                            }
-                                            files.value = loadFileChunk(filesDir)
-                                            contentViewModel
-                                                ?.snackShort(R.string.message_success_image_removal)
-                                        }
+                                        .height(150.dp)
+                                        .padding(4.dp)
+                                )
+                                Text(
+                                    imageFile.nameWithoutExtension,
+                                    maxLines = 2,
+                                    fontSize = 14.sp,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.padding(4.dp)
                                 )
                             }
+                            Icon(
+                                painterResource(id = R.drawable.ic_remove_circle),
+                                contentDescription = stringResource(id = R.string.delete),
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .align(Alignment.TopEnd)
+                                    .clickable {
+                                        if (!imageFile.exists()) {
+                                            contentViewModel
+                                                ?.snackShort(R.string.message_cannot_found_image)
+                                            return@clickable
+                                        }
+                                        val successRemove = imageFile.delete()
+                                        if (!successRemove) {
+                                            contentViewModel
+                                                ?.snackShort(R.string.message_failed_image_removal)
+                                            return@clickable
+                                        }
+                                        files.clear()
+                                        files.addAll(loadFileChunk(filesDir))
+                                        contentViewModel
+                                            ?.snackShort(R.string.message_success_image_removal)
+                                    }
+                            )
                         }
                     }
                 }
             }
+
         }
     }
 
@@ -243,14 +245,15 @@ internal fun DisplaySettingUi() {
             R.string.clear_all
         ) {
             filesDir.clean()
-            files.value = loadFileChunk(filesDir)
+            files.clear()
+            files.addAll(loadFileChunk(filesDir))
             contentViewModel?.snackShort(R.string.message_success_image_removal)
         }
     }
 }
 
 private fun loadFileChunk(filesDir: FilesDir) =
-    filesDir.listFiles().toList().windowed(2, 2, true)
+    filesDir.listFiles().toList()
 
     fun applyDarkMode() {
         /*view?.let {
