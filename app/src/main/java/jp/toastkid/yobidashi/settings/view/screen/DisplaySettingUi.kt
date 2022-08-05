@@ -184,7 +184,8 @@ internal fun DisplaySettingUi() {
                     Surface(elevation = 4.dp, modifier = Modifier
                         .height(200.dp)
                         .weight(1f)
-                        .padding(4.dp)) {
+                        .padding(4.dp)
+                    ) {
                         Box(Modifier.clickable {
                             preferenceApplier.backgroundImagePath = imageFile.path
                             contentViewModel
