@@ -14,6 +14,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,6 +57,7 @@ import jp.toastkid.yobidashi.settings.background.load.LoadedAction
 import jp.toastkid.yobidashi.settings.view.WithIcon
 import java.io.File
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun DisplaySettingUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
@@ -185,6 +187,7 @@ internal fun DisplaySettingUi() {
                         .height(200.dp)
                         .weight(1f)
                         .padding(4.dp)
+                        .animateItemPlacement()
                     ) {
                         Box(Modifier.clickable {
                             preferenceApplier.backgroundImagePath = imageFile.path
