@@ -82,8 +82,7 @@ internal fun DisplaySettingUi() {
             activityContext,
             contentViewModel,
             {
-                files.clear()
-                files.addAll(loadFileChunk(filesDir))
+                files.add(it)
             },
             BACKGROUND_DIR
         )
