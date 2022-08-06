@@ -18,6 +18,7 @@ import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -34,6 +35,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import jp.toastkid.image.Image
@@ -100,6 +102,17 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         state.animateRotateBy(-90f)
                     }
                 }
+            )
+            Icon(
+                painterResource(id = R.drawable.ic_rotate_right),
+                contentDescription = stringResource(id = R.string.content_description_reverse_image),
+                tint = MaterialTheme.colors.onSurface,
+                modifier = Modifier.clickable {
+                    coroutineScope.launch {
+                        state.animateRotateBy(90f)
+                    }
+                }
+                    .padding(start = 8.dp)
             )
         }
     }
