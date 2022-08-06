@@ -33,6 +33,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -61,9 +63,10 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         rotationZ += rotationChange
         offset += offsetChange
     }
-    var alphaSliderPosition by remember { mutableStateOf(1f) }
+    var alphaSliderPosition by remember { mutableStateOf(0f) }
 
     val openMenu = remember { mutableStateOf(false) }
+    val colorFilterState = remember { mutableStateOf<ColorFilter?>(null) }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -77,10 +80,11 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 .data(image.path).crossfade(true).build(),
             imageLoader = imageLoader,
             contentDescription = image.name,
+            colorFilter = colorFilterState.value,
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer(
-                    alpha = alphaSliderPosition,
+                    //TODO alpha = alphaSliderPosition,
                     scaleX = scale,
                     scaleY = scale,
                     rotationY = rotationY,
@@ -123,10 +127,21 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             alphaSliderPosition,
                             onValueChange = {
                                 alphaSliderPosition = it
+                                colorFilterState.value =
+                                    ColorFilter.colorMatrix(ColorMatrix(
+                                        floatArrayOf(
+                                            1f, 0f, 0f, it, 000f,
+                                            0f, 1f, 0f, it, 000f,
+                                            0f, 0f, 1f, it, 000f,
+                                            0f, 0f, 0f, 1f, 000f
+                                        )
+                                    ))
                             },
+                            valueRange = -0.75f .. 0.75f,
                             steps = 100
                         )
                     }
+
                     Row(
                         modifier = Modifier.padding(16.dp)
                     ) {
