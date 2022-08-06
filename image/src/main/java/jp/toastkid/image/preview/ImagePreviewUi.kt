@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.graphicsLayer
@@ -207,6 +208,19 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 }
                                 .padding(start = 8.dp)
                         )
+
+                        Icon(
+                            painterResource(id = R.drawable.ic_brush),
+                            contentDescription = stringResource(id = R.string.content_description_gray_scale),
+                            tint = Color(0xFFAAAAAA),
+                            modifier = Modifier
+                                .clickable {
+                                    colorFilterState.value =
+                                        ColorFilter.colorMatrix(ColorMatrix().also{ it.setToSaturation(0.0f) })
+                                }
+                                .padding(start = 8.dp)
+                        )
+
                     }
                 }
             }
