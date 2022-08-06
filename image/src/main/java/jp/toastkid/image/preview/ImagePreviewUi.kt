@@ -9,7 +9,6 @@
 package jp.toastkid.image.preview
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -23,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -96,58 +96,61 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                     )
                 }
         )
-        Column(
-            modifier = Modifier.align(Alignment.BottomCenter)
-                .background(MaterialTheme.colors.surface)
-        ) {
-            Row(
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
-                Text("Alpha: ")
 
-                Slider(
-                    alphaSliderPosition,
-                    onValueChange = {
-                        alphaSliderPosition = it
-                    },
-                    steps = 100
-                )
-            }
-            Row(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Icon(
-                    painterResource(id = R.drawable.ic_rotate_left),
-                    contentDescription = stringResource(id = R.string.content_description_rotate_left),
-                    tint = MaterialTheme.colors.onSurface,
-                    modifier = Modifier.clickable {
-                        coroutineScope.launch {
-                            state.animateRotateBy(-90f)
+        Surface(
+            elevation = 4.dp,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            Column() {
+                Row(
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    Text("Alpha: ")
+
+                    Slider(
+                        alphaSliderPosition,
+                        onValueChange = {
+                            alphaSliderPosition = it
+                        },
+                        steps = 100
+                    )
+                }
+                Row(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_rotate_left),
+                        contentDescription = stringResource(id = R.string.content_description_rotate_left),
+                        tint = MaterialTheme.colors.onSurface,
+                        modifier = Modifier.clickable {
+                            coroutineScope.launch {
+                                state.animateRotateBy(-90f)
+                            }
                         }
-                    }
-                )
-                Icon(
-                    painterResource(id = R.drawable.ic_rotate_right),
-                    contentDescription = stringResource(id = R.string.content_description_rotate_right),
-                    tint = MaterialTheme.colors.onSurface,
-                    modifier = Modifier.clickable {
-                        coroutineScope.launch {
-                            state.animateRotateBy(90f)
+                    )
+                    Icon(
+                        painterResource(id = R.drawable.ic_rotate_right),
+                        contentDescription = stringResource(id = R.string.content_description_rotate_right),
+                        tint = MaterialTheme.colors.onSurface,
+                        modifier = Modifier.clickable {
+                            coroutineScope.launch {
+                                state.animateRotateBy(90f)
+                            }
                         }
-                    }
-                        .padding(start = 8.dp)
-                )
-                Icon(
-                    painterResource(id = R.drawable.ic_flip),
-                    contentDescription = stringResource(id = R.string.content_description_reverse_image),
-                    tint = MaterialTheme.colors.onSurface,
-                    modifier = Modifier.clickable {
-                        coroutineScope.launch {
-                            rotationY = if (rotationY == 0f) 180f else 0f
+                            .padding(start = 8.dp)
+                    )
+                    Icon(
+                        painterResource(id = R.drawable.ic_flip),
+                        contentDescription = stringResource(id = R.string.content_description_reverse_image),
+                        tint = MaterialTheme.colors.onSurface,
+                        modifier = Modifier.clickable {
+                            coroutineScope.launch {
+                                rotationY = if (rotationY == 0f) 180f else 0f
+                            }
                         }
-                    }
-                        .padding(start = 8.dp)
-                )
+                            .padding(start = 8.dp)
+                    )
+                }
             }
         }
     }
