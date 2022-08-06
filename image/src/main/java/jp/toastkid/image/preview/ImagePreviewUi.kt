@@ -63,6 +63,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     }
     var alphaSliderPosition by remember { mutableStateOf(1f) }
 
+    val openMenu = remember { mutableStateOf(false) }
+
     val coroutineScope = rememberCoroutineScope()
 
     val index = remember { mutableStateOf(initialIndex) }
@@ -102,54 +104,67 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Column() {
-                Row(
-                    modifier = Modifier.padding(top = 8.dp)
-                ) {
-                    Text("Alpha: ")
+                Icon(
+                    painterResource(id = if (openMenu.value) R.drawable.ic_down else R.drawable.ic_up),
+                    contentDescription = stringResource(id = R.string.open),
+                    modifier = Modifier.clickable {
+                        openMenu.value = openMenu.value.not()
+                    }
+                        .align(Alignment.CenterHorizontally)
+                )
 
-                    Slider(
-                        alphaSliderPosition,
-                        onValueChange = {
-                            alphaSliderPosition = it
-                        },
-                        steps = 100
-                    )
-                }
-                Row(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.ic_rotate_left),
-                        contentDescription = stringResource(id = R.string.content_description_rotate_left),
-                        tint = MaterialTheme.colors.onSurface,
-                        modifier = Modifier.clickable {
-                            coroutineScope.launch {
-                                state.animateRotateBy(-90f)
+                if (openMenu.value) {
+                    Row(
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        Text("Alpha: ")
+
+                        Slider(
+                            alphaSliderPosition,
+                            onValueChange = {
+                                alphaSliderPosition = it
+                            },
+                            steps = 100
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.ic_rotate_left),
+                            contentDescription = stringResource(id = R.string.content_description_rotate_left),
+                            tint = MaterialTheme.colors.onSurface,
+                            modifier = Modifier.clickable {
+                                coroutineScope.launch {
+                                    state.animateRotateBy(-90f)
+                                }
                             }
-                        }
-                    )
-                    Icon(
-                        painterResource(id = R.drawable.ic_rotate_right),
-                        contentDescription = stringResource(id = R.string.content_description_rotate_right),
-                        tint = MaterialTheme.colors.onSurface,
-                        modifier = Modifier.clickable {
-                            coroutineScope.launch {
-                                state.animateRotateBy(90f)
-                            }
-                        }
-                            .padding(start = 8.dp)
-                    )
-                    Icon(
-                        painterResource(id = R.drawable.ic_flip),
-                        contentDescription = stringResource(id = R.string.content_description_reverse_image),
-                        tint = MaterialTheme.colors.onSurface,
-                        modifier = Modifier.clickable {
-                            coroutineScope.launch {
-                                rotationY = if (rotationY == 0f) 180f else 0f
-                            }
-                        }
-                            .padding(start = 8.dp)
-                    )
+                        )
+                        Icon(
+                            painterResource(id = R.drawable.ic_rotate_right),
+                            contentDescription = stringResource(id = R.string.content_description_rotate_right),
+                            tint = MaterialTheme.colors.onSurface,
+                            modifier = Modifier
+                                .clickable {
+                                    coroutineScope.launch {
+                                        state.animateRotateBy(90f)
+                                    }
+                                }
+                                .padding(start = 8.dp)
+                        )
+                        Icon(
+                            painterResource(id = R.drawable.ic_flip),
+                            contentDescription = stringResource(id = R.string.content_description_reverse_image),
+                            tint = MaterialTheme.colors.onSurface,
+                            modifier = Modifier
+                                .clickable {
+                                    coroutineScope.launch {
+                                        rotationY = if (rotationY == 0f) 180f else 0f
+                                    }
+                                }
+                                .padding(start = 8.dp)
+                        )
+                    }
                 }
             }
         }
