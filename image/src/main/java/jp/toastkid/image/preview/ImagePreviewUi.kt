@@ -49,12 +49,13 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
 
     var scale by remember { mutableStateOf(1f) }
-    var rotation by remember { mutableStateOf(0f) }
+    var rotationY by remember { mutableStateOf(0f) }
+    var rotationZ by remember { mutableStateOf(0f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
 
     val state = rememberTransformableState { zoomChange, offsetChange, rotationChange ->
         scale *= zoomChange
-        rotation += rotationChange
+        rotationZ += rotationChange
         offset += offsetChange
     }
 
@@ -75,7 +76,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 .graphicsLayer(
                     scaleX = scale,
                     scaleY = scale,
-                    rotationZ = rotation,
+                    rotationY = rotationY,
+                    rotationZ = rotationZ,
                     translationX = offset.x,
                     translationY = offset.y
                 )
@@ -110,6 +112,17 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 modifier = Modifier.clickable {
                     coroutineScope.launch {
                         state.animateRotateBy(90f)
+                    }
+                }
+                    .padding(start = 8.dp)
+            )
+            Icon(
+                painterResource(id = R.drawable.ic_flip),
+                contentDescription = stringResource(id = R.string.content_description_reverse_image),
+                tint = MaterialTheme.colors.onSurface,
+                modifier = Modifier.clickable {
+                    coroutineScope.launch {
+                        rotationY = if (rotationY == 0f) 180f else 0f
                     }
                 }
                     .padding(start = 8.dp)
