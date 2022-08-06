@@ -47,6 +47,7 @@ import jp.toastkid.image.Image
 import jp.toastkid.image.R
 import jp.toastkid.image.factory.GifImageLoaderFactory
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -64,6 +65,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         offset += offsetChange
     }
     var alphaSliderPosition by remember { mutableStateOf(0f) }
+    var contrastSliderPosition by remember { mutableStateOf(0f) }
 
     val openMenu = remember { mutableStateOf(false) }
     val colorFilterState = remember { mutableStateOf<ColorFilter?>(null) }
@@ -139,6 +141,32 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             },
                             valueRange = -0.75f .. 0.75f,
                             steps = 100
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        Text("Contrast: ")
+
+                        Slider(
+                            contrastSliderPosition,
+                            onValueChange = {
+                                contrastSliderPosition = it
+                                val v = max(contrastSliderPosition, 0f) + 1f
+                                val o = -128 * (v - 1)
+                                colorFilterState.value =
+                                    ColorFilter.colorMatrix(ColorMatrix(
+                                        floatArrayOf(
+                                            v, 0f, 0f, 0f, o,
+                                            0f, v, 0f, 0f, o,
+                                            0f, 0f, v, 0f, o,
+                                            0f, 0f, 0f, 1f, 000f
+                                        )
+                                    ))
+                            },
+                            valueRange = 0f .. 1.75f,
+                            steps = 256
                         )
                     }
 
