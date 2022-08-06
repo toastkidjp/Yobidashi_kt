@@ -95,7 +95,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         ) {
             Icon(
                 painterResource(id = R.drawable.ic_rotate_left),
-                contentDescription = stringResource(id = R.string.content_description_reverse_image),
+                contentDescription = stringResource(id = R.string.content_description_rotate_left),
                 tint = MaterialTheme.colors.onSurface,
                 modifier = Modifier.clickable {
                     coroutineScope.launch {
@@ -105,7 +105,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             )
             Icon(
                 painterResource(id = R.drawable.ic_rotate_right),
-                contentDescription = stringResource(id = R.string.content_description_reverse_image),
+                contentDescription = stringResource(id = R.string.content_description_rotate_right),
                 tint = MaterialTheme.colors.onSurface,
                 modifier = Modifier.clickable {
                     coroutineScope.launch {
