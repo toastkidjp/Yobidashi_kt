@@ -16,6 +16,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -250,6 +251,10 @@ class ContentViewModel : ViewModel() {
 
     fun replaceAppBarContent(composable: @Composable() () -> Unit) {
         _appBarContent.value = composable
+    }
+
+    fun hideAppBar() {
+        bottomBarOffsetHeightPx.value = -144.dp.value
     }
 
 }
