@@ -104,7 +104,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 .pointerInput(Unit) {
                     detectDragGestures { change, dragAmount ->
                         change.consume()
-                        println("tomato dragging")
                         offset += dragAmount
                     }
                 }
