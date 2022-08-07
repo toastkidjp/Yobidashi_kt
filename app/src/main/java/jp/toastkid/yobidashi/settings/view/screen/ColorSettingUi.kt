@@ -118,7 +118,7 @@ internal fun ColorSettingUi() {
                             fontColor.toArgb()
                         )
                     repository.add(savedColor)
-                    reload(repository, savedColors)
+                    savedColors.add(savedColor)
                 }
             },
             onReset = {
