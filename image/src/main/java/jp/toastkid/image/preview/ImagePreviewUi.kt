@@ -56,7 +56,6 @@ import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.max
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
