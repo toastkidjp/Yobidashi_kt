@@ -11,6 +11,7 @@ package jp.toastkid.image.preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -42,11 +43,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import jp.toastkid.image.Image
 import jp.toastkid.image.R
 import jp.toastkid.image.factory.GifImageLoaderFactory
+import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.max
 
@@ -263,5 +267,9 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 }
             }
         }
+    }
+
+    (LocalContext.current as? ViewModelStoreOwner)?.let {
+        ViewModelProvider(it).get(ContentViewModel::class.java).hideAppBar()
     }
 }
