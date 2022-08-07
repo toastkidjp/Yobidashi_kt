@@ -253,6 +253,10 @@ class ContentViewModel : ViewModel() {
         _appBarContent.value = composable
     }
 
+    fun showAppBar() {
+        bottomBarOffsetHeightPx.value = 0f
+    }
+
     fun hideAppBar() {
         bottomBarOffsetHeightPx.value = -144.dp.value
     }
