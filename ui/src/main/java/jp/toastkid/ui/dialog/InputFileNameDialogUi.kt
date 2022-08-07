@@ -69,20 +69,24 @@ fun InputFileNameDialogUi(
         confirmButton = {
             Text(
                 text = stringResource(id = R.string.save),
-                modifier = Modifier.clickable {
-                    if (input.value.isNotBlank()) {
-                        onCommit(input.value)
+                modifier = Modifier
+                    .clickable {
+                        if (input.value.isNotBlank()) {
+                            onCommit(input.value)
+                        }
+                        openDialog.value = false
                     }
-                    openDialog.value = false
-                }.padding(4.dp)
+                    .padding(4.dp)
             )
         },
         dismissButton = {
             Text(
                 text = stringResource(id = R.string.cancel),
-                modifier = Modifier.clickable {
-                    openDialog.value = false
-                }.padding(4.dp)
+                modifier = Modifier
+                    .clickable {
+                        openDialog.value = false
+                    }
+                    .padding(4.dp)
             )
         }
     )

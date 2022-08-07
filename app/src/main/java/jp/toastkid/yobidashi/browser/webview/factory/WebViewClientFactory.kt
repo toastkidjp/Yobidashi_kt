@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.browser.webview.factory
 
-import android.annotation.TargetApi
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -142,8 +141,6 @@ class WebViewClientFactory(
                     super.shouldInterceptRequest(view, request)
                 }
 
-        @Suppress("DEPRECATION")
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
             request?.url?.toString()?.let { url ->
                     val context: Context? = view?.context
@@ -179,10 +176,10 @@ class WebViewClientFactory(
                             true
                         }
                         else -> {
-                            super.shouldOverrideUrlLoading(view, url)
+                            super.shouldOverrideUrlLoading(view, request)
                         }
                     }
-                } ?: super.shouldOverrideUrlLoading(view, request?.url?.toString())
+                } ?: super.shouldOverrideUrlLoading(view, request)
 
         override fun onSafeBrowsingHit(
             view: WebView?,

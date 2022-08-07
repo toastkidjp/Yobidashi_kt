@@ -70,7 +70,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.editor.CursorColorSetter
 import jp.toastkid.editor.EditTextFinder
@@ -215,11 +214,9 @@ fun EditorTabUi(path: String?) {
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
     val openInputFileNameDialog = remember { mutableStateOf(false) }
-    val observer = object : LifecycleEventObserver {
-        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-            if (event == Lifecycle.Event.ON_PAUSE) {
-                fileActionUseCase.save(openInputFileNameDialog)
-            }
+    val observer = LifecycleEventObserver { source, event ->
+        if (event == Lifecycle.Event.ON_PAUSE) {
+            fileActionUseCase.save(openInputFileNameDialog)
         }
     }
 
@@ -281,7 +278,7 @@ private fun AppBarContent(
 
         EditorMenuItem(R.string.save, R.drawable.ic_save) { fileActionUseCase.save(openInputFileNameDialog) }
 
-        EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog?.value = true }
+        EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog.value = true }
 
         Box(
             contentAlignment = Alignment.Center,
@@ -291,7 +288,7 @@ private fun AppBarContent(
                 .combinedClickable(
                     true,
                     onClick = { contentViewModel.switchTabList() },
-                    onLongClick = { tabListViewModel?.openNewTab() }
+                    onLongClick = { tabListViewModel.openNewTab() }
                 )
         ) {
             Image(
@@ -396,12 +393,4 @@ private fun EditorMenuItem(
             modifier = Modifier.fillMaxWidth()
         )
     }
-}
-
-/**
- * Insert text to [EditText].
- * @param text insert text
- */
-fun insert(text: CharSequence?) {
-    //TODO editorInput.insert(binding.editorInput.selectionStart, text)
 }
