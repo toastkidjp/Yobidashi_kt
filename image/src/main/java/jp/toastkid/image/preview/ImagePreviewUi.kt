@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -42,6 +43,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -95,12 +97,16 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                     scaleX = scale,
                     scaleY = scale,
                     rotationY = rotationY,
-                    rotationZ = rotationZ,
-                    translationX = offset.x,
-                    translationY = offset.y
+                    rotationZ = rotationZ
                 )
+                .offset { IntOffset(offset.x.toInt(), offset.y.toInt()) }
                 .transformable(state = state)
                 .pointerInput(Unit) {
+                    detectDragGestures { change, dragAmount ->
+                        change.consume()
+                        println("tomato dragging")
+                        offset += dragAmount
+                    }
                     detectTapGestures(
                         onPress = { /* Called when the gesture starts */ },
                         onDoubleTap = { scale = 1f },
@@ -118,9 +124,10 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 Icon(
                     painterResource(id = if (openMenu.value) R.drawable.ic_down else R.drawable.ic_up),
                     contentDescription = stringResource(id = R.string.open),
-                    modifier = Modifier.clickable {
-                        openMenu.value = openMenu.value.not()
-                    }
+                    modifier = Modifier
+                        .clickable {
+                            openMenu.value = openMenu.value.not()
+                        }
                         .align(Alignment.CenterHorizontally)
                 )
 
@@ -220,14 +227,16 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             modifier = Modifier
                                 .clickable {
                                     colorFilterState.value =
-                                        ColorFilter.colorMatrix(ColorMatrix(
-                                            floatArrayOf(
-                                                -1f,0f,0f,0f,255f,
-                                                0f,-1f,0f,0f,255f,
-                                                0f,0f,-1f,0f,255f,
-                                                0f,0f,0f,1f,255f
+                                        ColorFilter.colorMatrix(
+                                            ColorMatrix(
+                                                floatArrayOf(
+                                                    -1f, 0f, 0f, 0f, 255f,
+                                                    0f, -1f, 0f, 0f, 255f,
+                                                    0f, 0f, -1f, 0f, 255f,
+                                                    0f, 0f, 0f, 1f, 255f
+                                                )
                                             )
-                                        ))
+                                        )
                                 }
                                 .padding(start = 8.dp)
                         )
@@ -239,14 +248,16 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             modifier = Modifier
                                 .clickable {
                                     colorFilterState.value =
-                                        ColorFilter.colorMatrix(ColorMatrix(
-                                            floatArrayOf(
-                                                0.9f,0f,0f,0f,000f,
-                                                0f,0.7f,0f,0f,000f,
-                                                0f,0f,0.4f,0f,000f,
-                                                0f,0f,0f,1f,000f
+                                        ColorFilter.colorMatrix(
+                                            ColorMatrix(
+                                                floatArrayOf(
+                                                    0.9f, 0f, 0f, 0f, 000f,
+                                                    0f, 0.7f, 0f, 0f, 000f,
+                                                    0f, 0f, 0.4f, 0f, 000f,
+                                                    0f, 0f, 0f, 1f, 000f
+                                                )
                                             )
-                                        ))
+                                        )
                                 }
                                 .padding(start = 8.dp)
                         )
@@ -258,7 +269,11 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             modifier = Modifier
                                 .clickable {
                                     colorFilterState.value =
-                                        ColorFilter.colorMatrix(ColorMatrix().also{ it.setToSaturation(0.0f) })
+                                        ColorFilter.colorMatrix(ColorMatrix().also {
+                                            it.setToSaturation(
+                                                0.0f
+                                            )
+                                        })
                                 }
                                 .padding(start = 8.dp)
                         )
