@@ -201,7 +201,7 @@ internal fun ColorSettingUi() {
                                     coroutineScope.launch {
                                         withContext(Dispatchers.IO) {
                                             repository.delete(savedColor)
-                                            reload(repository, savedColors)
+                                            savedColors.remove(savedColor)
                                         }
                                     }
                                 }
