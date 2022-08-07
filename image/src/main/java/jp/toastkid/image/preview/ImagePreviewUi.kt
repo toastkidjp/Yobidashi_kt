@@ -107,6 +107,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         println("tomato dragging")
                         offset += dragAmount
                     }
+                }
+                .pointerInput(Unit) {
                     detectTapGestures(
                         onPress = { /* Called when the gesture starts */ },
                         onDoubleTap = { scale = 1f },
