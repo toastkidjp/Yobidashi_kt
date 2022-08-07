@@ -211,6 +211,25 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
 
                         Icon(
                             painterResource(id = R.drawable.ic_brush),
+                            contentDescription = stringResource(id = R.string.content_description_reverse_color),
+                            tint = Color(0xCCCDDC39),
+                            modifier = Modifier
+                                .clickable {
+                                    colorFilterState.value =
+                                        ColorFilter.colorMatrix(ColorMatrix(
+                                            floatArrayOf(
+                                                -1f,0f,0f,0f,255f,
+                                                0f,-1f,0f,0f,255f,
+                                                0f,0f,-1f,0f,255f,
+                                                0f,0f,0f,1f,255f
+                                            )
+                                        ))
+                                }
+                                .padding(start = 8.dp)
+                        )
+
+                        Icon(
+                            painterResource(id = R.drawable.ic_brush),
                             contentDescription = stringResource(id = R.string.content_description_sepia_color_filter),
                             tint = Color(0xDDFF5722),
                             modifier = Modifier
