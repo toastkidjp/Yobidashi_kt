@@ -65,12 +65,10 @@
         android:id="@+id/context_edit_paste_as_quotation"
         android:title="@string/paste_as_quotation"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_quote"
         />
     <item
         android:id="@+id/context_edit_count"
         android:title="@string/title_count"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_quote"
         />
 </menu>
