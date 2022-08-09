@@ -30,6 +30,9 @@
     <string name="clear_all">すべて削除</string>
     <string name="tab_list">タブ一覧</string>
 
+    <string name="web_search">Web 検索</string>
+    <string name="preview_search">ちょっと見る検索</string>
+
     <string name="message_confirm_exit">アプリを終了しますか？</string>
 
     <string name="message_requires_permission_storage">
