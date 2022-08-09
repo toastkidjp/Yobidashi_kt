@@ -9,14 +9,12 @@
         android:id="@+id/context_edit_insert_as_plain"
         android:title="@string/insert_as_plain"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_insert_plain"
         />
 
     <item
         android:id="@+id/context_edit_paste_as_quotation"
         android:title="@string/paste_as_quotation"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_quote"
         tools:ignore="AlwaysShowAction"
         />
 
