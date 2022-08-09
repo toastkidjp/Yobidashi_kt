@@ -157,6 +157,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                     }
 
                     Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(top = 8.dp)
                     ) {
                         Text("Contrast: ")
