@@ -12,7 +12,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,14 +25,9 @@ import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
@@ -51,6 +45,7 @@ import coil.request.ImageRequest
 import jp.toastkid.image.Image
 import jp.toastkid.image.R
 import jp.toastkid.image.factory.GifImageLoaderFactory
+import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.max
@@ -58,30 +53,13 @@ import kotlin.math.max
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
-
-    var scale by remember { mutableStateOf(1f) }
-    var rotationY by remember { mutableStateOf(0f) }
-    var rotationZ by remember { mutableStateOf(0f) }
-    var offset by remember { mutableStateOf(Offset.Zero) }
-
-    val state = rememberTransformableState { zoomChange, offsetChange, rotationChange ->
-        scale *= zoomChange
-        rotationZ += rotationChange
-        offset += offsetChange
-    }
-    var alphaSliderPosition by remember { mutableStateOf(0f) }
-    var contrastSliderPosition by remember { mutableStateOf(0f) }
-    val saturation = remember { mutableStateOf(false) }
-    val reverse = remember { mutableStateOf(false) }
-
-    val openMenu = remember { mutableStateOf(false) }
-    val colorFilterState = remember { mutableStateOf<ColorFilter?>(null) }
-
     val coroutineScope = rememberCoroutineScope()
 
-    val index = remember { mutableStateOf(initialIndex) }
+    val viewModelStoreOwner = LocalContext.current as? ViewModelStoreOwner ?: return
+    val viewModel = ViewModelProvider(viewModelStoreOwner).get(ImagePreviewViewModel::class.java)
+    viewModel.setIndex(initialIndex)
 
-    val image = images[index.value]
+    val image = images[viewModel.index.value]
 
     Box {
         AsyncImage(
@@ -89,27 +67,27 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 .data(image.path).crossfade(true).build(),
             imageLoader = imageLoader,
             contentDescription = image.name,
-            colorFilter = colorFilterState.value,
+            colorFilter = viewModel.colorFilterState.value,
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer(
-                    scaleX = scale,
-                    scaleY = scale,
-                    rotationY = rotationY,
-                    rotationZ = rotationZ
+                    scaleX = viewModel.scale.value,
+                    scaleY = viewModel.scale.value,
+                    rotationY = viewModel.rotationY.value,
+                    rotationZ = viewModel.rotationZ.value
                 )
-                .offset { IntOffset(offset.x.toInt(), offset.y.toInt()) }
-                .transformable(state = state)
+                .offset { IntOffset(viewModel.offset.value.x.toInt(), viewModel.offset.value.y.toInt()) }
+                .transformable(state = viewModel.state)
                 .pointerInput(Unit) {
                     detectDragGestures { change, dragAmount ->
                         change.consume()
-                        offset += dragAmount
+                        viewModel.offset.value += dragAmount
                     }
                 }
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onPress = { /* Called when the gesture starts */ },
-                        onDoubleTap = { scale = 1f },
+                        onDoubleTap = { viewModel.scale.value = 1f },
                         onLongPress = { /* Called on Long Press */ },
                         onTap = { /* Called on Tap */ }
                     )
@@ -122,16 +100,16 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         ) {
             Column() {
                 Icon(
-                    painterResource(id = if (openMenu.value) R.drawable.ic_down else R.drawable.ic_up),
+                    painterResource(id = if (viewModel.openMenu.value) R.drawable.ic_down else R.drawable.ic_up),
                     contentDescription = stringResource(id = R.string.open),
                     modifier = Modifier
                         .clickable {
-                            openMenu.value = openMenu.value.not()
+                            viewModel.openMenu.value = viewModel.openMenu.value.not()
                         }
                         .align(Alignment.CenterHorizontally)
                 )
 
-                if (openMenu.value) {
+                if (viewModel.openMenu.value) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(top = 8.dp)
@@ -139,11 +117,11 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         Text("Alpha: ")
 
                         Slider(
-                            alphaSliderPosition,
+                            viewModel.alphaSliderPosition.value,
                             onValueChange = {
-                                alphaSliderPosition = it
-                                colorFilterState.value =
-                                    makeColorFilter(contrastSliderPosition, alphaSliderPosition, saturation.value, reverse.value)
+                                viewModel.alphaSliderPosition.value = it
+                                viewModel.colorFilterState.value =
+                                    makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
                             },
                             valueRange = -0.75f .. 0.75f,
                             steps = 100
@@ -157,11 +135,11 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         Text("Contrast: ")
 
                         Slider(
-                            contrastSliderPosition,
+                            viewModel.contrastSliderPosition.value,
                             onValueChange = {
-                                contrastSliderPosition = it
-                                colorFilterState.value =
-                                    makeColorFilter(contrastSliderPosition, alphaSliderPosition, saturation.value, reverse.value)
+                                viewModel.contrastSliderPosition.value = it
+                                viewModel.colorFilterState.value =
+                                    makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
                             },
                             valueRange = 0f .. 1.75f,
                             steps = 256
@@ -177,7 +155,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             tint = MaterialTheme.colors.onSurface,
                             modifier = Modifier.clickable {
                                 coroutineScope.launch {
-                                    state.animateRotateBy(-90f)
+                                    viewModel.state.animateRotateBy(-90f)
                                 }
                             }
                         )
@@ -188,7 +166,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             modifier = Modifier
                                 .clickable {
                                     coroutineScope.launch {
-                                        state.animateRotateBy(90f)
+                                        viewModel.state.animateRotateBy(90f)
                                     }
                                 }
                                 .padding(start = 8.dp)
@@ -200,7 +178,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             modifier = Modifier
                                 .clickable {
                                     coroutineScope.launch {
-                                        rotationY = if (rotationY == 0f) 180f else 0f
+                                        viewModel.rotationY.value = if (viewModel.rotationY.value == 0f) 180f else 0f
                                     }
                                 }
                                 .padding(start = 8.dp)
@@ -212,10 +190,10 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             tint = Color(0xCCCDDC39),
                             modifier = Modifier
                                 .clickable {
-                                    reverse.value = reverse.value.not()
+                                    viewModel.reverse.value = viewModel.reverse.value.not()
 
-                                    colorFilterState.value =
-                                        makeColorFilter(contrastSliderPosition, alphaSliderPosition, saturation.value, reverse.value)
+                                    viewModel.colorFilterState.value =
+                                        makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
                                 }
                                 .padding(start = 8.dp)
                         )
@@ -226,7 +204,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             tint = Color(0xDDFF5722),
                             modifier = Modifier
                                 .clickable {
-                                    colorFilterState.value =
+                                    viewModel.colorFilterState.value =
                                         ColorFilter.colorMatrix(
                                             ColorMatrix(
                                                 floatArrayOf(
@@ -247,14 +225,14 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             tint = Color(0xFFAAAAAA),
                             modifier = Modifier
                                 .clickable {
-                                    saturation.value = saturation.value.not()
+                                    viewModel.saturation.value = viewModel.saturation.value.not()
                                     val newFilter = makeColorFilter(
-                                        contrastSliderPosition,
-                                        alphaSliderPosition,
-                                        saturation.value,
-                                        reverse.value
+                                        viewModel.contrastSliderPosition.value,
+                                        viewModel.alphaSliderPosition.value,
+                                        viewModel.saturation.value,
+                                        viewModel.reverse.value
                                     )
-                                    colorFilterState.value = newFilter
+                                    viewModel.colorFilterState.value = newFilter
                                 }
                                 .padding(start = 8.dp)
                         )
