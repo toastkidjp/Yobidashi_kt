@@ -71,7 +71,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     }
     var alphaSliderPosition by remember { mutableStateOf(0f) }
     var contrastSliderPosition by remember { mutableStateOf(0f) }
-    val saturation = remember { mutableStateOf(1.0f) }
+    val saturation = remember { mutableStateOf(false) }
     val reverse = remember { mutableStateOf(false) }
 
     val openMenu = remember { mutableStateOf(false) }
@@ -248,11 +248,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             tint = Color(0xFFAAAAAA),
                             modifier = Modifier
                                 .clickable {
-                                    if (saturation.value == 1.0f) {
-                                        saturation.value = 0.0f
-                                    } else {
-                                        saturation.value = 1.0f
-                                    }
+                                    saturation.value = saturation.value.not()
                                     val newFilter = makeColorFilter(
                                         contrastSliderPosition,
                                         alphaSliderPosition,
@@ -278,7 +274,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
 private fun makeColorFilter(
     contrastSliderPosition: Float,
     alphaSliderPosition: Float,
-    saturation: Float,
+    saturation: Boolean,
     reverse: Boolean
 ): ColorFilter {
     val v = max(contrastSliderPosition, 0f) + 1f * (if (reverse) -1 else 1)
@@ -291,8 +287,8 @@ private fun makeColorFilter(
             0f, 0f, 0f, 1f, 000f
         )
     )
-    if (saturation == 0.0f) {
-        colorMatrix.setToSaturation(saturation)
+    if (saturation) {
+        colorMatrix.setToSaturation(0.0f)
     }
     return ColorFilter.colorMatrix(colorMatrix)
 }
