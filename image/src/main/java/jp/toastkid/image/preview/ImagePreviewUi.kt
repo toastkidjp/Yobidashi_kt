@@ -119,7 +119,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             viewModel.alphaSliderPosition.value,
                             onValueChange = {
                                 viewModel.alphaSliderPosition.value = it
-                                viewModel.makeColorFilter()
+                                viewModel.updateColorFilter()
                             },
                             valueRange = -0.75f .. 0.75f,
                             steps = 100
@@ -136,7 +136,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             viewModel.contrastSliderPosition.value,
                             onValueChange = {
                                 viewModel.contrastSliderPosition.value = it
-                                viewModel.makeColorFilter()
+                                viewModel.updateColorFilter()
                             },
                             valueRange = 0f .. 1.75f,
                             steps = 256
@@ -188,7 +188,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             modifier = Modifier
                                 .clickable {
                                     viewModel.reverse.value = viewModel.reverse.value.not()
-                                    viewModel.makeColorFilter()
+                                    viewModel.updateColorFilter()
                                 }
                                 .padding(start = 8.dp)
                         )
@@ -221,7 +221,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             modifier = Modifier
                                 .clickable {
                                     viewModel.saturation.value = viewModel.saturation.value.not()
-                                    viewModel.makeColorFilter()
+                                    viewModel.updateColorFilter()
                                 }
                                 .padding(start = 8.dp)
                         )
