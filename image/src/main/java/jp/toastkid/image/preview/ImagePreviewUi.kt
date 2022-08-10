@@ -291,6 +291,8 @@ private fun makeColorFilter(
             0f, 0f, 0f, 1f, 000f
         )
     )
-    colorMatrix.setToSaturation(saturation)
+    if (saturation == 0.0f) {
+        colorMatrix.setToSaturation(saturation)
+    }
     return ColorFilter.colorMatrix(colorMatrix)
 }
