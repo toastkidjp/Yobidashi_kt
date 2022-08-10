@@ -142,14 +142,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             onValueChange = {
                                 alphaSliderPosition = it
                                 colorFilterState.value =
-                                    ColorFilter.colorMatrix(ColorMatrix(
-                                        floatArrayOf(
-                                            1f, 0f, 0f, it, 000f,
-                                            0f, 1f, 0f, it, 000f,
-                                            0f, 0f, 1f, it, 000f,
-                                            0f, 0f, 0f, 1f, 000f
-                                        )
-                                    ))
+                                    makeColorFilter(contrastSliderPosition, alphaSliderPosition)
                             },
                             valueRange = -0.75f .. 0.75f,
                             steps = 100
