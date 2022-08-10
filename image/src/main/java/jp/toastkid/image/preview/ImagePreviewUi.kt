@@ -93,7 +93,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer(
-                    //TODO alpha = alphaSliderPosition,
                     scaleX = scale,
                     scaleY = scale,
                     rotationY = rotationY,
