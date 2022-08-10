@@ -50,7 +50,7 @@ class ImagePreviewViewModel : ViewModel() {
         index.value = i
     }
 
-    fun makeColorFilter(): ColorFilter {
+    fun makeColorFilter() {
         val v = max(contrastSliderPosition.value, 0f) + 1f * (if (reverse.value) -1 else 1)
         val o = -128 * (v - 1)
         val colorMatrix = ColorMatrix(
@@ -64,7 +64,7 @@ class ImagePreviewViewModel : ViewModel() {
         if (saturation.value) {
             colorMatrix.setToSaturation(0.0f)
         }
-        return ColorFilter.colorMatrix(colorMatrix)
+        colorFilterState.value = ColorFilter.colorMatrix(colorMatrix)
     }
 
 }
