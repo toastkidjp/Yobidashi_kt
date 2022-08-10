@@ -166,17 +166,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             contrastSliderPosition,
                             onValueChange = {
                                 contrastSliderPosition = it
-                                val v = max(contrastSliderPosition, 0f) + 1f
-                                val o = -128 * (v - 1)
                                 colorFilterState.value =
-                                    ColorFilter.colorMatrix(ColorMatrix(
-                                        floatArrayOf(
-                                            v, 0f, 0f, alphaSliderPosition, o,
-                                            0f, v, 0f, alphaSliderPosition, o,
-                                            0f, 0f, v, alphaSliderPosition, o,
-                                            0f, 0f, 0f, 1f, 000f
-                                        )
-                                    ))
+                                    makeColorFilter(contrastSliderPosition, alphaSliderPosition)
                             },
                             valueRange = 0f .. 1.75f,
                             steps = 256
@@ -288,4 +279,22 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     (LocalContext.current as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java).hideAppBar()
     }
+}
+
+private fun makeColorFilter(
+    contrastSliderPosition: Float,
+    alphaSliderPosition: Float
+): ColorFilter {
+    val v = max(contrastSliderPosition, 0f) + 1f
+    val o = -128 * (v - 1)
+    return ColorFilter.colorMatrix(
+        ColorMatrix(
+            floatArrayOf(
+                v, 0f, 0f, alphaSliderPosition, o,
+                0f, v, 0f, alphaSliderPosition, o,
+                0f, 0f, v, alphaSliderPosition, o,
+                0f, 0f, 0f, 1f, 000f
+            )
+        )
+    )
 }
