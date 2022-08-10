@@ -226,7 +226,6 @@
     <string name="title_editor">Text Editor</string>
     <string name="save_backup">Backup</string>
     <string name="title_torch">Torch</string>
-    <string name="title_count">Count</string>
     <string name="title_add_folder">Add Folder</string>
     <string name="title_import_bookmark">Import Bookmark</string>
     <string name="title_export_bookmark">Export Bookmark</string>
@@ -265,7 +264,6 @@
     <string name="message_wifi_not_connecting">It isn\'t connecting Wi-Fi.</string>
     <string name="wikipedia">Wikipedia</string>
     <string name="add_schedule">Add schedule</string>
-    <string name="web_search">Web search</string>
     <string name="minus">-</string>
     <string name="use_view_history">Use view history</string>
     <string name="use_app_search">Use app search</string>
@@ -320,22 +318,9 @@
     <string name="title_show_morning_notification">Show morning notification</string>
     <string name="title_show_daily_notification">Report daily information.</string>
     <string name="message_stay_tuned">Stay tuned!</string>
-    <string name="insert_as_plain">Insert as plain</string>
     <string name="title_image_viewer">Image Viewer</string>
 
     <string name="title_dark_mode">Use dark mode</string>
-    <string name="title_context_editor_add_order">Add order</string>
-    <string name="title_context_editor_unordered_list">To list</string>
-    <string name="title_context_editor_convert_to_table">To table</string>
-    <string name="title_context_editor_add_quote">Add quote</string>
-    <string name="title_context_editor_double_quote">Double quote</string>
-    <string name="title_context_editor_bold">Bold</string>
-    <string name="title_context_editor_italic">Italic</string>
-    <string name="title_context_editor_strikethrough">Strikethrough</string>
-    <string name="title_context_editor_set_default_search_category">Set default search category</string>
-    <string name="title_context_editor_task_list">Task list</string>
-    <string name="title_context_editor_code_block">Code block</string>
-    <string name="title_context_editor_insert_thousand_separator">Insert thousand separator</string>
     <string name="title_search_suggestion">Search suggestion</string>
     <string name="search_category">Search category</string>
 
@@ -344,13 +329,8 @@
     <string name="button_clip_cookie">Clip Cookie</string>
     <string name="add_to_home_screen">Add to Home screen</string>
 
-    <string name="horizontal_rule">Horizontal rule</string>
-    <string name="duplicate_current_line">Duplicate current line</string>
-    <string name="select_current_line">Select current line</string>
-    <string name="delete_current_line">Delete current line</string>
     <string name="title_add_default_background">Add default background</string>
     <string name="title_article_viewer">Article Viewer</string>
-    <string name="preview_search">Preview search</string>
     <string name="translate">Translate</string>
     <string name="download_all_images">Download all images</string>
     <string name="title_todo_tasks">TODO tasks</string>
