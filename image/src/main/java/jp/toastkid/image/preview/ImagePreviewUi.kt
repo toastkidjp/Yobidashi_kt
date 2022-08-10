@@ -171,9 +171,9 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 colorFilterState.value =
                                     ColorFilter.colorMatrix(ColorMatrix(
                                         floatArrayOf(
-                                            v, 0f, 0f, 0f, o,
-                                            0f, v, 0f, 0f, o,
-                                            0f, 0f, v, 0f, o,
+                                            v, 0f, 0f, alphaSliderPosition, o,
+                                            0f, v, 0f, alphaSliderPosition, o,
+                                            0f, 0f, v, alphaSliderPosition, o,
                                             0f, 0f, 0f, 1f, 000f
                                         )
                                     ))
