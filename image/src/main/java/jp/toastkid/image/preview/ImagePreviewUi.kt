@@ -72,6 +72,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     var alphaSliderPosition by remember { mutableStateOf(0f) }
     var contrastSliderPosition by remember { mutableStateOf(0f) }
     val saturation = remember { mutableStateOf(1.0f) }
+    val reverse = remember { mutableStateOf(false) }
 
     val openMenu = remember { mutableStateOf(false) }
     val colorFilterState = remember { mutableStateOf<ColorFilter?>(null) }
@@ -143,7 +144,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             onValueChange = {
                                 alphaSliderPosition = it
                                 colorFilterState.value =
-                                    makeColorFilter(contrastSliderPosition, alphaSliderPosition, saturation.value)
+                                    makeColorFilter(contrastSliderPosition, alphaSliderPosition, saturation.value, reverse.value)
                             },
                             valueRange = -0.75f .. 0.75f,
                             steps = 100
@@ -161,7 +162,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             onValueChange = {
                                 contrastSliderPosition = it
                                 colorFilterState.value =
-                                    makeColorFilter(contrastSliderPosition, alphaSliderPosition, saturation.value)
+                                    makeColorFilter(contrastSliderPosition, alphaSliderPosition, saturation.value, reverse.value)
                             },
                             valueRange = 0f .. 1.75f,
                             steps = 256
@@ -212,17 +213,10 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             tint = Color(0xCCCDDC39),
                             modifier = Modifier
                                 .clickable {
+                                    reverse.value = reverse.value.not()
+
                                     colorFilterState.value =
-                                        ColorFilter.colorMatrix(
-                                            ColorMatrix(
-                                                floatArrayOf(
-                                                    -1f, 0f, 0f, 0f, 255f,
-                                                    0f, -1f, 0f, 0f, 255f,
-                                                    0f, 0f, -1f, 0f, 255f,
-                                                    0f, 0f, 0f, 1f, 255f
-                                                )
-                                            )
-                                        )
+                                        makeColorFilter(contrastSliderPosition, alphaSliderPosition, saturation.value, reverse.value)
                                 }
                                 .padding(start = 8.dp)
                         )
@@ -259,7 +253,12 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                     } else {
                                         saturation.value = 1.0f
                                     }
-                                    val newFilter = makeColorFilter(contrastSliderPosition, alphaSliderPosition, saturation.value)
+                                    val newFilter = makeColorFilter(
+                                        contrastSliderPosition,
+                                        alphaSliderPosition,
+                                        saturation.value,
+                                        reverse.value
+                                    )
                                     colorFilterState.value = newFilter
                                 }
                                 .padding(start = 8.dp)
@@ -279,9 +278,10 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
 private fun makeColorFilter(
     contrastSliderPosition: Float,
     alphaSliderPosition: Float,
-    saturation: Float
+    saturation: Float,
+    reverse: Boolean
 ): ColorFilter {
-    val v = max(contrastSliderPosition, 0f) + 1f
+    val v = max(contrastSliderPosition, 0f) + 1f * (if (reverse) -1 else 1)
     val o = -128 * (v - 1)
     val colorMatrix = ColorMatrix(
         floatArrayOf(
