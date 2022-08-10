@@ -30,6 +30,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -41,12 +42,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -150,6 +148,7 @@ fun MusicListUi() {
         {
             browserViewModel.preview("https://www.google.com/search?q=$it Lyrics".toUri())
         },
+        { stop(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         {
             val mediaUri = mediaPlayerPopupViewModel.musics.random()?.description?.mediaUri
@@ -172,6 +171,7 @@ fun MusicListUi() {
 internal fun MusicList(
     onClickItem: (MediaBrowserCompat.MediaItem) -> Unit,
     onClickLyrics: (String) -> Unit,
+    stop: () -> Unit,
     switchState: () -> Unit,
     shuffle: () -> Unit
 ) {
@@ -202,27 +202,28 @@ internal fun MusicList(
                 .height(52.dp)
                 .background(MaterialTheme.colors.primary)
         ) {
-            AsyncImage(
-                R.drawable.ic_stop,
+            Icon(
+                painterResource(id = R.drawable.ic_stop),
                 contentDescription = stringResource(id = R.string.action_stop),
-                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
+                tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
+                    .clickable { stop() }
             )
-            AsyncImage(
-                if (viewModel?.playing == true) R.drawable.ic_pause else R.drawable.ic_play_media,
+            Icon(
+                painterResource(if (viewModel?.playing == true) R.drawable.ic_pause else R.drawable.ic_play_media),
                 contentDescription = stringResource(id = R.string.action_pause),
-                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
+                tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
                     .clickable { switchState() }
             )
-            AsyncImage(
-                R.drawable.ic_shuffle,
+            Icon(
+                painterResource(R.drawable.ic_shuffle),
                 contentDescription = stringResource(id = R.string.action_shuffle),
-                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
+                tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
@@ -264,10 +265,10 @@ internal fun MusicList(
                 }
             }
 
-            AsyncImage(
-                R.drawable.ic_close,
+            Icon(
+                painterResource(id = R.drawable.ic_close),
                 contentDescription = stringResource(id = R.string.close),
-                colorFilter = ColorFilter.tint(Color(iconColor), BlendMode.SrcIn),
+                tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
@@ -315,15 +316,15 @@ internal fun MusicList(
                             )
                             Text(
                                 text = music.description.subtitle.toString(),
-                                color = colorResource(id = R.color.link_blue),
                                 fontSize = 12.sp,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
                         }
-                        AsyncImage(
-                            R.drawable.ic_lyrics,
+                        Icon(
+                            painterResource(id = R.drawable.ic_lyrics),
                             contentDescription = "TODO",
+                            tint = Color(iconColor),
                             modifier = Modifier
                                 .width(36.dp)
                                 .fillMaxHeight()
@@ -348,6 +349,17 @@ fun switchState(
         PlaybackStateCompat.STATE_PAUSED -> play(mediaController, mediaPlayerPopupViewModel)
         else -> Unit
     }
+}
+
+private fun stop(
+    mediaController: MediaControllerCompat,
+    mediaPlayerPopupViewModel: MediaPlayerPopupViewModel
+) {
+    mediaController.metadata ?: return
+
+    mediaController.transportControls.stop()
+
+    mediaPlayerPopupViewModel.playing = false
 }
 
 private fun play(

@@ -8,11 +8,8 @@
 
 package jp.toastkid.yobidashi.main.ui
 
-import android.Manifest
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +26,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -41,35 +37,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.media.music.view.MusicListUi
-import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.menu.Menu
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainMenu(
     openFindInPageState: MutableState<Boolean>,
     navigate: (String) -> Unit,
+    showAudioPlayer: () -> Unit,
     hideMenu: () -> Unit
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
-
-    val coroutineScope = rememberCoroutineScope()
-
-    val mediaPermissionRequestLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-            println("tomato result $it")
-            if (it.not()) {
-                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                return@rememberLauncherForActivityResult
-            }
-
-            contentViewModel?.setBottomSheetContent { MusicListUi() }
-            coroutineScope?.launch {
-                contentViewModel?.switchBottomSheet()
-            }
-        }
 
     Box(
         contentAlignment = Alignment.Center,
@@ -94,9 +72,7 @@ fun MainMenu(
                             onClickMainMenuItem(
                                 menu,
                                 contentViewModel,
-                                {
-                                    mediaPermissionRequestLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-                                },
+                                showAudioPlayer,
                                 navigate,
                                 openFindInPageState
                             )
@@ -149,10 +125,10 @@ private fun onClickMainMenuItem(
             contentViewModel.toTop()
         }
         Menu.BOTTOM -> {
-            contentViewModel?.toBottom()
+            contentViewModel.toBottom()
         }
         Menu.SHARE -> {
-            contentViewModel?.share()
+            contentViewModel.share()
         }
         Menu.CODE_READER -> {
             navigate(
