@@ -120,7 +120,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             onValueChange = {
                                 viewModel.alphaSliderPosition.value = it
                                 viewModel.colorFilterState.value =
-                                    viewModel.makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
+                                    viewModel.makeColorFilter()
                             },
                             valueRange = -0.75f .. 0.75f,
                             steps = 100
@@ -138,7 +138,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             onValueChange = {
                                 viewModel.contrastSliderPosition.value = it
                                 viewModel.colorFilterState.value =
-                                    viewModel.makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
+                                    viewModel.makeColorFilter()
                             },
                             valueRange = 0f .. 1.75f,
                             steps = 256
@@ -192,7 +192,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                     viewModel.reverse.value = viewModel.reverse.value.not()
 
                                     viewModel.colorFilterState.value =
-                                        viewModel.makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
+                                        viewModel.makeColorFilter()
                                 }
                                 .padding(start = 8.dp)
                         )
@@ -225,12 +225,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             modifier = Modifier
                                 .clickable {
                                     viewModel.saturation.value = viewModel.saturation.value.not()
-                                    val newFilter = viewModel.makeColorFilter(
-                                        viewModel.contrastSliderPosition.value,
-                                        viewModel.alphaSliderPosition.value,
-                                        viewModel.saturation.value,
-                                        viewModel.reverse.value
-                                    )
+                                    val newFilter = viewModel.makeColorFilter()
                                     viewModel.colorFilterState.value = newFilter
                                 }
                                 .padding(start = 8.dp)
