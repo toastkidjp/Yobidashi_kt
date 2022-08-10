@@ -48,7 +48,6 @@ import jp.toastkid.image.factory.GifImageLoaderFactory
 import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.launch
-import kotlin.math.max
 
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
@@ -121,7 +120,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             onValueChange = {
                                 viewModel.alphaSliderPosition.value = it
                                 viewModel.colorFilterState.value =
-                                    makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
+                                    viewModel.makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
                             },
                             valueRange = -0.75f .. 0.75f,
                             steps = 100
@@ -139,7 +138,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             onValueChange = {
                                 viewModel.contrastSliderPosition.value = it
                                 viewModel.colorFilterState.value =
-                                    makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
+                                    viewModel.makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
                             },
                             valueRange = 0f .. 1.75f,
                             steps = 256
@@ -193,7 +192,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                     viewModel.reverse.value = viewModel.reverse.value.not()
 
                                     viewModel.colorFilterState.value =
-                                        makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
+                                        viewModel.makeColorFilter(viewModel.contrastSliderPosition.value, viewModel.alphaSliderPosition.value, viewModel.saturation.value, viewModel.reverse.value)
                                 }
                                 .padding(start = 8.dp)
                         )
@@ -226,7 +225,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             modifier = Modifier
                                 .clickable {
                                     viewModel.saturation.value = viewModel.saturation.value.not()
-                                    val newFilter = makeColorFilter(
+                                    val newFilter = viewModel.makeColorFilter(
                                         viewModel.contrastSliderPosition.value,
                                         viewModel.alphaSliderPosition.value,
                                         viewModel.saturation.value,
@@ -248,24 +247,3 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     }
 }
 
-private fun makeColorFilter(
-    contrastSliderPosition: Float,
-    alphaSliderPosition: Float,
-    saturation: Boolean,
-    reverse: Boolean
-): ColorFilter {
-    val v = max(contrastSliderPosition, 0f) + 1f * (if (reverse) -1 else 1)
-    val o = -128 * (v - 1)
-    val colorMatrix = ColorMatrix(
-        floatArrayOf(
-            v, 0f, 0f, alphaSliderPosition, o,
-            0f, v, 0f, alphaSliderPosition, o,
-            0f, 0f, v, alphaSliderPosition, o,
-            0f, 0f, 0f, 1f, 000f
-        )
-    )
-    if (saturation) {
-        colorMatrix.setToSaturation(0.0f)
-    }
-    return ColorFilter.colorMatrix(colorMatrix)
-}

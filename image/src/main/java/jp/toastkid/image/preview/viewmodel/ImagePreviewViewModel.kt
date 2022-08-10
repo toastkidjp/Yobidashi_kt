@@ -12,7 +12,9 @@ import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.lifecycle.ViewModel
+import kotlin.math.max
 
 class ImagePreviewViewModel : ViewModel() {
 
@@ -46,6 +48,28 @@ class ImagePreviewViewModel : ViewModel() {
 
     fun setIndex(i: Int) {
         index.value = i
+    }
+
+    fun makeColorFilter(
+        contrastSliderPosition: Float,
+        alphaSliderPosition: Float,
+        saturation: Boolean,
+        reverse: Boolean
+    ): ColorFilter {
+        val v = max(contrastSliderPosition, 0f) + 1f * (if (reverse) -1 else 1)
+        val o = -128 * (v - 1)
+        val colorMatrix = ColorMatrix(
+            floatArrayOf(
+                v, 0f, 0f, alphaSliderPosition, o,
+                0f, v, 0f, alphaSliderPosition, o,
+                0f, 0f, v, alphaSliderPosition, o,
+                0f, 0f, 0f, 1f, 000f
+            )
+        )
+        if (saturation) {
+            colorMatrix.setToSaturation(0.0f)
+        }
+        return ColorFilter.colorMatrix(colorMatrix)
     }
 
 }
