@@ -217,6 +217,7 @@ internal fun Content() {
     val bottomBarHeightPx = with(LocalDensity.current) {
         bottomBarHeight.roundToPx().toFloat()
     }
+    contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
 
     val fabOffsetHeightPx = remember { mutableStateOf(0f) }
 
