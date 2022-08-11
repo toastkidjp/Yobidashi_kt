@@ -16,7 +16,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -253,12 +252,20 @@ class ContentViewModel : ViewModel() {
         _appBarContent.value = composable
     }
 
+    private var bottomBarHeightPx = 0f
+
+    fun setBottomBarHeightPx(float: Float) {
+        if (bottomBarHeightPx == 0f) {
+            bottomBarHeightPx = float
+        }
+    }
+
     fun showAppBar() {
         bottomBarOffsetHeightPx.value = 0f
     }
 
     fun hideAppBar() {
-        bottomBarOffsetHeightPx.value = -144.dp.value
+        bottomBarOffsetHeightPx.value = -bottomBarHeightPx
     }
 
 }
