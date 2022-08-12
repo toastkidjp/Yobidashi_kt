@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
@@ -49,6 +50,7 @@ import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
@@ -75,7 +77,12 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                     rotationY = viewModel.rotationY.value,
                     rotationZ = viewModel.rotationZ.value
                 )
-                .offset { IntOffset(viewModel.offset.value.x.toInt(), viewModel.offset.value.y.toInt()) }
+                .offset {
+                    IntOffset(
+                        viewModel.offset.value.x.toInt(),
+                        viewModel.offset.value.y.toInt()
+                    )
+                }
                 .transformable(state = viewModel.state)
                 .pointerInput(Unit) {
                     detectDragGestures { change, dragAmount ->
@@ -175,7 +182,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             modifier = Modifier
                                 .clickable {
                                     coroutineScope.launch {
-                                        viewModel.rotationY.value = if (viewModel.rotationY.value == 0f) 180f else 0f
+                                        viewModel.rotationY.value =
+                                            if (viewModel.rotationY.value == 0f) 180f else 0f
                                     }
                                 }
                                 .padding(start = 8.dp)
