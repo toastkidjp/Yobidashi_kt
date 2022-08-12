@@ -104,7 +104,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             elevation = 4.dp,
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
-            Column() {
+            Column {
                 Icon(
                     painterResource(id = if (viewModel.openMenu.value) R.drawable.ic_down else R.drawable.ic_up),
                     contentDescription = stringResource(id = R.string.open),
