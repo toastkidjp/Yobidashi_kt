@@ -137,7 +137,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(top = 8.dp)
                     ) {
-                        Text("Contrast: ")
+                        Text(stringResource(R.string.title_contrast_slider))
 
                         Slider(
                             viewModel.contrastSliderPosition.value,
