@@ -102,7 +102,7 @@ class QueryingUseCase(
         CoroutineScope(backgroundDispatcher).launch(disposables) {
             channel.receiveAsFlow()
                 .distinctUntilChanged()
-                .debounce(400)
+                .debounce(100)
                 .collect {
                     invoke(it)
                 }
