@@ -19,5 +19,6 @@
     <string name="title_activity_date_detail">Detail</string>
     <string name="this_app">このアプリの背景に設定</string>
     <string name="other_app">別のアプリで設定</string>
+    <string name="title_alpha_slider">\"Alpha: \"</string>
 
 </resources>

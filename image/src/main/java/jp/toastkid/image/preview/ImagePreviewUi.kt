@@ -120,7 +120,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(top = 8.dp)
                     ) {
-                        Text("Alpha: ")
+                        Text(stringResource(R.string.title_alpha_slider))
 
                         Slider(
                             viewModel.alphaSliderPosition.value,
