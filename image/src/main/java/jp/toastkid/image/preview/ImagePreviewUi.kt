@@ -8,6 +8,7 @@
 
 package jp.toastkid.image.preview
 
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -39,6 +42,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import coil.compose.AsyncImage
@@ -46,6 +51,8 @@ import coil.request.ImageRequest
 import jp.toastkid.image.Image
 import jp.toastkid.image.R
 import jp.toastkid.image.factory.GifImageLoaderFactory
+import jp.toastkid.image.preview.attach.AttachToAnyAppUseCase
+import jp.toastkid.image.preview.attach.AttachToThisAppBackgroundUseCase
 import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.launch
@@ -61,6 +68,11 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     viewModel.setIndex(initialIndex)
 
     val image = images[viewModel.index.value]
+
+    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
+        ViewModelProvider(it).get(ContentViewModel::class.java)
+    }
+    val context = LocalContext.current ?: return
 
     Box {
         AsyncImage(
@@ -234,14 +246,55 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 .padding(start = 8.dp)
                         )
 
+                        Box(
+                            Modifier
+                                .clickable { viewModel.openOtherMenu.value = true }
+                                .padding(start = 8.dp)
+                        ) {
+                            Icon(
+                                painterResource(id = R.drawable.ic_set_to),
+                                contentDescription = stringResource(id = R.string.content_description_set_to),
+                                tint = MaterialTheme.colors.onSurface
+                            )
+
+                            DropdownMenu(
+                                viewModel.openOtherMenu.value,
+                                onDismissRequest = { viewModel.openOtherMenu.value = false }
+                            ) {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        viewModel.openOtherMenu.value = false
+                                        contentViewModel ?: return@DropdownMenuItem
+                                        AttachToThisAppBackgroundUseCase(contentViewModel)
+                                            .invoke(context, image.path.toUri(), BitmapFactory.decodeFile(image.path))
+                                    }
+                                ) {
+                                    Text(
+                                        stringResource(id = R.string.this_app),
+                                        fontSize = 20.sp
+                                    )
+                                }
+                                DropdownMenuItem(
+                                    onClick = {
+                                        viewModel.openOtherMenu.value = false
+                                        contentViewModel ?: return@DropdownMenuItem
+                                        AttachToAnyAppUseCase({ context.startActivity(it) })
+                                            .invoke(context, BitmapFactory.decodeFile(image.path))
+                                    }
+                                ) {
+                                    Text(
+                                        stringResource(id = R.string.other_app),
+                                        fontSize = 20.sp
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    (LocalContext.current as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(it).get(ContentViewModel::class.java).hideAppBar()
-    }
+    contentViewModel?.hideAppBar()
 }
 
