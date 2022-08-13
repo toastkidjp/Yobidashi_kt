@@ -46,6 +46,8 @@ class ImagePreviewViewModel : ViewModel() {
 
     val index = mutableStateOf(0)
 
+    val openOtherMenu = mutableStateOf(false)
+
     fun setIndex(i: Int) {
         index.value = i
     }
