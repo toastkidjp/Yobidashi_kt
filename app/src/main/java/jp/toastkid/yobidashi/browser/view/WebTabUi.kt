@@ -20,6 +20,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,9 +32,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Text
+import androidx.compose.material.rememberSwipeableState
+import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +55,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -325,7 +332,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
     })
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun AppBarContent(
     viewModel: BrowserViewModel,
@@ -340,6 +347,18 @@ private fun AppBarContent(
     val preferenceApplier = PreferenceApplier(activity)
     val tint = Color(preferenceApplier.fontColor)
 
+    val sizePx = with(LocalDensity.current) { 72.dp.toPx() }
+    val anchors = mapOf(-sizePx to 1, 0f to 0)
+    val swipeableState = rememberSwipeableState(
+        initialValue = 0,
+        confirmStateChange = {
+            if (it == 1) {
+                contentViewModel.switchTabList()
+            }
+            true
+        }
+    )
+
     val headerTitle = viewModel.title
     val headerUrl = viewModel.url
     val progress = viewModel.progress
@@ -351,6 +370,13 @@ private fun AppBarContent(
         modifier = Modifier
             .height(76.dp)
             .fillMaxWidth()
+            .swipeable(
+                swipeableState,
+                anchors = anchors,
+                thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                resistance = ResistanceConfig(0.5f),
+                orientation = Orientation.Vertical
+            )
     ) {
         if (progress.value < 70) {
             LinearProgressIndicator(
