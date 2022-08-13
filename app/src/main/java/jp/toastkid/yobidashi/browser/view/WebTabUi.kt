@@ -359,6 +359,20 @@ private fun AppBarContent(
         }
     )
 
+    val widthPx = with(LocalDensity.current) { 72.dp.toPx() }
+    val horizontalAnchors = mapOf(0f to 0, widthPx to 1, -widthPx to 2)
+    val horizontalSwipeableState = rememberSwipeableState(
+        initialValue = 0,
+        confirmStateChange = {
+            if (it == 1) {
+                contentViewModel.previousTab()
+            } else if (it == 2) {
+                contentViewModel.nextTab()
+            }
+            true
+        }
+    )
+
     val headerTitle = viewModel.title
     val headerUrl = viewModel.url
     val progress = viewModel.progress
@@ -376,6 +390,13 @@ private fun AppBarContent(
                 thresholds = { _, _ -> FractionalThreshold(0.75f) },
                 resistance = ResistanceConfig(0.5f),
                 orientation = Orientation.Vertical
+            )
+            .swipeable(
+                horizontalSwipeableState,
+                anchors = horizontalAnchors,
+                thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                resistance = ResistanceConfig(0.5f),
+                orientation = Orientation.Horizontal
             )
     ) {
         if (progress.value < 70) {
