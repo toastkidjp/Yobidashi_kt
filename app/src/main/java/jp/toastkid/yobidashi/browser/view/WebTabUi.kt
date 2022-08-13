@@ -41,6 +41,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -329,6 +330,12 @@ fun WebTabUi(uri: Uri, tabId: String) {
                     }
             })
         )
+    })
+
+    DisposableEffect(key1 = lifecycleOwner, effect = {
+        onDispose {
+            contentViewModel.share.removeObservers(lifecycleOwner)
+        }
     })
 }
 
