@@ -373,7 +373,6 @@ private fun AppBarContent(
         }
     )
 
-    val headerTitle = viewModel.title
     val headerUrl = viewModel.url
     val progress = viewModel.progress
     val enableBack = viewModel.enableBack
@@ -543,7 +542,7 @@ private fun AppBarContent(
 
                 BrowserTitle(
                     progress,
-                    headerTitle,
+                    viewModel.title,
                     headerUrl,
                     Modifier.weight(1f)
                 )
