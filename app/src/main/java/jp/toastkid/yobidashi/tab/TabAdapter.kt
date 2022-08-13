@@ -235,6 +235,24 @@ class TabAdapter(
         setIndexByTab(tab)
     }
 
+    fun movePreviousTab() {
+        val current = index()
+        if (current == 0) {
+            return
+        }
+
+        tabList.setIndex(current - 1)
+    }
+
+    fun moveNextTab() {
+        val current = index()
+        if (tabList.size() <= current) {
+            return
+        }
+
+        tabList.setIndex(current + 1)
+    }
+
     private fun invalidIndex(newIndex: Int): Boolean = newIndex < 0 || tabList.size() <= newIndex
 
     /**
