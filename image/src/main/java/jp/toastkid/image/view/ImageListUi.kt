@@ -95,6 +95,10 @@ fun ImageListUi() {
         )
     }
 
+    val contentViewModel = (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
+        ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
+    }
+
     val requestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
@@ -102,10 +106,7 @@ fun ImageListUi() {
                 return@rememberLauncherForActivityResult
             }
 
-            (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
-                ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
-                    .snackShort(R.string.message_audio_file_is_not_found)
-            }
+            contentViewModel?.snackShort(R.string.message_audio_file_is_not_found)
         }
 
     (context as? ViewModelStoreOwner)?.let {
