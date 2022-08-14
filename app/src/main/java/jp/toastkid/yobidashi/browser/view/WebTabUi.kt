@@ -28,15 +28,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ResistanceConfig
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
@@ -45,6 +50,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -61,6 +67,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -90,10 +97,14 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
+import jp.toastkid.yobidashi.browser.view.swiperefresh.SwipeRefreshNestedScrollConnection
+import jp.toastkid.yobidashi.browser.view.swiperefresh.SwipeRefreshState
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
+import kotlinx.coroutines.launch
+import kotlin.math.min
 
 @Composable
 fun WebTabUi(uri: Uri, tabId: String) {
@@ -112,18 +123,58 @@ fun WebTabUi(uri: Uri, tabId: String) {
     browserModule.applyNewAlpha()
     browserModule.resizePool(PreferenceApplier(activityContext).poolSize)
 
+    val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
     val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    val refreshTriggerPx = with(LocalDensity.current) { 80.dp.toPx() }
+    val swipeRefreshState = remember { SwipeRefreshState(false, refreshTriggerPx) }
+    LaunchedEffect(swipeRefreshState.isSwipeInProgress) {
+        if (!swipeRefreshState.isSwipeInProgress) {
+            // If there's not a swipe in progress, rest the indicator at 0f
+            swipeRefreshState.animateOffsetTo(0f)
+        }
+    }
+    val coroutineScope = rememberCoroutineScope()
+    val nestedScrollConnection = SwipeRefreshNestedScrollConnection(
+        swipeRefreshState,
+        coroutineScope,
+        {
+            if (swipeRefreshState.isRefreshing.not()) {
+                contentViewModel.showAppBar()
+                browserModule.reload()
+                swipeRefreshState.isRefreshing = true
+            }
+            swipeRefreshState.isSwipeInProgress = false
+        }
+    ).also {
+        it.refreshTrigger = refreshTriggerPx
+        it.enabled = true
+    }
+
     val scrollListener =
         View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (scrollY == 0) {
-                //TODO swipeRefreshState.isRefreshing = true
+            //nestedScrollConnection.enabled = scrollY == 0
+            if (oldScrollY == 0 && oldScrollX == 0) {
+                browserModule.nestedScrollDispatcher().dispatchPreScroll(
+                    Offset(0f, scrollY.toFloat()),
+                    NestedScrollSource.Drag
+                )
+                browserModule.nestedScrollDispatcher().dispatchPostScroll(
+                    Offset(0f, scrollY.toFloat()),
+                    Offset(0f, scrollY.toFloat()),
+                    NestedScrollSource.Drag
+                )
+                return@OnScrollChangeListener
             }
             browserModule.nestedScrollDispatcher().dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
             )
+            swipeRefreshState.isSwipeInProgress = false
+            coroutineScope.launch {
+                swipeRefreshState.resetOffset()
+            }
         }
 
     browserViewModel.switchWebViewToCurrent.observe(lifecycleOwner, {
@@ -147,21 +198,41 @@ fun WebTabUi(uri: Uri, tabId: String) {
         downloadPermissionRequestLauncher.launch(url)
     })
 
-    AndroidView(
-        factory = {
-            browserModule.loadWithNewTab(uri, tabId)
-            GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
-            webViewContainer
-        },
-        update = {
-            GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
-        },
-        modifier = Modifier
-            .nestedScroll(
-                connection = object : NestedScrollConnection {},
-                dispatcher = browserModule.nestedScrollDispatcher()
-            )
-    )
+    Box(
+        modifier = Modifier.nestedScroll(nestedScrollConnection)
+    ) {
+        AndroidView(
+            factory = {
+                browserModule.loadWithNewTab(uri, tabId)
+                GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
+                webViewContainer
+            },
+            update = {
+                GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
+            },
+            modifier = Modifier
+                .nestedScroll(
+                    connection = object : NestedScrollConnection {},
+                    dispatcher = browserModule.nestedScrollDispatcher()
+                )
+        )
+
+        if (swipeRefreshState.isSwipeInProgress || swipeRefreshState.isRefreshing) {
+            Surface(
+                shape = CircleShape,
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .offset { IntOffset(0, min(swipeRefreshState.indicatorOffset.toInt(), nestedScrollConnection.refreshTrigger.toInt())) }
+                    .align(Alignment.TopCenter)
+            ) {
+                CircularProgressIndicator(
+                    progress = browserViewModel.progress.value.toFloat() / 100f,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.padding(4.dp)
+                )
+            }
+        }
+    }
 
     val readerModeText = remember { mutableStateOf("") }
     if (readerModeText.value.isNotBlank()) {
@@ -194,7 +265,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
         }
     }
 
-    val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
@@ -248,6 +318,19 @@ fun WebTabUi(uri: Uri, tabId: String) {
             .onPageFinished
             .observe(lifecycleOwner) {
                 browserModule.saveArchiveForAutoArchive()
+                coroutineScope.launch {
+                    swipeRefreshState.resetOffset()
+                    swipeRefreshState.isRefreshing = false
+                }
+            }
+
+        browserViewModel
+            .stopProgress
+            .observe(lifecycleOwner) {
+                coroutineScope.launch {
+                    swipeRefreshState.resetOffset()
+                    swipeRefreshState.isRefreshing = false
+                }
             }
     })
 

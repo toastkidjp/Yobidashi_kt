@@ -156,10 +156,12 @@ class BrowserViewModel : ViewModel() {
         _progress.value = newProgress
     }
 
-    private val _stopProgress = mutableStateOf(Event(false))
+    private val _stopProgress = MutableLiveData(Event(false))
+
+    val stopProgress: LiveData<Event<Boolean>> = _stopProgress
 
     fun stopProgress(stop: Boolean) {
-        _stopProgress.value = Event(stop)
+        _stopProgress.postValue(Event(stop))
     }
 
     private val _onPageFinished =
