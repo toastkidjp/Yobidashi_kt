@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -130,13 +131,15 @@ fun ImageListUi() {
     }
 
     val index = remember { mutableStateOf(-1) }
+    val listState = rememberLazyGridState()
 
     if (preview.value) {
         ImagePreviewUi(images, index.value)
     } else {
         ImageListUi(
             imageLoaderUseCase,
-            images
+            images,
+            listState
         ) {
             index.value = it
             preview.value = true
@@ -159,9 +162,9 @@ fun ImageListUi() {
 internal fun ImageListUi(
     imageLoaderUseCase: ImageLoaderUseCase,
     images: List<Image>,
+    listState: LazyGridState,
     showPreview: (Int) -> Unit
 ) {
-    val listState = rememberLazyGridState()
     val preferenceApplier = PreferenceApplier(LocalContext.current)
 
     LazyVerticalGrid(
