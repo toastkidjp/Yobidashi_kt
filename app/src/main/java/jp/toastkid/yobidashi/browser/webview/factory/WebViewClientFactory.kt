@@ -144,7 +144,11 @@ class WebViewClientFactory(
                     val context: Context? = view?.context
                     val uri: Uri = Uri.parse(url)
 
-                if (uri.host?.endsWith(".xyz") == true || uri.host == "rt.gsspat.jp") {
+                if (uri.host?.endsWith(".xyz") == true
+                    || uri.host?.endsWith(".jp.net") == true
+                    || uri.host == "rt.gsspat.jp"
+                    || uri.host == "webnew.net"
+                ) {
                     view?.stopLoading()
                     contentViewModel?.snackShort("It has canceled load inappropriate Web site. : $uri")
                     return@let true
