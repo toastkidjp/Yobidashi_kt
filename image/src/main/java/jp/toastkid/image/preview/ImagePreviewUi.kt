@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import coil.compose.AsyncImage
@@ -53,9 +54,13 @@ import jp.toastkid.image.R
 import jp.toastkid.image.factory.GifImageLoaderFactory
 import jp.toastkid.image.preview.attach.AttachToAnyAppUseCase
 import jp.toastkid.image.preview.attach.AttachToThisAppBackgroundUseCase
+import jp.toastkid.image.preview.detail.ExifInformationExtractorUseCase
 import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.ui.dialog.ConfirmDialog
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileInputStream
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -289,10 +294,32 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 }
                             }
                         }
+
+                        Icon(
+                            painterResource(id = R.drawable.ic_info_white),
+                            contentDescription = "Information",
+                            tint = MaterialTheme.colors.onSurface,
+                            modifier = Modifier
+                                .clickable {
+                                    viewModel.openDialog.value = true
+                                }
+                                .padding(start = 8.dp)
+                        )
                     }
+
                 }
             }
         }
+    }
+
+    if (viewModel.openDialog.value) {
+        val inputStream = FileInputStream(File(image.path))
+        val exifInterface = ExifInterface(inputStream)
+        ConfirmDialog(
+            visibleState = viewModel.openDialog,
+            title = image.name,
+            message = ExifInformationExtractorUseCase().invoke(exifInterface) ?: "Not found"
+        )
     }
 
     contentViewModel?.hideAppBar()

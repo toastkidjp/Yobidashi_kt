@@ -48,6 +48,8 @@ class ImagePreviewViewModel : ViewModel() {
 
     val openOtherMenu = mutableStateOf(false)
 
+    val openDialog = mutableStateOf(false)
+
     fun setIndex(i: Int) {
         index.value = i
     }
