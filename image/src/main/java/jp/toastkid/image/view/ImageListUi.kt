@@ -25,14 +25,17 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
@@ -213,4 +216,28 @@ internal fun ImageListUi(
             }
         }
     }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val coroutineScope = rememberCoroutineScope()
+    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
+        ViewModelProvider(it).get(ContentViewModel::class.java)
+    }
+    contentViewModel?.toTop?.observe(lifecycleOwner, {
+        it?.getContentIfNotHandled() ?: return@observe
+        coroutineScope.launch {
+            listState.scrollToItem(0)
+        }
+    })
+    contentViewModel?.toBottom?.observe(lifecycleOwner, {
+        it?.getContentIfNotHandled() ?: return@observe
+        coroutineScope.launch {
+            listState.scrollToItem(listState.layoutInfo.totalItemsCount)
+        }
+    })
+    DisposableEffect(key1 = lifecycleOwner, effect = {
+        onDispose {
+            contentViewModel?.toTop?.removeObservers(lifecycleOwner)
+            contentViewModel?.toBottom?.removeObservers(lifecycleOwner)
+        }
+    })
 }
