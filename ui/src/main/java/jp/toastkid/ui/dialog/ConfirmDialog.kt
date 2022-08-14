@@ -43,7 +43,7 @@ fun ConfirmDialog(
     title: String,
     message: String,
     messageColor: Color = Color.Black,
-    onClickOk: () -> Unit
+    onClickOk: () -> Unit = {}
 ) {
     val color = MaterialTheme.colors.onSurface
 
