@@ -50,6 +50,20 @@ class ImagePreviewViewModel : ViewModel() {
 
     val openDialog = mutableStateOf(false)
 
+    fun moveToPrevious() {
+        if (index.value == 0) {
+            return
+        }
+        index.value--
+    }
+
+    fun moveToNext() {
+        if (index.value <= 0) {
+            return
+        }
+        index.value++
+    }
+
     fun setIndex(i: Int) {
         index.value = i
     }
