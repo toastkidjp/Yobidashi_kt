@@ -80,7 +80,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
     val coroutineScope = rememberCoroutineScope()
 
-    val viewModelStoreOwner = LocalContext.current as? ViewModelStoreOwner ?: return
     val viewModel = remember { ImagePreviewViewModel() }
     LaunchedEffect(key1 = Unit, block = {
         viewModel.setIndex(initialIndex)
