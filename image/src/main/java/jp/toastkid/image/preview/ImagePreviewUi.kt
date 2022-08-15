@@ -98,9 +98,9 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         initialValue = 0,
         confirmStateChange = {
             if (it == 1) {
-                viewModel.index.value--
+                viewModel.moveToPrevious()
             } else if (it == -1) {
-                viewModel.index.value++
+                viewModel.moveToNext()
             }
             true
         }
