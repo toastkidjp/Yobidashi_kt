@@ -14,11 +14,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
-import androidx.lifecycle.ViewModel
 import jp.toastkid.image.Image
 import kotlin.math.max
 
-class ImagePreviewViewModel : ViewModel() {
+class ImagePreviewViewModel {
 
     private val images = mutableStateListOf<Image>()
 
