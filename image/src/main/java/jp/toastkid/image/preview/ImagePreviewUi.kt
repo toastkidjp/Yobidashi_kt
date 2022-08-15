@@ -83,9 +83,10 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val viewModel = ViewModelProvider(viewModelStoreOwner).get(ImagePreviewViewModel::class.java)
     LaunchedEffect(key1 = Unit, block = {
         viewModel.setIndex(initialIndex)
+        viewModel.replaceImages(images)
     })
 
-    val image = images[viewModel.index.value]
+    val image = viewModel.getCurrentImage()
 
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
