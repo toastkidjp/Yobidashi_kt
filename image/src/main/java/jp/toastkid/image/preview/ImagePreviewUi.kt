@@ -38,6 +38,7 @@ import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,7 +81,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val coroutineScope = rememberCoroutineScope()
 
     val viewModelStoreOwner = LocalContext.current as? ViewModelStoreOwner ?: return
-    val viewModel = ViewModelProvider(viewModelStoreOwner).get(ImagePreviewViewModel::class.java)
+    val viewModel = remember { ImagePreviewViewModel() }
     LaunchedEffect(key1 = Unit, block = {
         viewModel.setIndex(initialIndex)
         viewModel.replaceImages(images)
