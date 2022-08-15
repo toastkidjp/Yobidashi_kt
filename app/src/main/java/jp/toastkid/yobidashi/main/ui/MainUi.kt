@@ -574,14 +574,17 @@ private fun initializeContentViewModel(
         val messageId = it?.getContentIfNotHandled() ?: return@Observer
         showSnackbar(snackbarHostState, SnackbarEvent(activity.getString(messageId)))
     })
-    contentViewModel.webSearch.observe(activity, {
+    contentViewModel.webSearch.observe(activity) {
         it?.getContentIfNotHandled() ?: return@observe
-        when (navigationHostController?.currentDestination?.route) {
+        when (navigationHostController.currentDestination?.route) {
             "tab/web/current" -> {
                 val currentTabWebView = GlobalWebViewPool.getLatest() ?: return@observe
                 val currentTitle = Uri.encode(currentTabWebView.title)
                 val currentUrl = Uri.encode(currentTabWebView.url)
-                val query = SearchQueryExtractor().invoke(currentTabWebView.url) ?: ""
+                val query = Uri.encode(
+                    SearchQueryExtractor().invoke(currentTabWebView.url)
+                        ?.replace("\n", "")
+                )
                 navigate(
                     navigationHostController,
                     "search/with/?query=$query&title=$currentTitle&url=$currentUrl"
@@ -590,7 +593,7 @@ private fun initializeContentViewModel(
             else ->
                 navigate(navigationHostController, "search/top")
         }
-    })
+    }
 
     contentViewModel.newArticle.observe(activity, Observer {
         val titleAndOnBackground = it?.getContentIfNotHandled() ?: return@Observer

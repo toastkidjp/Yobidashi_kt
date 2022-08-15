@@ -30,7 +30,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -64,7 +63,7 @@ fun FavoriteSearchListUi() {
 
     val preferenceApplier = PreferenceApplier(activityContext)
 
-    val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+    val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
     val favoriteSearchItems = remember { mutableStateListOf<FavoriteSearch>() }
 
@@ -173,7 +172,8 @@ private fun addItem(
     repository: FavoriteSearchRepository,
     favoriteSearchItems: SnapshotStateList<FavoriteSearch>
 ) {
-    if (input.value.isEmpty()) {
+    val newWord = input.value.trim()
+    if (newWord.isEmpty()) {
         contentViewModel.snackShort(
             R.string.favorite_search_addition_dialog_empty_message
         )
@@ -183,14 +183,14 @@ private fun addItem(
     FavoriteSearchInsertion(
         activityContext,
         categoryName.value,
-        input.value
+        newWord
     ).invoke()
 
     reload(repository, favoriteSearchItems)
 
     val message = MessageFormat.format(
         activityContext.getString(R.string.favorite_search_addition_successful_format),
-        input.value
+        newWord
     )
     contentViewModel.snackShort(message)
 }
@@ -201,8 +201,6 @@ private fun FavoriteSearchItemList(
     favoriteSearchItems: SnapshotStateList<FavoriteSearch>
 ) {
     val context = LocalContext.current
-
-    val coroutineScope = rememberCoroutineScope()
 
     val listState = rememberLazyListState()
 

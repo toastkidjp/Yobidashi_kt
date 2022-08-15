@@ -122,7 +122,7 @@ internal fun NavigationalContent(
             SearchInputUi()
         }
         composable("search/with/?query={query}&title={title}&url={url}") {
-            val query = it.arguments?.getString("query")
+            val query = Uri.decode(it.arguments?.getString("query"))
             val title = Uri.decode(it.arguments?.getString("title"))
             val url = Uri.decode(it.arguments?.getString("url"))
             SearchInputUi(query, title, url)
