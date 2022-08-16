@@ -69,7 +69,7 @@ class ImagePreviewViewModel {
     }
 
     fun moveToNext() {
-        if (index.value <= images.size) {
+        if (index.value >= images.size) {
             return
         }
         index.value++
