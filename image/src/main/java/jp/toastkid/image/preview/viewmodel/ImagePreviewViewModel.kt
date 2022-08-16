@@ -27,7 +27,7 @@ class ImagePreviewViewModel {
     }
 
     fun getCurrentImage() =
-        images.get(index.value)
+        if (images.isNotEmpty()) images.get(index.value) else Image.makeBucket("", "")
 
     var scale = mutableStateOf(1f)
 
@@ -69,7 +69,7 @@ class ImagePreviewViewModel {
     }
 
     fun moveToNext() {
-        if (index.value <= 0) {
+        if (index.value <= images.size) {
             return
         }
         index.value++

@@ -86,8 +86,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         viewModel.replaceImages(images)
     })
 
-    val image = viewModel.getCurrentImage()
-
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
@@ -110,9 +108,9 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     Box {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(image.path).crossfade(true).build(),
+                .data(viewModel.getCurrentImage().path).crossfade(true).build(),
             imageLoader = imageLoader,
-            contentDescription = image.name,
+            contentDescription = viewModel.getCurrentImage().name,
             colorFilter = viewModel.colorFilterState.value,
             modifier = Modifier
                 .fillMaxSize()
@@ -298,6 +296,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                     onClick = {
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
+                                        val image = viewModel.getCurrentImage()
                                         AttachToThisAppBackgroundUseCase(contentViewModel)
                                             .invoke(context, image.path.toUri(), BitmapFactory.decodeFile(image.path))
                                     }
@@ -312,7 +311,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
                                         AttachToAnyAppUseCase({ context.startActivity(it) })
-                                            .invoke(context, BitmapFactory.decodeFile(image.path))
+                                            .invoke(context, BitmapFactory.decodeFile(viewModel.getCurrentImage().path))
                                     }
                                 ) {
                                     Text(
@@ -359,11 +358,11 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     }
 
     if (viewModel.openDialog.value) {
-        val inputStream = FileInputStream(File(image.path))
+        val inputStream = FileInputStream(File(viewModel.getCurrentImage().path))
         val exifInterface = ExifInterface(inputStream)
         ConfirmDialog(
             visibleState = viewModel.openDialog,
-            title = image.name,
+            title = viewModel.getCurrentImage().name,
             message = ExifInformationExtractorUseCase().invoke(exifInterface) ?: "Not found"
         )
     }
