@@ -33,8 +33,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Slider
 import androidx.compose.material.Surface
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.Text
-import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -93,12 +93,12 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
 
     val sizePx = with(LocalDensity.current) { 100.dp.toPx() }
     val anchors = mapOf(sizePx to -1, 0f to 0, -sizePx to 1)
-    val swipeableState = rememberSwipeableState(
+    val swipeableState = SwipeableState(
         initialValue = 0,
         confirmStateChange = {
-            if (it == 1) {
+            if (it == -1) {
                 viewModel.moveToPrevious()
-            } else if (it == -1) {
+            } else if (it == 1) {
                 viewModel.moveToNext()
             }
             true
