@@ -143,6 +143,24 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 }
         )
 
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .background(Color(0xAAFF9999))
+                .align(Alignment.BottomCenter)
+                .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
+                .swipeable(
+                    swipeableState,
+                    anchors = anchors,
+                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                    resistance = ResistanceConfig(0.5f),
+                    orientation = Orientation.Horizontal
+                )
+        ) {
+            Text("< Swipeable > ")
+        }
+
         Surface(
             elevation = 4.dp,
             modifier = Modifier.align(Alignment.BottomCenter)
@@ -336,24 +354,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
 
                 }
             }
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .background(Color(0xAAFF9999))
-                .align(Alignment.BottomCenter)
-                .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
-                .swipeable(
-                    swipeableState,
-                    anchors = anchors,
-                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                    resistance = ResistanceConfig(0.5f),
-                    orientation = Orientation.Horizontal
-                )
-        ) {
-            Text("< Swipeable > ")
         }
     }
 
