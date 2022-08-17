@@ -156,7 +156,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                     orientation = Orientation.Horizontal
                 )
         ) {
-            Text("< Swipeable > ")
         }
 
         Surface(
