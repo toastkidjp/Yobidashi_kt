@@ -147,7 +147,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .background(Color(0xAAFF9999))
                 .align(Alignment.Center)
                 .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
                 .swipeable(
