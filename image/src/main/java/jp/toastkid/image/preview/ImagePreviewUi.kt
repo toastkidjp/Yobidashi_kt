@@ -161,7 +161,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         Surface(
             elevation = 4.dp,
             modifier = Modifier.align(Alignment.BottomCenter)
-                .fillMaxWidth()
         ) {
             Column {
                 Icon(
@@ -171,6 +170,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         .clickable {
                             viewModel.openMenu.value = viewModel.openMenu.value.not()
                         }
+                        .padding(8.dp)
                         .align(Alignment.CenterHorizontally)
                 )
 
