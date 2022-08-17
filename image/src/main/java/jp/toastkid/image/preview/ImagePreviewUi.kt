@@ -9,7 +9,6 @@
 package jp.toastkid.image.preview
 
 import android.graphics.BitmapFactory
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.animateRotateBy
@@ -146,7 +145,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(200.dp)
                 .align(Alignment.Center)
                 .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
                 .swipeable(
