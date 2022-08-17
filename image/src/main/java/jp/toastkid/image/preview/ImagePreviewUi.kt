@@ -161,6 +161,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         Surface(
             elevation = 4.dp,
             modifier = Modifier.align(Alignment.BottomCenter)
+                .fillMaxWidth()
         ) {
             Column {
                 Icon(
