@@ -341,7 +341,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
 
                         Icon(
                             painterResource(id = R.drawable.ic_info_white),
-                            contentDescription = "Information",
+                            contentDescription = stringResource(R.string.content_description_information),
                             tint = MaterialTheme.colors.onSurface,
                             modifier = Modifier
                                 .clickable {
