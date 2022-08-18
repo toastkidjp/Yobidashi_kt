@@ -72,7 +72,6 @@ import jp.toastkid.ui.dialog.ConfirmDialog
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -148,7 +147,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 .fillMaxWidth()
                 .height(200.dp)
                 .align(Alignment.Center)
-                .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
                 .swipeable(
                     swipeableState,
                     anchors = anchors,
