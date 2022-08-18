@@ -15,7 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
-class SwipeRefreshState(isRefreshing: Boolean, private val maximumOffset: Float) {
+class SwipeRefreshState(
+    isRefreshing: Boolean,
+    private val maximumOffset: Float
+) {
     private val _indicatorOffset = Animatable(-maximumOffset)
     private val mutatorMutex = MutatorMutex()
 
