@@ -88,7 +88,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
-    val context = LocalContext.current ?: return
+    val context = LocalContext.current
 
     val sizePx = with(LocalDensity.current) { 100.dp.toPx() }
     val anchors = mapOf(sizePx to -1, 0f to 0, -sizePx to 1)
