@@ -233,7 +233,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                         viewModel.state.animateRotateBy(90f)
                                     }
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
                         Icon(
                             painterResource(id = R.drawable.ic_flip),
@@ -246,7 +246,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                             if (viewModel.rotationY.value == 0f) 180f else 0f
                                     }
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
 
                         Icon(
@@ -258,7 +258,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                     viewModel.reverse.value = viewModel.reverse.value.not()
                                     viewModel.updateColorFilter()
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
 
                         Icon(
@@ -279,7 +279,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                             )
                                         )
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
 
                         Icon(
@@ -291,13 +291,13 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                     viewModel.saturation.value = viewModel.saturation.value.not()
                                     viewModel.updateColorFilter()
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
 
                         Box(
                             Modifier
                                 .clickable { viewModel.openOtherMenu.value = true }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         ) {
                             Icon(
                                 painterResource(id = R.drawable.ic_set_to),
@@ -347,7 +347,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 .clickable {
                                     viewModel.openDialog.value = true
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
                     }
 
