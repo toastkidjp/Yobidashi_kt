@@ -1,5 +1,9 @@
 package jp.toastkid.yobidashi.tab
 
+import kotlinx.serialization.Required
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 /**
  * History object.
  *
@@ -7,9 +11,10 @@ package jp.toastkid.yobidashi.tab
  * @param url URL
  * @author toastkidjp
  */
+@Serializable
 data class History internal constructor(
-        private val title: String,
-        private val url: String
+    @Required @SerialName("a") private val title: String,
+    @Required @SerialName("b") private val url: String
 ) {
 
     /**

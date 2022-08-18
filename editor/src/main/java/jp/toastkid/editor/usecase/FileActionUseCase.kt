@@ -35,7 +35,7 @@ class FileActionUseCase(
      * Save current content to file.
      */
     fun save(openInputFileNameDialog: MutableState<Boolean>) {
-        if (path.value.isNullOrBlank()) {
+        if (path.value.isBlank()) {
             openInputFileNameDialog.value = true
             return
         }
@@ -78,7 +78,7 @@ class FileActionUseCase(
      * @param data [Uri]
      */
     fun readFromFileUri(data: Uri) {
-        val context = context ?: return
+        val context = context
 
         FileExtractorFromUri(context, data)?.let {
             if (it == path.value) {
@@ -146,7 +146,7 @@ class FileActionUseCase(
      * @param id
      */
     private fun snackText(@StringRes id: Int) {
-        contentViewModel?.snackShort(id)
+        contentViewModel.snackShort(id)
     }
 
     /**

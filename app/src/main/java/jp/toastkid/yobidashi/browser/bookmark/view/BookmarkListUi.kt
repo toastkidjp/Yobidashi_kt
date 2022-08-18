@@ -122,7 +122,7 @@ fun BookmarkListUi() {
                 viewModel.query(bookmarkRepository, bookmark.title)
             }
             else -> {
-                browserViewModel.openBackground(bookmark.title, Uri.parse(bookmark.url))
+                browserViewModel.open(Uri.parse(bookmark.url))
             }
         }
     }
@@ -159,7 +159,7 @@ fun BookmarkListUi() {
     val importRequestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                contentViewModel.snackShort(R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 
@@ -182,7 +182,7 @@ fun BookmarkListUi() {
     val exportRequestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                contentViewModel.snackShort(R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 
@@ -370,7 +370,7 @@ private fun EditorDialog(
 
     Dialog(onDismissRequest = { openEditor.value = false }) {
         Surface(elevation = 4.dp) {
-            Box() {
+            Box {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End,

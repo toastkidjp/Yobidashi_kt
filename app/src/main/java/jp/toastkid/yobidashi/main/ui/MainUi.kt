@@ -281,7 +281,7 @@ internal fun Content() {
             contentViewModel?.switchBottomSheet()
         }
     })
-    browserViewModel?.openBackground?.observe(activity, Observer {
+    browserViewModel.openBackground.observe(activity, Observer {
         val urlString = it?.getContentIfNotHandled()?.toString() ?: return@Observer
         val callback = tabs.openBackgroundTab(urlString, urlString)
         contentViewModel.snackWithAction(
@@ -292,7 +292,7 @@ internal fun Content() {
             contentViewModel.replaceToCurrentTab()
         }
     })
-    browserViewModel?.openBackgroundWithTitle?.observe(activity, Observer {
+    browserViewModel.openBackgroundWithTitle.observe(activity, Observer {
         val pair = it?.getContentIfNotHandled() ?: return@Observer
         val callback = tabs.openBackgroundTab(pair.first, pair.second.toString())
         contentViewModel.snackWithAction(
@@ -303,10 +303,10 @@ internal fun Content() {
             contentViewModel.replaceToCurrentTab()
         }
     })
-    browserViewModel?.openNewWindow?.observe(activity, Observer {
+    browserViewModel.openNewWindow.observe(activity, Observer {
         val message = it?.getContentIfNotHandled() ?: return@Observer
         tabs.openNewWindowWebTab(message)
-        browserViewModel?.switchWebViewToCurrent(tabs.currentTabId())
+        browserViewModel.switchWebViewToCurrent(tabs.currentTabId())
     })
     LaunchedEffect(browserViewModel) {
         browserViewModel
@@ -583,7 +583,7 @@ private fun initializeContentViewModel(
                 val currentUrl = Uri.encode(currentTabWebView.url)
                 val query = Uri.encode(
                     SearchQueryExtractor().invoke(currentTabWebView.url)
-                        ?.replace("\n", "")
+                        ?.replace("\n", "") ?: ""
                 )
                 navigate(
                     navigationHostController,

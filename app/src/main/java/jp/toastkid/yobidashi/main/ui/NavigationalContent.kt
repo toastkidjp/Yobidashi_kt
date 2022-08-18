@@ -10,12 +10,14 @@ package jp.toastkid.yobidashi.main.ui
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -70,17 +72,21 @@ internal fun NavigationalContent(
         tabComposable("tab/pdf/current") {
             val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
             PdfViewerUi(currentTab.getUrl().toUri())
+            takeScreenshot(tabs, LocalView.current)
         }
         tabComposable("tab/article/list") {
             ArticleListUi()
+            takeScreenshot(tabs, LocalView.current)
         }
         tabComposable("tab/article/content/{title}") {
             val title = it?.getString("title") ?: return@tabComposable
             ArticleContentUi(title)
+            takeScreenshot(tabs, LocalView.current)
         }
         tabComposable("tab/editor/current") {
             val currentTab = tabs.currentTab() as? EditorTab ?: return@tabComposable
             EditorTabUi(currentTab.path)
+            takeScreenshot(tabs, LocalView.current)
         }
         composable("web/bookmark/list") {
             BookmarkListUi()
@@ -114,6 +120,7 @@ internal fun NavigationalContent(
         }
         composable("tab/calendar") {
             CalendarUi()
+            takeScreenshot(tabs, LocalView.current)
         }
         composable("setting/top") {
             SettingTopUi()
@@ -138,6 +145,12 @@ internal fun NavigationalContent(
         }
     }
 
+}
+
+private fun takeScreenshot(tabs: TabAdapter, view: View) {
+    view.post {
+        tabs.saveNewThumbnail(view)
+    }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
