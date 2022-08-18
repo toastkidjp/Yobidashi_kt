@@ -9,6 +9,7 @@
 package jp.toastkid.image.preview
 
 import android.graphics.BitmapFactory
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.animateRotateBy
@@ -363,6 +364,10 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             title = viewModel.getCurrentImage().name,
             message = ExifInformationExtractorUseCase().invoke(exifInterface) ?: "Not found"
         )
+    }
+
+    BackHandler(viewModel.openMenu.value) {
+        viewModel.openMenu.value = false
     }
 
     contentViewModel?.hideAppBar()
