@@ -208,9 +208,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
                 webViewContainer
             },
-            update = {
-                GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
-            },
             modifier = Modifier
                 .nestedScroll(
                     connection = object : NestedScrollConnection {},
@@ -223,7 +220,15 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 shape = CircleShape,
                 color = MaterialTheme.colors.primary,
                 modifier = Modifier
-                    .offset { IntOffset(0, min(swipeRefreshState.indicatorOffset.toInt(), nestedScrollConnection.refreshTrigger.toInt())) }
+                    .offset {
+                        IntOffset(
+                            0,
+                            min(
+                                swipeRefreshState.indicatorOffset.toInt(),
+                                nestedScrollConnection.refreshTrigger.toInt()
+                            )
+                        )
+                    }
                     .align(Alignment.TopCenter)
             ) {
                 CircularProgressIndicator(
