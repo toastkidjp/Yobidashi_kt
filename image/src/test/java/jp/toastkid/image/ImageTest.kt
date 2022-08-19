@@ -1,7 +1,7 @@
 package jp.toastkid.image
 
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -26,6 +26,15 @@ class ImageTest {
         assertTrue(bucket.isBucket)
         assertEquals("test", bucket.makeExcludingId())
         assertEquals("bucket/test / 0 images", bucket.makeDisplayName())
+    }
+
+    @Test
+    fun testMakeEmpty() {
+        val bucket = Image.makeEmpty()
+        assertEquals(0, bucket.itemCount)
+        assertTrue(bucket.isBucket)
+        assertEquals("", bucket.makeExcludingId())
+        assertEquals(" / 0 images", bucket.makeDisplayName())
     }
 
 }
