@@ -141,7 +141,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             viewModel.offset.value = Offset.Zero
                             viewModel.rotationY.value = 0f
                             viewModel.rotationZ.value = 0f
-                                      },
+                        },
                         onLongPress = { /* Called on Long Press */ },
                         onTap = { /* Called on Tap */ }
                     )
