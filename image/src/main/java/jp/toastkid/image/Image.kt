@@ -29,5 +29,10 @@ data class Image(
 
         fun makeBucket(bucketName: String, path: String) =
                 Image(path, bucketName, 0, true)
+
+        /**
+         * Use as placeholder object when compose screen launch.
+         */
+        fun makeEmpty() = makeBucket("", "")
     }
 }
