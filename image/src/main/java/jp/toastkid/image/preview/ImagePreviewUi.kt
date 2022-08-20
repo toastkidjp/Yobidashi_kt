@@ -42,7 +42,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
@@ -137,10 +136,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                     detectTapGestures(
                         onPress = { /* Called when the gesture starts */ },
                         onDoubleTap = {
-                            viewModel.scale.value = 1f
-                            viewModel.offset.value = Offset.Zero
-                            viewModel.rotationY.value = 0f
-                            viewModel.rotationZ.value = 0f
+                            viewModel.resetStates()
                         },
                         onLongPress = { /* Called on Long Press */ },
                         onTap = { /* Called on Tap */ }
