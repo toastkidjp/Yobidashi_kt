@@ -135,9 +135,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onPress = { /* Called when the gesture starts */ },
-                        onDoubleTap = {
-                            viewModel.resetStates()
-                        },
+                        onDoubleTap = { viewModel.resetStates() },
                         onLongPress = { /* Called on Long Press */ },
                         onTap = { /* Called on Tap */ }
                     )
