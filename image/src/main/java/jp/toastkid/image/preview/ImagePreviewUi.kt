@@ -262,9 +262,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             contentDescription = stringResource(id = R.string.content_description_sepia_color_filter),
                             tint = Color(0xDDFF5722),
                             modifier = Modifier
-                                .clickable {
-                                    viewModel.setSepia()
-                                }
+                                .clickable { viewModel.setSepia() }
                                 .padding(start = 16.dp)
                         )
 
