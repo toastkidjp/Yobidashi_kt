@@ -256,13 +256,7 @@ internal fun DisplaySettingUi() {
 private fun loadFileChunk(filesDir: FilesDir) =
     filesDir.listFiles().toList()
 
-    fun applyDarkMode() {
-        /*view?.let {
-            DarkModeApplier().invoke(preferenceApplier, it)
-        }*/
-    }
-
-    /**
+/**
      * Make pick image intent.
      * @return Intent
      */
