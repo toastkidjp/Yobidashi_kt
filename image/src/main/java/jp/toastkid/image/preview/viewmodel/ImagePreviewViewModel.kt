@@ -96,6 +96,20 @@ class ImagePreviewViewModel {
         colorFilterState.value = ColorFilter.colorMatrix(colorMatrix)
     }
 
+    fun setSepia() {
+        colorFilterState.value =
+            ColorFilter.colorMatrix(
+                ColorMatrix(
+                    floatArrayOf(
+                        0.9f, 0f, 0f, 0f, 000f,
+                        0f, 0.7f, 0f, 0f, 000f,
+                        0f, 0f, 0.4f, 0f, 000f,
+                        0f, 0f, 0f, 1f, 000f
+                    )
+                )
+            )
+    }
+
     fun resetStates() {
         scale.value = 1f
         offset.value = Offset.Zero
