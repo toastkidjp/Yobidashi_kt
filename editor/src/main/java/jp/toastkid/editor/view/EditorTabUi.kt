@@ -15,6 +15,7 @@ import android.net.Uri
 import android.text.format.DateFormat
 import android.view.View
 import android.widget.EditText
+import android.widget.ScrollView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -97,15 +98,7 @@ fun EditorTabUi(path: String?) {
     val viewModelProvider = ViewModelProvider(context)
 
     val editText = remember { EditText(context) }
-    val nestedScrollDispatcher = NestedScrollDispatcher()
-    val scrollListener =
-        View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            nestedScrollDispatcher.dispatchPreScroll(
-                Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
-                NestedScrollSource.Fling
-            )
-        }
-    editText.setOnScrollChangeListener(scrollListener)
+    val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
 
     val finder = EditTextFinder(editText)
 
@@ -161,6 +154,7 @@ fun EditorTabUi(path: String?) {
             editText.typeface = Typeface.MONOSPACE
             editText.hint = context.getString(R.string.hint_editor_input)
             editText.setHintTextColor(preferenceApplier.editorFontColor())
+            editText.isNestedScrollingEnabled = true
 
             CursorColorSetter().invoke(
                 editText,
@@ -169,8 +163,25 @@ fun EditorTabUi(path: String?) {
             editText.highlightColor = preferenceApplier.editorHighlightColor(
                 ContextCompat.getColor(context, R.color.light_blue_200_dd)
             )
+            val scrollListener =
+                View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                    nestedScrollDispatcher.dispatchPreScroll(
+                        Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
+                        NestedScrollSource.Fling
+                    )
+                }
+            //editText.setOnScrollChangeListener(scrollListener)
             fileActionUseCase.readCurrentFile()
-            editText
+            val scrollView = ScrollView(editText.context)
+            scrollView.addView(editText)
+            scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                nestedScrollDispatcher.dispatchPreScroll(
+                    Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
+                    NestedScrollSource.Fling
+                )
+            }
+            scrollView.overScrollMode = ScrollView.OVER_SCROLL_NEVER
+            scrollView
         },
         modifier = Modifier
             .fillMaxSize()
@@ -348,10 +359,7 @@ private fun AppBarContent(
     InputFileNameDialogUi(
         openInputFileNameDialog,
         onCommit = {
-            val appropriateName =
-                if (it.endsWith(".md") || it.endsWith(".txt")) it else "$it.txt"
-            fileActionUseCase.assignNewFile(appropriateName)
-            fileActionUseCase.save(openInputFileNameDialog)
+            fileActionUseCase.makeNewFileWithName(it, fileActionUseCase, openInputFileNameDialog)
         }
     )
 

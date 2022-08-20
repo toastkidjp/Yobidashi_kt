@@ -175,9 +175,6 @@ class TabAdapter(
         setCount()
     }
 
-    /**
-     * This method allow calling from only [BrowserFragment].
-     */
     internal fun openNewEditorTab(path: String? = null) {
         val editorTab = EditorTab()
         if (path != null) {

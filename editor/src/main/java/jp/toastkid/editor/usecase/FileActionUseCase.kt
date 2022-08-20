@@ -127,7 +127,7 @@ class FileActionUseCase(
      * @param fileName
      */
     fun assignNewFile(fileName: String) {
-        val context = context ?: return
+        val context = context
         var newFile = externalFileAssignment(context, fileName)
         while (newFile.exists()) {
             newFile = externalFileAssignment(
@@ -138,6 +138,18 @@ class FileActionUseCase(
         path.value = newFile.absolutePath
         updateTab(newFile)
         saveToFile(path.value)
+    }
+
+    fun makeNewFileWithName(
+        fileName: String,
+        fileActionUseCase: FileActionUseCase,
+        openInputFileNameDialog: MutableState<Boolean>
+    ) {
+        val appropriateName =
+            if (fileName.endsWith(".md") || fileName.endsWith(".txt")) fileName
+            else "$fileName.txt"
+        fileActionUseCase.assignNewFile(appropriateName)
+        fileActionUseCase.save(openInputFileNameDialog)
     }
 
     /**

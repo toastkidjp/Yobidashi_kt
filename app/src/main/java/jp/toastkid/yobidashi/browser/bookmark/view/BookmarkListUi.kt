@@ -509,7 +509,7 @@ private fun exportBookmark(
     uri: Uri
 ) {
     val items = bookmarkRepository.all()
-    val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return
+    val outputStream = context.contentResolver?.openOutputStream(uri) ?: return
     outputStream.sink().use { sink ->
         sink.buffer().use {
             it.writeUtf8(Exporter(items).invoke())

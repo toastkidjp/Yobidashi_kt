@@ -385,9 +385,8 @@ internal fun Content() {
                 backgroundColor = Color.Transparent,
                 bottomBar = {
                     AppBar(
-                        openFindInPageState,
-                        { navigate(navigationHostController, "setting/top") }
-                    )
+                        openFindInPageState
+                    ) { navigate(navigationHostController, "setting/top") }
                 },
                 snackbarHost = {
                     SnackbarHost(
