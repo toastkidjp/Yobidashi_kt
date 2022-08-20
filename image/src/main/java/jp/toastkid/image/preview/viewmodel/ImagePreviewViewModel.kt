@@ -96,4 +96,11 @@ class ImagePreviewViewModel {
         colorFilterState.value = ColorFilter.colorMatrix(colorMatrix)
     }
 
+    fun resetStates() {
+        scale.value = 1f
+        offset.value = Offset.Zero
+        rotationY.value = 0f
+        rotationZ.value = 0f
+    }
+
 }
