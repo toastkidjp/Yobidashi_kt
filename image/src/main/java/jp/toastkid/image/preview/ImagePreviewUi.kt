@@ -43,8 +43,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -265,17 +263,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             tint = Color(0xDDFF5722),
                             modifier = Modifier
                                 .clickable {
-                                    viewModel.colorFilterState.value =
-                                        ColorFilter.colorMatrix(
-                                            ColorMatrix(
-                                                floatArrayOf(
-                                                    0.9f, 0f, 0f, 0f, 000f,
-                                                    0f, 0.7f, 0f, 0f, 000f,
-                                                    0f, 0f, 0.4f, 0f, 000f,
-                                                    0f, 0f, 0f, 1f, 000f
-                                                )
-                                            )
-                                        )
+                                    viewModel.setSepia()
                                 }
                                 .padding(start = 16.dp)
                         )
