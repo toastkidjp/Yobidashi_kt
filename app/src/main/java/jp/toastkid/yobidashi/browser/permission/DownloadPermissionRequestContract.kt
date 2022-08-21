@@ -27,7 +27,7 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
         return Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
             .putExtra(
                 ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSIONS,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.POST_NOTIFICATIONS)
             )
     }
 
