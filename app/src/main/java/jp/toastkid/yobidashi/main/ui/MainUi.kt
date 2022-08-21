@@ -355,8 +355,8 @@ internal fun Content() {
     }
 
     val mediaPermissionRequestLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it.not()) {
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            if (it.values.any { it.not() }) {
                 contentViewModel?.snackShort(R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
@@ -490,7 +490,12 @@ internal fun Content() {
                         openFindInPageState,
                         { navigate(navigationHostController, it) },
                         {
-                            mediaPermissionRequestLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            mediaPermissionRequestLauncher.launch(
+                                arrayOf(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.POST_NOTIFICATIONS
+                                )
+                            )
                         },
                         { openMenu.value = false }
                     )
