@@ -148,6 +148,7 @@ class WebViewClientFactory(
                     || uri.host?.endsWith(".jp.net") == true
                     || uri.host == "rt.gsspat.jp"
                     || uri.host == "webnew.net"
+                    || uri.host == "jp.img4.uk"
                 ) {
                     view?.stopLoading()
                     contentViewModel?.snackShort("It has canceled load inappropriate Web site. : $uri")
