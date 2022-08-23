@@ -24,10 +24,21 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
     override fun createIntent(context: Context, input: String?): Intent {
         url = input
 
+        val permissions =
+            if (Build.VERSION.SDK_INT >= 33) {
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            } else {
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            }
         return Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
             .putExtra(
                 ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSIONS,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.POST_NOTIFICATIONS)
+                permissions
             )
     }
 
