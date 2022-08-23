@@ -490,10 +490,16 @@ internal fun Content() {
                         openFindInPageState,
                         { navigate(navigationHostController, it) },
                         {
-                            val permissions = arrayOf(
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.POST_NOTIFICATIONS
-                            )
+                            val permissions = if (Build.VERSION.SDK_INT >= 33) {
+                                arrayOf(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.POST_NOTIFICATIONS
+                                )
+                            } else {
+                                arrayOf(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                                )
+                            }
                             mediaPermissionRequestLauncher.launch(
                                 permissions
                             )
