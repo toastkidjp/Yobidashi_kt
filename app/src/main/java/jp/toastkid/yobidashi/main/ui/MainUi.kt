@@ -490,11 +490,12 @@ internal fun Content() {
                         openFindInPageState,
                         { navigate(navigationHostController, it) },
                         {
+                            val arrayOf = arrayOf(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            )
                             mediaPermissionRequestLauncher.launch(
-                                arrayOf(
-                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    Manifest.permission.POST_NOTIFICATIONS
-                                )
+                                arrayOf
                             )
                         },
                         { openMenu.value = false }
