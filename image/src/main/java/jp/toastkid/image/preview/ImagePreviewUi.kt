@@ -184,7 +184,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 viewModel.alphaSliderPosition.value = it
                                 viewModel.updateColorFilter()
                             },
-                            valueRange = -0.75f .. 0.75f,
+                            valueRange = -1f .. 0.75f,
                             steps = 100
                         )
                     }
@@ -201,8 +201,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 viewModel.contrastSliderPosition.value = it
                                 viewModel.updateColorFilter()
                             },
-                            valueRange = 0f .. 1.75f,
-                            steps = 256
+                            valueRange = 0f .. 3f,
+                            steps = 300
                         )
                     }
 
