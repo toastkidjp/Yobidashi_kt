@@ -184,8 +184,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 viewModel.alphaSliderPosition.value = it
                                 viewModel.updateColorFilter()
                             },
-                            valueRange = -1f .. 0.75f,
-                            steps = 100
+                            valueRange = -1.5f .. 1f,
+                            steps = 150
                         )
                     }
 
