@@ -10,10 +10,11 @@ package jp.toastkid.yobidashi.browser.block
 
 class SiteNameChecker {
 
-    operator fun invoke(host: String?) =
-        host?.endsWith(".xyz") == true
+    operator fun invoke(host: String?): Boolean {
+        return host?.endsWith(".xyz") == true
                 || host?.endsWith(".jp.net") == true
                 || host == "rt.gsspat.jp"
                 || host == "webnew.net"
                 || host == "jp.img4.uk"
+    }
 }
