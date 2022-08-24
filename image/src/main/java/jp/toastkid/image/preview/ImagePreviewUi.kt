@@ -143,7 +143,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
+                .height(60.dp)
                 .align(Alignment.Center)
                 .swipeable(
                     swipeableState,
