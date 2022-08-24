@@ -44,7 +44,7 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
 
     companion object {
 
-        val permissions =
+        private val permissions =
             if (Build.VERSION.SDK_INT >= 33) {
                 arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
