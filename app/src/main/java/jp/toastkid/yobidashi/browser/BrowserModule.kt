@@ -91,7 +91,8 @@ class BrowserModule(
                     preferenceApplier,
                     browserViewModel,
                     rssAddingSuggestion,
-                ) { currentView() },
+                    { currentView() }
+                ),
                 webChromeClientFactory = WebChromeClientFactory(
                         browserViewModel,
                         faviconApplier,
