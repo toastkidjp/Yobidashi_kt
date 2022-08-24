@@ -32,6 +32,7 @@ import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.block.AdRemover
+import jp.toastkid.yobidashi.browser.block.SiteNameChecker
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
@@ -48,7 +49,8 @@ class WebViewClientFactory(
     private val preferenceApplier: PreferenceApplier,
     private val browserViewModel: BrowserViewModel? = null,
     private val rssAddingSuggestion: RssAddingSuggestion? = null,
-    private val currentView: () -> WebView? = { null }
+    private val currentView: () -> WebView? = { null },
+    private val siteNameChecker: SiteNameChecker = SiteNameChecker()
 ) {
 
     /**
@@ -144,12 +146,7 @@ class WebViewClientFactory(
                     val context: Context? = view?.context
                     val uri: Uri = Uri.parse(url)
 
-                if (uri.host?.endsWith(".xyz") == true
-                    || uri.host?.endsWith(".jp.net") == true
-                    || uri.host == "rt.gsspat.jp"
-                    || uri.host == "webnew.net"
-                    || uri.host == "jp.img4.uk"
-                ) {
+                if (siteNameChecker(uri.host)) {
                     view?.stopLoading()
                     contentViewModel?.snackShort("It has canceled load inappropriate Web site. : $uri")
                     return@let true
