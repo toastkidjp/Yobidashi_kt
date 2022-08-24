@@ -13,7 +13,6 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.text.format.DateFormat
-import android.view.View
 import android.widget.EditText
 import android.widget.ScrollView
 import androidx.activity.ComponentActivity
@@ -163,14 +162,6 @@ fun EditorTabUi(path: String?) {
             editText.highlightColor = preferenceApplier.editorHighlightColor(
                 ContextCompat.getColor(context, R.color.light_blue_200_dd)
             )
-            val scrollListener =
-                View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-                    nestedScrollDispatcher.dispatchPreScroll(
-                        Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
-                        NestedScrollSource.Fling
-                    )
-                }
-            //editText.setOnScrollChangeListener(scrollListener)
             fileActionUseCase.readCurrentFile()
             val scrollView = ScrollView(editText.context)
             scrollView.addView(editText)
