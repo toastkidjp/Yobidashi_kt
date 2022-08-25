@@ -83,6 +83,8 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.swiperefresh.SwipeRefreshNestedScrollConnection
+import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.ui.dialog.ConfirmDialog
@@ -97,8 +99,6 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
-import jp.toastkid.yobidashi.browser.view.swiperefresh.SwipeRefreshNestedScrollConnection
-import jp.toastkid.yobidashi.browser.view.swiperefresh.SwipeRefreshState
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker

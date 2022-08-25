@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.browser.view.swiperefresh
+package jp.toastkid.lib.view.swiperefresh
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.MutatePriority
@@ -31,14 +31,14 @@ class SwipeRefreshState(
      * Whether a swipe/drag is currently in progress.
      */
     var isSwipeInProgress: Boolean by mutableStateOf(false)
-        internal set
+        set
 
     /**
      * The current offset for the indicator, in pixels.
      */
     val indicatorOffset: Float get() = _indicatorOffset.value
 
-    internal suspend fun animateOffsetTo(offset: Float) {
+    suspend fun animateOffsetTo(offset: Float) {
         mutatorMutex.mutate {
             _indicatorOffset.animateTo(offset)
         }
