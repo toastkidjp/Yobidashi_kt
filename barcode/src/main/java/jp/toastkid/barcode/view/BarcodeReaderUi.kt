@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -63,8 +64,8 @@ fun BarcodeReaderUi() {
     val onResume = remember { mutableStateOf(isGranted(context)) }
 
     val cameraPermissionRequestLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it) {
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
                 onResume.value = true
                 return@rememberLauncherForActivityResult
             }
@@ -145,14 +146,14 @@ fun BarcodeReaderUi() {
             ) {
                 Column(
                     modifier = Modifier
-                        .background(Color(preferenceApplier.color))
+                        .background(MaterialTheme.colors.primary)
                         .wrapContentWidth()
                         .padding(16.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             stringResource(id = R.string.clip),
-                            color = Color(preferenceApplier.fontColor),
+                            color = MaterialTheme.colors.onPrimary,
                             fontSize = 16.sp,
                             modifier = Modifier
                                 .padding(16.dp)
@@ -214,4 +215,4 @@ private fun clip(context: Context?, text: String) {
 /**
  * Required permission for this fragment(and function).
  */
-private val cameraPermission = Manifest.permission.CAMERA
+private const val cameraPermission = Manifest.permission.CAMERA

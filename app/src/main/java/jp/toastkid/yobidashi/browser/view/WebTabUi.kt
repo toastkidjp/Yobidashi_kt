@@ -352,9 +352,9 @@ private fun AppBarContent(
             .height(76.dp)
             .fillMaxWidth()
     ) {
-        if (progress.value ?: 0 < 70) {
+        if (progress.value < 70) {
             LinearProgressIndicator(
-                progress = (progress.value?.toFloat() ?: 100f) / 100f,
+                progress = progress.value.toFloat() / 100f,
                 color = Color(preferenceApplier.fontColor),
                 modifier = Modifier
                     .height(1.dp)
@@ -376,7 +376,7 @@ private fun AppBarContent(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,
                 tint,
-                enableForward.value ?: false
+                enableForward.value
             ) { browserModule.forward() }
             Box(
                 contentAlignment = Alignment.Center,
@@ -385,8 +385,8 @@ private fun AppBarContent(
                     .padding(8.dp)
                     .combinedClickable(
                         true,
-                        onClick = { contentViewModel?.switchTabList() },
-                        onLongClick = { tabListViewModel?.openNewTab() }
+                        onClick = { contentViewModel.switchTabList() },
+                        onLongClick = { tabListViewModel.openNewTab() }
                     )
             ) {
                 Image(
@@ -417,7 +417,7 @@ private fun AppBarContent(
                 UserAgentDropdown(open) {
                     preferenceApplier.setUserAgent(it.name)
                     browserModule.resetUserAgent(it.text())
-                    contentViewModel?.snackShort(
+                    contentViewModel.snackShort(
                         activity.getString(
                             R.string.format_result_user_agent,
                             it.title()
@@ -501,7 +501,7 @@ private fun AppBarContent(
                     Modifier.weight(1f)
                 )
 
-                val isNotLoading = 70 < progress.value ?: 100
+                val isNotLoading = 70 < progress.value
                 val reloadIconId =
                     if (isNotLoading) R.drawable.ic_reload else R.drawable.ic_close
                 Icon(

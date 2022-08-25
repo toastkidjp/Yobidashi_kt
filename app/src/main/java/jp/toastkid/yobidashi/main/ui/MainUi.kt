@@ -185,8 +185,7 @@ internal fun Content() {
             )
 
             tabs.openNewPdfTab(uri)
-            contentViewModel?.replaceToCurrentTab()
-            contentViewModel?.switchTabList()
+            contentViewModel.replaceToCurrentTab()
         }
 
     val requestPermissionForOpenPdfTab =
@@ -627,10 +626,10 @@ private fun initializeContentViewModel(
         tabs.openCalendar()
         replaceToCurrentTab(tabs, navigationHostController)
     })
-    contentViewModel?.nextRoute?.observe(activity, {
+    contentViewModel.nextRoute.observe(activity) {
         val route = it?.getContentIfNotHandled() ?: return@observe
         navigate(navigationHostController, route)
-    })
+    }
 }
 
 private fun showSnackbar(

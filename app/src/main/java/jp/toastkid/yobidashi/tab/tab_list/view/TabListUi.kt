@@ -200,6 +200,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     backgroundColor,
                     Modifier.padding(4.dp)
                 ) {
+                    // For suppressing replace screen.
                     contentViewModel.setHideBottomSheetAction {  }
                     tabListViewModel.openNewTab()
                     closeOnly(coroutineScope, contentViewModel)
@@ -245,12 +246,15 @@ private fun TabItem(
     onClick: (Tab) -> Unit,
     onClose: (Tab) -> Unit
 ) {
-    val swipeableState = SwipeableState(initialValue = 0, confirmStateChange = {
-        if (it == 1) {
-            onClose(tab)
+    val swipeableState = SwipeableState(
+        initialValue = 0,
+        confirmStateChange = {
+            if (it == 1) {
+                onClose(tab)
+            }
+            true
         }
-        true
-    })
+    )
 
     AnimatedVisibility(
         visibility(tab),
