@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Message
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -179,5 +180,9 @@ class BrowserViewModel : ViewModel() {
     fun search(query: String) {
         _search.postValue(Event(query))
     }
+
+    private val nestedScrollDispatcher = NestedScrollDispatcher()
+
+    fun nestedScrollDispatcher() = nestedScrollDispatcher
 
 }
