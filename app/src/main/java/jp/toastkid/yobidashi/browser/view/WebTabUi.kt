@@ -154,21 +154,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
 
     val scrollListener =
         View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            //nestedScrollConnection.enabled = scrollY == 0
-            val nestedScrollDispatcher = browserModule.nestedScrollDispatcher()
-            if (oldScrollY == 0 && oldScrollX == 0) {
-                nestedScrollDispatcher.dispatchPreScroll(
-                    Offset(0f, scrollY.toFloat()),
-                    NestedScrollSource.Drag
-                )
-                nestedScrollDispatcher.dispatchPostScroll(
-                    Offset(0f, scrollY.toFloat()),
-                    Offset(0f, scrollY.toFloat()),
-                    NestedScrollSource.Drag
-                )
-                return@OnScrollChangeListener
-            }
-            nestedScrollDispatcher.dispatchPreScroll(
+            browserViewModel.nestedScrollDispatcher().dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
             )
@@ -211,7 +197,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
             modifier = Modifier
                 .nestedScroll(
                     connection = object : NestedScrollConnection {},
-                    dispatcher = browserModule.nestedScrollDispatcher()
+                    dispatcher = browserViewModel.nestedScrollDispatcher()
                 )
         )
 
