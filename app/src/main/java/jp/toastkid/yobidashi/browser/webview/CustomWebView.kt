@@ -8,7 +8,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.webkit.WebView
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.core.net.toUri
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.R
@@ -46,6 +51,10 @@ internal class CustomWebView(context: Context) : WebView(context) {
 
     private val speechMaker by lazy { SpeechMaker(context) }
 
+    private val viewModel = (context as? ViewModelStoreOwner)?.let {
+        ViewModelProvider(it).get(BrowserViewModel::class.java)
+    }
+
     override fun dispatchTouchEvent(motionEvent: MotionEvent?): Boolean {
         if (motionEvent?.action == MotionEvent.ACTION_UP) {
             scrolling = 0
@@ -70,7 +79,16 @@ internal class CustomWebView(context: Context) : WebView(context) {
                 var deltaY: Float = lastY - eventY
 
                 if (enablePullToRefresh) {
-                    onScrollChanged(0, (deltaY / 10f).toInt(), 0, 0)
+                    viewModel?.nestedScrollDispatcher()?.dispatchPreScroll(
+                        Offset(0f, deltaY / 10f),
+                        NestedScrollSource.Drag
+                    )
+                    viewModel?.nestedScrollDispatcher()?.dispatchPostScroll(
+                        Offset(0f, deltaY / 10f),
+                        Offset(0f, deltaY / 10f),
+                        NestedScrollSource.Drag
+                    )
+                    //onScrollChanged(0, (deltaY / 10f).toInt(), 0, 0)
                     return true
                 }
 
