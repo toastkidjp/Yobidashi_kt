@@ -185,7 +185,7 @@ fun BarcodeReaderUi() {
                     }
                     Text(
                         result.value,
-                        color = Color(preferenceApplier.fontColor),
+                        color = MaterialTheme.colors.onPrimary,
                         fontSize = 18.sp,
                         modifier = Modifier.padding(8.dp)
                     )
