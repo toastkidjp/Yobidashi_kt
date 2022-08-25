@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 private const val DragMultiplier = -0.1f
 
 class SwipeRefreshNestedScrollConnection(
-    private val state: SwipeRefreshState,
+    private val state: SwipeRefreshState?,
     private val coroutineScope: CoroutineScope,
     private val onRefresh: () -> Unit,
 ) : NestedScrollConnection {
@@ -34,7 +34,7 @@ class SwipeRefreshNestedScrollConnection(
         // If swiping isn't enabled, return zero
         !enabled -> Offset.Zero
         // If we're refreshing, return zero
-        state.isRefreshing -> Offset.Zero
+        state?.isRefreshing == true -> Offset.Zero
         // If the user is swiping up, handle it
         source == NestedScrollSource.Drag && available.y < 0 -> onScroll(available)
         else -> Offset.Zero
@@ -45,15 +45,15 @@ class SwipeRefreshNestedScrollConnection(
         available: Offset,
         source: NestedScrollSource
     ): Offset {
-        if (!state.isRefreshing && state.indicatorOffset >= refreshTrigger) {
+        if (state?.isRefreshing != false && (state?.indicatorOffset ?: 0f) >= refreshTrigger) {
             onRefresh()
-            state.isSwipeInProgress = false
+            state?.isSwipeInProgress = false
         }
         return when {
             // If swiping isn't enabled, return zero
             !enabled -> Offset.Zero
             // If we're refreshing, return zero
-            state.isRefreshing -> Offset.Zero
+            state?.isRefreshing == true -> Offset.Zero
             // If the user is swiping down and there's y remaining, handle it
             source == NestedScrollSource.Drag && available.y > 0 -> onScroll(available)
             else -> Offset.Zero
@@ -62,17 +62,17 @@ class SwipeRefreshNestedScrollConnection(
 
     private fun onScroll(available: Offset): Offset {
         if (available.y < 0) {
-            state.isSwipeInProgress = true
-        } else if (state.indicatorOffset.roundToInt() == 0) {
-            state.isSwipeInProgress = false
+            state?.isSwipeInProgress = true
+        } else if (state?.indicatorOffset?.roundToInt() == 0) {
+            state?.isSwipeInProgress = false
         }
 
-        val newOffset = (available.y * DragMultiplier + state.indicatorOffset).coerceAtLeast(0f)
-        val dragConsumed = newOffset - state.indicatorOffset
+        val newOffset = (available.y * DragMultiplier + (state?.indicatorOffset ?: 0f)).coerceAtLeast(0f)
+        val dragConsumed = newOffset - (state?.indicatorOffset ?: 0f)
 
         return if (dragConsumed.absoluteValue >= 0.5f) {
             coroutineScope.launch {
-                state.dispatchScrollDelta(dragConsumed)
+                state?.dispatchScrollDelta(dragConsumed)
             }
             // Return the consumed Y
             Offset(x = 0f, y = dragConsumed / DragMultiplier)
@@ -84,12 +84,12 @@ class SwipeRefreshNestedScrollConnection(
     override suspend fun onPreFling(available: Velocity): Velocity {
         // If we're dragging, not currently refreshing and scrolled
         // past the trigger point, refresh!
-        if (!state.isRefreshing && state.indicatorOffset >= refreshTrigger) {
+        if (state?.isRefreshing != null && (state?.indicatorOffset ?: 0f) >= refreshTrigger) {
             onRefresh()
         }
 
         // Reset the drag in progress state
-        state.isSwipeInProgress = false
+        state?.isSwipeInProgress = false
 
         // Don't consume any velocity, to allow the scrolling layout to fling
         return Velocity.Zero
