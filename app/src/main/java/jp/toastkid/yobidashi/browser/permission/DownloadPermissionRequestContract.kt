@@ -27,7 +27,7 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
         return Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
             .putExtra(
                 ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSIONS,
-                permissions
+                PERMISSIONS
             )
     }
 
@@ -44,7 +44,7 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
 
     companion object {
 
-        private val permissions =
+        private val PERMISSIONS =
             if (Build.VERSION.SDK_INT >= 33) {
                 arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
