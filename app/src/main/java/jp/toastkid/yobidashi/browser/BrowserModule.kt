@@ -302,6 +302,4 @@ class BrowserModule(
         AllImageDownloaderUseCase(DownloadAction(context)).invoke(currentView())
     }
 
-    fun nestedScrollDispatcher() = nestedScrollDispatcher
-
 }
