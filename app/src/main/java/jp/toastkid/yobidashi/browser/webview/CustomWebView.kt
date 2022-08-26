@@ -18,9 +18,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.webview.usecase.SelectedTextUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 /**
