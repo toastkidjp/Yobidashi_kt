@@ -91,7 +91,6 @@ internal class CustomWebView(context: Context) : WebView(context) {
                         Offset(0f, deltaY / 10f),
                         NestedScrollSource.Drag
                     )
-                    //onScrollChanged(0, (deltaY / 10f).toInt(), 0, 0)
                     return true
                 }
 
