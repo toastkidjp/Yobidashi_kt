@@ -94,10 +94,6 @@ internal class CustomWebView(context: Context) : WebView(context) {
                     return true
                 }
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    //viewModel?.swipeRefreshState?.value?.isSwipeInProgress = false
-                }
-
                 // NestedPreScroll
                 if (dispatchNestedPreScroll(deltaX.toInt(), deltaY.toInt(), scrollConsumed, scrollOffset)) {
                     deltaY -= scrollConsumed[1]
