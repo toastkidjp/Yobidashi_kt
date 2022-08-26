@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.lib.model.LoadInformation
+import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
 
 /**
  * @author toastkidjp
@@ -184,5 +185,11 @@ class BrowserViewModel : ViewModel() {
     private val nestedScrollDispatcher = NestedScrollDispatcher()
 
     fun nestedScrollDispatcher() = nestedScrollDispatcher
+
+    val swipeRefreshState = mutableStateOf<SwipeRefreshState?>(null)
+
+    fun initializeSwipeRefreshState(refreshTriggerPx: Float) {
+        swipeRefreshState.value = SwipeRefreshState(false, refreshTriggerPx)
+    }
 
 }
