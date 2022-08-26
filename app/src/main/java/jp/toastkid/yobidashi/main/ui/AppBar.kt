@@ -11,7 +11,6 @@ package jp.toastkid.yobidashi.main.ui
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
@@ -49,7 +48,7 @@ internal fun AppBar(
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
     val pageSearcherInput = remember { mutableStateOf("") }
 
-    Box(modifier = Modifier.fillMaxHeight()) {
+    Box(modifier = Modifier.height(80.dp)) {
 
         BottomAppBar(
             backgroundColor = MaterialTheme.colors.primary,
