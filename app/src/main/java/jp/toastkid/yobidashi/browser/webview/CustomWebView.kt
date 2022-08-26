@@ -18,6 +18,9 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.webview.usecase.SelectedTextUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 /**
@@ -90,6 +93,10 @@ internal class CustomWebView(context: Context) : WebView(context) {
                     )
                     //onScrollChanged(0, (deltaY / 10f).toInt(), 0, 0)
                     return true
+                }
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    //viewModel?.swipeRefreshState?.value?.isSwipeInProgress = false
                 }
 
                 // NestedPreScroll
