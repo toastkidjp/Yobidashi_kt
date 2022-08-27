@@ -472,7 +472,6 @@ cdn.caprofitx.com
 cdn.cxense.com
 cdn.fivecdm.com
 cdn.js.tapone.jp
-cdn.jsdelivr.net
 cdn.kixer.com
 cdn.loka.jp
 cdn.mdotm.com
