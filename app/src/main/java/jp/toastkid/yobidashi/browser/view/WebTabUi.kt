@@ -127,7 +127,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val refreshTriggerPx = with(LocalDensity.current) { 80.dp.toPx() }
-    browserViewModel.initializeSwipeRefreshState(refreshTriggerPx)
     LaunchedEffect(browserViewModel.swipeRefreshState.value?.isSwipeInProgress) {
         if (browserViewModel.swipeRefreshState.value?.isSwipeInProgress == false) {
             // If there's not a swipe in progress, rest the indicator at 0f
@@ -209,7 +208,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
                         IntOffset(
                             0,
                             min(
-                                browserViewModel.swipeRefreshState.value?.indicatorOffset?.toInt() ?: 0,
+                                browserViewModel.swipeRefreshState.value?.indicatorOffset?.toInt()
+                                    ?: 0,
                                 nestedScrollConnection.refreshTrigger.toInt()
                             )
                         )
@@ -259,6 +259,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
+        browserViewModel.initializeSwipeRefreshState(refreshTriggerPx)
+
         focusManager.clearFocus(true)
 
         contentViewModel.replaceAppBarContent {
