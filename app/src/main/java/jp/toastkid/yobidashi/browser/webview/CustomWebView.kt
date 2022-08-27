@@ -83,11 +83,6 @@ internal class CustomWebView(context: Context) : WebView(context) {
                         Offset(0f, deltaY / 10f),
                         NestedScrollSource.Drag
                     )
-                    viewModel?.nestedScrollDispatcher()?.dispatchPostScroll(
-                        Offset(0f, deltaY / 10f),
-                        Offset(0f, deltaY / 10f),
-                        NestedScrollSource.Drag
-                    )
                     return true
                 }
 
@@ -127,6 +122,11 @@ internal class CustomWebView(context: Context) : WebView(context) {
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 val returnValue = super.dispatchTouchEvent(event)
                 enablePullToRefresh = false
+                viewModel?.nestedScrollDispatcher()?.dispatchPostScroll(
+                    Offset.Zero,
+                    Offset.Zero,
+                    NestedScrollSource.Drag
+                )
                 // end NestedScroll
                 stopNestedScroll()
                 return returnValue
