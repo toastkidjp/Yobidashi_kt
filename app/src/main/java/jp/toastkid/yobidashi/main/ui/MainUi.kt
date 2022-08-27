@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -32,9 +33,11 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarDuration
@@ -43,6 +46,8 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.rememberSwipeableState
+import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -369,6 +374,18 @@ internal fun Content() {
 
     val bottomSheetState = contentViewModel?.modalBottomSheetState ?: return
 
+    val sizePx = with(LocalDensity.current) { 72.dp.toPx() }
+    val anchors = mapOf(-sizePx to -1, 0f to 0, sizePx to 1)
+    val snackbarSwipeableState = rememberSwipeableState(
+        initialValue = 0,
+        confirmStateChange = {
+            if (it == -1 || it == 1) {
+                rememberSnackbarHostState.currentSnackbarData?.dismiss()
+            }
+            true
+        }
+    )
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -418,7 +435,14 @@ internal fun Content() {
                             Snackbar(
                                 backgroundColor = backgroundColor,
                                 contentColor = tint,
-                                elevation = 4.dp
+                                elevation = 4.dp,
+                                modifier = Modifier.swipeable(
+                                    snackbarSwipeableState,
+                                    anchors = anchors,
+                                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                                    resistance = ResistanceConfig(0.5f),
+                                    orientation = Orientation.Horizontal
+                                )
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
