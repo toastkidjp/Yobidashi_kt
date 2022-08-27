@@ -6,7 +6,6 @@ import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -43,8 +42,6 @@ class BrowserModule(
 ) {
 
     private val context = webViewContainer.context
-
-    private val nestedScrollDispatcher = NestedScrollDispatcher()
 
     private val preferenceApplier = PreferenceApplier(context)
 
