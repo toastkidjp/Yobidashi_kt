@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -48,42 +47,39 @@ internal fun AppBar(
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
     val pageSearcherInput = remember { mutableStateOf("") }
 
-    Box(modifier = Modifier.height(80.dp)) {
-
-        BottomAppBar(
-            backgroundColor = MaterialTheme.colors.primary,
-            elevation = 4.dp,
-            modifier = Modifier
-                .height(72.dp)
-                .offset {
-                    IntOffset(
-                        x = 0,
-                        y = -1 * contentViewModel.bottomBarOffsetHeightPx.value.roundToInt()
-                    )
-                }
-                .align(Alignment.BottomCenter)
-        ) {
-            Box(modifier = Modifier.weight(1f)) {
-                if (openFindInPageState.value) {
-                    FindInPage(
-                        openFindInPageState,
-                        MaterialTheme.colors.onPrimary,
-                        pageSearcherInput
-                    )
-                } else {
-                    contentViewModel.appBarContent.value()
-                }
+    BottomAppBar(
+        backgroundColor = MaterialTheme.colors.primary,
+        elevation = 4.dp,
+        modifier = Modifier
+            .height(72.dp)
+            .offset {
+                IntOffset(
+                    x = 0,
+                    y = -1 * contentViewModel.bottomBarOffsetHeightPx.value.roundToInt()
+                )
             }
-
-            OverflowMenu(
-                MaterialTheme.colors.onPrimary,
-                contentViewModel.optionMenus,
-                { contentViewModel.switchTabList() },
-                openSetting,
-                { activity.finish() }
-            )
+    ) {
+        Box(modifier = Modifier.weight(1f)) {
+            if (openFindInPageState.value) {
+                FindInPage(
+                    openFindInPageState,
+                    MaterialTheme.colors.onPrimary,
+                    pageSearcherInput
+                )
+            } else {
+                contentViewModel.appBarContent.value()
+            }
         }
+
+        OverflowMenu(
+            MaterialTheme.colors.onPrimary,
+            contentViewModel.optionMenus,
+            { contentViewModel.switchTabList() },
+            openSetting,
+            { activity.finish() }
+        )
     }
+
 }
 
 @Composable
