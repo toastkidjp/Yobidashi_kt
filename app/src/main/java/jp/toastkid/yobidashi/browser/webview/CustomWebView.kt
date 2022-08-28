@@ -152,6 +152,9 @@ internal class CustomWebView(context: Context) : WebView(context) {
             super.startActionMode(
                     object : ActionMode.Callback {
                         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                            if (enablePullToRefresh) {
+                                return false
+                            }
                             val menuInflater = MenuInflater(context)
                             menuInflater.inflate(R.menu.context_speech, menu)
                             menuInflater.inflate(R.menu.context_browser, menu)
