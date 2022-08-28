@@ -40,7 +40,6 @@ class WebViewInitializer(
         val adRemover = AdRemover.make(context.assets)
 
         webView.webViewClient = object : WebViewClient() {
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 return false
             }
