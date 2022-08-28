@@ -45,7 +45,7 @@ class SwipeRefreshNestedScrollConnection(
         available: Offset,
         source: NestedScrollSource
     ): Offset {
-        if (state?.isRefreshing == false && (state?.indicatorOffset ?: 0f) >= refreshTrigger) {
+        if (state?.isRefreshing == false && (state.indicatorOffset ?: 0f) >= refreshTrigger) {
             onRefresh()
             state?.isSwipeInProgress = false
         } else {
