@@ -267,42 +267,22 @@ private fun loadFileChunk(filesDir: FilesDir) =
         return intent
     }
 
-    /**
-     * Clear all images.
-     */
-    private fun clearImages() {
-        /*TODO ConfirmDialogFragment.show(
-            parentFragmentManager,
-            getString(R.string.clear_all),
-            Html.fromHtml(
-                getString(R.string.confirm_clear_all_settings),
-                Html.FROM_HTML_MODE_COMPACT
-            ),
-            "clear_background_images"
-        )
-        filesDir.clean()
-                contentViewModel?.snackShort(R.string.message_success_image_removal)
-                refresh()
+/*override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
-        */
-    }
-
-    /*override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-
-        R.id.background_settings_add_default -> {
-            activity?.let { activity ->
-                DefaultBackgroundImagePreparation().invoke(activity) {
-                    activity.runOnUiThread { refresh() }
-                }
+    R.id.background_settings_add_default -> {
+        activity?.let { activity ->
+            DefaultBackgroundImagePreparation().invoke(activity) {
+                activity.runOnUiThread { refresh() }
             }
-            true
         }
-        R.id.background_settings_toolbar_menu_clear -> {
-            clearImages()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }*/
+        true
+    }
+    R.id.background_settings_toolbar_menu_clear -> {
+        clearImages()
+        true
+    }
+    else -> super.onOptionsItemSelected(item)
+}*/
 
 /**
  * Background image dir.
