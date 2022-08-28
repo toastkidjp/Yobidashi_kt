@@ -376,8 +376,8 @@ internal fun Content() {
 
     val bottomSheetState = contentViewModel?.modalBottomSheetState ?: return
 
-    val sizePx = with(LocalDensity.current) { 72.dp.toPx() }
-    val anchors = mapOf(-sizePx to -1, 0f to 0, sizePx to 1)
+    val dismissSnackbarDistance = with(LocalDensity.current) { 72.dp.toPx() }
+    val anchors = mapOf(-dismissSnackbarDistance to -1, 0f to 0, dismissSnackbarDistance to 1)
 
     Box(
         modifier = Modifier.fillMaxSize()
