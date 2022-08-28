@@ -216,7 +216,7 @@ fun EditorTabUi(path: String?) {
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
     val openInputFileNameDialog = remember { mutableStateOf(false) }
-    val observer = LifecycleEventObserver { source, event ->
+    val observer = LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_PAUSE) {
             fileActionUseCase.save(openInputFileNameDialog)
         }

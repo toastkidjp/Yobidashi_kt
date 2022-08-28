@@ -48,7 +48,7 @@ class WebTabTest {
     @Throws(IOException::class)
     private fun check_fromJson(tabJsonAdapter: Json, json: String) {
         val fromJson = tabJsonAdapter.decodeFromString<WebTab>(json)
-        assertEquals("Title", fromJson?.latest?.title())
+        assertEquals("Title", fromJson.latest.title())
         assertEquals("URL", fromJson?.latest?.url())
     }
 

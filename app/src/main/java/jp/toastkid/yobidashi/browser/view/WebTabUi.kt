@@ -200,10 +200,10 @@ fun WebTabUi(uri: Uri, tabId: String) {
             )
         }
 
-        contentViewModel.toTop.observe(lifecycleOwner, {
+        contentViewModel.toTop.observe(lifecycleOwner) {
             it.getContentIfNotHandled() ?: return@observe
             browserModule.pageUp()
-        })
+        }
         contentViewModel.toBottom.observe(lifecycleOwner, {
             it.getContentIfNotHandled() ?: return@observe
             browserModule.pageDown()
