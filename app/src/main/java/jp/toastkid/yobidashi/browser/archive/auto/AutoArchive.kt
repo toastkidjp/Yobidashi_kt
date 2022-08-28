@@ -57,6 +57,7 @@ class AutoArchive(private val filesDir: StorageWrapper) {
 
         fun make(context: Context) = AutoArchive(CacheDir(context, FOLDER))
 
-        fun shouldNotUpdateTab(url: String?) = url?.contains("/files/auto_archives/") == true
+        fun shouldNotUpdateTab(url: String?) = url?.contains("/cache/auto_archives/") == true
+
     }
 }
