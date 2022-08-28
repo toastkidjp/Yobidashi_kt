@@ -344,12 +344,12 @@ fun WebTabUi(uri: Uri, tabId: String) {
                     .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }),
             OptionMenu(titleId = R.string.add_to_home_screen, action = {
-                val uri = browserModule.currentUrl()?.toUri() ?: return@OptionMenu
+                val shortcutUri = browserModule.currentUrl()?.toUri() ?: return@OptionMenu
                 ShortcutUseCase(activityContext)
                     .invoke(
-                        uri,
+                        shortcutUri,
                         browserModule.currentTitle(),
-                        FaviconApplier(activityContext).load(uri)
+                        FaviconApplier(activityContext).load(shortcutUri)
                     )
             }),
             OptionMenu(titleId = R.string.title_add_bookmark, action = {
