@@ -24,7 +24,6 @@ import jp.toastkid.yobidashi.browser.usecase.HtmlSourceExtractionUseCase
 import jp.toastkid.yobidashi.browser.usecase.WebViewReplacementUseCase
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
-import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
@@ -227,14 +226,6 @@ class BrowserModule(
             Timber.e(e)
         }
     }
-
-    /**
-     * Is disable Pull-to-Refresh?
-     *
-     * @return is disable Pull-to-Refresh
-     */
-    fun disablePullToRefresh(): Boolean =
-            (currentView() as? CustomWebView)?.let { !it.enablePullToRefresh || it.scrollY != 0 } ?: false
 
     /**
      * Stop loading in current tab.
