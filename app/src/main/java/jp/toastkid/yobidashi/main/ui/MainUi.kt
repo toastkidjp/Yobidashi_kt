@@ -45,9 +45,9 @@ import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -378,15 +378,6 @@ internal fun Content() {
 
     val sizePx = with(LocalDensity.current) { 72.dp.toPx() }
     val anchors = mapOf(-sizePx to -1, 0f to 0, sizePx to 1)
-    val snackbarSwipeableState = rememberSwipeableState(
-        initialValue = 0,
-        confirmStateChange = {
-            if (it == -1 || it == 1) {
-                rememberSnackbarHostState.currentSnackbarData?.dismiss()
-            }
-            true
-        }
-    )
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -434,6 +425,15 @@ internal fun Content() {
                     SnackbarHost(
                         hostState = rememberSnackbarHostState,
                         snackbar = {
+                            val snackbarSwipeableState = SwipeableState(
+                                initialValue = 0,
+                                confirmStateChange = {
+                                    if (it == -1 || it == 1) {
+                                        rememberSnackbarHostState.currentSnackbarData?.dismiss()
+                                    }
+                                    true
+                                }
+                            )
                             Snackbar(
                                 backgroundColor = backgroundColor,
                                 contentColor = tint,
