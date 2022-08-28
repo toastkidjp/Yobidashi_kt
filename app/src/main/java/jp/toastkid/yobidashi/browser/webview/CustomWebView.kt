@@ -78,7 +78,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
                 var deltaX: Float = lastX - eventX
                 var deltaY: Float = lastY - eventY
 
-                if (enablePullToRefresh) {
+                if (enablePullToRefresh && deltaY < 0) {
                     viewModel?.nestedScrollDispatcher()?.dispatchPreScroll(
                         Offset(0f, deltaY / 10f),
                         NestedScrollSource.Drag
