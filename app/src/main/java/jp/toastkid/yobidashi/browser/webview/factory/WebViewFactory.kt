@@ -69,6 +69,10 @@ internal class WebViewFactory {
         val preferenceApplier = PreferenceApplier(context)
 
         webView.setOnLongClickListener {
+            if ((webView as? CustomWebView)?.enablePullToRefresh == true) {
+                return@setOnLongClickListener true
+            }
+
             val hitResult = webView.hitTestResult
             when (hitResult.type) {
                 WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
