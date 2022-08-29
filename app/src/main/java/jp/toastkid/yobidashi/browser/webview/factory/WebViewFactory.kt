@@ -130,9 +130,7 @@ internal class WebViewFactory {
                 "application/pdf" -> {
                     val intent = Intent().also { it.data = url.toUri() }
                     val currentContext = webView.context
-                    if (currentContext.packageManager.resolveActivity(intent, 0) == null) {
-                        intent.action = Intent.ACTION_VIEW
-                    }
+                    intent.action = Intent.ACTION_VIEW
                     currentContext.startActivity(intent)
                 }
                 else -> {
