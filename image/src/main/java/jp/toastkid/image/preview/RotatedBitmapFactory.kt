@@ -17,10 +17,6 @@ class RotatedBitmapFactory(
         private val rotateMatrixFactory: RotateMatrixFactory = RotateMatrixFactory()
 ) {
 
-    fun reverse(bitmap: Bitmap): Bitmap {
-        return applyMatrix(bitmap, horizontalMatrix)
-    }
-
     private fun applyMatrix(bitmap: Bitmap, matrix: Matrix) =
             Bitmap.createBitmap(
                     bitmap,
