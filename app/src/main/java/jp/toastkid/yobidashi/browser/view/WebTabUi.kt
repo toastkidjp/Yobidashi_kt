@@ -302,9 +302,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserModule.findDown()
             })
 
-            viewModel.clear.observe(lifecycleOwner, {
+            viewModel.clear.observe(lifecycleOwner) {
                 browserModule.clearMatches()
-            })
+            }
         }
 
         browserViewModel
