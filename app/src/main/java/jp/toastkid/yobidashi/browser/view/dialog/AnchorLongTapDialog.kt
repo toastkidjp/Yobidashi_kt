@@ -65,7 +65,7 @@ internal fun AnchorLongTapDialog(
         },
         content = {
             Surface(elevation = 4.dp) {
-                Box() {
+                Box {
                     Column() {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
