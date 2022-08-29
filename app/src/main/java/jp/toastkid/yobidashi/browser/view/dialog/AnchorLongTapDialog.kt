@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
@@ -81,9 +82,9 @@ internal fun AnchorLongTapDialog(
                             }
                             Text(
                                 makeTitleText(title, anchor, imageUrl),
-                                style = MaterialTheme.typography.h5,
+                                fontSize = 14.sp,
                                 overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
+                                maxLines = 2,
                                 modifier = Modifier.weight(1f)
                             )
                         }
