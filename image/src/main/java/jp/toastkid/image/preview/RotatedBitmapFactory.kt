@@ -7,7 +7,6 @@
  */
 package jp.toastkid.image.preview
 
-import android.graphics.Bitmap
 import android.graphics.Matrix
 
 /**
@@ -16,17 +15,6 @@ import android.graphics.Matrix
 class RotatedBitmapFactory(
         private val rotateMatrixFactory: RotateMatrixFactory = RotateMatrixFactory()
 ) {
-
-    private fun applyMatrix(bitmap: Bitmap, matrix: Matrix) =
-            Bitmap.createBitmap(
-                    bitmap,
-                    0,
-                    0,
-                    bitmap.width,
-                    bitmap.height,
-                    matrix,
-                    false
-            )
 
     companion object {
         private val horizontalMatrix = Matrix().also { it.preScale(-1f, 1f) }
