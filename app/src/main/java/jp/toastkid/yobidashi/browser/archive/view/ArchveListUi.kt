@@ -140,7 +140,6 @@ fun ArchiveListUi() {
             listState,
             LocalLifecycleOwner.current,
             items,
-            fullItems.toList(),
-            { item, word -> item.name.contains(word) }
-        )
+            fullItems.toList()
+        ) { item, word -> item.name.contains(word) }
 }

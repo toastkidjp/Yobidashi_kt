@@ -60,7 +60,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -123,10 +122,10 @@ fun EditorTabUi(path: String?) {
     }
 
     val localLifecycleOwner = LocalLifecycleOwner.current
-    contentViewModel.toTop.observe(localLifecycleOwner, {
+    contentViewModel.toTop.observe(localLifecycleOwner) {
         it.getContentIfNotHandled() ?: return@observe
         editText.setSelection(0)
-    })
+    }
     contentViewModel.toBottom.observe(localLifecycleOwner, {
         it.getContentIfNotHandled() ?: return@observe
         editText.setSelection(editText.text.length)
@@ -222,14 +221,12 @@ fun EditorTabUi(path: String?) {
         }
     }
 
-    val keyboardController = LocalSoftwareKeyboardController.current
     DisposableEffect(key1 = editText) {
         localLifecycle.addObserver(observer)
 
         onDispose {
             fileActionUseCase.save(openInputFileNameDialog)
             localLifecycle.removeObserver(observer)
-            keyboardController?.hide()
             contentViewModel.share.removeObservers(localLifecycleOwner)
         }
     }

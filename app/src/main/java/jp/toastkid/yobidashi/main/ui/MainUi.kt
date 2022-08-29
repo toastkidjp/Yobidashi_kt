@@ -621,7 +621,7 @@ private fun initializeContentViewModel(
         tabs.openArticleList()
         replaceToCurrentTab(tabs, navigationHostController)
     })
-    contentViewModel?.openCalendar?.observe(activity) {
+    contentViewModel.openCalendar.observe(activity) {
         it?.getContentIfNotHandled() ?: return@observe
         tabs.openCalendar()
         replaceToCurrentTab(tabs, navigationHostController)

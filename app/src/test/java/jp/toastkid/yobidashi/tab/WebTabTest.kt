@@ -16,6 +16,8 @@ import java.io.IOException
  */
 class WebTabTest {
 
+    private val jsonConverter = Json { ignoreUnknownKeys = true }
+
     @Test
     fun testDeserialize() {
         val json = """
@@ -23,7 +25,7 @@ class WebTabTest {
             "b":"http://xn--2ch-2d8eo32c60z.xyz/lite/archives/30927298/comments/1083702/?p=4",
             "c":0}],"id":"505efeb5-8694-4486-ba26-6d152cba4a65"}
         """
-        val deserialized = Json { ignoreUnknownKeys = true }.decodeFromString<WebTab>(json)
+        val deserialized = jsonConverter.decodeFromString<WebTab>(json)
         assertEquals(
             "【大相撲雑談スレ】名古屋場所 : 2ch大相撲 (記事コメント - 4)",
             deserialized.latest.title()
@@ -49,7 +51,7 @@ class WebTabTest {
     private fun check_fromJson(tabJsonAdapter: Json, json: String) {
         val fromJson = tabJsonAdapter.decodeFromString<WebTab>(json)
         assertEquals("Title", fromJson.latest.title())
-        assertEquals("URL", fromJson?.latest?.url())
+        assertEquals("URL", fromJson.latest.url())
     }
 
     private fun check_toJson(tab: WebTab, tabJsonAdapter: Json): String {

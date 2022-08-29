@@ -10,9 +10,9 @@ import android.view.MotionEvent
 import android.webkit.WebView
 import androidx.core.net.toUri
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.webview.usecase.SelectedTextUseCase
-import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
 
 /**
