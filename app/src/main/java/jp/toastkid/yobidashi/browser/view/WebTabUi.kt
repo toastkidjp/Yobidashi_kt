@@ -162,11 +162,11 @@ fun WebTabUi(uri: Uri, tabId: String) {
             }
         }
 
-    browserViewModel.switchWebViewToCurrent.observe(lifecycleOwner, {
+    browserViewModel.switchWebViewToCurrent.observe(lifecycleOwner) {
         val newTabId = it?.getContentIfNotHandled() ?: return@observe
         browserModule.switchWebViewToCurrent(newTabId)
         GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
-    })
+    }
 
     val downloadPermissionRequestLauncher =
         rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
