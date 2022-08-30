@@ -10,6 +10,7 @@ package jp.toastkid.todo.view.board
 
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -139,6 +140,7 @@ fun TaskBoardUi() {
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActionUseCase) {
     val context = LocalContext.current
@@ -154,7 +156,8 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActio
                 task,
                 repository,
                 color,
-                menuUseCase
+                menuUseCase,
+                Modifier.animateItemPlacement()
             )
         }
     }
@@ -165,7 +168,8 @@ private fun BoardItem(
     task: TodoTask,
     repository: TodoTaskDataAccessor,
     color: Int,
-    menuUseCase: ItemMenuPopupActionUseCase
+    menuUseCase: ItemMenuPopupActionUseCase,
+    modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(
@@ -178,7 +182,7 @@ private fun BoardItem(
 
     Surface(
         elevation = 4.dp,
-        modifier = Modifier
+        modifier = modifier
             .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 2.dp)
             .width(140.dp)
             .height(140.dp)
