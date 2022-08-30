@@ -7,8 +7,6 @@
  */
 package jp.toastkid.image.preview
 
-import android.graphics.Matrix
-
 /**
  * @author toastkidjp
  */
@@ -17,6 +15,5 @@ class RotatedBitmapFactory(
 ) {
 
     companion object {
-        private val horizontalMatrix = Matrix().also { it.preScale(-1f, 1f) }
     }
 }
