@@ -118,7 +118,8 @@ internal fun BindItemContent(
     urlItem: UrlItem,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val title = when (urlItem) {
         is Bookmark -> urlItem.title
@@ -197,7 +198,7 @@ internal fun BindItemContent(
                 }
             }
         },
-        modifier = Modifier.padding(
+        modifier = modifier.padding(
             start = 8.dp,
             end = 8.dp,
             top = 2.dp,
