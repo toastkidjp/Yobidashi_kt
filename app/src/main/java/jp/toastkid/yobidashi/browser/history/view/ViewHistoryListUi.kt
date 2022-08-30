@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.browser.history.view
 
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -20,6 +21,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.ViewModelProvider
@@ -109,6 +111,7 @@ fun ViewHistoryListUi() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun List(
     viewHistoryItems: SnapshotStateList<ViewHistory>,
@@ -128,7 +131,8 @@ private fun List(
                 },
                 onDelete = {
                     onDelete(viewHistory)
-                }
+                },
+                modifier = Modifier.animateItemPlacement()
             )
         }
     }
