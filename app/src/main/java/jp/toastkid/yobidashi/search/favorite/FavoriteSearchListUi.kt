@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -202,6 +203,7 @@ private fun addItem(
     contentViewModel.snackShort(message)
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FavoriteSearchItemList(
     repository: FavoriteSearchRepository,
@@ -234,7 +236,8 @@ private fun FavoriteSearchItemList(
                 {
                     repository.delete(favoriteSearch)
                     favoriteSearchItems.remove(favoriteSearch)
-                }
+                },
+                modifier = Modifier.animateItemPlacement()
             )
         }
     }
