@@ -3,8 +3,10 @@ package jp.toastkid.image.preview
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -35,7 +37,7 @@ class EditorChooserInvokingUseCaseTest {
     @Test
     fun testPathNotFound() {
         every { pathFinder.invoke() }.returns(null)
-        every { showErrorMessage.invoke() }.answers { Unit }
+        every { showErrorMessage.invoke() }.just(Runs)
         every { activityStarter.invoke(any()) }.answers { Unit }
 
         mockkConstructor(ImageEditChooserFactory::class)
