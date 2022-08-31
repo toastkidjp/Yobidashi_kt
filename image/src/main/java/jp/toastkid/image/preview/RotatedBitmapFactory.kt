@@ -12,5 +12,4 @@ package jp.toastkid.image.preview
  */
 class RotatedBitmapFactory {
 
-    companion object
 }
