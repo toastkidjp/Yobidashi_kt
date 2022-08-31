@@ -79,7 +79,7 @@ class EditorChooserInvokingUseCaseTest {
     @Test
     fun testSuccessful() {
         every { pathFinder.invoke() }.returns("test")
-        every { showErrorMessage.invoke() }.answers { Unit }
+        every { showErrorMessage.invoke() }.just(Runs)
         every { activityStarter.invoke(any()) }.answers { Unit }
 
         mockkConstructor(ImageEditChooserFactory::class)
