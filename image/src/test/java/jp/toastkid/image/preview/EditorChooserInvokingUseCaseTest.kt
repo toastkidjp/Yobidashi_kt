@@ -38,7 +38,7 @@ class EditorChooserInvokingUseCaseTest {
     fun testPathNotFound() {
         every { pathFinder.invoke() }.returns(null)
         every { showErrorMessage.invoke() }.just(Runs)
-        every { activityStarter.invoke(any()) }.answers { Unit }
+        every { activityStarter.invoke(any()) }.just(Runs)
 
         mockkConstructor(ImageEditChooserFactory::class)
         every { anyConstructed<ImageEditChooserFactory>().invoke(any(), any()) }.answers { mockk() }
