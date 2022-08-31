@@ -14,6 +14,5 @@ class RotatedBitmapFactory(
         private val rotateMatrixFactory: RotateMatrixFactory = RotateMatrixFactory()
 ) {
 
-    companion object {
-    }
+    companion object
 }
