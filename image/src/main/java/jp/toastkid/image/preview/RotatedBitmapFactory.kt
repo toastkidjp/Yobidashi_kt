@@ -10,9 +10,7 @@ package jp.toastkid.image.preview
 /**
  * @author toastkidjp
  */
-class RotatedBitmapFactory(
-        private val rotateMatrixFactory: RotateMatrixFactory = RotateMatrixFactory()
-) {
+class RotatedBitmapFactory {
 
     companion object
 }
