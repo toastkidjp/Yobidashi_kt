@@ -136,16 +136,15 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val coroutineScope = rememberCoroutineScope()
     val nestedScrollConnection = SwipeRefreshNestedScrollConnection(
         browserViewModel.swipeRefreshState.value,
-        coroutineScope,
-        {
-            if (browserViewModel.swipeRefreshState.value?.isRefreshing == false) {
-                contentViewModel.showAppBar()
-                browserModule.reload()
-                browserViewModel.swipeRefreshState.value?.isRefreshing = true
-            }
-            browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
+        coroutineScope
+    ) {
+        if (browserViewModel.swipeRefreshState.value?.isRefreshing == false) {
+            contentViewModel.showAppBar()
+            browserModule.reload()
+            browserViewModel.swipeRefreshState.value?.isRefreshing = true
         }
-    ).also {
+        browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
+    }.also {
         it.refreshTrigger = refreshTriggerPx
         it.enabled = true
     }
