@@ -267,23 +267,6 @@ private fun loadFileChunk(filesDir: FilesDir) =
         return intent
     }
 
-/*override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-
-    R.id.background_settings_add_default -> {
-        activity?.let { activity ->
-            DefaultBackgroundImagePreparation().invoke(activity) {
-                activity.runOnUiThread { refresh() }
-            }
-        }
-        true
-    }
-    R.id.background_settings_toolbar_menu_clear -> {
-        clearImages()
-        true
-    }
-    else -> super.onOptionsItemSelected(item)
-}*/
-
 /**
  * Background image dir.
  */
