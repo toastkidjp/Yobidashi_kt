@@ -299,7 +299,7 @@ internal fun BrowserSettingUi() {
                         .height(dimensionResource(id = R.dimen.settings_item_height))
                         .padding(start = 16.dp, end = 16.dp)
                 ) {
-                    Row() {
+                    Row {
                         Text("Background alpha")
                         Text(
                             "${backgroundAlpha.value}",
