@@ -43,8 +43,8 @@ import androidx.lifecycle.ViewModelStoreOwner
 import coil.compose.AsyncImage
 import jp.toastkid.barcode.generator.BarcodeGenerator
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.clip.Clipboard
+import jp.toastkid.yobidashi.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -75,7 +75,7 @@ internal fun PageInformationDialog(
                 elevation = 4.dp
             ) {
                 Box() {
-                    Column() {
+                    Column {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(16.dp)
