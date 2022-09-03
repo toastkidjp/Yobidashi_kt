@@ -270,7 +270,7 @@ class ContentViewModel : ViewModel() {
 
     val appBarContent: State<@Composable () -> Unit> = _appBarContent
 
-    fun replaceAppBarContent(composable: @Composable() () -> Unit) {
+    fun replaceAppBarContent(composable: @Composable () -> Unit) {
         _appBarContent.value = composable
     }
 
