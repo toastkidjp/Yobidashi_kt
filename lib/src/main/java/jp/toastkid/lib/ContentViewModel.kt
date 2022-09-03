@@ -274,6 +274,8 @@ class ContentViewModel : ViewModel() {
 
     fun showAppBar() {
         bottomBarOffsetHeightPx.value = 0f
+
+        fabScale.value = 1f
     }
 
     fun hideAppBar() {
