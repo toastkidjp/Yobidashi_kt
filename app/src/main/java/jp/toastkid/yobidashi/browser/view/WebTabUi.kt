@@ -139,7 +139,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
         coroutineScope
     ) {
         if (browserViewModel.swipeRefreshState.value?.isRefreshing == false) {
-            contentViewModel.showAppBar()
+            contentViewModel.showAppBar(coroutineScope)
             browserModule.reload()
             browserViewModel.swipeRefreshState.value?.isRefreshing = true
         }
