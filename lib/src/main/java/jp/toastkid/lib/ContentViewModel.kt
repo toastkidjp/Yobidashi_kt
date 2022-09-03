@@ -8,6 +8,7 @@
 package jp.toastkid.lib
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.Animatable
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -22,6 +23,8 @@ import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.ColorPair
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -225,11 +228,23 @@ class ContentViewModel : ViewModel() {
 
     val bottomBarOffsetHeightPx = mutableStateOf(0f)
 
-    val fabScale = mutableStateOf(1f)
+    val fabScale = Animatable(1f)
+
+    fun showFab(coroutineScope: CoroutineScope) {
+        coroutineScope.launch {
+            fabScale.animateTo(1f)
+        }
+    }
+
+    fun hideFab(coroutineScope: CoroutineScope) {
+        coroutineScope.launch {
+            fabScale.animateTo(0f)
+        }
+    }
 
     fun resetSubComponentVisibility() {
         bottomBarOffsetHeightPx.value = 0f
-        fabScale.value = 1f
+        //showFab()
     }
 
     private val _replaceToCurrentTab = MutableLiveData<Event<Unit>>()
@@ -272,10 +287,12 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    fun showAppBar() {
+    fun showAppBar(coroutineScope: CoroutineScope? = null) {
         bottomBarOffsetHeightPx.value = 0f
 
-        fabScale.value = 1f
+        coroutineScope?.let {
+            showFab(coroutineScope)
+        }
     }
 
     fun hideAppBar() {
