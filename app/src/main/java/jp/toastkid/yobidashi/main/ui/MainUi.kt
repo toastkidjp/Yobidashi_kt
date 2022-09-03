@@ -226,6 +226,8 @@ internal fun Content() {
     }
     contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
 
+    val coroutineScope = rememberCoroutineScope()
+
     val fabOffsetHeightPx = remember { mutableStateOf(0f) }
 
     val nestedScrollConnection = remember {
@@ -245,7 +247,11 @@ internal fun Content() {
                     else -> newValue
                 }
 
-                contentViewModel?.fabScale?.value = fabOffsetHeightPx.value / bottomBarHeight.value
+                if (delta < -20f) {
+                    contentViewModel?.hideFab(coroutineScope)
+                } else if (delta > 20f) {
+                    contentViewModel?.showFab(coroutineScope)
+                }
                 return Offset.Zero
             }
         }
@@ -259,8 +265,6 @@ internal fun Content() {
         keyboardController?.hide()
         focusManager.clearFocus(true)
     })
-
-    val coroutineScope = rememberCoroutineScope()
 
     contentViewModel?.switchTabList?.observe(activity, Observer {
         it?.getContentIfNotHandled() ?: return@Observer
@@ -438,14 +442,20 @@ internal fun Content() {
                                 backgroundColor = backgroundColor,
                                 contentColor = tint,
                                 elevation = 4.dp,
-                                modifier = Modifier.swipeable(
-                                    snackbarSwipeableState,
-                                    anchors = snackbarSwipingAnchors,
-                                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                                    resistance = ResistanceConfig(0.5f),
-                                    orientation = Orientation.Horizontal
-                                )
-                                    .offset { IntOffset(snackbarSwipeableState.offset.value.toInt(), 0) }
+                                modifier = Modifier
+                                    .swipeable(
+                                        snackbarSwipeableState,
+                                        anchors = snackbarSwipingAnchors,
+                                        thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                                        resistance = ResistanceConfig(0.5f),
+                                        orientation = Orientation.Horizontal
+                                    )
+                                    .offset {
+                                        IntOffset(
+                                            snackbarSwipeableState.offset.value.toInt(),
+                                            0
+                                        )
+                                    }
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
