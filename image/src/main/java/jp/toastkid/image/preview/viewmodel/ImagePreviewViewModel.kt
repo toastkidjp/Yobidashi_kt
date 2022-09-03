@@ -66,6 +66,7 @@ class ImagePreviewViewModel {
             return
         }
         index.value--
+        offset.value = Offset.Zero
     }
 
     fun moveToNext() {
@@ -73,6 +74,7 @@ class ImagePreviewViewModel {
             return
         }
         index.value++
+        offset.value = Offset.Zero
     }
 
     fun setIndex(i: Int) {
