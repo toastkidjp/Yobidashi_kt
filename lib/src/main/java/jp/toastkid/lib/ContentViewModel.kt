@@ -242,11 +242,6 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    fun resetSubComponentVisibility() {
-        bottomBarOffsetHeightPx.value = 0f
-        //showFab()
-    }
-
     private val _replaceToCurrentTab = MutableLiveData<Event<Unit>>()
 
     val replaceToCurrentTab: LiveData<Event<Unit>> = _replaceToCurrentTab
