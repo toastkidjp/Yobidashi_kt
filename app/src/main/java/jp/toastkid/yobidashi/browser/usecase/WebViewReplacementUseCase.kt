@@ -71,7 +71,7 @@ class WebViewReplacementUseCase(
             if (activity is ViewModelStoreOwner
                     && ScreenMode.find(preferenceApplier.browserScreenMode()) != ScreenMode.FULL_SCREEN) {
                 ViewModelProvider(activity).get(ContentViewModel::class.java)
-                    .resetSubComponentVisibility()
+                    .showAppBar()
             }
         }
 
