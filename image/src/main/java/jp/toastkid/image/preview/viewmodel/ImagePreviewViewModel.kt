@@ -66,6 +66,7 @@ class ImagePreviewViewModel {
             return
         }
         index.value--
+
         offset.value = Offset.Zero
     }
 
@@ -74,6 +75,7 @@ class ImagePreviewViewModel {
             return
         }
         index.value++
+
         offset.value = Offset.Zero
     }
 
