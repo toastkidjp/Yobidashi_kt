@@ -32,6 +32,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
@@ -174,6 +175,12 @@ fun SearchInputUi(
                                 color = MaterialTheme.colors.onPrimary
                             )
                         },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            cursorColor = MaterialTheme.colors.onPrimary,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
                         singleLine = true,
                         textStyle = TextStyle(
                             color = MaterialTheme.colors.onPrimary,
