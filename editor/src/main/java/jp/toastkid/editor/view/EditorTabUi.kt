@@ -186,8 +186,7 @@ fun EditorTabUi(path: String?) {
             .padding(horizontal = 8.dp, vertical = 2.dp)
     )
 
-    val pageSearcherViewModel =
-        viewModel(PageSearcherViewModel::class.java, context)
+    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, context)
     pageSearcherViewModel.upward.observe(context, {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findUp(word)
