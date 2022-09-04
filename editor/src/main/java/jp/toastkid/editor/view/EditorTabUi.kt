@@ -72,6 +72,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.editor.CursorColorSetter
 import jp.toastkid.editor.EditTextFinder
 import jp.toastkid.editor.EditorContextMenuInitializer
@@ -102,8 +103,8 @@ fun EditorTabUi(path: String?) {
 
     val finder = EditTextFinder(editText)
 
-    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
-    val tabListViewModel = ViewModelProvider(context).get(TabListViewModel::class.java)
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
+    val tabListViewModel = viewModel(TabListViewModel::class.java, context)
 
     val fileActionUseCase = remember {
         FileActionUseCase(
@@ -186,7 +187,7 @@ fun EditorTabUi(path: String?) {
     )
 
     val pageSearcherViewModel =
-        viewModelProvider.get(PageSearcherViewModel::class.java)
+        viewModel(PageSearcherViewModel::class.java, context)
     pageSearcherViewModel.upward.observe(context, {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findUp(word)
