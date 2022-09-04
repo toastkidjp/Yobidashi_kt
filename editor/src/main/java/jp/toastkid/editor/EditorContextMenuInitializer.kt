@@ -13,13 +13,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.EditText
 import androidx.core.text.isDigitsOnly
-import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.editor.usecase.MenuActionInvokerUseCase
-import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.clip.Clipboard
-import jp.toastkid.libs.speech.SpeechMaker
 
 /**
  * @author toastkidjp
@@ -28,20 +24,13 @@ class EditorContextMenuInitializer {
     
     operator fun invoke(
         editText: EditText?,
-        speechMaker: SpeechMaker?,
-        viewModelProvider: ViewModelProvider
+        menuActionInvokerUseCase: MenuActionInvokerUseCase
     ) {
         if (editText == null) {
             return
         }
 
         val context = editText.context
-
-        val browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
-        val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
-
-        val menuActionInvokerUseCase =
-            MenuActionInvokerUseCase(editText, speechMaker, browserViewModel, contentViewModel)
 
         editText.customInsertionActionModeCallback = object : ActionMode.Callback {
 
