@@ -29,7 +29,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "$libVersions.compose"
+        kotlinCompilerExtensionVersion "$libVersions.compose_compiler"
     }
 
     afterEvaluate {
@@ -57,4 +57,5 @@ dependencies {
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"
+    testImplementation "org.robolectric:robolectric:$libVersions.robolectric"
 }
