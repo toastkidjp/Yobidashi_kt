@@ -96,7 +96,6 @@ import jp.toastkid.ui.dialog.InputFileNameDialogUi
 fun EditorTabUi(path: String?) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
-    val viewModelProvider = ViewModelProvider(context)
 
     val editText = remember { EditText(context) }
     val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
@@ -148,7 +147,7 @@ fun EditorTabUi(path: String?) {
 
     AndroidView(
         factory = {
-            EditorContextMenuInitializer().invoke(editText, SpeechMaker(it), viewModelProvider)
+            EditorContextMenuInitializer().invoke(editText, SpeechMaker(it), ViewModelProvider(context))
             editText.setBackgroundColor(Color.Transparent.toArgb())
             editText.setTextColor(preferenceApplier.editorFontColor())
             editText.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
