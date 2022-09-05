@@ -62,7 +62,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "$libVersions.compose"
+        kotlinCompilerExtensionVersion "$libVersions.compose_compiler"
     }
     lintOptions {
         checkReleaseBuilds false
