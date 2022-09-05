@@ -248,7 +248,7 @@ internal fun DisplaySettingUi() {
         ) {
             filesDir.clean()
             files.clear()
-            contentViewModel?.snackShort(R.string.message_success_image_removal)
+            contentViewModel.snackShort(R.string.message_success_image_removal)
         }
     }
 }
