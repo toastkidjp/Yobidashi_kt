@@ -54,7 +54,7 @@ internal fun PageInformationDialog(
     openState: MutableState<Boolean>,
     pageInformationBundle: Bundle
 ) {
-    val favicon = pageInformationBundle.getParcelable<Bitmap>("favicon") ?: return
+    val favicon = pageInformationBundle.getParcelable<Bitmap>("favicon")
     val title = pageInformationBundle.getString("title") ?: return
     val url = pageInformationBundle.getString("url") ?: return
     val cookie = pageInformationBundle.getString("cookie") ?: return
@@ -80,11 +80,14 @@ internal fun PageInformationDialog(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(16.dp)
                         ) {
-                            AsyncImage(
-                                model = favicon,
-                                contentDescription = stringResource(id = R.string.title_icon),
-                                modifier = Modifier.size(44.dp).padding(end = 8.dp)
-                            )
+                            if (favicon != null) {
+                                AsyncImage(
+                                    model = favicon,
+                                    contentDescription = stringResource(id = R.string.title_icon),
+                                    modifier = Modifier.size(44.dp).padding(end = 8.dp)
+                                )
+                            }
+
                             Text(
                                 title,
                                 style = MaterialTheme.typography.h5,
