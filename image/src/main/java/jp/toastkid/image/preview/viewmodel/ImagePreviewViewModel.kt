@@ -27,7 +27,7 @@ class ImagePreviewViewModel {
     }
 
     fun getCurrentImage() =
-        if (images.isNotEmpty()) images.get(index.value) else Image.makeEmpty()
+        if (images.isNotEmpty()) images[index.value] else Image.makeEmpty()
 
     var scale = mutableStateOf(1f)
 
