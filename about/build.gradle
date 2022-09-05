@@ -33,7 +33,7 @@ android {
         generateDebugBuildConfig.enabled = false
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "$libVersions.compose"
+        kotlinCompilerExtensionVersion "$libVersions.compose_compiler"
     }
 }
 
