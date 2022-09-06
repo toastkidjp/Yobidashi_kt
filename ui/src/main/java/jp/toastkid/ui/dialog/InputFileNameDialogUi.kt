@@ -16,6 +16,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.ui.R
@@ -53,6 +55,11 @@ fun InputFileNameDialogUi(
                     input.value = text
                 },
                 singleLine = true,
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = MaterialTheme.colors.onSurface,
+                    backgroundColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.onSurface
+                ),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.Clear,

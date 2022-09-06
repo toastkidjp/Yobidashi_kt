@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -105,51 +104,52 @@ private fun RssReaderList(fullItems: List<Item>) {
                     ),
                 elevation = 4.dp
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
                 ) {
-                    Icon(
-                        painterResource(id = R.drawable.ic_rss_feed),
-                        contentDescription = stringResource(id = R.string.image),
-                        tint = MaterialTheme.colors.primary
-                    )
-                    Column {
+                    Row() {
+                        Icon(
+                            painterResource(id = R.drawable.ic_rss_feed),
+                            contentDescription = stringResource(id = R.string.image),
+                            tint = MaterialTheme.colors.primary,
+                            modifier = Modifier.padding(end = 4.dp)
+                        )
+
                         Text(
                             text = it.title,
                             fontSize = 18.sp,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                         )
-                        Text(
-                            text = it.link,
-                            color = colorResource(R.color.link_blue),
-                            fontSize = 12.sp,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1
-                        )
-                        Text(
-                            text = it.content.toString(),
-                            fontSize = 14.sp,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 3,
-                        )
-                        Text(
-                            text = it.source,
-                            fontSize = 12.sp,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                        )
-                        Text(
-                            text = it.date,
-                            color = colorResource(R.color.darkgray_scale),
-                            fontSize = 12.sp,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                        )
                     }
+                    Text(
+                        text = it.link,
+                        color = colorResource(R.color.link_blue),
+                        fontSize = 12.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                    Text(
+                        text = it.content.toString(),
+                        fontSize = 14.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 3,
+                    )
+                    Text(
+                        text = it.source,
+                        fontSize = 12.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
+                    Text(
+                        text = it.date,
+                        color = colorResource(R.color.darkgray_scale),
+                        fontSize = 12.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
                 }
             }
         }

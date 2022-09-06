@@ -148,7 +148,7 @@ fun MusicListUi() {
                 ?.playFromUri(mediaUri, bundleOf())
         },
         {
-            browserViewModel.preview("https://www.google.com/search?q=$it Lyrics".toUri())
+            browserViewModel.open("https://www.google.com/search?q=$it Lyrics".toUri())
         },
         { stop(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },

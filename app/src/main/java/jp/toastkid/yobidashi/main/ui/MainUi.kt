@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.main.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -104,6 +105,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 internal fun Content() {
@@ -447,7 +449,7 @@ internal fun Content() {
                 modifier = Modifier
                     .fillMaxSize()
                     .nestedScroll(nestedScrollConnection)
-            ) {
+            ) { paddingValue ->
                 NavigationalContent(navigationHostController, tabs)
 
                 MainBackHandler(
@@ -485,6 +487,9 @@ internal fun Content() {
                     },
                     {
                         tabs.closeTab(tabs.index())
+                    },
+                    {
+                        tabs.currentTab() is WebTab
                     },
                     {
                         tabs.isEmpty()
@@ -616,7 +621,7 @@ private fun initializeContentViewModel(
 
         replaceToCurrentTab(tabs, navigationHostController)
     })
-    contentViewModel?.openArticleList?.observe(activity, {
+    contentViewModel.openArticleList?.observe(activity, {
         it?.getContentIfNotHandled() ?: return@observe
         tabs.openArticleList()
         replaceToCurrentTab(tabs, navigationHostController)

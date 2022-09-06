@@ -25,6 +25,7 @@ internal fun MainBackHandler(
     currentRoute: () -> String?,
     navigationPopBackStack: () -> Unit,
     closeTab: () -> Unit,
+    currentTabIsWeb: () -> Boolean,
     tabsIsEmpty: () -> Boolean
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
@@ -68,6 +69,11 @@ internal fun MainBackHandler(
                 tabListViewModel.openNewTab()
                 return@BackHandler
             }
+            contentViewModel.replaceToCurrentTab()
+            return@BackHandler
+        }
+
+        if (route == "search/top" && currentTabIsWeb().not()) {
             contentViewModel.replaceToCurrentTab()
             return@BackHandler
         }

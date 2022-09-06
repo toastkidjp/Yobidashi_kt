@@ -101,7 +101,7 @@ fun MainMenu(
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp)
+                                .padding(top = 8.dp)
                         )
                     }
                 }
@@ -169,7 +169,7 @@ private fun onClickMainMenuItem(
             )
         }
         Menu.CALENDAR -> {
-            contentViewModel?.openCalendar()
+            contentViewModel.openCalendar()
         }
         Menu.WEB_SEARCH -> {
             contentViewModel?.webSearch()
