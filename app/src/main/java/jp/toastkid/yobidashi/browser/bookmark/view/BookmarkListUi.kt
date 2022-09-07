@@ -262,7 +262,7 @@ fun BookmarkListUi() {
                 }
 
                 activityContext.startActivity(
-                    ShareIntentFactory()(html)
+                    ShareIntentFactory()(html, "bookmark.html")
                 )
             }
 
