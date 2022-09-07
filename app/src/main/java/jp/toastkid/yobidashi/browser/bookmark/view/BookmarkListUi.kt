@@ -99,6 +99,8 @@ import timber.log.Timber
 import java.io.IOException
 import java.util.Stack
 
+private val EXPORT_FILE_NAME = "bookmark.html"
+
 @Composable
 fun BookmarkListUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
@@ -190,7 +192,7 @@ fun BookmarkListUi() {
             }
 
             exportLauncher.launch(
-                CreateDocumentIntentFactory()("text/html", "bookmark.html")
+                CreateDocumentIntentFactory()("text/html", EXPORT_FILE_NAME)
             )
         }
 
@@ -262,7 +264,7 @@ fun BookmarkListUi() {
                 }
 
                 activityContext.startActivity(
-                    ShareIntentFactory()(html, "bookmark.html")
+                    ShareIntentFactory()(html, EXPORT_FILE_NAME)
                 )
             }
 
