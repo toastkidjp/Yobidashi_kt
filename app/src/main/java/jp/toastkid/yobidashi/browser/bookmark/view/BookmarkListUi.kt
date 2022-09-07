@@ -99,7 +99,7 @@ import timber.log.Timber
 import java.io.IOException
 import java.util.Stack
 
-private val EXPORT_FILE_NAME = "bookmark.html"
+private const val EXPORT_FILE_NAME = "bookmark.html"
 
 @Composable
 fun BookmarkListUi() {
