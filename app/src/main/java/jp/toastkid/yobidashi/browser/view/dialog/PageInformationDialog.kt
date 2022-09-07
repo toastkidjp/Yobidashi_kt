@@ -44,6 +44,7 @@ import coil.compose.AsyncImage
 import jp.toastkid.barcode.generator.BarcodeGenerator
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
+import jp.toastkid.lib.compat.getParcelableCompat
 import jp.toastkid.yobidashi.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -54,7 +55,7 @@ internal fun PageInformationDialog(
     openState: MutableState<Boolean>,
     pageInformationBundle: Bundle
 ) {
-    val favicon = pageInformationBundle.getParcelable<Bitmap>("favicon")
+    val favicon = pageInformationBundle.getParcelableCompat<Bitmap>("favicon")
     val title = pageInformationBundle.getString("title") ?: return
     val url = pageInformationBundle.getString("url") ?: return
     val cookie = pageInformationBundle.getString("cookie") ?: return
