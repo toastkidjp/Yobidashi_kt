@@ -250,7 +250,7 @@ fun BookmarkListUi() {
     LaunchedEffect(key1 = "first_launch", block = {
         viewModel.query(bookmarkRepository)
 
-        contentViewModel.share.observe(lifecycleOwner, {
+        contentViewModel.share.observe(lifecycleOwner) {
             it.getContentIfNotHandled() ?: return@observe
 
             contentViewModel.viewModelScope.launch {
@@ -266,7 +266,7 @@ fun BookmarkListUi() {
                 )
             }
 
-        })
+        }
     })
 
     DisposableEffect(key1 = lifecycleOwner, effect = {
