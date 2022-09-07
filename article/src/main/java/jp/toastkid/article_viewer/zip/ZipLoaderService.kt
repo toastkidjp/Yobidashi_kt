@@ -14,6 +14,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.JobIntentService
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.lib.compat.getParcelableCompat
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +35,7 @@ class ZipLoaderService(
 ) : JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
-        val file = intent.getParcelableExtra<Uri>("target") ?: return
+        val file = intent.getParcelableCompat<Uri>("target") ?: return
 
         val articleRepository = AppDatabase.find(this).articleRepository()
         val zipLoader = ZipLoader(articleRepository)
