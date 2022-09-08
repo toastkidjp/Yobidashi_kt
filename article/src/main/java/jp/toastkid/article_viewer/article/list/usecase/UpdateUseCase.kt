@@ -11,7 +11,7 @@ package jp.toastkid.article_viewer.article.list.usecase
 import android.content.Context
 import android.net.Uri
 import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
-import jp.toastkid.article_viewer.zip.ZipLoaderService
+import jp.toastkid.article_viewer.zip.ZipLoaderWorker
 
 class UpdateUseCase(
     private val viewModel: ArticleListFragmentViewModel?,
@@ -26,7 +26,7 @@ class UpdateUseCase(
         viewModel?.showProgress()
 
         contextProvider.invoke()?.let {
-            ZipLoaderService.start(it, target)
+            ZipLoaderWorker.start(it, target)
         }
     }
 }
