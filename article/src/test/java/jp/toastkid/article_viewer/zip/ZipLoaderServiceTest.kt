@@ -26,6 +26,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.lib.compat.getParcelableCompat
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
@@ -53,7 +54,7 @@ class ZipLoaderServiceTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { intent.getParcelableExtra<Uri>(any()) }.returns(mockk())
+        every { intent.getParcelableCompat<Uri>(any()) }.returns(mockk())
         coEvery { zipLoadProgressBroadcastIntentFactory.invoke(any()) }.returns(mockk())
 
         zipLoaderService =
