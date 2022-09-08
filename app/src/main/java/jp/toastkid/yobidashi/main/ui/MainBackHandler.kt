@@ -19,9 +19,6 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 
 @Composable
 internal fun MainBackHandler(
-    closeMenuIfNeed: () -> Boolean,
-    closeBottomSheetIfNeed: () -> Boolean,
-    closeFindInPageIfNeed: () -> Boolean,
     currentRoute: () -> String?,
     navigationPopBackStack: () -> Unit,
     closeTab: () -> Unit,
@@ -33,18 +30,6 @@ internal fun MainBackHandler(
     val tabListViewModel = viewModel(TabListViewModel::class.java, activity)
 
     BackHandler(true) {
-        if (closeMenuIfNeed()) {
-            return@BackHandler
-        }
-
-        if (closeBottomSheetIfNeed()) {
-            return@BackHandler
-        }
-
-        if (closeFindInPageIfNeed()) {
-            return@BackHandler
-        }
-
         val route = currentRoute()
 
         if (route?.startsWith("tab/web") == true) {

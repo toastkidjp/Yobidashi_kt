@@ -102,8 +102,8 @@ fun ImageListUi() {
                 return@rememberLauncherForActivityResult
             }
 
-            (context as? ViewModelStoreOwner)?.let {
-                ViewModelProvider(it).get(ContentViewModel::class.java)
+            (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
+                ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
                     .snackShort(R.string.message_audio_file_is_not_found)
             }
         }

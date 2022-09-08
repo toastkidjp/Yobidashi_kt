@@ -291,6 +291,6 @@ private fun commitNewColor(
     preferenceApplier.color = bgColor.toArgb()
     preferenceApplier.fontColor = fontColor.toArgb()
 
-    currentBackgroundColor?.value = bgColor
+    currentBackgroundColor.value = bgColor
     currentFontColor?.value = fontColor
 }

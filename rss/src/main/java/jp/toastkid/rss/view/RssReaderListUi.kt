@@ -160,7 +160,6 @@ private fun RssReaderList(fullItems: List<Item>) {
             listState,
             LocalLifecycleOwner.current,
             items,
-            fullItems,
-            { item, word -> item.title.contains(word) || item.description.contains(word) }
-        )
+            fullItems
+        ) { item, word -> item.title.contains(word) || item.description.contains(word) }
 }

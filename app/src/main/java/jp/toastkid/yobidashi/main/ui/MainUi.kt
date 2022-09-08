@@ -15,6 +15,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -351,6 +352,8 @@ internal fun Content() {
             }
         }
 
+    val bottomSheetState = contentViewModel?.modalBottomSheetState ?: return
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -362,8 +365,6 @@ internal fun Content() {
             modifier = Modifier.fillMaxSize()
         )
 
-        val bottomSheetState = contentViewModel?.modalBottomSheetState ?: return
-
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
             sheetContent = {
@@ -371,7 +372,13 @@ internal fun Content() {
                     if (bottomSheetState.isVisible) {
                         keyboardController?.hide()
 
-                        contentViewModel?.bottomSheetContent?.value?.invoke()
+                        contentViewModel.bottomSheetContent?.value?.invoke()
+                    }
+                }
+
+                BackHandler(bottomSheetState.isVisible) {
+                    coroutineScope.launch {
+                        contentViewModel.hideBottomSheet()
                     }
                 }
             },
@@ -452,50 +459,6 @@ internal fun Content() {
             ) { paddingValue ->
                 NavigationalContent(navigationHostController, tabs)
 
-                MainBackHandler(
-                    {
-                        if (openMenu.value) {
-                            openMenu.value = false
-                            return@MainBackHandler true
-                        } else {
-                            return@MainBackHandler false
-                        }
-                    },
-                    {
-                        if (bottomSheetState.isVisible) {
-                            coroutineScope.launch {
-                                contentViewModel.hideBottomSheet()
-                            }
-                            return@MainBackHandler true
-                        } else {
-                            return@MainBackHandler false
-                        }
-                    },
-                    {
-                        if (openFindInPageState.value) {
-                            openFindInPageState.value = false
-                            return@MainBackHandler true
-                        } else {
-                            return@MainBackHandler false
-                        }
-                    },
-                    {
-                        navigationHostController.currentBackStackEntry?.destination?.route
-                    },
-                    {
-                        navigationHostController.popBackStack()
-                    },
-                    {
-                        tabs.closeTab(tabs.index())
-                    },
-                    {
-                        tabs.currentTab() is WebTab
-                    },
-                    {
-                        tabs.isEmpty()
-                    }
-                )
-
                 LaunchedEffect(key1 = "first_launch", block = {
                     if (tabs.isEmpty()) {
                         tabListViewModel.openNewTab()
@@ -527,6 +490,23 @@ internal fun Content() {
                 }
             }
         }
+    }
+
+    MainBackHandler(
+        {
+            navigationHostController.currentBackStackEntry?.destination?.route
+        },
+        {
+            navigationHostController.popBackStack()
+        },
+        {
+            tabs.closeTab(tabs.index())
+        },
+        {
+            tabs.currentTab() is WebTab
+        }
+    ) {
+        tabs.isEmpty()
     }
 
     val lifecycle = LocalLifecycleOwner.current.lifecycle
