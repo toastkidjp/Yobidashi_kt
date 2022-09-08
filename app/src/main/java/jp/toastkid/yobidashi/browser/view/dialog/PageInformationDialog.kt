@@ -58,7 +58,7 @@ internal fun PageInformationDialog(
     val favicon = pageInformationBundle.getParcelableCompat<Bitmap>("favicon")
     val title = pageInformationBundle.getString("title") ?: return
     val url = pageInformationBundle.getString("url") ?: return
-    val cookie = pageInformationBundle.getString("cookie") ?: return
+    val cookie = pageInformationBundle.getString("cookie") ?: ""
 
     val barcode = remember { mutableStateOf<Bitmap?>(null) }
     LaunchedEffect(key1 = "generate_barcode") {
