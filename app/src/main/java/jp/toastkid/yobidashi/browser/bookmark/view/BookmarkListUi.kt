@@ -132,7 +132,7 @@ fun BookmarkListUi() {
         }
     }
 
-    val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+    val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
     val listState = rememberLazyListState()
 
     BookmarkList(listState, onClick) {
