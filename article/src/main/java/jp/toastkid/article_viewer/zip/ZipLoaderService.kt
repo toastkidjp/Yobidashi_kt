@@ -10,8 +10,6 @@ package jp.toastkid.article_viewer.zip
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.JobIntentService
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.lib.compat.getParcelableCompat
@@ -26,7 +24,6 @@ import java.io.IOException
 /**
  * @author toastkidjp
  */
-@RequiresApi(Build.VERSION_CODES.N)
 class ZipLoaderService(
     private val zipLoadProgressBroadcastIntentFactory: ZipLoadProgressBroadcastIntentFactory =
         ZipLoadProgressBroadcastIntentFactory(),
