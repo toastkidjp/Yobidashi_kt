@@ -88,7 +88,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArticleListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
