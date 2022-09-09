@@ -42,8 +42,8 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Surface
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.Text
-import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -434,7 +434,7 @@ private fun AppBarContent(
 
     val sizePx = with(LocalDensity.current) { 72.dp.toPx() }
     val anchors = mapOf(-sizePx to 1, 0f to 0)
-    val swipeableState = rememberSwipeableState(
+    val swipeableState = SwipeableState(
         initialValue = 0,
         confirmStateChange = {
             if (it == 1) {
@@ -446,7 +446,7 @@ private fun AppBarContent(
 
     val widthPx = with(LocalDensity.current) { 72.dp.toPx() }
     val horizontalAnchors = mapOf(0f to 0, widthPx to 1, -widthPx to 2)
-    val horizontalSwipeableState = rememberSwipeableState(
+    val horizontalSwipeableState = SwipeableState(
         initialValue = 0,
         confirmStateChange = {
             if (it == 1) {
@@ -480,6 +480,12 @@ private fun AppBarContent(
                 resistance = ResistanceConfig(0.5f),
                 orientation = Orientation.Horizontal
             )
+            .offset {
+                IntOffset(
+                    horizontalSwipeableState.offset.value.toInt(),
+                    swipeableState.offset.value.toInt()
+                )
+            }
     ) {
         if (viewModel.progress.value < 70) {
             LinearProgressIndicator(
