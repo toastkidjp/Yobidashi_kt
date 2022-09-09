@@ -7,7 +7,6 @@
  */
 package jp.toastkid.article_viewer.zip
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.app.JobIntentService
@@ -55,10 +54,5 @@ class ZipLoaderService(
 
     companion object {
 
-        fun start(context: Context, target: Uri) {
-            val intent = Intent(context, ZipLoaderService::class.java)
-            intent.putExtra("target", target)
-            enqueueWork(context, ZipLoaderService::class.java, 20, intent)
-        }
     }
 }
