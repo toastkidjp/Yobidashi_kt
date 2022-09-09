@@ -52,7 +52,5 @@ class ZipLoaderService(
         }
     }
 
-    companion object {
-
-    }
+    companion object
 }
