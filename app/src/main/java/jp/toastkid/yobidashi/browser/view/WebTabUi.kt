@@ -20,7 +20,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,15 +35,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Surface
-import androidx.compose.material.SwipeableState
 import androidx.compose.material.Text
-import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -432,32 +427,6 @@ private fun AppBarContent(
     val preferenceApplier = PreferenceApplier(activity)
     val tint = Color(preferenceApplier.fontColor)
 
-    val sizePx = with(LocalDensity.current) { 72.dp.toPx() }
-    val anchors = mapOf(-sizePx to 1, 0f to 0)
-    val swipeableState = SwipeableState(
-        initialValue = 0,
-        confirmStateChange = {
-            if (it == 1) {
-                contentViewModel.switchTabList()
-            }
-            true
-        }
-    )
-
-    val widthPx = with(LocalDensity.current) { 72.dp.toPx() }
-    val horizontalAnchors = mapOf(0f to 0, widthPx to 1, -widthPx to 2)
-    val horizontalSwipeableState = SwipeableState(
-        initialValue = 0,
-        confirmStateChange = {
-            if (it == 1) {
-                contentViewModel.previousTab()
-            } else if (it == 2) {
-                contentViewModel.nextTab()
-            }
-            true
-        }
-    )
-
     val enableBack = viewModel.enableBack
     val enableForward = viewModel.enableForward
     val tabCountState = tabListViewModel.tabCount
@@ -466,26 +435,6 @@ private fun AppBarContent(
         modifier = Modifier
             .height(76.dp)
             .fillMaxWidth()
-            .swipeable(
-                swipeableState,
-                anchors = anchors,
-                thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                resistance = ResistanceConfig(0.5f),
-                orientation = Orientation.Vertical
-            )
-            .swipeable(
-                horizontalSwipeableState,
-                anchors = horizontalAnchors,
-                thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                resistance = ResistanceConfig(0.5f),
-                orientation = Orientation.Horizontal
-            )
-            .offset {
-                IntOffset(
-                    horizontalSwipeableState.offset.value.toInt(),
-                    swipeableState.offset.value.toInt()
-                )
-            }
     ) {
         if (viewModel.progress.value < 70) {
             LinearProgressIndicator(
