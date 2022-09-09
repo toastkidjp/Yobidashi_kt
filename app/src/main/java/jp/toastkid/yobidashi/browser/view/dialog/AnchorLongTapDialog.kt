@@ -82,7 +82,7 @@ internal fun AnchorLongTapDialog(
                             }
                             Text(
                                 makeTitleText(title, anchor, imageUrl),
-                                fontSize = 14.sp,
+                                fontSize = 18.sp,
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 2,
                                 modifier = Modifier.weight(1f)
