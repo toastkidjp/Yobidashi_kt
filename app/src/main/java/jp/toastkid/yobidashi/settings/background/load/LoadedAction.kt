@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.File
 import java.io.IOException
 
 /**
@@ -30,11 +31,11 @@ import java.io.IOException
  * @author toastkidjp
  */
 internal class LoadedAction (
-        private val uri: Uri?,
-        private val context: Context,
-        private val contentViewModel: ContentViewModel,
-        private val onLoadedAction: () -> Unit,
-        private val fileDir: String
+    private val uri: Uri?,
+    private val context: Context,
+    private val contentViewModel: ContentViewModel,
+    private val onLoadedAction: (File) -> Unit,
+    private val fileDir: String
 ) {
 
     /**
@@ -64,7 +65,7 @@ internal class LoadedAction (
                         ImageStoreUseCase(
                                 FilesDir(context, fileDir),
                                 PreferenceApplier(context)
-                        )(it, uri, displaySize)
+                        )(it, uri, displaySize, onLoadedAction)
                     }
                     fixedImage
                 }
@@ -74,7 +75,6 @@ internal class LoadedAction (
                 return@launch
             }
 
-            onLoadedAction()
             bitmap?.let { contentViewModel.snackShort(R.string.message_done_set_image) }
         }
     }

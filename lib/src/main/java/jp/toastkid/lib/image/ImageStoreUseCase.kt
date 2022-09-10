@@ -13,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.StorageWrapper
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.util.UUID
@@ -36,7 +37,7 @@ class ImageStoreUseCase(
      * @throws FileNotFoundException
      */
     @Throws(FileNotFoundException::class)
-    operator fun invoke(image: Bitmap, uri: Uri, displaySize: Rect) {
+    operator fun invoke(image: Bitmap, uri: Uri, displaySize: Rect, fileActionAfterStored: (File) -> Unit = {}) {
         val output = filesDir.assignNewFile(uri.lastPathSegment ?: UUID.randomUUID().toString())
         preferenceApplier.backgroundImagePath = output.path
 
@@ -50,6 +51,8 @@ class ImageStoreUseCase(
         bitmapScaling(image, displaySize.width().toDouble(), displaySize.height().toDouble())
                 .compress(compressFormat, 100, fileOutputStream)
         fileOutputStream.close()
+
+        fileActionAfterStored(output)
     }
 
 }
