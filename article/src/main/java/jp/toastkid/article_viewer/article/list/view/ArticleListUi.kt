@@ -130,7 +130,7 @@ fun ArticleListUi() {
 
             if (openSortDialog.value) {
                 SortSettingDialogUi(preferenceApplier, openSortDialog, onSelect = {
-                    viewModel?.sort(it)
+                    viewModel.sort(it)
                 })
             }
 
