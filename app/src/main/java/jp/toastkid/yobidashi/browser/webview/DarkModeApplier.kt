@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.browser.webview
 
-import android.content.res.Configuration
 import android.os.Build
 import android.webkit.WebView
 import androidx.webkit.WebSettingsCompat
@@ -26,11 +25,6 @@ class DarkModeApplier {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
             && WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
             WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.settings, useDarkMode)
-        }
-
-        if (useDarkMode) {
-            webView.context.resources.configuration.uiMode =
-                webView.context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         }
     }
 
