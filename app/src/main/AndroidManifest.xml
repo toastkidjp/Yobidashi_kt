@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
-        android:theme="@android:style/Theme.Material"
+        android:theme="@android:style/Theme.NoTitleBar"
         >
 
         <meta-data
