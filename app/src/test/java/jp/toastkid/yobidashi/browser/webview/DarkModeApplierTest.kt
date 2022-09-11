@@ -6,6 +6,7 @@ import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -21,6 +22,9 @@ import org.robolectric.util.ReflectionHelpers
  */
 class DarkModeApplierTest {
 
+    @InjectMockKs
+    private lateinit var darkModeApplier: DarkModeApplier
+
     @MockK
     private lateinit var webView: WebView
 
@@ -35,7 +39,7 @@ class DarkModeApplierTest {
         every { WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING) }.answers { false }
         every { webView.getSettings() }.answers { mockk() }
 
-        DarkModeApplier().invoke(webView, true)
+        darkModeApplier.invoke(webView, true)
 
         verify(exactly = 0) { webView.getSettings() }
     }
@@ -49,7 +53,7 @@ class DarkModeApplierTest {
         every { WebSettingsCompat.setAlgorithmicDarkeningAllowed(any(), any()) }.answers { Unit }
         every { webView.getSettings() }.answers { mockk() }
 
-        DarkModeApplier().invoke(webView, true)
+        darkModeApplier.invoke(webView, true)
 
         verify(exactly = 1) { webView.getSettings() }
     }
