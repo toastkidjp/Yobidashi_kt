@@ -28,8 +28,10 @@ class DarkCssInjectorUseCase {
                         
                         var cssText = 
                             'html{      filter: invert(1) hue-rotate(180deg);  }'
-                               + 'html img{      filter: invert(1) hue-rotate(180deg);  }'
-                               + 'html figure{      filter: invert(1) hue-rotate(180deg);  }';
+                               + 'html img, .Image, .ytp-cued-thumbnail-overlay-image, .EmbeddedImage,'
+                               + '.theme-Kisekae__backgroundImage--headerChar {'
+                               +      'filter: invert(1) hue-rotate(180deg);'
+                               + '}';
                         
                         if (styleElement.styleSheet) {
                             styleElement.styleSheet.cssText = cssText;
