@@ -63,7 +63,7 @@ class WebViewClientFactory(
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
 
-            if (preferenceApplier.useDarkMode() && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
                 darkCssInjectorUseCase(view)
             }
 
@@ -80,7 +80,7 @@ class WebViewClientFactory(
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
 
-            if (preferenceApplier.useDarkMode() && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
                 darkCssInjectorUseCase(view)
             }
 
