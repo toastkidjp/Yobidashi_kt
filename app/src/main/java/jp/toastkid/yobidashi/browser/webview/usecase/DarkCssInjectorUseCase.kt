@@ -14,8 +14,8 @@ import jp.toastkid.lib.preference.PreferenceApplier
 
 class DarkCssInjectorUseCase {
 
-    operator fun invoke(webView: WebView) {
-        webView.evaluateJavascript(CSS_INJECTOR_SCRIPT) { }
+    operator fun invoke(webView: WebView?) {
+        webView?.evaluateJavascript(CSS_INJECTOR_SCRIPT) { }
     }
 
     companion object {
