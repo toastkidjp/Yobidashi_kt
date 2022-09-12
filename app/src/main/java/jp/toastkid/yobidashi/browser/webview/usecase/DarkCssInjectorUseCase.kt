@@ -8,7 +8,9 @@
 
 package jp.toastkid.yobidashi.browser.webview.usecase
 
+import android.os.Build
 import android.webkit.WebView
+import jp.toastkid.lib.preference.PreferenceApplier
 
 class DarkCssInjectorUseCase {
 
@@ -42,5 +44,9 @@ class DarkCssInjectorUseCase {
                         headElement.appendChild(styleElement);
                     }());
                 """
+
+        fun isTarget(preferenceApplier: PreferenceApplier) =
+            preferenceApplier.useDarkMode() && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+
     }
 }
