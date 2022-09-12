@@ -73,14 +73,6 @@ class WebViewInitializer(
                         super.shouldInterceptRequest(view, request)
                     }
 
-            @Suppress("OverridingDeprecatedMember")
-            override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
-                    if (preferenceApplier.adRemove) {
-                        adRemover(url)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        super.shouldInterceptRequest(view, url)
-                    }
         }
 
         webView.webChromeClient = object : WebChromeClient() {
