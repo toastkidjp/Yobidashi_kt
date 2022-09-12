@@ -20,13 +20,15 @@ import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.block.AdRemover
+import jp.toastkid.yobidashi.browser.webview.usecase.DarkCssInjectorUseCase
 
 /**
  * @author toastkidjp
  */
 class WebViewInitializer(
         private val preferenceApplier: PreferenceApplier,
-        private val viewModel: FloatingPreviewViewModel
+        private val viewModel: FloatingPreviewViewModel,
+        private val darkCssInjectorUseCase: DarkCssInjectorUseCase = DarkCssInjectorUseCase()
 ) {
 
     /**
@@ -46,8 +48,21 @@ class WebViewInitializer(
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
+
+                if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
+                    darkCssInjectorUseCase(view)
+                }
+
                 viewModel.newIcon(null)
                 viewModel.newUrl(url)
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+
+                if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
+                    darkCssInjectorUseCase(view)
+                }
             }
 
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
