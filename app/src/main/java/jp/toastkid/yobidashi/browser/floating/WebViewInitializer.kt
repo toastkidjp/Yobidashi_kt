@@ -7,10 +7,8 @@
  */
 package jp.toastkid.yobidashi.browser.floating
 
-import android.annotation.TargetApi
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -65,7 +63,6 @@ class WebViewInitializer(
                 }
             }
 
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                     if (preferenceApplier.adRemove) {
                         adRemover(request.url.toString())
