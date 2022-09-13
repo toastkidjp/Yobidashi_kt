@@ -10,9 +10,11 @@ package jp.toastkid.yobidashi.browser.webview.usecase
 
 import android.webkit.WebView
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
 
@@ -28,7 +30,7 @@ class DarkCssInjectorUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { webView.evaluateJavascript(any(), any()) }.answers { Unit }
+        every { webView.evaluateJavascript(any(), any()) }.just(Runs)
     }
 
     @org.junit.After
