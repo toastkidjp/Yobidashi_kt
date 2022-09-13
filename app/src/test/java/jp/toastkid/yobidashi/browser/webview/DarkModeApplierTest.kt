@@ -37,6 +37,15 @@ class DarkModeApplierTest {
     }
 
     @Test
+    fun testIsNotSupportedOs() {
+        ReflectionHelpers.setStaticField(Build.VERSION::class.java, "SDK_INT", Build.VERSION_CODES.P)
+
+        darkModeApplier.invoke(webView, true)
+
+        verify(exactly = 0) { webView.getSettings() }
+    }
+
+    @Test
     fun testIsNotFeatureSupported() {
         every { WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING) }.answers { false }
         every { webView.getSettings() }.answers { mockk() }
