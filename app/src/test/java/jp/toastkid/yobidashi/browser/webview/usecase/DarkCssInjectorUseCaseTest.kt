@@ -17,6 +17,9 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class DarkCssInjectorUseCaseTest {
 
@@ -26,19 +29,19 @@ class DarkCssInjectorUseCaseTest {
     @MockK
     private lateinit var webView: WebView
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
         every { webView.evaluateJavascript(any(), any()) }.just(Runs)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         darkCssInjectorUseCase.invoke(webView)
 
