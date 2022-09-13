@@ -42,7 +42,7 @@ class DarkCssInjectorUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         darkCssInjectorUseCase.invoke(webView)
 
         verify { webView.evaluateJavascript(any(), any()) }
