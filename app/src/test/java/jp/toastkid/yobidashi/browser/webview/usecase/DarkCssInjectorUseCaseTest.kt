@@ -47,4 +47,5 @@ class DarkCssInjectorUseCaseTest {
 
         verify { webView.evaluateJavascript(any(), any()) }
     }
+
 }
