@@ -49,6 +49,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.FileNotFoundException
 import kotlin.math.roundToInt
 
 @Composable
@@ -58,7 +59,12 @@ fun PdfViewerUi(uri: Uri) {
     val listState = rememberLazyListState()
 
     val pdfRenderer =
-        context.contentResolver.openFileDescriptor(uri, "r")
+        try {
+            context.contentResolver.openFileDescriptor(uri, "r")
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            return
+        }
             ?.let { PdfRenderer(it) }
             ?: return
 
