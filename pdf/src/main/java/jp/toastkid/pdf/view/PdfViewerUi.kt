@@ -162,12 +162,3 @@ private fun AppBarUi(scrollState: LazyListState) {
         steps = (scrollState.layoutInfo.totalItemsCount ?: 1) - 1
     )
 }
-
-/*
-CoroutineScope(Dispatchers.Main).launch {
-        scrollState?.scrollToItem(0, 0)
-    }
-    CoroutineScope(Dispatchers.Main).launch {
-        scrollState?.scrollToItem(scrollState?.layoutInfo?.totalItemsCount ?: 0, 0)
-    }
- */
