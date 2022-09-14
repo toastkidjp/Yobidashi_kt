@@ -58,21 +58,23 @@ fun PdfViewerUi(uri: Uri) {
 
     val listState = rememberLazyListState()
 
+    val viewModelProvider = ViewModelProvider(context)
+    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
+    contentViewModel.replaceAppBarContent { AppBarUi(listState) }
+
     val pdfRenderer =
         try {
             context.contentResolver.openFileDescriptor(uri, "r")
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
+            contentViewModel.snackShort("File not found. : $uri")
             return
         }
             ?.let { PdfRenderer(it) }
             ?: return
 
-    val viewModelProvider = ViewModelProvider(context)
-    viewModelProvider.get(ContentViewModel::class.java).replaceAppBarContent { AppBarUi(listState) }
-
     ScrollerUseCase(
-        viewModelProvider.get(ContentViewModel::class.java),
+        contentViewModel,
         listState
     ).invoke(LocalLifecycleOwner.current)
 
