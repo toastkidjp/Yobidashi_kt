@@ -130,7 +130,6 @@ internal fun ColorSettingUi() {
                     Color(initialFontColor)
                 )
 
-                //TODO activity?.let { Updater().update(it) }
                 contentViewModel?.snackShort(R.string.settings_color_done_reset)
                 contentViewModel?.refresh()
             }
