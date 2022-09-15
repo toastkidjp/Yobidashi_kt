@@ -117,8 +117,9 @@ internal fun ColorSettingUi() {
                             bgColor.toArgb(),
                             fontColor.toArgb()
                         )
-                    repository.add(savedColor)
-                    reload(repository, savedColors)
+                    val newId = repository.add(savedColor)
+                    savedColor.id = newId
+                    savedColors.add(savedColor)
                 }
             },
             onReset = {
