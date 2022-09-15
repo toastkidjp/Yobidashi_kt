@@ -52,7 +52,10 @@ class DownloadAction(private val context: Context) {
                 if (showComplete) DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
                 else DownloadManager.Request.VISIBILITY_VISIBLE
         )
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.lastPathSegment)
+        request.setDestinationInExternalPublicDir(
+            Environment.DIRECTORY_DOWNLOADS,
+            uri.lastPathSegment
+        )
         request.setAllowedOverMetered(false)
         request.setAllowedOverRoaming(false)
         return request
