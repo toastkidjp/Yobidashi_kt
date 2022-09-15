@@ -61,9 +61,7 @@ class RssUrlFinder(
         }
     }
 
-    private fun storeToPreferences(
-            urls: List<String>?
-    ) {
+    private fun storeToPreferences(urls: List<String>?) {
         urls?.firstOrNull { urlValidator(it) }
                 ?.let {
                     preferenceApplier.saveNewRssReaderTargets(it)
