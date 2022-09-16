@@ -76,7 +76,7 @@ internal fun ColorSettingUi() {
     val coroutineScope = rememberCoroutineScope()
 
     val contentViewModel = (context as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(it).get(ContentViewModel::class.java)
+        viewModel(ContentViewModel::class.java, it)
     }
 
     val savedColors = remember { mutableStateListOf<SavedColor>() }
