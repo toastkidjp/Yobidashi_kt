@@ -37,8 +37,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
@@ -58,6 +60,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
 
     val viewModel = viewModel(FloatingPreviewViewModel::class.java)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
+    val browserViewModel = viewModel(BrowserViewModel::class.java, context)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -73,6 +76,10 @@ internal fun FloatingPreviewUi(uri: Uri) {
             modifier = Modifier
                 .background(Color(preferenceApplier.color))
                 .padding(8.dp)
+                .clickable {
+                    val currentUri = viewModel.url.value?.toUri() ?: return@clickable
+                    browserViewModel.open(currentUri)
+                }
         ) {
             AsyncImage(
                 model = viewModel.icon.value,
