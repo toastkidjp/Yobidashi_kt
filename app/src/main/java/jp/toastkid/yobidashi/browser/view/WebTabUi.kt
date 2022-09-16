@@ -193,7 +193,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 )
         )
 
-        if (browserViewModel.swipeRefreshState.value?.isSwipeInProgress == true || browserViewModel.swipeRefreshState.value?.isRefreshing == true) {
+        if (browserViewModel.showSwipeRefreshIndicator()) {
             Surface(
                 shape = CircleShape,
                 color = MaterialTheme.colors.primary,
