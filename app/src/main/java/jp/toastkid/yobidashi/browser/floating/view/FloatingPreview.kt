@@ -23,6 +23,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -74,7 +75,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .background(Color(preferenceApplier.color))
+                .background(MaterialTheme.colors.primary)
                 .padding(8.dp)
                 .clickable {
                     val currentUri = viewModel.url.value?.toUri() ?: return@clickable
