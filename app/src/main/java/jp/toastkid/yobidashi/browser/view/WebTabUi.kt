@@ -9,7 +9,6 @@
 package jp.toastkid.yobidashi.browser.view
 
 import android.Manifest
-import android.net.Uri
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
@@ -96,12 +95,14 @@ import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.math.min
 
 @Composable
-fun WebTabUi(uri: Uri, tabId: String) {
+internal fun WebTabUi(webTab: WebTab) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
     val webViewContainer = remember {
@@ -182,7 +183,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
     ) {
         AndroidView(
             factory = {
-                browserModule.loadWithNewTab(uri, tabId)
+                browserModule.loadWithNewTab(webTab.latest.url().toUri(), webTab.id())
                 GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
                 webViewContainer
             },
