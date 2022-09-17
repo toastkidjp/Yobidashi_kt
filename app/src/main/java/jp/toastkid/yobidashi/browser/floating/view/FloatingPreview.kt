@@ -32,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,7 +56,7 @@ import kotlinx.coroutines.launch
 internal fun FloatingPreviewUi(uri: Uri) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
-    val tint = Color(preferenceApplier.fontColor)
+    val tint = MaterialTheme.colors.onPrimary
 
     val viewModel = viewModel(FloatingPreviewViewModel::class.java)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
