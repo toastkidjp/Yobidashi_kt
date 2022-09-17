@@ -98,7 +98,6 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.math.min
 
 @Composable
@@ -166,7 +165,7 @@ internal fun WebTabUi(webTab: WebTab) {
     val downloadPermissionRequestLauncher =
         rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
             if (it.first.not()) {
-                ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+                contentViewModel
                     .snackShort(R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
