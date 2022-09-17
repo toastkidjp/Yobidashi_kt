@@ -65,9 +65,12 @@ internal fun FloatingPreviewUi(uri: Uri) {
 
     val coroutineScope = rememberCoroutineScope()
 
-    val webView = remember { WebViewFactory().make(context) }
-    WebViewInitializer(preferenceApplier, viewModel)(webView)
-    DarkModeApplier().invoke(webView, preferenceApplier.useDarkMode())
+    val webView = remember {
+        val view = WebViewFactory().make(context)
+        WebViewInitializer(preferenceApplier, viewModel)(view)
+        DarkModeApplier().invoke(view, preferenceApplier.useDarkMode())
+        view
+    }
 
     Column(modifier = Modifier.height(400.dp)) {
         val progressState = viewModel.progress.observeAsState()
