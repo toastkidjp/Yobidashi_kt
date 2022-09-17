@@ -485,7 +485,7 @@ private fun AppBarContent(
                         .fillMaxHeight()
                 )
                 Text(
-                    text = "${tabCountState?.value}",
+                    text = "${tabCountState.value}",
                     color = Color(preferenceApplier.fontColor),
                     fontSize = 10.sp,
                     modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
