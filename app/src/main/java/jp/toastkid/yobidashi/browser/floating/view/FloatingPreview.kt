@@ -102,7 +102,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
             Icon(
                 painterResource(id = R.drawable.ic_close),
                 stringResource(id = R.string.close),
-                tint = tint,
+                tint = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.clickable {
                     close(webView, coroutineScope, contentViewModel)
                 }
@@ -113,7 +113,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
         if (progress < 75) {
             LinearProgressIndicator(
                 progress = progress / 100f,
-                color = tint,
+                color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.height(1.dp)
             )
         }
