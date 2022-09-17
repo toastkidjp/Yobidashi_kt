@@ -217,6 +217,7 @@ internal fun Content() {
     val bottomBarHeightPx = with(LocalDensity.current) {
         bottomBarHeight.roundToPx().toFloat()
     }
+    contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
 
     val fabOffsetHeightPx = remember { mutableStateOf(0f) }
 
@@ -258,6 +259,17 @@ internal fun Content() {
             contentViewModel?.switchBottomSheet()
         }
     })
+
+    contentViewModel.moveTab.observe(activity, {
+        val i = it?.getContentIfNotHandled() ?: return@observe
+        if (i == -1) {
+            tabs.movePreviousTab()
+        } else {
+            tabs.moveNextTab()
+        }
+        replaceToCurrentTab(tabs, navigationHostController)
+    })
+
     contentViewModel?.openPdf?.observe(activity, {
         it?.getContentIfNotHandled() ?: return@observe
         requestPermissionForOpenPdfTab.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -372,7 +384,7 @@ internal fun Content() {
                     if (bottomSheetState.isVisible) {
                         keyboardController?.hide()
 
-                        contentViewModel.bottomSheetContent?.value?.invoke()
+                        contentViewModel.bottomSheetContent.value?.invoke()
                     }
                 }
 

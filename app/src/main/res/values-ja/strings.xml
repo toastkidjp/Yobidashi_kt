@@ -221,7 +221,6 @@
 
     <string name="save_backup">バックアップ</string>
     <string name="title_torch">ライト</string>
-    <string name="title_count">文字数</string>
     <string name="title_add_folder">フォルダーを追加</string>
     <string name="title_import_bookmark">ブックマークをインポート</string>
     <string name="title_export_bookmark">ブックマークをエクスポート</string>
@@ -261,7 +260,6 @@
     <string name="message_wifi_not_connecting">Wi-Fi に接続していません。</string>
     <string name="wikipedia">Wikipedia</string>
     <string name="add_schedule">スケジュールに追加</string>
-    <string name="web_search">Web 検索</string>
     <string name="minus">-</string>
     <string name="use_view_history">閲覧履歴を使う</string>
     <string name="use_app_search">アプリ検索を使う</string>
@@ -314,23 +312,11 @@
     <string name="message_require_usage_stats_permission">If you use this function, You should allow permission.</string>
     <string name="title_show_morning_notification">Show morning notification</string>
     <string name="title_show_daily_notification">Report daily information.</string>
-    <string name="insert_as_plain">テキストを挿入</string>
     <string name="message_stay_tuned">お楽しみに！</string>
     <string name="title_image_viewer">画像ビューアー</string>
 
     <string name="title_dark_mode">ダークモードを使う</string>
-    <string name="title_context_editor_add_order">順序リスト</string>
-    <string name="title_context_editor_unordered_list">リスト</string>
-    <string name="title_context_editor_convert_to_table">テーブルに変換</string>
-    <string name="title_context_editor_add_quote">引用符</string>
-    <string name="title_context_editor_double_quote">ダブルクォート</string>
-    <string name="title_context_editor_bold">太字</string>
-    <string name="title_context_editor_italic">斜体</string>
-    <string name="title_context_editor_strikethrough">取り消し線</string>
-    <string name="title_context_editor_set_default_search_category">デフォルトの検索種別</string>
-    <string name="title_context_editor_code_block">コードブロック</string>
-    <string name="title_context_editor_task_list">タスクリスト</string>
-    <string name="title_context_editor_insert_thousand_separator">数値3桁区切</string>
+
     <string name="title_search_suggestion">検索サジェスト</string>
     <string name="search_category">検索種別</string>
 
@@ -338,13 +324,8 @@
     <string name="button_clip_url">URL をコピー</string>
     <string name="button_clip_cookie">Cookie をコピー</string>
     <string name="add_to_home_screen">ショートカットを設置</string>
-    <string name="horizontal_rule">水平線</string>
-    <string name="duplicate_current_line">行をコピー</string>
-    <string name="select_current_line">行を選択</string>
-    <string name="delete_current_line">行を削除</string>
     <string name="title_add_default_background">デフォルトの背景を追加</string>
     <string name="title_article_viewer">記事</string>
-    <string name="preview_search">ちょっと見る検索</string>
     <string name="translate">翻訳</string>
     <string name="download_all_images">すべての画像を保存</string>
     <string name="title_todo_tasks">タスクリスト</string>

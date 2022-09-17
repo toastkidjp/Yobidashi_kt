@@ -162,6 +162,18 @@ class ContentViewModel : ViewModel() {
         _switchTabList.postValue(Event(Unit))
     }
 
+    private val _moveTab = MutableLiveData<Event<Int>>()
+
+    val moveTab: LiveData<Event<Int>> = _moveTab
+
+    fun previousTab() {
+        _moveTab.postValue(Event(-1))
+    }
+
+    fun nextTab() {
+        _moveTab.postValue(Event(1))
+    }
+
     private val _refresh = MutableLiveData<Unit>()
 
     val refresh: LiveData<Unit> = _refresh
@@ -250,6 +262,22 @@ class ContentViewModel : ViewModel() {
 
     fun replaceAppBarContent(composable: @Composable() () -> Unit) {
         _appBarContent.value = composable
+    }
+
+    private var bottomBarHeightPx = 0f
+
+    fun setBottomBarHeightPx(float: Float) {
+        if (bottomBarHeightPx == 0f) {
+            bottomBarHeightPx = float
+        }
+    }
+
+    fun showAppBar() {
+        bottomBarOffsetHeightPx.value = 0f
+    }
+
+    fun hideAppBar() {
+        bottomBarOffsetHeightPx.value = -bottomBarHeightPx
     }
 
 }

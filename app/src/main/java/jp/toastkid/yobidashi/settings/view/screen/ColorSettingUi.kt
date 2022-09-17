@@ -118,7 +118,7 @@ internal fun ColorSettingUi() {
                             fontColor.toArgb()
                         )
                     repository.add(savedColor)
-                    reload(repository, savedColors)
+                    savedColors.add(savedColor)
                 }
             },
             onReset = {
@@ -201,7 +201,7 @@ internal fun ColorSettingUi() {
                                     coroutineScope.launch {
                                         withContext(Dispatchers.IO) {
                                             repository.delete(savedColor)
-                                            reload(repository, savedColors)
+                                            savedColors.remove(savedColor)
                                         }
                                     }
                                 }
@@ -292,5 +292,5 @@ private fun commitNewColor(
     preferenceApplier.fontColor = fontColor.toArgb()
 
     currentBackgroundColor.value = bgColor
-    currentFontColor?.value = fontColor
+    currentFontColor.value = fontColor
 }

@@ -101,7 +101,8 @@ private fun RssReaderList(fullItems: List<Item>) {
                         onLongClick = {
                             browserViewModel.openBackground(it.link.toUri())
                         }
-                    ),
+                    )
+                    .animateItemPlacement(),
                 elevation = 4.dp
             ) {
                 Column(
