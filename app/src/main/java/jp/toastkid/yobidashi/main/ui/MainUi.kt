@@ -339,7 +339,7 @@ internal fun Content() {
     LaunchedEffect(browserViewModel) {
         browserViewModel
             .onPageFinished
-            .observe(activity, {
+            .observe(activity) {
                 if (it.expired()) {
                     return@observe
                 }
@@ -350,7 +350,7 @@ internal fun Content() {
                         GlobalWebViewPool.get(tabs.currentTabId()) ?: return@observe
                     tabs.saveNewThumbnail(currentWebView)
                 }
-            })
+            }
         browserViewModel
             .search
             .observe(activity, { event ->
