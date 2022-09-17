@@ -563,7 +563,6 @@ private fun AppBarContent(
                             .get(ContentViewModel::class.java)
                             .webSearch()
                     }
-                //url_box_background
             ) {
                 Icon(
                     painterResource(id = R.drawable.ic_reader_mode),
