@@ -60,8 +60,11 @@ class WebViewClientFactory(
      */
     operator fun invoke(): WebViewClient = object : WebViewClient() {
 
+        private var lastStartedMs = false
+
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
+            lastStartedMs = true
 
             if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
                 darkCssInjectorUseCase(view)
@@ -79,6 +82,11 @@ class WebViewClientFactory(
 
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
+
+            if (!lastStartedMs) {
+                return
+            }
+            lastStartedMs = false
 
             if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
                 darkCssInjectorUseCase(view)
