@@ -193,6 +193,7 @@ class BrowserViewModel : ViewModel() {
     }
 
     fun showSwipeRefreshIndicator() =
-        swipeRefreshState.value?.isSwipeInProgress == true || swipeRefreshState.value?.isRefreshing == true
+        swipeRefreshState.value?.isSwipeInProgress == true
+                || swipeRefreshState.value?.isRefreshing == true
 
 }
