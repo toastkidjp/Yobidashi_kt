@@ -105,11 +105,14 @@ class TabAdapter(
      */
     @UiThread
     fun saveNewThumbnail(view: View?) {
-        val bitmap = thumbnailGenerator(view) ?: return
-
         val currentTab = tabList.currentTab() ?: return
 
         val file = tabThumbnails.assignNewFile(currentTab.thumbnailPath())
+        if (System.currentTimeMillis() - file.lastModified() < 15_000) {
+            return
+        }
+
+        val bitmap = thumbnailGenerator(view) ?: return
         bitmapCompressor(bitmap, file)
     }
 
