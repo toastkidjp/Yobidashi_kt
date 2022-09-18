@@ -93,7 +93,6 @@ import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EditorTabUi(path: String?) {
     val context = LocalContext.current as? ComponentActivity ?: return
