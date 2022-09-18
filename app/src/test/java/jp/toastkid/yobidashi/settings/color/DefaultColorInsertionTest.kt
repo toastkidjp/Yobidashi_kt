@@ -47,7 +47,7 @@ class DefaultColorInsertionTest {
 
         coEvery { databaseFinder.invoke(any()) }.returns(appDatabase)
         coEvery { appDatabase.savedColorRepository() }.returns(savedColorRepository)
-        coEvery { savedColorRepository.add(any()) }.answers { Unit }
+        coEvery { savedColorRepository.add(any()) }.answers { 1L }
 
         mockkStatic(ContextCompat::class)
         coEvery { ContextCompat.getColor(any(), any()) }.returns(Color.TRANSPARENT)
