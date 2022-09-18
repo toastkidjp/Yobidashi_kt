@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -19,8 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -220,6 +219,7 @@ private fun ColorChooserMenu(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .height(48.dp)
+            .padding(start = 16.dp, end = 16.dp)
             .clickable {
                 openColorChooserDialog.value = true
             }
@@ -227,8 +227,7 @@ private fun ColorChooserMenu(
         Icon(
             painterResource(id = iconId),
             tint = iconTint,
-            contentDescription = stringResource(id = textId),
-            modifier = Modifier.padding(start = 16.dp)
+            contentDescription = stringResource(id = textId)
         )
 
         Text(
@@ -237,19 +236,12 @@ private fun ColorChooserMenu(
                 .weight(1f)
                 .padding(start = 4.dp)
         )
-        Button(
-            {},
-            colors = ButtonDefaults.textButtonColors(
-                backgroundColor = colorState.value,
-                contentColor = Color.Transparent,
-                disabledContentColor = Color.LightGray
-            ),
-            modifier = Modifier
-                .size(dimensionResource(id = R.dimen.search_category_spinner_width))
-                .padding(end = 8.dp)
-        ) {
 
-        }
+        Box(
+            modifier = Modifier
+                .background(colorState.value)
+                .size(dimensionResource(id = R.dimen.search_category_spinner_width))
+        ) { }
     }
 
     ComponentColorSettingDialog(
