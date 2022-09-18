@@ -289,6 +289,7 @@ private fun BookmarkList(
     val viewModel = viewModel(BookmarkListViewModel::class.java)
     LazyColumn(
         contentPadding = PaddingValues(bottom = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
         state = listState,
         modifier = Modifier.padding(start = 8.dp, end = 8.dp)
     ) {
