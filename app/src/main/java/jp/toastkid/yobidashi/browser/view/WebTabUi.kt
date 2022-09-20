@@ -373,7 +373,6 @@ private fun AppBarContent(
         }
     )
 
-    val progress = viewModel.progress
     val enableBack = viewModel.enableBack
     val enableForward = viewModel.enableForward
     val tabCountState = tabListViewModel.tabCount
@@ -397,9 +396,9 @@ private fun AppBarContent(
                 orientation = Orientation.Horizontal
             )
     ) {
-        if (progress.value < 70) {
+        if (viewModel.progress.value < 70) {
             LinearProgressIndicator(
-                progress = progress.value.toFloat() / 100f,
+                progress = viewModel.progress.value.toFloat() / 100f,
                 color = Color(preferenceApplier.fontColor),
                 modifier = Modifier
                     .height(1.dp)
@@ -540,13 +539,13 @@ private fun AppBarContent(
                 )
 
                 BrowserTitle(
-                    progress,
+                    viewModel.progress,
                     viewModel.title,
                     viewModel.url,
                     Modifier.weight(1f)
                 )
 
-                val isNotLoading = 70 < progress.value
+                val isNotLoading = 70 < viewModel.progress.value
                 val reloadIconId =
                     if (isNotLoading) R.drawable.ic_reload else R.drawable.ic_close
                 Icon(
