@@ -13,6 +13,7 @@ import android.graphics.Color
 import androidx.core.graphics.ColorUtils
 import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -26,6 +27,7 @@ import org.junit.Test
 
 class AlphaConverterTest {
 
+    @InjectMockKs
     private lateinit var alphaConverter: AlphaConverter
 
     @MockK
@@ -34,8 +36,6 @@ class AlphaConverterTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-
-        alphaConverter = AlphaConverter()
 
         mockkStatic(ColorUtils::class)
         every { ColorUtils.setAlphaComponent(any(), any()) }.answers { Color.WHITE }
