@@ -22,6 +22,7 @@ import jp.toastkid.number.repository.GameRepositoryImplementation
 class NumberPlaceViewModel : ViewModel() {
 
     private val _game = mutableStateOf(NumberPlaceGame())
+
     private val _mask = mutableStateOf(NumberBoard())
     private val _loading = mutableStateOf(false)
 
