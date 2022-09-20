@@ -57,7 +57,7 @@ class AlphaConverterTest {
         alphaConverter.readBackground(context)
 
         verify(atLeast = 1) { context.getSharedPreferences(any(), any()) }
-        verify(atLeast = 1) { ColorUtils.setAlphaComponent(any(), any()) }
+        verify(atLeast = 1) { ColorUtils.setAlphaComponent(Color.WHITE, any()) }
         verify(atLeast = 1) { anyConstructed<PreferenceApplier>().getWebViewBackgroundAlpha() }
     }
 
