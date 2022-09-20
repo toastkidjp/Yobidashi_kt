@@ -41,7 +41,7 @@ class AlphaConverterTest {
         every { ColorUtils.setAlphaComponent(any(), any()) }.answers { Color.WHITE }
 
         mockkConstructor(PreferenceApplier::class)
-        every { anyConstructed<PreferenceApplier>().useDarkMode() }.returns(true)
+        every { anyConstructed<PreferenceApplier>().useDarkMode() }.returns(false)
         every { anyConstructed<PreferenceApplier>().getWebViewBackgroundAlpha() }.returns(0.3f)
 
         every { context.getSharedPreferences(any(), any()) }.returns(mockk())
@@ -58,6 +58,17 @@ class AlphaConverterTest {
 
         verify(atLeast = 1) { context.getSharedPreferences(any(), any()) }
         verify(atLeast = 1) { ColorUtils.setAlphaComponent(any(), any()) }
+        verify(atLeast = 1) { anyConstructed<PreferenceApplier>().getWebViewBackgroundAlpha() }
+    }
+
+    @Test
+    fun testDarkMode() {
+        every { anyConstructed<PreferenceApplier>().useDarkMode() }.returns(true)
+
+        alphaConverter.readBackground(context)
+
+        verify(atLeast = 1) { context.getSharedPreferences(any(), any()) }
+        verify(atLeast = 1) { ColorUtils.setAlphaComponent(Color.BLACK, any()) }
         verify(atLeast = 1) { anyConstructed<PreferenceApplier>().getWebViewBackgroundAlpha() }
     }
 
