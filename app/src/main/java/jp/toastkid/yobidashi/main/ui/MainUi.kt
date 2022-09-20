@@ -161,10 +161,10 @@ internal fun Content() {
 
     initializeContentViewModel(activity, tabs, navigationHostController, snackbarHostState)
 
-    contentViewModel.replaceToCurrentTab.observe(activity, {
+    contentViewModel.replaceToCurrentTab.observe(activity) {
         it.getContentIfNotHandled() ?: return@observe
         replaceToCurrentTab(tabs, navigationHostController)
-    })
+    }
     contentViewModel.refresh.observe(activity, {
         val colorPair = preferenceApplier.colorPair()
 
