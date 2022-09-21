@@ -209,7 +209,7 @@ internal fun WebTabUi(webTab: WebTab) {
                         )
                     }
                     .alpha(
-                        ((browserViewModel.swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx).coerceIn(0f, 1f)
+                        browserViewModel.calculateSwipeRefreshIndicatorAlpha(refreshTriggerPx)
                     )
                     .align(Alignment.TopCenter)
             ) {
