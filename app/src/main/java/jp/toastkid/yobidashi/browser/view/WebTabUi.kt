@@ -214,7 +214,7 @@ internal fun WebTabUi(webTab: WebTab) {
                     .align(Alignment.TopCenter)
             ) {
                 CircularProgressIndicator(
-                    progress = if (browserViewModel.swipeRefreshState.value?.isRefreshing == false) ((browserViewModel.swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx).coerceIn(0f, 1f) else browserViewModel.progress.value.toFloat() / 100f,
+                    progress = browserViewModel.calculateSwipingProgress(refreshTriggerPx),
                     color = MaterialTheme.colors.onPrimary,
                     modifier = Modifier.padding(4.dp)
                 )
