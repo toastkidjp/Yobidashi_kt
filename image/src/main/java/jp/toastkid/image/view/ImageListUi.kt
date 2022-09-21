@@ -19,20 +19,24 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
@@ -95,6 +99,10 @@ fun ImageListUi() {
         )
     }
 
+    val contentViewModel = (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
+        ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
+    }
+
     val requestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
@@ -102,10 +110,7 @@ fun ImageListUi() {
                 return@rememberLauncherForActivityResult
             }
 
-            (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
-                ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
-                    .snackShort(R.string.message_audio_file_is_not_found)
-            }
+            contentViewModel?.snackShort(R.string.message_audio_file_is_not_found)
         }
 
     (context as? ViewModelStoreOwner)?.let {
@@ -126,13 +131,15 @@ fun ImageListUi() {
     }
 
     val index = remember { mutableStateOf(-1) }
+    val listState = rememberLazyGridState()
 
     if (preview.value) {
         ImagePreviewUi(images, index.value)
     } else {
         ImageListUi(
             imageLoaderUseCase,
-            images
+            images,
+            listState
         ) {
             index.value = it
             preview.value = true
@@ -155,9 +162,9 @@ fun ImageListUi() {
 internal fun ImageListUi(
     imageLoaderUseCase: ImageLoaderUseCase,
     images: List<Image>,
+    listState: LazyGridState,
     showPreview: (Int) -> Unit
 ) {
-    val listState = rememberLazyGridState()
     val preferenceApplier = PreferenceApplier(LocalContext.current)
 
     LazyVerticalGrid(
@@ -212,4 +219,28 @@ internal fun ImageListUi(
             }
         }
     }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val coroutineScope = rememberCoroutineScope()
+    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
+        ViewModelProvider(it).get(ContentViewModel::class.java)
+    }
+    contentViewModel?.toTop?.observe(lifecycleOwner, {
+        it?.getContentIfNotHandled() ?: return@observe
+        coroutineScope.launch {
+            listState.scrollToItem(0)
+        }
+    })
+    contentViewModel?.toBottom?.observe(lifecycleOwner, {
+        it?.getContentIfNotHandled() ?: return@observe
+        coroutineScope.launch {
+            listState.scrollToItem(listState.layoutInfo.totalItemsCount)
+        }
+    })
+    DisposableEffect(key1 = lifecycleOwner, effect = {
+        onDispose {
+            contentViewModel?.toTop?.removeObservers(lifecycleOwner)
+            contentViewModel?.toBottom?.removeObservers(lifecycleOwner)
+        }
+    })
 }

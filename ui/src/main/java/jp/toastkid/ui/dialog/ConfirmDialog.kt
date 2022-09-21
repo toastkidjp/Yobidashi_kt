@@ -42,8 +42,8 @@ fun ConfirmDialog(
     visibleState: MutableState<Boolean>,
     title: String,
     message: String,
-    messageColor: Color = Color.Black,
-    onClickOk: () -> Unit
+    messageColor: Color = MaterialTheme.colors.onSurface,
+    onClickOk: () -> Unit = {}
 ) {
     val color = MaterialTheme.colors.onSurface
 

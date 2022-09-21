@@ -23,7 +23,6 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.app.ComponentActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.BrowserViewModel
@@ -130,8 +129,7 @@ class WebViewClientFactory(
                 return
             }
 
-            ViewModelProvider(context).get(BrowserViewModel::class.java)
-                .setError(TlsErrorMessageGenerator().invoke(context, error))
+            browserViewModel?.setError(TlsErrorMessageGenerator().invoke(context, error))
         }
 
         override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
@@ -146,7 +144,11 @@ class WebViewClientFactory(
                     val context: Context? = view?.context
                     val uri: Uri = Uri.parse(url)
 
-                if (uri.host?.endsWith(".xyz") == true || uri.host == "rt.gsspat.jp") {
+                if (uri.host?.endsWith(".xyz") == true
+                    || uri.host?.endsWith(".jp.net") == true
+                    || uri.host == "rt.gsspat.jp"
+                    || uri.host == "webnew.net"
+                ) {
                     view?.stopLoading()
                     contentViewModel?.snackShort("It has canceled load inappropriate Web site. : $uri")
                     return@let true
