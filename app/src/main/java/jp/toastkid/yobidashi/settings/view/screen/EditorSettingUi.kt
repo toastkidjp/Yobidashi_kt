@@ -172,7 +172,7 @@ internal fun EditorSettingUi() {
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .size(dimensionResource(id = R.dimen.search_category_spinner_width))
-                            .padding(end = 8.dp)
+                            .padding(end = 16.dp)
                     ) {
                         Text("${fontSize.value}")
                         DropdownMenu(
