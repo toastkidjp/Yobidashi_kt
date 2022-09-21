@@ -36,7 +36,7 @@ class SwipeRefreshNestedScrollConnection(
         // If we're refreshing, return zero
         state?.isRefreshing == true -> Offset.Zero
         // If the user is swiping up, handle it
-        source == NestedScrollSource.Drag && available.y < 0 -> onScroll(available)
+        source == NestedScrollSource.Drag -> onScroll(available)
         else -> Offset.Zero
     }
 
@@ -59,7 +59,7 @@ class SwipeRefreshNestedScrollConnection(
             // If we're refreshing, return zero
             state?.isRefreshing == true -> Offset.Zero
             // If the user is swiping down and there's y remaining, handle it
-            source == NestedScrollSource.Drag && available.y > 0 -> onScroll(available)
+            source == NestedScrollSource.Drag -> onScroll(available)
             else -> Offset.Zero
         }
     }
