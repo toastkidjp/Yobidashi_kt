@@ -7,11 +7,8 @@
  */
 package jp.toastkid.lib.view.swipe
 
-import kotlinx.coroutines.Job
-
 /**
  * @author toastkidjp
  */
 interface Removable {
-    fun removeAt(position: Int): Job
 }
