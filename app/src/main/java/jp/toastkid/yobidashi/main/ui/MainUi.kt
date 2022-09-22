@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.ExperimentalMaterialApi
@@ -469,7 +470,9 @@ internal fun Content() {
                                                 .clickable {
                                                     it.performAction()
                                                 }
-                                                .wrapContentWidth())
+                                                .wrapContentWidth()
+                                                .padding(start = 4.dp)
+                                        )
                                     }
                                 }
                             }
