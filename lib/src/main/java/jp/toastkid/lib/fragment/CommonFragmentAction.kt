@@ -5,6 +5,4 @@ package jp.toastkid.lib.fragment
  *
  * @author toastkidjp
  */
-interface CommonFragmentAction {
-
-}
+interface CommonFragmentAction
