@@ -68,6 +68,12 @@ internal class CustomWebView(context: Context) : WebView(context) {
             MotionEvent.ACTION_MOVE -> {
                 var deltaX: Float = lastX - eventX
                 var deltaY: Float = lastY - eventY
+
+                if (enablePullToRefresh) {
+                    onScrollChanged(0, (deltaY / 10f).toInt(), 0, 0)
+                    return true
+                }
+
                 // NestedPreScroll
                 if (dispatchNestedPreScroll(deltaX.toInt(), deltaY.toInt(), scrollConsumed, scrollOffset)) {
                     deltaY -= scrollConsumed[1]
