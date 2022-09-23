@@ -7,6 +7,4 @@ package jp.toastkid.lib.fragment
  */
 interface CommonFragmentAction {
 
-    fun share() = Unit
-
 }
