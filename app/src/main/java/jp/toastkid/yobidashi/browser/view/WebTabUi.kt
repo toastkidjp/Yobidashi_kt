@@ -67,7 +67,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
@@ -572,8 +571,7 @@ private fun AppBarContent(
                     .height(32.dp)
                     .fillMaxWidth()
                     .clickable {
-                        ViewModelProvider(activity)
-                            .get(ContentViewModel::class.java)
+                        contentViewModel
                             .webSearch()
                     }
             ) {
