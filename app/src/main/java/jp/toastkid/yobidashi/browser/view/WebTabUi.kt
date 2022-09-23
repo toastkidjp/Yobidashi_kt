@@ -491,6 +491,19 @@ private fun AppBarContent(
                     modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
                 )
             }
+
+            HeaderSubButton(
+                R.drawable.ic_bookmark,
+                R.string.title_bookmark,
+                tint
+            ) { contentViewModel.nextRoute("web/bookmark/list") }
+
+            HeaderSubButton(
+                R.drawable.ic_history,
+                R.string.title_view_history,
+                tint
+            ) { contentViewModel.nextRoute("web/history/list") }
+
             Box {
                 val open = remember { mutableStateOf(false) }
                 HeaderSubButton(
