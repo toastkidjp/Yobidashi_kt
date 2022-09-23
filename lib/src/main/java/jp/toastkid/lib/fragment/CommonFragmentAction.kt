@@ -7,13 +7,6 @@ package jp.toastkid.lib.fragment
  */
 interface CommonFragmentAction {
 
-    /**
-     * Event of press back key.
-     *
-     * @return is consumed event?
-     */
-    fun pressBack(): Boolean = false
-
     fun share() = Unit
 
 }
