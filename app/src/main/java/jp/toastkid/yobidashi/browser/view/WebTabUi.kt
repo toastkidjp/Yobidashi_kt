@@ -571,8 +571,7 @@ private fun AppBarContent(
                     .height(32.dp)
                     .fillMaxWidth()
                     .clickable {
-                        contentViewModel
-                            .webSearch()
+                        contentViewModel.webSearch()
                     }
             ) {
                 Icon(
