@@ -440,6 +440,11 @@ enum class SearchCategory(
         R.string.google_news,
         R.drawable.ic_google_news,
         "https://news.google.com/search?q="
+    ),
+    JAPAN_SEARCH(
+        R.string.search_category_japan_search,
+        R.drawable.ic_japan_search,
+        "https://jpsearch.go.jp/csearch/jps-cross?csid=jps-cross&keyword="
     )
     ;
 
