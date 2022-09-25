@@ -205,7 +205,7 @@ internal fun Content() {
                 return@rememberLauncherForActivityResult
             }
 
-            activityResultLauncher?.launch(OpenDocumentIntentFactory()("application/pdf"))
+            activityResultLauncher.launch(OpenDocumentIntentFactory()("application/pdf"))
         }
 
     val openMenu = remember { mutableStateOf(false) }
