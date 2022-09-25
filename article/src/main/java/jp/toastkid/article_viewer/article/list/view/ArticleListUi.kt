@@ -111,7 +111,7 @@ fun ArticleListUi() {
 
     val progressBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
-            viewModel?.hideProgress()
+            viewModel.hideProgress()
             showFeedback()
         }
 
