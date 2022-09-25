@@ -195,25 +195,6 @@ fun BookmarkListUi() {
             )
         }
 
-    contentViewModel.optionMenus(
-        OptionMenu(titleId = R.string.title_add_folder, action = {
-            openAddFolderDialogState.value = true
-        }),
-        OptionMenu(titleId = R.string.title_import_bookmark, action = {
-            importRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }),
-        OptionMenu(titleId = R.string.title_export_bookmark, action = {
-            exportRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }),
-        OptionMenu(titleId = R.string.title_add_default_bookmark, action = {
-            BookmarkInitializer.from(activityContext)() { viewModel.query(bookmarkRepository) }
-            contentViewModel.snackShort(R.string.done_addition)
-        }),
-        OptionMenu(titleId = R.string.title_clear_bookmark, action = {
-            openClearDialogState.value = true
-        })
-    )
-
     InputFileNameDialogUi(openAddFolderDialogState, onCommit = { title ->
         CoroutineScope(Dispatchers.Main).launch {
             val currentFolderName =
@@ -250,6 +231,25 @@ fun BookmarkListUi() {
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = "first_launch", block = {
         viewModel.query(bookmarkRepository)
+
+        contentViewModel.optionMenus(
+            OptionMenu(titleId = R.string.title_add_folder, action = {
+                openAddFolderDialogState.value = true
+            }),
+            OptionMenu(titleId = R.string.title_import_bookmark, action = {
+                importRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }),
+            OptionMenu(titleId = R.string.title_export_bookmark, action = {
+                exportRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }),
+            OptionMenu(titleId = R.string.title_add_default_bookmark, action = {
+                BookmarkInitializer.from(activityContext)() { viewModel.query(bookmarkRepository) }
+                contentViewModel.snackShort(R.string.done_addition)
+            }),
+            OptionMenu(titleId = R.string.title_clear_bookmark, action = {
+                openClearDialogState.value = true
+            })
+        )
 
         contentViewModel.share.observe(lifecycleOwner) {
             it.getContentIfNotHandled() ?: return@observe
