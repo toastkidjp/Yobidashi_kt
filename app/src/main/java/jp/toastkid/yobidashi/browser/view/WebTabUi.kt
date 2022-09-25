@@ -155,19 +155,20 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val scrollListener =
         View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             //nestedScrollConnection.enabled = scrollY == 0
+            val nestedScrollDispatcher = browserModule.nestedScrollDispatcher()
             if (oldScrollY == 0 && oldScrollX == 0) {
-                browserModule.nestedScrollDispatcher().dispatchPreScroll(
+                nestedScrollDispatcher.dispatchPreScroll(
                     Offset(0f, scrollY.toFloat()),
                     NestedScrollSource.Drag
                 )
-                browserModule.nestedScrollDispatcher().dispatchPostScroll(
+                nestedScrollDispatcher.dispatchPostScroll(
                     Offset(0f, scrollY.toFloat()),
                     Offset(0f, scrollY.toFloat()),
                     NestedScrollSource.Drag
                 )
                 return@OnScrollChangeListener
             }
-            browserModule.nestedScrollDispatcher().dispatchPreScroll(
+            nestedScrollDispatcher.dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
             )
@@ -207,9 +208,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
                 webViewContainer
             },
-            update = {
-                GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
-            },
             modifier = Modifier
                 .nestedScroll(
                     connection = object : NestedScrollConnection {},
@@ -222,7 +220,15 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 shape = CircleShape,
                 color = MaterialTheme.colors.primary,
                 modifier = Modifier
-                    .offset { IntOffset(0, min(swipeRefreshState.indicatorOffset.toInt(), nestedScrollConnection.refreshTrigger.toInt())) }
+                    .offset {
+                        IntOffset(
+                            0,
+                            min(
+                                swipeRefreshState.indicatorOffset.toInt(),
+                                nestedScrollConnection.refreshTrigger.toInt()
+                            )
+                        )
+                    }
                     .align(Alignment.TopCenter)
             ) {
                 CircularProgressIndicator(

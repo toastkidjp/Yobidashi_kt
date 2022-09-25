@@ -9,7 +9,9 @@
 package jp.toastkid.image.preview
 
 import android.graphics.BitmapFactory
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -18,26 +20,33 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Slider
 import androidx.compose.material.Surface
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.Text
+import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -68,23 +77,37 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
     val coroutineScope = rememberCoroutineScope()
 
-    val viewModelStoreOwner = LocalContext.current as? ViewModelStoreOwner ?: return
-    val viewModel = ViewModelProvider(viewModelStoreOwner).get(ImagePreviewViewModel::class.java)
-    viewModel.setIndex(initialIndex)
-
-    val image = images[viewModel.index.value]
+    val viewModel = remember { ImagePreviewViewModel() }
+    LaunchedEffect(key1 = Unit, block = {
+        viewModel.setIndex(initialIndex)
+        viewModel.replaceImages(images)
+    })
 
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
-    val context = LocalContext.current ?: return
+    val context = LocalContext.current
+
+    val sizePx = with(LocalDensity.current) { 200.dp.toPx() }
+    val anchors = mapOf(sizePx to -1, 0f to 0, -sizePx to 1)
+    val swipeableState = SwipeableState(
+        initialValue = 0,
+        confirmStateChange = {
+            if (it == -1) {
+                viewModel.moveToPrevious()
+            } else if (it == 1) {
+                viewModel.moveToNext()
+            }
+            true
+        }
+    )
 
     Box {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(image.path).crossfade(true).build(),
+                .data(viewModel.getCurrentImage().path).crossfade(true).build(),
             imageLoader = imageLoader,
-            contentDescription = image.name,
+            contentDescription = viewModel.getCurrentImage().name,
             colorFilter = viewModel.colorFilterState.value,
             modifier = Modifier
                 .fillMaxSize()
@@ -110,12 +133,27 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onPress = { /* Called when the gesture starts */ },
-                        onDoubleTap = { viewModel.scale.value = 1f },
+                        onDoubleTap = { viewModel.resetStates() },
                         onLongPress = { /* Called on Long Press */ },
                         onTap = { /* Called on Tap */ }
                     )
                 }
         )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp)
+                .align(Alignment.Center)
+                .swipeable(
+                    swipeableState,
+                    anchors = anchors,
+                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                    resistance = ResistanceConfig(0.5f),
+                    orientation = Orientation.Horizontal
+                )
+        ) {
+        }
 
         Surface(
             elevation = 4.dp,
@@ -129,6 +167,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         .clickable {
                             viewModel.openMenu.value = viewModel.openMenu.value.not()
                         }
+                        .padding(8.dp)
                         .align(Alignment.CenterHorizontally)
                 )
 
@@ -190,7 +229,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                         viewModel.state.animateRotateBy(90f)
                                     }
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
                         Icon(
                             painterResource(id = R.drawable.ic_flip),
@@ -203,7 +242,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                             if (viewModel.rotationY.value == 0f) 180f else 0f
                                     }
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
 
                         Icon(
@@ -215,7 +254,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                     viewModel.reverse.value = viewModel.reverse.value.not()
                                     viewModel.updateColorFilter()
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
 
                         Icon(
@@ -223,20 +262,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             contentDescription = stringResource(id = R.string.content_description_sepia_color_filter),
                             tint = Color(0xDDFF5722),
                             modifier = Modifier
-                                .clickable {
-                                    viewModel.colorFilterState.value =
-                                        ColorFilter.colorMatrix(
-                                            ColorMatrix(
-                                                floatArrayOf(
-                                                    0.9f, 0f, 0f, 0f, 000f,
-                                                    0f, 0.7f, 0f, 0f, 000f,
-                                                    0f, 0f, 0.4f, 0f, 000f,
-                                                    0f, 0f, 0f, 1f, 000f
-                                                )
-                                            )
-                                        )
-                                }
-                                .padding(start = 8.dp)
+                                .clickable { viewModel.setSepia() }
+                                .padding(start = 16.dp)
                         )
 
                         Icon(
@@ -248,13 +275,13 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                     viewModel.saturation.value = viewModel.saturation.value.not()
                                     viewModel.updateColorFilter()
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
 
                         Box(
                             Modifier
                                 .clickable { viewModel.openOtherMenu.value = true }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         ) {
                             Icon(
                                 painterResource(id = R.drawable.ic_set_to),
@@ -270,6 +297,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                     onClick = {
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
+                                        val image = viewModel.getCurrentImage()
                                         AttachToThisAppBackgroundUseCase(contentViewModel)
                                             .invoke(context, image.path.toUri(), BitmapFactory.decodeFile(image.path))
                                     }
@@ -284,7 +312,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
                                         AttachToAnyAppUseCase({ context.startActivity(it) })
-                                            .invoke(context, BitmapFactory.decodeFile(image.path))
+                                            .invoke(context, BitmapFactory.decodeFile(viewModel.getCurrentImage().path))
                                     }
                                 ) {
                                     Text(
@@ -297,13 +325,13 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
 
                         Icon(
                             painterResource(id = R.drawable.ic_info_white),
-                            contentDescription = "Information",
+                            contentDescription = stringResource(R.string.content_description_information),
                             tint = MaterialTheme.colors.onSurface,
                             modifier = Modifier
                                 .clickable {
                                     viewModel.openDialog.value = true
                                 }
-                                .padding(start = 8.dp)
+                                .padding(start = 16.dp)
                         )
                     }
 
@@ -313,13 +341,17 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     }
 
     if (viewModel.openDialog.value) {
-        val inputStream = FileInputStream(File(image.path))
+        val inputStream = FileInputStream(File(viewModel.getCurrentImage().path))
         val exifInterface = ExifInterface(inputStream)
         ConfirmDialog(
             visibleState = viewModel.openDialog,
-            title = image.name,
+            title = viewModel.getCurrentImage().name,
             message = ExifInformationExtractorUseCase().invoke(exifInterface) ?: "Not found"
         )
+    }
+
+    BackHandler(viewModel.openMenu.value) {
+        viewModel.openMenu.value = false
     }
 
     contentViewModel?.hideAppBar()

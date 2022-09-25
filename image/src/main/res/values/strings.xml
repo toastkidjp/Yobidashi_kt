@@ -21,5 +21,6 @@
     <string name="other_app">Other app</string>
     <string name="title_alpha_slider">Alpha: </string>
     <string name="title_contrast_slider">Contrast: </string>
+    <string name="content_description_information">Information</string>
 
 </resources>

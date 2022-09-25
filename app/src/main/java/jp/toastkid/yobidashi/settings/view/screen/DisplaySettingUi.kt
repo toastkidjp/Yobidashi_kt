@@ -156,6 +156,7 @@ internal fun DisplaySettingUi() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
+                    .clickable { addingLauncher.launch(makePickImage()) }
             ) {
                 Icon(
                     painterResource(id = R.drawable.ic_image),
@@ -171,8 +172,7 @@ internal fun DisplaySettingUi() {
                 Icon(
                     painterResource(id = R.drawable.ic_add_white),
                     tint = iconColor,
-                    contentDescription = stringResource(id = R.string.add_background_image),
-                    modifier = Modifier.clickable { addingLauncher.launch(makePickImage()) }
+                    contentDescription = stringResource(id = R.string.add_background_image)
                 )
             }
 
@@ -256,13 +256,7 @@ internal fun DisplaySettingUi() {
 private fun loadFileChunk(filesDir: FilesDir) =
     filesDir.listFiles().toList()
 
-    fun applyDarkMode() {
-        /*view?.let {
-            DarkModeApplier().invoke(preferenceApplier, it)
-        }*/
-    }
-
-    /**
+/**
      * Make pick image intent.
      * @return Intent
      */

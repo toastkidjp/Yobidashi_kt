@@ -9,14 +9,25 @@
 package jp.toastkid.image.preview.viewmodel
 
 import androidx.compose.foundation.gestures.TransformableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
-import androidx.lifecycle.ViewModel
+import jp.toastkid.image.Image
 import kotlin.math.max
 
-class ImagePreviewViewModel : ViewModel() {
+class ImagePreviewViewModel {
+
+    private val images = mutableStateListOf<Image>()
+
+    fun replaceImages(images: Collection<Image>) {
+        this.images.clear()
+        this.images.addAll(images)
+    }
+
+    fun getCurrentImage() =
+        if (images.isNotEmpty()) images.get(index.value) else Image.makeEmpty()
 
     var scale = mutableStateOf(1f)
 
@@ -50,6 +61,20 @@ class ImagePreviewViewModel : ViewModel() {
 
     val openDialog = mutableStateOf(false)
 
+    fun moveToPrevious() {
+        if (index.value == 0) {
+            return
+        }
+        index.value--
+    }
+
+    fun moveToNext() {
+        if (index.value >= images.size) {
+            return
+        }
+        index.value++
+    }
+
     fun setIndex(i: Int) {
         index.value = i
     }
@@ -69,6 +94,31 @@ class ImagePreviewViewModel : ViewModel() {
             colorMatrix.setToSaturation(0.0f)
         }
         colorFilterState.value = ColorFilter.colorMatrix(colorMatrix)
+    }
+
+    fun setSepia() {
+        colorFilterState.value =
+            if (colorFilterState.value != null) {
+                null
+            } else {
+                ColorFilter.colorMatrix(
+                    ColorMatrix(
+                        floatArrayOf(
+                            0.9f, 0f, 0f, 0f, 000f,
+                            0f, 0.7f, 0f, 0f, 000f,
+                            0f, 0f, 0.4f, 0f, 000f,
+                            0f, 0f, 0f, 1f, 000f
+                        )
+                    )
+                )
+            }
+    }
+
+    fun resetStates() {
+        scale.value = 1f
+        offset.value = Offset.Zero
+        rotationY.value = 0f
+        rotationZ.value = 0f
     }
 
 }
