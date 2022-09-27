@@ -296,6 +296,7 @@ private fun TabItem(
                     anchors = anchors,
                     thresholds = { _, _ -> FractionalThreshold(0.75f) },
                     resistance = ResistanceConfig(0.5f),
+                    velocityThreshold = 3000000.dp,
                     orientation = Orientation.Vertical
                 )
         ) {
