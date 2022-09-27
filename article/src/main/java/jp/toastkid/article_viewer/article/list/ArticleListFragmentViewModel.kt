@@ -96,4 +96,6 @@ class ArticleListFragmentViewModel(
 
     val searchInput = mutableStateOf("")
 
+    val searchResult = mutableStateOf("")
+
 }
