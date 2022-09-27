@@ -285,7 +285,7 @@ private fun TabItem(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .width(dimensionResource(id = R.dimen.tab_list_item_width))
-                .height(dimensionResource(R.dimen.tab_list_item_height))
+                .height(dimensionResource(id = R.dimen.tab_list_item_height))
                 .clickable {
                     onClick(tab)
                 }
