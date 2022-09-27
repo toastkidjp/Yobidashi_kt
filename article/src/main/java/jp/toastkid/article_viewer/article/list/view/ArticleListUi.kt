@@ -238,7 +238,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             viewModel.searchResult.value = message
         }
     }
-    viewModel?.messageId?.observe(activityContext) {
+    viewModel.messageId?.observe(activityContext) {
         it?.getContentIfNotHandled()?.let { messageId ->
             viewModel.searchResult.value = activityContext.getString(messageId)
         }
