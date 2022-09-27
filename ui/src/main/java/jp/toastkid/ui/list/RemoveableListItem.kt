@@ -110,7 +110,8 @@ fun SwipeToDismissItem(
                     basis = width,
                     factorAtMin = minFactor,
                     factorAtMax = maxFactor
-                )
+                ),
+                velocityThreshold = 3000000.dp
             )
         ) {
             Row(
