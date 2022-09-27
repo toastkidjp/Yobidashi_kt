@@ -192,14 +192,13 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(activityContext)
 
-    var searchInput by remember { mutableStateOf("") }
     var searchResult by remember { mutableStateOf("") }
     Row {
         Column {
             TextField(
-                value = searchInput,
+                value = viewModel.searchInput.value,
                 onValueChange = {
-                    searchInput = it
+                    viewModel.searchInput.value = it
                     CoroutineScope(Dispatchers.Default).launch {
                         //inputChannel.send(it)
                     }
@@ -212,7 +211,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 },
                 singleLine = true,
                 keyboardActions = KeyboardActions{
-                    viewModel?.search(searchInput)
+                    viewModel?.search(viewModel.searchInput.value)
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color(preferenceApplier.fontColor),
@@ -226,7 +225,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     modifier = Modifier
                         .offset(x = 8.dp)
                         .clickable {
-                            searchInput = ""
+                            viewModel.searchInput.value = ""
                         }
                 )
                 }
