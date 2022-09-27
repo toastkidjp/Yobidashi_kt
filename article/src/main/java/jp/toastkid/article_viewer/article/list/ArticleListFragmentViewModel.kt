@@ -47,10 +47,6 @@ class ArticleListFragmentViewModel(
     private val _progress = MutableLiveData<Event<String>>()
     val progress : LiveData<Event<String>> = _progress
 
-    fun setProgressMessage(message: String) {
-        _progress.postValue(Event(message))
-    }
-
     private val _messageId = MutableLiveData<Event<Int>>()
     val messageId : LiveData<Event<Int>> = _messageId
 
