@@ -235,11 +235,11 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
         }
     }
 
-    viewModel?.progress?.observe(activityContext, {
+    viewModel?.progress?.observe(activityContext) {
         it?.getContentIfNotHandled()?.let { message ->
             searchResult = message
         }
-    })
+    }
     viewModel?.messageId?.observe(activityContext, {
         it?.getContentIfNotHandled()?.let { messageId ->
             searchResult = activityContext.getString(messageId)
