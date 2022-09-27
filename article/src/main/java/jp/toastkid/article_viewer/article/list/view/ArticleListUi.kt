@@ -192,7 +192,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(activityContext)
 
-    var searchResult by remember { mutableStateOf("") }
     Row {
         Column {
             TextField(
@@ -230,18 +229,18 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 )
                 }
             )
-            Text(text = searchResult, color = Color.White)
+            Text(text = viewModel.searchResult.value, color = Color.White)
         }
     }
 
     viewModel?.progress?.observe(activityContext) {
         it?.getContentIfNotHandled()?.let { message ->
-            searchResult = message
+            viewModel.searchResult.value = message
         }
     }
     viewModel?.messageId?.observe(activityContext) {
         it?.getContentIfNotHandled()?.let { messageId ->
-            searchResult = activityContext.getString(messageId)
+            viewModel.searchResult.value = activityContext.getString(messageId)
         }
     }
 
