@@ -240,11 +240,11 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             searchResult = message
         }
     }
-    viewModel?.messageId?.observe(activityContext, {
+    viewModel?.messageId?.observe(activityContext) {
         it?.getContentIfNotHandled()?.let { messageId ->
             searchResult = activityContext.getString(messageId)
         }
-    })
+    }
 
     val setTargetLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
