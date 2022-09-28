@@ -589,11 +589,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/JakeWharton/timber
-- artifact: com.squareup.moshi:moshi:+
-  name: moshi
-  copyrightHolder: Square, Inc.
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
 - artifact: com.squareup.okhttp3:okhttp:+
   name: okhttp
   copyrightHolder: Square, Inc.
@@ -612,11 +607,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/square/okio/
-- artifact: com.squareup.retrofit2:converter-moshi:+
-  name: converter-moshi
-  copyrightHolder: Square, Inc.
-  license: The Apache License, Version 2.0
-  licenseUrl: https://www.apache.org/licenses/LICENSE-2.0.txt
 - artifact: com.squareup.retrofit2:retrofit:+
   name: retrofit
   copyrightHolder: Square, Inc.
