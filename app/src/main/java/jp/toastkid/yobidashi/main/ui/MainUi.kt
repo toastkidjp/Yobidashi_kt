@@ -221,7 +221,6 @@ internal fun Content() {
     val backgroundColor = MaterialTheme.colors.primary
     val tint = MaterialTheme.colors.onPrimary
 
-    val bottomBarHeight = 72.dp
     val bottomBarHeightPx = with(LocalDensity.current) { 72.dp.toPx() }
     contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
 
