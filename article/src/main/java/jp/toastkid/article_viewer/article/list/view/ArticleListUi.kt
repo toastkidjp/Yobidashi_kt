@@ -102,12 +102,14 @@ fun ArticleListUi() {
 
     val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
 
-    val viewModel = ArticleListFragmentViewModelFactory(
-        articleRepository,
-        bookmarkRepository,
-        preferenceApplier
-    )
-        .create(ArticleListFragmentViewModel::class.java)
+    val viewModel = remember {
+        ArticleListFragmentViewModelFactory(
+            articleRepository,
+            bookmarkRepository,
+            preferenceApplier
+        )
+            .create(ArticleListFragmentViewModel::class.java)
+    }
 
     val progressBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
