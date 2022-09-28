@@ -227,9 +227,11 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                             viewModel.searchInput.value = ""
                         }
                 )
-                }
+                },
+                modifier = Modifier.weight(0.7f)
             )
-            Text(text = viewModel.searchResult.value, color = Color.White)
+            Text(text = viewModel.searchResult.value, color = Color.White,
+                modifier = Modifier.weight(0.3f))
         }
     }
 
