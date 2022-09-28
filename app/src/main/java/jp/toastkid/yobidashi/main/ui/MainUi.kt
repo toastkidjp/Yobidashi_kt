@@ -222,9 +222,7 @@ internal fun Content() {
     val tint = MaterialTheme.colors.onPrimary
 
     val bottomBarHeight = 72.dp
-    val bottomBarHeightPx = with(LocalDensity.current) {
-        bottomBarHeight.roundToPx().toFloat()
-    }
+    val bottomBarHeightPx = with(LocalDensity.current) { 72.dp.toPx() }
     contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
 
     val coroutineScope = rememberCoroutineScope()
@@ -244,7 +242,7 @@ internal fun Content() {
                 val newValue = fabOffsetHeightPx.value + (delta / 2)
                 fabOffsetHeightPx.value = when {
                     0f > newValue -> 0f
-                    newValue > bottomBarHeight.value -> bottomBarHeight.value
+                    newValue > bottomBarHeightPx -> bottomBarHeightPx
                     else -> newValue
                 }
 
