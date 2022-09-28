@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -129,16 +130,16 @@ internal fun NavigationalContent(
             CalendarUi()
             takeScreenshot(tabs, LocalView.current)
         }
-        composable("setting/top") {
+        slideInComposable("setting/top") {
             SettingTopUi()
         }
-        composable("search/top") {
+        slideInComposable("search/top") {
             SearchInputUi()
         }
-        composable("search/with/?query={query}&title={title}&url={url}") {
-            val query = Uri.decode(it.arguments?.getString("query"))
-            val title = Uri.decode(it.arguments?.getString("title"))
-            val url = Uri.decode(it.arguments?.getString("url"))
+        slideInComposable("search/with/?query={query}&title={title}&url={url}") {
+            val query = Uri.decode(it.getString("query"))
+            val title = Uri.decode(it.getString("title"))
+            val url = Uri.decode(it.getString("url"))
             SearchInputUi(query, title, url)
         }
         composable("search/history/list") {
@@ -157,6 +158,18 @@ internal fun NavigationalContent(
 private fun takeScreenshot(tabs: TabAdapter, view: View) {
     view.post {
         tabs.saveNewThumbnail(view)
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+private fun NavGraphBuilder.slideInComposable(route: String, content: @Composable (Bundle) -> Unit) {
+    composable(
+        route,
+        enterTransition = {
+            slideInHorizontally()
+        }
+    ) {
+        content(it.arguments ?: Bundle.EMPTY)
     }
 }
 
