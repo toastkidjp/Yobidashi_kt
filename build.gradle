@@ -20,9 +20,9 @@ buildscript {
     ext.versionNameValue = "${verMajor}.${verMiddle}.${verMinor}"
 
     ext.minSdk = 24
-    ext.compileSdk = 32
-    ext.targetSdk = 31
-    ext.buildTools = "31.0.0"
+    ext.compileSdk = 33
+    ext.targetSdk = 32
+    ext.buildTools = "33.0.0"
 
     ext.kotlin_version = '1.7.0'
 

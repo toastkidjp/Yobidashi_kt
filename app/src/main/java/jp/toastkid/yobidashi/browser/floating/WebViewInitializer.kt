@@ -60,7 +60,6 @@ class WebViewInitializer(
                     }
 
             @Suppress("OverridingDeprecatedMember")
-            @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
             override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
                     if (preferenceApplier.adRemove) {
                         adRemover(url)

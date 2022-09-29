@@ -231,12 +231,12 @@ internal fun ImageListUi(
             listState.scrollToItem(0)
         }
     })
-    contentViewModel?.toBottom?.observe(lifecycleOwner, {
+    contentViewModel?.toBottom?.observe(lifecycleOwner) {
         it?.getContentIfNotHandled() ?: return@observe
         coroutineScope.launch {
             listState.scrollToItem(listState.layoutInfo.totalItemsCount)
         }
-    })
+    }
     DisposableEffect(key1 = lifecycleOwner, effect = {
         onDispose {
             contentViewModel?.toTop?.removeObservers(lifecycleOwner)

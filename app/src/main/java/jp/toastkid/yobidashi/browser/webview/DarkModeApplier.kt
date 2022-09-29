@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.browser.webview
 
+import android.os.Build
 import android.webkit.WebView
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
@@ -19,6 +20,11 @@ class DarkModeApplier {
     operator fun invoke(webView: WebView, useDarkMode: Boolean) {
         if (!WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
             return
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+            && WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+            WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.settings, true)
         }
 
         val forceDarkMode =
