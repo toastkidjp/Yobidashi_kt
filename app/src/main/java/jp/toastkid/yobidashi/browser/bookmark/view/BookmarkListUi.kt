@@ -63,7 +63,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -106,7 +105,7 @@ fun BookmarkListUi() {
 
     val bookmarkRepository = DatabaseFinder().invoke(activityContext).bookmarkRepository()
 
-    val browserViewModel = ViewModelProvider(activityContext).get(BrowserViewModel::class.java)
+    val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
 
     val viewModel = viewModel(BookmarkListViewModel::class.java)
 
