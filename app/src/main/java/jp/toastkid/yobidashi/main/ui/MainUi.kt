@@ -236,7 +236,7 @@ internal fun Content() {
                 }
                 val delta = available.y
                 val newOffset = contentViewModel.bottomBarOffsetHeightPx.value + delta
-                contentViewModel.bottomBarOffsetHeightPx?.value = newOffset.coerceIn(-bottomBarHeightPx, 0f)
+                contentViewModel.bottomBarOffsetHeightPx.value = newOffset.coerceIn(-bottomBarHeightPx, 0f)
 
                 val newValue = fabOffsetHeightPx.value + (delta / 2)
                 fabOffsetHeightPx.value = when {
