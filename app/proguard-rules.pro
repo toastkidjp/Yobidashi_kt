@@ -7,19 +7,12 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
--dontwarn jp.toastkid.yobidashi.browser.BrowserFragment**
 -keep class jp.toastkid.yobidashi.tab.model.** { *; }
 -keepclassmembers enum jp.toastkid.yobidashi.** { *; }
 
 # For Jsoup
 -keep public class org.jsoup.** {
     public *;
-}
-
-# For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
 }
 
 # For OkHttp
@@ -35,11 +28,6 @@
 
 # For Moshi
 -dontwarn okio.**
--keepclasseswithmembers class * {
-    @com.squareup.moshi.* <methods>;
-}
--keep @com.squareup.moshi.JsonQualifier interface *
-
 -keepclassmembers class kotlin.Metadata {
     public <methods>;
 }
@@ -116,5 +104,3 @@
 
 # @Serializable and @Polymorphic are used at runtime for polymorphic serialization.
 -keepattributes RuntimeVisibleAnnotations,AnnotationDefault
-
-
