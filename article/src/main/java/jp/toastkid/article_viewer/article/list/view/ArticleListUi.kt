@@ -235,6 +235,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             Text(
                 text = viewModel.searchResult.value,
                 color = MaterialTheme.colors.onPrimary,
+                fontSize = 12.sp,
                 modifier = Modifier.weight(0.3f).padding(start = 16.dp)
             )
         }
