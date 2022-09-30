@@ -258,11 +258,11 @@ internal fun Content() {
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    pageSearcherViewModel.close.observe(activity, {
+    pageSearcherViewModel.close.observe(activity) {
         it?.getContentIfNotHandled() ?: return@observe
         keyboardController?.hide()
         focusManager.clearFocus(true)
-    })
+    }
 
     contentViewModel?.switchTabList?.observe(activity, Observer {
         it?.getContentIfNotHandled() ?: return@Observer
