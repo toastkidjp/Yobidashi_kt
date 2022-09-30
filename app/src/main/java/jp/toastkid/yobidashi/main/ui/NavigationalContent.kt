@@ -96,10 +96,10 @@ internal fun NavigationalContent(
             EditorTabUi(currentTab.path)
             takeScreenshot(tabs, LocalView.current)
         }
-        composable("web/bookmark/list") {
+        tabComposable("web/bookmark/list") {
             BookmarkListUi()
         }
-        composable("web/history/list") {
+        tabComposable("web/history/list") {
             ViewHistoryListUi()
         }
         composable("web/archive/list") {
