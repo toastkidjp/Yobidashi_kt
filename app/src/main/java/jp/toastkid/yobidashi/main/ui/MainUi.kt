@@ -248,7 +248,7 @@ internal fun Content() {
                 if (delta < -20f) {
                     contentViewModel.hideFab(coroutineScope)
                 } else if (delta > 20f) {
-                    contentViewModel?.showFab(coroutineScope)
+                    contentViewModel.showFab(coroutineScope)
                 }
                 return Offset.Zero
             }
