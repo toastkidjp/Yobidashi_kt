@@ -233,7 +233,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 modifier = Modifier.weight(0.7f)
             )
             Text(text = viewModel.searchResult.value, color = Color.White,
-                modifier = Modifier.weight(0.3f))
+                modifier = Modifier.weight(0.3f).padding(start = 16.dp))
         }
     }
 
