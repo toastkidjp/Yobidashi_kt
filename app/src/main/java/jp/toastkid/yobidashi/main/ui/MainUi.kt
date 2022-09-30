@@ -399,7 +399,7 @@ internal fun Content() {
                     if (bottomSheetState.isVisible) {
                         keyboardController?.hide()
 
-                        contentViewModel.bottomSheetContent.value?.invoke()
+                        contentViewModel.bottomSheetContent.value.invoke()
                     }
                 }
 
