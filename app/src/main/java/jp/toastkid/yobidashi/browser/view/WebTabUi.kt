@@ -83,6 +83,7 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.swiperefresh.SwipeRefreshNestedScrollConnection
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.ui.dialog.ConfirmDialog
@@ -97,8 +98,6 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
-import jp.toastkid.yobidashi.browser.view.swiperefresh.SwipeRefreshNestedScrollConnection
-import jp.toastkid.yobidashi.browser.view.swiperefresh.SwipeRefreshState
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
@@ -128,24 +127,23 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val refreshTriggerPx = with(LocalDensity.current) { 80.dp.toPx() }
-    val swipeRefreshState = remember { SwipeRefreshState(false, refreshTriggerPx) }
-    LaunchedEffect(swipeRefreshState.isSwipeInProgress) {
-        if (!swipeRefreshState.isSwipeInProgress) {
+    LaunchedEffect(browserViewModel.swipeRefreshState.value?.isSwipeInProgress) {
+        if (browserViewModel.swipeRefreshState.value?.isSwipeInProgress == false) {
             // If there's not a swipe in progress, rest the indicator at 0f
-            swipeRefreshState.animateOffsetTo(0f)
+            browserViewModel.swipeRefreshState.value?.animateOffsetTo(0f)
         }
     }
     val coroutineScope = rememberCoroutineScope()
     val nestedScrollConnection = SwipeRefreshNestedScrollConnection(
-        swipeRefreshState,
+        browserViewModel.swipeRefreshState.value,
         coroutineScope,
         {
-            if (swipeRefreshState.isRefreshing.not()) {
+            if (browserViewModel.swipeRefreshState.value?.isRefreshing == false) {
                 contentViewModel.showAppBar()
                 browserModule.reload()
-                swipeRefreshState.isRefreshing = true
+                browserViewModel.swipeRefreshState.value?.isRefreshing = true
             }
-            swipeRefreshState.isSwipeInProgress = false
+            browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
         }
     ).also {
         it.refreshTrigger = refreshTriggerPx
@@ -154,27 +152,13 @@ fun WebTabUi(uri: Uri, tabId: String) {
 
     val scrollListener =
         View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            //nestedScrollConnection.enabled = scrollY == 0
-            val nestedScrollDispatcher = browserModule.nestedScrollDispatcher()
-            if (oldScrollY == 0 && oldScrollX == 0) {
-                nestedScrollDispatcher.dispatchPreScroll(
-                    Offset(0f, scrollY.toFloat()),
-                    NestedScrollSource.Drag
-                )
-                nestedScrollDispatcher.dispatchPostScroll(
-                    Offset(0f, scrollY.toFloat()),
-                    Offset(0f, scrollY.toFloat()),
-                    NestedScrollSource.Drag
-                )
-                return@OnScrollChangeListener
-            }
-            nestedScrollDispatcher.dispatchPreScroll(
+            browserViewModel.nestedScrollDispatcher().dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
             )
-            swipeRefreshState.isSwipeInProgress = false
+            browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
             coroutineScope.launch {
-                swipeRefreshState.resetOffset()
+                browserViewModel.swipeRefreshState.value?.resetOffset()
             }
         }
 
@@ -211,11 +195,11 @@ fun WebTabUi(uri: Uri, tabId: String) {
             modifier = Modifier
                 .nestedScroll(
                     connection = object : NestedScrollConnection {},
-                    dispatcher = browserModule.nestedScrollDispatcher()
+                    dispatcher = browserViewModel.nestedScrollDispatcher()
                 )
         )
 
-        if (swipeRefreshState.isSwipeInProgress || swipeRefreshState.isRefreshing) {
+        if (browserViewModel.swipeRefreshState.value?.isSwipeInProgress == true || browserViewModel.swipeRefreshState.value?.isRefreshing == true) {
             Surface(
                 shape = CircleShape,
                 color = MaterialTheme.colors.primary,
@@ -224,7 +208,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
                         IntOffset(
                             0,
                             min(
-                                swipeRefreshState.indicatorOffset.toInt(),
+                                browserViewModel.swipeRefreshState.value?.indicatorOffset?.toInt()
+                                    ?: 0,
                                 nestedScrollConnection.refreshTrigger.toInt()
                             )
                         )
@@ -274,6 +259,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
+        browserViewModel.initializeSwipeRefreshState(refreshTriggerPx)
+
         focusManager.clearFocus(true)
 
         contentViewModel.replaceAppBarContent {
@@ -325,8 +312,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
             .observe(lifecycleOwner) {
                 browserModule.saveArchiveForAutoArchive()
                 coroutineScope.launch {
-                    swipeRefreshState.resetOffset()
-                    swipeRefreshState.isRefreshing = false
+                    browserViewModel.swipeRefreshState.value?.resetOffset()
+                    browserViewModel.swipeRefreshState.value?.isRefreshing = false
                 }
             }
 
@@ -334,8 +321,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
             .stopProgress
             .observe(lifecycleOwner) {
                 coroutineScope.launch {
-                    swipeRefreshState.resetOffset()
-                    swipeRefreshState.isRefreshing = false
+                    browserViewModel.swipeRefreshState.value?.resetOffset()
+                    browserViewModel.swipeRefreshState.value?.isRefreshing = false
                 }
             }
     })

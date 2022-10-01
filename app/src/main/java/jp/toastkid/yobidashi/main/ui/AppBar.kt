@@ -79,6 +79,7 @@ internal fun AppBar(
             { activity.finish() }
         )
     }
+
 }
 
 @Composable

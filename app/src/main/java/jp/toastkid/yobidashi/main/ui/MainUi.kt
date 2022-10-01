@@ -22,27 +22,33 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -69,6 +75,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -369,6 +376,9 @@ internal fun Content() {
 
     val bottomSheetState = contentViewModel?.modalBottomSheetState ?: return
 
+    val dismissSnackbarDistance = with(LocalDensity.current) { 72.dp.toPx() }
+    val anchors = mapOf(-dismissSnackbarDistance to -1, 0f to 0, dismissSnackbarDistance to 1)
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -415,10 +425,27 @@ internal fun Content() {
                     SnackbarHost(
                         hostState = rememberSnackbarHostState,
                         snackbar = {
+                            val snackbarSwipeableState = SwipeableState(
+                                initialValue = 0,
+                                confirmStateChange = {
+                                    if (it == -1 || it == 1) {
+                                        rememberSnackbarHostState.currentSnackbarData?.dismiss()
+                                    }
+                                    true
+                                }
+                            )
                             Snackbar(
                                 backgroundColor = backgroundColor,
                                 contentColor = tint,
-                                elevation = 4.dp
+                                elevation = 4.dp,
+                                modifier = Modifier.swipeable(
+                                    snackbarSwipeableState,
+                                    anchors = anchors,
+                                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
+                                    resistance = ResistanceConfig(0.5f),
+                                    orientation = Orientation.Horizontal
+                                )
+                                    .offset { IntOffset(snackbarSwipeableState.offset.value.toInt(), 0) }
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(

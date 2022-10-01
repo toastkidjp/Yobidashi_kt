@@ -143,7 +143,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
+                .height(60.dp)
                 .align(Alignment.Center)
                 .swipeable(
                     swipeableState,
@@ -184,8 +184,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 viewModel.alphaSliderPosition.value = it
                                 viewModel.updateColorFilter()
                             },
-                            valueRange = -0.75f .. 0.75f,
-                            steps = 100
+                            valueRange = -1.5f .. 1f,
+                            steps = 150
                         )
                     }
 
@@ -201,8 +201,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 viewModel.contrastSliderPosition.value = it
                                 viewModel.updateColorFilter()
                             },
-                            valueRange = 0f .. 1.75f,
-                            steps = 256
+                            valueRange = 0f .. 3f,
+                            steps = 300
                         )
                     }
 

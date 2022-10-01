@@ -290,6 +290,7 @@ internal fun MusicList(
                         .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
                 ) {
                     Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .clickable { onClickItem(music) }
                             .padding(4.dp)

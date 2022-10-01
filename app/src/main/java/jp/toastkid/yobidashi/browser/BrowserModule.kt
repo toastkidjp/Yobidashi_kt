@@ -6,7 +6,6 @@ import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -25,7 +24,6 @@ import jp.toastkid.yobidashi.browser.usecase.HtmlSourceExtractionUseCase
 import jp.toastkid.yobidashi.browser.usecase.WebViewReplacementUseCase
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
-import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
@@ -43,8 +41,6 @@ class BrowserModule(
 ) {
 
     private val context = webViewContainer.context
-
-    private val nestedScrollDispatcher = NestedScrollDispatcher()
 
     private val preferenceApplier = PreferenceApplier(context)
 
@@ -232,14 +228,6 @@ class BrowserModule(
     }
 
     /**
-     * Is disable Pull-to-Refresh?
-     *
-     * @return is disable Pull-to-Refresh
-     */
-    fun disablePullToRefresh(): Boolean =
-            (currentView() as? CustomWebView)?.let { !it.enablePullToRefresh || it.scrollY != 0 } ?: false
-
-    /**
      * Stop loading in current tab.
      */
     fun stopLoading() {
@@ -301,7 +289,5 @@ class BrowserModule(
     fun downloadAllImages() {
         AllImageDownloaderUseCase(DownloadAction(context)).invoke(currentView())
     }
-
-    fun nestedScrollDispatcher() = nestedScrollDispatcher
 
 }
