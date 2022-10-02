@@ -159,7 +159,7 @@ fun ArticleListUi() {
         articleRepository,
         bookmarkRepository,
         {
-            contentViewModel?.snackWithAction(
+            contentViewModel.snackWithAction(
                 "Deleted: \"${it.title}\".",
                 "UNDO"
             ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
