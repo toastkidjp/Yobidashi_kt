@@ -194,7 +194,7 @@ private fun TaskListItem(
                 onCheckedChange = {
                     task.done = task.done.not()
                     CoroutineScope(Dispatchers.IO).launch {
-                        repository?.insert(task)
+                        repository.insert(task)
                     }
                 },
                 modifier = Modifier
