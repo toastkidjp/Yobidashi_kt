@@ -82,10 +82,10 @@ fun ViewHistoryListUi() {
         }
     }
 
-    List(viewHistoryItems, listState, onClick, {
+    List(viewHistoryItems, listState, onClick) {
         viewHistoryRepository.delete(it)
         viewHistoryItems.remove(it)
-    })
+    }
 
     ListActionAttachment.make(context)
         .invoke(
