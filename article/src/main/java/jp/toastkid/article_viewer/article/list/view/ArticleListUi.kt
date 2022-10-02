@@ -45,6 +45,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -187,6 +188,12 @@ fun ArticleListUi() {
     LaunchedEffect(key1 = "first_launch", block = {
         viewModel.search("")
     })
+
+    DisposableEffect(key1 = "unregisterReceiver", effect = {
+        onDispose {
+            context.unregisterReceiver(progressBroadcastReceiver)
+        }
+    })
 }
 
 @Composable
@@ -236,7 +243,9 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 text = viewModel.searchResult.value,
                 color = MaterialTheme.colors.onPrimary,
                 fontSize = 12.sp,
-                modifier = Modifier.weight(0.3f).padding(start = 16.dp)
+                modifier = Modifier
+                    .weight(0.3f)
+                    .padding(start = 16.dp)
             )
         }
     }
