@@ -151,9 +151,9 @@ fun ArticleListUi() {
 
     val itemFlowState = remember { mutableStateOf<Flow<PagingData<SearchResult>>?>(null) }
 
-    viewModel.dataSource.observe(context, {
+    viewModel.dataSource.observe(context) {
         itemFlowState.value = it.flow
-    })
+    }
 
     val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
         articleRepository,
