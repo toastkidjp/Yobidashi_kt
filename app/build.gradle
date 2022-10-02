@@ -3,7 +3,7 @@ plugins {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'org.jetbrains.kotlin.kapt'
 apply plugin: 'com.github.triplet.play'
 apply plugin: "com.cookpad.android.plugin.license-tools"
 
@@ -76,6 +76,7 @@ play {
 
 dependencies {
     implementation project(":lib")
+    implementation project(":lib:snow")
     implementation project(":article")
     implementation project(":search")
     implementation project(":todo")
