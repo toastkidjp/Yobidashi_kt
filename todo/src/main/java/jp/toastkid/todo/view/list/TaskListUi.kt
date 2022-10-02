@@ -123,7 +123,7 @@ fun TaskListUi() {
         }
     )
 
-    taskAdditionDialogFragmentViewModel?.task?.observe(context, {
+    taskAdditionDialogFragmentViewModel.task?.observe(context, {
         coroutineScope.launch {
             bottomSheetScaffoldState.show()
         }
