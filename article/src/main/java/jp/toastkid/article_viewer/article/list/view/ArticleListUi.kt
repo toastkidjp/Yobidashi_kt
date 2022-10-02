@@ -212,7 +212,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 },
                 singleLine = true,
                 keyboardActions = KeyboardActions{
-                    viewModel?.search(viewModel.searchInput.value)
+                    viewModel.search(viewModel.searchInput.value)
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color(preferenceApplier.fontColor),
