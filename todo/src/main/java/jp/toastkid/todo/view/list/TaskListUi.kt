@@ -113,7 +113,7 @@ fun TaskListUi() {
     )
 
     val menuUseCase = ItemMenuPopupActionUseCase(
-        { taskAdditionDialogFragmentViewModel?.setTask(it) },
+        { taskAdditionDialogFragmentViewModel.setTask(it) },
         {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
