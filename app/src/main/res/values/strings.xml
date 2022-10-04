@@ -294,7 +294,7 @@
     <string name="reset_button_position">Reset Button Position</string>
     <string name="title_dialog_color_chooser">Choose color</string>
     <string name="current_color">Current color:</string>
-    <string name="title_copy_colors">Copy colors</string>
+    <string name="title_copy_colors">Copy colors from main color</string>
     <string name="title_cursor_color">Cursor color</string>
     <string name="title_highlight_color">Selected text color</string>
     <string name="menu_random_wikipedia">Random Wikipedia</string>
