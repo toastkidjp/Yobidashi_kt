@@ -13,8 +13,6 @@ import kotlin.math.tan
 
 class SnowParticleGlRenderer(private val context: Context) : GLSurfaceView.Renderer {
 
-    private val textureLoader = TextureLoader()
-
     private val matrixProjection = FloatArray(16)
     private val matrixView = FloatArray(16)
     private val matrixProjectionAndView = FloatArray(16)
@@ -101,7 +99,7 @@ class SnowParticleGlRenderer(private val context: Context) : GLSurfaceView.Rende
     private fun makeRenderObject() {
         renderingObjects.clear()
         val drawable = ContextCompat.getDrawable(context, R.drawable.ic_snow)
-        val textureId = textureLoader(drawable?.toBitmap())
+        val textureId = TextureLoader().invoke(drawable?.toBitmap())
 
         val program = ShaderLoader().invoke()
 
