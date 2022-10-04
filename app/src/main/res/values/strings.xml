@@ -23,6 +23,7 @@
     <string name="title_tools">Tools</string>
     <string name="title_set_bg">Set Background Image</string>
     <string name="title_bg_reset">Reset Background Image</string>
+    <string name="title_display_effect">Show display effect</string>
     <string name="section_title_share">Share</string>
     <string name="title_share">Share this app</string>
     <string name="title_share_twitter">Share by Twitter</string>

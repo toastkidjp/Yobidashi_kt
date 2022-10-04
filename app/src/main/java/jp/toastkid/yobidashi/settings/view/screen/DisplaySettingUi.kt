@@ -54,6 +54,7 @@ import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.load.LoadedAction
+import jp.toastkid.yobidashi.settings.view.CheckableRow
 import jp.toastkid.yobidashi.settings.view.WithIcon
 import java.io.File
 
@@ -69,6 +70,8 @@ internal fun DisplaySettingUi() {
     val iconColor = Color(IconColorFinder.from(activityContext).invoke())
 
     val files = remember { mutableStateListOf<File>().also { it.addAll(loadFileChunk(filesDir)) } }
+
+    val displayEffectState = remember { mutableStateOf(preferenceApplier.showDisplayEffect()) }
 
     val addingLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -112,6 +115,20 @@ internal fun DisplaySettingUi() {
                         .padding(start = 4.dp)
                 )
             }
+
+            InsetDivider()
+
+            CheckableRow(
+                textId = R.string.title_display_effect,
+                clickable = {
+                    preferenceApplier.switchShowDisplayEffect()
+                    displayEffectState.value = preferenceApplier.showDisplayEffect()
+                    contentViewModel.setShowDisplayEffect(displayEffectState.value)
+                },
+                booleanState = displayEffectState,
+                iconTint = iconColor,
+                iconId = R.drawable.ic_snow
+            )
 
             InsetDivider()
 
