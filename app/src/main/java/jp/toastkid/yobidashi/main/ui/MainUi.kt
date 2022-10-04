@@ -377,7 +377,7 @@ internal fun Content() {
     val bottomSheetState = contentViewModel?.modalBottomSheetState ?: return
 
     val dismissSnackbarDistance = with(LocalDensity.current) { 72.dp.toPx() }
-    val anchors = mapOf(-dismissSnackbarDistance to -1, 0f to 0, dismissSnackbarDistance to 1)
+    val snackbarSwipingAnchors = mapOf(-dismissSnackbarDistance to -1, 0f to 0, dismissSnackbarDistance to 1)
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -440,7 +440,7 @@ internal fun Content() {
                                 elevation = 4.dp,
                                 modifier = Modifier.swipeable(
                                     snackbarSwipeableState,
-                                    anchors = anchors,
+                                    anchors = snackbarSwipingAnchors,
                                     thresholds = { _, _ -> FractionalThreshold(0.75f) },
                                     resistance = ResistanceConfig(0.5f),
                                     orientation = Orientation.Horizontal
