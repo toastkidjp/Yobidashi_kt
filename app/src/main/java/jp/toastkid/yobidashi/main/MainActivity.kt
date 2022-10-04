@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
             val preferenceApplier = PreferenceApplier(this)
             val contentViewModel = viewModel(ContentViewModel::class.java, this)
             contentViewModel.setColorPair(preferenceApplier.colorPair())
+            contentViewModel.setShowDisplayEffect(preferenceApplier.showDisplayEffect())
             AppTheme(
                 contentViewModel.colorPair(),
                 isSystemInDarkTheme() || preferenceApplier.useDarkMode()
