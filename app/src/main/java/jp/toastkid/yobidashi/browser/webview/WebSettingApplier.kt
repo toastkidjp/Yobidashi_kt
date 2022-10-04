@@ -39,6 +39,9 @@ class WebSettingApplier(private val preferenceApplier: PreferenceApplier) {
         webSettings.domStorageEnabled = true
         webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
 
+        webSettings.useWideViewPort = true
+        webSettings.loadWithOverviewMode = true
+
         val ua =  UserAgent.findByName(preferenceApplier.userAgent()).text()
 
         if (ua.isNotBlank() && webSettings.userAgentString != ua) {
