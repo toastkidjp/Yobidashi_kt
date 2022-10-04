@@ -482,7 +482,7 @@ internal fun Content() {
                         onClick = { openMenu.value = openMenu.value.not() },
                         backgroundColor = tint,
                         modifier = Modifier
-                            .scale(contentViewModel.fabScale?.value ?: 1f)
+                            .scale(contentViewModel.fabScale.value ?: 1f)
                             .pointerInput(Unit) {
                                 detectDragGestures(
                                     onDragEnd = {
