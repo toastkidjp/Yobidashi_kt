@@ -87,6 +87,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.SnackbarEvent
@@ -96,7 +97,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchQueryExtractor
-import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
@@ -482,7 +482,7 @@ internal fun Content() {
                         onClick = { openMenu.value = openMenu.value.not() },
                         backgroundColor = tint,
                         modifier = Modifier
-                            .scale(contentViewModel?.fabScale?.value ?: 1f)
+                            .scale(contentViewModel.fabScale?.value ?: 1f)
                             .pointerInput(Unit) {
                                 detectDragGestures(
                                     onDragEnd = {
