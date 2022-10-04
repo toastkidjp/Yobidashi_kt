@@ -206,14 +206,23 @@ class SnowParticleEmitter(
     companion object {
 
         private const val DEFAULT_PARTICLE_COUNT = 300
+
         private const val PARTICLE_X_VELOCITY_FACTOR = 0.001f
+
         private const val PARTICLE_Y_VELOCITY_FACTOR_MIN = 0.0014f
+
         private const val PARTICLE_Y_VELOCITY_FACTOR_MAX = 0.0017f
+
         private const val TIME_TILL_TURN = 3.0f
+
         private const val TIME_TILL_TURN_NORMALIZED_UNIT = 1.0f / TIME_TILL_TURN
+
         private const val INTERNAL_DURATION_IN_SEC = 5f
+
         private const val INTERNAL_START_FACTOR = 2f
+
         private const val INTERNAL_END_FACTOR = 1f
+
     }
 
 }
