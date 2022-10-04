@@ -78,6 +78,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
@@ -95,6 +96,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchQueryExtractor
+import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
@@ -509,7 +511,13 @@ internal fun Content() {
                     .fillMaxSize()
                     .nestedScroll(nestedScrollConnection)
             ) { paddingValue ->
-                NavigationalContent(navigationHostController, tabs)
+                Box {
+                    NavigationalContent(navigationHostController, tabs)
+
+                    if (contentViewModel.showSnowEffect()) {
+                        AndroidView(factory = { SnowRendererView(activity) })
+                    }
+                }
 
                 LaunchedEffect(key1 = "first_launch", block = {
                     if (tabs.isEmpty()) {
