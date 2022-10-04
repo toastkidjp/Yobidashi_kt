@@ -4,6 +4,7 @@ import android.opengl.GLES20
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
+import kotlin.random.Random
 
 class SnowParticleEmitter(
     private val shaderProgram: Int,
@@ -44,6 +45,8 @@ class SnowParticleEmitter(
     private var animationStartingTime = 0L
     private var internalYVelocityFactor = 1f
     private var visible = true
+
+    private val random = Random(hashCode())
 
     init {
         this.textureId = textureId
@@ -167,7 +170,7 @@ class SnowParticleEmitter(
     }
 
     private fun getRandomFloat(min: Float, max: Float): Float {
-        val r = Math.random().toFloat()
+        val r = random.nextFloat()
         return min + r * (max - min)
     }
 
