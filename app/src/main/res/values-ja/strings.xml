@@ -290,7 +290,7 @@
     <string name="reset_button_position">ボタンの位置をリセット</string>
     <string name="title_dialog_color_chooser">色を選択</string>
     <string name="current_color">現在の色:</string>
-    <string name="title_copy_colors">Copy colors</string>
+    <string name="title_copy_colors">色設定をコピー</string>
     <string name="title_cursor_color">カーソルの色</string>
     <string name="title_highlight_color">テキスト選択の色</string>
     <string name="menu_random_wikipedia">ランダム Wikipedia</string>
