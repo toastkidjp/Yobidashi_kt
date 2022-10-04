@@ -294,4 +294,12 @@ class ContentViewModel : ViewModel() {
         bottomBarOffsetHeightPx.value = -bottomBarHeightPx
     }
 
+    private val showSnowEffect = mutableStateOf(false)
+
+    fun setShowDisplayEffect(newState: Boolean) {
+        showSnowEffect.value = newState
+    }
+
+    fun showSnowEffect() = showSnowEffect.value
+
 }
