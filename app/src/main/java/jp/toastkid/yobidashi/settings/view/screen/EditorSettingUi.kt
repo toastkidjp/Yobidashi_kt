@@ -51,6 +51,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.view.ColorPaletteUi
+import jp.toastkid.yobidashi.settings.view.WithIcon
 
 @Composable
 internal fun EditorSettingUi() {
@@ -108,6 +109,27 @@ internal fun EditorSettingUi() {
 
                         contentViewModel?.snackShort(R.string.settings_color_done_reset)
                     }
+                )
+            }
+
+            item {
+                InsetDivider()
+            }
+
+            item {
+                WithIcon(
+                    R.string.title_cursor_color,
+                    {
+                        preferenceApplier.setEditorBackgroundColor(preferenceApplier.color)
+                        preferenceApplier.setEditorFontColor(preferenceApplier.fontColor)
+
+                        currentBackgroundColor.value = Color(preferenceApplier.color)
+                        currentFontColor.value = Color(preferenceApplier.fontColor)
+
+                        contentViewModel?.snackShort(R.string.settings_color_done_commit)
+                    },
+                    iconTint,
+                    R.drawable.ic_clip
                 )
             }
 
