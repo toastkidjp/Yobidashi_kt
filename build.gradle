@@ -58,7 +58,7 @@ buildscript {
             coroutines_test: '1.5.1'
     ]
     ext.pluginVersions = [
-            jacoco: '0.8.7'
+            jacoco: '0.8.8'
     ]
 }
 
