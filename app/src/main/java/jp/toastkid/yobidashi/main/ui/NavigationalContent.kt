@@ -166,7 +166,7 @@ private fun NavGraphBuilder.slideInComposable(route: String, content: @Composabl
     composable(
         route,
         enterTransition = {
-            slideInHorizontally()
+            slideInHorizontally(initialOffsetX = { it })
         }
     ) {
         content(it.arguments ?: Bundle.EMPTY)
