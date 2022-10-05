@@ -118,7 +118,7 @@ internal fun EditorSettingUi() {
 
             item {
                 WithIcon(
-                    R.string.title_cursor_color,
+                    R.string.title_copy_colors,
                     {
                         preferenceApplier.setEditorBackgroundColor(preferenceApplier.color)
                         preferenceApplier.setEditorFontColor(preferenceApplier.fontColor)
