@@ -41,8 +41,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.godaddy.android.colorpicker.ClassicColorPicker
 import jp.toastkid.editor.EditorFontSize
 import jp.toastkid.lib.ContentViewModel
@@ -58,7 +58,7 @@ internal fun EditorSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+        viewModel(ContentViewModel::class.java, activityContext)
     }
     val backgroundColor = preferenceApplier.editorBackgroundColor()
     val fontColor = preferenceApplier.editorFontColor()
