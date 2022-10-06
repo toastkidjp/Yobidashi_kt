@@ -66,7 +66,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -493,7 +492,7 @@ internal fun Content() {
                                             )
                                     },
                                     onDrag = { change, dragAmount ->
-                                        change.consumeAllChanges()
+                                        change.consume()
                                         offsetX.value += dragAmount.x
                                         offsetY.value += dragAmount.y
                                     }
