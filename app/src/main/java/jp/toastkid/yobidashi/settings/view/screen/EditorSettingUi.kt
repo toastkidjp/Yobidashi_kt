@@ -72,7 +72,12 @@ internal fun EditorSettingUi() {
         remember { mutableStateOf(Color(preferenceApplier.editorFontColor())) }
 
     val cursorColor =
-        remember { mutableStateOf(Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, R.color.editor_cursor)))) }
+        remember {
+            val color = preferenceApplier.editorCursorColor(
+                ContextCompat.getColor(activityContext, R.color.editor_cursor)
+            )
+            mutableStateOf(Color(color))
+        }
 
     val highlightColor =
         remember { mutableStateOf(Color(preferenceApplier.editorHighlightColor(ContextCompat.getColor(activityContext, R.color.light_blue_200_dd)))) }
