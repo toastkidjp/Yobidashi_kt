@@ -80,7 +80,15 @@ internal fun EditorSettingUi() {
         }
 
     val highlightColor =
-        remember { mutableStateOf(Color(preferenceApplier.editorHighlightColor(ContextCompat.getColor(activityContext, R.color.light_blue_200_dd)))) }
+        remember {
+            val color = preferenceApplier.editorHighlightColor(
+                ContextCompat.getColor(
+                    activityContext,
+                    R.color.light_blue_200_dd
+                )
+            )
+            mutableStateOf(Color(color))
+        }
 
     val fontSize =
         remember { mutableStateOf(preferenceApplier.editorFontSize()) }
