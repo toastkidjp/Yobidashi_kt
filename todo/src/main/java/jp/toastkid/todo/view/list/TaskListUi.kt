@@ -10,6 +10,7 @@ package jp.toastkid.todo.view.list
 
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -136,6 +137,7 @@ fun TaskListUi() {
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TaskList(
     flow: Flow<PagingData<TodoTask>>?,
@@ -151,7 +153,7 @@ private fun TaskList(
     LazyColumn(state = listState) {
         items(tasks, { it.id }) { task ->
             task ?: return@items
-            TaskListItem(task, color, menuUseCase)
+            TaskListItem(task, color, menuUseCase, Modifier.animateItemPlacement())
         }
     }
 }
@@ -160,7 +162,8 @@ private fun TaskList(
 private fun TaskListItem(
     task: TodoTask,
     color: Int,
-    menuUseCase: ItemMenuPopupActionUseCase
+    menuUseCase: ItemMenuPopupActionUseCase,
+    modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(
@@ -172,7 +175,7 @@ private fun TaskListItem(
 
     Surface(
         elevation = 4.dp,
-        modifier = Modifier
+        modifier = modifier
             .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 2.dp)
     ) {
         Row(

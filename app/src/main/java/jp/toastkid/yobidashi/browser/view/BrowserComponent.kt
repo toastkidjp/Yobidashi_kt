@@ -34,7 +34,7 @@ internal fun BrowserTitle(
         modifier = modifier
     ) {
         val progressTitle =
-            if (progress.value ?: 100 < 70)
+            if ((progress.value ?: 100) < 70)
                 context.getString(R.string.prefix_loading) + "${progress.value}%"
             else
                 headerTitle.value ?: ""

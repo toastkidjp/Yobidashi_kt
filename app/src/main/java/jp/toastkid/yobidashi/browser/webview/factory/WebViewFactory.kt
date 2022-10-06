@@ -69,6 +69,10 @@ internal class WebViewFactory {
         val preferenceApplier = PreferenceApplier(context)
 
         webView.setOnLongClickListener {
+            if ((webView as? CustomWebView)?.enablePullToRefresh == true) {
+                return@setOnLongClickListener true
+            }
+
             val hitResult = webView.hitTestResult
             when (hitResult.type) {
                 WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
@@ -126,9 +130,7 @@ internal class WebViewFactory {
                 "application/pdf" -> {
                     val intent = Intent().also { it.data = url.toUri() }
                     val currentContext = webView.context
-                    if (currentContext.packageManager.resolveActivity(intent, 0) == null) {
-                        intent.action = Intent.ACTION_VIEW
-                    }
+                    intent.action = Intent.ACTION_VIEW
                     currentContext.startActivity(intent)
                 }
                 else -> {

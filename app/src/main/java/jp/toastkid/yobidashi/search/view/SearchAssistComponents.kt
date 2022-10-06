@@ -48,7 +48,8 @@ internal fun SearchItemContent(
     category: String?,
     onClick: (Boolean) -> Unit,
     onDelete: () -> Unit,
-    time: Long = -1
+    time: Long = -1,
+    modifier: Modifier = Modifier
 ) {
     if (query == null || category == null) {
         return
@@ -108,7 +109,7 @@ internal fun SearchItemContent(
                 }
             }
         },
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
+        modifier = modifier.padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
     )
 }
 
@@ -118,7 +119,8 @@ internal fun BindItemContent(
     urlItem: UrlItem,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val title = when (urlItem) {
         is Bookmark -> urlItem.title
@@ -197,7 +199,7 @@ internal fun BindItemContent(
                 }
             }
         },
-        modifier = Modifier.padding(
+        modifier = modifier.padding(
             start = 8.dp,
             end = 8.dp,
             top = 2.dp,

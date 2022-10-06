@@ -11,6 +11,7 @@ package jp.toastkid.yobidashi.browser.archive.view
 import android.net.Uri
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -21,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -51,7 +51,7 @@ import java.io.IOException
 import java.text.NumberFormat
 import java.util.Locale
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArchiveListUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
@@ -91,7 +91,9 @@ fun ArchiveListUi() {
                             .padding(start = 16.dp, end = 16.dp)
                             .clickable {
                                 browserViewModel.open(Uri.fromFile(archiveFile))
-                            }) {
+                            }
+                            .animateItemPlacement()
+                    ) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_archive),
                             contentDescription = stringResource(id = R.string.image),

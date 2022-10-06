@@ -136,16 +136,15 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val coroutineScope = rememberCoroutineScope()
     val nestedScrollConnection = SwipeRefreshNestedScrollConnection(
         browserViewModel.swipeRefreshState.value,
-        coroutineScope,
-        {
-            if (browserViewModel.swipeRefreshState.value?.isRefreshing == false) {
-                contentViewModel.showAppBar()
-                browserModule.reload()
-                browserViewModel.swipeRefreshState.value?.isRefreshing = true
-            }
-            browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
+        coroutineScope
+    ) {
+        if (browserViewModel.swipeRefreshState.value?.isRefreshing == false) {
+            contentViewModel.showAppBar()
+            browserModule.reload()
+            browserViewModel.swipeRefreshState.value?.isRefreshing = true
         }
-    ).also {
+        browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
+    }.also {
         it.refreshTrigger = refreshTriggerPx
         it.enabled = true
     }
@@ -162,11 +161,11 @@ fun WebTabUi(uri: Uri, tabId: String) {
             }
         }
 
-    browserViewModel.switchWebViewToCurrent.observe(lifecycleOwner, {
+    browserViewModel.switchWebViewToCurrent.observe(lifecycleOwner) {
         val newTabId = it?.getContentIfNotHandled() ?: return@observe
         browserModule.switchWebViewToCurrent(newTabId)
         GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
-    })
+    }
 
     val downloadPermissionRequestLauncher =
         rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
@@ -302,9 +301,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserModule.findDown()
             })
 
-            viewModel.clear.observe(lifecycleOwner, {
+            viewModel.clear.observe(lifecycleOwner) {
                 browserModule.clearMatches()
-            })
+            }
         }
 
         browserViewModel
@@ -344,12 +343,12 @@ fun WebTabUi(uri: Uri, tabId: String) {
                     .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }),
             OptionMenu(titleId = R.string.add_to_home_screen, action = {
-                val uri = browserModule.currentUrl()?.toUri() ?: return@OptionMenu
+                val shortcutUri = browserModule.currentUrl()?.toUri() ?: return@OptionMenu
                 ShortcutUseCase(activityContext)
                     .invoke(
-                        uri,
+                        shortcutUri,
                         browserModule.currentTitle(),
-                        FaviconApplier(activityContext).load(uri)
+                        FaviconApplier(activityContext).load(shortcutUri)
                     )
             }),
             OptionMenu(titleId = R.string.title_add_bookmark, action = {

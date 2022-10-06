@@ -37,7 +37,7 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class BrowserModule(
-    private val webViewContainer: FrameLayout
+    webViewContainer: FrameLayout
 ) {
 
     private val context = webViewContainer.context
