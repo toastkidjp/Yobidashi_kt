@@ -37,9 +37,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.menu.view.OptionMenuItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.ui.finder.FindInPage
@@ -99,7 +101,8 @@ internal fun AppBar(
             }
     ) {
         Box(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .swipeable(
                     horizontalSwipeableState,
                     anchors = horizontalAnchors,
@@ -152,6 +155,11 @@ private fun OverflowMenu(
     finishApp: () -> Unit
 ) {
     val openOptionMenu = remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val preferenceApplier = PreferenceApplier(context)
+    val contentViewModel = (context as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, context)
+    }
 
     Box(modifier = Modifier
         .width(32.dp)
@@ -163,6 +171,12 @@ private fun OverflowMenu(
         )
 
         val commonOptionMenuItems = listOf(
+            OptionMenu(
+                titleId = R.string.reset_button_position,
+                action = {
+                    preferenceApplier.clearMenuFabPosition()
+                    contentViewModel?.resetMenuFabPosition()
+                }),
             OptionMenu(
                 titleId = R.string.title_tab_list,
                 action = switchTabList),
