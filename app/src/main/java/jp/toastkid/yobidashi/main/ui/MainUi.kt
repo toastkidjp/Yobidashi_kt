@@ -215,7 +215,7 @@ internal fun Content() {
     val rememberSnackbarHostState = remember { snackbarHostState }
 
     val menuFabPosition = preferenceApplier.menuFabPosition()
-    val offsetX = remember { mutableStateOf(menuFabPosition?.first ?: 0f) }
+    val menuFabOffsetX = remember { mutableStateOf(menuFabPosition?.first ?: 0f) }
     val offsetY = remember { mutableStateOf(menuFabPosition?.second ?: 0f) }
     val openFindInPageState = remember { mutableStateOf(false) }
 
@@ -482,19 +482,19 @@ internal fun Content() {
                         backgroundColor = tint,
                         modifier = Modifier
                             .scale(contentViewModel.fabScale.value)
-                            .offset { IntOffset(offsetX.value.toInt(), offsetY.value.toInt()) }
+                            .offset { IntOffset(menuFabOffsetX.value.toInt(), offsetY.value.toInt()) }
                             .pointerInput(Unit) {
                                 detectDragGestures(
                                     onDragEnd = {
                                         preferenceApplier
                                             .setNewMenuFabPosition(
-                                                offsetX.value,
+                                                menuFabOffsetX.value,
                                                 offsetY.value
                                             )
                                     },
                                     onDrag = { change, dragAmount ->
                                         change.consume()
-                                        offsetX.value += dragAmount.x
+                                        menuFabOffsetX.value += dragAmount.x
                                         offsetY.value += dragAmount.y
                                     }
                                 )
