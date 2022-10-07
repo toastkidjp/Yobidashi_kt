@@ -214,9 +214,10 @@ internal fun Content() {
     val scaffoldState = rememberScaffoldState()
     val rememberSnackbarHostState = remember { snackbarHostState }
 
-    val menuFabPosition = preferenceApplier.menuFabPosition()
-    val menuFabOffsetX = remember { mutableStateOf(menuFabPosition?.first ?: 0f) }
-    val menuFabOffsetY = remember { mutableStateOf(menuFabPosition?.second ?: 0f) }
+    // TODO clean up
+    val menuFabPosition = preferenceApplier.menuFabPosition()?.let {
+        contentViewModel.setMenuFabPosition(it.first, it.second)
+    }
     val openFindInPageState = remember { mutableStateOf(false) }
 
     val backgroundColor = MaterialTheme.colors.primary
@@ -482,20 +483,20 @@ internal fun Content() {
                         backgroundColor = tint,
                         modifier = Modifier
                             .scale(contentViewModel.fabScale.value)
-                            .offset { IntOffset(menuFabOffsetX.value.toInt(), menuFabOffsetY.value.toInt()) }
+                            .offset { IntOffset(contentViewModel.menuFabOffsetX.value.toInt(), contentViewModel.menuFabOffsetY.value.toInt()) }
                             .pointerInput(Unit) {
                                 detectDragGestures(
                                     onDragEnd = {
                                         preferenceApplier
                                             .setNewMenuFabPosition(
-                                                menuFabOffsetX.value,
-                                                menuFabOffsetY.value
+                                                contentViewModel.menuFabOffsetX.value,
+                                                contentViewModel.menuFabOffsetY.value
                                             )
                                     },
                                     onDrag = { change, dragAmount ->
                                         change.consume()
-                                        menuFabOffsetX.value += dragAmount.x
-                                        menuFabOffsetY.value += dragAmount.y
+                                        contentViewModel.menuFabOffsetX.value += dragAmount.x
+                                        contentViewModel.menuFabOffsetY.value += dragAmount.y
                                     }
                                 )
                             }
