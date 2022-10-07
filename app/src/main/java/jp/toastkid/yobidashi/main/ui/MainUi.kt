@@ -483,7 +483,7 @@ internal fun Content() {
                         backgroundColor = tint,
                         modifier = Modifier
                             .scale(contentViewModel.fabScale.value)
-                            .offset { IntOffset(contentViewModel.menuFabOffsetX.value.toInt(), contentViewModel.menuFabOffsetY.value.toInt()) }
+                            .offset { contentViewModel.makeFabOffset() }
                             .pointerInput(Unit) {
                                 detectDragGestures(
                                     onDragEnd = {
