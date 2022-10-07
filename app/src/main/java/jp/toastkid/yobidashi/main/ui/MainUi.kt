@@ -482,11 +482,12 @@ internal fun Content() {
                         backgroundColor = tint,
                         modifier = Modifier
                             .scale(contentViewModel.fabScale.value)
+                            .offset { IntOffset(offsetX.value.toInt(), offsetY.value.toInt()) }
                             .pointerInput(Unit) {
                                 detectDragGestures(
                                     onDragEnd = {
                                         preferenceApplier
-                                            .setNewCameraFabPosition(
+                                            .setNewMenuFabPosition(
                                                 offsetX.value,
                                                 offsetY.value
                                             )
