@@ -315,4 +315,9 @@ class ContentViewModel : ViewModel() {
         menuFabOffsetY.value = y
     }
 
+    fun resetMenuFabPosition() {
+        menuFabOffsetX.value = 0f
+        menuFabOffsetY.value = 0f
+    }
+
 }
