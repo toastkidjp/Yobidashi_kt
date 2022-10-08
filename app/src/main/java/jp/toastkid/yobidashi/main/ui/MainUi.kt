@@ -214,8 +214,7 @@ internal fun Content() {
     val scaffoldState = rememberScaffoldState()
     val rememberSnackbarHostState = remember { snackbarHostState }
 
-    // TODO clean up
-    val menuFabPosition = preferenceApplier.menuFabPosition()?.let {
+    preferenceApplier.menuFabPosition()?.let {
         contentViewModel.setMenuFabPosition(it.first, it.second)
     }
     val openFindInPageState = remember { mutableStateOf(false) }
