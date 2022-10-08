@@ -233,15 +233,15 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 ),
                 trailingIcon = {
                     Icon(
-                    Icons.Filled.Clear,
-                    tint = Color(preferenceApplier.fontColor),
-                    contentDescription = "clear text",
-                    modifier = Modifier
-                        .offset(x = 8.dp)
-                        .clickable {
-                            viewModel.searchInput.value = ""
-                        }
-                )
+                        Icons.Filled.Clear,
+                        tint = Color(preferenceApplier.fontColor),
+                        contentDescription = "clear text",
+                        modifier = Modifier
+                            .offset(x = 8.dp)
+                            .clickable {
+                                viewModel.searchInput.value = ""
+                            }
+                    )
                 },
                 modifier = Modifier.weight(0.7f)
             )
