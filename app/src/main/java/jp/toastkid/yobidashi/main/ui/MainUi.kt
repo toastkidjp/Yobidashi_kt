@@ -214,9 +214,6 @@ internal fun Content() {
     val scaffoldState = rememberScaffoldState()
     val rememberSnackbarHostState = remember { snackbarHostState }
 
-    preferenceApplier.menuFabPosition()?.let {
-        contentViewModel.setMenuFabPosition(it.first, it.second)
-    }
     val openFindInPageState = remember { mutableStateOf(false) }
 
     val backgroundColor = MaterialTheme.colors.primary
