@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -318,6 +319,14 @@ class ContentViewModel : ViewModel() {
     fun resetMenuFabPosition() {
         menuFabOffsetX.value = 0f
         menuFabOffsetY.value = 0f
+    }
+
+    fun initializeWith(preferenceApplier: PreferenceApplier) {
+        setColorPair(preferenceApplier.colorPair())
+        setShowDisplayEffect(preferenceApplier.showDisplayEffect())
+        preferenceApplier.menuFabPosition()?.let {
+            setMenuFabPosition(it.first, it.second)
+        }
     }
 
 }
