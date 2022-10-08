@@ -43,7 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -197,7 +196,7 @@ private fun BoardItem(
                         }
                     },
                     onDrag = { change, dragAmount ->
-                        change.consumeAllChanges()
+                        change.consume()
                         offsetX += dragAmount.x
                         offsetY += dragAmount.y
                     }
