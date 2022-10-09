@@ -156,10 +156,13 @@ fun MusicListUi() {
         { stop(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         {
-            val mediaUri = mediaPlayerPopupViewModel.musics.random()?.description?.mediaUri
+            val random = mediaPlayerPopupViewModel.musics.random()
+            val mediaUri = random?.description?.mediaUri
             if (mediaUri == null || mediaUri == Uri.EMPTY) {
                 return@MusicList
             }
+
+            mediaPlayerPopupViewModel.current.value = random
 
             attemptToGetMediaController(activity)
                 ?.transportControls
