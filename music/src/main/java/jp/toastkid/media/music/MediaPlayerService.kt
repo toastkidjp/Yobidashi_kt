@@ -144,7 +144,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                 return false
             }
             return when (keyEvent.keyCode) {
-                //KeyEvent.KEYCODE_MEDIA_NEXT,
                 KeyEvent.KEYCODE_MEDIA_SKIP_FORWARD -> {
                     onSetRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE)
                     true
