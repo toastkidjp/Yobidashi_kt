@@ -192,7 +192,6 @@ fun SearchInputUi(
                                 contentDescription = "clear text",
                                 tint = MaterialTheme.colors.onPrimary,
                                 modifier = Modifier
-                                    //.offset(x = 8.dp)
                                     .clickable {
                                         viewModel.setInput(TextFieldValue())
                                     }
