@@ -39,7 +39,7 @@ class MediaPlayerPopupViewModel : ViewModel() {
             return null
         }
 
-        return _musics[currentIndex - 1]
+        return _musics[calculateCorrectIndex(currentIndex - 1)]
     }
 
     fun next(): MediaBrowserCompat.MediaItem? {
@@ -48,7 +48,14 @@ class MediaPlayerPopupViewModel : ViewModel() {
             return null
         }
 
-        return _musics[currentIndex + 1]
+        return _musics[calculateCorrectIndex(currentIndex + 1)]
     }
+
+    private fun calculateCorrectIndex(candidateIndex: Int) =
+        when {
+            candidateIndex < 0 -> _musics.size - 1
+            _musics.size <= candidateIndex -> 0
+            else -> candidateIndex
+        }
 
 }
