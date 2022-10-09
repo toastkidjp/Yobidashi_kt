@@ -12,14 +12,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.theme.AppTheme
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.main.ui.Content
 
 class MainActivity : ComponentActivity() {
@@ -47,14 +44,6 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         GlobalWebViewPool.onResume()
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-
-        ClippingUrlOpener()(this) {
-            ViewModelProvider(this).get(BrowserViewModel::class.java).open(it)
-        }
     }
 
     override fun onPause() {
