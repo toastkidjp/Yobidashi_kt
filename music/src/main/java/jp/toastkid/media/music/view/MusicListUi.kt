@@ -143,6 +143,9 @@ fun MusicListUi() {
             if (mediaUri == null || mediaUri == Uri.EMPTY) {
                 return@MusicList
             }
+
+            mediaPlayerPopupViewModel.current.value = it
+
             attemptToGetMediaController(activity)
                 ?.transportControls
                 ?.playFromUri(mediaUri, bundleOf())
