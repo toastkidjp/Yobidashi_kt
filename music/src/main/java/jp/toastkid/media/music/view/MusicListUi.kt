@@ -79,6 +79,16 @@ fun MusicListUi() {
 
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
             when (state?.state) {
+                PlaybackStateCompat.STATE_SKIPPING_TO_PREVIOUS -> {
+                    mediaPlayerPopupViewModel.previous()?.let {
+                        play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                    }
+                }
+                PlaybackStateCompat.STATE_SKIPPING_TO_NEXT -> {
+                    mediaPlayerPopupViewModel.next()?.let {
+                        play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                    }
+                }
                 PlaybackStateCompat.STATE_PLAYING -> mediaPlayerPopupViewModel.playing = true
                 PlaybackStateCompat.STATE_PAUSED,
                 PlaybackStateCompat.STATE_STOPPED -> mediaPlayerPopupViewModel.playing = false

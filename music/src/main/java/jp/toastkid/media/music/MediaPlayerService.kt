@@ -116,6 +116,16 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             stopForeground(true)
         }
 
+        override fun onSkipToPrevious() {
+            super.onSkipToPrevious()
+            setNewState(PlaybackStateCompat.STATE_SKIPPING_TO_PREVIOUS)
+        }
+
+        override fun onSkipToNext() {
+            super.onSkipToNext()
+            setNewState(PlaybackStateCompat.STATE_SKIPPING_TO_NEXT)
+        }
+
         override fun onSetRepeatMode(repeatMode: Int) {
             mediaSession.setRepeatMode(repeatMode)
             when (repeatMode) {
@@ -134,7 +144,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                 return false
             }
             return when (keyEvent.keyCode) {
-                KeyEvent.KEYCODE_MEDIA_NEXT,
+                //KeyEvent.KEYCODE_MEDIA_NEXT,
                 KeyEvent.KEYCODE_MEDIA_SKIP_FORWARD -> {
                     onSetRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE)
                     true
@@ -263,6 +273,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                         PlaybackStateCompat.ACTION_PAUSE or
                         PlaybackStateCompat.ACTION_PLAY_PAUSE or
                         PlaybackStateCompat.ACTION_STOP or
+                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
                         PlaybackStateCompat.ACTION_SEEK_TO
 
         fun makeSpeedIntent(speed: Float) =
