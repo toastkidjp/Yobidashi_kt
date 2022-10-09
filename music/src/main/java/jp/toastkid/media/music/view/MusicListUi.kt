@@ -367,6 +367,8 @@ private fun stop(
     mediaController.transportControls.stop()
 
     mediaPlayerPopupViewModel.playing = false
+
+    mediaPlayerPopupViewModel.current.value = null
 }
 
 private fun play(
