@@ -31,4 +31,6 @@ class MediaPlayerPopupViewModel : ViewModel() {
 
     var playing by mutableStateOf(false)
 
+    val current = mutableStateOf<MediaBrowserCompat.MediaItem?>(null)
+
 }
