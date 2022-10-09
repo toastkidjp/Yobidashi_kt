@@ -144,6 +144,16 @@ fun MusicListUi() {
         {
             browserViewModel.open("https://www.google.com/search?q=$it Lyrics".toUri())
         },
+        {
+            mediaPlayerPopupViewModel.previous()?.let {
+                play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+            }
+        },
+        {
+            mediaPlayerPopupViewModel.next()?.let {
+                play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+            }
+        },
         { stop(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         {
@@ -170,6 +180,8 @@ fun MusicListUi() {
 internal fun MusicList(
     onClickItem: (MediaBrowserCompat.MediaItem) -> Unit,
     onClickLyrics: (String) -> Unit,
+    previous: () -> Unit,
+    next: () -> Unit,
     stop: () -> Unit,
     switchState: () -> Unit,
     shuffle: () -> Unit
@@ -209,6 +221,15 @@ internal fun MusicList(
                     .clickable { stop() }
             )
             Icon(
+                painterResource(R.drawable.ic_previous_media),
+                contentDescription = stringResource(id = R.string.action_pause), // TODO
+                tint = Color(iconColor),
+                modifier = Modifier
+                    .width(44.dp)
+                    .fillMaxHeight()
+                    .clickable { previous() }
+            )
+            Icon(
                 painterResource(if (viewModel.playing) R.drawable.ic_pause else R.drawable.ic_play_media),
                 contentDescription = stringResource(id = R.string.action_pause),
                 tint = Color(iconColor),
@@ -216,6 +237,15 @@ internal fun MusicList(
                     .width(44.dp)
                     .fillMaxHeight()
                     .clickable { switchState() }
+            )
+            Icon(
+                painterResource(R.drawable.ic_next_media),
+                contentDescription = stringResource(id = R.string.action_pause), // TODO
+                tint = Color(iconColor),
+                modifier = Modifier
+                    .width(44.dp)
+                    .fillMaxHeight()
+                    .clickable { next() }
             )
             Icon(
                 painterResource(R.drawable.ic_shuffle),
