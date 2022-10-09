@@ -139,16 +139,7 @@ fun MusicListUi() {
 
     MusicList(
         {
-            val mediaUri = it.description.mediaUri
-            if (mediaUri == null || mediaUri == Uri.EMPTY) {
-                return@MusicList
-            }
-
-            mediaPlayerPopupViewModel.current.value = it
-
-            attemptToGetMediaController(activity)
-                ?.transportControls
-                ?.playFromUri(mediaUri, bundleOf())
+            play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
         },
         {
             browserViewModel.open("https://www.google.com/search?q=$it Lyrics".toUri())
@@ -356,6 +347,23 @@ fun switchState(
         PlaybackStateCompat.STATE_PAUSED -> play(mediaController, mediaPlayerPopupViewModel)
         else -> Unit
     }
+}
+
+private fun play(
+    it: MediaBrowserCompat.MediaItem,
+    mediaController: MediaControllerCompat?,
+    mediaPlayerPopupViewModel: MediaPlayerPopupViewModel
+) {
+    val mediaUri = it.description.mediaUri
+    if (mediaUri == null || mediaUri == Uri.EMPTY) {
+        return
+    }
+
+    mediaPlayerPopupViewModel.current.value = it
+
+    mediaController
+        ?.transportControls
+        ?.playFromUri(mediaUri, bundleOf())
 }
 
 private fun stop(
