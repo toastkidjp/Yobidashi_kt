@@ -47,6 +47,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -234,8 +235,9 @@ fun EditorTabUi(path: String?) {
 
     contentViewModel.clearOptionMenus()
 
+    val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(key1 = Unit, block = {
-        contentViewModel.showAppBar()
+        contentViewModel.showAppBar(coroutineScope)
     })
 }
 
