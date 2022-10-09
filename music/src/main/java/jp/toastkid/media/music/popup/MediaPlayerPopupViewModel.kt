@@ -33,4 +33,22 @@ class MediaPlayerPopupViewModel : ViewModel() {
 
     val current = mutableStateOf<MediaBrowserCompat.MediaItem?>(null)
 
+    fun previous(): MediaBrowserCompat.MediaItem? {
+        val currentIndex = _musics.indexOf(current.value)
+        if (currentIndex == -1) {
+            return null
+        }
+
+        return _musics[currentIndex - 1]
+    }
+
+    fun next(): MediaBrowserCompat.MediaItem? {
+        val currentIndex = _musics.indexOf(current.value)
+        if (currentIndex == -1) {
+            return null
+        }
+
+        return _musics[currentIndex + 1]
+    }
+
 }
