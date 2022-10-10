@@ -241,7 +241,7 @@ internal fun MusicList(
             )
             Icon(
                 painterResource(if (viewModel.playing) R.drawable.ic_pause else R.drawable.ic_play_media),
-                contentDescription = stringResource(id = R.string.action_pause),
+                contentDescription = stringResource(id = if (viewModel.playing) R.string.action_pause else R.string.action_play),
                 tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
