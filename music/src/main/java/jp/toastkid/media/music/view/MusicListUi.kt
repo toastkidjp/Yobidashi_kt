@@ -390,16 +390,16 @@ fun switchState(
 }
 
 private fun play(
-    it: MediaBrowserCompat.MediaItem,
+    mediaItem: MediaBrowserCompat.MediaItem,
     mediaController: MediaControllerCompat?,
     mediaPlayerPopupViewModel: MediaPlayerPopupViewModel
 ) {
-    val mediaUri = it.description.mediaUri
+    val mediaUri = mediaItem.description.mediaUri
     if (mediaUri == null || mediaUri == Uri.EMPTY) {
         return
     }
 
-    mediaPlayerPopupViewModel.current.value = it
+    mediaPlayerPopupViewModel.current.value = mediaItem
 
     mediaController
         ?.transportControls
