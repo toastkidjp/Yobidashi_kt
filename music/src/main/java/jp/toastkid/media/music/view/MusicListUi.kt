@@ -232,7 +232,7 @@ internal fun MusicList(
             )
             Icon(
                 painterResource(R.drawable.ic_previous_media),
-                contentDescription = stringResource(id = R.string.action_pause), // TODO
+                contentDescription = stringResource(id = R.string.action_skip_to_previous),
                 tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
@@ -250,7 +250,7 @@ internal fun MusicList(
             )
             Icon(
                 painterResource(R.drawable.ic_next_media),
-                contentDescription = stringResource(id = R.string.action_pause), // TODO
+                contentDescription = stringResource(id = R.string.action_skip_to_next),
                 tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
