@@ -124,10 +124,7 @@ fun MusicListUi() {
             val mediaControllerCompat =
                 MediaControllerCompat(activity, sessionToken)
             mediaControllerCompat.registerCallback(controllerCallback)
-            MediaControllerCompat.setMediaController(
-                activity,
-                mediaControllerCompat
-            )
+            MediaControllerCompat.setMediaController(activity, mediaControllerCompat)
 
             mediaBrowserNonNull?.subscribe(mediaBrowserNonNull.root, subscriptionCallback)
         }
