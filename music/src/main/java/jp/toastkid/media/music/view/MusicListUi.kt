@@ -120,16 +120,14 @@ fun MusicListUi() {
 
         override fun onConnected() {
             val mediaBrowser = mediaBrowser ?: return
-            activity?.also {
-                val sessionToken: MediaSessionCompat.Token = mediaBrowser?.sessionToken ?: return@also
-                val mediaControllerCompat =
-                    MediaControllerCompat(activity, sessionToken)
-                mediaControllerCompat.registerCallback(controllerCallback)
-                MediaControllerCompat.setMediaController(
-                    it,
-                    mediaControllerCompat
-                )
-            }
+            val sessionToken: MediaSessionCompat.Token = mediaBrowser?.sessionToken ?: return
+            val mediaControllerCompat =
+                MediaControllerCompat(activity, sessionToken)
+            mediaControllerCompat.registerCallback(controllerCallback)
+            MediaControllerCompat.setMediaController(
+                activity,
+                mediaControllerCompat
+            )
 
             mediaBrowser?.subscribe(mediaBrowser.root, subscriptionCallback)
         }
