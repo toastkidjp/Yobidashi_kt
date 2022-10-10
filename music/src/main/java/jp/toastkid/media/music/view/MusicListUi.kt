@@ -168,7 +168,6 @@ fun MusicListUi() {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MusicList(
     onClickItem: (MediaBrowserCompat.MediaItem) -> Unit,
