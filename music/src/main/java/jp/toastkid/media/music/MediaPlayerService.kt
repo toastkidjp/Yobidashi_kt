@@ -99,7 +99,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             setNewState(PlaybackStateCompat.STATE_PAUSED)
             val notification = notificationFactory() ?: return
             notificationManager.notify(NOTIFICATION_ID, notification)
-            stopForeground(false)
+            stopForeground(STOP_FOREGROUND_DETACH)
         }
 
         override fun onStop() {
@@ -113,7 +113,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaPlayer.stop()
             setNewState(PlaybackStateCompat.STATE_STOPPED)
             notificationManager.cancel(NOTIFICATION_ID)
-            stopForeground(true)
+            stopForeground(STOP_FOREGROUND_REMOVE)
         }
 
         override fun onSkipToPrevious() {
