@@ -119,8 +119,8 @@ fun MusicListUi() {
     val connectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
 
         override fun onConnected() {
-            val mediaBrowser = mediaBrowser ?: return
-            val sessionToken: MediaSessionCompat.Token = mediaBrowser?.sessionToken ?: return
+            val mediaBrowserNonNull = mediaBrowser ?: return
+            val sessionToken: MediaSessionCompat.Token = mediaBrowserNonNull?.sessionToken ?: return
             val mediaControllerCompat =
                 MediaControllerCompat(activity, sessionToken)
             mediaControllerCompat.registerCallback(controllerCallback)
@@ -129,7 +129,7 @@ fun MusicListUi() {
                 mediaControllerCompat
             )
 
-            mediaBrowser?.subscribe(mediaBrowser.root, subscriptionCallback)
+            mediaBrowserNonNull?.subscribe(mediaBrowserNonNull.root, subscriptionCallback)
         }
     }
     mediaBrowser = remember {
