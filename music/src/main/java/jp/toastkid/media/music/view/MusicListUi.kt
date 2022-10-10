@@ -126,7 +126,7 @@ fun MusicListUi() {
             mediaControllerCompat.registerCallback(controllerCallback)
             MediaControllerCompat.setMediaController(activity, mediaControllerCompat)
 
-            mediaBrowserNonNull?.subscribe(mediaBrowserNonNull.root, subscriptionCallback)
+            mediaBrowserNonNull.subscribe(mediaBrowserNonNull.root, subscriptionCallback)
         }
     }
     mediaBrowser = remember {
