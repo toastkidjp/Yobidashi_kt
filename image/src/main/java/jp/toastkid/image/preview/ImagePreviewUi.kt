@@ -75,7 +75,6 @@ import java.io.FileInputStream
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
-    val coroutineScope = rememberCoroutineScope()
 
     val viewModel = remember { ImagePreviewViewModel() }
     LaunchedEffect(key1 = Unit, block = {
@@ -101,6 +100,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             true
         }
     )
+
+    val coroutineScope = rememberCoroutineScope()
 
     Box {
         AsyncImage(

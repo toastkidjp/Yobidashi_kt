@@ -213,6 +213,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
                             )
                         )
                     }
+                    .alpha(
+                        ((browserViewModel.swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx).coerceIn(0f, 1f)
+                    )
                     .align(Alignment.TopCenter)
             ) {
                 CircularProgressIndicator(

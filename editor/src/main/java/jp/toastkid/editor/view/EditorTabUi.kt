@@ -72,6 +72,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.editor.CursorColorSetter
 import jp.toastkid.editor.EditTextFinder
 import jp.toastkid.editor.EditorContextMenuInitializer
@@ -79,6 +80,8 @@ import jp.toastkid.editor.R
 import jp.toastkid.editor.load.LoadFromStorageDialogUi
 import jp.toastkid.editor.load.StorageFilesFinder
 import jp.toastkid.editor.usecase.FileActionUseCase
+import jp.toastkid.editor.usecase.MenuActionInvokerUseCase
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.intent.GetContentIntentFactory
@@ -95,15 +98,14 @@ import jp.toastkid.ui.dialog.InputFileNameDialogUi
 fun EditorTabUi(path: String?) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
-    val viewModelProvider = ViewModelProvider(context)
 
     val editText = remember { EditText(context) }
     val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
 
     val finder = EditTextFinder(editText)
 
-    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
-    val tabListViewModel = ViewModelProvider(context).get(TabListViewModel::class.java)
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
+    val tabListViewModel = viewModel(TabListViewModel::class.java, context)
 
     val fileActionUseCase = remember {
         FileActionUseCase(
@@ -145,9 +147,14 @@ fun EditorTabUi(path: String?) {
         context.startActivity(ShareIntentFactory().invoke(content, title))
     })
 
+    val browserViewModel = viewModel(BrowserViewModel::class.java, context)
+
     AndroidView(
         factory = {
-            EditorContextMenuInitializer().invoke(editText, SpeechMaker(it), viewModelProvider)
+            EditorContextMenuInitializer().invoke(
+                editText,
+                MenuActionInvokerUseCase(editText, SpeechMaker(it), browserViewModel, contentViewModel)
+            )
             editText.setBackgroundColor(Color.Transparent.toArgb())
             editText.setTextColor(preferenceApplier.editorFontColor())
             editText.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
@@ -185,8 +192,7 @@ fun EditorTabUi(path: String?) {
             .padding(horizontal = 8.dp, vertical = 2.dp)
     )
 
-    val pageSearcherViewModel =
-        viewModelProvider.get(PageSearcherViewModel::class.java)
+    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, context)
     pageSearcherViewModel.upward.observe(context, {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findUp(word)

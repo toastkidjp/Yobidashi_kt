@@ -27,7 +27,7 @@ class ImagePreviewViewModel {
     }
 
     fun getCurrentImage() =
-        if (images.isNotEmpty()) images.get(index.value) else Image.makeEmpty()
+        if (images.isNotEmpty()) images[index.value] else Image.makeEmpty()
 
     var scale = mutableStateOf(1f)
 
@@ -66,6 +66,8 @@ class ImagePreviewViewModel {
             return
         }
         index.value--
+
+        offset.value = Offset.Zero
     }
 
     fun moveToNext() {
@@ -73,6 +75,8 @@ class ImagePreviewViewModel {
             return
         }
         index.value++
+
+        offset.value = Offset.Zero
     }
 
     fun setIndex(i: Int) {
