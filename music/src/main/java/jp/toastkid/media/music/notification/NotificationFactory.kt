@@ -40,9 +40,9 @@ class NotificationFactory(
     )
 
     private val playAction = NotificationCompat.Action(
-            R.drawable.ic_play_media,
-            context.getString(R.string.action_play),
-            MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PLAY)
+        R.drawable.ic_play_media,
+        context.getString(R.string.action_play),
+        MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PLAY)
     )
 
     private val previousAction = NotificationCompat.Action(
