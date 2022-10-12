@@ -49,9 +49,8 @@ class RssAddingSuggestion(
             contentViewModelFactory(it)
                 ?.snackWithAction(
                     view.context.getString(R.string.message_add_rss_target),
-                    view.context.getString(R.string.add),
-                    { preferenceApplier.saveNewRssReaderTargets(url) }
-                )
+                    view.context.getString(R.string.add)
+                ) { preferenceApplier.saveNewRssReaderTargets(url) }
         }
     }
 
