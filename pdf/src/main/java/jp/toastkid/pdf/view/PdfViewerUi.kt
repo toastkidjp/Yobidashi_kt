@@ -156,7 +156,7 @@ private fun AppBarUi(scrollState: LazyListState) {
             sliderPosition = it
             CoroutineScope(Dispatchers.Main).launch {
                 scrollState.scrollToItem(
-                    ((scrollState.layoutInfo.totalItemsCount ?: 0 ) * it).roundToInt(),
+                    (scrollState.layoutInfo.totalItemsCount * it).roundToInt(),
                     0
                 )
             }
