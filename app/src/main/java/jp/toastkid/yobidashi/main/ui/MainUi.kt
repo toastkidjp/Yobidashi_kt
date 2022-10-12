@@ -351,7 +351,7 @@ internal fun Content() {
             }
         browserViewModel
             .search
-            .observe(activity, { event ->
+            .observe(activity) { event ->
                 val query = event?.getContentIfNotHandled() ?: return@observe
                 WebSearchResultTabOpenerUseCase(
                     preferenceApplier,
@@ -360,7 +360,7 @@ internal fun Content() {
                         contentViewModel.replaceToCurrentTab()
                     }
                 ).invoke(query)
-            })
+            }
     }
 
     val windowInfo = LocalWindowInfo.current
