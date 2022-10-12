@@ -16,7 +16,6 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -269,7 +268,7 @@ internal fun MusicList(
                     onDismissRequest = { expanded = false }
                 ) {
                     val values = PlayingSpeed.values()
-                    values.forEachIndexed { index, s ->
+                    values.forEachIndexed { index, _ ->
                         DropdownMenuItem(onClick = {
                             currentSpeed = values[index].textId
                             sendSpeedBroadcast(values[index].speed)
