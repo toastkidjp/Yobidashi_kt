@@ -13,18 +13,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.RadioButton
+import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 
 @Composable
 fun UserAgentDropdown(open: MutableState<Boolean>, onSelect: (UserAgent) -> Unit) {
     val current = PreferenceApplier(LocalContext.current).userAgent()
+    val tint = Color(IconColorFinder.from(LocalContext.current).invoke())
     DropdownMenu(
         expanded = open.value,
         onDismissRequest = { open.value = false }
@@ -46,6 +50,7 @@ fun UserAgentDropdown(open: MutableState<Boolean>, onSelect: (UserAgent) -> Unit
                 )
                 RadioButton(
                     selected = userAgent.name == current,
+                    colors = RadioButtonDefaults.colors(selectedColor = tint),
                     onClick = {  }
                 )
             }
