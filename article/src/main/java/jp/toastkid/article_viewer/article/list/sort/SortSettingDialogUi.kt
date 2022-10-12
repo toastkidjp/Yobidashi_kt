@@ -14,17 +14,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.RadioButton
+import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import jp.toastkid.article_viewer.R
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 
 @Composable
@@ -33,6 +37,8 @@ internal fun SortSettingDialogUi(
     openSortDialog: MutableState<Boolean>,
     onSelect: (Sort) -> Unit
 ) {
+    val tint = Color(IconColorFinder.from(LocalContext.current).invoke())
+
     Dialog(
         onDismissRequest = {
             openSortDialog.value = false
@@ -61,6 +67,7 @@ internal fun SortSettingDialogUi(
                     ) {
                         RadioButton(
                             selected = sort == currentSort,
+                            colors = RadioButtonDefaults.colors(selectedColor = tint),
                             onClick = {}
                         )
                         Text(sort.name)
