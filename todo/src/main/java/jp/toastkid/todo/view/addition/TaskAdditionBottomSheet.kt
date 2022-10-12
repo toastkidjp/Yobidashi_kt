@@ -56,7 +56,7 @@ import java.util.GregorianCalendar
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun TaskEditorUi(
-    screenContent: @Composable() () -> Unit,
+    screenContent: @Composable () -> Unit,
     taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel?,
     bottomSheetScaffoldState: ModalBottomSheetState,
     onTapAdd: (TodoTask) -> Unit,
