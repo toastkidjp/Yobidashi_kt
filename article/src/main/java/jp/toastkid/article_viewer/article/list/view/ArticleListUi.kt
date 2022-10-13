@@ -16,7 +16,6 @@ import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.ColorInt
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -83,7 +82,6 @@ import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
 import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
@@ -168,8 +166,6 @@ fun ArticleListUi() {
         }
     )
 
-    val menuIconColor = IconColorFinder.from(context).invoke()
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
@@ -178,8 +174,7 @@ fun ArticleListUi() {
             itemFlowState.value,
             rememberLazyListState(),
             contentViewModel,
-            menuPopupUseCase,
-            menuIconColor
+            menuPopupUseCase
         )
 
         if (viewModel.progressVisibility.value) {
@@ -341,15 +336,14 @@ internal fun ArticleListUi(
     flow: Flow<PagingData<SearchResult>>?,
     listState: LazyListState,
     contentViewModel: ContentViewModel?,
-    menuPopupUseCase: MenuPopupActionUseCase,
-    @ColorInt menuIconColor: Int
+    menuPopupUseCase: MenuPopupActionUseCase
 ) {
     val articles = flow?.collectAsLazyPagingItems() ?: return
 
     LazyColumn(state = listState) {
         items(articles, { it.id }) {
             it ?: return@items
-            ListItem(it, contentViewModel, menuPopupUseCase, menuIconColor,
+            ListItem(it, contentViewModel, menuPopupUseCase,
                 Modifier.animateItemPlacement()
             )
         }
@@ -365,7 +359,6 @@ private fun ListItem(
     article: SearchResult,
     contentViewModel: ContentViewModel?,
     menuPopupUseCase: MenuPopupActionUseCase,
-    @ColorInt menuIconColor: Int,
     modifier: Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -420,7 +413,7 @@ private fun ListItem(
                     R.drawable.ic_more,
                     stringResource(id = R.string.menu),
                     colorFilter = ColorFilter.tint(
-                        Color(menuIconColor),
+                        MaterialTheme.colors.secondary,
                         BlendMode.SrcIn
                     ),
                     modifier = Modifier
