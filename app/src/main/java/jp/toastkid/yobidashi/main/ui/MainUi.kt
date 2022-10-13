@@ -286,7 +286,7 @@ internal fun Content() {
         it?.getContentIfNotHandled() ?: return@observe
         requestPermissionForOpenPdfTab.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
-    contentViewModel?.openEditorTab?.observe(activity, {
+    contentViewModel.openEditorTab?.observe(activity, {
         it?.getContentIfNotHandled() ?: return@observe
         tabs.openNewEditorTab()
         replaceToCurrentTab(tabs, navigationHostController)
