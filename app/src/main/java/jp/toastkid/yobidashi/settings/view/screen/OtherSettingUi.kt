@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +32,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.parts.InsetDivider
@@ -45,7 +45,6 @@ import jp.toastkid.yobidashi.settings.view.WithIcon
 internal fun OtherSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
-    val iconTint = Color(IconColorFinder.from(activityContext).invoke())
 
     val intentFactory = SettingsIntentFactory()
 
@@ -80,7 +79,7 @@ internal fun OtherSettingUi() {
                     Icon(
                         painterResource(id = R.drawable.ic_tab_black),
                         contentDescription = stringResource(id = R.string.title_setting_new_tab),
-                        tint = iconTint
+                        tint = MaterialTheme.colors.secondary
                     )
                     Text(
                         stringResource(id = R.string.title_setting_new_tab),
@@ -137,7 +136,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_settings_device,
                     { activityContext.startActivity(intentFactory.makeLaunch()) },
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_settings_cell_black
                 )
             }
@@ -150,7 +149,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_settings_wifi,
                     { activityContext.startActivity(intentFactory.wifi()) },
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_wifi_black
                 )
             }
@@ -165,7 +164,7 @@ internal fun OtherSettingUi() {
                     {
                         activityContext.startActivity(intentFactory.wireless())
                     },
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_network_black
                 )
             }
@@ -180,7 +179,7 @@ internal fun OtherSettingUi() {
                     {
                         activityContext.startActivity(intentFactory.dateAndTime())
                     },
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_time
                 )
             }
@@ -193,7 +192,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_settings_display,
                     { activityContext.startActivity(intentFactory.display()) },
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_phone_android_black
                 )
             }
@@ -206,7 +205,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_settings_all_apps,
                     { activityContext.startActivity(intentFactory.allApps()) },
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_android_developer
                 )
             }
@@ -219,7 +218,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_clear_settings,
                     { openConfirmDialog.value = true },
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_close_black
                 )
             }
