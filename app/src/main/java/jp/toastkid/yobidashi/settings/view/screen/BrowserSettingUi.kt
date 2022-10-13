@@ -44,7 +44,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
-import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
@@ -59,8 +58,6 @@ internal fun BrowserSettingUi() {
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
         ViewModelProvider(activityContext).get(ContentViewModel::class.java)
     }
-
-    val iconTint = Color(IconColorFinder.from(activityContext).invoke())
 
     val retainTabs = remember { mutableStateOf(preferenceApplier.doesRetainTabs()) }
     val homeUrl = remember { mutableStateOf(preferenceApplier.homeUrl) }
@@ -90,7 +87,7 @@ internal fun BrowserSettingUi() {
                         retainTabs.value = preferenceApplier.doesRetainTabs()
                     },
                     R.string.title_enable_javascript,
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_tab_black
                 )
             }
@@ -106,7 +103,7 @@ internal fun BrowserSettingUi() {
                 ) {
                     Icon(
                         painterResource(id = R.drawable.ic_home_black),
-                        tint = iconTint,
+                        tint = MaterialTheme.colors.secondary,
                         contentDescription = stringResource(id = R.string.title_retain_tabs)
                     )
                     TextField(
@@ -181,7 +178,7 @@ internal fun BrowserSettingUi() {
                         useImage.value = preferenceApplier.doesLoadImage()
                     },
                     R.string.title_load_image,
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_image
                 )
             }
@@ -215,7 +212,7 @@ internal fun BrowserSettingUi() {
                         saveViewHistory.value = preferenceApplier.doesSaveForm()
                     },
                     R.string.title_save_view_history,
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_open_in_browser_black
                 )
             }
@@ -236,7 +233,7 @@ internal fun BrowserSettingUi() {
                 ) {
                     Icon(
                         painterResource(id = R.drawable.ic_user_agent_black),
-                        tint = iconTint,
+                        tint = MaterialTheme.colors.secondary,
                         contentDescription = stringResource(id = R.string.title_user_agent)
                     )
 
@@ -330,7 +327,7 @@ internal fun BrowserSettingUi() {
                         useDarkMode.value = preferenceApplier.useDarkMode()
                     },
                     R.string.title_dark_mode,
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_dark_mode_black
                 )
             }
@@ -348,7 +345,7 @@ internal fun BrowserSettingUi() {
                         useAdRemover.value = preferenceApplier.adRemove
                     },
                     R.string.title_remove_ad,
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_block_black
                 )
             }
