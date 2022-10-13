@@ -37,8 +37,6 @@ internal fun SortSettingDialogUi(
     openSortDialog: MutableState<Boolean>,
     onSelect: (Sort) -> Unit
 ) {
-    val tint = Color(IconColorFinder.from(LocalContext.current).invoke())
-
     Dialog(
         onDismissRequest = {
             openSortDialog.value = false
@@ -67,7 +65,6 @@ internal fun SortSettingDialogUi(
                     ) {
                         RadioButton(
                             selected = sort == currentSort,
-                            colors = RadioButtonDefaults.colors(selectedColor = tint),
                             onClick = {}
                         )
                         Text(sort.name)
