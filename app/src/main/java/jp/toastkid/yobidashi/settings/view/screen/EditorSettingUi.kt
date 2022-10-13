@@ -46,7 +46,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.godaddy.android.colorpicker.ClassicColorPicker
 import jp.toastkid.editor.EditorFontSize
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
@@ -62,9 +61,7 @@ internal fun EditorSettingUi() {
     }
     val backgroundColor = preferenceApplier.editorBackgroundColor()
     val fontColor = preferenceApplier.editorFontColor()
-
-    val iconTint = Color(IconColorFinder.from(activityContext).invoke())
-
+    
     val currentBackgroundColor =
         remember { mutableStateOf(Color(preferenceApplier.editorBackgroundColor())) }
 
@@ -141,7 +138,7 @@ internal fun EditorSettingUi() {
 
                         contentViewModel?.snackShort(R.string.settings_color_done_commit)
                     },
-                    iconTint,
+                    MaterialTheme.colors.secondary,
                     R.drawable.ic_clip
                 )
             }
@@ -154,8 +151,7 @@ internal fun EditorSettingUi() {
                 ColorChooserMenu(
                     cursorColor,
                     R.drawable.ic_cursor_black,
-                    R.string.title_cursor_color,
-                    iconTint
+                    R.string.title_cursor_color
                 ) {
                     preferenceApplier.setEditorCursorColor(it.toArgb())
                     cursorColor.value = it
@@ -170,8 +166,7 @@ internal fun EditorSettingUi() {
                 ColorChooserMenu(
                     highlightColor,
                     R.drawable.ic_highlight_black,
-                    R.string.title_highlight_color,
-                    iconTint
+                    R.string.title_highlight_color
                 ) {
                     preferenceApplier.setEditorHighlightColor(it.toArgb())
                     highlightColor.value = it
@@ -191,7 +186,7 @@ internal fun EditorSettingUi() {
                 ) {
                     Icon(
                         painterResource(id = R.drawable.ic_edit),
-                        tint = iconTint,
+                        tint = MaterialTheme.colors.secondary,
                         contentDescription = stringResource(id = R.string.title_font_size),
                         modifier = Modifier.padding(start = 16.dp)
                     )
@@ -245,7 +240,6 @@ private fun ColorChooserMenu(
     colorState: MutableState<Color>,
     @DrawableRes iconId: Int,
     @StringRes textId: Int,
-    iconTint: Color,
     onNewColor: (Color) -> Unit
 ) {
     val openColorChooserDialog = remember { mutableStateOf(false) }
@@ -261,7 +255,7 @@ private fun ColorChooserMenu(
     ) {
         Icon(
             painterResource(id = iconId),
-            tint = iconTint,
+            tint = MaterialTheme.colors.secondary,
             contentDescription = stringResource(id = textId)
         )
 
