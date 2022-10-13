@@ -27,7 +27,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -42,13 +41,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.todo.R
 import jp.toastkid.todo.model.TodoTask
@@ -72,7 +69,6 @@ internal fun TaskEditorUi(
         descriptionInput = it.description
         chosenColor = it.color
     }
-    val tint = Color(IconColorFinder.from(LocalContext.current).invoke())
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -146,7 +142,6 @@ internal fun TaskEditorUi(
                 colors.forEach { color ->
                     RadioButton(
                         selected = chosenColor == color.toInt(),
-                        colors = RadioButtonDefaults.colors(selectedColor = tint),
                         onClick = {
                             task?.color = color.toInt()
                             chosenColor = color.toInt()
