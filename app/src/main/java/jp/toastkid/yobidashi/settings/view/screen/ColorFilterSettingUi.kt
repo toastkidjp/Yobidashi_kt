@@ -47,7 +47,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
@@ -94,7 +93,7 @@ internal fun ColorFilterSettingUi() {
                 Icon(
                     painterResource(id = R.drawable.ic_color_filter_black),
                     contentDescription = stringResource(id = R.string.title_color_filter),
-                    tint = Color(IconColorFinder.from(activityContext).invoke())
+                    tint = MaterialTheme.colors.secondary
                 )
                 Text(
                     text = stringResource(id = R.string.title_color_filter),
