@@ -27,6 +27,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +36,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
@@ -66,8 +65,6 @@ internal fun DisplaySettingUi() {
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
 
     val filesDir = FilesDir(activityContext, BACKGROUND_DIR)
-
-    val iconColor = Color(IconColorFinder.from(activityContext).invoke())
 
     val files = remember { mutableStateListOf<File>().also { it.addAll(loadFileChunk(filesDir)) } }
 
@@ -105,7 +102,7 @@ internal fun DisplaySettingUi() {
             ) {
                 Icon(
                     painterResource(id = R.drawable.ic_dark_mode_black),
-                    tint = iconColor,
+                    tint = MaterialTheme.colors.secondary,
                     contentDescription = stringResource(id = R.string.apply_dark_mode)
                 )
                 Text(
@@ -126,7 +123,7 @@ internal fun DisplaySettingUi() {
                     contentViewModel.setShowDisplayEffect(displayEffectState.value)
                 },
                 booleanState = displayEffectState,
-                iconTint = iconColor,
+                iconTint = MaterialTheme.colors.secondary,
                 iconId = R.drawable.ic_snow
             )
 
@@ -144,7 +141,7 @@ internal fun DisplaySettingUi() {
             ) {
                 Icon(
                     painterResource(id = R.drawable.ic_close_black),
-                    tint = iconColor,
+                    tint = MaterialTheme.colors.secondary,
                     contentDescription = stringResource(id = R.string.title_bg_reset)
                 )
                 Text(
@@ -163,7 +160,7 @@ internal fun DisplaySettingUi() {
                     openClearImagesDialog.value = true
                 },
                 iconId = R.drawable.ic_clear_form,
-                iconTint = iconColor
+                iconTint = MaterialTheme.colors.secondary
             )
 
             InsetDivider()
@@ -177,7 +174,7 @@ internal fun DisplaySettingUi() {
             ) {
                 Icon(
                     painterResource(id = R.drawable.ic_image),
-                    tint = iconColor,
+                    tint = MaterialTheme.colors.secondary,
                     contentDescription = stringResource(id = R.string.title_background_image_setting)
                 )
                 Text(
@@ -188,7 +185,7 @@ internal fun DisplaySettingUi() {
                 )
                 Icon(
                     painterResource(id = R.drawable.ic_add_white),
-                    tint = iconColor,
+                    tint = MaterialTheme.colors.secondary,
                     contentDescription = stringResource(id = R.string.add_background_image)
                 )
             }
