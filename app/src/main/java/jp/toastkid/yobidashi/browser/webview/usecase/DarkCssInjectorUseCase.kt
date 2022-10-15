@@ -19,7 +19,19 @@ class DarkCssInjectorUseCase {
     }
 
     companion object {
-        private const val CSS_INJECTOR_SCRIPT = """
+
+        private const val DARK_CSS = """'
+            html{      
+                filter: invert(1) hue-rotate(180deg);
+            }
+            html img, video, iframe, .Image, .ytp-cued-thumbnail-overlay-image, .EmbeddedImage,
+            .theme-Kisekae__backgroundImage--headerChar, .ext-related-articles-card-thumb,
+            .block_ph .r-1wyyakw {
+                filter: invert(1) hue-rotate(180deg);
+            }
+        '"""
+
+        private val CSS_INJECTOR_SCRIPT = """
                     (function () {
                         'use strict';
                         
@@ -28,13 +40,7 @@ class DarkCssInjectorUseCase {
                         
                         styleElement.type = 'text/css';
                         
-                        var cssText = 
-                            'html{      filter: invert(1) hue-rotate(180deg);  }'
-                               + 'html img, video, iframe, .Image, .ytp-cued-thumbnail-overlay-image, .EmbeddedImage,'
-                               + '.theme-Kisekae__backgroundImage--headerChar, .ext-related-articles-card-thumb,'
-                               + '.block_ph .r-1wyyakw {'
-                               +      'filter: invert(1) hue-rotate(180deg);'
-                               + '}';
+                        var cssText = ${DARK_CSS.replace("\n", "")}
                         
                         if (styleElement.styleSheet) {
                             styleElement.styleSheet.cssText = cssText;
