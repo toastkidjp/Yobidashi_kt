@@ -68,7 +68,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
@@ -283,7 +282,6 @@ private fun BookmarkList(
     onClick: (Bookmark, Boolean) -> Unit,
     onDelete: (Bookmark) -> Unit
 ) {
-    val iconColor = Color(IconColorFinder.from(LocalContext.current).invoke())
     val viewModel = viewModel(BookmarkListViewModel::class.java)
     LazyColumn(
         contentPadding = PaddingValues(bottom = 4.dp),
@@ -361,7 +359,7 @@ private fun BookmarkList(
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_option_menu),
                                 contentDescription = stringResource(id = R.string.title_option_menu),
-                                tint = iconColor,
+                                tint = MaterialTheme.colors.secondary,
                                 modifier = Modifier.clickable {
                                     openEditor.value = true
                                 }
