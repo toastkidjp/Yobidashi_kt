@@ -5,11 +5,4 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <application>
-        <service
-            android:name=".zip.ZipLoaderService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            />
-    </application>
 </manifest>

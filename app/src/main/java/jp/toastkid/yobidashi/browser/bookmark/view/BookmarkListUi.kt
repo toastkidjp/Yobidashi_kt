@@ -45,6 +45,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
@@ -64,6 +65,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
@@ -71,6 +73,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
+import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
@@ -95,6 +98,8 @@ import okio.sink
 import timber.log.Timber
 import java.io.IOException
 import java.util.Stack
+
+private const val EXPORT_FILE_NAME = "bookmark.html"
 
 @Composable
 fun BookmarkListUi() {
@@ -127,7 +132,7 @@ fun BookmarkListUi() {
         }
     }
 
-    val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+    val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
     val listState = rememberLazyListState()
 
     BookmarkList(listState, onClick) {
@@ -187,7 +192,7 @@ fun BookmarkListUi() {
             }
 
             exportLauncher.launch(
-                CreateDocumentIntentFactory()("text/html", "bookmark.html")
+                CreateDocumentIntentFactory()("text/html", EXPORT_FILE_NAME)
             )
         }
 
@@ -243,8 +248,33 @@ fun BookmarkListUi() {
         viewModel.query(bookmarkRepository)
     }
 
+    val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = "first_launch", block = {
         viewModel.query(bookmarkRepository)
+
+        contentViewModel.share.observe(lifecycleOwner) {
+            it.getContentIfNotHandled() ?: return@observe
+
+            contentViewModel.viewModelScope.launch {
+                val items = withContext(Dispatchers.IO) {
+                    bookmarkRepository.all()
+                }
+                val html = withContext(Dispatchers.IO) {
+                    Exporter(items).invoke()
+                }
+
+                activityContext.startActivity(
+                    ShareIntentFactory()(html, EXPORT_FILE_NAME)
+                )
+            }
+
+        }
+    })
+
+    DisposableEffect(key1 = lifecycleOwner, effect = {
+        onDispose {
+            contentViewModel.share.removeObservers(lifecycleOwner)
+        }
     })
 }
 

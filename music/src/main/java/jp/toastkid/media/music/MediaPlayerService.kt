@@ -22,6 +22,7 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
 import androidx.core.app.NotificationManagerCompat
 import androidx.media.MediaBrowserServiceCompat
+import jp.toastkid.lib.compat.getParcelableCompat
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.media.music.notification.NotificationFactory
 import timber.log.Timber
@@ -128,7 +129,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         }
 
         override fun onMediaButtonEvent(mediaButtonEvent: Intent): Boolean {
-            val keyEvent = mediaButtonEvent.getParcelableExtra<KeyEvent?>(Intent.EXTRA_KEY_EVENT)
+            val keyEvent = mediaButtonEvent.getParcelableCompat<KeyEvent?>(Intent.EXTRA_KEY_EVENT)
             if (keyEvent == null || keyEvent.action != KeyEvent.ACTION_DOWN) {
                 return false
             }

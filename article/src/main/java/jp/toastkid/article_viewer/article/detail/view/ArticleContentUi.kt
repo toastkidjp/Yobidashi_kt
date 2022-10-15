@@ -137,6 +137,8 @@ binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CY
 
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
     ScrollerUseCase(contentViewModel, scrollState).invoke(LocalLifecycleOwner.current)
+
+    contentViewModel.clearOptionMenus()
 }
 
 @OptIn(ExperimentalFoundationApi::class)
