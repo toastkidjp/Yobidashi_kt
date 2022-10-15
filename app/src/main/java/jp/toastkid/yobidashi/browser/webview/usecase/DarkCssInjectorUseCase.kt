@@ -15,7 +15,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 class DarkCssInjectorUseCase {
 
     operator fun invoke(webView: WebView?) {
-        webView?.evaluateJavascript(CSS_INJECTOR_SCRIPT) { }
+        webView?.evaluateJavascript(cssInjectorScript) { }
     }
 
     companion object {
@@ -31,7 +31,7 @@ class DarkCssInjectorUseCase {
             }
         '"""
 
-        private val CSS_INJECTOR_SCRIPT = """
+        private val cssInjectorScript = """
                     (function () {
                         'use strict';
                         
