@@ -144,7 +144,7 @@ internal fun WebTabUi(webTab: WebTab) {
     }
 
     val scrollListener =
-        View.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+        View.OnScrollChangeListener { _, scrollX, scrollY, oldScrollX, oldScrollY ->
             browserViewModel.nestedScrollDispatcher().dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
