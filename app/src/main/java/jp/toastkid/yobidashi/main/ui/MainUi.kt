@@ -552,9 +552,7 @@ internal fun Content() {
                                         Manifest.permission.READ_EXTERNAL_STORAGE
                                     )
                                 }
-                            mediaPermissionRequestLauncher.launch(
-                                permissions
-                            )
+                            mediaPermissionRequestLauncher.launch(permissions)
                         },
                         { openMenu.value = false }
                     )
