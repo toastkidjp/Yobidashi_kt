@@ -73,6 +73,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -92,6 +93,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.SnackbarEvent
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
@@ -388,6 +390,8 @@ internal fun Content() {
     val dismissSnackbarDistance = with(LocalDensity.current) { 72.dp.toPx() }
     val snackbarSwipingAnchors = mapOf(-dismissSnackbarDistance to -1, 0f to 0, dismissSnackbarDistance to 1)
 
+    val localView = LocalView.current
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -404,7 +408,7 @@ internal fun Content() {
             sheetContent = {
                 Box(modifier = Modifier.defaultMinSize(1.dp, 1.dp)) {
                     if (bottomSheetState.isVisible) {
-                        keyboardController?.hide()
+                        Inputs.hideKeyboard(localView)
 
                         contentViewModel.bottomSheetContent.value.invoke()
                     }
