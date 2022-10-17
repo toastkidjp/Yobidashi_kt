@@ -127,10 +127,10 @@ fun EditorTabUi(path: String?) {
         it.getContentIfNotHandled() ?: return@observe
         editText.setSelection(0)
     }
-    contentViewModel.toBottom.observe(localLifecycleOwner, {
+    contentViewModel.toBottom.observe(localLifecycleOwner) {
         it.getContentIfNotHandled() ?: return@observe
         editText.setSelection(editText.text.length)
-    })
+    }
     contentViewModel.share.observe(localLifecycleOwner, {
         it.getContentIfNotHandled() ?: return@observe
         val title =
