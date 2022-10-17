@@ -190,10 +190,10 @@ fun EditorTabUi(path: String?) {
     )
 
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, context)
-    pageSearcherViewModel.upward.observe(context, {
+    pageSearcherViewModel.upward.observe(context) {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findUp(word)
-    })
+    }
     pageSearcherViewModel.downward.observe(context, {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findDown(word)
