@@ -35,6 +35,7 @@ import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.block.SiteNameChecker
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
+import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.usecase.DarkCssInjectorUseCase
 import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
@@ -64,6 +65,8 @@ class WebViewClientFactory(
 
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
+
+            (view as? CustomWebView)?.enablePullToRefresh = false
 
             lastStartedMs = true
 
