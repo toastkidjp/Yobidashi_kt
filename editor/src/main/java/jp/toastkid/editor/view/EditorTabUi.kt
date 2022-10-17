@@ -170,7 +170,7 @@ fun EditorTabUi(path: String?) {
             fileActionUseCase.readCurrentFile()
             val scrollView = ScrollView(editText.context)
             scrollView.addView(editText)
-            scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            scrollView.setOnScrollChangeListener { _, scrollX, scrollY, oldScrollX, oldScrollY ->
                 nestedScrollDispatcher.dispatchPreScroll(
                     Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                     NestedScrollSource.Fling
