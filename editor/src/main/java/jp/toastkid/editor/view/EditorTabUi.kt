@@ -131,7 +131,7 @@ fun EditorTabUi(path: String?) {
         it.getContentIfNotHandled() ?: return@observe
         editText.setSelection(editText.text.length)
     }
-    contentViewModel.share.observe(localLifecycleOwner, {
+    contentViewModel.share.observe(localLifecycleOwner) {
         it.getContentIfNotHandled() ?: return@observe
         val title =
             if (path?.contains("/") == true) path.substring(path.lastIndexOf("/") + 1)
@@ -142,7 +142,7 @@ fun EditorTabUi(path: String?) {
             return@observe
         }
         context.startActivity(ShareIntentFactory().invoke(content, title))
-    })
+    }
 
     val browserViewModel = viewModel(BrowserViewModel::class.java, context)
 
