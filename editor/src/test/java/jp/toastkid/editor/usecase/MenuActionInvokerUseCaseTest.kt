@@ -34,7 +34,6 @@ import jp.toastkid.editor.TableConverter
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
-import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.search.SearchCategory
@@ -280,8 +279,6 @@ class MenuActionInvokerUseCaseTest {
         every { browserViewModel.preview(any()) }.just(Runs)
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
-        mockkObject(Inputs)
-        every { Inputs.hideKeyboard(any()) }.just(Runs)
 
         val handled = menuActionInvokerUseCase
             .invoke(R.id.context_edit_url_preview, "https://www.yahoo.co.jp")
@@ -289,7 +286,6 @@ class MenuActionInvokerUseCaseTest {
         assertTrue(handled)
         verify(exactly = 1) { browserViewModel.preview(any()) }
         verify(exactly = 1) { Uri.parse(any()) }
-        verify(exactly = 1) { Inputs.hideKeyboard(any()) }
     }
 
     @Test
