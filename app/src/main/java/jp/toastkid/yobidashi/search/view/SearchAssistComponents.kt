@@ -113,7 +113,7 @@ internal fun SearchItemContent(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun BindItemContent(
     urlItem: UrlItem,
