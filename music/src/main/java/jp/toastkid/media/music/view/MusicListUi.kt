@@ -111,7 +111,7 @@ fun MusicListUi() {
                 it.transportControls?.prepare()
             }
 
-            mediaPlayerPopupViewModel?.nextMusics(children)
+            mediaPlayerPopupViewModel.nextMusics(children)
         }
     }
 
