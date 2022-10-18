@@ -266,7 +266,7 @@ internal fun Content() {
         focusManager.clearFocus(true)
     }
 
-    contentViewModel?.switchTabList?.observe(activity, Observer {
+    contentViewModel.switchTabList?.observe(activity, Observer {
         it?.getContentIfNotHandled() ?: return@Observer
         contentViewModel?.setBottomSheetContent { TabListUi(tabs) }
         coroutineScope?.launch {
