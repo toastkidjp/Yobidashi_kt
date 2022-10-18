@@ -165,7 +165,7 @@ internal fun BindItemContent(
                     iconFile,
                     contentDescription = urlItem.urlString(),
                     placeholder = painterResource(id = R.drawable.ic_history_black),
-                    contentScale = ContentScale.Inside,
+                    contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .width(32.dp)
                         .fillMaxHeight()
