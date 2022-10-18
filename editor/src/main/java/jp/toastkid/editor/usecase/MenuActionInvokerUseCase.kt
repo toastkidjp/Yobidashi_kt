@@ -79,7 +79,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_speech -> {
-                val speechText = if (text.isBlank()) editText.text.toString() else text
+                val speechText = text.ifBlank { editText.text.toString() }
                 speechMaker?.invoke(speechText)
                 return true
             }
