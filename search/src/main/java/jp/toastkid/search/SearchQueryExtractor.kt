@@ -79,7 +79,8 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("find_desc")
             host.equals("www.tumblr.com")
                     or host.equals("ejje.weblio.jp")
-                    or host.equals("web.archive.org")-> uri.lastPathSegment
+                    or host.equals("web.archive.org")
+                    or host.equals("www.dictionary.com") -> uri.lastPathSegment
             host.endsWith("archive.org")
                     or host.endsWith("search.naver.com")
                     or host.endsWith("www.morningstar.com")
