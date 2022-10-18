@@ -34,9 +34,9 @@ class NotificationFactory(
     private val albumArtFinder = AlbumArtFinder(context.contentResolver)
 
     private val pauseAction = NotificationCompat.Action(
-            R.drawable.ic_pause,
-            context.getString(R.string.action_pause),
-            MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PAUSE)
+        R.drawable.ic_pause,
+        context.getString(R.string.action_pause),
+        MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PAUSE)
     )
 
     private val playAction = NotificationCompat.Action(
