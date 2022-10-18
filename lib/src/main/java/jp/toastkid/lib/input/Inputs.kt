@@ -15,7 +15,7 @@ import android.view.inputmethod.InputMethodManager
 /**
  * @author toastkidjp
  */
-object Inputs {
+class Inputs {
 
     /**
      * Hide software keyboard.

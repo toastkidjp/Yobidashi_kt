@@ -408,7 +408,7 @@ internal fun Content() {
             sheetContent = {
                 Box(modifier = Modifier.defaultMinSize(1.dp, 1.dp)) {
                     if (bottomSheetState.isVisible) {
-                        Inputs.hideKeyboard(localView)
+                        Inputs().hideKeyboard(localView)
 
                         contentViewModel.bottomSheetContent.value.invoke()
                     }
