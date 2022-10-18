@@ -385,7 +385,7 @@ internal fun Content() {
             }
         }
 
-    val bottomSheetState = contentViewModel?.modalBottomSheetState ?: return
+    val bottomSheetState = contentViewModel.modalBottomSheetState ?: return
 
     val dismissSnackbarDistance = with(LocalDensity.current) { 72.dp.toPx() }
     val snackbarSwipingAnchors = mapOf(-dismissSnackbarDistance to -1, 0f to 0, dismissSnackbarDistance to 1)
