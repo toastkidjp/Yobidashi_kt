@@ -37,6 +37,7 @@ class WebSettingApplier(private val preferenceApplier: PreferenceApplier) {
         }
         webSettings.setSupportMultipleWindows(true)
         webSettings.domStorageEnabled = true
+        webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
 
         val ua =  UserAgent.findByName(preferenceApplier.userAgent()).text()
 

@@ -7,10 +7,8 @@
  */
 package jp.toastkid.yobidashi.browser.floating
 
-import android.annotation.TargetApi
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -20,13 +18,15 @@ import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.block.AdRemover
+import jp.toastkid.yobidashi.browser.webview.usecase.DarkCssInjectorUseCase
 
 /**
  * @author toastkidjp
  */
 class WebViewInitializer(
         private val preferenceApplier: PreferenceApplier,
-        private val viewModel: FloatingPreviewViewModel
+        private val viewModel: FloatingPreviewViewModel,
+        private val darkCssInjectorUseCase: DarkCssInjectorUseCase = DarkCssInjectorUseCase()
 ) {
 
     /**
@@ -46,11 +46,23 @@ class WebViewInitializer(
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
+
+                if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
+                    darkCssInjectorUseCase(view)
+                }
+
                 viewModel.newIcon(null)
                 viewModel.newUrl(url)
             }
 
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+
+                if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
+                    darkCssInjectorUseCase(view)
+                }
+            }
+
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                     if (preferenceApplier.adRemove) {
                         adRemover(request.url.toString())
@@ -58,14 +70,6 @@ class WebViewInitializer(
                         super.shouldInterceptRequest(view, request)
                     }
 
-            @Suppress("OverridingDeprecatedMember")
-            override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
-                    if (preferenceApplier.adRemove) {
-                        adRemover(url)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        super.shouldInterceptRequest(view, url)
-                    }
         }
 
         webView.webChromeClient = object : WebChromeClient() {

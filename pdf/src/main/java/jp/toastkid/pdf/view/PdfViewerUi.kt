@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -92,6 +93,7 @@ private fun PdfPageList(pdfRenderer: PdfRenderer, listState: LazyListState) {
         itemsIndexed(images) { index, bitmap ->
             Surface(
                 elevation = 4.dp,
+                color = Color(0xFFF0F0F0),
                 modifier = Modifier
                     .padding(
                         start = 8.dp,

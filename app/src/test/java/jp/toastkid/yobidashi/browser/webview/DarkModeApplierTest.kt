@@ -1,11 +1,15 @@
 package jp.toastkid.yobidashi.browser.webview
 
+import android.os.Build
 import android.webkit.WebView
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
@@ -13,11 +17,15 @@ import io.mockk.verify
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.robolectric.util.ReflectionHelpers
 
 /**
  * @author toastkidjp
  */
 class DarkModeApplierTest {
+
+    @InjectMockKs
+    private lateinit var darkModeApplier: DarkModeApplier
 
     @MockK
     private lateinit var webView: WebView
@@ -29,23 +37,34 @@ class DarkModeApplierTest {
     }
 
     @Test
+    fun testIsNotSupportedOs() {
+        ReflectionHelpers.setStaticField(Build.VERSION::class.java, "SDK_INT", Build.VERSION_CODES.P)
+
+        darkModeApplier.invoke(webView, true)
+
+        verify(exactly = 0) { webView.getSettings() }
+    }
+
+    @Test
     fun testIsNotFeatureSupported() {
-        every { WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK) }.answers { false }
+        every { WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING) }.answers { false }
         every { webView.getSettings() }.answers { mockk() }
 
-        DarkModeApplier().invoke(webView, true)
+        darkModeApplier.invoke(webView, true)
 
         verify(exactly = 0) { webView.getSettings() }
     }
 
     @Test
     fun testIsFeatureSupported() {
-        every { WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK) }.answers { true }
+        ReflectionHelpers.setStaticField(Build.VERSION::class.java, "SDK_INT", Build.VERSION_CODES.Q)
+
+        every { WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING) }.answers { true }
         mockkStatic(WebSettingsCompat::class)
-        every { WebSettingsCompat.setForceDark(any(), any()) }.answers { Unit }
+        every { WebSettingsCompat.setAlgorithmicDarkeningAllowed(any(), any()) }.just(Runs)
         every { webView.getSettings() }.answers { mockk() }
 
-        DarkModeApplier().invoke(webView, true)
+        darkModeApplier.invoke(webView, true)
 
         verify(exactly = 1) { webView.getSettings() }
     }

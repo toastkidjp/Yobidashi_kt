@@ -21,7 +21,7 @@ buildscript {
 
     ext.minSdk = 24
     ext.compileSdk = 33
-    ext.targetSdk = 32
+    ext.targetSdk = 33
     ext.buildTools = "33.0.0"
 
     ext.kotlin_version = '1.7.10'

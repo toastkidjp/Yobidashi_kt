@@ -18,18 +18,14 @@ import androidx.webkit.WebViewFeature
 class DarkModeApplier {
 
     operator fun invoke(webView: WebView, useDarkMode: Boolean) {
-        if (!WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             return
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
             && WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
-            WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.settings, true)
+            WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.settings, useDarkMode)
         }
-
-        val forceDarkMode =
-            if (useDarkMode) WebSettingsCompat.FORCE_DARK_ON else WebSettingsCompat.FORCE_DARK_OFF
-        WebSettingsCompat.setForceDark(webView.settings, forceDarkMode)
     }
 
 }
