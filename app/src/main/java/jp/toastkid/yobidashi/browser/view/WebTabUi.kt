@@ -423,7 +423,7 @@ private fun AppBarContent(
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     val preferenceApplier = PreferenceApplier(activity)
-    val tint = Color(preferenceApplier.fontColor)
+    val tint = MaterialTheme.colors.onPrimary
 
     val enableBack = viewModel.enableBack
     val enableForward = viewModel.enableForward
