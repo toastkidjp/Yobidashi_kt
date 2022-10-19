@@ -17,7 +17,7 @@ import java.io.File
  *
  * @author toastkidjp
  */
-object FileExtractorFromUri {
+class FileExtractorFromUri {
 
     /**
      * Extract [File] object from [Uri]. This method is nullable.
