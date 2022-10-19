@@ -8,10 +8,8 @@
 
 package jp.toastkid.lib.night
 
-import android.content.res.Configuration
-
 /**
  *
  * @see https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
  */
-class DisplayMode(private val configuration: Configuration) 
+class DisplayMode
