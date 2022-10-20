@@ -437,7 +437,7 @@ private fun AppBarContent(
         if (viewModel.progress.value < 70) {
             LinearProgressIndicator(
                 progress = viewModel.progress.value.toFloat() / 100f,
-                color = Color(preferenceApplier.fontColor),
+                color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier
                     .height(1.dp)
                     .fillMaxWidth()
