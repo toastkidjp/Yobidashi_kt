@@ -17,6 +17,7 @@
     <string name="search_category_stack_overflow">Stack Overflow</string>
     <string name="search_category_bgr">BGR</string>
     <string name="search_category_technology">TechCrunch</string>
+    <string name="search_category_gizmode">GIZMODO</string>
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>
     <string name="search_category_android_developer">Android Developer</string>

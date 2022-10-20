@@ -356,6 +356,11 @@ enum class SearchCategory(
                 "https://techcrunch.com/search/" + Uri.encode(q)
             }
     ),
+    GIZMODE(
+        R.string.search_category_gizmode,
+        R.drawable.ic_gizmodo,
+        "https://gizmodo.com/search?q="
+    ),
     GITHUB(
             R.string.search_category_github,
             R.drawable.ic_github,
