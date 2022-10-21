@@ -30,7 +30,6 @@ class MainActivity : ComponentActivity() {
             val preferenceApplier = PreferenceApplier(this)
 
             val contentViewModel = viewModel(ContentViewModel::class.java, this)
-            contentViewModel.initializeWith(preferenceApplier)
 
             AppTheme(
                 contentViewModel.colorPair(),
