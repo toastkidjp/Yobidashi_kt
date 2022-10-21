@@ -123,7 +123,7 @@ fun ArticleListUi() {
         }
 
         private fun showFeedback() {
-            contentViewModel?.snackShort(R.string.message_done_import)
+            contentViewModel.snackShort(R.string.message_done_import)
         }
     }
 
