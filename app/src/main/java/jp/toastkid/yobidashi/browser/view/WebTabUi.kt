@@ -475,7 +475,7 @@ private fun AppBarContent(
                     painterResource(R.drawable.ic_tab),
                     contentDescription = stringResource(id = R.string.tab_list),
                     colorFilter = ColorFilter.tint(
-                        Color(preferenceApplier.fontColor),
+                        MaterialTheme.colors.onPrimary,
                         BlendMode.SrcIn
                     ),
                     modifier = Modifier
