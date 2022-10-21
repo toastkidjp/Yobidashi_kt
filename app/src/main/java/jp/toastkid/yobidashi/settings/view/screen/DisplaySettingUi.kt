@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.settings.view.screen
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -77,8 +78,14 @@ internal fun DisplaySettingUi() {
             return@rememberLauncherForActivityResult
         }
 
+        val targets = mutableListOf<Uri>()
+        val clipData = it.data?.clipData
+        val itemCount = clipData?.itemCount ?: 0
+        (0 until itemCount).mapNotNull { clipData?.getItemAt(it)?.uri }.forEach { targets.add(it) }
+        it.data?.data?.let { targets.add(it) }
+
         LoadedAction(
-            it.data?.data,
+            targets,
             activityContext,
             contentViewModel,
             {
@@ -195,7 +202,7 @@ internal fun DisplaySettingUi() {
             }
 
             LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                items(files, { it.absolutePath }) { imageFile ->
+                items(files, { it.absolutePath + it.lastModified().toString() }) { imageFile ->
                     Surface(elevation = 4.dp, modifier = Modifier
                         .height(200.dp)
                         .weight(1f)
@@ -277,6 +284,7 @@ private fun loadFileChunk(filesDir: FilesDir) =
     private fun makePickImage(): Intent {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         intent.type = "image/*"
         return intent
     }
