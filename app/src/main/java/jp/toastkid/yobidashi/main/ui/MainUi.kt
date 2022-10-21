@@ -129,7 +129,6 @@ internal fun Content() {
     val preferenceApplier = PreferenceApplier(activity)
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
-    contentViewModel.initializeWith(preferenceApplier)
     contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
     contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
 
