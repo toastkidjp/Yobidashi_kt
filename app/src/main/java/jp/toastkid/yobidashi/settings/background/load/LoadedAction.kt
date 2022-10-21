@@ -31,7 +31,7 @@ import java.io.IOException
  * @author toastkidjp
  */
 internal class LoadedAction (
-    private val uri: Uri?,
+    private val uris: List<Uri>,
     private val context: Context,
     private val contentViewModel: ContentViewModel,
     private val onLoadedAction: (File) -> Unit,
@@ -47,35 +47,37 @@ internal class LoadedAction (
      * Invoke action.
      */
     operator fun invoke() {
-        if (uri == null) {
+        if (uris.isEmpty()) {
             return
         }
 
         CoroutineScope(Dispatchers.Main).launch {
-            val bitmap = try {
-                withContext(Dispatchers.IO) {
-                    val image = context.imageLoader
+            uris.forEach { uri ->
+                val bitmap = try {
+                    withContext(Dispatchers.IO) {
+                        val image = context.imageLoader
                             .execute(ImageRequest.Builder(context).data(uri).build())
                             .drawable
                             ?.toBitmap()
 
-                    val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
-                    fixedImage?.let {
-                        val displaySize = WindowRectCalculatorCompat().invoke(context as? Activity) ?: return@let
-                        ImageStoreUseCase(
+                        val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
+                        fixedImage?.let {
+                            val displaySize = WindowRectCalculatorCompat().invoke(context as? Activity) ?: return@let
+                            ImageStoreUseCase(
                                 FilesDir(context, fileDir),
                                 PreferenceApplier(context)
-                        )(it, uri, displaySize, onLoadedAction)
+                            )(it, uri, displaySize, onLoadedAction)
+                        }
+                        fixedImage
                     }
-                    fixedImage
+                } catch (e: IOException) {
+                    Timber.e(e)
+                    informFailed()
+                    return@launch
                 }
-            } catch (e: IOException) {
-                Timber.e(e)
-                informFailed()
-                return@launch
-            }
 
-            bitmap?.let { contentViewModel.snackShort(R.string.message_done_set_image) }
+                bitmap?.let { contentViewModel.snackShort(R.string.message_done_set_image) }
+            }
         }
     }
 
