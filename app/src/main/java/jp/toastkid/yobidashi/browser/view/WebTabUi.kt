@@ -161,6 +161,7 @@ internal fun WebTabUi(webTab: WebTab) {
         GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
     }
 
+    val downloadUrl = remember { mutableStateOf("") }
     val downloadPermissionRequestLauncher =
         rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
             if (it.first.not()) {
@@ -168,11 +169,15 @@ internal fun WebTabUi(webTab: WebTab) {
                     .snackShort(R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
-            val url = it.second ?: return@rememberLauncherForActivityResult
-            DownloadAction(activityContext).invoke(url)
+            if (downloadUrl.value.isEmpty()) {
+                return@rememberLauncherForActivityResult
+            }
+            DownloadAction(activityContext).invoke(downloadUrl.value)
+            downloadUrl.value = ""
         }
     browserViewModel.download.observe(lifecycleOwner, Observer {
         val url = it?.getContentIfNotHandled() ?: return@Observer
+        downloadUrl.value = url
         downloadPermissionRequestLauncher.launch(url)
     })
 
@@ -201,7 +206,8 @@ internal fun WebTabUi(webTab: WebTab) {
                         IntOffset(
                             0,
                             min(
-                                verticalIndicatorOffsetPx + (browserViewModel.swipeRefreshState.value?.indicatorOffset?.toInt() ?: 0),
+                                verticalIndicatorOffsetPx + (browserViewModel.swipeRefreshState.value?.indicatorOffset?.toInt()
+                                    ?: 0),
                                 nestedScrollConnection.refreshTrigger.toInt()
                             )
                         )
