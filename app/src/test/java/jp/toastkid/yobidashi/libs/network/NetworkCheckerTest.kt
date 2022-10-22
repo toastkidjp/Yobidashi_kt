@@ -54,38 +54,40 @@ class NetworkCheckerTest {
         unmockkAll()
     }
 
+    private val networkChecker = NetworkChecker()
+
     @Test
     fun testIsNotAvailable() {
-        assertFalse(NetworkChecker().isNotAvailable(context))
+        assertFalse(networkChecker.isNotAvailable(context))
     }
 
     @Test
     fun testIsUnavailableWiFi() {
-        assertFalse(NetworkChecker().isUnavailableWiFi(context))
+        assertFalse(networkChecker.isUnavailableWiFi(context))
     }
 
     @Test
     fun testCannotGetConnectivityManager() {
         every { context.getSystemService(any()) }.returns(null)
 
-        assertTrue(NetworkChecker().isUnavailableWiFi(context))
-        assertTrue(NetworkChecker().isNotAvailable(context))
+        assertTrue(networkChecker.isUnavailableWiFi(context))
+        assertTrue(networkChecker.isNotAvailable(context))
     }
 
     @Test
     fun testCannotGetActiveNetwork() {
         every { connectivityManager.activeNetwork }.returns(null)
 
-        assertTrue(NetworkChecker().isUnavailableWiFi(context))
-        assertTrue(NetworkChecker().isNotAvailable(context))
+        assertTrue(networkChecker.isUnavailableWiFi(context))
+        assertTrue(networkChecker.isNotAvailable(context))
     }
 
     @Test
     fun testCannotGetNetworkCapabilities() {
         every { connectivityManager.getNetworkCapabilities(any()) }.returns(null)
 
-        assertTrue(NetworkChecker().isUnavailableWiFi(context))
-        assertTrue(NetworkChecker().isNotAvailable(context))
+        assertTrue(networkChecker.isUnavailableWiFi(context))
+        assertTrue(networkChecker.isNotAvailable(context))
     }
 
 }
