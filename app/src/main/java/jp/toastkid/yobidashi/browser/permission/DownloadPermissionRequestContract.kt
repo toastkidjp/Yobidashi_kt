@@ -47,7 +47,6 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
         private val PERMISSIONS =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 arrayOf(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.POST_NOTIFICATIONS
                 )
             } else {
