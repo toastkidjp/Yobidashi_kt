@@ -19,8 +19,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 
 class DownloadPermissionRequestContract : ActivityResultContract<String?, Boolean>() {
 
-    private var url: String? = null
-
     override fun createIntent(context: Context, input: String?): Intent {
         return Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
             .putExtra(
