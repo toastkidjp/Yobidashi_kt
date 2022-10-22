@@ -22,8 +22,6 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
     private var url: String? = null
 
     override fun createIntent(context: Context, input: String?): Intent {
-        url = input
-
         return Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
             .putExtra(
                 ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSIONS,
