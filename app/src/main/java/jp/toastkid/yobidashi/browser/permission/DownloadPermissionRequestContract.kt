@@ -17,7 +17,7 @@ import android.os.Build
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 
-class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<Boolean, String?>>() {
+class DownloadPermissionRequestContract : ActivityResultContract<String?, Boolean>() {
 
     private var url: String? = null
 
@@ -29,15 +29,15 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
             )
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): Pair<Boolean, String?> {
+    override fun parseResult(resultCode: Int, intent: Intent?): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return true to url
+            return true
         }
-        if (resultCode != Activity.RESULT_OK) return false to url
+        if (resultCode != Activity.RESULT_OK) return false
         val granted = intent
             ?.getIntArrayExtra(ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
             ?.getOrNull(0) == PackageManager.PERMISSION_GRANTED
-        return granted to url
+        return granted
     }
 
     companion object {

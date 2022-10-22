@@ -164,7 +164,7 @@ internal fun WebTabUi(webTab: WebTab) {
     val downloadUrl = remember { mutableStateOf("") }
     val downloadPermissionRequestLauncher =
         rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
-            if (it.first.not()) {
+            if (it.not()) {
                 contentViewModel
                     .snackShort(R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
