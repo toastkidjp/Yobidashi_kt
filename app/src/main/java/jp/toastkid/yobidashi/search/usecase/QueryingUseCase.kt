@@ -115,7 +115,7 @@ class QueryingUseCase(
     }
 
     private fun cannotUseNetwork(context: Context) =
-        NetworkChecker.isNotAvailable(context) ||
-                (PreferenceApplier(context).wifiOnly && NetworkChecker.isUnavailableWiFi(context))
+        NetworkChecker().isNotAvailable(context) ||
+                (PreferenceApplier(context).wifiOnly && NetworkChecker().isUnavailableWiFi(context))
 
 }

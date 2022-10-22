@@ -407,7 +407,7 @@ private inline fun search(
     query: String,
     onBackground: Boolean = false
 ) {
-    if (NetworkChecker.isNotAvailable(context)) {
+    if (NetworkChecker().isNotAvailable(context)) {
         contentViewModel?.snackShort("Network is not available...")
         return
     }

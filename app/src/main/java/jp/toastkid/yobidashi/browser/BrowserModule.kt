@@ -124,7 +124,7 @@ class BrowserModule(
 
         if (currentView.url.isNullOrEmpty()
                 && Urls.isValidUrl(url)
-                && NetworkChecker.isNotAvailable(context)
+                && NetworkChecker().isNotAvailable(context)
         ) {
             autoArchive.load(currentView, idGenerator.from(url)) {
                 contentViewModel?.snackShort("Load archive.")
@@ -132,7 +132,7 @@ class BrowserModule(
             return
         }
 
-        if (preferenceApplier.wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
+        if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(context)) {
             contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
             return
         }
@@ -152,7 +152,7 @@ class BrowserModule(
      * Simple delegation to [WebView].
      */
     fun reload() {
-        if (preferenceApplier.wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
+        if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(context)) {
             contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
             return
         }

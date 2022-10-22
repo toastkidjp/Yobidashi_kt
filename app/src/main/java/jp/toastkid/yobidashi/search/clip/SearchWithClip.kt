@@ -45,7 +45,7 @@ class SearchWithClip(
     private val listener: ClipboardManager.OnPrimaryClipChangedListener by lazy {
         ClipboardManager.OnPrimaryClipChangedListener{
             val context = parent.context
-            if (isInvalidCondition() || NetworkChecker.isNotAvailable(context)) {
+            if (isInvalidCondition() || NetworkChecker().isNotAvailable(context)) {
                 return@OnPrimaryClipChangedListener
             }
 

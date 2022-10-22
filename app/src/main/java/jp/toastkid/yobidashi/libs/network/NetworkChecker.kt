@@ -9,7 +9,7 @@ import android.net.NetworkCapabilities
  *
  * @author toastkidjp
  */
-object NetworkChecker {
+class NetworkChecker {
 
     private enum class NetworkType {
         WIFI, OTHER, NONE

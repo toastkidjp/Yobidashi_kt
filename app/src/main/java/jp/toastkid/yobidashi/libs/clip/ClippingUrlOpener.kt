@@ -26,7 +26,7 @@ class ClippingUrlOpener {
      * @param onClick callback
      */
     operator fun invoke(context: Context?, onClick: (Uri) -> Unit) {
-        if (context == null || NetworkChecker.isNotAvailable(context)) {
+        if (context == null || NetworkChecker().isNotAvailable(context)) {
             return
         }
 
