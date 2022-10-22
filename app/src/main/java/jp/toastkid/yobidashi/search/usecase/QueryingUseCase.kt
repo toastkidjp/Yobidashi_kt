@@ -12,6 +12,7 @@ import android.content.Context
 import android.util.LruCache
 import jp.toastkid.api.suggestion.SuggestionApi
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchRepository
 import jp.toastkid.yobidashi.search.history.SearchHistoryRepository
@@ -122,5 +123,29 @@ class QueryingUseCase(
     private fun cannotUseNetwork(context: Context) =
         NetworkChecker().isNotAvailable(context) ||
                 (PreferenceApplier(context).wifiOnly && NetworkChecker().isUnavailableWiFi(context))
+
+    companion object {
+        fun make(viewModel: SearchUiViewModel, context: Context): QueryingUseCase {
+            val database = DatabaseFinder().invoke(context)
+
+            return QueryingUseCase(
+                viewModel,
+                PreferenceApplier(context),
+                UrlItemQueryUseCase(
+                    {
+                        viewModel.urlItems.clear()
+                        viewModel.urlItems.addAll(it)
+                    },
+                    database.bookmarkRepository(),
+                    database.viewHistoryRepository(),
+                    { }
+                ),
+                database.favoriteSearchRepository(),
+                database.searchHistoryRepository(),
+                { context }
+            )
+        }
+
+    }
 
 }

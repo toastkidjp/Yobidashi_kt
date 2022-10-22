@@ -66,13 +66,11 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
 import jp.toastkid.yobidashi.search.trend.TrendApi
-import jp.toastkid.yobidashi.search.url_suggestion.UrlItemQueryUseCase
 import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import jp.toastkid.yobidashi.search.voice.VoiceSearchIntentFactory
@@ -107,24 +105,7 @@ fun SearchInputUi(
     val viewModel = viewModel(SearchUiViewModel::class.java)
 
     val queryingUseCase = remember {
-        val database = DatabaseFinder().invoke(context)
-
-        QueryingUseCase(
-            viewModel,
-            preferenceApplier,
-            UrlItemQueryUseCase(
-                {
-                    viewModel.urlItems.clear()
-                    viewModel.urlItems.addAll(it)
-                },
-                database.bookmarkRepository(),
-                database.viewHistoryRepository(),
-                { }
-            ),
-            database.favoriteSearchRepository(),
-            database.searchHistoryRepository(),
-            { context }
-        )
+        QueryingUseCase.make(viewModel, context)
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
