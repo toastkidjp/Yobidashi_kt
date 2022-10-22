@@ -27,14 +27,6 @@ enum class StartUp(@StringRes val titleId: Int, @IdRes val radioButtonId: Int) {
         fun findByName(name: String?): StartUp = if (name.isNullOrEmpty()) getDefault() else valueOf(name)
 
         /**
-         * Find value by ID.
-         *
-         * @param checkedRadioButtonId [Int]
-         */
-        fun findById(@IdRes checkedRadioButtonId: Int): StartUp =
-                values().find { it.radioButtonId == checkedRadioButtonId } ?: getDefault()
-
-        /**
          * Return default value.
          */
         private fun getDefault(): StartUp = SEARCH

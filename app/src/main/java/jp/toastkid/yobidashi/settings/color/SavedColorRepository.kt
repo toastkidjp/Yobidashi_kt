@@ -19,7 +19,7 @@ import androidx.room.Query
 interface SavedColorRepository {
 
     @Insert
-    fun add(item: SavedColor)
+    fun add(item: SavedColor): Long
 
     @Query("SELECT * FROM SavedColor")
     fun findAll(): List<SavedColor>

@@ -42,7 +42,7 @@ class DarkModeApplierTest {
 
         darkModeApplier.invoke(webView, true)
 
-        verify(exactly = 0) { webView.getSettings() }
+        verify(exactly = 0) { webView.settings }
     }
 
     @Test

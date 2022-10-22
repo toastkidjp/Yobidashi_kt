@@ -69,13 +69,18 @@ internal fun AppBar(
 
     val widthPx = with(LocalDensity.current) { 72.dp.toPx() }
     val horizontalAnchors = mapOf(0f to 0, widthPx to 1, -widthPx to 2)
+    val stateValue = remember { mutableStateOf(0) }
     val horizontalSwipeableState = SwipeableState(
-        initialValue = 0,
+        initialValue = stateValue.value,
         confirmStateChange = {
             if (it == 1) {
+                stateValue.value = 1
                 contentViewModel.previousTab()
+                stateValue.value = 0
             } else if (it == 2) {
+                stateValue.value = 2
                 contentViewModel.nextTab()
+                stateValue.value = 0
             }
             true
         }

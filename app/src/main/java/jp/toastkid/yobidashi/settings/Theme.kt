@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.settings
 
 import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import jp.toastkid.lib.preference.PreferenceApplier
 
 /**

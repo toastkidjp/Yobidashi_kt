@@ -76,7 +76,7 @@ internal fun ColorSettingUi() {
     val coroutineScope = rememberCoroutineScope()
 
     val contentViewModel = (context as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(it).get(ContentViewModel::class.java)
+        viewModel(ContentViewModel::class.java, it)
     }
 
     val savedColors = remember { mutableStateListOf<SavedColor>() }
@@ -117,7 +117,8 @@ internal fun ColorSettingUi() {
                             bgColor.toArgb(),
                             fontColor.toArgb()
                         )
-                    repository.add(savedColor)
+                    val newId = repository.add(savedColor)
+                    savedColor.id = newId
                     savedColors.add(savedColor)
                 }
             },
@@ -130,7 +131,6 @@ internal fun ColorSettingUi() {
                     Color(initialFontColor)
                 )
 
-                //activity?.let { Updater().update(it) }
                 contentViewModel?.snackShort(R.string.settings_color_done_reset)
                 contentViewModel?.refresh()
             }

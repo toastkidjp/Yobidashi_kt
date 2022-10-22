@@ -49,6 +49,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.FileNotFoundException
 import kotlin.math.roundToInt
 
 @Composable
@@ -57,16 +58,23 @@ fun PdfViewerUi(uri: Uri) {
 
     val listState = rememberLazyListState()
 
+    val viewModelProvider = ViewModelProvider(context)
+    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
+    contentViewModel.replaceAppBarContent { AppBarUi(listState) }
+
     val pdfRenderer =
-        context.contentResolver.openFileDescriptor(uri, "r")
+        try {
+            context.contentResolver.openFileDescriptor(uri, "r")
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            contentViewModel.snackShort("File not found. : $uri")
+            return
+        }
             ?.let { PdfRenderer(it) }
             ?: return
 
-    val viewModelProvider = ViewModelProvider(context)
-    viewModelProvider.get(ContentViewModel::class.java).replaceAppBarContent { AppBarUi(listState) }
-
     ScrollerUseCase(
-        viewModelProvider.get(ContentViewModel::class.java),
+        contentViewModel,
         listState
     ).invoke(LocalLifecycleOwner.current)
 
@@ -156,12 +164,3 @@ private fun AppBarUi(scrollState: LazyListState) {
         steps = (scrollState.layoutInfo.totalItemsCount ?: 1) - 1
     )
 }
-
-/*
-CoroutineScope(Dispatchers.Main).launch {
-        scrollState?.scrollToItem(0, 0)
-    }
-    CoroutineScope(Dispatchers.Main).launch {
-        scrollState?.scrollToItem(scrollState?.layoutInfo?.totalItemsCount ?: 0, 0)
-    }
- */

@@ -42,7 +42,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.color.IconColorFinder
@@ -323,19 +322,17 @@ internal fun BrowserSettingUi() {
             }
 
             item {
-                if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                    CheckableRow(
-                        useDarkMode,
-                        {
-                            val newState = !preferenceApplier.useDarkMode()
-                            preferenceApplier.setUseDarkMode(newState)
-                            useDarkMode.value = preferenceApplier.useDarkMode()
-                        },
-                        R.string.title_dark_mode,
-                        iconTint,
-                        R.drawable.ic_dark_mode_black
-                    )
-                }
+                CheckableRow(
+                    useDarkMode,
+                    {
+                        val newState = !preferenceApplier.useDarkMode()
+                        preferenceApplier.setUseDarkMode(newState)
+                        useDarkMode.value = preferenceApplier.useDarkMode()
+                    },
+                    R.string.title_dark_mode,
+                    iconTint,
+                    R.drawable.ic_dark_mode_black
+                )
             }
 
             item {

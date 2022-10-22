@@ -80,6 +80,7 @@ import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
 import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
@@ -162,6 +163,8 @@ fun ArticleListUi() {
         }
     )
 
+    val menuIconColor = IconColorFinder.from(context).invoke()
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
@@ -171,7 +174,7 @@ fun ArticleListUi() {
             rememberLazyListState(),
             contentViewModel,
             menuPopupUseCase,
-            preferenceApplier.color
+            menuIconColor
         )
 
         if (viewModel.progressVisibility.value) {

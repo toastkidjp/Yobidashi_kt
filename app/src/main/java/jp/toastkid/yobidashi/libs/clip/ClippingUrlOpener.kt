@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.libs.clip
 
 import android.content.Context
 import android.net.Uri
-import android.view.View
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -23,7 +22,7 @@ class ClippingUrlOpener {
     /**
      * Invoke action.
      *
-     * @param view [View](Nullable)
+     * @param context [Context](Nullable)
      * @param onClick callback
      */
     operator fun invoke(context: Context?, onClick: (Uri) -> Unit) {

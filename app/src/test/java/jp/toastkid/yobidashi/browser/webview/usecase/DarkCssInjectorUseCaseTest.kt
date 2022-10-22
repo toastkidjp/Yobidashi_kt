@@ -48,4 +48,11 @@ class DarkCssInjectorUseCaseTest {
         verify { webView.evaluateJavascript(any(), any()) }
     }
 
+    @Test
+    fun testNull() {
+        darkCssInjectorUseCase.invoke(null)
+
+        verify(inverse = true) { webView.evaluateJavascript(any(), any()) }
+    }
+
 }
