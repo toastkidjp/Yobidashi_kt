@@ -277,17 +277,17 @@ internal fun DisplaySettingUi() {
 private fun loadFileChunk(filesDir: FilesDir) =
     filesDir.listFiles().toList()
 
-    /**
-     * Make pick image intent.
-     * @return Intent
-     */
-    private fun makePickImage(): Intent {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        intent.type = "image/*"
-        return intent
-    }
+/**
+ * Make pick image intent.
+ * @return Intent
+ */
+private fun makePickImage(): Intent {
+    val intent = Intent(Intent.ACTION_GET_CONTENT)
+    intent.addCategory(Intent.CATEGORY_OPENABLE)
+    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+    intent.type = "image/*"
+    return intent
+}
 
 /**
  * Background image dir.
