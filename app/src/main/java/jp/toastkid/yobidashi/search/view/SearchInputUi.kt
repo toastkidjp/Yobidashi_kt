@@ -122,7 +122,8 @@ fun SearchInputUi(
                 { }
             ),
             database.favoriteSearchRepository(),
-            database.searchHistoryRepository()
+            database.searchHistoryRepository(),
+            { context }
         )
     }
 
