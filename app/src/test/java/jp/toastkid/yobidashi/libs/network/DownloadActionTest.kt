@@ -17,7 +17,6 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -57,8 +56,8 @@ class DownloadActionTest {
         mockkConstructor(PreferenceApplier::class)
         every { anyConstructed<PreferenceApplier>().wifiOnly }.returns(true)
 
-        mockkObject(NetworkChecker)
-        every { NetworkChecker.isUnavailableWiFi(any()) }.returns(false)
+        mockkConstructor(NetworkChecker::class)
+        every { anyConstructed<NetworkChecker>().isUnavailableWiFi(any()) }.returns(false)
 
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(uri)
@@ -80,7 +79,7 @@ class DownloadActionTest {
 
     @Test
     fun testNoopOnUnavailableWiFiCase() {
-        every { NetworkChecker.isUnavailableWiFi(any()) }.returns(true)
+        every { anyConstructed<NetworkChecker>().isUnavailableWiFi(any()) }.returns(true)
 
         downloadAction.invoke("https://www.search.yahoo.co.jp")
     }
