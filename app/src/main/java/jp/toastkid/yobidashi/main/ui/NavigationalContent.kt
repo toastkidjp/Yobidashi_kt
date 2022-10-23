@@ -72,7 +72,7 @@ internal fun NavigationalContent(
         tabComposable("tab/web/current") {
             val currentTab = tabs.currentTab() as? WebTab ?: return@tabComposable
             keyboardController?.hide()
-            WebTabUi(currentTab.latest.url().toUri(), currentTab.id())
+            WebTabUi(currentTab)
         }
         tabComposable("tab/pdf/current") {
             val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
