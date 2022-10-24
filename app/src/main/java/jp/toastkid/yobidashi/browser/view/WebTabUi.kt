@@ -490,7 +490,7 @@ private fun AppBarContent(
                 )
                 Text(
                     text = "${tabCountState.value}",
-                    color = Color(preferenceApplier.fontColor),
+                    color = MaterialTheme.colors.onPrimary,
                     fontSize = 10.sp,
                     modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
                 )
