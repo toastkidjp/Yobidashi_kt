@@ -447,7 +447,7 @@ enum class SearchCategory(
             "https://www.livejournal.com/gsearch/?engine=google&cx=partner-pub-5600223439108080:3711723852&q="
     ),
     POLITICO(
-        R.string.livejournal,
+        R.string.politico,
         R.drawable.ic_politico,
         "https://www.politico.com/search?q="
     ),
