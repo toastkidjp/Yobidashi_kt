@@ -389,7 +389,7 @@ internal fun WebTabUi(webTab: WebTab) {
             }),
             OptionMenu(titleId = R.string.menu_random_wikipedia, action = {
                 if (PreferenceApplier(activityContext).wifiOnly &&
-                    NetworkChecker.isUnavailableWiFi(activityContext)
+                    NetworkChecker().isUnavailableWiFi(activityContext)
                 ) {
                     contentViewModel.snackShort(R.string.message_wifi_not_connecting)
                     return@OptionMenu
