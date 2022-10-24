@@ -30,9 +30,8 @@ class ClippingUrlOpener {
             return
         }
 
-        val activityContext = context
-        val clipboardContent = Clipboard.getPrimary(activityContext)?.toString() ?: return
-        val preferenceApplier = PreferenceApplier(activityContext)
+        val clipboardContent = Clipboard.getPrimary(context)?.toString() ?: return
+        val preferenceApplier = PreferenceApplier(context)
         val lastClipped = preferenceApplier.lastClippedWord()
 
         if (shouldNotFeedback(clipboardContent, lastClipped)) {
