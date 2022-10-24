@@ -48,7 +48,7 @@ class QueryingUseCase(
             CoroutineScope(Dispatchers.IO).launch {
                 searchUiViewModel.searchHistories.clear()
                 searchUiViewModel.searchHistories.addAll(
-                    if (keyword.isNullOrBlank()) {
+                    if (keyword.isBlank()) {
                         searchHistoryRepository.find(5)
                     } else {
                         searchHistoryRepository.select(keyword)
