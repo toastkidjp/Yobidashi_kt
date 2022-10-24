@@ -92,7 +92,7 @@ fun SearchInputUi(
     val preferenceApplier = PreferenceApplier(context)
 
     val activityViewModelProvider = ViewModelProvider(context)
-    val contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     val categoryName = remember {
         mutableStateOf(
