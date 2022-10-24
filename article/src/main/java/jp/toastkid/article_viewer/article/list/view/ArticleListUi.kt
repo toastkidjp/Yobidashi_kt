@@ -234,7 +234,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 trailingIcon = {
                     Icon(
                         Icons.Filled.Clear,
-                        tint = Color(preferenceApplier.fontColor),
+                        tint = MaterialTheme.colors.onPrimary,
                         contentDescription = "clear text",
                         modifier = Modifier
                             .offset(x = 8.dp)
