@@ -41,7 +41,7 @@ class ClippingUrlOpenerTest {
         clippingUrlOpener = ClippingUrlOpener()
         
         MockKAnnotations.init(this)
-        every { view.getContext() }.returns(context)
+        every { view.context }.returns(context)
         every { context.getString(any(), any()) }.returns("Test message")
         every { context.getSharedPreferences(any(), any()) }.returns(mockk())
 
