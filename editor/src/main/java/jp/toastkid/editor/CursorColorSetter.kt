@@ -26,9 +26,23 @@ class CursorColorSetter {
 
     operator fun invoke(editText: EditText, @ColorInt newColor: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val drawable = editText.textCursorDrawable ?: return
-            DrawableCompat.setTint(drawable, newColor)
-            editText.textCursorDrawable = drawable
+            editText.textCursorDrawable?.let { drawable ->
+                DrawableCompat.setTint(drawable, newColor)
+                editText.textCursorDrawable = drawable
+            }
+
+            val leftDrawable = editText.textSelectHandleLeft ?: return
+            DrawableCompat.setTint(leftDrawable, newColor)
+            editText.setTextSelectHandleLeft(leftDrawable)
+
+            val rightDrawable = editText.textSelectHandleRight ?: return
+            DrawableCompat.setTint(rightDrawable, newColor)
+            editText.setTextSelectHandleRight(rightDrawable)
+
+            val handleDrawable = editText.textSelectHandle ?: return
+            DrawableCompat.setTint(handleDrawable, newColor)
+            editText.setTextSelectHandle(handleDrawable)
+
             return
         }
 
