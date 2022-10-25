@@ -10,6 +10,7 @@ package jp.toastkid.editor
 import android.content.res.Resources
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.widget.EditText
@@ -29,6 +30,10 @@ class CursorColorSetter {
             editText.textCursorDrawable?.let { drawable ->
                 DrawableCompat.setTint(drawable, newColor)
                 editText.textCursorDrawable = drawable
+            }
+
+            if (editText.textCursorDrawable == null) {
+                editText.textCursorDrawable = ColorDrawable(newColor)
             }
 
             val leftDrawable = editText.textSelectHandleLeft ?: return
