@@ -63,9 +63,10 @@ class CursorColorSetter {
             editText.setTextSelectHandleRight(it)
         }
 
-        val handleDrawable = editText.textSelectHandle ?: return
-        DrawableCompat.setTint(handleDrawable, newColor)
-        editText.setTextSelectHandle(handleDrawable)
+        editText.textSelectHandle?.let {
+            DrawableCompat.setTint(it, newColor)
+            editText.setTextSelectHandle(it)
+        }
     }
 
     private fun makeDrawables(editText: EditText, @ColorInt newColor: Int): Array<Drawable>? {
