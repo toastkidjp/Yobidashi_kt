@@ -16,6 +16,7 @@ import android.os.Build
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import timber.log.Timber
@@ -27,27 +28,7 @@ class CursorColorSetter {
 
     operator fun invoke(editText: EditText, @ColorInt newColor: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            editText.textCursorDrawable?.let { drawable ->
-                DrawableCompat.setTint(drawable, newColor)
-                editText.textCursorDrawable = drawable
-            }
-
-            if (editText.textCursorDrawable == null) {
-                editText.textCursorDrawable = ColorDrawable(newColor)
-            }
-
-            val leftDrawable = editText.textSelectHandleLeft ?: return
-            DrawableCompat.setTint(leftDrawable, newColor)
-            editText.setTextSelectHandleLeft(leftDrawable)
-
-            val rightDrawable = editText.textSelectHandleRight ?: return
-            DrawableCompat.setTint(rightDrawable, newColor)
-            editText.setTextSelectHandleRight(rightDrawable)
-
-            val handleDrawable = editText.textSelectHandle ?: return
-            DrawableCompat.setTint(handleDrawable, newColor)
-            editText.setTextSelectHandle(handleDrawable)
-
+            setColor(editText, newColor)
             return
         }
 
@@ -59,6 +40,30 @@ class CursorColorSetter {
         } catch (e: Exception) {
             Timber.e(e)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun setColor(editText: EditText, newColor: Int) {
+        editText.textCursorDrawable?.let { drawable ->
+            DrawableCompat.setTint(drawable, newColor)
+            editText.textCursorDrawable = drawable
+        }
+
+        if (editText.textCursorDrawable == null) {
+            editText.textCursorDrawable = ColorDrawable(newColor)
+        }
+
+        val leftDrawable = editText.textSelectHandleLeft ?: return
+        DrawableCompat.setTint(leftDrawable, newColor)
+        editText.setTextSelectHandleLeft(leftDrawable)
+
+        val rightDrawable = editText.textSelectHandleRight ?: return
+        DrawableCompat.setTint(rightDrawable, newColor)
+        editText.setTextSelectHandleRight(rightDrawable)
+
+        val handleDrawable = editText.textSelectHandle ?: return
+        DrawableCompat.setTint(handleDrawable, newColor)
+        editText.setTextSelectHandle(handleDrawable)
     }
 
     private fun makeDrawables(editText: EditText, @ColorInt newColor: Int): Array<Drawable>? {
