@@ -134,7 +134,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     val backgroundColor = if (currentIndex == position)
                         Color(
                             ColorUtils.setAlphaComponent(
-                                MaterialTheme.colors.primary.toArgb(),
+                                MaterialTheme.colors.secondary.toArgb(),
                                 128
                             )
                         )
