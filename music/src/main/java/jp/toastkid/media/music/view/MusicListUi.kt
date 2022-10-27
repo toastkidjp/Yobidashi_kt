@@ -194,8 +194,6 @@ internal fun MusicList(
 
     val coroutineScope = rememberCoroutineScope()
 
-    //TODO: AsyncImage -> Icon
-
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,

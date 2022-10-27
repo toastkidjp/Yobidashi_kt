@@ -15,9 +15,11 @@ import kotlin.math.roundToInt
 class AlphaConverter {
 
     @ColorInt
-    fun readBackground(context: Context) =
-            ColorUtils.setAlphaComponent(
-                    Color.WHITE,
-                    (255f * PreferenceApplier(context).getWebViewBackgroundAlpha()).roundToInt()
-            )
+    fun readBackground(context: Context): Int {
+        val preferenceApplier = PreferenceApplier(context)
+        return ColorUtils.setAlphaComponent(
+            if (preferenceApplier.useDarkMode()) Color.BLACK else Color.WHITE,
+            (255f * preferenceApplier.getWebViewBackgroundAlpha()).roundToInt()
+        )
+    }
 }

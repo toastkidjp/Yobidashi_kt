@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.ExperimentalMaterialApi
@@ -161,10 +162,10 @@ internal fun Content() {
 
     initializeContentViewModel(activity, tabs, navigationHostController, snackbarHostState)
 
-    contentViewModel.replaceToCurrentTab.observe(activity, {
+    contentViewModel.replaceToCurrentTab.observe(activity) {
         it.getContentIfNotHandled() ?: return@observe
         replaceToCurrentTab(tabs, navigationHostController)
-    })
+    }
     contentViewModel.refresh.observe(activity, {
         val colorPair = preferenceApplier.colorPair()
 
@@ -237,7 +238,7 @@ internal fun Content() {
                     return Offset.Zero
                 }
                 val delta = available.y
-                val newOffset = (contentViewModel.bottomBarOffsetHeightPx?.value ?: 0f) + delta
+                val newOffset = (contentViewModel.bottomBarOffsetHeightPx.value ?: 0f) + delta
                 contentViewModel?.bottomBarOffsetHeightPx?.value = newOffset.coerceIn(-bottomBarHeightPx, 0f)
 
                 val newValue = fabOffsetHeightPx.value + (delta / 2)
@@ -339,7 +340,7 @@ internal fun Content() {
     LaunchedEffect(browserViewModel) {
         browserViewModel
             .onPageFinished
-            .observe(activity, {
+            .observe(activity) {
                 if (it.expired()) {
                     return@observe
                 }
@@ -350,7 +351,7 @@ internal fun Content() {
                         GlobalWebViewPool.get(tabs.currentTabId()) ?: return@observe
                     tabs.saveNewThumbnail(currentWebView)
                 }
-            })
+            }
         browserViewModel
             .search
             .observe(activity, { event ->
@@ -469,7 +470,9 @@ internal fun Content() {
                                                 .clickable {
                                                     it.performAction()
                                                 }
-                                                .wrapContentWidth())
+                                                .wrapContentWidth()
+                                                .padding(start = 4.dp)
+                                        )
                                     }
                                 }
                             }

@@ -23,6 +23,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -56,7 +56,6 @@ import kotlinx.coroutines.launch
 internal fun FloatingPreviewUi(uri: Uri) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
-    val tint = Color(preferenceApplier.fontColor)
 
     val viewModel = viewModel(FloatingPreviewViewModel::class.java)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
@@ -64,9 +63,12 @@ internal fun FloatingPreviewUi(uri: Uri) {
 
     val coroutineScope = rememberCoroutineScope()
 
-    val webView = remember { WebViewFactory().make(context) }
-    WebViewInitializer(preferenceApplier, viewModel)(webView)
-    DarkModeApplier().invoke(webView, preferenceApplier.useDarkMode())
+    val webView = remember {
+        val view = WebViewFactory().make(context)
+        WebViewInitializer(preferenceApplier, viewModel)(view)
+        DarkModeApplier().invoke(view, preferenceApplier.useDarkMode())
+        view
+    }
 
     Column(modifier = Modifier.height(400.dp)) {
         val progressState = viewModel.progress.observeAsState()
@@ -74,7 +76,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .background(Color(preferenceApplier.color))
+                .background(MaterialTheme.colors.primary)
                 .padding(8.dp)
                 .clickable {
                     val currentUri = viewModel.url.value?.toUri() ?: return@clickable
@@ -99,7 +101,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
             Icon(
                 painterResource(id = R.drawable.ic_close),
                 stringResource(id = R.string.close),
-                tint = tint,
+                tint = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.clickable {
                     close(webView, coroutineScope, contentViewModel)
                 }
@@ -110,7 +112,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
         if (progress < 75) {
             LinearProgressIndicator(
                 progress = progress / 100f,
-                color = tint,
+                color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.height(1.dp)
             )
         }

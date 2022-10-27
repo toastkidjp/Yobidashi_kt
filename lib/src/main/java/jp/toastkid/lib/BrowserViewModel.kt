@@ -196,4 +196,14 @@ class BrowserViewModel : ViewModel() {
         swipeRefreshState.value?.isSwipeInProgress == true
                 || swipeRefreshState.value?.isRefreshing == true
 
+    fun calculateSwipeRefreshIndicatorAlpha(refreshTriggerPx: Float) =
+        ((swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx).coerceIn(0f, 1f)
+
+    fun calculateSwipingProgress(refreshTriggerPx: Float) =
+        if (swipeRefreshState.value?.isRefreshing == false)
+                ((swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx)
+                    .coerceIn(0f, 1f)
+        else
+            progress.value.toFloat() / 100f
+
 }

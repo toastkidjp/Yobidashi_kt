@@ -49,7 +49,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
@@ -71,7 +70,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.editor.CursorColorSetter
 import jp.toastkid.editor.EditTextFinder
@@ -93,7 +91,6 @@ import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EditorTabUi(path: String?) {
     val context = LocalContext.current as? ComponentActivity ?: return
@@ -259,7 +256,7 @@ private fun AppBarContent(
     val openLoadFromStorageDialog = remember { mutableStateOf(false) }
     val openInputFileNameDialog = remember { mutableStateOf(false) }
 
-    val tabListViewModel = ViewModelProvider(context).get(TabListViewModel::class.java)
+    val tabListViewModel = viewModel(TabListViewModel::class.java, context)
 
     val loadAs: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {

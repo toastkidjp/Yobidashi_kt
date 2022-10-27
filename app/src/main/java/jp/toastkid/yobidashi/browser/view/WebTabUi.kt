@@ -67,7 +67,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
@@ -209,12 +208,12 @@ internal fun WebTabUi(webTab: WebTab) {
                         )
                     }
                     .alpha(
-                        ((browserViewModel.swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx).coerceIn(0f, 1f)
+                        browserViewModel.calculateSwipeRefreshIndicatorAlpha(refreshTriggerPx)
                     )
                     .align(Alignment.TopCenter)
             ) {
                 CircularProgressIndicator(
-                    progress = browserViewModel.progress.value.toFloat() / 100f,
+                    progress = browserViewModel.calculateSwipingProgress(refreshTriggerPx),
                     color = MaterialTheme.colors.onPrimary,
                     modifier = Modifier.padding(4.dp)
                 )
@@ -491,6 +490,19 @@ private fun AppBarContent(
                     modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
                 )
             }
+
+            HeaderSubButton(
+                R.drawable.ic_bookmark,
+                R.string.title_bookmark,
+                tint
+            ) { contentViewModel.nextRoute("web/bookmark/list") }
+
+            HeaderSubButton(
+                R.drawable.ic_history,
+                R.string.title_view_history,
+                tint
+            ) { contentViewModel.nextRoute("web/history/list") }
+
             Box {
                 val open = remember { mutableStateOf(false) }
                 HeaderSubButton(
@@ -559,11 +571,8 @@ private fun AppBarContent(
                     .height(32.dp)
                     .fillMaxWidth()
                     .clickable {
-                        ViewModelProvider(activity)
-                            .get(ContentViewModel::class.java)
-                            .webSearch()
+                        contentViewModel.webSearch()
                     }
-                //url_box_background
             ) {
                 Icon(
                     painterResource(id = R.drawable.ic_reader_mode),

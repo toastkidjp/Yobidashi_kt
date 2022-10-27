@@ -36,7 +36,7 @@ class SwipeRefreshNestedScrollConnection(
         // If we're refreshing, return zero
         state?.isRefreshing == true -> Offset.Zero
         // If the user is swiping up, handle it
-        source == NestedScrollSource.Drag && available.y < 0 -> onScroll(available)
+        source == NestedScrollSource.Drag -> onScroll(available)
         else -> Offset.Zero
     }
 
@@ -59,7 +59,7 @@ class SwipeRefreshNestedScrollConnection(
             // If we're refreshing, return zero
             state?.isRefreshing == true -> Offset.Zero
             // If the user is swiping down and there's y remaining, handle it
-            source == NestedScrollSource.Drag && available.y > 0 -> onScroll(available)
+            source == NestedScrollSource.Drag -> onScroll(available)
             else -> Offset.Zero
         }
     }
@@ -88,7 +88,7 @@ class SwipeRefreshNestedScrollConnection(
     override suspend fun onPreFling(available: Velocity): Velocity {
         // If we're dragging, not currently refreshing and scrolled
         // past the trigger point, refresh!
-        if (state?.isRefreshing != null && (state?.indicatorOffset ?: 0f) >= refreshTrigger) {
+        if (state?.isRefreshing != null && (state.indicatorOffset ?: 0f) >= refreshTrigger) {
             onRefresh()
         }
 

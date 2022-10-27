@@ -13,6 +13,7 @@ import android.graphics.Color
 import androidx.core.graphics.ColorUtils
 import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -26,6 +27,7 @@ import org.junit.Test
 
 class AlphaConverterTest {
 
+    @InjectMockKs
     private lateinit var alphaConverter: AlphaConverter
 
     @MockK
@@ -35,12 +37,11 @@ class AlphaConverterTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        alphaConverter = AlphaConverter()
-
         mockkStatic(ColorUtils::class)
         every { ColorUtils.setAlphaComponent(any(), any()) }.answers { Color.WHITE }
 
         mockkConstructor(PreferenceApplier::class)
+        every { anyConstructed<PreferenceApplier>().useDarkMode() }.returns(false)
         every { anyConstructed<PreferenceApplier>().getWebViewBackgroundAlpha() }.returns(0.3f)
 
         every { context.getSharedPreferences(any(), any()) }.returns(mockk())
@@ -56,7 +57,18 @@ class AlphaConverterTest {
         alphaConverter.readBackground(context)
 
         verify(atLeast = 1) { context.getSharedPreferences(any(), any()) }
-        verify(atLeast = 1) { ColorUtils.setAlphaComponent(any(), any()) }
+        verify(atLeast = 1) { ColorUtils.setAlphaComponent(Color.WHITE, any()) }
+        verify(atLeast = 1) { anyConstructed<PreferenceApplier>().getWebViewBackgroundAlpha() }
+    }
+
+    @Test
+    fun testDarkMode() {
+        every { anyConstructed<PreferenceApplier>().useDarkMode() }.returns(true)
+
+        alphaConverter.readBackground(context)
+
+        verify(atLeast = 1) { context.getSharedPreferences(any(), any()) }
+        verify(atLeast = 1) { ColorUtils.setAlphaComponent(Color.BLACK, any()) }
         verify(atLeast = 1) { anyConstructed<PreferenceApplier>().getWebViewBackgroundAlpha() }
     }
 

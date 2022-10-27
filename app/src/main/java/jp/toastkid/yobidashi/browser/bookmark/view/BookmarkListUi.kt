@@ -39,7 +39,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -278,7 +277,7 @@ fun BookmarkListUi() {
     })
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BookmarkList(
     listState: LazyListState,
@@ -289,6 +288,7 @@ private fun BookmarkList(
     val viewModel = viewModel(BookmarkListViewModel::class.java)
     LazyColumn(
         contentPadding = PaddingValues(bottom = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
         state = listState,
         modifier = Modifier.padding(start = 8.dp, end = 8.dp)
     ) {
@@ -370,7 +370,7 @@ private fun BookmarkList(
                         }
                     }
                 },
-                modifier = Modifier
+                modifier = Modifier.animateItemPlacement()
             )
 
             if (openEditor.value) {

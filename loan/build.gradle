@@ -19,7 +19,6 @@ android {
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk
-        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -28,7 +27,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
