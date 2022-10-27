@@ -240,7 +240,7 @@ private fun NewTabSettingItem(
     nameId: Int,
     thumbnailId: Int, onClick: () -> Unit
 ) {
-    val selectedColor = Color(color)
+    val selectedColor = MaterialTheme.colors.secondary
     Surface(elevation = 4.dp, modifier = Modifier.clickable(onClick = onClick)) {
         Column(
             modifier = Modifier
