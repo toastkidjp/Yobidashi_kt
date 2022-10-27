@@ -266,7 +266,10 @@ internal fun SearchSettingUi() {
             }
 
             item {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                ) {
                     Icon(
                         painterResource(id = R.drawable.ic_search),
                         contentDescription = stringResource(id = R.string.subhead_search_category_setting),
@@ -285,7 +288,10 @@ internal fun SearchSettingUi() {
             }
 
             items(selections, { it.searchCategory.id }) { selection ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                ) {
                     AsyncImage(
                         model = selection.searchCategory.iconId,
                         contentDescription = stringResource(id = selection.searchCategory.id),
