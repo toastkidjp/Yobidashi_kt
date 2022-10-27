@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
@@ -69,7 +70,7 @@ fun SettingTopUi() {
                 ) {
                     Text(
                         text = stringResource(id = page),
-                        color = Color(preferenceApplier.fontColor),
+                        color = MaterialTheme.colors.onPrimary,
                         fontSize = 16.sp
                     )
                 }
