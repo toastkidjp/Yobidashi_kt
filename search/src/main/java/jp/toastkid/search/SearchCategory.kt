@@ -495,13 +495,12 @@ enum class SearchCategory(
     companion object {
 
         private val hostAndCategories =
-                values()
-                        .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }
-                        .map {
-                            val key = if (it == YAHOO_JAPAN_REALTIME_SEARCH) "search.yahoo.co.jp/realtime" else it.host.toUri().host
-                            key to it
-                        }
-                        .toMap()
+            values()
+                .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }.associateBy {
+                    val key =
+                        if (it == YAHOO_JAPAN_REALTIME_SEARCH) "search.yahoo.co.jp/realtime" else it.host.toUri().host
+                    key
+                }
 
         fun findByUrlOrNull(url: String?): SearchCategory? {
             val key = makeKey(url)
