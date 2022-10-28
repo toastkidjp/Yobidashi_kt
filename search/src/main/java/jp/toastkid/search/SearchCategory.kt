@@ -161,7 +161,7 @@ enum class SearchCategory(
     NAVER(
             R.string.naver,
             R.drawable.ic_naver,
-            "https://search.naver.com/search.naver?ie=utf8&query="
+            "https://m.search.naver.com/search.naver?ie=utf8&query="
     ),
     DAUM(
             R.string.daum,
