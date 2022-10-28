@@ -220,7 +220,7 @@ internal fun DisplaySettingUi() {
                                     contentDescription = imageFile.name,
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
-                                        .height(150.dp)
+                                        .height(152.dp)
                                         .padding(4.dp)
                                 )
                                 Text(
