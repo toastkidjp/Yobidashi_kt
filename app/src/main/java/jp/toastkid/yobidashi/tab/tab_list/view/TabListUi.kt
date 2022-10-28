@@ -163,7 +163,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                 }
             }
 
-            val tint = Color(preferenceApplier.fontColor)
+            val tint = MaterialTheme.colors.onPrimary
             val backgroundColor = Color(preferenceApplier.color)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
