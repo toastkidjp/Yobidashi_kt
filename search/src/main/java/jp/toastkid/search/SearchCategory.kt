@@ -361,6 +361,11 @@ enum class SearchCategory(
         R.drawable.ic_gizmodo,
         "https://gizmodo.com/search?q="
     ),
+    LIFEHACKER(
+        R.string.search_category_lifehacker,
+        R.drawable.ic_lifehacker,
+        "https://lifehacker.com/search?q="
+    ),
     GITHUB(
             R.string.search_category_github,
             R.drawable.ic_github,
