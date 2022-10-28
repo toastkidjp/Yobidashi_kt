@@ -31,8 +31,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -49,7 +49,7 @@ internal fun SearchSettingUi() {
     val preferenceApplier = PreferenceApplier(activityContext)
 
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+        viewModel(ContentViewModel::class.java, activityContext)
     }
 
     val spinnerOpen = remember { mutableStateOf(false) }
