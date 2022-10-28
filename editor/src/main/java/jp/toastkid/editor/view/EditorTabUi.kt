@@ -198,10 +198,10 @@ fun EditorTabUi(path: String?) {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findDown(word)
     })
-    pageSearcherViewModel.find.observe(context, {
+    pageSearcherViewModel.find.observe(context) {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findDown(word)
-    })
+    }
 
     val dialogState = remember { mutableStateOf(false) }
 
