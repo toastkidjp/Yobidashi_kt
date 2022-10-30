@@ -14,6 +14,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -382,6 +383,10 @@ internal fun BrowserSettingUi() {
                         contentViewModel?.snackShort(R.string.done_clear)
                     }
                 }
+            }
+            
+            item {
+                Spacer(modifier = Modifier.width(1.dp).height(32.dp))
             }
         }
     }
