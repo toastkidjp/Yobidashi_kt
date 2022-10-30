@@ -73,8 +73,7 @@ fun MainMenu(
                                 menu,
                                 contentViewModel,
                                 showAudioPlayer,
-                                navigate,
-                                contentViewModel.openFindInPageState
+                                navigate
                             )
 
                             hideMenu()
@@ -117,8 +116,7 @@ private fun onClickMainMenuItem(
     menu: Menu,
     contentViewModel: ContentViewModel,
     showAudioPlayer: () -> Unit,
-    navigate: (String) -> Unit,
-    openFindInPageState: MutableState<Boolean>
+    navigate: (String) -> Unit
 ) {
     when (menu) {
         Menu.TOP -> {
