@@ -430,7 +430,7 @@ internal fun Content() {
                 bottomBar = {
                     AppBar(
                         openFindInPageState
-                    ) { navigate(navigationHostController, "setting/top") }
+                    )
                 },
                 snackbarHost = {
                     SnackbarHost(
