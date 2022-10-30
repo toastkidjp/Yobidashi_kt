@@ -74,7 +74,7 @@ fun MainMenu(
                                 contentViewModel,
                                 showAudioPlayer,
                                 navigate,
-                                openFindInPageState
+                                contentViewModel.openFindInPageState
                             )
 
                             hideMenu()
@@ -193,7 +193,7 @@ private fun onClickMainMenuItem(
             )
         }
         Menu.FIND_IN_PAGE -> {
-            openFindInPageState.value = true
+            contentViewModel.openFindInPageState.value = true
         }
     }
 }
