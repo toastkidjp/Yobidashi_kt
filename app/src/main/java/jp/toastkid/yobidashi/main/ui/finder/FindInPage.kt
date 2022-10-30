@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.yobidashi.R
 
@@ -49,10 +50,11 @@ internal fun FindInPage(
 ) {
     val activity = LocalContext.current as? ViewModelStoreOwner ?: return
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
+    val contentViewModel = viewModel(ContentViewModel::class.java, activity)
     val closeAction = {
         pageSearcherViewModel.clearInput()
         pageSearcherViewModel.hide()
-        openFindInPageState.value = false
+        contentViewModel.openFindInPageState.value = false
     }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -139,12 +141,12 @@ internal fun FindInPage(
                 .padding(8.dp)
         )
 
-        BackHandler(openFindInPageState.value) {
+        BackHandler(contentViewModel.openFindInPageState.value) {
             closeAction()
         }
 
         LaunchedEffect(key1 = "find_in_page_first_launch", block = {
-            if (openFindInPageState.value) {
+            if (contentViewModel.openFindInPageState.value) {
                 focusRequester.requestFocus()
             }
         })
