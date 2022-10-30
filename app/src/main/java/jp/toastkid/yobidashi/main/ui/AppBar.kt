@@ -138,10 +138,8 @@ internal fun AppBar(
         OverflowMenu(
             MaterialTheme.colors.onPrimary,
             contentViewModel.optionMenus,
-            { contentViewModel.switchTabList() },
-            openSetting,
-            { activity.finish() }
-        )
+            { contentViewModel.switchTabList() }
+        ) { activity.finish() }
     }
 
 }
@@ -151,7 +149,6 @@ private fun OverflowMenu(
     tint: Color,
     menus: List<OptionMenu>,
     switchTabList: () -> Unit,
-    openSetting: () -> Unit,
     finishApp: () -> Unit
 ) {
     val openOptionMenu = remember { mutableStateOf(false) }
