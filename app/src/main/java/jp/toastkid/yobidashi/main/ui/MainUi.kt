@@ -216,8 +216,6 @@ internal fun Content() {
     val scaffoldState = rememberScaffoldState()
     val rememberSnackbarHostState = remember { snackbarHostState }
 
-    val openFindInPageState = remember { mutableStateOf(false) }
-
     val backgroundColor = MaterialTheme.colors.primary
     val tint = MaterialTheme.colors.onPrimary
 
@@ -429,7 +427,7 @@ internal fun Content() {
                 backgroundColor = Color.Transparent,
                 bottomBar = {
                     AppBar(
-                        openFindInPageState
+                        contentViewModel.openFindInPageState
                     )
                 },
                 snackbarHost = {
@@ -540,7 +538,7 @@ internal fun Content() {
 
                 if (openMenu.value) {
                     MainMenu(
-                        openFindInPageState,
+                        contentViewModel.openFindInPageState,
                         { navigate(navigationHostController, it) },
                         {
                             val permissions =
