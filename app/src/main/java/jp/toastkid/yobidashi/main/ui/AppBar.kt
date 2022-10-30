@@ -50,8 +50,7 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun AppBar(
-    openFindInPageState: MutableState<Boolean>,
-    openSetting: () -> Unit = {}
+    openFindInPageState: MutableState<Boolean>
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
