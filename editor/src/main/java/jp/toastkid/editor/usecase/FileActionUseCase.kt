@@ -94,7 +94,7 @@ class FileActionUseCase(
      *
      * @param file [File]
      */
-    fun readFromFile(file: File) {
+    private fun readFromFile(file: File) {
         if (!file.exists() || !file.canRead()) {
             snackText(R.string.message_cannot_read_file)
             path.value = ""
