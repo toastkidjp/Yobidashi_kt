@@ -51,7 +51,7 @@ import kotlin.math.roundToInt
 @Composable
 internal fun AppBar(
     openFindInPageState: MutableState<Boolean>,
-    openSetting: () -> Unit
+    openSetting: () -> Unit = {}
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
@@ -182,7 +182,7 @@ private fun OverflowMenu(
                 action = switchTabList),
             OptionMenu(
                 titleId = R.string.title_settings,
-                action = openSetting),
+                action = { contentViewModel?.nextRoute("setting/top") }),
             OptionMenu(titleId = R.string.exit, action = finishApp)
         )
         val optionMenuItems =
