@@ -417,7 +417,7 @@ internal fun Content() {
                     SnackbarHost(
                         hostState = rememberSnackbarHostState,
                         snackbar = {
-                            MainSnackbar(it, { rememberSnackbarHostState.currentSnackbarData?.dismiss() })
+                            MainSnackbar(it) { rememberSnackbarHostState.currentSnackbarData?.dismiss() }
                         })
                 },
                 floatingActionButton = {
