@@ -50,7 +50,16 @@ fun ViewHistoryListUi() {
     val viewHistoryItems = remember { mutableStateListOf<ViewHistory>() }
     val listState = rememberLazyListState()
 
+    val clearConfirmDialogState = remember { mutableStateOf(false) }
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
+
     LaunchedEffect(key1 = "first_launch", block = {
+        contentViewModel.optionMenus(
+            OptionMenu(titleId = R.string.title_clear_view_history, action = {
+                clearConfirmDialogState.value = true
+            })
+        )
+
         CoroutineScope(Dispatchers.Main).launch {
             val loaded = withContext(Dispatchers.IO) {
                 viewHistoryRepository.reversed()
@@ -78,14 +87,6 @@ fun ViewHistoryListUi() {
         viewHistoryRepository.delete(it)
         viewHistoryItems.remove(it)
     })
-
-    val clearConfirmDialogState = remember { mutableStateOf(false) }
-    val contentViewModel = viewModel(ContentViewModel::class.java, context)
-    contentViewModel.optionMenus(
-        OptionMenu(titleId = R.string.title_clear_view_history, action = {
-            clearConfirmDialogState.value = true
-        })
-    )
 
     ListActionAttachment.make(context)
         .invoke(

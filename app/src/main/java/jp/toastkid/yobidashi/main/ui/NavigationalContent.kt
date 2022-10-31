@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -167,9 +166,6 @@ private fun NavGraphBuilder.tabComposable(route: String, content: @Composable (B
         route,
         enterTransition = {
             slideInVertically(initialOffsetY = { it })
-        },
-        exitTransition = {
-            slideOutVertically(targetOffsetY = { it })
         }
     ) {
         content(it.arguments)

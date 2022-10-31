@@ -260,41 +260,43 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val openDateDialog = remember { mutableStateOf(false) }
 
     val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
-    contentViewModel.optionMenus(
-        OptionMenu(
-            titleId = R.string.action_all_article,
-            action = {
-                viewModel.search("")
-            }
-        ),
-        OptionMenu(
-            titleId = R.string.action_set_target,
-            action = {
-                setTargetLauncher.launch(ZipFileChooserIntentFactory()())
-            }
-        ),
-        OptionMenu(
-            titleId = R.string.action_sort,
-            action = {
-                openSortDialog.value = true
-            }
-        ),
-        OptionMenu(
-            titleId = R.string.action_date_filter,
-            action = {
-                openDateDialog.value = true
-            }
-        ),
-        OptionMenu(
-            titleId = R.string.action_switch_title_filter,
-            action = {
-                val newState = !useTitleFilter.value
-                preferenceApplier.switchUseTitleFilter(newState)
-                useTitleFilter.value = newState
-            },
-            checkState = useTitleFilter
+    LaunchedEffect(key1 = "add_option_menu", block = {
+        contentViewModel.optionMenus(
+            OptionMenu(
+                titleId = R.string.action_all_article,
+                action = {
+                    viewModel.search("")
+                }
+            ),
+            OptionMenu(
+                titleId = R.string.action_set_target,
+                action = {
+                    setTargetLauncher.launch(ZipFileChooserIntentFactory()())
+                }
+            ),
+            OptionMenu(
+                titleId = R.string.action_sort,
+                action = {
+                    openSortDialog.value = true
+                }
+            ),
+            OptionMenu(
+                titleId = R.string.action_date_filter,
+                action = {
+                    openDateDialog.value = true
+                }
+            ),
+            OptionMenu(
+                titleId = R.string.action_switch_title_filter,
+                action = {
+                    val newState = !useTitleFilter.value
+                    preferenceApplier.switchUseTitleFilter(newState)
+                    useTitleFilter.value = newState
+                },
+                checkState = useTitleFilter
+            )
         )
-    )
+    })
 
     if (openSortDialog.value) {
         SortSettingDialogUi(preferenceApplier, openSortDialog, onSelect = {
