@@ -44,7 +44,6 @@ import jp.toastkid.yobidashi.R
 
 @Composable
 internal fun FindInPage(
-    openFindInPageState: MutableState<Boolean>,
     tint: Color,
     pageSearcherInput: MutableState<String>
 ) {
