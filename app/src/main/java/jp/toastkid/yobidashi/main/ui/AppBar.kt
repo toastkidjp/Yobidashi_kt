@@ -120,9 +120,7 @@ internal fun AppBar() {
                 }
         ) {
             if (contentViewModel.openFindInPageState.value) {
-                FindInPage(
-                    MaterialTheme.colors.onPrimary
-                )
+                FindInPage()
             } else {
                 contentViewModel.appBarContent.value()
             }

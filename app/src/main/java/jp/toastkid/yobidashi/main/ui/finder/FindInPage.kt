@@ -43,9 +43,7 @@ import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.yobidashi.R
 
 @Composable
-internal fun FindInPage(
-    tint: Color
-) {
+internal fun FindInPage() {
     val activity = LocalContext.current as? ViewModelStoreOwner ?: return
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
