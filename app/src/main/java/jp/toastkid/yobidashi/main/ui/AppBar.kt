@@ -51,7 +51,6 @@ import kotlin.math.roundToInt
 internal fun AppBar() {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
-    val pageSearcherInput = remember { mutableStateOf("") }
 
     val sizePx = with(LocalDensity.current) { 72.dp.toPx() }
     val anchors = mapOf(-sizePx to 1, 0f to 0)
