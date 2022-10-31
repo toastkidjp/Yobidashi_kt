@@ -426,9 +426,7 @@ internal fun Content() {
                 scaffoldState = scaffoldState,
                 backgroundColor = Color.Transparent,
                 bottomBar = {
-                    AppBar(
-                        contentViewModel.openFindInPageState
-                    )
+                    AppBar()
                 },
                 snackbarHost = {
                     SnackbarHost(

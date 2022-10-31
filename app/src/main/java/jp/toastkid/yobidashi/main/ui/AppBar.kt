@@ -26,7 +26,6 @@ import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.SwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -49,9 +48,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun AppBar(
-    openFindInPageState: MutableState<Boolean>
-) {
+internal fun AppBar() {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
     val pageSearcherInput = remember { mutableStateOf("") }
