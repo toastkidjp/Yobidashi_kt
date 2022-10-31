@@ -476,7 +476,6 @@ internal fun Content() {
 
                 if (openMenu.value) {
                     MainMenu(
-                        contentViewModel.openFindInPageState,
                         { navigate(navigationHostController, it) },
                         {
                             val permissions =
@@ -491,9 +490,8 @@ internal fun Content() {
                                     )
                                 }
                             mediaPermissionRequestLauncher.launch(permissions)
-                        },
-                        { openMenu.value = false }
-                    )
+                        }
+                    ) { openMenu.value = false }
                 }
 
                 if (contentViewModel.useScreenFilter.value) {
