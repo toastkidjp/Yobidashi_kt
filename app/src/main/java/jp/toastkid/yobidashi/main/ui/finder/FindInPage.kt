@@ -60,7 +60,7 @@ internal fun FindInPage(
         Icon(
             painterResource(id = R.drawable.ic_close),
             contentDescription = stringResource(id = R.string.content_description_close_find_area),
-            tint = tint,
+            tint = MaterialTheme.colors.onPrimary,
             modifier = Modifier
                 .clickable(onClick = closeAction)
                 .padding(start = 16.dp)
@@ -120,7 +120,7 @@ internal fun FindInPage(
         Icon(
             painterResource(id = R.drawable.ic_up),
             contentDescription = stringResource(id = R.string.content_description_find_upward),
-            tint = tint,
+            tint = MaterialTheme.colors.onPrimary,
             modifier = Modifier
                 .clickable {
                     pageSearcherViewModel.findUp(
@@ -132,7 +132,7 @@ internal fun FindInPage(
         Icon(
             painterResource(id = R.drawable.ic_down),
             contentDescription = stringResource(id = R.string.content_description_find_downward),
-            tint = tint,
+            tint = MaterialTheme.colors.onPrimary,
             modifier = Modifier
                 .clickable {
                     pageSearcherViewModel.findDown(pageSearcherInput.value)
