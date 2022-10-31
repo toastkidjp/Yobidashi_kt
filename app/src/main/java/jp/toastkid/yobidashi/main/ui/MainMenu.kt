@@ -40,7 +40,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.menu.Menu
 
 @Composable
-fun MainMenu(
+internal fun MainMenu(
     openFindInPageState: MutableState<Boolean>,
     navigate: (String) -> Unit,
     showAudioPlayer: () -> Unit,
