@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.browser.view
 
 import android.Manifest
+import android.net.Uri
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
@@ -340,6 +341,15 @@ internal fun WebTabUi(webTab: WebTab) {
 
     LaunchedEffect(key1 = "add_option_menu", block = {
         contentViewModel.optionMenus(
+            OptionMenu(titleId = R.string.translate, action = {
+                val language = activityContext.resources.configuration.locales[0].language
+                val source = if (language == "en") "ja" else "en"
+                browserViewModel.open(
+                    ("https://papago.naver.net/website?locale=auto&source=${source}&target=$language&url="
+                            + Uri.encode(browserModule.currentUrl()))
+                        .toUri()
+                )
+            }),
             OptionMenu(titleId = R.string.download_all_images, action = {
                 storagePermissionRequestLauncher
                     .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
