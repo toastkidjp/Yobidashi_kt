@@ -612,7 +612,7 @@ private fun AppBarContent(
                                 browserModule.reload()
                             } else {
                                 browserModule.stopLoading()
-                                stopSwipeRefresherLoading()
+                                viewModel.stopProgress(true)
                             }
                         }
                 )
