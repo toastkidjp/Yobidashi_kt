@@ -59,7 +59,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
@@ -91,7 +90,6 @@ fun SearchInputUi(
 
     val preferenceApplier = PreferenceApplier(context)
 
-    val activityViewModelProvider = ViewModelProvider(context)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     val categoryName = remember {
