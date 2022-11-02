@@ -9,10 +9,7 @@
 package jp.toastkid.yobidashi.browser.view
 
 import android.Manifest
-import android.content.Context.PRINT_SERVICE
 import android.net.Uri
-import android.print.PrintAttributes
-import android.print.PrintManager
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
@@ -90,6 +87,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
+import jp.toastkid.yobidashi.browser.usecase.PrintCurrentPageUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
@@ -380,10 +378,7 @@ internal fun WebTabUi(webTab: WebTab) {
                 contentViewModel.snackShort(R.string.message_done_added_bookmark)
             }),
             OptionMenu(titleId = R.string.title_print_page, action = {
-                val latest = GlobalWebViewPool.getLatest() ?: return@OptionMenu
-                val adapter = latest.createPrintDocumentAdapter("${latest.title}.pdf")
-                val printManager = activityContext.getSystemService(PRINT_SERVICE) as? PrintManager
-                printManager?.print("PrintPDF", adapter, PrintAttributes.Builder().build())
+                PrintCurrentPageUseCase().invoke(GlobalWebViewPool.getLatest())
             }),
             OptionMenu(titleId = R.string.title_archive, action = {
                 browserModule.saveArchive()
