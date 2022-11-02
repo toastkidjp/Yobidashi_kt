@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun MainSnackbar(it: SnackbarData, onDismiss: () -> Unit) {
+internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
     val dismissSnackbarDistance = with(LocalDensity.current) { 72.dp.toPx() }
     val snackbarSwipingAnchors = mapOf(-dismissSnackbarDistance to -1, 0f to 0, dismissSnackbarDistance to 1)
     val snackbarSwipeableState = SwipeableState(
@@ -66,15 +66,15 @@ internal fun MainSnackbar(it: SnackbarData, onDismiss: () -> Unit) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                it.message,
+                snackbarData.message,
                 modifier = Modifier.weight(1f)
             )
-            if (it.actionLabel != null) {
+            if (snackbarData.actionLabel != null) {
                 Text(
-                    it.actionLabel ?: "",
+                    snackbarData.actionLabel ?: "",
                     modifier = Modifier
                         .clickable {
-                            it.performAction()
+                            snackbarData.performAction()
                         }
                         .wrapContentWidth()
                         .padding(start = 4.dp)
