@@ -56,7 +56,7 @@ class PrintCurrentPageUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         printCurrentPageUseCase.invoke(webView)
 
         verify { webView.title }
