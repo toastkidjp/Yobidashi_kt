@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -179,14 +181,16 @@ private fun OverflowMenu(
         DropdownMenu(
             expanded = openOptionMenu.value,
             onDismissRequest = { openOptionMenu.value = false }) {
-            optionMenuItems.forEach {
-                DropdownMenuItem(
-                    onClick = {
-                        openOptionMenu.value = false
-                        it.action()
+            LazyColumn {
+                items(optionMenuItems) {
+                    DropdownMenuItem(
+                        onClick = {
+                            openOptionMenu.value = false
+                            it.action()
+                        }
+                    ) {
+                        OptionMenuItem(it)
                     }
-                ) {
-                    OptionMenuItem(it)
                 }
             }
         }
