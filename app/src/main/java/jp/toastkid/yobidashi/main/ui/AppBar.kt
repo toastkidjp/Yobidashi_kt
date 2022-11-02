@@ -14,10 +14,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -33,7 +30,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -180,20 +176,17 @@ private fun OverflowMenu(
         val optionMenuItems =
             menus.union(commonOptionMenuItems).distinct()
 
-        val popupWindowHeight = (LocalConfiguration.current.screenHeightDp * 0.8f).dp
         DropdownMenu(
             expanded = openOptionMenu.value,
             onDismissRequest = { openOptionMenu.value = false }) {
-            LazyColumn(modifier = Modifier.size(popupWindowHeight)) {
-                items(optionMenuItems) {
-                    DropdownMenuItem(
-                        onClick = {
-                            openOptionMenu.value = false
-                            it.action()
-                        }
-                    ) {
-                        OptionMenuItem(it)
+            optionMenuItems.forEach {
+                DropdownMenuItem(
+                    onClick = {
+                        openOptionMenu.value = false
+                        it.action()
                     }
+                ) {
+                    OptionMenuItem(it)
                 }
             }
         }
