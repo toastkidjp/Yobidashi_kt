@@ -9,7 +9,10 @@
 package jp.toastkid.yobidashi.browser.view
 
 import android.Manifest
+import android.content.Context.PRINT_SERVICE
 import android.net.Uri
+import android.print.PrintAttributes
+import android.print.PrintManager
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
@@ -375,6 +378,12 @@ internal fun WebTabUi(webTab: WebTab) {
                 ).insert()
 
                 contentViewModel.snackShort(R.string.message_done_added_bookmark)
+            }),
+            OptionMenu(titleId = R.string.title_print_page, action = {
+                val latest = GlobalWebViewPool.getLatest() ?: return@OptionMenu
+                val adapter = latest.createPrintDocumentAdapter("${latest.title}.pdf")
+                val printManager = activityContext.getSystemService(PRINT_SERVICE) as? PrintManager
+                printManager?.print("PrintPDF", adapter, PrintAttributes.Builder().build())
             }),
             OptionMenu(titleId = R.string.title_archive, action = {
                 browserModule.saveArchive()
