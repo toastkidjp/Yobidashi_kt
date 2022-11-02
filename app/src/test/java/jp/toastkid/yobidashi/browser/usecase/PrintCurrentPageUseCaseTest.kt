@@ -20,6 +20,9 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class PrintCurrentPageUseCaseTest {
 
@@ -35,7 +38,7 @@ class PrintCurrentPageUseCaseTest {
     @MockK
     private lateinit var printManager: PrintManager
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { webView.title }.returns("test")
@@ -47,12 +50,12 @@ class PrintCurrentPageUseCaseTest {
         every { anyConstructed<PrintAttributes.Builder>().build() }.returns(mockk())
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         printCurrentPageUseCase.invoke(webView)
 
