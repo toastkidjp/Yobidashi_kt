@@ -64,4 +64,15 @@ class PrintCurrentPageUseCaseTest {
         verify { webView.context.getSystemService(any()) }
         verify { printManager.print(any(), any(), any()) }
     }
+
+    @Test
+    fun invoke() {
+        printCurrentPageUseCase.invoke(null)
+
+        verify(inverse = true) { webView.title }
+        verify(inverse = true) { webView.createPrintDocumentAdapter(any()) }
+        verify(inverse = true) { webView.context.getSystemService(any()) }
+        verify(inverse = true) { printManager.print(any(), any(), any()) }
+    }
+
 }
