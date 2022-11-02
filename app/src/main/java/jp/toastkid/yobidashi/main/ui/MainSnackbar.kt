@@ -57,12 +57,7 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
                 resistance = ResistanceConfig(0.5f),
                 orientation = Orientation.Horizontal
             )
-            .offset {
-                IntOffset(
-                    snackbarSwipeableState.offset.value.toInt(),
-                    0
-                )
-            }
+            .offset { IntOffset(snackbarSwipeableState.offset.value.toInt(), 0) }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
