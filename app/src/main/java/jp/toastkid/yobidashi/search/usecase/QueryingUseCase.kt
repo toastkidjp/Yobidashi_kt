@@ -61,7 +61,7 @@ class QueryingUseCase(
             CoroutineScope(backgroundDispatcher).launch {
                 searchUiViewModel.favoriteSearchItems.clear()
                 searchUiViewModel.favoriteSearchItems.addAll(
-                    if (keyword.isNullOrBlank()) {
+                    if (keyword.isBlank()) {
                         favoriteSearchRepository.find(5)
                     } else {
                         favoriteSearchRepository.select(keyword)
