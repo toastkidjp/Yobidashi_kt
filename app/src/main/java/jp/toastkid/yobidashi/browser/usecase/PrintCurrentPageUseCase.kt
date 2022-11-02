@@ -19,7 +19,9 @@ class PrintCurrentPageUseCase {
         webView ?: return
         val adapter = webView.createPrintDocumentAdapter("${webView.title}.pdf")
         val printManager = webView.context.getSystemService(Context.PRINT_SERVICE) as? PrintManager
-        printManager?.print("PrintPDF", adapter, PrintAttributes.Builder().build())
+        printManager?.print(PRINTER_NAME, adapter, PrintAttributes.Builder().build())
     }
 
 }
+
+private const val PRINTER_NAME = "PrintPDF"
