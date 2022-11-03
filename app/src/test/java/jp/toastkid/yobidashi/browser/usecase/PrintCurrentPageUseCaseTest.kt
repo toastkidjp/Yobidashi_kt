@@ -60,7 +60,7 @@ class PrintCurrentPageUseCaseTest {
         printCurrentPageUseCase.invoke(webView)
 
         verify { webView.title }
-        verify { webView.createPrintDocumentAdapter(any()) }
+        verify { webView.createPrintDocumentAdapter("test.pdf") }
         verify { webView.context.getSystemService(any()) }
         verify { printManager.print(any(), any(), any()) }
     }
