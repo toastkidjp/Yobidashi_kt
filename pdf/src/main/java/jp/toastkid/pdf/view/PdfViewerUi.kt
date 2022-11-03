@@ -62,31 +62,33 @@ fun PdfViewerUi(uri: Uri) {
     val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
     contentViewModel.replaceAppBarContent { AppBarUi(listState) }
 
-    val pdfRenderer =
-        try {
-            context.contentResolver.openFileDescriptor(uri, "r")
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-            contentViewModel.snackShort("File not found. : $uri")
-            return
-        }
-            ?.let { PdfRenderer(it) }
-            ?: return
-
     ScrollerUseCase(
         contentViewModel,
         listState
     ).invoke(LocalLifecycleOwner.current)
 
-    PdfPageList(pdfRenderer, listState)
+    PdfPageList(uri, listState)
 }
 
 @Composable
-private fun PdfPageList(pdfRenderer: PdfRenderer, listState: LazyListState) {
+private fun PdfPageList(uri: Uri, listState: LazyListState) {
     val pdfImageFactory = PdfImageFactory()
+    val context = LocalContext.current
+
+    val pdfRenderer =
+        remember {
+            try {
+                context.contentResolver.openFileDescriptor(uri, "r")
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+                return
+            }
+                ?.let { PdfRenderer(it) }
+        }
+            ?: return
 
     val images = remember { mutableStateListOf<Bitmap>() }
-    LaunchedEffect(pdfRenderer) {
+    LaunchedEffect(uri) {
         withContext(Dispatchers.IO) {
             images.addAll(
                 (0 until pdfRenderer.pageCount).map {
