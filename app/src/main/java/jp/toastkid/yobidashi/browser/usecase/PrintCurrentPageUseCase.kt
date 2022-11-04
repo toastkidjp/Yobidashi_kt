@@ -13,7 +13,7 @@ import android.print.PrintAttributes
 import android.print.PrintManager
 import android.webkit.WebView
 
-class PrintCurrentPageUseCase {
+internal class PrintCurrentPageUseCase {
 
     operator fun invoke(webView: WebView?) {
         webView ?: return
