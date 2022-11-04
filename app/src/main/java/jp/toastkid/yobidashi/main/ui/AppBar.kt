@@ -44,6 +44,10 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.menu.view.OptionMenuItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.ui.finder.FindInPage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -54,11 +58,17 @@ internal fun AppBar() {
 
     val sizePx = with(LocalDensity.current) { 72.dp.toPx() }
     val anchors = mapOf(-sizePx to 1, 0f to 0)
+    val verticalState = remember { mutableStateOf(0) }
     val swipeableState = SwipeableState(
-        initialValue = 0,
+        initialValue = verticalState.value,
         confirmStateChange = {
             if (it == 1) {
+                verticalState.value = 1
                 contentViewModel.switchTabList()
+                CoroutineScope(Dispatchers.IO).launch {
+                    delay(400L)
+                    verticalState.value = 0
+                }
             }
             true
         }
