@@ -76,7 +76,7 @@ class PrintCurrentPageUseCaseTest {
     }
 
     @Test
-    fun invoke2() {
+    fun testCannotGetPrintManager() {
         every { webView.context.getSystemService(any()) }.returns(null)
 
         printCurrentPageUseCase.invoke(webView)
