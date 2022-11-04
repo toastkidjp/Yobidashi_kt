@@ -66,7 +66,7 @@ class PrintCurrentPageUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testPassingNull() {
         printCurrentPageUseCase.invoke(null)
 
         verify(inverse = true) { webView.title }
