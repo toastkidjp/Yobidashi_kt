@@ -669,7 +669,3 @@ private fun HeaderSubButton(
             .clickable(enabled = enable, onClick = onClick)
     )
 }
-
-fun stopSwipeRefresherLoading() {
-    //TODO binding?.swipeRefresher?.isRefreshing = false
-}
