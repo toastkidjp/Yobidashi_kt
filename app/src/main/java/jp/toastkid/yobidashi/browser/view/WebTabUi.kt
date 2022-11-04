@@ -282,12 +282,12 @@ internal fun WebTabUi(webTab: WebTab) {
             it.getContentIfNotHandled() ?: return@observe
             browserModule.pageDown()
         }
-        contentViewModel.share.observe(lifecycleOwner, {
+        contentViewModel.share.observe(lifecycleOwner) {
             it.getContentIfNotHandled() ?: return@observe
             activityContext.startActivity(
                 ShareIntentFactory()(browserModule.makeShareMessage())
             )
-        })
+        }
 
         pageSearcherViewModel.also { viewModel ->
             viewModel.find.observe(lifecycleOwner, Observer {
