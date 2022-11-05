@@ -95,7 +95,7 @@ internal fun ColorFilterSettingUi() {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp)
+                    .padding(horizontal = 16.dp)
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
