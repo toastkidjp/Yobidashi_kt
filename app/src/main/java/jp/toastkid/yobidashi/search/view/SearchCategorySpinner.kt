@@ -11,6 +11,7 @@ package jp.toastkid.yobidashi.search.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -79,16 +80,18 @@ internal fun SearchCategorySpinner(
                 items(searchCategories, { it.id }) { searchCategory ->
                     DropdownMenuItem(
                         text = {
-                            AsyncImage(
-                                model = searchCategory.iconId,
-                                contentDescription = stringResource(id = searchCategory.id),
-                                modifier = Modifier.width(40.dp)
-                            )
-                            Text(
-                                stringResource(id = searchCategory.id),
-                                fontSize = 20.sp,
-                                modifier = Modifier.padding(8.dp)
-                            )
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                AsyncImage(
+                                    model = searchCategory.iconId,
+                                    contentDescription = stringResource(id = searchCategory.id),
+                                    modifier = Modifier.width(40.dp)
+                                )
+                                Text(
+                                    stringResource(id = searchCategory.id),
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            }
                         },
                         onClick = {
                             currentCategory?.value = searchCategory.name
