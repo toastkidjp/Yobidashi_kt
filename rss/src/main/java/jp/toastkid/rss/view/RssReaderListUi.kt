@@ -19,10 +19,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -102,7 +102,7 @@ private fun RssReaderList(fullItems: List<Item>) {
                         }
                     )
                     .animateItemPlacement(),
-                elevation = 4.dp
+                shadowElevation = 4.dp
             ) {
                 Column(
                     modifier = Modifier
@@ -113,7 +113,7 @@ private fun RssReaderList(fullItems: List<Item>) {
                         Icon(
                             painterResource(id = R.drawable.ic_rss_feed),
                             contentDescription = stringResource(id = R.string.image),
-                            tint = MaterialTheme.colors.primary,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(end = 4.dp)
                         )
 

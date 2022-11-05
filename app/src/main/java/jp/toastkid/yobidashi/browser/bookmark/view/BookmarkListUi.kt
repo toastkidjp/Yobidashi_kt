@@ -37,12 +37,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -75,7 +75,7 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
-import jp.toastkid.ui.list.SwipeToDismissItem
+import jp.toastkid.lib.view.list.SwipeToDismissItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
@@ -359,7 +359,7 @@ private fun BookmarkList(
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_option_menu),
                                 contentDescription = stringResource(id = R.string.title_option_menu),
-                                tint = MaterialTheme.colors.secondary,
+                                tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.clickable {
                                     openEditor.value = true
                                 }
@@ -397,7 +397,7 @@ private fun EditorDialog(
     }
 
     Dialog(onDismissRequest = { openEditor.value = false }) {
-        Surface(elevation = 4.dp) {
+        Surface(shadowElevation = 4.dp) {
             Box {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -406,7 +406,7 @@ private fun EditorDialog(
                 ) {
                     Text(
                         text = stringResource(id = R.string.cancel),
-                        color = MaterialTheme.colors.onSurface,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .clickable {
                                 openEditor.value = false
@@ -416,7 +416,7 @@ private fun EditorDialog(
 
                     Text(
                         text = stringResource(id = R.string.ok),
-                        color = MaterialTheme.colors.onSurface,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .clickable {
                                 openEditor.value = false
@@ -464,16 +464,17 @@ private fun EditorDialog(
                         ) {
                             folders.forEach {
                                 DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            it,
+                                            fontSize = 20.sp
+                                        )
+                                    },
                                     onClick = {
                                         openChooser.value = false
                                         moveTo.value = it
                                     }
-                                ) {
-                                    Text(
-                                        it,
-                                        fontSize = 20.sp
-                                    )
-                                }
+                                )
                             }
                         }
                     }

@@ -28,17 +28,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import jp.toastkid.lib.compat.material3.ModalBottomSheetLayout
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -108,7 +107,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 internal fun Content() {
     val snackbarHostState = SnackbarHostState()
@@ -201,11 +200,10 @@ internal fun Content() {
 
     val openMenu = remember { mutableStateOf(false) }
 
-    val scaffoldState = rememberScaffoldState()
     val rememberSnackbarHostState = remember { snackbarHostState }
 
-    val backgroundColor = MaterialTheme.colors.primary
-    val tint = MaterialTheme.colors.onPrimary
+    val backgroundColor = MaterialTheme.colorScheme.primary
+    val tint = MaterialTheme.colorScheme.onPrimary
 
     val bottomBarHeightPx = with(LocalDensity.current) { 72.dp.toPx() }
     contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
@@ -402,14 +400,13 @@ internal fun Content() {
                 }
             },
             sheetElevation = 4.dp,
-            sheetBackgroundColor = if (bottomSheetState.isVisible) MaterialTheme.colors.surface else Color.Transparent,
+            sheetBackgroundColor = if (bottomSheetState.isVisible) MaterialTheme.colorScheme.surface else Color.Transparent,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
             Scaffold(
-                scaffoldState = scaffoldState,
-                backgroundColor = Color.Transparent,
+                containerColor = Color.Transparent,
                 bottomBar = {
                     AppBar()
                 },
@@ -423,7 +420,7 @@ internal fun Content() {
                 floatingActionButton = {
                     FloatingActionButton(
                         onClick = { openMenu.value = openMenu.value.not() },
-                        backgroundColor = tint,
+                        containerColor = tint,
                         modifier = Modifier
                             .scale(contentViewModel.fabScale.value)
                             .offset { contentViewModel.makeFabOffset() }
@@ -454,7 +451,7 @@ internal fun Content() {
                 modifier = Modifier
                     .fillMaxSize()
                     .nestedScroll(nestedScrollConnection)
-            ) { paddingValue ->
+            ) { _ ->
                 Box {
                     NavigationalContent(navigationHostController, tabs)
 
@@ -647,6 +644,7 @@ private fun showSnackbar(
         val snackbarResult = snackbarHostState.showSnackbar(
             snackbarEvent.message,
             snackbarEvent.actionLabel ?: "",
+            false,
             SnackbarDuration.Long
         )
         when (snackbarResult) {

@@ -16,9 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -65,7 +65,7 @@ internal fun AnchorLongTapDialog(
             visibleState.value = false
         },
         content = {
-            Surface(elevation = 4.dp) {
+            Surface(shadowElevation = 4.dp) {
                 Box {
                     Column {
                         Row(
@@ -170,7 +170,7 @@ internal fun AnchorLongTapDialog(
 
                         Text(
                             text = stringResource(id = R.string.close),
-                            color = MaterialTheme.colors.onSurface,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable {
                                     browserViewModel?.clearLongTapParameters()

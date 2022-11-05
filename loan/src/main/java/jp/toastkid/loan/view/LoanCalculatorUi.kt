@@ -14,11 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +42,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoanCalculatorUi() {
     val context = LocalContext.current
@@ -85,7 +87,7 @@ fun LoanCalculatorUi() {
         }
     ).invoke()
 
-    Surface(elevation = 4.dp) {
+    Surface(shadowElevation = 4.dp) {
         Column(
             Modifier
                 .padding(8.dp)
@@ -100,9 +102,9 @@ fun LoanCalculatorUi() {
                 },
                 label = { Text(text = stringResource(R.string.hint_loan_amount)) },
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
+                    textColor = MaterialTheme.colorScheme.onSurface,
+                    containerColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -116,9 +118,9 @@ fun LoanCalculatorUi() {
                 },
                 label = { Text(text = stringResource(R.string.hint_loan_term)) },
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
+                    textColor = MaterialTheme.colorScheme.onSurface,
+                    containerColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -132,9 +134,9 @@ fun LoanCalculatorUi() {
                 },
                 label = { Text(text = stringResource(R.string.hint_interest_rate)) },
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
+                    textColor = MaterialTheme.colorScheme.onSurface,
+                    containerColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -148,9 +150,9 @@ fun LoanCalculatorUi() {
                 },
                 label = { Text(text = stringResource(R.string.hint_down_payment)) },
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
+                    textColor = MaterialTheme.colorScheme.onSurface,
+                    containerColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -164,9 +166,9 @@ fun LoanCalculatorUi() {
                 },
                 label = { Text(text = "Management fee (Monthly)") },
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
+                    textColor = MaterialTheme.colorScheme.onSurface,
+                    containerColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -180,9 +182,9 @@ fun LoanCalculatorUi() {
                 },
                 label = { Text(text = "Renovation reserves (Monthly)") },
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
+                    textColor = MaterialTheme.colorScheme.onSurface,
+                    containerColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

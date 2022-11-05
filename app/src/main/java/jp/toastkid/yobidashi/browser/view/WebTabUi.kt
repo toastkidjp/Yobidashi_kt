@@ -33,12 +33,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -202,7 +202,7 @@ internal fun WebTabUi(webTab: WebTab) {
         if (browserViewModel.showSwipeRefreshIndicator()) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .offset {
                         IntOffset(
@@ -221,7 +221,7 @@ internal fun WebTabUi(webTab: WebTab) {
             ) {
                 CircularProgressIndicator(
                     progress = browserViewModel.calculateSwipingProgress(refreshTriggerPx),
-                    color = MaterialTheme.colors.onPrimary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.padding(4.dp)
                 )
             }
@@ -443,7 +443,7 @@ private fun AppBarContent(
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     val preferenceApplier = PreferenceApplier(activity)
-    val tint = MaterialTheme.colors.onPrimary
+    val tint = MaterialTheme.colorScheme.onPrimary
 
     val enableBack = viewModel.enableBack
     val enableForward = viewModel.enableForward
@@ -457,7 +457,7 @@ private fun AppBarContent(
         if (viewModel.progress.value < 70) {
             LinearProgressIndicator(
                 progress = viewModel.progress.value.toFloat() / 100f,
-                color = MaterialTheme.colors.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .height(1.dp)
                     .fillMaxWidth()
@@ -495,7 +495,7 @@ private fun AppBarContent(
                     painterResource(R.drawable.ic_tab),
                     contentDescription = stringResource(id = R.string.tab_list),
                     colorFilter = ColorFilter.tint(
-                        MaterialTheme.colors.onPrimary,
+                        MaterialTheme.colorScheme.onPrimary,
                         BlendMode.SrcIn
                     ),
                     modifier = Modifier
@@ -504,7 +504,7 @@ private fun AppBarContent(
                 )
                 Text(
                     text = "${tabCountState.value}",
-                    color = MaterialTheme.colors.onPrimary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 10.sp,
                     modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
                 )

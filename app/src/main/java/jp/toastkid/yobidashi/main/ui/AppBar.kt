@@ -15,16 +15,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.BottomAppBar
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FractionalThreshold
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ResistanceConfig
-import androidx.compose.material.SwipeableState
-import androidx.compose.material.swipeable
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import jp.toastkid.lib.compat.material3.FractionalThreshold
+import jp.toastkid.lib.compat.material3.ResistanceConfig
+import jp.toastkid.lib.compat.material3.SwipeableState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import jp.toastkid.lib.compat.material3.swipeableCompat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,7 +50,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AppBar() {
     val activity = LocalContext.current as? ComponentActivity ?: return
@@ -94,8 +94,8 @@ internal fun AppBar() {
     )
 
     BottomAppBar(
-        backgroundColor = MaterialTheme.colors.primary,
-        elevation = 4.dp,
+        containerColor = MaterialTheme.colorScheme.primary,
+        tonalElevation = 4.dp,
         modifier = Modifier
             .height(72.dp)
             .offset {
@@ -108,15 +108,15 @@ internal fun AppBar() {
         Box(
             modifier = Modifier
                 .weight(1f)
-                .swipeable(
-                    horizontalSwipeableState,
+                .swipeableCompat(
+                    state = horizontalSwipeableState,
                     anchors = horizontalAnchors,
                     thresholds = { _, _ -> FractionalThreshold(0.75f) },
                     resistance = ResistanceConfig(0.5f),
                     orientation = Orientation.Horizontal
                 )
-                .swipeable(
-                    swipeableState,
+                .swipeableCompat(
+                    state = swipeableState,
                     anchors = anchors,
                     thresholds = { _, _ -> FractionalThreshold(0.75f) },
                     resistance = ResistanceConfig(0.5f),
@@ -137,7 +137,7 @@ internal fun AppBar() {
         }
 
         OverflowMenu(
-            MaterialTheme.colors.onPrimary,
+            MaterialTheme.colorScheme.onPrimary,
             contentViewModel.optionMenus,
             { contentViewModel.switchTabList() }
         ) { activity.finish() }
@@ -192,13 +192,14 @@ private fun OverflowMenu(
         ) {
             optionMenuItems.forEach {
                 DropdownMenuItem(
+                    text = {
+                        OptionMenuItem(it)
+                    },
                     onClick = {
                         openOptionMenu.value = false
                         it.action()
                     }
-                ) {
-                    OptionMenuItem(it)
-                }
+                )
             }
         }
     }

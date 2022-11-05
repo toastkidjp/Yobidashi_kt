@@ -21,14 +21,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +53,7 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.settings.view.TextMenu
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun BrowserSettingUi() {
     val activityContext = LocalContext.current
@@ -72,7 +74,7 @@ internal fun BrowserSettingUi() {
     val useDarkMode = remember { mutableStateOf(preferenceApplier.useDarkMode()) }
     val useAdRemover = remember { mutableStateOf(preferenceApplier.adRemove) }
 
-    Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
+    Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         LazyColumn {
             item {
                 CheckableRow(
@@ -88,7 +90,7 @@ internal fun BrowserSettingUi() {
                         retainTabs.value = preferenceApplier.doesRetainTabs()
                     },
                     R.string.title_enable_javascript,
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_tab_black
                 )
             }
@@ -104,7 +106,7 @@ internal fun BrowserSettingUi() {
                 ) {
                     Icon(
                         painterResource(id = R.drawable.ic_home_black),
-                        tint = MaterialTheme.colors.secondary,
+                        tint = MaterialTheme.colorScheme.secondary,
                         contentDescription = stringResource(id = R.string.title_retain_tabs)
                     )
                     TextField(
@@ -114,9 +116,9 @@ internal fun BrowserSettingUi() {
                         },
                         label = { stringResource(id = R.string.title_home) },
                         colors = TextFieldDefaults.textFieldColors(
-                            textColor = MaterialTheme.colors.onSurface,
-                            backgroundColor = MaterialTheme.colors.surface,
-                            cursorColor = MaterialTheme.colors.onSurface
+                            textColor = MaterialTheme.colorScheme.onSurface,
+                            containerColor = MaterialTheme.colorScheme.surface,
+                            cursorColor = MaterialTheme.colorScheme.onSurface
                         ),
                         keyboardActions = KeyboardActions(onDone = {
                             if (homeUrl.value.isEmpty()) {
@@ -179,7 +181,7 @@ internal fun BrowserSettingUi() {
                         useImage.value = preferenceApplier.doesLoadImage()
                     },
                     R.string.title_load_image,
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_image
                 )
             }
@@ -213,7 +215,7 @@ internal fun BrowserSettingUi() {
                         saveViewHistory.value = preferenceApplier.doesSaveForm()
                     },
                     R.string.title_save_view_history,
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_open_in_browser_black
                 )
             }
@@ -234,7 +236,7 @@ internal fun BrowserSettingUi() {
                 ) {
                     Icon(
                         painterResource(id = R.drawable.ic_user_agent_black),
-                        tint = MaterialTheme.colors.secondary,
+                        tint = MaterialTheme.colorScheme.secondary,
                         contentDescription = stringResource(id = R.string.title_user_agent)
                     )
 
@@ -328,7 +330,7 @@ internal fun BrowserSettingUi() {
                         useDarkMode.value = preferenceApplier.useDarkMode()
                     },
                     R.string.title_dark_mode,
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_dark_mode_black
                 )
             }
@@ -346,7 +348,7 @@ internal fun BrowserSettingUi() {
                         useAdRemover.value = preferenceApplier.adRemove
                     },
                     R.string.title_remove_ad,
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_block_black
                 )
             }

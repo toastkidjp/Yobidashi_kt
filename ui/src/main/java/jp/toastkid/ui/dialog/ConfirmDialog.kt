@@ -11,9 +11,9 @@ package jp.toastkid.ui.dialog
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
@@ -42,10 +42,10 @@ fun ConfirmDialog(
     visibleState: MutableState<Boolean>,
     title: String,
     message: String,
-    messageColor: Color = MaterialTheme.colors.onSurface,
+    messageColor: Color = MaterialTheme.colorScheme.onSurface,
     onClickOk: () -> Unit = {}
 ) {
-    val color = MaterialTheme.colors.onSurface
+    val color = MaterialTheme.colorScheme.onSurface
 
     if (visibleState.value.not()) {
         return
@@ -56,7 +56,7 @@ fun ConfirmDialog(
         title = {
             Text(
                 title,
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.titleMedium
             )
         },
         text = {

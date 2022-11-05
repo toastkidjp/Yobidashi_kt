@@ -28,9 +28,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
@@ -137,19 +137,19 @@ fun BarcodeReaderUi() {
             modifier = Modifier.fillMaxSize()
         ) {
             Surface(
-                elevation = 4.dp,
+                shadowElevation = 4.dp,
                 modifier = Modifier.wrapContentHeight()
             ) {
                 Column(
                     modifier = Modifier
-                        .background(MaterialTheme.colors.primary)
+                        .background(MaterialTheme.colorScheme.primary)
                         .wrapContentWidth()
                         .padding(16.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             stringResource(id = R.string.clip),
-                            color = MaterialTheme.colors.onPrimary,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 16.sp,
                             modifier = Modifier
                                 .padding(16.dp)
@@ -157,7 +157,7 @@ fun BarcodeReaderUi() {
                         )
                         Text(
                             stringResource(id = R.string.share),
-                            color = MaterialTheme.colors.onPrimary,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 16.sp,
                             modifier = Modifier
                                 .padding(16.dp)
@@ -167,7 +167,7 @@ fun BarcodeReaderUi() {
                         )
                         Text(
                             stringResource(id = R.string.open),
-                            color = MaterialTheme.colors.onPrimary,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 16.sp,
                             modifier = Modifier
                                 .padding(16.dp)
@@ -181,7 +181,7 @@ fun BarcodeReaderUi() {
                     }
                     Text(
                         result.value,
-                        color = MaterialTheme.colors.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 18.sp,
                         modifier = Modifier.padding(8.dp)
                     )

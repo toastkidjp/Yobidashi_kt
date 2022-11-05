@@ -23,14 +23,12 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Checkbox
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -75,7 +73,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskBoardUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
@@ -84,9 +82,7 @@ fun TaskBoardUi() {
 
     val repository = TodoTaskDatabase.find(context).repository()
     val preferenceApplier = PreferenceApplier(context)
-    val bottomSheetScaffoldState = rememberModalBottomSheetState(
-        ModalBottomSheetValue.Hidden
-    )
+    val bottomSheetScaffoldState = remember { mutableStateOf(false) }
 
     val menuUseCase = ItemMenuPopupActionUseCase(
         { taskAdditionDialogFragmentViewModel?.setTask(it) },
@@ -116,7 +112,7 @@ fun TaskBoardUi() {
 
         taskAdditionDialogFragmentViewModel?.task?.observe(context, {
             coroutineScope.launch {
-                bottomSheetScaffoldState.show()
+                bottomSheetScaffoldState.value = true
             }
         })
     })
@@ -180,7 +176,7 @@ private fun BoardItem(
     var offsetY by remember { mutableStateOf(task.y) }
 
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         modifier = modifier
             .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 2.dp)
             .width(140.dp)
@@ -260,13 +256,17 @@ private fun BoardItem(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items.forEachIndexed { index, s ->
-                    DropdownMenuItem(onClick = {
+                    DropdownMenuItem(
+                        text = {
+                            Text(text = s)
+                        },
+                        onClick = {
                         when (index) {
                             0 -> menuUseCase.modify(task)
                             1 -> menuUseCase.delete(task)
                         }
                         expanded = false
-                    }) { Text(text = s) }
+                    })
                 }
             }
         }

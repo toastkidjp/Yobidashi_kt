@@ -46,7 +46,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Compose dependencies.
-    implementation "androidx.compose.material:material:$libVersions.compose"
+    implementation "androidx.compose.material3:material3:$libVersions.compose_material3"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
     implementation "io.coil-kt:coil-gif:$libVersions.coil_compose"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"

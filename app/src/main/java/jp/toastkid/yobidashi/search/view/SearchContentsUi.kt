@@ -24,10 +24,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -61,7 +60,6 @@ import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 
 @OptIn(
     ExperimentalComposeUiApi::class,
-    ExperimentalMaterialApi::class,
     ExperimentalFoundationApi::class
 )
 @Composable
@@ -204,13 +202,13 @@ internal fun SearchContentsUi(
                             )
                             Text(
                                 text = stringResource(id = R.string.plus),
-                                color = MaterialTheme.colors.surface,
+                                color = MaterialTheme.colorScheme.surface,
                                 fontSize = 20.sp,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .width(36.dp)
                                     .height(32.dp)
-                                    .background(MaterialTheme.colors.onSurface)
+                                    .background(MaterialTheme.colorScheme.onSurface)
                                     .clickable { viewModel.putQuery("$it ") }
                             )
                         }
@@ -283,7 +281,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
     val context = LocalContext.current
 
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         modifier = Modifier.padding(8.dp)
     ) {
         Row(
@@ -309,7 +307,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
             Image(
                 painterResource(id = R.drawable.ic_share_black),
                 contentDescription = stringResource(id = R.string.share),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary, BlendMode.SrcIn),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary, BlendMode.SrcIn),
                 modifier = Modifier
                     .width(32.dp)
                     .clickable {
@@ -324,7 +322,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
             Image(
                 painterResource(id = R.drawable.ic_clip),
                 contentDescription = stringResource(id = R.string.clip),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary, BlendMode.SrcIn),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary, BlendMode.SrcIn),
                 modifier = Modifier
                     .width(32.dp)
                     .clickable {
@@ -340,7 +338,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
             Image(
                 painterResource(id = R.drawable.ic_edit_black),
                 contentDescription = stringResource(id = R.string.edit),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary, BlendMode.SrcIn),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary, BlendMode.SrcIn),
                 modifier = Modifier
                     .width(32.dp)
                     .clickable { setInput(currentUrl) }
@@ -352,7 +350,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
 @Composable
 private fun Header(headerTextId: Int) {
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp)
     ) {
@@ -369,7 +367,7 @@ private fun Header(headerTextId: Int) {
 @Composable
 private fun HeaderWithLink(headerTextId: Int, linkTextId: Int, onLinkClick: () -> Unit) {
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp)
     ) {
@@ -398,7 +396,7 @@ private fun HeaderWithLink(headerTextId: Int, linkTextId: Int, onLinkClick: () -
 @Composable
 private fun ItemCard(content: @Composable () -> Unit) {
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         content = content,
         modifier = Modifier.padding(2.dp)
     )

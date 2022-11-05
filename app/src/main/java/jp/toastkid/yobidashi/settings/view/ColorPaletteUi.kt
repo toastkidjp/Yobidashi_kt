@@ -14,10 +14,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -39,7 +39,7 @@ internal fun ColorPaletteUi(
     onReset: () -> Unit
 ) {
     Surface(
-        elevation = 4.dp
+        shadowElevation = 4.dp
     ) {
         Row(
             modifier = Modifier
@@ -62,7 +62,7 @@ internal fun ColorPaletteUi(
                 Button(
                     onClick = onCommit,
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = currentBackgroundColor.value,
+                        containerColor = currentBackgroundColor.value,
                         contentColor = currentFontColor.value,
                         disabledContentColor = Color.LightGray
                     ),
@@ -92,7 +92,7 @@ internal fun ColorPaletteUi(
                 Button(
                     onClick = onReset,
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = Color(initialBgColor),
+                        containerColor = Color(initialBgColor),
                         contentColor = Color(initialFontColor),
                         disabledContentColor = Color.LightGray
                     ),

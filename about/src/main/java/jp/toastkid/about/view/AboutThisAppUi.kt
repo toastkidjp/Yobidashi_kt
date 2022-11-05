@@ -24,11 +24,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -86,7 +86,7 @@ fun AboutThisAppUi(versionName: String) {
         null
     )
 
-    Surface(elevation = 4.dp) {
+    Surface(shadowElevation = 4.dp) {
         Column(
             Modifier
                 .verticalScroll(scrollState)
@@ -217,7 +217,7 @@ fun AboutThisAppUi(versionName: String) {
         Dialog(
             onDismissRequest = { openLicense.value = false }
         ) {
-            Surface(elevation = 4.dp) {
+            Surface(shadowElevation = 4.dp) {
                 AndroidView(
                     factory = { webView },
                     modifier = Modifier.fillMaxSize()
@@ -225,7 +225,7 @@ fun AboutThisAppUi(versionName: String) {
                 if (progress.value < 0.75f) {
                     CircularProgressIndicator(
                         progress = progress.value,
-                        color = MaterialTheme.colors.primary
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -238,7 +238,7 @@ fun AboutThisAppUi(versionName: String) {
 
 @Composable
 private fun InsetDivider() {
-    TabRowDefaults.Divider(
+    Divider(
         color = colorResource(id = R.color.gray_500_dd),
         modifier = Modifier
             .fillMaxWidth()

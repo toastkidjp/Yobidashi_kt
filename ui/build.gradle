@@ -44,6 +44,6 @@ android {
 
 dependencies {
     implementation project(":lib")
-    implementation "androidx.compose.material:material:$libVersions.compose"
+    implementation "androidx.compose.material3:material3:$libVersions.compose_material3"
     testImplementation 'junit:junit:4.12'
 }

@@ -21,12 +21,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,7 +71,7 @@ internal fun ColorFilterSettingUi() {
         contentViewModel
     )
 
-    Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
+    Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         Column {
             val onClick = {
                 val newState = !preferenceApplier.useColorFilter()
@@ -85,7 +85,7 @@ internal fun ColorFilterSettingUi() {
                 textId = R.string.title_color_filter,
                 clickable = onClick,
                 booleanState = check,
-                iconTint = MaterialTheme.colors.secondary,
+                iconTint = MaterialTheme.colorScheme.secondary,
                 iconId = R.drawable.ic_color_filter_black
             )
 
@@ -127,8 +127,8 @@ internal fun ColorFilterSettingUi() {
                             .toFloat()
                     },
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = MaterialTheme.colors.primary,
-                        contentColor = MaterialTheme.colors.onPrimary,
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
                         disabledContentColor = Color.LightGray
                     ),
                     modifier = Modifier
@@ -178,7 +178,7 @@ internal fun ColorFilterSettingUi() {
 
 @Composable
 private fun ColorFilterItem(@ColorRes colorId: Int, onClick: () -> Unit) {
-    Surface(elevation = 4.dp) {
+    Surface(shadowElevation = 4.dp) {
         Box(
             modifier = Modifier
                 .background(colorResource(id = colorId))

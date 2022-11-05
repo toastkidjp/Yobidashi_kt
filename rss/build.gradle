@@ -46,7 +46,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
-    implementation "androidx.compose.material:material:$libVersions.compose"
+    implementation "androidx.compose.material3:material3:$libVersions.compose_material3"
     implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
     implementation 'androidx.activity:activity-compose:1.4.0'
 

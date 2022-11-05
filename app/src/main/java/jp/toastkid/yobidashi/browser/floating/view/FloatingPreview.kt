@@ -21,9 +21,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -76,7 +76,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .background(MaterialTheme.colors.primary)
+                .background(MaterialTheme.colorScheme.primary)
                 .padding(8.dp)
                 .clickable {
                     val currentUri = viewModel.url.value?.toUri() ?: return@clickable
@@ -101,7 +101,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
             Icon(
                 painterResource(id = R.drawable.ic_close),
                 stringResource(id = R.string.close),
-                tint = MaterialTheme.colors.onPrimary,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.clickable {
                     close(webView, coroutineScope, contentViewModel)
                 }
@@ -112,7 +112,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
         if (progress < 75) {
             LinearProgressIndicator(
                 progress = progress / 100f,
-                color = MaterialTheme.colors.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.height(1.dp)
             )
         }

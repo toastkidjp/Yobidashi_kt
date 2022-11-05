@@ -13,10 +13,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
@@ -29,12 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import jp.toastkid.editor.R
-import jp.toastkid.ui.list.SwipeToDismissItem
+import jp.toastkid.lib.view.list.SwipeToDismissItem
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun LoadFromStorageDialogUi(
     openDialog: MutableState<Boolean>,
@@ -50,7 +48,7 @@ internal fun LoadFromStorageDialogUi(
             openDialog.value = false
         }
     ) {
-        Surface(elevation = 4.dp) {
+        Surface(shadowElevation = 4.dp) {
             LazyColumn {
                 item {
                     Row(

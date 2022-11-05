@@ -14,15 +14,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FractionalThreshold
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ResistanceConfig
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarData
-import androidx.compose.material.SwipeableState
-import androidx.compose.material.Text
-import androidx.compose.material.swipeable
+import androidx.compose.material3.ExperimentalMaterial3Api
+import jp.toastkid.lib.compat.material3.FractionalThreshold
+import jp.toastkid.lib.compat.material3.ResistanceConfig
+import jp.toastkid.lib.compat.material3.SwipeableState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.Text
+import jp.toastkid.lib.compat.material3.swipeableCompat
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +30,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
     val dismissSnackbarDistance = with(LocalDensity.current) { 72.dp.toPx() }
@@ -46,12 +46,11 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
     )
 
     Snackbar(
-        backgroundColor = MaterialTheme.colors.primary,
-        contentColor = MaterialTheme.colors.onPrimary,
-        elevation = 4.dp,
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
-            .swipeable(
-                snackbarSwipeableState,
+            .swipeableCompat(
+                state = snackbarSwipeableState,
                 anchors = snackbarSwipingAnchors,
                 thresholds = { _, _ -> FractionalThreshold(0.75f) },
                 resistance = ResistanceConfig(0.5f),
@@ -61,12 +60,12 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                snackbarData.message,
+                snackbarData.visuals.message,
                 modifier = Modifier.weight(1f)
             )
-            if (snackbarData.actionLabel != null) {
+            if (snackbarData.visuals.actionLabel != null) {
                 Text(
-                    snackbarData.actionLabel ?: "",
+                    snackbarData.visuals.actionLabel ?: "",
                     modifier = Modifier
                         .clickable {
                             snackbarData.performAction()

@@ -29,16 +29,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.FractionalThreshold
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ResistanceConfig
-import androidx.compose.material.Surface
-import androidx.compose.material.SwipeableState
-import androidx.compose.material.Text
-import androidx.compose.material.swipeable
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import jp.toastkid.lib.compat.material3.FractionalThreshold
+import jp.toastkid.lib.compat.material3.ResistanceConfig
+import jp.toastkid.lib.compat.material3.SwipeableState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import jp.toastkid.lib.compat.material3.swipeableCompat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -133,7 +133,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     val backgroundColor = if (currentIndex == position)
                         Color(
                             ColorUtils.setAlphaComponent(
-                                MaterialTheme.colors.secondary.toArgb(),
+                                MaterialTheme.colorScheme.secondary.toArgb(),
                                 128
                             )
                         )
@@ -162,8 +162,8 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                 }
             }
 
-            val tint = MaterialTheme.colors.onPrimary
-            val backgroundColor = MaterialTheme.colors.primary
+            val tint = MaterialTheme.colorScheme.onPrimary
+            val backgroundColor = MaterialTheme.colorScheme.primary
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
@@ -254,7 +254,7 @@ private fun closeOnly(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TabItem(
     tab: Tab,
@@ -290,8 +290,8 @@ private fun TabItem(
                 }
                 .background(backgroundColor)
                 .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
-                .swipeable(
-                    swipeableState,
+                .swipeableCompat(
+                    state = swipeableState,
                     anchors = anchors,
                     thresholds = { _, _ -> FractionalThreshold(0.75f) },
                     resistance = ResistanceConfig(0.5f),
@@ -300,7 +300,7 @@ private fun TabItem(
                 )
         ) {
             Surface(
-                elevation = 4.dp,
+                shadowElevation = 4.dp,
                 modifier = Modifier
                     .width(112.dp)
                     .height(152.dp)
@@ -323,14 +323,14 @@ private fun TabItem(
                     )
                     Text(
                         text = tab.title(),
-                        color = MaterialTheme.colors.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         maxLines = 2,
                         fontSize = 14.sp,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .fillMaxWidth()
-                            .background(MaterialTheme.colors.primary)
+                            .background(MaterialTheme.colorScheme.primary)
                             .padding(4.dp)
                     )
                 }
@@ -350,7 +350,7 @@ private fun TabActionFab(
 ) {
     FloatingActionButton(
         onClick = action,
-        backgroundColor = buttonColor,
+        containerColor = buttonColor,
         modifier = modifier.size(48.dp)
     ) {
         Icon(

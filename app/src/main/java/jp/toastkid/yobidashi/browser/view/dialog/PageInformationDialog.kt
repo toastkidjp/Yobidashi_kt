@@ -22,9 +22,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -73,7 +73,7 @@ internal fun PageInformationDialog(
         onDismissRequest = { openState.value = false },
         content = {
             Surface(
-                elevation = 4.dp
+                shadowElevation = 4.dp
             ) {
                 Box() {
                     Column {
@@ -91,7 +91,7 @@ internal fun PageInformationDialog(
 
                             Text(
                                 title,
-                                style = MaterialTheme.typography.h5,
+                                style = MaterialTheme.typography.titleMedium,
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1,
                                 modifier = Modifier.weight(1f)
@@ -133,7 +133,7 @@ internal fun PageInformationDialog(
                     ) {
                         Text(
                             text = stringResource(id = R.string.button_clip_cookie),
-                            color = MaterialTheme.colors.onSurface,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable {
                                     openState.value = false
@@ -144,7 +144,7 @@ internal fun PageInformationDialog(
 
                         Text(
                             text = stringResource(id = R.string.close),
-                            color = MaterialTheme.colors.onSurface,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable {
                                     openState.value = false

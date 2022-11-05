@@ -22,14 +22,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Checkbox
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -71,7 +68,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TaskListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
@@ -108,9 +104,7 @@ fun TaskListUi() {
     })
 
     val preferenceApplier = PreferenceApplier(context)
-    val bottomSheetScaffoldState = rememberModalBottomSheetState(
-        ModalBottomSheetValue.Hidden
-    )
+    val bottomSheetScaffoldState = remember { mutableStateOf(false) }
 
     val menuUseCase = ItemMenuPopupActionUseCase(
         { taskAdditionDialogFragmentViewModel.setTask(it) },
@@ -125,7 +119,7 @@ fun TaskListUi() {
 
     taskAdditionDialogFragmentViewModel.task?.observe(context, {
         coroutineScope.launch {
-            bottomSheetScaffoldState.show()
+            bottomSheetScaffoldState.value = true
         }
     })
 
@@ -179,7 +173,7 @@ private fun TaskListItem(
     val repository = TodoTaskDatabase.find(LocalContext.current).repository()
 
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         modifier = modifier
             .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 2.dp)
     ) {
@@ -240,13 +234,17 @@ private fun TaskListItem(
                     onDismissRequest = { expanded = false }
                 ) {
                     items.forEachIndexed { index, s ->
-                        DropdownMenuItem(onClick = {
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = s)
+                            },
+                            onClick = {
                             when (index) {
                                 0 -> menuUseCase.modify(task)
                                 1 -> menuUseCase.delete(task)
                             }
                             expanded = false
-                        }) { Text(text = s) }
+                        })
                     }
                 }
             }

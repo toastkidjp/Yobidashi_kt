@@ -20,9 +20,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -39,7 +39,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.list.ListActionAttachment
-import jp.toastkid.ui.list.SwipeToDismissItem
+import jp.toastkid.lib.view.list.SwipeToDismissItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
 import timber.log.Timber
@@ -94,7 +94,7 @@ fun ArchiveListUi() {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_archive),
                             contentDescription = stringResource(id = R.string.image),
-                            tint = MaterialTheme.colors.secondary,
+                            tint = MaterialTheme.colorScheme.secondary,
                             modifier = Modifier
                                 .padding(4.dp)
                                 .fillMaxHeight()

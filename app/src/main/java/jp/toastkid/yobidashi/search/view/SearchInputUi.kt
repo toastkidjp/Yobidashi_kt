@@ -28,13 +28,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -79,7 +80,9 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Composable
 fun SearchInputUi(
     inputQuery: String? = null,
@@ -152,25 +155,25 @@ fun SearchInputUi(
                         label = {
                             Text(
                                 stringResource(id = R.string.title_search),
-                                color = MaterialTheme.colors.onPrimary
+                                color = MaterialTheme.colorScheme.onPrimary
                             )
                         },
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            cursorColor = MaterialTheme.colors.onPrimary,
+                            containerColor = Color.Transparent,
+                            cursorColor = MaterialTheme.colorScheme.onPrimary,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
                         singleLine = true,
                         textStyle = TextStyle(
-                            color = MaterialTheme.colors.onPrimary,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             textAlign = TextAlign.Start,
                         ),
                         trailingIcon = {
                             Icon(
                                 Icons.Filled.Clear,
                                 contentDescription = "clear text",
-                                tint = MaterialTheme.colors.onPrimary,
+                                tint = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier
                                     .clickable {
                                         viewModel.setInput(TextFieldValue())
@@ -196,7 +199,7 @@ fun SearchInputUi(
                     Icon(
                         painterResource(id = if (useVoice.value) R.drawable.ic_mic else R.drawable.ic_search_white),
                         contentDescription = stringResource(id = R.string.title_search_action),
-                        tint = MaterialTheme.colors.onPrimary,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
                             .width(32.dp)
                             .fillMaxHeight()
