@@ -43,15 +43,16 @@ internal fun BrowserTitle(
             text = progressTitle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+            letterSpacing = 0.sp,
             color = tint,
-            fontSize = 12.sp
+            fontSize = 11.sp
         )
         Text(
             text = headerUrl.value ?: "",
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             color = tint,
-            fontSize = 10.sp
+            fontSize = 9.sp
         )
     }
 }
