@@ -47,16 +47,8 @@ class ArticleListFragmentViewModel(
     private val _progress = MutableLiveData<Event<String>>()
     val progress : LiveData<Event<String>> = _progress
 
-    fun setProgressMessage(message: String) {
-        _progress.postValue(Event(message))
-    }
-
     private val _messageId = MutableLiveData<Event<Int>>()
     val messageId : LiveData<Event<Int>> = _messageId
-
-    fun setProgressMessageId(messageId: Int) {
-        _messageId.postValue(Event(messageId))
-    }
 
     private val _sort = MutableLiveData<Event<Sort>>()
     val sort: LiveData<Event<Sort>> = _sort
@@ -70,10 +62,16 @@ class ArticleListFragmentViewModel(
 
     fun search(keyword: String?) {
         setNextPager {
-            if (keyword.isNullOrBlank())
-                Sort.findByName(preferencesWrapper.articleSort()).invoke(articleRepository)
-            else
-                articleRepository.search("${tokenizer(keyword, 2)}")
+            if (keyword.isNullOrBlank()) {
+                val pagingSource = Sort.findByName(preferencesWrapper.articleSort()).invoke(articleRepository)
+                searchResult.value = "All article"
+                pagingSource
+            } else {
+                val start = System.currentTimeMillis()
+                val pagingSource = articleRepository.search("${tokenizer(keyword, 2)}")
+                searchResult.value = "Search ended. [${System.currentTimeMillis() - start}ms]"
+                pagingSource
+            }
         }
     }
 
@@ -101,5 +99,9 @@ class ArticleListFragmentViewModel(
             )
         )
     }
+
+    val searchInput = mutableStateOf("")
+
+    val searchResult = mutableStateOf("")
 
 }

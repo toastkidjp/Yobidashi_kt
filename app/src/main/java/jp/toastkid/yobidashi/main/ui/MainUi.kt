@@ -205,7 +205,7 @@ internal fun Content() {
                 return@rememberLauncherForActivityResult
             }
 
-            activityResultLauncher?.launch(OpenDocumentIntentFactory()("application/pdf"))
+            activityResultLauncher.launch(OpenDocumentIntentFactory()("application/pdf"))
         }
 
     val openMenu = remember { mutableStateOf(false) }
@@ -221,10 +221,7 @@ internal fun Content() {
     val backgroundColor = MaterialTheme.colors.primary
     val tint = MaterialTheme.colors.onPrimary
 
-    val bottomBarHeight = 72.dp
-    val bottomBarHeightPx = with(LocalDensity.current) {
-        bottomBarHeight.roundToPx().toFloat()
-    }
+    val bottomBarHeightPx = with(LocalDensity.current) { 72.dp.toPx() }
     contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
 
     val coroutineScope = rememberCoroutineScope()
@@ -238,20 +235,20 @@ internal fun Content() {
                     return Offset.Zero
                 }
                 val delta = available.y
-                val newOffset = (contentViewModel.bottomBarOffsetHeightPx.value ?: 0f) + delta
-                contentViewModel?.bottomBarOffsetHeightPx?.value = newOffset.coerceIn(-bottomBarHeightPx, 0f)
+                val newOffset = contentViewModel.bottomBarOffsetHeightPx.value + delta
+                contentViewModel.bottomBarOffsetHeightPx.value = newOffset.coerceIn(-bottomBarHeightPx, 0f)
 
                 val newValue = fabOffsetHeightPx.value + (delta / 2)
                 fabOffsetHeightPx.value = when {
                     0f > newValue -> 0f
-                    newValue > bottomBarHeight.value -> bottomBarHeight.value
+                    newValue > bottomBarHeightPx -> bottomBarHeightPx
                     else -> newValue
                 }
 
                 if (delta < -20f) {
                     contentViewModel.hideFab(coroutineScope)
                 } else if (delta > 20f) {
-                    contentViewModel?.showFab(coroutineScope)
+                    contentViewModel.showFab(coroutineScope)
                 }
                 return Offset.Zero
             }
@@ -261,11 +258,11 @@ internal fun Content() {
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    pageSearcherViewModel.close.observe(activity, {
+    pageSearcherViewModel.close.observe(activity) {
         it?.getContentIfNotHandled() ?: return@observe
         keyboardController?.hide()
         focusManager.clearFocus(true)
-    })
+    }
 
     contentViewModel?.switchTabList?.observe(activity, Observer {
         it?.getContentIfNotHandled() ?: return@Observer
@@ -402,7 +399,7 @@ internal fun Content() {
                     if (bottomSheetState.isVisible) {
                         keyboardController?.hide()
 
-                        contentViewModel.bottomSheetContent.value?.invoke()
+                        contentViewModel.bottomSheetContent.value.invoke()
                     }
                 }
 

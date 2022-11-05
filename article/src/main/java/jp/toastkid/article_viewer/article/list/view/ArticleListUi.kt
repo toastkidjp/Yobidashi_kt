@@ -102,16 +102,18 @@ fun ArticleListUi() {
 
     val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
 
-    val viewModel = ArticleListFragmentViewModelFactory(
-        articleRepository,
-        bookmarkRepository,
-        preferenceApplier
-    )
-        .create(ArticleListFragmentViewModel::class.java)
+    val viewModel = remember {
+        ArticleListFragmentViewModelFactory(
+            articleRepository,
+            bookmarkRepository,
+            preferenceApplier
+        )
+            .create(ArticleListFragmentViewModel::class.java)
+    }
 
     val progressBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
-            viewModel?.hideProgress()
+            viewModel.hideProgress()
             showFeedback()
         }
 
@@ -192,14 +194,12 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(activityContext)
 
-    var searchInput by remember { mutableStateOf("") }
-    var searchResult by remember { mutableStateOf("") }
     Row {
         Column {
             TextField(
-                value = searchInput,
+                value = viewModel.searchInput.value,
                 onValueChange = {
-                    searchInput = it
+                    viewModel.searchInput.value = it
                     CoroutineScope(Dispatchers.Default).launch {
                         //inputChannel.send(it)
                     }
@@ -212,7 +212,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 },
                 singleLine = true,
                 keyboardActions = KeyboardActions{
-                    viewModel?.search(searchInput)
+                    viewModel?.search(viewModel.searchInput.value)
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color(preferenceApplier.fontColor),
@@ -226,25 +226,31 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     modifier = Modifier
                         .offset(x = 8.dp)
                         .clickable {
-                            searchInput = ""
+                            viewModel.searchInput.value = ""
                         }
                 )
-                }
+                },
+                modifier = Modifier.weight(0.7f)
             )
-            Text(text = searchResult, color = Color.White)
+            Text(
+                text = viewModel.searchResult.value,
+                color = MaterialTheme.colors.onPrimary,
+                fontSize = 12.sp,
+                modifier = Modifier.weight(0.3f).padding(start = 16.dp)
+            )
         }
     }
 
-    viewModel?.progress?.observe(activityContext, {
+    viewModel.progress.observe(activityContext) {
         it?.getContentIfNotHandled()?.let { message ->
-            searchResult = message
+            viewModel.searchResult.value = message
         }
-    })
-    viewModel?.messageId?.observe(activityContext, {
+    }
+    viewModel.messageId.observe(activityContext) {
         it?.getContentIfNotHandled()?.let { messageId ->
-            searchResult = activityContext.getString(messageId)
+            viewModel.searchResult.value = activityContext.getString(messageId)
         }
-    })
+    }
 
     val setTargetLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {

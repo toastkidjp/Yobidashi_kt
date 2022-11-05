@@ -33,7 +33,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -120,7 +119,8 @@ internal fun WebTabUi(webTab: WebTab) {
     val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val refreshTriggerPx = with(LocalDensity.current) { 80.dp.toPx() }
+    val refreshTriggerPx = with(LocalDensity.current) { 96.dp.toPx() }
+    val verticalIndicatorOffsetPx = with(LocalDensity.current) { -24.dp.toPx() }.toInt()
     LaunchedEffect(browserViewModel.swipeRefreshState.value?.isSwipeInProgress) {
         if (browserViewModel.swipeRefreshState.value?.isSwipeInProgress == false) {
             // If there's not a swipe in progress, rest the indicator at 0f
@@ -201,8 +201,7 @@ internal fun WebTabUi(webTab: WebTab) {
                         IntOffset(
                             0,
                             min(
-                                browserViewModel.swipeRefreshState.value?.indicatorOffset?.toInt()
-                                    ?: 0,
+                                verticalIndicatorOffsetPx + (browserViewModel.swipeRefreshState.value?.indicatorOffset?.toInt() ?: 0),
                                 nestedScrollConnection.refreshTrigger.toInt()
                             )
                         )
@@ -411,7 +410,7 @@ internal fun WebTabUi(webTab: WebTab) {
     })
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(
     viewModel: BrowserViewModel,

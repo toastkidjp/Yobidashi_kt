@@ -30,8 +30,8 @@ class DarkCssInjectorUseCase {
                         
                         var cssText = 
                             'html{      filter: invert(1) hue-rotate(180deg);  }'
-                               + 'html img, .Image, .ytp-cued-thumbnail-overlay-image, .EmbeddedImage,'
-                               + '.theme-Kisekae__backgroundImage--headerChar, .ext-related-articles-card-thumb {'
+                               + 'html img, video, iframe, .Image, .ytp-cued-thumbnail-overlay-image, .EmbeddedImage,'
+                               + '.theme-Kisekae__backgroundImage--headerChar, .ext-related-articles-card-thumb, .r-1wyyakw {'
                                +      'filter: invert(1) hue-rotate(180deg);'
                                + '}';
                         

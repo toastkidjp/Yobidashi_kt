@@ -24,7 +24,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -70,7 +69,7 @@ fun ViewHistoryListUi() {
         }
     })
 
-    val browserViewModel = ViewModelProvider(context).get(BrowserViewModel::class.java)
+    val browserViewModel = viewModel(BrowserViewModel::class.java, context)
 
     val onClick: (ViewHistory, Boolean) -> Unit = { viewHistory, isLongClick ->
         when (isLongClick) {
