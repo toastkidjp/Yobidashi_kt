@@ -66,7 +66,7 @@ internal fun ColorSettingUi() {
     val context = LocalContext.current
     val preferenceApplier = PreferenceApplier(context)
 
-    val repository = DatabaseFinder().invoke(context).savedColorRepository()
+    val repository = remember { DatabaseFinder().invoke(context).savedColorRepository() }
 
     val colorPair = preferenceApplier.colorPair()
     val initialBgColor = colorPair.bgColor()
