@@ -47,7 +47,8 @@ fun UserAgentDropdown(open: MutableState<Boolean>, onSelect: (UserAgent) -> Unit
                         )
                         RadioButton(
                             selected = userAgent.name == current,
-                            colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.secondary),
+                            colors = RadioButtonDefaults
+                                .colors(selectedColor = MaterialTheme.colorScheme.secondary),
                             onClick = {  }
                         )
                     }
