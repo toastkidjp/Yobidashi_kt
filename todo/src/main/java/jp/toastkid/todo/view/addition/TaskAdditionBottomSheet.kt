@@ -26,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -143,6 +144,8 @@ internal fun TaskEditorUi(
             colors.forEach { color ->
                 RadioButton(
                     selected = chosenColor == color.toInt(),
+                    colors = RadioButtonDefaults
+                        .colors(selectedColor = MaterialTheme.colorScheme.secondary),
                     onClick = {
                         task?.color = color.toInt()
                         chosenColor = color.toInt()
