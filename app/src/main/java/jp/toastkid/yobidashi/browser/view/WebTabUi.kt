@@ -480,6 +480,17 @@ private fun AppBarContent(
                 tint,
                 enableForward.value
             ) { browserModule.forward() }
+
+            HeaderSubButton(
+                R.drawable.ic_reader_mode,
+                R.string.title_menu_reader_mode,
+                tint
+            ) {
+                browserModule.invokeContentExtraction {
+                    showReader(it, contentViewModel, resetReaderModeContent)
+                }
+            }
+
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
@@ -593,19 +604,6 @@ private fun AppBarContent(
                         contentViewModel.webSearch()
                     }
             ) {
-                Icon(
-                    painterResource(id = R.drawable.ic_reader_mode),
-                    contentDescription = stringResource(id = R.string.title_menu_reader_mode),
-                    tint = tint,
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .clickable {
-                            browserModule.invokeContentExtraction {
-                                showReader(it, contentViewModel, resetReaderModeContent)
-                            }
-                        }
-                )
-
                 BrowserTitle(
                     viewModel.progress,
                     viewModel.title,
