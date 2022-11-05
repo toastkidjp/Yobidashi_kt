@@ -52,13 +52,10 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
-import jp.toastkid.lib.preference.PreferenceApplier
 
 @Composable
 fun BarcodeReaderUi() {
     val context = LocalContext.current as? Activity ?: return
-
-    val preferenceApplier = PreferenceApplier(context)
 
     val onResume = remember { mutableStateOf(isGranted(context)) }
 
