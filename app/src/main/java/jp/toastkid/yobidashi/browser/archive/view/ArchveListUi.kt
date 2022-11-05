@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -98,7 +97,6 @@ fun ArchiveListUi() {
                             tint = MaterialTheme.colors.secondary,
                             modifier = Modifier
                                 .padding(4.dp)
-                                .width(40.dp)
                                 .fillMaxHeight()
                         )
                         Column(
