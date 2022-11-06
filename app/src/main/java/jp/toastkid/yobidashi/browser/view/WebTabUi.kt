@@ -608,7 +608,7 @@ private fun AppBarContent(
                     viewModel.progress,
                     viewModel.title,
                     viewModel.url,
-                    Modifier.weight(1f)
+                    Modifier.weight(1f).padding(horizontal = 4.dp)
                 )
 
                 val isNotLoading = 70 < viewModel.progress.value
