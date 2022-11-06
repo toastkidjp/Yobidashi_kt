@@ -45,14 +45,14 @@ internal fun BrowserTitle(
             overflow = TextOverflow.Ellipsis,
             letterSpacing = 0.sp,
             color = tint,
-            fontSize = 11.sp
+            fontSize = 12.sp
         )
         Text(
             text = headerUrl.value ?: "",
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             color = tint,
-            fontSize = 9.sp
+            fontSize = 10.sp
         )
     }
 }
