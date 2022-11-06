@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.browser.view
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -44,14 +45,14 @@ internal fun BrowserTitle(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             letterSpacing = 0.sp,
-            color = tint,
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 12.sp
         )
         Text(
             text = headerUrl.value ?: "",
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            color = tint,
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 10.sp
         )
     }
