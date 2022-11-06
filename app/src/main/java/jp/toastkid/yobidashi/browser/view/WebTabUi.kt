@@ -269,9 +269,8 @@ internal fun WebTabUi(webTab: WebTab) {
         contentViewModel.replaceAppBarContent {
             AppBarContent(
                 browserViewModel,
-                browserModule,
-                { readerModeText.value = it }
-            )
+                browserModule
+            ) { readerModeText.value = it }
         }
 
         contentViewModel.toTop.observe(lifecycleOwner) {
