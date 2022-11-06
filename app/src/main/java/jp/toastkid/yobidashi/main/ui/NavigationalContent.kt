@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
 import androidx.navigation.NavGraphBuilder
@@ -58,8 +57,6 @@ internal fun NavigationalContent(
     navigationHostController: NavHostController,
     tabs: TabAdapter
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-
     AnimatedNavHost(
         navController = navigationHostController,
         startDestination = "empty",
@@ -71,23 +68,19 @@ internal fun NavigationalContent(
         }
         tabComposable("tab/web/current") {
             val currentTab = tabs.currentTab() as? WebTab ?: return@tabComposable
-            keyboardController?.hide()
             WebTabUi(currentTab)
         }
         tabComposable("tab/pdf/current") {
             val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
-            keyboardController?.hide()
             PdfViewerUi(currentTab.getUrl().toUri())
             takeScreenshot(tabs, LocalView.current)
         }
         tabComposable("tab/article/list") {
-            keyboardController?.hide()
             ArticleListUi()
             takeScreenshot(tabs, LocalView.current)
         }
         tabComposable("tab/article/content/{title}") {
             val title = it?.getString("title") ?: return@tabComposable
-            keyboardController?.hide()
             ArticleContentUi(title)
             takeScreenshot(tabs, LocalView.current)
         }
