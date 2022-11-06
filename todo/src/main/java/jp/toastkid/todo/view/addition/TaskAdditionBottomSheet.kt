@@ -11,6 +11,7 @@ package jp.toastkid.todo.view.addition
 import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -83,111 +84,113 @@ internal fun TaskEditorUi(
     }
 
     Dialog(onDismissRequest = { bottomSheetScaffoldState.value = false }) {
-        Row {
-            TextField(
-                value = descriptionInput,
-                onValueChange = {
-                    descriptionInput = it
-                    task?.description = descriptionInput
-                },
-                label = { stringResource(id = R.string.description) },
-                singleLine = true,
-                keyboardActions = KeyboardActions {
-                    save(task, onTapAdd)
-                    coroutineScope.launch {
-                        bottomSheetScaffoldState.value = false
+        Column {
+            Row {
+                TextField(
+                    value = descriptionInput,
+                    onValueChange = {
+                        descriptionInput = it
+                        task?.description = descriptionInput
+                    },
+                    label = { stringResource(id = R.string.description) },
+                    singleLine = true,
+                    keyboardActions = KeyboardActions {
+                        save(task, onTapAdd)
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.value = false
+                        }
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = MaterialTheme.colorScheme.onSurface,
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        cursorColor = MaterialTheme.colorScheme.onSurface
+                    ),
+                    trailingIcon = {
+                        Icon(
+                            Icons.Filled.Clear,
+                            tint = Color(colorPair.fontColor()),
+                            contentDescription = "clear text",
+                            modifier = Modifier
+                                .offset(x = 8.dp)
+                                .clickable {
+                                    descriptionInput = ""
+                                }
+                        )
                     }
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onSurface,
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
-                ),
-                trailingIcon = {
-                    Icon(
-                        Icons.Filled.Clear,
-                        tint = Color(colorPair.fontColor()),
-                        contentDescription = "clear text",
+                )
+                Button(
+                    onClick = {
+                        save(task, onTapAdd)
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.value = false
+                        }
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        disabledContentColor = Color.LightGray)
+                ) {
+                    Text(text = stringResource(id = R.string.add), textAlign = TextAlign.Center)
+                }
+            }
+
+            Text(
+                text = stringResource(id = R.string.color),
+                fontSize = 16.sp,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .height(44.dp)) {
+                colors.forEach { color ->
+                    RadioButton(
+                        selected = chosenColor == color.toInt(),
+                        colors = RadioButtonDefaults
+                            .colors(selectedColor = MaterialTheme.colorScheme.secondary),
+                        onClick = {
+                            task?.color = color.toInt()
+                            chosenColor = color.toInt()
+                        },
                         modifier = Modifier
-                            .offset(x = 8.dp)
-                            .clickable {
-                                descriptionInput = ""
-                            }
+                            .width(44.dp)
+                            .height(44.dp)
+                            .background(Color(color))
                     )
                 }
+            }
+
+            Text(
+                text = "Date",
+                fontSize = 16.sp,
+                modifier = Modifier.fillMaxWidth()
             )
-            Button(
-                onClick = {
-                    save(task, onTapAdd)
-                    coroutineScope.launch {
-                        bottomSheetScaffoldState.value = false
+
+            AndroidView(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                factory = { context ->
+                    val today = Calendar.getInstance()
+                    task?.let {
+                        today.timeInMillis = it.dueDate
                     }
-                },
-                colors = ButtonDefaults.textButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    disabledContentColor = Color.LightGray)
-            ) {
-                Text(text = stringResource(id = R.string.add), textAlign = TextAlign.Center)
-            }
-        }
-
-        Text(
-            text = stringResource(id = R.string.color),
-            fontSize = 16.sp,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .height(44.dp)) {
-            colors.forEach { color ->
-                RadioButton(
-                    selected = chosenColor == color.toInt(),
-                    colors = RadioButtonDefaults
-                        .colors(selectedColor = MaterialTheme.colorScheme.secondary),
-                    onClick = {
-                        task?.color = color.toInt()
-                        chosenColor = color.toInt()
-                    },
-                    modifier = Modifier
-                        .width(44.dp)
-                        .height(44.dp)
-                        .background(Color(color))
-                )
-            }
-        }
-
-        Text(
-            text = "Date",
-            fontSize = 16.sp,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        AndroidView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            factory = { context ->
-                val today = Calendar.getInstance()
-                task?.let {
-                    today.timeInMillis = it.dueDate
+                    val datePicker = DatePicker(context)
+                    datePicker.init(
+                        today.get(Calendar.YEAR),
+                        today.get(Calendar.MONTH),
+                        today.get(Calendar.DAY_OF_MONTH)
+                    ) { _, year, monthOfYear, dayOfMonth ->
+                        task?.dueDate = GregorianCalendar(
+                            year,
+                            monthOfYear,
+                            dayOfMonth
+                        ).timeInMillis
+                    }
+                    datePicker
                 }
-                val datePicker = DatePicker(context)
-                datePicker.init(
-                    today.get(Calendar.YEAR),
-                    today.get(Calendar.MONTH),
-                    today.get(Calendar.DAY_OF_MONTH)
-                ) { _, year, monthOfYear, dayOfMonth ->
-                    task?.dueDate = GregorianCalendar(
-                        year,
-                        monthOfYear,
-                        dayOfMonth
-                    ).timeInMillis
-                }
-                datePicker
-            }
-        )
+            )
+        }
     }
 }
 
