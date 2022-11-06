@@ -21,6 +21,7 @@ import jp.toastkid.editor.TableConverter
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.search.SearchCategory
@@ -125,6 +126,7 @@ class MenuActionInvokerUseCase(
             }
             R.id.context_edit_url_open_new -> {
                 browserViewModel?.open(text.toUri())
+                Inputs().hideKeyboard(editText)
                 return true
             }
             R.id.context_edit_url_open_background -> {
