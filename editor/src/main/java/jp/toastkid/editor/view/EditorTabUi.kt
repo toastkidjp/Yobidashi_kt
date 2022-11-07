@@ -398,6 +398,7 @@ private fun EditorMenuItem(
             color = Color(preferenceApplier.fontColor),
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
+            softWrap = false,
             modifier = Modifier.fillMaxWidth()
         )
     }
