@@ -14,11 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 
 @Composable
@@ -29,7 +27,6 @@ internal fun BrowserTitle(
     modifier: Modifier
 ) {
     val context = LocalContext.current
-    val tint = Color(PreferenceApplier(context).fontColor)
 
     Column(
         modifier = modifier
