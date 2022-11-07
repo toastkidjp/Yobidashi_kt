@@ -589,7 +589,7 @@ private fun AppBarContent(
             }
         }
 
-        Box {
+        Box(modifier = Modifier.padding(start = 4.dp)) {
             AsyncImage(
                 model = R.drawable.url_box_background,
                 contentDescription = stringResource(id = R.string.search)
