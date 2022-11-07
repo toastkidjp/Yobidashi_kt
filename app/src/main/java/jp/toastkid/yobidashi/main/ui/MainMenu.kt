@@ -96,6 +96,7 @@ internal fun MainMenu(
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                             textAlign = TextAlign.Center,
+                            softWrap = false,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 8.dp)
