@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -304,10 +305,10 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                     modifier = Modifier.padding(start = 4.dp, end = 4.dp)
                 )
             }
-            Image(
+            Icon(
                 painterResource(id = R.drawable.ic_share_black),
                 contentDescription = stringResource(id = R.string.share),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary, BlendMode.SrcIn),
+                tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .width(32.dp)
                     .clickable {
