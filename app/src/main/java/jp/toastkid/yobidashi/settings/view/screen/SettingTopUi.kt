@@ -66,7 +66,7 @@ fun SettingTopUi() {
                 Box(
                     modifier = Modifier
                         .tabIndicatorOffset(tabPositions[selectedIndex.value])
-                        .height(4.dp)
+                        .height(2.dp)
                         .clip(RoundedCornerShape(8.dp)) // clip modifier not working
                         .padding(horizontal = 4.dp)
                         .background(color = MaterialTheme.colorScheme.onPrimary)
