@@ -320,10 +320,10 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                         )
                     }
             )
-            Image(
+            Icon(
                 painterResource(id = R.drawable.ic_clip),
                 contentDescription = stringResource(id = R.string.clip),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary, BlendMode.SrcIn),
+                tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .width(32.dp)
                     .clickable {
