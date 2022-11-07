@@ -8,11 +8,16 @@
 
 package jp.toastkid.yobidashi.settings.view.screen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -20,6 +25,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -56,6 +62,16 @@ fun SettingTopUi() {
             selectedTabIndex = selectedIndex.value,
             edgePadding = 8.dp,
             containerColor = Color.Transparent,
+            indicator = { tabPositions ->
+                Box(
+                    modifier = Modifier
+                        .tabIndicatorOffset(tabPositions[selectedIndex.value])
+                        .height(4.dp)
+                        .clip(RoundedCornerShape(8.dp)) // clip modifier not working
+                        .padding(horizontal = 4.dp)
+                        .background(color = MaterialTheme.colorScheme.onPrimary)
+                )
+            },
             modifier = Modifier.fillMaxHeight()
         ) {
             pages.forEachIndexed { index, page ->
