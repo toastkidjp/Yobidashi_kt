@@ -261,7 +261,7 @@ internal fun SearchContentsUi(
                                     .width(36.dp)
                                     .height(32.dp)
                                     .background(colorResource(id = R.color.pre4_ripple))
-                                    .clickable { viewModel?.putQuery("${it.title} ") }
+                                    .clickable { viewModel.putQuery("${it.title} ") }
                             )
                         }
                     }
