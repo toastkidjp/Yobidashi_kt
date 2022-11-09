@@ -125,8 +125,8 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_url_open_new -> {
-                browserViewModel?.open(text.toUri())
                 Inputs().hideKeyboard(editText)
+                browserViewModel?.open(text.toUri())
                 return true
             }
             R.id.context_edit_url_open_background -> {
@@ -142,6 +142,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_web_search -> {
+                Inputs().hideKeyboard(editText)
                 browserViewModel?.open(makeSearchResultUrl(context, text))
                 return true
             }
