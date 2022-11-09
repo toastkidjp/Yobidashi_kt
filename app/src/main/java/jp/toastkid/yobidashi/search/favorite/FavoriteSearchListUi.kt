@@ -111,7 +111,7 @@ fun FavoriteSearchListUi() {
                         Icon(
                             Icons.Filled.Clear,
                             contentDescription = "clear text",
-                            tint = Color(preferenceApplier.fontColor),
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
                                 .clickable {
                                     input.value = ""
