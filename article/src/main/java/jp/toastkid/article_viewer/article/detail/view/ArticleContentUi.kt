@@ -77,7 +77,7 @@ fun ArticleContentUi(title: String) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
     val viewModelProvider = ViewModelProvider(context)
-    val repository = AppDatabase.find(context).articleRepository()
+    val repository = remember { AppDatabase.find(context).articleRepository() }
     val linkBehaviorService = LinkBehaviorService(
         viewModelProvider.get(ContentViewModel::class.java),
         viewModelProvider.get(BrowserViewModel::class.java),
