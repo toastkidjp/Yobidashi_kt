@@ -78,11 +78,13 @@ fun ArticleContentUi(title: String) {
     val preferenceApplier = PreferenceApplier(context)
     val viewModelProvider = ViewModelProvider(context)
     val repository = remember { AppDatabase.find(context).articleRepository() }
-    val linkBehaviorService = LinkBehaviorService(
-        viewModelProvider.get(ContentViewModel::class.java),
-        viewModelProvider.get(BrowserViewModel::class.java),
-        { repository.exists(it) > 0 }
-    )
+    val linkBehaviorService = remember {
+        LinkBehaviorService(
+            viewModelProvider.get(ContentViewModel::class.java),
+            viewModelProvider.get(BrowserViewModel::class.java),
+            { repository.exists(it) > 0 }
+        )
+    }
     val viewModel = ViewModelProvider(context).get(ContentViewerFragmentViewModel::class.java)
 
     viewModel.setTitle(title)
