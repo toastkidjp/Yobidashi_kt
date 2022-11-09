@@ -50,7 +50,7 @@ class SuggestionApi(
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string() ?: return
+                val body = response.body?.use { it.string() } ?: return
                 listCallback(suggestionParser(body))
             }
         })
