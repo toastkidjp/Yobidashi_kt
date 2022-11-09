@@ -215,7 +215,7 @@ fun EditorTabUi(path: String?) {
     val openInputFileNameDialog = remember { mutableStateOf(false) }
     val observer = LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_PAUSE) {
-            fileActionUseCase.save(openInputFileNameDialog)
+            fileActionUseCase.save(openInputFileNameDialog, false)
         }
     }
 
@@ -223,7 +223,7 @@ fun EditorTabUi(path: String?) {
         localLifecycle.addObserver(observer)
 
         onDispose {
-            fileActionUseCase.save(openInputFileNameDialog)
+            fileActionUseCase.save(openInputFileNameDialog, false)
             localLifecycle.removeObserver(observer)
             contentViewModel.share.removeObservers(localLifecycleOwner)
         }
