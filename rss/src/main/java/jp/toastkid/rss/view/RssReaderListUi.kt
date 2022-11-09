@@ -110,7 +110,7 @@ private fun RssReaderList(fullItems: List<Item>) {
                         .fillMaxWidth()
                         .fillMaxHeight()
                 ) {
-                    Row() {
+                    Row {
                         Icon(
                             painterResource(id = R.drawable.ic_rss_feed),
                             contentDescription = stringResource(id = R.string.image),

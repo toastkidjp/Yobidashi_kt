@@ -64,6 +64,7 @@ import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskEditorUi
 import jp.toastkid.todo.view.appbar.AppBarUi
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
+import jp.toastkid.todo.view.list.initial.InitialTaskPreparation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -92,6 +93,10 @@ fun TaskListUi() {
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(key1 = "load", block = {
         withContext(Dispatchers.IO) {
+            if (repository.count() == 0) {
+                InitialTaskPreparation(repository).invoke()
+            }
+
             val flow = Pager(
                 PagingConfig(pageSize = 10, enablePlaceholders = true),
                 pagingSourceFactory = { repository.allTasks() }
@@ -108,7 +113,7 @@ fun TaskListUi() {
     )
 
     val menuUseCase = ItemMenuPopupActionUseCase(
-        { taskAdditionDialogFragmentViewModel?.setTask(it) },
+        { taskAdditionDialogFragmentViewModel.setTask(it) },
         {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
@@ -118,7 +123,7 @@ fun TaskListUi() {
         }
     )
 
-    taskAdditionDialogFragmentViewModel?.task?.observe(context, {
+    taskAdditionDialogFragmentViewModel.task?.observe(context, {
         coroutineScope.launch {
             bottomSheetScaffoldState.show()
         }
@@ -189,7 +194,7 @@ private fun TaskListItem(
                 onCheckedChange = {
                     task.done = task.done.not()
                     CoroutineScope(Dispatchers.IO).launch {
-                        repository?.insert(task)
+                        repository.insert(task)
                     }
                 },
                 modifier = Modifier

@@ -62,7 +62,7 @@ fun MainMenu(
                 .fillMaxWidth()
         ) {
             items(tooBigCount) { longIndex ->
-                val menu = Menu.values().get(longIndex % menuCount)
+                val menu = Menu.values()[longIndex % menuCount]
                 Surface(
                     color = MaterialTheme.colors.primary,
                     elevation = 4.dp,

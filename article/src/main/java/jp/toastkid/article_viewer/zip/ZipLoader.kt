@@ -1,7 +1,6 @@
 package jp.toastkid.article_viewer.zip
 
 import android.os.Build
-import androidx.annotation.RequiresApi
 import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
@@ -27,7 +26,6 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
 
     private val disposable = Job()
 
-    @RequiresApi(Build.VERSION_CODES.N)
     operator fun invoke(inputStream: InputStream) {
         ZipInputStream(inputStream, CHARSET)
             .use { zipInputStream ->

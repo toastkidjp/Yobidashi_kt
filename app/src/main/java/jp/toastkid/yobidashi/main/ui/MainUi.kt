@@ -272,7 +272,7 @@ internal fun Content() {
         }
     })
 
-    contentViewModel.moveTab.observe(activity, {
+    contentViewModel.moveTab.observe(activity) {
         val i = it?.getContentIfNotHandled() ?: return@observe
         if (i == -1) {
             tabs.movePreviousTab()
@@ -280,7 +280,7 @@ internal fun Content() {
             tabs.moveNextTab()
         }
         replaceToCurrentTab(tabs, navigationHostController)
-    })
+    }
 
     contentViewModel.openPdf?.observe(activity) {
         it?.getContentIfNotHandled() ?: return@observe
