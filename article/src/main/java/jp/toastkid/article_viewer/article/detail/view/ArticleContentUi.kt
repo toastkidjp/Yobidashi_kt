@@ -85,7 +85,7 @@ fun ArticleContentUi(title: String) {
             { repository.exists(it) > 0 }
         )
     }
-    val viewModel = ViewModelProvider(context).get(ContentViewerFragmentViewModel::class.java)
+    val viewModel = viewModelProvider.get(ContentViewerFragmentViewModel::class.java)
 
     viewModel.setTitle(title)
 
