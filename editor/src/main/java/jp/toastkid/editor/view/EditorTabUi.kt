@@ -41,6 +41,7 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -303,7 +304,7 @@ private fun AppBarContent(
             Image(
                 painterResource(R.drawable.ic_tab),
                 contentDescription = stringResource(id = R.string.tab_list),
-                colorFilter = ColorFilter.tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary, BlendMode.SrcIn),
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
