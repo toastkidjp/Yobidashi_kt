@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.browser.view.reader
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -20,14 +19,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -69,10 +67,10 @@ internal fun ReaderModeUi(title: String, text: MutableState<String>) {
                 )
             }
         }
-        Image(
+        Icon(
             painterResource(R.drawable.ic_close_black),
             contentDescription = stringResource(id = R.string.close),
-            colorFilter = ColorFilter.tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn),
+            tint = Color(preferenceApplier.fontColor),
             modifier = Modifier
                 .size(60.dp)
                 .padding(16.dp)
