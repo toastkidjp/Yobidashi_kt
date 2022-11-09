@@ -34,15 +34,15 @@ class FileActionUseCase(
     /**
      * Save current content to file.
      */
-    fun save(openInputFileNameDialog: MutableState<Boolean>) {
+    fun save(openInputFileNameDialog: MutableState<Boolean>, showSnack: Boolean = true) {
         if (path.value.isBlank()) {
             openInputFileNameDialog.value = true
             return
         }
-        saveToFile(path.value)
+        saveToFile(path.value, showSnack)
     }
 
-    private fun saveToFile(filePath: String) {
+    private fun saveToFile(filePath: String, showSnack: Boolean = true) {
         val file = File(filePath)
         if (!file.exists()) {
             file.createNewFile()
@@ -64,7 +64,9 @@ class FileActionUseCase(
             null
         ) { _, _ ->  }
 
-        snackText("${context.getString(R.string.done_save)}: $filePath")
+        if (showSnack) {
+            snackText("${context.getString(R.string.done_save)}: $filePath")
+        }
 
         //val fileName = file.nameWithoutExtension + "_backup.txt"
         //saveToFile(ExternalFileAssignment()(context, fileName).absolutePath)
