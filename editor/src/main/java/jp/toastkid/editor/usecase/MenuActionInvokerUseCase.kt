@@ -142,8 +142,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_web_search -> {
-                Inputs().hideKeyboard(editText)
-                browserViewModel?.open(makeSearchResultUrl(context, text))
+                openUrl(makeSearchResultUrl(context, text))
                 return true
             }
             R.id.context_edit_delete_line -> {
@@ -161,6 +160,11 @@ class MenuActionInvokerUseCase(
             else -> Unit
         }
         return false
+    }
+
+    private fun openUrl(uri: Uri) {
+        Inputs().hideKeyboard(editText)
+        browserViewModel?.open(uri)
     }
 
     private fun makeSearchResultUrl(context: Context, text: String): Uri = UrlFactory().invoke(
