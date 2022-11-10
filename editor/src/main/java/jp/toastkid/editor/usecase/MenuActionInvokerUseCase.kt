@@ -125,8 +125,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_url_open_new -> {
-                Inputs().hideKeyboard(editText)
-                browserViewModel?.open(text.toUri())
+                openUrl(text.toUri())
                 return true
             }
             R.id.context_edit_url_open_background -> {
