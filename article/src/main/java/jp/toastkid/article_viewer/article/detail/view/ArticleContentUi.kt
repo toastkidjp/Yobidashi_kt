@@ -169,7 +169,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                         viewModel.title.value,
                         color = Color(preferenceApplier.editorFontColor())
                     )
-                        },
+                },
                 singleLine = true,
                 keyboardActions = KeyboardActions {
                     //TODO contentTextSearchUseCase.invoke(it.toString())
