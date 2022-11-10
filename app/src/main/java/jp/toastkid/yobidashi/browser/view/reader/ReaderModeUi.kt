@@ -20,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -70,7 +71,7 @@ internal fun ReaderModeUi(title: String, text: MutableState<String>) {
         Icon(
             painterResource(R.drawable.ic_close_black),
             contentDescription = stringResource(id = R.string.close),
-            tint = Color(preferenceApplier.fontColor),
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .size(60.dp)
                 .padding(16.dp)
