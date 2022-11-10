@@ -178,7 +178,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                     textColor = MaterialTheme.colorScheme.onPrimary,
                     cursorColor = MaterialTheme.colorScheme.onPrimary,
                     unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                    focusedIndicatorColor = Color(preferenceApplier.fontColor)
+                    focusedIndicatorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 trailingIcon = {
                     Icon(
