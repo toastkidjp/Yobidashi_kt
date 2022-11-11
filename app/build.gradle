@@ -76,7 +76,7 @@ play {
 
 dependencies {
     implementation project(":lib")
-    implementation project(":lib:snow")
+    implementation project(':lib:display_effect')
     implementation project(":article")
     implementation project(":search")
     implementation project(":todo")

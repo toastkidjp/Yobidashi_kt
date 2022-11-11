@@ -30,7 +30,7 @@ class PreferenceApplier(private val context: Context) {
         BG_COLOR, FONT_COLOR,
         ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY, ENABLE_URL_MODULE,
         ENABLE_TREND_MODULE, ENABLE_FAVORITE_SEARCH, DISABLE_SEARCH_CATEGORIES,
-        BG_IMAGE,
+        BG_IMAGE, SHOW_DISPLAY_EFFECT,
         USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
@@ -123,6 +123,14 @@ class PreferenceApplier(private val context: Context) {
 
     fun readDisableSearchCategory(): MutableSet<String>? {
         return preferences.getStringSet(Key.DISABLE_SEARCH_CATEGORIES.name, mutableSetOf())
+    }
+
+    fun switchShowDisplayEffect() {
+        preferences.edit().putBoolean(Key.SHOW_DISPLAY_EFFECT.name, showDisplayEffect().not()).apply()
+    }
+
+    fun showDisplayEffect(): Boolean {
+        return preferences.getBoolean(Key.SHOW_DISPLAY_EFFECT.name, false)
     }
 
     var backgroundImagePath: String

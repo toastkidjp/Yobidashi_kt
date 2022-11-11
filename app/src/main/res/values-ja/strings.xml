@@ -17,6 +17,7 @@
     <string name="title_tools">ツール</string>
     <string name="title_set_bg">背景画像を設定</string>
     <string name="title_bg_reset">背景画像を解除</string>
+    <string name="title_display_effect">画面エフェクトを表示</string>
     <string name="section_title_share">シェア</string>
     <string name="title_share">このアプリをシェア</string>
     <string name="title_share_twitter">Twitter でシェア</string>
@@ -289,6 +290,7 @@
     <string name="reset_button_position">ボタンの位置をリセット</string>
     <string name="title_dialog_color_chooser">色を選択</string>
     <string name="current_color">現在の色:</string>
+    <string name="title_copy_colors">色設定をコピー</string>
     <string name="title_cursor_color">カーソルの色</string>
     <string name="title_highlight_color">テキスト選択の色</string>
     <string name="menu_random_wikipedia">ランダム Wikipedia</string>

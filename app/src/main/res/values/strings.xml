@@ -23,6 +23,7 @@
     <string name="title_tools">Tools</string>
     <string name="title_set_bg">Set Background Image</string>
     <string name="title_bg_reset">Reset Background Image</string>
+    <string name="title_display_effect">Show display effect</string>
     <string name="section_title_share">Share</string>
     <string name="title_share">Share this app</string>
     <string name="title_share_twitter">Share by Twitter</string>
@@ -293,6 +294,7 @@
     <string name="reset_button_position">Reset Button Position</string>
     <string name="title_dialog_color_chooser">Choose color</string>
     <string name="current_color">Current color:</string>
+    <string name="title_copy_colors">Copy colors from main color</string>
     <string name="title_cursor_color">Cursor color</string>
     <string name="title_highlight_color">Selected text color</string>
     <string name="menu_random_wikipedia">Random Wikipedia</string>

@@ -41,8 +41,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.godaddy.android.colorpicker.ClassicColorPicker
 import jp.toastkid.editor.EditorFontSize
 import jp.toastkid.lib.ContentViewModel
@@ -51,13 +51,14 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.view.ColorPaletteUi
+import jp.toastkid.yobidashi.settings.view.WithIcon
 
 @Composable
 internal fun EditorSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+        viewModel(ContentViewModel::class.java, activityContext)
     }
     val backgroundColor = preferenceApplier.editorBackgroundColor()
     val fontColor = preferenceApplier.editorFontColor()
@@ -71,10 +72,23 @@ internal fun EditorSettingUi() {
         remember { mutableStateOf(Color(preferenceApplier.editorFontColor())) }
 
     val cursorColor =
-        remember { mutableStateOf(Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, R.color.editor_cursor)))) }
+        remember {
+            val color = preferenceApplier.editorCursorColor(
+                ContextCompat.getColor(activityContext, R.color.editor_cursor)
+            )
+            mutableStateOf(Color(color))
+        }
 
     val highlightColor =
-        remember { mutableStateOf(Color(preferenceApplier.editorHighlightColor(ContextCompat.getColor(activityContext, R.color.light_blue_200_dd)))) }
+        remember {
+            val color = preferenceApplier.editorHighlightColor(
+                ContextCompat.getColor(
+                    activityContext,
+                    R.color.light_blue_200_dd
+                )
+            )
+            mutableStateOf(Color(color))
+        }
 
     val fontSize =
         remember { mutableStateOf(preferenceApplier.editorFontSize()) }
@@ -108,6 +122,27 @@ internal fun EditorSettingUi() {
 
                         contentViewModel?.snackShort(R.string.settings_color_done_reset)
                     }
+                )
+            }
+
+            item {
+                InsetDivider()
+            }
+
+            item {
+                WithIcon(
+                    R.string.title_copy_colors,
+                    {
+                        preferenceApplier.setEditorBackgroundColor(preferenceApplier.color)
+                        preferenceApplier.setEditorFontColor(preferenceApplier.fontColor)
+
+                        currentBackgroundColor.value = Color(preferenceApplier.color)
+                        currentFontColor.value = Color(preferenceApplier.fontColor)
+
+                        contentViewModel?.snackShort(R.string.settings_color_done_commit)
+                    },
+                    iconTint,
+                    R.drawable.ic_clip
                 )
             }
 

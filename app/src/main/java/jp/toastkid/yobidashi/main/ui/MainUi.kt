@@ -66,7 +66,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -78,6 +77,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
@@ -86,6 +86,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.SnackbarEvent
@@ -480,7 +481,7 @@ internal fun Content() {
                         onClick = { openMenu.value = openMenu.value.not() },
                         backgroundColor = tint,
                         modifier = Modifier
-                            .scale(contentViewModel?.fabScale?.value ?: 1f)
+                            .scale(contentViewModel.fabScale.value)
                             .pointerInput(Unit) {
                                 detectDragGestures(
                                     onDragEnd = {
@@ -491,7 +492,7 @@ internal fun Content() {
                                             )
                                     },
                                     onDrag = { change, dragAmount ->
-                                        change.consumeAllChanges()
+                                        change.consume()
                                         offsetX.value += dragAmount.x
                                         offsetY.value += dragAmount.y
                                     }
@@ -509,7 +510,13 @@ internal fun Content() {
                     .fillMaxSize()
                     .nestedScroll(nestedScrollConnection)
             ) { paddingValue ->
-                NavigationalContent(navigationHostController, tabs)
+                Box {
+                    NavigationalContent(navigationHostController, tabs)
+
+                    if (contentViewModel.showSnowEffect()) {
+                        AndroidView(factory = { SnowRendererView(activity) })
+                    }
+                }
 
                 LaunchedEffect(key1 = "first_launch", block = {
                     if (tabs.isEmpty()) {
