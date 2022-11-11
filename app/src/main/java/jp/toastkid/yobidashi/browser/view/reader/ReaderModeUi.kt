@@ -59,6 +59,7 @@ internal fun ReaderModeUi(title: String, text: MutableState<String>) {
                         color = Color(preferenceApplier.editorFontColor()),
                         fontSize = 24.sp,
                         lineHeight = 32.sp,
+                        maxLines = 3,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
