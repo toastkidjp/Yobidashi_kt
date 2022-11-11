@@ -49,7 +49,7 @@ internal fun ReaderModeUi(title: String, text: MutableState<String>) {
             .background(Color(preferenceApplier.editorBackgroundColor()))
             .padding(16.dp)
     ) {
-        Column(Modifier.verticalScroll(scrollState)) {
+        Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 SelectionContainer(
                     modifier = Modifier.weight(1f)
@@ -80,6 +80,7 @@ internal fun ReaderModeUi(title: String, text: MutableState<String>) {
                     color = Color(preferenceApplier.editorFontColor()),
                     fontSize = 16.sp,
                     modifier = Modifier
+                        .verticalScroll(scrollState)
                         .fillMaxWidth()
                         .fillMaxHeight()
                 )
