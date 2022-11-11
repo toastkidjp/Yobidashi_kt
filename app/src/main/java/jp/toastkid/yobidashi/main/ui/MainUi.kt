@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -422,6 +423,7 @@ internal fun Content() {
                         onClick = { openMenu.value = openMenu.value.not() },
                         containerColor = tint,
                         modifier = Modifier
+                            .size(48.dp)
                             .scale(contentViewModel.fabScale.value)
                             .offset { contentViewModel.makeFabOffset() }
                             .pointerInput(Unit) {
