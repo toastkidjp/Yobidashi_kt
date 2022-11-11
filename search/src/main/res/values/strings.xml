@@ -3,6 +3,7 @@
     <string name="title_site_search_by_google">Site Search by Google</string>
 
     <string name="search_category_web">DuckDuckGo</string>
+    <string name="search_category_duckduckgo_lite">DuckDuckGo Lite</string>
     <string name="search_category_image">Image</string>
     <string name="search_category_map">Map</string>
     <string name="search_category_apps">Apps</string>

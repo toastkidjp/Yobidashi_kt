@@ -3,6 +3,7 @@
     <string name="title_site_search_by_google">サイト内をGoogleで検索</string>
 
     <string name="search_category_web">DuckDuckGo</string>
+    <string name="search_category_duckduckgo_lite">DuckDuckGo Lite</string>
     <string name="search_category_image">画像</string>
     <string name="search_category_map">地図</string>
     <string name="search_category_apps">アプリ</string>

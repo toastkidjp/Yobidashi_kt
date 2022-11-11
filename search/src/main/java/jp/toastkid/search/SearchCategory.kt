@@ -58,6 +58,11 @@ enum class SearchCategory(
             R.drawable.ic_duckduckgo,
             "https://duckduckgo.com/?ia=web&q="
     ),
+    DUCKDUCKGO_LITE(
+        R.string.search_category_duckduckgo_lite,
+        R.drawable.ic_duckduckgo,
+        "https://lite.duckduckgo.com/lite/?ia=web&q="
+    ),
     AOL(
             R.string.aol,
             R.drawable.ic_aol,
