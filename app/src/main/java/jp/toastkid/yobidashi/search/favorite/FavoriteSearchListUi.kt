@@ -98,7 +98,7 @@ fun FavoriteSearchListUi() {
                     label = { stringResource(id = R.string.word) },
                     singleLine = true,
                     textStyle = TextStyle(
-                        color = Color(preferenceApplier.fontColor),
+                        color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.Start,
                     ),
                     colors = TextFieldDefaults.textFieldColors(
