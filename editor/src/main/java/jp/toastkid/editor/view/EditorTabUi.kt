@@ -312,7 +312,7 @@ private fun AppBarContent(
             )
             Text(
                 text = tabListViewModel.tabCount.value.toString(),
-                color = Color(preferenceApplier.fontColor),
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
             )
