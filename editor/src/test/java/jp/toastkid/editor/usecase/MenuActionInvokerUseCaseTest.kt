@@ -299,12 +299,16 @@ class MenuActionInvokerUseCaseTest {
         mockkConstructor(UrlFactory::class)
         every { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }.returns(mockk())
 
+        mockkConstructor(Inputs::class)
+        every { anyConstructed<Inputs>().hideKeyboard(any()) }.just(Runs)
+
         val handled = menuActionInvokerUseCase
             .invoke(R.id.context_edit_web_search, "https://www.yahoo.co.jp")
 
         assertTrue(handled)
         verify(exactly = 1) { browserViewModel.open(any()) }
         verify(exactly = 1) { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }
+        verify { anyConstructed<Inputs>().hideKeyboard(any()) }
     }
 
     @Test
