@@ -169,7 +169,7 @@ class FileActionUseCase(
      * @param message
      */
     private fun snackText(message: String) {
-        contentViewModel?.snackShort(message)
+        contentViewModel.snackShort(message)
     }
 
     fun getText() = textGetter()
