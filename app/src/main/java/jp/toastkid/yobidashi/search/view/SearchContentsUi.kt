@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.search.view
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -32,8 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -336,10 +333,10 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                             )
                     }
             )
-            Image(
+            Icon(
                 painterResource(id = R.drawable.ic_edit_black),
                 contentDescription = stringResource(id = R.string.edit),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary, BlendMode.SrcIn),
+                tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .width(32.dp)
                     .clickable { setInput(currentUrl) }
