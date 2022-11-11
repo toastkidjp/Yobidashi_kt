@@ -125,7 +125,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_url_open_new -> {
-                openUrl(text.toUri())
+                openUri(text.toUri())
                 return true
             }
             R.id.context_edit_url_open_background -> {
@@ -141,7 +141,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_web_search -> {
-                openUrl(makeSearchResultUrl(context, text))
+                openUri(makeSearchResultUrl(context, text))
                 return true
             }
             R.id.context_edit_delete_line -> {
@@ -161,7 +161,7 @@ class MenuActionInvokerUseCase(
         return false
     }
 
-    private fun openUrl(uri: Uri) {
+    private fun openUri(uri: Uri) {
         Inputs().hideKeyboard(editText)
         browserViewModel?.open(uri)
     }
