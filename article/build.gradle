@@ -66,7 +66,6 @@ dependencies {
 
     implementation "androidx.compose.material3:material3:$libVersions.compose_material3"
     implementation 'androidx.activity:activity-compose:1.4.0'
-    implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
     implementation "androidx.paging:paging-compose:$libVersions.paging_compose"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
     implementation "com.halilibo.compose-richtext:richtext-commonmark-android:0.15.0"
