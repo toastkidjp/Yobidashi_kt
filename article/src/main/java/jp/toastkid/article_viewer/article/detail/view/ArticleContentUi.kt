@@ -62,6 +62,7 @@ import com.halilibo.richtext.ui.string.RichTextStringStyle
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.LinkBehaviorService
+import jp.toastkid.article_viewer.article.detail.LinkGenerator
 import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -89,6 +90,8 @@ fun ArticleContentUi(title: String) {
 
     viewModel.setTitle(title)
 
+    val linkGenerator = remember { LinkGenerator() }
+
     LaunchedEffect(key1 = title, block = {
         val content = withContext(Dispatchers.IO) {
             repository.findContentByTitle(title)
@@ -98,8 +101,9 @@ fun ArticleContentUi(title: String) {
             return@LaunchedEffect
         }
 
+        val converted = linkGenerator.invoke(content)
         withContext(Dispatchers.Main) {
-            viewModel.setContent(content)
+            viewModel.setContent(converted)
         }
     })
 
