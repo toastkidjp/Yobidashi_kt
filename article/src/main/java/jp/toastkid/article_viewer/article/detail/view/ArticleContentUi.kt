@@ -103,8 +103,6 @@ fun ArticleContentUi(title: String) {
 
         val converted = linkGenerator.invoke(content)
         viewModel.setContent(converted)
-        withContext(Dispatchers.Main) {
-        }
     })
 
     viewModelProvider.get(ContentViewModel::class.java).replaceAppBarContent {
