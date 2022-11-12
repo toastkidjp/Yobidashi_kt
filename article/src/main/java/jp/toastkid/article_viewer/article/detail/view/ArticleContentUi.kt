@@ -102,8 +102,8 @@ fun ArticleContentUi(title: String) {
         }
 
         val converted = linkGenerator.invoke(content)
+        viewModel.setContent(converted)
         withContext(Dispatchers.Main) {
-            viewModel.setContent(converted)
         }
     })
 
