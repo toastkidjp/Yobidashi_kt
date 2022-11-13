@@ -54,6 +54,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
 import com.halilibo.richtext.ui.RichTextStyle
@@ -86,7 +87,7 @@ fun ArticleContentUi(title: String) {
             { repository.exists(it) > 0 }
         )
     }
-    val viewModel = viewModelProvider.get(ContentViewerFragmentViewModel::class.java)
+    val viewModel = viewModel(ContentViewerFragmentViewModel::class.java)
 
     viewModel.setTitle(title)
 
