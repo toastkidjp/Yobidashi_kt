@@ -17,6 +17,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -301,5 +302,22 @@ class ContentViewModel : ViewModel() {
     }
 
     fun showSnowEffect() = showSnowEffect.value
+
+    val menuFabOffsetX = mutableStateOf(0f)
+
+    val menuFabOffsetY = mutableStateOf(0f)
+
+    fun makeFabOffset() =
+        IntOffset(menuFabOffsetX.value.toInt(), menuFabOffsetY.value.toInt())
+
+    fun setMenuFabPosition(x: Float, y: Float) {
+        menuFabOffsetX.value = x
+        menuFabOffsetY.value = y
+    }
+
+    fun resetMenuFabPosition() {
+        menuFabOffsetX.value = 0f
+        menuFabOffsetY.value = 0f
+    }
 
 }

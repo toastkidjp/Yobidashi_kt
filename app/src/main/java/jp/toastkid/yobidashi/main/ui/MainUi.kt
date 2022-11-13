@@ -214,9 +214,6 @@ internal fun Content() {
     val scaffoldState = rememberScaffoldState()
     val rememberSnackbarHostState = remember { snackbarHostState }
 
-    val menuFabPosition = preferenceApplier.menuFabPosition()
-    val offsetX = remember { mutableStateOf(menuFabPosition?.first ?: 0f) }
-    val offsetY = remember { mutableStateOf(menuFabPosition?.second ?: 0f) }
     val openFindInPageState = remember { mutableStateOf(false) }
 
     val backgroundColor = MaterialTheme.colors.primary
@@ -482,19 +479,20 @@ internal fun Content() {
                         backgroundColor = tint,
                         modifier = Modifier
                             .scale(contentViewModel.fabScale.value)
+                            .offset { contentViewModel.makeFabOffset() }
                             .pointerInput(Unit) {
                                 detectDragGestures(
                                     onDragEnd = {
                                         preferenceApplier
-                                            .setNewCameraFabPosition(
-                                                offsetX.value,
-                                                offsetY.value
+                                            .setNewMenuFabPosition(
+                                                contentViewModel.menuFabOffsetX.value,
+                                                contentViewModel.menuFabOffsetY.value
                                             )
                                     },
                                     onDrag = { change, dragAmount ->
                                         change.consume()
-                                        offsetX.value += dragAmount.x
-                                        offsetY.value += dragAmount.y
+                                        contentViewModel.menuFabOffsetX.value += dragAmount.x
+                                        contentViewModel.menuFabOffsetY.value += dragAmount.y
                                     }
                                 )
                             }

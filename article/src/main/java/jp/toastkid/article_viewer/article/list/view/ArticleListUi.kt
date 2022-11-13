@@ -33,6 +33,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -59,6 +60,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -221,21 +223,25 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 keyboardActions = KeyboardActions{
                     viewModel.search(viewModel.searchInput.value)
                 },
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = true,
+                    imeAction = ImeAction.Search
+                ),
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color(preferenceApplier.fontColor),
                     cursorColor = MaterialTheme.colors.onPrimary
                 ),
                 trailingIcon = {
                     Icon(
-                    Icons.Filled.Clear,
-                    tint = Color(preferenceApplier.fontColor),
-                    contentDescription = "clear text",
-                    modifier = Modifier
-                        .offset(x = 8.dp)
-                        .clickable {
-                            viewModel.searchInput.value = ""
-                        }
-                )
+                        Icons.Filled.Clear,
+                        tint = Color(preferenceApplier.fontColor),
+                        contentDescription = "clear text",
+                        modifier = Modifier
+                            .offset(x = 8.dp)
+                            .clickable {
+                                viewModel.searchInput.value = ""
+                            }
+                    )
                 },
                 modifier = Modifier.weight(0.7f)
             )
