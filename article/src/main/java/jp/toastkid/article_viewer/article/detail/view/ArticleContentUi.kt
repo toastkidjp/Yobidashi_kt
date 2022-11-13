@@ -106,7 +106,7 @@ fun ArticleContentUi(title: String) {
         viewModel.setContent(converted)
     })
 
-    viewModelProvider.get(ContentViewModel::class.java).replaceAppBarContent {
+    viewModel(ContentViewModel::class.java, context).replaceAppBarContent {
         AppBarContent(viewModel)
     }
 
