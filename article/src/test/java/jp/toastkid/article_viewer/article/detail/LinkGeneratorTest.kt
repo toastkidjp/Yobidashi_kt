@@ -10,7 +10,10 @@ package jp.toastkid.article_viewer.article.detail
 
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
+import org.junit.After
 import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 
 class LinkGeneratorTest {
 
@@ -27,16 +30,16 @@ class LinkGeneratorTest {
         https://www.yahoo.co.jp
     """.trimIndent()
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         assertTrue(linkGenerator.invoke(markdown).contains("1. [『武士道』感想](http://internal/『武士道』感想)"))
     }
