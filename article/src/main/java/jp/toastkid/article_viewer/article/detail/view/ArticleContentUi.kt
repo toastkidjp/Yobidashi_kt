@@ -152,7 +152,7 @@ binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CY
 private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(activityContext)
-    val tabListViewModel = ViewModelProvider(activityContext).get(TabListViewModel::class.java)
+    val tabListViewModel = viewModel(TabListViewModel::class.java, activityContext)
 
     var searchInput by remember { mutableStateOf("") }
     Row(
