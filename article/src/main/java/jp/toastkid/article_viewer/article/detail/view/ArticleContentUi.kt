@@ -106,7 +106,8 @@ fun ArticleContentUi(title: String) {
         viewModel.setContent(converted)
     })
 
-    viewModel(ContentViewModel::class.java, context).replaceAppBarContent {
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
+    contentViewModel.replaceAppBarContent {
         AppBarContent(viewModel)
     }
 
@@ -141,7 +142,6 @@ binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CY
         }
     }
 
-    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
     ScrollerUseCase(contentViewModel, scrollState).invoke(LocalLifecycleOwner.current)
 
     contentViewModel.clearOptionMenus()
