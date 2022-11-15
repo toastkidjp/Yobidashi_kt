@@ -12,7 +12,8 @@ package jp.toastkid.article_viewer.article.detail
  */
 class InternalLinkScheme {
 
-    fun makeLink(title: String?) = "[$title]($INTERNAL_LINK_SCHEME${title?.replace(" ", "%20")})"
+    fun makeLink(title: String?) =
+        "[$title]($INTERNAL_LINK_SCHEME${title?.replace(" ", "%20")})"
 
     fun isInternalLink(url: String): Boolean {
         return url.startsWith(INTERNAL_LINK_SCHEME)
