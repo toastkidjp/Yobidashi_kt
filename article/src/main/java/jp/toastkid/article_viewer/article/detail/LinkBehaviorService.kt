@@ -23,7 +23,6 @@ class LinkBehaviorService(
     private val browserViewModel: BrowserViewModel,
     private val exists: (String) -> Boolean,
     private val internalLinkScheme: InternalLinkScheme = InternalLinkScheme(),
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
