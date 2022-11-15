@@ -33,11 +33,8 @@ class MainActivity : ComponentActivity() {
             val preferenceApplier = PreferenceApplier(this)
 
             val contentViewModel = viewModel(ContentViewModel::class.java, this)
-            contentViewModel.setColorPair(preferenceApplier.colorPair())
-            contentViewModel.setShowDisplayEffect(preferenceApplier.showDisplayEffect())
-            preferenceApplier.menuFabPosition()?.let {
-                contentViewModel.setMenuFabPosition(it.first, it.second)
-            }
+            contentViewModel.initializeWith(preferenceApplier)
+
             AppTheme(
                 contentViewModel.colorPair(),
                 isSystemInDarkTheme() || preferenceApplier.useDarkMode()
