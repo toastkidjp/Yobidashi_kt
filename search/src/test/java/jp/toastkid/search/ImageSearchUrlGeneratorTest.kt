@@ -21,6 +21,7 @@ class ImageSearchUrlGeneratorTest {
     fun setUp() {
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.answers { mockk() }
+        every { Uri.encode(any()) }.answers { "https://www.yahoo.co.jp" }
 
         imageSearchUrlGenerator = ImageSearchUrlGenerator()
     }
@@ -30,6 +31,7 @@ class ImageSearchUrlGeneratorTest {
         imageSearchUrlGenerator.invoke("https://www.yahoo.co.jp")
 
         verify(exactly = 1) { Uri.parse(any()) }
+        verify(exactly = 1) { Uri.encode(any()) }
     }
 
     @After
