@@ -324,7 +324,7 @@ private fun AppBarContent(
 
         Text(
             text = context.getString(R.string.last_saved) + DateFormat.format(" HH:mm:ss", fileActionUseCase.lastSaved.value),
-            color = Color(preferenceApplier.fontColor),
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 14.sp,
             maxLines = 2,
             modifier = Modifier
