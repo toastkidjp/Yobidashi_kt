@@ -51,6 +51,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
@@ -126,7 +128,39 @@ binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CY
             contentColor = { Color(editorFontColor) }
         ) {
             RichText(
-                style = RichTextStyle(stringStyle = stringStyle),
+                style = RichTextStyle(
+                    headingStyle = { level, textStyle ->
+                        when (level) {
+                            0 -> TextStyle(
+                                fontSize = 36.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            1 -> TextStyle(
+                                fontSize = 26.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            2 -> TextStyle(
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            3 -> TextStyle(
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            4 -> TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = textStyle.color.copy(alpha = .7F)
+                            )
+                            5 -> TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                color = textStyle.color.copy(alpha = .7f)
+                            )
+                            else -> textStyle
+                        }
+                    },
+                    stringStyle = stringStyle
+                ),
                 modifier = Modifier
                     .background(Color(preferenceApplier.editorBackgroundColor()))
                     .padding(8.dp)
