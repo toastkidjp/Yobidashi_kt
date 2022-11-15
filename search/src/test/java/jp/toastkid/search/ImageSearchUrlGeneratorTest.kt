@@ -30,8 +30,8 @@ class ImageSearchUrlGeneratorTest {
     fun test() {
         imageSearchUrlGenerator.invoke("https://www.yahoo.co.jp")
 
-        verify(exactly = 1) { Uri.parse(any()) }
-        verify(exactly = 1) { Uri.encode(any()) }
+        verify { Uri.parse(any()) }
+        verify { Uri.encode(any()) }
     }
 
     @After
