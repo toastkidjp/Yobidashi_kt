@@ -41,9 +41,6 @@ class LinkBehaviorServiceTest {
     private lateinit var internalLinkScheme: InternalLinkScheme
 
     @Suppress("unused")
-    private val mainDispatcher = Dispatchers.Unconfined
-
-    @Suppress("unused")
     private val ioDispatcher = Dispatchers.Unconfined
 
     @Before
