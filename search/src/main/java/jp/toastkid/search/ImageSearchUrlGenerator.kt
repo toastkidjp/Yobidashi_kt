@@ -16,6 +16,6 @@ import androidx.core.net.toUri
 class ImageSearchUrlGenerator {
 
     operator fun invoke(imageUrl: String): Uri
-        = "https://www.google.co.jp/searchbyimage?image_url=$imageUrl".toUri()
+        = "https://www.bing.com/images/search?view=detailv2&iss=sbi&q=imgurl:${Uri.encode(imageUrl)}".toUri()
 
 }
