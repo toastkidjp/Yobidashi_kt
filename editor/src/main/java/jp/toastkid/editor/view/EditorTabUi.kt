@@ -396,7 +396,7 @@ private fun EditorMenuItem(
         Spacer(Modifier.requiredWidth(8.dp))
         Text(
             text = stringResource(id = labelId),
-            color = Color(preferenceApplier.fontColor),
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
             softWrap = false,
