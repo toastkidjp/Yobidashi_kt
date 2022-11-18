@@ -4,7 +4,6 @@
     <dimen name="common_horizontal_margin">16dp</dimen>
 
     <dimen name="nav_header_height">56dp</dimen>
-    <dimen name="settings_item_height">56dp</dimen>
     <dimen name="settings_item_left_margin">16dp</dimen>
     <dimen name="toolbar_height">56dp</dimen>
     <dimen name="fab_size">60dp</dimen>
