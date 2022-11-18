@@ -38,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -265,7 +264,7 @@ internal fun BrowserSettingUi() {
             item {
                 Column(
                     modifier = Modifier
-                        .height(dimensionResource(id = R.dimen.settings_item_height))
+                        .height(56.dp)
                         .padding(start = 16.dp, end = 16.dp)
                 ) {
                     Row() {
@@ -295,7 +294,7 @@ internal fun BrowserSettingUi() {
             item {
                 Column(
                     modifier = Modifier
-                        .height(dimensionResource(id = R.dimen.settings_item_height))
+                        .height(56.dp)
                         .padding(start = 16.dp, end = 16.dp)
                 ) {
                     Row {
