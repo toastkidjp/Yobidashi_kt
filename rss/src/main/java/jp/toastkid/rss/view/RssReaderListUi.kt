@@ -75,8 +75,7 @@ fun RssReaderListUi() {
 private fun RssReaderList(fullItems: List<Item>) {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val viewModelProvider = ViewModelProvider(activity)
-    val browserViewModel = viewModelProvider
-        .get(BrowserViewModel::class.java)
+    val browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
 
     val listState = rememberLazyListState()
 

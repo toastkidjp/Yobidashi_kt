@@ -40,9 +40,23 @@ class NotificationFactory(
     )
 
     private val playAction = NotificationCompat.Action(
-            R.drawable.ic_play_media,
-            context.getString(R.string.action_play),
-            MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PLAY)
+        R.drawable.ic_play_media,
+        context.getString(R.string.action_play),
+        MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PLAY)
+    )
+
+    private val previousAction = NotificationCompat.Action(
+        R.drawable.ic_previous_media,
+        context.getString(R.string.action_skip_to_previous),
+        MediaButtonReceiver
+            .buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
+    )
+
+    private val nextAction = NotificationCompat.Action(
+        R.drawable.ic_next_media,
+        context.getString(R.string.action_skip_to_next),
+        MediaButtonReceiver
+            .buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_SKIP_TO_NEXT)
     )
 
     operator fun invoke(): Notification? {
@@ -55,7 +69,7 @@ class NotificationFactory(
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                         .setMediaSession(mediaSessionSupplier().sessionToken)
-                        .setShowActionsInCompactView(0)
+                        .setShowActionsInCompactView(0, 1, 2)
                 )
                 .setColor(preferenceApplier.color)
                 .setSmallIcon(R.drawable.ic_music)
@@ -70,7 +84,9 @@ class NotificationFactory(
                         )
                 )
 
+        notificationBuilder.addAction(previousAction)
         notificationBuilder.addAction(if (isPlaying()) pauseAction else playAction)
+        notificationBuilder.addAction(nextAction)
         return notificationBuilder.build()
     }
 

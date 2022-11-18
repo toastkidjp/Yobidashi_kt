@@ -56,7 +56,7 @@ import java.util.GregorianCalendar
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun TaskEditorUi(
-    screenContent: @Composable() () -> Unit,
+    screenContent: @Composable () -> Unit,
     taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel?,
     bottomSheetScaffoldState: ModalBottomSheetState,
     onTapAdd: (TodoTask) -> Unit,
@@ -91,7 +91,7 @@ internal fun TaskEditorUi(
                     label = { stringResource(id = R.string.description) },
                     singleLine = true,
                     keyboardActions = KeyboardActions {
-                        save(task, onTapAdd, bottomSheetScaffoldState)
+                        save(task, onTapAdd)
                         coroutineScope.launch {
                             bottomSheetScaffoldState.hide()
                         }
@@ -116,7 +116,7 @@ internal fun TaskEditorUi(
                 )
                 Button(
                     onClick = {
-                        save(task, onTapAdd, bottomSheetScaffoldState)
+                        save(task, onTapAdd)
                         coroutineScope.launch {
                             bottomSheetScaffoldState.hide()
                         }
@@ -194,8 +194,7 @@ internal fun TaskEditorUi(
 @OptIn(ExperimentalMaterialApi::class)
 private fun save(
     task: TodoTask?,
-    onTapAdd: (TodoTask) -> Unit,
-    bottomSheetScaffoldState: ModalBottomSheetState
+    onTapAdd: (TodoTask) -> Unit
 ) {
     task?.let {
         updateTask(it)

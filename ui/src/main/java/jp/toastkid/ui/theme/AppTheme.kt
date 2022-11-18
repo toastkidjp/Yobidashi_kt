@@ -8,6 +8,7 @@
 
 package jp.toastkid.ui.theme
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
@@ -43,10 +44,12 @@ fun AppTheme(
     val primary = Color(colorPair.bgColor())
     val onPrimary = Color(colorPair.fontColor())
 
+    @SuppressLint("ConflictingOnColor")
     val colors =
         if (darkTheme)
             darkColors(
                 primary = primary,
+                secondary = onPrimary,
                 surface = Color(0xFF0F0F0F),
                 background = Color(0xFF0F0F0F),
                 onPrimary = onPrimary,
@@ -56,9 +59,10 @@ fun AppTheme(
         else
             lightColors(
                 primary = primary,
-                onPrimary = onPrimary,
+                secondary = primary,
                 surface = Color(0xFFF0F0F0),
                 background = Color(0xFFF0F0F0),
+                onPrimary = onPrimary,
                 onSurface = Color(0xFF000B00),
                 onBackground = Color(0xFF000B00)
             )

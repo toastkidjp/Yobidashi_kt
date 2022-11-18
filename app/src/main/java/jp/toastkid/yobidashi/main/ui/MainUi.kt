@@ -73,6 +73,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -99,6 +100,7 @@ import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
@@ -280,11 +282,11 @@ internal fun Content() {
         replaceToCurrentTab(tabs, navigationHostController)
     }
 
-    contentViewModel.openPdf?.observe(activity) {
+    contentViewModel.openPdf.observe(activity) {
         it?.getContentIfNotHandled() ?: return@observe
         requestPermissionForOpenPdfTab.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
-    contentViewModel?.openEditorTab?.observe(activity, {
+    contentViewModel.openEditorTab?.observe(activity, {
         it?.getContentIfNotHandled() ?: return@observe
         tabs.openNewEditorTab()
         replaceToCurrentTab(tabs, navigationHostController)
@@ -349,7 +351,7 @@ internal fun Content() {
             }
         browserViewModel
             .search
-            .observe(activity, { event ->
+            .observe(activity) { event ->
                 val query = event?.getContentIfNotHandled() ?: return@observe
                 WebSearchResultTabOpenerUseCase(
                     preferenceApplier,
@@ -358,7 +360,14 @@ internal fun Content() {
                         contentViewModel.replaceToCurrentTab()
                     }
                 ).invoke(query)
-            })
+            }
+    }
+
+    val windowInfo = LocalWindowInfo.current
+    LaunchedEffect(windowInfo.isWindowFocused) {
+        ClippingUrlOpener()(activity) {
+            browserViewModel.open(it)
+        }
     }
 
     val mediaPermissionRequestLauncher =

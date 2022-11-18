@@ -311,7 +311,7 @@ class ContentViewModel : ViewModel() {
     fun makeFabOffset() =
         IntOffset(menuFabOffsetX.value.toInt(), menuFabOffsetY.value.toInt())
 
-    fun setMenuFabPosition(x: Float, y: Float) {
+    private fun setMenuFabPosition(x: Float, y: Float) {
         menuFabOffsetX.value = x
         menuFabOffsetY.value = y
     }

@@ -16,7 +16,6 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -79,6 +78,16 @@ fun MusicListUi() {
 
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
             when (state?.state) {
+                PlaybackStateCompat.STATE_SKIPPING_TO_PREVIOUS -> {
+                    mediaPlayerPopupViewModel.previous()?.let {
+                        play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                    }
+                }
+                PlaybackStateCompat.STATE_SKIPPING_TO_NEXT -> {
+                    mediaPlayerPopupViewModel.next()?.let {
+                        play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                    }
+                }
                 PlaybackStateCompat.STATE_PLAYING -> mediaPlayerPopupViewModel.playing = true
                 PlaybackStateCompat.STATE_PAUSED,
                 PlaybackStateCompat.STATE_STOPPED -> mediaPlayerPopupViewModel.playing = false
@@ -109,19 +118,14 @@ fun MusicListUi() {
     val connectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
 
         override fun onConnected() {
-            val mediaBrowser = mediaBrowser ?: return
-            activity?.also {
-                val sessionToken: MediaSessionCompat.Token = mediaBrowser?.sessionToken ?: return@also
-                val mediaControllerCompat =
-                    MediaControllerCompat(activity, sessionToken)
-                mediaControllerCompat.registerCallback(controllerCallback)
-                MediaControllerCompat.setMediaController(
-                    it,
-                    mediaControllerCompat
-                )
-            }
+            val mediaBrowserNonNull = mediaBrowser ?: return
+            val sessionToken: MediaSessionCompat.Token = mediaBrowserNonNull.sessionToken
+            val mediaControllerCompat =
+                MediaControllerCompat(activity, sessionToken)
+            mediaControllerCompat.registerCallback(controllerCallback)
+            MediaControllerCompat.setMediaController(activity, mediaControllerCompat)
 
-            mediaBrowser?.subscribe(mediaBrowser.root, subscriptionCallback)
+            mediaBrowserNonNull.subscribe(mediaBrowserNonNull.root, subscriptionCallback)
         }
     }
     mediaBrowser = remember {
@@ -139,40 +143,36 @@ fun MusicListUi() {
 
     MusicList(
         {
-            val mediaUri = it.description.mediaUri
-            if (mediaUri == null || mediaUri == Uri.EMPTY) {
-                return@MusicList
-            }
-            attemptToGetMediaController(activity)
-                ?.transportControls
-                ?.playFromUri(mediaUri, bundleOf())
+            play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
         },
         {
             browserViewModel.open("https://www.google.com/search?q=$it Lyrics".toUri())
         },
+        {
+            mediaPlayerPopupViewModel.previous()?.let {
+                play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+            }
+        },
+        {
+            mediaPlayerPopupViewModel.next()?.let {
+                play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+            }
+        },
         { stop(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
         {
-            val mediaUri = mediaPlayerPopupViewModel.musics.random()?.description?.mediaUri
-            if (mediaUri == null || mediaUri == Uri.EMPTY) {
-                return@MusicList
-            }
-
-            attemptToGetMediaController(activity)
-                ?.transportControls
-                ?.playFromUri(
-                    mediaUri,
-                    bundleOf()
-                )
+            val random = mediaPlayerPopupViewModel.musics.random()
+            play(random, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
         }
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MusicList(
     onClickItem: (MediaBrowserCompat.MediaItem) -> Unit,
     onClickLyrics: (String) -> Unit,
+    previous: () -> Unit,
+    next: () -> Unit,
     stop: () -> Unit,
     switchState: () -> Unit,
     shuffle: () -> Unit
@@ -212,13 +212,31 @@ internal fun MusicList(
                     .clickable { stop() }
             )
             Icon(
+                painterResource(R.drawable.ic_previous_media),
+                contentDescription = stringResource(id = R.string.action_skip_to_previous),
+                tint = Color(iconColor),
+                modifier = Modifier
+                    .width(44.dp)
+                    .fillMaxHeight()
+                    .clickable { previous() }
+            )
+            Icon(
                 painterResource(if (viewModel.playing) R.drawable.ic_pause else R.drawable.ic_play_media),
-                contentDescription = stringResource(id = R.string.action_pause),
+                contentDescription = stringResource(id = if (viewModel.playing) R.string.action_pause else R.string.action_play),
                 tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
                     .clickable { switchState() }
+            )
+            Icon(
+                painterResource(R.drawable.ic_next_media),
+                contentDescription = stringResource(id = R.string.action_skip_to_next),
+                tint = Color(iconColor),
+                modifier = Modifier
+                    .width(44.dp)
+                    .fillMaxHeight()
+                    .clickable { next() }
             )
             Icon(
                 painterResource(R.drawable.ic_shuffle),
@@ -250,7 +268,7 @@ internal fun MusicList(
                     onDismissRequest = { expanded = false }
                 ) {
                     val values = PlayingSpeed.values()
-                    values.forEachIndexed { index, s ->
+                    values.forEachIndexed { index, _ ->
                         DropdownMenuItem(onClick = {
                             currentSpeed = values[index].textId
                             sendSpeedBroadcast(values[index].speed)
@@ -352,6 +370,23 @@ fun switchState(
     }
 }
 
+private fun play(
+    mediaItem: MediaBrowserCompat.MediaItem,
+    mediaController: MediaControllerCompat?,
+    mediaPlayerPopupViewModel: MediaPlayerPopupViewModel
+) {
+    val mediaUri = mediaItem.description.mediaUri
+    if (mediaUri == null || mediaUri == Uri.EMPTY) {
+        return
+    }
+
+    mediaPlayerPopupViewModel.current.value = mediaItem
+
+    mediaController
+        ?.transportControls
+        ?.playFromUri(mediaUri, bundleOf())
+}
+
 private fun stop(
     mediaController: MediaControllerCompat,
     mediaPlayerPopupViewModel: MediaPlayerPopupViewModel
@@ -361,6 +396,8 @@ private fun stop(
     mediaController.transportControls.stop()
 
     mediaPlayerPopupViewModel.playing = false
+
+    mediaPlayerPopupViewModel.current.value = null
 }
 
 private fun play(

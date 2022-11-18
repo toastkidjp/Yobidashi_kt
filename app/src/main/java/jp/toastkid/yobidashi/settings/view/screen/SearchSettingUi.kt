@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,7 +35,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.ui.parts.InsetDivider
@@ -53,7 +52,6 @@ internal fun SearchSettingUi() {
         ViewModelProvider(activityContext).get(ContentViewModel::class.java)
     }
 
-    val iconTint = Color(IconColorFinder.from(activityContext).invoke())
     val spinnerOpen = remember { mutableStateOf(false) }
     val categoryName = remember {
         mutableStateOf(
@@ -100,7 +98,7 @@ internal fun SearchSettingUi() {
                     Icon(
                         painterResource(id = R.drawable.ic_search_black),
                         contentDescription = stringResource(id = R.string.title_default_search_engine),
-                        tint = iconTint
+                        tint = MaterialTheme.colors.secondary
                     )
                     Text(
                         stringResource(id = R.string.title_default_search_engine),
@@ -128,7 +126,7 @@ internal fun SearchSettingUi() {
                             preferenceApplier.enableSearchQueryExtract
                     },
                     booleanState = enableSearchQueryExtractCheck,
-                    iconTint = iconTint,
+                    iconTint = MaterialTheme.colors.secondary,
                     iconId = R.drawable.ic_extract
                 )
             }
@@ -155,7 +153,7 @@ internal fun SearchSettingUi() {
                             preferenceApplier.enableSearchWithClip
                     },
                     booleanState = enableSearchWithClipCheck,
-                    iconTint = iconTint,
+                    iconTint = MaterialTheme.colors.secondary,
                     iconId = R.drawable.ic_clipboard_black
                 )
             }
@@ -173,7 +171,7 @@ internal fun SearchSettingUi() {
                             preferenceApplier.isEnableSuggestion
                     },
                     booleanState = useSuggestionCheck,
-                    iconTint = iconTint,
+                    iconTint = MaterialTheme.colors.secondary,
                     iconId = R.drawable.ic_open_in_browser_black
                 )
             }
@@ -190,7 +188,7 @@ internal fun SearchSettingUi() {
                         useHistoryCheck.value = preferenceApplier.isEnableSearchHistory
                     },
                     booleanState = useHistoryCheck,
-                    iconTint = iconTint,
+                    iconTint = MaterialTheme.colors.secondary,
                     iconId = R.drawable.ic_search_history_black
                 )
             }
@@ -207,7 +205,7 @@ internal fun SearchSettingUi() {
                         useFavoriteCheck.value = preferenceApplier.isEnableFavoriteSearch
                     },
                     booleanState = useFavoriteCheck,
-                    iconTint = iconTint,
+                    iconTint = MaterialTheme.colors.secondary,
                     iconId = R.drawable.ic_favorite
                 )
             }
@@ -224,7 +222,7 @@ internal fun SearchSettingUi() {
                         useViewHistoryCheck.value = preferenceApplier.isEnableViewHistory
                     },
                     booleanState = useViewHistoryCheck,
-                    iconTint = iconTint,
+                    iconTint = MaterialTheme.colors.secondary,
                     iconId = R.drawable.ic_history_black
                 )
             }
@@ -241,7 +239,7 @@ internal fun SearchSettingUi() {
                         useUrlModuleCheck.value = preferenceApplier.isEnableUrlModule()
                     },
                     booleanState = useUrlModuleCheck,
-                    iconTint = iconTint,
+                    iconTint = MaterialTheme.colors.secondary,
                     iconId = R.drawable.ic_web_black
                 )
             }
@@ -258,7 +256,7 @@ internal fun SearchSettingUi() {
                         useTrendCheck.value = preferenceApplier.isEnableUrlModule()
                     },
                     booleanState = useTrendCheck,
-                    iconTint = iconTint,
+                    iconTint = MaterialTheme.colors.secondary,
                     iconId = R.drawable.ic_trend_black
                 )
             }
@@ -272,7 +270,7 @@ internal fun SearchSettingUi() {
                     Icon(
                         painterResource(id = R.drawable.ic_search),
                         contentDescription = stringResource(id = R.string.subhead_search_category_setting),
-                        tint = iconTint
+                        tint = MaterialTheme.colors.secondary
                     )
                     Text(
                         stringResource(id = R.string.subhead_search_category_setting),

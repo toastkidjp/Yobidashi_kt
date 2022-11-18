@@ -31,4 +31,31 @@ class MediaPlayerPopupViewModel : ViewModel() {
 
     var playing by mutableStateOf(false)
 
+    val current = mutableStateOf<MediaBrowserCompat.MediaItem?>(null)
+
+    fun previous(): MediaBrowserCompat.MediaItem? {
+        val currentIndex = _musics.indexOf(current.value)
+        if (currentIndex == -1) {
+            return null
+        }
+
+        return _musics[calculateCorrectIndex(currentIndex - 1)]
+    }
+
+    fun next(): MediaBrowserCompat.MediaItem? {
+        val currentIndex = _musics.indexOf(current.value)
+        if (currentIndex == -1) {
+            return null
+        }
+
+        return _musics[calculateCorrectIndex(currentIndex + 1)]
+    }
+
+    private fun calculateCorrectIndex(candidateIndex: Int) =
+        when {
+            candidateIndex < 0 -> _musics.size - 1
+            _musics.size <= candidateIndex -> 0
+            else -> candidateIndex
+        }
+
 }

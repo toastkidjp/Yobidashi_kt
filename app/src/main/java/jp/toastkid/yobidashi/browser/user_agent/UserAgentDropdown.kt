@@ -44,7 +44,10 @@ fun UserAgentDropdown(open: MutableState<Boolean>, onSelect: (UserAgent) -> Unit
                         .fillMaxHeight()
                         .padding(8.dp)
                 )
-                RadioButton(selected = userAgent.name == current, onClick = {  })
+                RadioButton(
+                    selected = userAgent.name == current,
+                    onClick = {  }
+                )
             }
         }
     }

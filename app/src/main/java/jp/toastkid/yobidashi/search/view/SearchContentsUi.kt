@@ -33,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -51,7 +50,6 @@ import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
-import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
@@ -282,8 +280,6 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
         return
     }
 
-    val color = IconColorFinder.from(LocalContext.current).invoke()
-
     val context = LocalContext.current
 
     Surface(
@@ -313,7 +309,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
             Image(
                 painterResource(id = R.drawable.ic_share_black),
                 contentDescription = stringResource(id = R.string.share),
-                colorFilter = ColorFilter.tint(Color(color), BlendMode.SrcIn),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary, BlendMode.SrcIn),
                 modifier = Modifier
                     .width(32.dp)
                     .clickable {
@@ -328,7 +324,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
             Image(
                 painterResource(id = R.drawable.ic_clip),
                 contentDescription = stringResource(id = R.string.clip),
-                colorFilter = ColorFilter.tint(Color(color), BlendMode.SrcIn),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary, BlendMode.SrcIn),
                 modifier = Modifier
                     .width(32.dp)
                     .clickable {
@@ -344,7 +340,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
             Image(
                 painterResource(id = R.drawable.ic_edit_black),
                 contentDescription = stringResource(id = R.string.edit),
-                colorFilter = ColorFilter.tint(Color(color), BlendMode.SrcIn),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary, BlendMode.SrcIn),
                 modifier = Modifier
                     .width(32.dp)
                     .clickable { setInput(currentUrl) }
