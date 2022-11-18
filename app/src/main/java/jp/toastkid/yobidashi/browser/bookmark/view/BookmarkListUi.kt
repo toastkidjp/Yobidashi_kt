@@ -52,7 +52,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -72,10 +71,10 @@ import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
+import jp.toastkid.lib.view.list.SwipeToDismissItem
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
-import jp.toastkid.lib.view.list.SwipeToDismissItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
@@ -450,11 +449,12 @@ private fun EditorDialog(
                         Modifier
                             .padding(bottom = 60.dp)
                             .defaultMinSize(200.dp)
-                            .background(Color(0xDDFFFFFF))
+                            .background(MaterialTheme.colorScheme.onSurface)
                             .clickable { openChooser.value = true }
                     ) {
                         Text(
                             moveTo.value,
+                            color = MaterialTheme.colorScheme.surface,
                             fontSize = 20.sp
                         )
 
