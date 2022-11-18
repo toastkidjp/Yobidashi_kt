@@ -92,6 +92,7 @@ fun InputFileNameDialogUi(
         dismissButton = {
             Text(
                 text = stringResource(id = R.string.cancel),
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .clickable {
                         openDialog.value = false
