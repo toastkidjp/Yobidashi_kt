@@ -41,8 +41,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -58,7 +58,7 @@ internal fun BrowserSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+        viewModel(ContentViewModel::class.java, activityContext)
     }
 
     val retainTabs = remember { mutableStateOf(preferenceApplier.doesRetainTabs()) }
