@@ -391,7 +391,7 @@ private fun EditorMenuItem(
         Icon(
             painter = painterResource(id = iconId),
             contentDescription = stringResource(id = labelId),
-            tint = Color(preferenceApplier.fontColor)
+            tint = MaterialTheme.colorScheme.onPrimary
         )
         Spacer(Modifier.requiredWidth(8.dp))
         Text(
