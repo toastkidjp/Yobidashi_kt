@@ -397,7 +397,7 @@ private fun EditorDialog(
 
     Dialog(onDismissRequest = { openEditor.value = false }) {
         Surface(shadowElevation = 4.dp) {
-            Box {
+            Box(modifier = Modifier.padding(16.dp)) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End,
