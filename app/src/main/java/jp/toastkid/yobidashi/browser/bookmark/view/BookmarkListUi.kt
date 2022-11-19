@@ -447,7 +447,7 @@ private fun EditorDialog(
                         }
                     Box(
                         Modifier
-                            .padding(bottom = 60.dp)
+                            .padding(start = 4.dp, bottom = 60.dp)
                             .defaultMinSize(200.dp)
                             .background(MaterialTheme.colorScheme.onSurface)
                             .clickable { openChooser.value = true }
@@ -455,7 +455,8 @@ private fun EditorDialog(
                         Text(
                             moveTo.value,
                             color = MaterialTheme.colorScheme.surface,
-                            fontSize = 20.sp
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(start = 8.dp)
                         )
 
                         DropdownMenu(
