@@ -442,7 +442,8 @@ private fun EditorDialog(
                             )
                             Text(
                                 "Move to other folder",
-                                fontSize = 20.sp
+                                fontSize = 20.sp,
+                                modifier = Modifier.padding(start = 4.dp)
                             )
                         }
                     Box(
