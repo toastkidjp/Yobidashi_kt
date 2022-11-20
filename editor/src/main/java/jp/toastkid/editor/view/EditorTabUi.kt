@@ -376,7 +376,6 @@ private fun EditorMenuItem(
     iconId: Int,
     onClick: () -> Unit
 ) {
-    val preferenceApplier = PreferenceApplier(LocalContext.current)
     Column(
         modifier = Modifier
             .width(60.dp)
