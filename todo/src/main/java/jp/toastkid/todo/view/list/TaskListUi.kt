@@ -26,6 +26,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -216,7 +217,7 @@ private fun TaskListItem(
                 Icon(
                     painterResource(id = R.drawable.ic_more),
                     contentDescription = stringResource(R.string.menu),
-                    tint = Color(color),
+                    tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier
                         .width(32.dp)
                         .fillMaxHeight()
