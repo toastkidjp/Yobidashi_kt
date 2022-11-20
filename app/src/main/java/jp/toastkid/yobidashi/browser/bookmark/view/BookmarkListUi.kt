@@ -435,7 +435,10 @@ private fun EditorDialog(
                 val openChooser = remember { mutableStateOf(false) }
 
                 Column {
-                     Row(verticalAlignment = Alignment.CenterVertically) {
+                     Row(
+                         verticalAlignment = Alignment.CenterVertically,
+                         modifier = Modifier.padding(bottom = 8.dp)
+                     ) {
                             Icon(
                                 painterResource(id = R.drawable.ic_folder_black),
                                 stringResource(id = R.string.title_add_folder)
