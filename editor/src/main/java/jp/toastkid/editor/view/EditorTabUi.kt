@@ -156,7 +156,7 @@ fun EditorTabUi(path: String?) {
 
             CursorColorSetter().invoke(
                 editText,
-                preferenceApplier.editorCursorColor(ContextCompat.getColor(context, R.color.editor_cursor))
+                preferenceApplier.editorCursorColor(Color(0xDD81D4FA).toArgb())
             )
             editText.highlightColor = preferenceApplier.editorHighlightColor(
                 ContextCompat.getColor(context, R.color.light_blue_200_dd)
