@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.settings
 
 import android.content.Context
 import android.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -28,7 +29,7 @@ class DarkModeApplier {
         val currentTheme = Theme.extract(
                 preferenceApplier,
                 ContextCompat.getColor(context, R.color.editor_cursor),
-                ContextCompat.getColor(context, R.color.light_blue_200_dd)
+                androidx.compose.ui.graphics.Color(0xDD81D4FA).toArgb()
         )
         darkTheme.apply(preferenceApplier)
 
