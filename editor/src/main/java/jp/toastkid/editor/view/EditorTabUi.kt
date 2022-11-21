@@ -68,7 +68,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -159,7 +158,7 @@ fun EditorTabUi(path: String?) {
                 preferenceApplier.editorCursorColor(Color(0xDD81D4FA).toArgb())
             )
             editText.highlightColor = preferenceApplier.editorHighlightColor(
-                ContextCompat.getColor(context, R.color.light_blue_200_dd)
+                Color(0xDD81D4FA).toArgb()
             )
             fileActionUseCase.readCurrentFile()
             val scrollView = ScrollView(editText.context)
