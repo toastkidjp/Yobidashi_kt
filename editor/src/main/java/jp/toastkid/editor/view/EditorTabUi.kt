@@ -153,12 +153,13 @@ fun EditorTabUi(path: String?) {
             editText.setHintTextColor(preferenceApplier.editorFontColor())
             editText.isNestedScrollingEnabled = true
 
+            val substitute = Color(0xDD81D4FA).toArgb()
             CursorColorSetter().invoke(
                 editText,
-                preferenceApplier.editorCursorColor(Color(0xDD81D4FA).toArgb())
+                preferenceApplier.editorCursorColor(substitute)
             )
             editText.highlightColor = preferenceApplier.editorHighlightColor(
-                Color(0xDD81D4FA).toArgb()
+                substitute
             )
             fileActionUseCase.readCurrentFile()
             val scrollView = ScrollView(editText.context)
