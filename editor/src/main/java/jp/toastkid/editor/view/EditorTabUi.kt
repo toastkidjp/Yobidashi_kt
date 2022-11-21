@@ -158,9 +158,7 @@ fun EditorTabUi(path: String?) {
                 editText,
                 preferenceApplier.editorCursorColor(substitute)
             )
-            editText.highlightColor = preferenceApplier.editorHighlightColor(
-                substitute
-            )
+            editText.highlightColor = preferenceApplier.editorHighlightColor(substitute)
             fileActionUseCase.readCurrentFile()
             val scrollView = ScrollView(editText.context)
             scrollView.addView(editText)
