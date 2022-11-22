@@ -142,8 +142,6 @@ private fun TaskList(
     flow: Flow<PagingData<TodoTask>>?,
     menuUseCase: ItemMenuPopupActionUseCase
 ) {
-    val context = LocalContext.current
-
     val listState = rememberLazyListState()
 
     val tasks = flow?.collectAsLazyPagingItems() ?: return
