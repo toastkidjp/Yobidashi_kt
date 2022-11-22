@@ -142,11 +142,9 @@ private fun TaskList(
     flow: Flow<PagingData<TodoTask>>?,
     menuUseCase: ItemMenuPopupActionUseCase
 ) {
-    val listState = rememberLazyListState()
-
     val tasks = flow?.collectAsLazyPagingItems() ?: return
 
-    LazyColumn(state = listState) {
+    LazyColumn(state = rememberLazyListState()) {
         items(tasks, { it.id }) { task ->
             task ?: return@items
             TaskListItem(task, menuUseCase, Modifier.animateItemPlacement())
