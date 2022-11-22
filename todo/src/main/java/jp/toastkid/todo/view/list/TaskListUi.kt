@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -73,7 +74,7 @@ fun TaskListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
 
     val taskAdditionDialogFragmentViewModel =
-        ViewModelProvider(context).get(TaskAdditionDialogFragmentViewModel::class.java)
+        viewModel(TaskAdditionDialogFragmentViewModel::class.java, context)
 
     ViewModelProvider(context).get(ContentViewModel::class.java)
         .replaceAppBarContent {
