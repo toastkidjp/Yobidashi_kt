@@ -152,7 +152,7 @@ private fun TaskList(
     LazyColumn(state = listState) {
         items(tasks, { it.id }) { task ->
             task ?: return@items
-            TaskListItem(task, color, menuUseCase, Modifier.animateItemPlacement())
+            TaskListItem(task, menuUseCase, Modifier.animateItemPlacement())
         }
     }
 }
@@ -160,7 +160,6 @@ private fun TaskList(
 @Composable
 private fun TaskListItem(
     task: TodoTask,
-    color: Int,
     menuUseCase: ItemMenuPopupActionUseCase,
     modifier: Modifier = Modifier
 ) {
