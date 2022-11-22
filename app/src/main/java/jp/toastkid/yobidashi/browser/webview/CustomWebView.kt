@@ -35,7 +35,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
     /**
      * Scrolling value.
      */
-    private var scrolling: Int = 0
+    private var scrolling: Int = 1
 
     private var nestedOffsetY: Float = 0f
 
@@ -78,13 +78,14 @@ internal class CustomWebView(context: Context) : WebView(context) {
                 var deltaX: Float = lastX - eventX
                 var deltaY: Float = lastY - eventY
 
-                if (enablePullToRefresh) {
+                if (enablePullToRefresh && (deltaY < 0)) {
                     viewModel?.nestedScrollDispatcher()?.dispatchPreScroll(
                         Offset(0f, deltaY / 10f),
                         NestedScrollSource.Drag
                     )
                     return true
                 }
+                enablePullToRefresh = false
 
                 // NestedPreScroll
                 if (dispatchNestedPreScroll(deltaX.toInt(), deltaY.toInt(), scrollConsumed, scrollOffset)) {

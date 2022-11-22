@@ -127,11 +127,11 @@ fun EditorTabUi(path: String?) {
         it.getContentIfNotHandled() ?: return@observe
         editText.setSelection(0)
     }
-    contentViewModel.toBottom.observe(localLifecycleOwner, {
+    contentViewModel.toBottom.observe(localLifecycleOwner) {
         it.getContentIfNotHandled() ?: return@observe
         editText.setSelection(editText.text.length)
-    })
-    contentViewModel.share.observe(localLifecycleOwner, {
+    }
+    contentViewModel.share.observe(localLifecycleOwner) {
         it.getContentIfNotHandled() ?: return@observe
         val title =
             if (path?.contains("/") == true) path.substring(path.lastIndexOf("/") + 1)
@@ -142,7 +142,7 @@ fun EditorTabUi(path: String?) {
             return@observe
         }
         context.startActivity(ShareIntentFactory().invoke(content, title))
-    })
+    }
 
     val browserViewModel = viewModel(BrowserViewModel::class.java, context)
 
@@ -170,7 +170,7 @@ fun EditorTabUi(path: String?) {
             fileActionUseCase.readCurrentFile()
             val scrollView = ScrollView(editText.context)
             scrollView.addView(editText)
-            scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            scrollView.setOnScrollChangeListener { _, scrollX, scrollY, oldScrollX, oldScrollY ->
                 nestedScrollDispatcher.dispatchPreScroll(
                     Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                     NestedScrollSource.Fling
@@ -190,10 +190,10 @@ fun EditorTabUi(path: String?) {
     )
 
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, context)
-    pageSearcherViewModel.upward.observe(context, {
+    pageSearcherViewModel.upward.observe(context) {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findUp(word)
-    })
+    }
     pageSearcherViewModel.downward.observe(context, {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findDown(word)

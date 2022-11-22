@@ -16,8 +16,7 @@ import androidx.annotation.ColorInt
 class LinkColorGenerator {
 
     @ColorInt
-    operator fun invoke(@ColorInt baseColor: Int): Int {
-        return Color.rgb(Color.green(baseColor), Color.blue(baseColor), Color.red(baseColor))
-    }
+    operator fun invoke(@ColorInt baseColor: Int): Int =
+        Color.rgb(Color.green(baseColor), Color.blue(baseColor), Color.red(baseColor))
 
 }

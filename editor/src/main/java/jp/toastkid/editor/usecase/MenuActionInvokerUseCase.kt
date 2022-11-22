@@ -12,20 +12,19 @@ import android.net.Uri
 import android.widget.EditText
 import androidx.annotation.IdRes
 import androidx.core.net.toUri
-import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.input.Inputs
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.search.SearchCategory
-import jp.toastkid.search.UrlFactory
 import jp.toastkid.editor.CurrentLineDuplicatorUseCase
 import jp.toastkid.editor.ListHeadAdder
 import jp.toastkid.editor.OrderedListHeadAdder
 import jp.toastkid.editor.R
 import jp.toastkid.editor.StringSurroundingUseCase
 import jp.toastkid.editor.TableConverter
+import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.libs.speech.SpeechMaker
+import jp.toastkid.search.SearchCategory
+import jp.toastkid.search.UrlFactory
 
 /**
  * @author toastkidjp
@@ -134,7 +133,6 @@ class MenuActionInvokerUseCase(
             }
             R.id.context_edit_url_preview -> {
                 browserViewModel?.preview(text.toUri())
-                Inputs.hideKeyboard(editText)
                 return true
             }
             R.id.context_edit_preview_search -> {
