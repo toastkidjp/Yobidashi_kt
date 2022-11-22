@@ -54,7 +54,7 @@ internal fun SearchCategorySpinner(
                 spinnerOpen.value = true
             }
             .width(dimensionResource(id = R.dimen.search_category_spinner_width))
-            .height(dimensionResource(id = R.dimen.toolbar_height))
+            .height(56.dp)
             .background(Color(0xDDFFFFFF))
     ) {
         val category = SearchCategory.findByCategory(currentCategory?.value)
