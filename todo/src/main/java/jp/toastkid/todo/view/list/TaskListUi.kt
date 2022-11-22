@@ -143,7 +143,6 @@ private fun TaskList(
     menuUseCase: ItemMenuPopupActionUseCase
 ) {
     val context = LocalContext.current
-    val color = PreferenceApplier(context).color
 
     val listState = rememberLazyListState()
 
