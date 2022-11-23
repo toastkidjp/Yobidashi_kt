@@ -23,6 +23,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.translate.TranslationUrlGenerator
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.UrlFactory
@@ -150,6 +151,10 @@ class MenuActionInvokerUseCase(
             }
             R.id.context_edit_count -> {
                 TextCountUseCase().invoke(editText, contentViewModel)
+                return true
+            }
+            R.id.context_edit_translate -> {
+                browserViewModel?.preview(TranslationUrlGenerator().invoke(text).toUri())
                 return true
             }
             R.id.context_edit_insert_thousand_separator -> {

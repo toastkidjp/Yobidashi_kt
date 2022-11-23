@@ -67,6 +67,11 @@
         android:orderInCategory="100"
         />
     <item
+        android:id="@+id/context_edit_translate"
+        android:title="Translate"
+        android:orderInCategory="100"
+        />
+    <item
         android:id="@+id/context_edit_count"
         android:title="@string/title_count"
         android:orderInCategory="100"
