@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.translate.TranslationUrlGenerator
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.webview.usecase.SelectedTextUseCase
@@ -187,6 +188,13 @@ internal class CustomWebView(context: Context) : WebView(context) {
                                 }
                                 R.id.web_search -> {
                                     search()
+                                    mode?.finish()
+                                    return true
+                                }
+                                R.id.translate -> {
+                                    selectedTextExtractor.withAction(this@CustomWebView) {
+                                        viewModel?.preview(TranslationUrlGenerator()(it).toUri())
+                                    }
                                     mode?.finish()
                                     return true
                                 }
