@@ -423,6 +423,7 @@ class MenuActionInvokerUseCaseTest {
 
         assertTrue(handled)
         verify(exactly = 1) { anyConstructed<TranslationUrlGenerator>().invoke(any()) }
+        verify { browserViewModel.preview(any()) }
     }
 
 }
