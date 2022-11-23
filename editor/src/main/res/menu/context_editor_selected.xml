@@ -68,7 +68,7 @@
         />
     <item
         android:id="@+id/context_edit_translate"
-        android:title="Translate"
+        android:title="@string/context_editor_translate"
         android:orderInCategory="100"
         />
     <item

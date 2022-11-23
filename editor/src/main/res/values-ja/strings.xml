@@ -42,5 +42,6 @@
     <string name="title_context_editor_code_block">コードブロック</string>
     <string name="title_context_editor_task_list">タスクリスト</string>
     <string name="title_count">文字数</string>
+    <string name="context_editor_translate">Translate</string>
 
 </resources>
