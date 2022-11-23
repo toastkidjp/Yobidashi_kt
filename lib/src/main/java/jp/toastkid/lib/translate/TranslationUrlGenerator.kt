@@ -9,14 +9,15 @@
 package jp.toastkid.lib.translate
 
 import android.net.Uri
+import java.util.Locale
 
 class TranslationUrlGenerator {
 
     operator fun invoke(text: String): String {
         val containsMultiByteCharacter = containsMultiByteCharacter(text)
         val encodedText = Uri.encode(text)
-        val sl = if (containsMultiByteCharacter) "ja" else "en"
-        val tl = if (containsMultiByteCharacter) "en" else "ja"
+        val sl = if (containsMultiByteCharacter) Locale.JAPANESE.language else Locale.ENGLISH.language
+        val tl = if (containsMultiByteCharacter) Locale.ENGLISH.language else Locale.JAPANESE.language
         return "https://translate.google.com/?sl=$sl&tl=$tl&text=$encodedText&op=translate"
     }
 
