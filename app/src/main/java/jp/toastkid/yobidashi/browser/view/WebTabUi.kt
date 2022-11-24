@@ -161,18 +161,23 @@ internal fun WebTabUi(webTab: WebTab) {
         GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
     }
 
+    val downloadUrl = remember { mutableStateOf("") }
     val downloadPermissionRequestLauncher =
         rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
-            if (it.first.not()) {
+            if (it.not()) {
                 contentViewModel
                     .snackShort(R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
-            val url = it.second ?: return@rememberLauncherForActivityResult
-            DownloadAction(activityContext).invoke(url)
+            if (downloadUrl.value.isEmpty()) {
+                return@rememberLauncherForActivityResult
+            }
+            DownloadAction(activityContext).invoke(downloadUrl.value)
+            downloadUrl.value = ""
         }
     browserViewModel.download.observe(lifecycleOwner, Observer {
         val url = it?.getContentIfNotHandled() ?: return@Observer
+        downloadUrl.value = url
         downloadPermissionRequestLauncher.launch(url)
     })
 
@@ -201,7 +206,8 @@ internal fun WebTabUi(webTab: WebTab) {
                         IntOffset(
                             0,
                             min(
-                                verticalIndicatorOffsetPx + (browserViewModel.swipeRefreshState.value?.indicatorOffset?.toInt() ?: 0),
+                                verticalIndicatorOffsetPx + (browserViewModel.swipeRefreshState.value?.indicatorOffset?.toInt()
+                                    ?: 0),
                                 nestedScrollConnection.refreshTrigger.toInt()
                             )
                         )
@@ -423,7 +429,7 @@ private fun AppBarContent(
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     val preferenceApplier = PreferenceApplier(activity)
-    val tint = Color(preferenceApplier.fontColor)
+    val tint = MaterialTheme.colors.onPrimary
 
     val enableBack = viewModel.enableBack
     val enableForward = viewModel.enableForward
@@ -437,7 +443,7 @@ private fun AppBarContent(
         if (viewModel.progress.value < 70) {
             LinearProgressIndicator(
                 progress = viewModel.progress.value.toFloat() / 100f,
-                color = Color(preferenceApplier.fontColor),
+                color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier
                     .height(1.dp)
                     .fillMaxWidth()
@@ -475,7 +481,7 @@ private fun AppBarContent(
                     painterResource(R.drawable.ic_tab),
                     contentDescription = stringResource(id = R.string.tab_list),
                     colorFilter = ColorFilter.tint(
-                        Color(preferenceApplier.fontColor),
+                        MaterialTheme.colors.onPrimary,
                         BlendMode.SrcIn
                     ),
                     modifier = Modifier

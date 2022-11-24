@@ -327,6 +327,8 @@ class ContentViewModel : ViewModel() {
         preferenceApplier.menuFabPosition()?.let {
             setMenuFabPosition(it.first, it.second)
         }
+        setScreenFilterColor(preferenceApplier.useColorFilter())
+        setBackgroundImagePath(preferenceApplier.backgroundImagePath)
     }
 
 }

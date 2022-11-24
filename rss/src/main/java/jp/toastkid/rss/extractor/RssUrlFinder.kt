@@ -7,7 +7,6 @@
  */
 package jp.toastkid.rss.extractor
 
-import androidx.annotation.VisibleForTesting
 import jp.toastkid.api.html.HtmlApi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -26,11 +25,8 @@ class RssUrlFinder(
     private val contentViewModel: ContentViewModel,
     private val urlValidator: RssUrlValidator = RssUrlValidator(),
     private val rssUrlExtractor: RssUrlExtractor = RssUrlExtractor(),
-    @VisibleForTesting
     private val htmlApi: HtmlApi = HtmlApi(),
-    @VisibleForTesting
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    @VisibleForTesting
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 

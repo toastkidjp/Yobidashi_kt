@@ -32,25 +32,25 @@ class DarkCssInjectorUseCase {
         '"""
 
         private val cssInjectorScript = """
-                    (function () {
-                        'use strict';
+            (function () {
+                'use strict';
                         
-                        var headElement = document.getElementsByTagName('head')[0],
-                            styleElement = document.createElement('style');
+                var headElement = document.getElementsByTagName('head')[0],
+                    styleElement = document.createElement('style');
                         
-                        styleElement.type = 'text/css';
+                styleElement.type = 'text/css';
                         
-                        var cssText = ${DARK_CSS.replace("\n", "")}
+                var cssText = ${DARK_CSS.replace("\n", "")}
                         
-                        if (styleElement.styleSheet) {
-                            styleElement.styleSheet.cssText = cssText;
-                        } else {
-                            styleElement.appendChild(document.createTextNode(cssText));
-                        }
+                if (styleElement.styleSheet) {
+                    styleElement.styleSheet.cssText = cssText;
+                } else {
+                    styleElement.appendChild(document.createTextNode(cssText));
+                }
 
-                        headElement.appendChild(styleElement);
-                    }());
-                """
+                headElement.appendChild(styleElement);
+            }());
+        """
 
         fun isTarget(preferenceApplier: PreferenceApplier) =
             preferenceApplier.useDarkMode() && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q

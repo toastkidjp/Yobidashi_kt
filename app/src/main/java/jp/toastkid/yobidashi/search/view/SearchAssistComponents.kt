@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,7 +40,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun SearchItemContent(
     query: String?,
@@ -113,7 +112,7 @@ internal fun SearchItemContent(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun BindItemContent(
     urlItem: UrlItem,
@@ -165,7 +164,7 @@ internal fun BindItemContent(
                     iconFile,
                     contentDescription = urlItem.urlString(),
                     placeholder = painterResource(id = R.drawable.ic_history_black),
-                    contentScale = ContentScale.Inside,
+                    contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .width(32.dp)
                         .fillMaxHeight()

@@ -17,13 +17,9 @@ import android.os.Build
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 
-class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<Boolean, String?>>() {
-
-    private var url: String? = null
+class DownloadPermissionRequestContract : ActivityResultContract<String?, Boolean>() {
 
     override fun createIntent(context: Context, input: String?): Intent {
-        url = input
-
         return Intent(ActivityResultContracts.RequestMultiplePermissions.ACTION_REQUEST_PERMISSIONS)
             .putExtra(
                 ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSIONS,
@@ -31,15 +27,15 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
             )
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): Pair<Boolean, String?> {
+    override fun parseResult(resultCode: Int, intent: Intent?): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return true to url
+            return true
         }
-        if (resultCode != Activity.RESULT_OK) return false to url
+        if (resultCode != Activity.RESULT_OK) return false
         val granted = intent
             ?.getIntArrayExtra(ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
             ?.getOrNull(0) == PackageManager.PERMISSION_GRANTED
-        return granted to url
+        return granted
     }
 
     companion object {
@@ -47,7 +43,6 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Pair<B
         private val PERMISSIONS =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 arrayOf(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.POST_NOTIFICATIONS
                 )
             } else {

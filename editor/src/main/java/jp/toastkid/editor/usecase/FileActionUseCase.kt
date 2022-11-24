@@ -80,7 +80,7 @@ class FileActionUseCase(
     fun readFromFileUri(data: Uri) {
         val context = context
 
-        FileExtractorFromUri(context, data)?.let {
+        FileExtractorFromUri()(context, data)?.let {
             if (it == path.value) {
                 return
             }

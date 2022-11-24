@@ -204,6 +204,11 @@ enum class SearchCategory(
             R.drawable.ic_weblio,
             "https://ejje.weblio.jp/content/"
     ),
+    DICTIONARY_COM(
+        R.string.search_category_dictionary_com,
+        R.drawable.ic_dictionary_com,
+        "https://www.dictionary.com/browse/"
+    ),
     INTERNET_ARCHIVE(
             R.string.search_category_internet_archive,
             R.drawable.ic_internet_archive,
@@ -350,6 +355,11 @@ enum class SearchCategory(
                 }
                 "https://techcrunch.com/search/" + Uri.encode(q)
             }
+    ),
+    GIZMODE(
+        R.string.search_category_gizmode,
+        R.drawable.ic_gizmodo,
+        "https://gizmodo.com/search?q="
     ),
     GITHUB(
             R.string.search_category_github,

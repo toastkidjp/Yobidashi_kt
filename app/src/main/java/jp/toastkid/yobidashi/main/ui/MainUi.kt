@@ -129,8 +129,6 @@ internal fun Content() {
     val preferenceApplier = PreferenceApplier(activity)
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
-    contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
-    contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
 
     val tabListViewModel = viewModel(TabListViewModel::class.java, activity)
 
@@ -266,7 +264,7 @@ internal fun Content() {
         focusManager.clearFocus(true)
     }
 
-    contentViewModel?.switchTabList?.observe(activity, Observer {
+    contentViewModel.switchTabList?.observe(activity, Observer {
         it?.getContentIfNotHandled() ?: return@Observer
         contentViewModel?.setBottomSheetContent { TabListUi(tabs) }
         coroutineScope?.launch {
@@ -385,7 +383,7 @@ internal fun Content() {
             }
         }
 
-    val bottomSheetState = contentViewModel?.modalBottomSheetState ?: return
+    val bottomSheetState = contentViewModel.modalBottomSheetState ?: return
 
     val dismissSnackbarDistance = with(LocalDensity.current) { 72.dp.toPx() }
     val snackbarSwipingAnchors = mapOf(-dismissSnackbarDistance to -1, 0f to 0, dismissSnackbarDistance to 1)
@@ -408,7 +406,7 @@ internal fun Content() {
             sheetContent = {
                 Box(modifier = Modifier.defaultMinSize(1.dp, 1.dp)) {
                     if (bottomSheetState.isVisible) {
-                        Inputs.hideKeyboard(localView)
+                        Inputs().hideKeyboard(localView)
 
                         contentViewModel.bottomSheetContent.value.invoke()
                     }

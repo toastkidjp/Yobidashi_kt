@@ -17,6 +17,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -58,12 +59,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -82,6 +85,7 @@ import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
 import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
@@ -119,7 +123,7 @@ fun ArticleListUi() {
         }
 
         private fun showFeedback() {
-            contentViewModel?.snackShort(R.string.message_done_import)
+            contentViewModel.snackShort(R.string.message_done_import)
         }
     }
 
@@ -193,13 +197,14 @@ fun ArticleListUi() {
     })
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(activityContext)
 
     Row {
-        Column {
+        Column(Modifier.weight(1f)) {
             TextField(
                 value = viewModel.searchInput.value,
                 onValueChange = {
@@ -247,6 +252,43 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 modifier = Modifier
                     .weight(0.3f)
                     .padding(start = 16.dp)
+            )
+        }
+
+        val tabListViewModel = ViewModelProvider(activityContext).get<TabListViewModel>()
+
+        Box(
+            Modifier
+                .width(40.dp)
+                .fillMaxHeight()
+                .combinedClickable(
+                    true,
+                    onClick = {
+                        ViewModelProvider(activityContext)
+                            .get(ContentViewModel::class.java)
+                            .switchTabList()
+                    },
+                    onLongClick = {
+                        tabListViewModel.openNewTabForLongTap()
+                    }
+                )
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_tab),
+                contentDescription = stringResource(id = R.string.tab),
+                colorFilter = ColorFilter.tint(
+                    MaterialTheme.colors.onPrimary,
+                    BlendMode.SrcIn
+                ),
+                modifier = Modifier.align(Alignment.Center)
+            )
+            Text(
+                text = tabListViewModel.tabCount.value.toString(),
+                fontSize = 9.sp,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(start = 2.dp, bottom = 2.dp)
             )
         }
     }

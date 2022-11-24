@@ -211,7 +211,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 painter = painterResource(id = R.drawable.ic_tab),
                 contentDescription = stringResource(id = R.string.tab),
                 colorFilter = ColorFilter.tint(
-                    Color(preferenceApplier.fontColor),
+                    MaterialTheme.colors.onPrimary,
                     BlendMode.SrcIn
                 ),
                 modifier = Modifier.align(Alignment.Center)
@@ -219,7 +219,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
             Text(
                 text = tabListViewModel.tabCount.value.toString(),
                 fontSize = 9.sp,
-                color = Color(preferenceApplier.fontColor),
+                color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(start = 2.dp, bottom = 2.dp)

@@ -78,7 +78,9 @@ class SearchQueryExtractorTest {
         "test" to "https://seekingalpha.com/search?q=test&tab=all",
         "test" to "https://you.com/search?q=test",
         "test" to "https://jpsearch.go.jp/csearch/jps-cross?csid=jps-cross&keyword=test",
-        "test" to "https://500px.com/search?q=test&type=photos&sort=relevance"
+        "test" to "https://500px.com/search?q=test&type=photos&sort=relevance",
+        "test" to "https://gizmodo.com/search?q=test",
+        "test" to "https://www.dictionary.com/browse/test"
     )
 
     @Before
