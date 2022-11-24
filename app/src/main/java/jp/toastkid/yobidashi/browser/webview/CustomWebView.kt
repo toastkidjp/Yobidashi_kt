@@ -198,6 +198,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
                                             (context as? ViewModelStoreOwner)?.let {
                                                 ViewModelProvider(it).get(ContentViewModel::class.java)
                                             }?.snackShort(R.string.message_failed_query_extraction_from_web_view)
+                                            return@withAction
                                         }
                                         viewModel?.preview(TranslationUrlGenerator()(it).toUri())
                                     }
