@@ -270,7 +270,9 @@ internal fun WebTabUi(webTab: WebTab) {
             AppBarContent(
                 browserViewModel,
                 browserModule
-            ) { readerModeText.value = it }
+            ) {
+                readerModeText.value = if (readerModeText.value.isNotEmpty()) "" else it
+            }
         }
 
         contentViewModel.toTop.observe(lifecycleOwner) {
