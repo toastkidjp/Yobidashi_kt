@@ -48,7 +48,7 @@ class TranslationUrlGeneratorTest {
     }
 
     @Test
-    fun makeTranslateUrl() {
+    fun containsMultiByteCharacters() {
         assertTrue(translationUrlGenerator("きょうは Chicken Noodle だ。").contains("sl=ja&tl=en"))
     }
 
