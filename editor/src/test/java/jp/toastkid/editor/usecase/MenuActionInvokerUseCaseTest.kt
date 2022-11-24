@@ -411,7 +411,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun translate() {
+    fun testTranslate() {
         mockkConstructor(TranslationUrlGenerator::class)
         every { anyConstructed<TranslationUrlGenerator>().invoke(any()) }.returns("https://test/url")
         mockkStatic(Uri::class)
