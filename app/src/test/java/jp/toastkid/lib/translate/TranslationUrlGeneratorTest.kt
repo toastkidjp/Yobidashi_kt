@@ -38,7 +38,7 @@ class TranslationUrlGeneratorTest {
     }
 
     @Test
-    fun emptyCase() {
+    fun testEmptyCase() {
         assertTrue(translationUrlGenerator("").contains("sl=en&tl=ja"))
     }
 
