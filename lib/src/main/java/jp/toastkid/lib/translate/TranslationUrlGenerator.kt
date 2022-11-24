@@ -15,9 +15,11 @@ class TranslationUrlGenerator {
 
     operator fun invoke(text: String): String {
         val containsMultiByteCharacter = containsMultiByteCharacter(text)
-        val encodedText = Uri.encode(text)
         val sl = if (containsMultiByteCharacter) Locale.JAPANESE.language else Locale.ENGLISH.language
         val tl = if (containsMultiByteCharacter) Locale.ENGLISH.language else Locale.JAPANESE.language
+
+        val encodedText = Uri.encode(text)
+
         return "https://translate.google.com/?sl=$sl&tl=$tl&text=$encodedText&op=translate"
     }
 
