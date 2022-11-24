@@ -43,8 +43,12 @@ class TranslationUrlGeneratorTest {
     }
 
     @Test
-    fun makeTranslateUrl() {
+    fun onlySingleByteCharacters() {
         assertTrue(translationUrlGenerator("Make sense?").contains("sl=en&tl=ja"))
+    }
+
+    @Test
+    fun makeTranslateUrl() {
         assertTrue(translationUrlGenerator("きょうは Chicken Noodle だ。").contains("sl=ja&tl=en"))
     }
 
