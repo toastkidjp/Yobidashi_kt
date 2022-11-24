@@ -14,14 +14,17 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import org.junit.After
 import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 
 class TranslationUrlGeneratorTest {
 
     @InjectMockKs
     private lateinit var translationUrlGenerator: TranslationUrlGenerator
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
@@ -29,12 +32,12 @@ class TranslationUrlGeneratorTest {
         every { Uri.encode(any()) }.returns("Mocked")
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun makeTranslateUrl() {
         assertTrue(translationUrlGenerator("").contains("sl=en&tl=ja"))
         assertTrue(translationUrlGenerator("Make sense?").contains("sl=en&tl=ja"))
