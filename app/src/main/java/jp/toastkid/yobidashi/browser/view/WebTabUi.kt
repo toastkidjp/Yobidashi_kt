@@ -475,6 +475,7 @@ private fun AppBarContent(
                 tint,
                 enableBack.value
             ) { browserModule.back() }
+
             HeaderSubButton(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,
