@@ -38,8 +38,12 @@ class TranslationUrlGeneratorTest {
     }
 
     @Test
-    fun makeTranslateUrl() {
+    fun emptyCase() {
         assertTrue(translationUrlGenerator("").contains("sl=en&tl=ja"))
+    }
+
+    @Test
+    fun makeTranslateUrl() {
         assertTrue(translationUrlGenerator("Make sense?").contains("sl=en&tl=ja"))
         assertTrue(translationUrlGenerator("きょうは Chicken Noodle だ。").contains("sl=ja&tl=en"))
     }
