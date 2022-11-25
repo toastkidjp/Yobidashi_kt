@@ -37,14 +37,16 @@ class TranslationUrlGeneratorTest {
         unmockkAll()
     }
 
+    private val expectedE2J = "sl=en&tl=ja"
+
     @Test
     fun testEmptyCase() {
-        assertTrue(translationUrlGenerator("").contains("sl=en&tl=ja"))
+        assertTrue(translationUrlGenerator("").contains(expectedE2J))
     }
 
     @Test
     fun testOnlySingleByteCharacters() {
-        assertTrue(translationUrlGenerator("Make sense?").contains("sl=en&tl=ja"))
+        assertTrue(translationUrlGenerator("Make sense?").contains(expectedE2J))
     }
 
     @Test
