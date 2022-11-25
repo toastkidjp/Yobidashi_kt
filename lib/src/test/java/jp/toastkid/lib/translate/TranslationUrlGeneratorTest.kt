@@ -49,9 +49,11 @@ class TranslationUrlGeneratorTest {
         assertTrue(translationUrlGenerator("Make sense?").contains(expectedE2J))
     }
 
+    private val expectedJ2E = "sl=ja&tl=en"
+
     @Test
     fun testContainsMultiByteCharacters() {
-        assertTrue(translationUrlGenerator("きょうは Chicken Noodle だ。").contains("sl=ja&tl=en"))
+        assertTrue(translationUrlGenerator("きょうは Chicken Noodle だ。").contains(expectedJ2E))
     }
 
 }
