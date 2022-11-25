@@ -43,7 +43,7 @@ class TranslationUrlGeneratorTest {
     }
 
     @Test
-    fun onlySingleByteCharacters() {
+    fun testOnlySingleByteCharacters() {
         assertTrue(translationUrlGenerator("Make sense?").contains("sl=en&tl=ja"))
     }
 
