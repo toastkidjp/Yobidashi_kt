@@ -189,5 +189,5 @@ private fun makeTitleText(title: String?, anchor: String?, imageUrl: String?) =
     when {
         title != null && title.isNotBlank() -> "$title"
         anchor != null && anchor.isNotBlank() -> "Link to: $anchor"
-        else -> "Image: ${imageUrl}"
+        else -> "Image: $imageUrl"
     }
