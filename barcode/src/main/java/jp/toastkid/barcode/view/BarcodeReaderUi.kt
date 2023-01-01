@@ -37,7 +37,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -171,7 +170,7 @@ fun BarcodeReaderUi() {
                         )
                         Text(
                             stringResource(id = R.string.open),
-                            color = Color(preferenceApplier.fontColor),
+                            color = MaterialTheme.colors.onPrimary,
                             fontSize = 16.sp,
                             modifier = Modifier
                                 .padding(16.dp)

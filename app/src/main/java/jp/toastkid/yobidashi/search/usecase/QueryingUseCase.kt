@@ -12,6 +12,7 @@ import android.content.Context
 import android.util.LruCache
 import jp.toastkid.api.suggestion.SuggestionApi
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchRepository
 import jp.toastkid.yobidashi.search.history.SearchHistoryRepository
@@ -33,6 +34,7 @@ class QueryingUseCase(
     private val urlItemQueryUseCase: UrlItemQueryUseCase,
     private val favoriteSearchRepository: FavoriteSearchRepository,
     private val searchHistoryRepository: SearchHistoryRepository,
+    private val contextSupplier: () -> Context,
     private val suggestionApi: SuggestionApi = SuggestionApi(),
     private val channel: Channel<String> = Channel(),
     private val cache: LruCache<String, List<String>> = LruCache<String, List<String>>(30),
@@ -46,7 +48,7 @@ class QueryingUseCase(
             CoroutineScope(Dispatchers.IO).launch {
                 searchUiViewModel.searchHistories.clear()
                 searchUiViewModel.searchHistories.addAll(
-                    if (keyword.isNullOrBlank()) {
+                    if (keyword.isBlank()) {
                         searchHistoryRepository.find(5)
                     } else {
                         searchHistoryRepository.select(keyword)
@@ -84,6 +86,10 @@ class QueryingUseCase(
             return
         }
 
+        if (cannotUseNetwork(contextSupplier())) {
+            return
+        }
+
         suggestionApi.fetchAsync(keyword) { suggestions ->
             searchUiViewModel.suggestions.clear()
             if (suggestions.isEmpty()) {
@@ -115,7 +121,31 @@ class QueryingUseCase(
     }
 
     private fun cannotUseNetwork(context: Context) =
-        NetworkChecker.isNotAvailable(context) ||
-                (PreferenceApplier(context).wifiOnly && NetworkChecker.isUnavailableWiFi(context))
+        NetworkChecker().isNotAvailable(context) ||
+                (PreferenceApplier(context).wifiOnly && NetworkChecker().isUnavailableWiFi(context))
+
+    companion object {
+        fun make(viewModel: SearchUiViewModel, context: Context): QueryingUseCase {
+            val database = DatabaseFinder().invoke(context)
+
+            return QueryingUseCase(
+                viewModel,
+                PreferenceApplier(context),
+                UrlItemQueryUseCase(
+                    {
+                        viewModel.urlItems.clear()
+                        viewModel.urlItems.addAll(it)
+                    },
+                    database.bookmarkRepository(),
+                    database.viewHistoryRepository(),
+                    { }
+                ),
+                database.favoriteSearchRepository(),
+                database.searchHistoryRepository(),
+                { context }
+            )
+        }
+
+    }
 
 }

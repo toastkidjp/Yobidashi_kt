@@ -66,13 +66,11 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
 import jp.toastkid.yobidashi.search.trend.TrendApi
-import jp.toastkid.yobidashi.search.url_suggestion.UrlItemQueryUseCase
 import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import jp.toastkid.yobidashi.search.voice.VoiceSearchIntentFactory
@@ -94,7 +92,7 @@ fun SearchInputUi(
     val preferenceApplier = PreferenceApplier(context)
 
     val activityViewModelProvider = ViewModelProvider(context)
-    val contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     val categoryName = remember {
         mutableStateOf(
@@ -107,23 +105,7 @@ fun SearchInputUi(
     val viewModel = viewModel(SearchUiViewModel::class.java)
 
     val queryingUseCase = remember {
-        val database = DatabaseFinder().invoke(context)
-
-        QueryingUseCase(
-            viewModel,
-            preferenceApplier,
-            UrlItemQueryUseCase(
-                {
-                    viewModel.urlItems.clear()
-                    viewModel.urlItems.addAll(it)
-                },
-                database.bookmarkRepository(),
-                database.viewHistoryRepository(),
-                { }
-            ),
-            database.favoriteSearchRepository(),
-            database.searchHistoryRepository()
-        )
+        QueryingUseCase.make(viewModel, context)
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -314,28 +296,6 @@ fun SearchInputUi(
             )
         })
 
-    /*LaunchedEffect(key1 = queryingUseCase.hashCode(), block = {
-        val text = inputQuery ?: ""
-        viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
-
-        queryingUseCase.withDebounce()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val trendItems = try {
-                TrendApi()()
-            } catch (e: IOException) {
-                Timber.e(e)
-                null
-            }
-            viewModel.trends.clear()
-            val taken = trendItems?.take(10)
-            if (taken.isNullOrEmpty()) {
-                return@launch
-            }
-            viewModel.trends.addAll(taken)
-        }
-    })*/
-
     DisposableEffect(key1 = localLifecycleOwner, effect = {
         onDispose {
             queryingUseCase.dispose()
@@ -407,7 +367,7 @@ private inline fun search(
     query: String,
     onBackground: Boolean = false
 ) {
-    if (NetworkChecker.isNotAvailable(context)) {
+    if (NetworkChecker().isNotAvailable(context)) {
         contentViewModel?.snackShort("Network is not available...")
         return
     }

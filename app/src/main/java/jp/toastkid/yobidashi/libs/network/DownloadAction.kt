@@ -25,7 +25,7 @@ class DownloadAction(private val context: Context) {
     }
 
     operator fun invoke(urls: Collection<String>) {
-        if (PreferenceApplier(context).wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
+        if (PreferenceApplier(context).wifiOnly && NetworkChecker().isUnavailableWiFi(context)) {
             (context as? ViewModelStoreOwner)?.let {
                 ViewModelProvider(it).get(ContentViewModel::class.java)
                     .snackShort(R.string.message_wifi_not_connecting)

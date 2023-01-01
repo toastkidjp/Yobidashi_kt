@@ -68,6 +68,8 @@ class BrowserModule(
 
     private val alphaConverter = AlphaConverter()
 
+    private val networkChecker = NetworkChecker()
+
     init {
         GlobalWebViewPool.resize(preferenceApplier.poolSize)
 
@@ -124,7 +126,7 @@ class BrowserModule(
 
         if (currentView.url.isNullOrEmpty()
                 && Urls.isValidUrl(url)
-                && NetworkChecker.isNotAvailable(context)
+                && networkChecker.isNotAvailable(context)
         ) {
             autoArchive.load(currentView, idGenerator.from(url)) {
                 contentViewModel?.snackShort("Load archive.")
@@ -132,7 +134,7 @@ class BrowserModule(
             return
         }
 
-        if (preferenceApplier.wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
+        if (preferenceApplier.wifiOnly && networkChecker.isUnavailableWiFi(context)) {
             contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
             return
         }
@@ -152,7 +154,7 @@ class BrowserModule(
      * Simple delegation to [WebView].
      */
     fun reload() {
-        if (preferenceApplier.wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
+        if (preferenceApplier.wifiOnly && networkChecker.isUnavailableWiFi(context)) {
             contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
             return
         }

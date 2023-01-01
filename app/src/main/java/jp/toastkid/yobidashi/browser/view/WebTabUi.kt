@@ -389,7 +389,7 @@ internal fun WebTabUi(webTab: WebTab) {
             }),
             OptionMenu(titleId = R.string.menu_random_wikipedia, action = {
                 if (PreferenceApplier(activityContext).wifiOnly &&
-                    NetworkChecker.isUnavailableWiFi(activityContext)
+                    NetworkChecker().isUnavailableWiFi(activityContext)
                 ) {
                     contentViewModel.snackShort(R.string.message_wifi_not_connecting)
                     return@OptionMenu
@@ -490,7 +490,7 @@ private fun AppBarContent(
                 )
                 Text(
                     text = "${tabCountState.value}",
-                    color = Color(preferenceApplier.fontColor),
+                    color = MaterialTheme.colors.onPrimary,
                     fontSize = 10.sp,
                     modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
                 )

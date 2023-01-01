@@ -41,12 +41,12 @@ class ClippingUrlOpenerTest {
         clippingUrlOpener = ClippingUrlOpener()
         
         MockKAnnotations.init(this)
-        every { view.getContext() }.returns(context)
+        every { view.context }.returns(context)
         every { context.getString(any(), any()) }.returns("Test message")
         every { context.getSharedPreferences(any(), any()) }.returns(mockk())
 
-        mockkObject(NetworkChecker)
-        every { NetworkChecker.isNotAvailable(any()) }.returns(false)
+        mockkConstructor(NetworkChecker::class)
+        every { anyConstructed<NetworkChecker>().isNotAvailable(any()) }.returns(false)
 
         mockkObject(Clipboard)
         every { Clipboard.getPrimary(any()) }.returns("clipped")
@@ -70,17 +70,17 @@ class ClippingUrlOpenerTest {
         clippingUrlOpener.invoke(null) { }
 
         verify(exactly = 0) { view.getContext() }
-        verify(exactly = 0) { NetworkChecker.isNotAvailable(any()) }
+        verify(exactly = 0) { anyConstructed<NetworkChecker>().isNotAvailable(any()) }
     }
 
     @Test
     fun testNetworkIsNotAvailable() {
-        every { NetworkChecker.isNotAvailable(any()) }.returns(true)
+        every { anyConstructed<NetworkChecker>().isNotAvailable(any()) }.returns(true)
 
         clippingUrlOpener.invoke(context) { }
 
         verify(exactly = 1) { view.getContext() }
-        verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
+        verify(exactly = 1) { anyConstructed<NetworkChecker>().isNotAvailable(any()) }
         verify(exactly = 0) { Clipboard.getPrimary(any()) }
     }
 
@@ -91,7 +91,7 @@ class ClippingUrlOpenerTest {
         clippingUrlOpener.invoke(context) { }
 
         verify(atLeast = 1) { view.getContext() }
-        verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
+        verify(exactly = 1) { anyConstructed<NetworkChecker>().isNotAvailable(any()) }
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         verify(exactly = 0) { Urls.isInvalidUrl(any()) }
     }
@@ -104,7 +104,7 @@ class ClippingUrlOpenerTest {
         clippingUrlOpener.invoke(context) { }
 
         verify(atLeast = 1) { view.getContext() }
-        verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
+        verify(exactly = 1) { anyConstructed<NetworkChecker>().isNotAvailable(any()) }
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         verify(exactly = 1) { Urls.isInvalidUrl(any()) }
     }
@@ -117,7 +117,7 @@ class ClippingUrlOpenerTest {
         clippingUrlOpener.invoke(context) { }
 
         verify(atLeast = 1) { view.getContext() }
-        verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
+        verify(exactly = 1) { anyConstructed<NetworkChecker>().isNotAvailable(any()) }
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         verify(exactly = 1) { Urls.isInvalidUrl(any()) }
         verify(exactly = 1) { context.getString(any(), any()) }

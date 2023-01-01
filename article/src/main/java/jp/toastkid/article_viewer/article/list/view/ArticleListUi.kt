@@ -65,6 +65,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.paging.PagingData
@@ -228,13 +229,13 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     imeAction = ImeAction.Search
                 ),
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = Color(preferenceApplier.fontColor),
-                    cursorColor = MaterialTheme.colors.onPrimary
+                    textColor = MaterialTheme.colors.onPrimary,
+                    cursorColor = Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, R.color.editor_cursor)))
                 ),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.Clear,
-                        tint = Color(preferenceApplier.fontColor),
+                        tint = MaterialTheme.colors.onPrimary,
                         contentDescription = "clear text",
                         modifier = Modifier
                             .offset(x = 8.dp)

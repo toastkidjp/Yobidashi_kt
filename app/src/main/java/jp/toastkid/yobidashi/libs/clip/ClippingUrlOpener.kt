@@ -26,13 +26,12 @@ class ClippingUrlOpener {
      * @param onClick callback
      */
     operator fun invoke(context: Context?, onClick: (Uri) -> Unit) {
-        if (context == null || NetworkChecker.isNotAvailable(context)) {
+        if (context == null || NetworkChecker().isNotAvailable(context)) {
             return
         }
 
-        val activityContext = context
-        val clipboardContent = Clipboard.getPrimary(activityContext)?.toString() ?: return
-        val preferenceApplier = PreferenceApplier(activityContext)
+        val clipboardContent = Clipboard.getPrimary(context)?.toString() ?: return
+        val preferenceApplier = PreferenceApplier(context)
         val lastClipped = preferenceApplier.lastClippedWord()
 
         if (shouldNotFeedback(clipboardContent, lastClipped)) {
