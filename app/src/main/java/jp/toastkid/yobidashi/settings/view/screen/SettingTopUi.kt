@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
@@ -27,13 +28,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 
 @Composable
 fun SettingTopUi() {
     val activityContext = LocalContext.current
-    val preferenceApplier = PreferenceApplier(activityContext)
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, activityContext)
     }
@@ -69,7 +68,7 @@ fun SettingTopUi() {
                 ) {
                     Text(
                         text = stringResource(id = page),
-                        color = Color(preferenceApplier.fontColor),
+                        color = MaterialTheme.colors.onPrimary,
                         fontSize = 16.sp
                     )
                 }

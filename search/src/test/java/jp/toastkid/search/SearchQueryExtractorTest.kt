@@ -81,6 +81,7 @@ class SearchQueryExtractorTest {
         "test" to "https://500px.com/search?q=test&type=photos&sort=relevance",
         "test" to "https://gizmodo.com/search?q=test",
         "test" to "https://www.politico.com/search?q=test",
+        "test" to "https://lifehacker.com/search?q=test",
         "test" to "https://www.dictionary.com/browse/test"
     )
 

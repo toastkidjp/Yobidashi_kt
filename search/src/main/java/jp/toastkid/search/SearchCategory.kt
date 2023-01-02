@@ -161,7 +161,7 @@ enum class SearchCategory(
     NAVER(
             R.string.naver,
             R.drawable.ic_naver,
-            "https://search.naver.com/search.naver?ie=utf8&query="
+            "https://m.search.naver.com/search.naver?ie=utf8&query="
     ),
     DAUM(
             R.string.daum,
@@ -361,6 +361,11 @@ enum class SearchCategory(
         R.drawable.ic_gizmodo,
         "https://gizmodo.com/search?q="
     ),
+    LIFEHACKER(
+        R.string.search_category_lifehacker,
+        R.drawable.ic_lifehacker,
+        "https://lifehacker.com/search?q="
+    ),
     GITHUB(
             R.string.search_category_github,
             R.drawable.ic_github,
@@ -495,13 +500,12 @@ enum class SearchCategory(
     companion object {
 
         private val hostAndCategories =
-                values()
-                        .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }
-                        .map {
-                            val key = if (it == YAHOO_JAPAN_REALTIME_SEARCH) "search.yahoo.co.jp/realtime" else it.host.toUri().host
-                            key to it
-                        }
-                        .toMap()
+            values()
+                .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }.associateBy {
+                    val key =
+                        if (it == YAHOO_JAPAN_REALTIME_SEARCH) "search.yahoo.co.jp/realtime" else it.host.toUri().host
+                    key
+                }
 
         fun findByUrlOrNull(url: String?): SearchCategory? {
             val key = makeKey(url)

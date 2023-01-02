@@ -115,13 +115,6 @@ fun EditorTabUi(path: String?) {
         )
     }
 
-    contentViewModel.replaceAppBarContent {
-        AppBarContent(
-            contentViewModel,
-            fileActionUseCase
-        )
-    }
-
     val localLifecycleOwner = LocalLifecycleOwner.current
     contentViewModel.toTop.observe(localLifecycleOwner) {
         it.getContentIfNotHandled() ?: return@observe
@@ -198,10 +191,10 @@ fun EditorTabUi(path: String?) {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findDown(word)
     })
-    pageSearcherViewModel.find.observe(context, {
+    pageSearcherViewModel.find.observe(context) {
         val word = it.getContentIfNotHandled() ?: return@observe
         finder.findDown(word)
-    })
+    }
 
     val dialogState = remember { mutableStateOf(false) }
 
@@ -241,6 +234,13 @@ fun EditorTabUi(path: String?) {
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(key1 = Unit, block = {
         contentViewModel.showAppBar(coroutineScope)
+
+        contentViewModel.replaceAppBarContent {
+            AppBarContent(
+                contentViewModel,
+                fileActionUseCase
+            )
+        }
     })
 }
 

@@ -19,13 +19,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.Surface
@@ -39,7 +36,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -51,6 +47,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterUseCase
+import jp.toastkid.yobidashi.settings.view.CheckableRow
 import kotlin.math.roundToInt
 
 @Composable
@@ -83,30 +80,14 @@ internal fun ColorFilterSettingUi() {
 
                 check.value = preferenceApplier.useColorFilter()
             }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = onClick)
-                    .padding(start = 16.dp, end = 16.dp)
-            ) {
-                Icon(
-                    painterResource(id = R.drawable.ic_color_filter_black),
-                    contentDescription = stringResource(id = R.string.title_color_filter),
-                    tint = MaterialTheme.colors.secondary
-                )
-                Text(
-                    text = stringResource(id = R.string.title_color_filter),
-                    modifier = Modifier.weight(1f)
-                )
-                Checkbox(
-                    checked = check.value,
-                    onCheckedChange = { onClick() },
-                    modifier = Modifier
-                        .width(44.dp)
-                        .align(Alignment.CenterVertically)
-                )
-            }
+
+            CheckableRow(
+                textId = R.string.title_color_filter,
+                clickable = onClick,
+                booleanState = check,
+                iconTint = MaterialTheme.colors.secondary,
+                iconId = R.drawable.ic_color_filter_black
+            )
 
             InsetDivider()
 

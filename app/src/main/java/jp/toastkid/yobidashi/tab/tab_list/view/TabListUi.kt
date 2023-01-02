@@ -134,7 +134,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     val backgroundColor = if (currentIndex == position)
                         Color(
                             ColorUtils.setAlphaComponent(
-                                MaterialTheme.colors.primary.toArgb(),
+                                MaterialTheme.colors.secondary.toArgb(),
                                 128
                             )
                         )
@@ -163,8 +163,8 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                 }
             }
 
-            val tint = Color(preferenceApplier.fontColor)
-            val backgroundColor = Color(preferenceApplier.color)
+            val tint = MaterialTheme.colors.onPrimary
+            val backgroundColor = MaterialTheme.colors.primary
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
@@ -284,8 +284,8 @@ private fun TabItem(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .width(dimensionResource(id = R.dimen.tab_list_item_width))
-                .height(dimensionResource(id = R.dimen.tab_list_item_height))
+                .width(120.dp)
+                .height(160.dp)
                 .clickable {
                     onClick(tab)
                 }

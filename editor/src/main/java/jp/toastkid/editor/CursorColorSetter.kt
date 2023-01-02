@@ -10,11 +10,13 @@ package jp.toastkid.editor
 import android.content.res.Resources
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import timber.log.Timber
@@ -26,9 +28,7 @@ class CursorColorSetter {
 
     operator fun invoke(editText: EditText, @ColorInt newColor: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val drawable = editText.textCursorDrawable ?: return
-            DrawableCompat.setTint(drawable, newColor)
-            editText.textCursorDrawable = drawable
+            setColor(editText, newColor)
             return
         }
 
@@ -39,6 +39,33 @@ class CursorColorSetter {
             field.set(editor, makeDrawables(editText, newColor))
         } catch (e: Exception) {
             Timber.e(e)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun setColor(editText: EditText, newColor: Int) {
+        editText.textCursorDrawable?.let { drawable ->
+            DrawableCompat.setTint(drawable, newColor)
+            editText.textCursorDrawable = drawable
+        }
+
+        if (editText.textCursorDrawable == null) {
+            editText.textCursorDrawable = ColorDrawable(newColor)
+        }
+
+        editText.textSelectHandleLeft?.let {
+            DrawableCompat.setTint(it, newColor)
+            editText.setTextSelectHandleLeft(it)
+        }
+
+        editText.textSelectHandleRight?.let {
+            DrawableCompat.setTint(it, newColor)
+            editText.setTextSelectHandleRight(it)
+        }
+
+        editText.textSelectHandle?.let {
+            DrawableCompat.setTint(it, newColor)
+            editText.setTextSelectHandle(it)
         }
     }
 

@@ -214,13 +214,13 @@ internal fun DisplaySettingUi() {
                             contentViewModel
                                 .snackShort(R.string.message_change_background_image)
                         }) {
-                            Column() {
+                            Column {
                                 AsyncImage(
                                     model = imageFile,
                                     contentDescription = imageFile.name,
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
-                                        .height(150.dp)
+                                        .height(152.dp)
                                         .padding(4.dp)
                                 )
                                 Text(

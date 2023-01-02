@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.settings.view.screen
 
-import androidx.annotation.ColorInt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -97,7 +96,6 @@ internal fun OtherSettingUi() {
                         .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
                 ) {
                     NewTabSettingItem(
-                        preferenceApplier.color,
                         StartUp.SEARCH == selected.value,
                         R.string.title_search,
                         R.mipmap.thumbnail_search
@@ -107,7 +105,6 @@ internal fun OtherSettingUi() {
                     }
 
                     NewTabSettingItem(
-                        preferenceApplier.color,
                         StartUp.BROWSER == selected.value,
                         R.string.title_browser,
                         R.mipmap.thumbnail_browser
@@ -117,7 +114,6 @@ internal fun OtherSettingUi() {
                     }
 
                     NewTabSettingItem(
-                        preferenceApplier.color,
                         StartUp.BOOKMARK == selected.value,
                         R.string.title_bookmark,
                         R.mipmap.thumbnail_bookmark
@@ -235,12 +231,12 @@ internal fun OtherSettingUi() {
 
 @Composable
 private fun NewTabSettingItem(
-    @ColorInt color: Int,
     selected: Boolean,
     nameId: Int,
-    thumbnailId: Int, onClick: () -> Unit
+    thumbnailId: Int,
+    onClick: () -> Unit
 ) {
-    val selectedColor = Color(color)
+    val selectedColor = MaterialTheme.colors.secondary
     Surface(elevation = 4.dp, modifier = Modifier.clickable(onClick = onClick)) {
         Column(
             modifier = Modifier

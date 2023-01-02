@@ -656,12 +656,6 @@ private fun HeaderSubButton(
     )
 }
 
-/*TODO
-        binding?.swipeRefresher?.let {
-            it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
-            it.setColorSchemeColors(preferenceApplier.fontColor)
-        }*/
-
 fun stopSwipeRefresherLoading() {
     //TODO binding?.swipeRefresher?.isRefreshing = false
 }

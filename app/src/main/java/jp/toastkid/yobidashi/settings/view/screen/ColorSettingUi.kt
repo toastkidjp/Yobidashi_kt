@@ -14,7 +14,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -144,15 +143,11 @@ internal fun ColorSettingUi() {
                     .fillMaxWidth()
                     .padding(top = 8.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Text(
+                    stringResource(id = R.string.settings_color_saved_title),
+                    fontSize = 18.sp,
                     modifier = Modifier.padding(8.dp)
-                ) {
-                    Text(
-                        stringResource(id = R.string.settings_color_saved_title),
-                        fontSize = 18.sp
-                    )
-                }
+                )
             }
         }
 
