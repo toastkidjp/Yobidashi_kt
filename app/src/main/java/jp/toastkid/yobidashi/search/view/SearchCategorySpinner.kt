@@ -30,14 +30,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
-import jp.toastkid.yobidashi.R
 
 @Composable
 internal fun SearchCategorySpinner(
@@ -53,7 +51,7 @@ internal fun SearchCategorySpinner(
             .clickable {
                 spinnerOpen.value = true
             }
-            .width(dimensionResource(id = R.dimen.search_category_spinner_width))
+            .width(44.dp)
             .height(56.dp)
             .background(Color(0xDDFFFFFF))
     ) {
