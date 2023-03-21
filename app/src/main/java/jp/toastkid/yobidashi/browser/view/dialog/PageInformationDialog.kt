@@ -76,7 +76,9 @@ internal fun PageInformationDialog(
                 shadowElevation = 4.dp
             ) {
                 Box() {
-                    Column {
+                    Column(
+                        modifier = Modifier.padding(bottom = 40.dp)
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(16.dp)
