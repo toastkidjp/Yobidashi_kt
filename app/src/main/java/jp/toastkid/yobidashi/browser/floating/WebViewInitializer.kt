@@ -18,15 +18,13 @@ import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.block.AdRemover
-import jp.toastkid.yobidashi.browser.webview.usecase.DarkCssInjectorUseCase
 
 /**
  * @author toastkidjp
  */
 class WebViewInitializer(
         private val preferenceApplier: PreferenceApplier,
-        private val viewModel: FloatingPreviewViewModel,
-        private val darkCssInjectorUseCase: DarkCssInjectorUseCase = DarkCssInjectorUseCase()
+        private val viewModel: FloatingPreviewViewModel
 ) {
 
     /**
