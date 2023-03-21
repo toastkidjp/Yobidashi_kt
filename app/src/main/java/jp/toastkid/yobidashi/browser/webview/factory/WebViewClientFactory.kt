@@ -70,10 +70,6 @@ class WebViewClientFactory(
 
             lastStartedMs = true
 
-            if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                //darkCssInjectorUseCase(view)
-            }
-
             if (view == currentView()) {
                 browserViewModel?.updateProgress(0)
                 browserViewModel?.nextUrl(url)
@@ -91,10 +87,6 @@ class WebViewClientFactory(
                 return
             }
             lastStartedMs = false
-
-            if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                //darkCssInjectorUseCase(view)
-            }
 
             val title = view.title ?: ""
             val urlStr = url ?: ""
