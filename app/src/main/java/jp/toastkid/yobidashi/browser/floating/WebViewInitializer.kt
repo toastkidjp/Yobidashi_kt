@@ -47,20 +47,8 @@ class WebViewInitializer(
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
-                if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                    //darkCssInjectorUseCase(view)
-                }
-
                 viewModel.newIcon(null)
                 viewModel.newUrl(url)
-            }
-
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-
-                if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                    //darkCssInjectorUseCase(view)
-                }
             }
 
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
