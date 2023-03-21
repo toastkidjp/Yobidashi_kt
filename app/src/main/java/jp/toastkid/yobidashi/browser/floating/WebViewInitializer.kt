@@ -48,7 +48,7 @@ class WebViewInitializer(
                 super.onPageStarted(view, url, favicon)
 
                 if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                    darkCssInjectorUseCase(view)
+                    //darkCssInjectorUseCase(view)
                 }
 
                 viewModel.newIcon(null)
@@ -59,7 +59,7 @@ class WebViewInitializer(
                 super.onPageFinished(view, url)
 
                 if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                    darkCssInjectorUseCase(view)
+                    //darkCssInjectorUseCase(view)
                 }
             }
 
@@ -89,7 +89,7 @@ class WebViewInitializer(
                 }
 
                 if (urlStr != null && favicon != null) {
-                    val file = faviconApplier.assignFile(urlStr) ?: return
+                    val file = faviconApplier.assignFile(urlStr)
                     if (file.exists() && file.length() != 0L) {
                         viewModel.newIcon(BitmapFactory.decodeFile(file.absolutePath))
                         return
