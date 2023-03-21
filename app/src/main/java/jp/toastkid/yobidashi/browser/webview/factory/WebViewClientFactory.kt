@@ -71,7 +71,7 @@ class WebViewClientFactory(
             lastStartedMs = true
 
             if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                darkCssInjectorUseCase(view)
+                //darkCssInjectorUseCase(view)
             }
 
             if (view == currentView()) {
@@ -93,7 +93,7 @@ class WebViewClientFactory(
             lastStartedMs = false
 
             if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                darkCssInjectorUseCase(view)
+                //darkCssInjectorUseCase(view)
             }
 
             val title = view.title ?: ""
