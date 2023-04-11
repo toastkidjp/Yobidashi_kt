@@ -56,7 +56,6 @@ import java.util.GregorianCalendar
 @Composable
 fun CalendarUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val browserViewModel = viewModel(BrowserViewModel::class.java, context)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     val datePicker = DatePicker(context)
