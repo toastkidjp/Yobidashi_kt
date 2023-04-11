@@ -57,9 +57,6 @@ fun CalendarUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
-    val datePicker = DatePicker(context)
-    val today = Calendar.getInstance()
-
     val week = arrayOf(
         Calendar.SUNDAY,
         Calendar.MONDAY,
