@@ -53,7 +53,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -105,7 +104,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
         listState = rememberLazyListState(max(0, tabAdapter.index() - 1))
     )
 
-    val sizePx = with(LocalDensity.current) { dimensionResource(R.dimen.tab_list_item_height).toPx() }
+    val sizePx = with(LocalDensity.current) { 160.dp.toPx() }
     val anchors = mapOf(0f to 0, -sizePx to 1)
 
     val initialIndex = tabAdapter.currentTabId()

@@ -22,7 +22,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,28 +38,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.yobidashi.R
 
 @Composable
-internal fun FindInPage(
-    openFindInPageState: MutableState<Boolean>,
-    tint: Color,
-    pageSearcherInput: MutableState<String>
-) {
+internal fun FindInPage() {
     val activity = LocalContext.current as? ViewModelStoreOwner ?: return
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
+    val contentViewModel = viewModel(ContentViewModel::class.java, activity)
     val closeAction = {
         pageSearcherViewModel.clearInput()
         pageSearcherViewModel.hide()
-        openFindInPageState.value = false
+        contentViewModel.openFindInPageState.value = false
     }
+    val pageSearcherInput = remember { mutableStateOf("") }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painterResource(id = R.drawable.ic_close),
             contentDescription = stringResource(id = R.string.content_description_close_find_area),
-            tint = tint,
+            tint = MaterialTheme.colors.onPrimary,
             modifier = Modifier
                 .clickable(onClick = closeAction)
                 .padding(start = 16.dp)
@@ -119,7 +118,7 @@ internal fun FindInPage(
         Icon(
             painterResource(id = R.drawable.ic_up),
             contentDescription = stringResource(id = R.string.content_description_find_upward),
-            tint = tint,
+            tint = MaterialTheme.colors.onPrimary,
             modifier = Modifier
                 .clickable {
                     pageSearcherViewModel.findUp(
@@ -131,7 +130,7 @@ internal fun FindInPage(
         Icon(
             painterResource(id = R.drawable.ic_down),
             contentDescription = stringResource(id = R.string.content_description_find_downward),
-            tint = tint,
+            tint = MaterialTheme.colors.onPrimary,
             modifier = Modifier
                 .clickable {
                     pageSearcherViewModel.findDown(pageSearcherInput.value)
@@ -139,12 +138,12 @@ internal fun FindInPage(
                 .padding(8.dp)
         )
 
-        BackHandler(openFindInPageState.value) {
+        BackHandler(contentViewModel.openFindInPageState.value) {
             closeAction()
         }
 
         LaunchedEffect(key1 = "find_in_page_first_launch", block = {
-            if (openFindInPageState.value) {
+            if (contentViewModel.openFindInPageState.value) {
                 focusRequester.requestFocus()
             }
         })

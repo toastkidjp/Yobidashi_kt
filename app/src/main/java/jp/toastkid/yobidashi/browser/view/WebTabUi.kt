@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.browser.view
 
 import android.Manifest
+import android.net.Uri
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
@@ -86,6 +87,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
+import jp.toastkid.yobidashi.browser.usecase.PrintCurrentPageUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
@@ -280,12 +282,12 @@ internal fun WebTabUi(webTab: WebTab) {
             it.getContentIfNotHandled() ?: return@observe
             browserModule.pageDown()
         }
-        contentViewModel.share.observe(lifecycleOwner, {
+        contentViewModel.share.observe(lifecycleOwner) {
             it.getContentIfNotHandled() ?: return@observe
             activityContext.startActivity(
                 ShareIntentFactory()(browserModule.makeShareMessage())
             )
-        })
+        }
 
         pageSearcherViewModel.also { viewModel ->
             viewModel.find.observe(lifecycleOwner, Observer {
@@ -340,6 +342,15 @@ internal fun WebTabUi(webTab: WebTab) {
 
     LaunchedEffect(key1 = "add_option_menu", block = {
         contentViewModel.optionMenus(
+            OptionMenu(titleId = R.string.translate, action = {
+                val language = activityContext.resources.configuration.locales[0].language
+                val source = if (language == "en") "ja" else "en"
+                browserViewModel.open(
+                    ("https://papago.naver.net/website?locale=auto&source=${source}&target=$language&url="
+                            + Uri.encode(browserModule.currentUrl()))
+                        .toUri()
+                )
+            }),
             OptionMenu(titleId = R.string.download_all_images, action = {
                 storagePermissionRequestLauncher
                     .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -365,6 +376,9 @@ internal fun WebTabUi(webTab: WebTab) {
                 ).insert()
 
                 contentViewModel.snackShort(R.string.message_done_added_bookmark)
+            }),
+            OptionMenu(titleId = R.string.title_print_page, action = {
+                PrintCurrentPageUseCase().invoke(GlobalWebViewPool.getLatest())
             }),
             OptionMenu(titleId = R.string.title_archive, action = {
                 browserModule.saveArchive()
@@ -612,7 +626,7 @@ private fun AppBarContent(
                                 browserModule.reload()
                             } else {
                                 browserModule.stopLoading()
-                                stopSwipeRefresherLoading()
+                                viewModel.stopProgress(true)
                             }
                         }
                 )
@@ -654,8 +668,4 @@ private fun HeaderSubButton(
             .alpha(if (enable) 1f else 0.6f)
             .clickable(enabled = enable, onClick = onClick)
     )
-}
-
-fun stopSwipeRefresherLoading() {
-    //TODO binding?.swipeRefresher?.isRefreshing = false
 }

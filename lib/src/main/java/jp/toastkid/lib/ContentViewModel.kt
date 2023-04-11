@@ -296,6 +296,8 @@ class ContentViewModel : ViewModel() {
         bottomBarOffsetHeightPx.value = -bottomBarHeightPx
     }
 
+    val openFindInPageState = mutableStateOf(false)
+
     private val showSnowEffect = mutableStateOf(false)
 
     fun setShowDisplayEffect(newState: Boolean) {

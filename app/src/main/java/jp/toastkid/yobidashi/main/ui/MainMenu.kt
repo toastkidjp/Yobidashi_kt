@@ -25,7 +25,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,8 +39,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.menu.Menu
 
 @Composable
-fun MainMenu(
-    openFindInPageState: MutableState<Boolean>,
+internal fun MainMenu(
     navigate: (String) -> Unit,
     showAudioPlayer: () -> Unit,
     hideMenu: () -> Unit
@@ -73,8 +71,7 @@ fun MainMenu(
                                 menu,
                                 contentViewModel,
                                 showAudioPlayer,
-                                navigate,
-                                openFindInPageState
+                                navigate
                             )
 
                             hideMenu()
@@ -117,8 +114,7 @@ private fun onClickMainMenuItem(
     menu: Menu,
     contentViewModel: ContentViewModel,
     showAudioPlayer: () -> Unit,
-    navigate: (String) -> Unit,
-    openFindInPageState: MutableState<Boolean>
+    navigate: (String) -> Unit
 ) {
     when (menu) {
         Menu.TOP -> {
@@ -193,7 +189,7 @@ private fun onClickMainMenuItem(
             )
         }
         Menu.FIND_IN_PAGE -> {
-            openFindInPageState.value = true
+            contentViewModel.openFindInPageState.value = true
         }
     }
 }

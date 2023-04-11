@@ -26,7 +26,6 @@ import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.SwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -45,25 +44,31 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.menu.view.OptionMenuItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.ui.finder.FindInPage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun AppBar(
-    openFindInPageState: MutableState<Boolean>,
-    openSetting: () -> Unit
-) {
+internal fun AppBar() {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
-    val pageSearcherInput = remember { mutableStateOf("") }
 
     val sizePx = with(LocalDensity.current) { 72.dp.toPx() }
     val anchors = mapOf(-sizePx to 1, 0f to 0)
+    val verticalState = remember { mutableStateOf(0) }
     val swipeableState = SwipeableState(
-        initialValue = 0,
+        initialValue = verticalState.value,
         confirmStateChange = {
             if (it == 1) {
+                verticalState.value = 1
                 contentViewModel.switchTabList()
+                CoroutineScope(Dispatchers.IO).launch {
+                    delay(400L)
+                    verticalState.value = 0
+                }
             }
             true
         }
@@ -124,12 +129,8 @@ internal fun AppBar(
                     )
                 }
         ) {
-            if (openFindInPageState.value) {
-                FindInPage(
-                    openFindInPageState,
-                    MaterialTheme.colors.onPrimary,
-                    pageSearcherInput
-                )
+            if (contentViewModel.openFindInPageState.value) {
+                FindInPage()
             } else {
                 contentViewModel.appBarContent.value()
             }
@@ -138,10 +139,8 @@ internal fun AppBar(
         OverflowMenu(
             MaterialTheme.colors.onPrimary,
             contentViewModel.optionMenus,
-            { contentViewModel.switchTabList() },
-            openSetting,
-            { activity.finish() }
-        )
+            { contentViewModel.switchTabList() }
+        ) { activity.finish() }
     }
 
 }
@@ -151,7 +150,6 @@ private fun OverflowMenu(
     tint: Color,
     menus: List<OptionMenu>,
     switchTabList: () -> Unit,
-    openSetting: () -> Unit,
     finishApp: () -> Unit
 ) {
     val openOptionMenu = remember { mutableStateOf(false) }
@@ -182,7 +180,7 @@ private fun OverflowMenu(
                 action = switchTabList),
             OptionMenu(
                 titleId = R.string.title_settings,
-                action = openSetting),
+                action = { contentViewModel?.nextRoute("setting/top") }),
             OptionMenu(titleId = R.string.exit, action = finishApp)
         )
         val optionMenuItems =
@@ -190,7 +188,8 @@ private fun OverflowMenu(
 
         DropdownMenu(
             expanded = openOptionMenu.value,
-            onDismissRequest = { openOptionMenu.value = false }) {
+            onDismissRequest = { openOptionMenu.value = false }
+        ) {
             optionMenuItems.forEach {
                 DropdownMenuItem(
                     onClick = {

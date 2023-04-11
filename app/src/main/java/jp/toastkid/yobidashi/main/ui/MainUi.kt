@@ -21,35 +21,24 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
-import androidx.compose.material.SwipeableState
-import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -77,7 +66,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
@@ -215,8 +203,6 @@ internal fun Content() {
 
     val scaffoldState = rememberScaffoldState()
     val rememberSnackbarHostState = remember { snackbarHostState }
-
-    val openFindInPageState = remember { mutableStateOf(false) }
 
     val backgroundColor = MaterialTheme.colors.primary
     val tint = MaterialTheme.colors.onPrimary
@@ -385,9 +371,6 @@ internal fun Content() {
 
     val bottomSheetState = contentViewModel.modalBottomSheetState ?: return
 
-    val dismissSnackbarDistance = with(LocalDensity.current) { 72.dp.toPx() }
-    val snackbarSwipingAnchors = mapOf(-dismissSnackbarDistance to -1, 0f to 0, dismissSnackbarDistance to 1)
-
     val localView = LocalView.current
 
     Box(
@@ -428,60 +411,13 @@ internal fun Content() {
                 scaffoldState = scaffoldState,
                 backgroundColor = Color.Transparent,
                 bottomBar = {
-                    AppBar(
-                        openFindInPageState
-                    ) { navigate(navigationHostController, "setting/top") }
+                    AppBar()
                 },
                 snackbarHost = {
                     SnackbarHost(
                         hostState = rememberSnackbarHostState,
                         snackbar = {
-                            val snackbarSwipeableState = SwipeableState(
-                                initialValue = 0,
-                                confirmStateChange = {
-                                    if (it == -1 || it == 1) {
-                                        rememberSnackbarHostState.currentSnackbarData?.dismiss()
-                                    }
-                                    true
-                                }
-                            )
-                            Snackbar(
-                                backgroundColor = backgroundColor,
-                                contentColor = tint,
-                                elevation = 4.dp,
-                                modifier = Modifier
-                                    .swipeable(
-                                        snackbarSwipeableState,
-                                        anchors = snackbarSwipingAnchors,
-                                        thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                                        resistance = ResistanceConfig(0.5f),
-                                        orientation = Orientation.Horizontal
-                                    )
-                                    .offset {
-                                        IntOffset(
-                                            snackbarSwipeableState.offset.value.toInt(),
-                                            0
-                                        )
-                                    }
-                            ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text(
-                                        it.message,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                    if (it.actionLabel != null) {
-                                        Text(
-                                            it.actionLabel ?: "",
-                                            modifier = Modifier
-                                                .clickable {
-                                                    it.performAction()
-                                                }
-                                                .wrapContentWidth()
-                                                .padding(start = 4.dp)
-                                        )
-                                    }
-                                }
-                            }
+                            MainSnackbar(it) { rememberSnackbarHostState.currentSnackbarData?.dismiss() }
                         })
                 },
                 floatingActionButton = {
@@ -540,7 +476,6 @@ internal fun Content() {
 
                 if (openMenu.value) {
                     MainMenu(
-                        openFindInPageState,
                         { navigate(navigationHostController, it) },
                         {
                             val permissions =
@@ -555,9 +490,8 @@ internal fun Content() {
                                     )
                                 }
                             mediaPermissionRequestLauncher.launch(permissions)
-                        },
-                        { openMenu.value = false }
-                    )
+                        }
+                    ) { openMenu.value = false }
                 }
 
                 if (contentViewModel.useScreenFilter.value) {
