@@ -59,9 +59,6 @@ fun CalendarUi() {
 
     val datePicker = DatePicker(context)
     val today = Calendar.getInstance()
-    var year = today.get(Calendar.YEAR)
-    var monthOfYear = today.get(Calendar.MONTH)
-    var dayOfMonth = today.get(Calendar.DAY_OF_MONTH)
 
     val week = arrayOf(
         Calendar.SUNDAY,
