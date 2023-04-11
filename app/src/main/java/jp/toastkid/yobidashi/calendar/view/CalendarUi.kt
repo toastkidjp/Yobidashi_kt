@@ -223,7 +223,7 @@ fun CalendarUi() {
                                             contentViewModel,
                                             currentDate.value.get(Calendar.YEAR),
                                             currentDate.value.get(Calendar.MONTH),
-                                            currentDate.value.get(Calendar.DAY_OF_MONTH)
+                                            day.date
                                         )
                                     },
                                     onLongClick = {
@@ -235,7 +235,7 @@ fun CalendarUi() {
                                             contentViewModel,
                                             currentDate.value.get(Calendar.YEAR),
                                             currentDate.value.get(Calendar.MONTH),
-                                            currentDate.value.get(Calendar.DAY_OF_MONTH)
+                                            day.date
                                         )
                                     }
                                 )
