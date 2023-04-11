@@ -161,14 +161,19 @@ fun CalendarUi() {
 
                 Button(
                     onClick = {
-                        currentDate.value = Calendar.getInstance()
+                        currentDate.value = GregorianCalendar(
+                            currentDate.value.get(Calendar.YEAR),
+                            currentDate.value.get(Calendar.MONTH) + 1,
+                            1
+                        )
                     },
                     modifier = Modifier
-                        .padding(8.dp)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_calendar),
-                        contentDescription = "Current month", modifier = Modifier.padding(8.dp))
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        contentDescription = "Current month"
+                    )
                 }
             }
             Row {
