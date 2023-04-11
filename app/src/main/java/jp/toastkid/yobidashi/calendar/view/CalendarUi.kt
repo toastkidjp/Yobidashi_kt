@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.calendar.model.Week
@@ -63,12 +62,6 @@ fun CalendarUi() {
     var year = today.get(Calendar.YEAR)
     var monthOfYear = today.get(Calendar.MONTH)
     var dayOfMonth = today.get(Calendar.DAY_OF_MONTH)
-    datePicker.init(year, monthOfYear, dayOfMonth) { _, y, m, d ->
-        year = y
-        monthOfYear = m
-        dayOfMonth = d
-    }
-
 
     val week = arrayOf(
         Calendar.SUNDAY,
