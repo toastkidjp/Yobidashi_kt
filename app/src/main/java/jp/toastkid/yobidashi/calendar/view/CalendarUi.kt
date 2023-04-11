@@ -9,7 +9,6 @@
 package jp.toastkid.yobidashi.calendar.view
 
 import android.content.Context
-import android.widget.DatePicker
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -259,7 +258,7 @@ private fun makeMonth(
     firstDay: Calendar
 ): MutableList<Week> {
     var hasStarted1 = false
-    var current1 = firstDay
+    var current1 = GregorianCalendar(firstDay.get(Calendar.YEAR), firstDay.get(Calendar.MONTH), firstDay.get(Calendar.DAY_OF_MONTH))
     val weeks = mutableListOf<Week>()
     for (i in 0..5) {
         val w = Week()
