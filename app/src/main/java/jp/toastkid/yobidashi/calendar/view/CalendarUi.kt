@@ -255,28 +255,6 @@ fun CalendarUi() {
     }
 }
 
-            /*SingleLineMenu(R.string.menu_what_happened_today) {
-                val url = DateArticleUrlFactory()(
-                    context,
-                    monthOfYear,
-                    dayOfMonth
-                )
-                if (Urls.isValidUrl(url)) {
-                    browserViewModel.open(url.toUri())
-                }
-            }
-
-            InsetDivider()
-
-            SingleLineMenu(R.string.title_article_viewer) {
-                DateSelectedActionUseCase(
-                    AppDatabase
-                        .find(context)
-                        .articleRepository(),
-                    contentViewModel
-                ).invoke(year, monthOfYear, dayOfMonth)
-            }*/
-
 private fun openDateArticle(context: Context, contentViewModel: ContentViewModel, year: Int, monthOfYear: Int, dayOfMonth: Int) {
     DateSelectedActionUseCase(
         AppDatabase
