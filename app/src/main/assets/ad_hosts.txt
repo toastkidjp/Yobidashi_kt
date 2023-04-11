@@ -496,6 +496,7 @@ cf.ad-v.jp
 cf.cdn.inmobi.com
 cf.smaad.net
 cgi.i-mobile.co.jp
+chat-lab.tokyo
 ch.impact-ad.jp
 ck.jp.ap.valuecommerce.com
 ck.storematch.jp
