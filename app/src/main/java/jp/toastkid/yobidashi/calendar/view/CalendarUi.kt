@@ -233,7 +233,8 @@ fun CalendarUi() {
                                             contentViewModel,
                                             currentDate.value.get(Calendar.YEAR),
                                             currentDate.value.get(Calendar.MONTH),
-                                            day.date
+                                            day.date,
+                                            true
                                         )
                                     }
                                 )
@@ -245,13 +246,13 @@ fun CalendarUi() {
     }
 }
 
-private fun openDateArticle(context: Context, contentViewModel: ContentViewModel, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+private fun openDateArticle(context: Context, contentViewModel: ContentViewModel, year: Int, monthOfYear: Int, dayOfMonth: Int, background: Boolean = false) {
     DateSelectedActionUseCase(
         AppDatabase
             .find(context)
             .articleRepository(),
         contentViewModel
-    ).invoke(year, monthOfYear, dayOfMonth)
+    ).invoke(year, monthOfYear, dayOfMonth, background)
 }
 
 private fun isToday(value: Calendar, date: Int): Boolean {
