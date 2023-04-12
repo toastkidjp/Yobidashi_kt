@@ -8,8 +8,8 @@
 
 package jp.toastkid.yobidashi.browser.floating
 
+import android.content.Context
 import android.webkit.WebView
-import androidx.fragment.app.FragmentActivity
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -39,15 +39,15 @@ class WebViewInitializerTest {
     private lateinit var webView: WebView
 
     @MockK
-    private lateinit var fragmentActivity: FragmentActivity
+    private lateinit var context: Context
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { fragmentActivity.getAssets() }.returns(mockk())
+        every { context.getAssets() }.returns(mockk())
 
-        every { webView.getContext() }.returns(fragmentActivity)
+        every { webView.getContext() }.returns(context)
 
         mockkObject(AdRemover)
         every { AdRemover.make(any()) }.returns(mockk())
@@ -65,7 +65,7 @@ class WebViewInitializerTest {
     fun invoke() {
         webViewInitializer.invoke(webView)
 
-        verify(exactly = 1) { fragmentActivity.getAssets() }
+        verify(exactly = 1) { context.getAssets() }
         verify(exactly = 1) { webView.getContext() }
         verify(exactly = 1) { AdRemover.make(any()) }
         verify(exactly = 1) { webView.setWebViewClient(any()) }
