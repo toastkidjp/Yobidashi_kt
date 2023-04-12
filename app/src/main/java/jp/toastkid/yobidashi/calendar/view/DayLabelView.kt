@@ -42,4 +42,4 @@ fun DayLabelView(date: Int, dayOfWeek: Int, offDay: Boolean, today: Boolean, mod
 }
 
 private val OFF_DAY_FG:  Color = Color(220, 50, 55)
-private val SATURDAY_FG:  Color = Color(55, 50, 190)
+private val SATURDAY_FG:  Color = Color(95, 90, 250)
