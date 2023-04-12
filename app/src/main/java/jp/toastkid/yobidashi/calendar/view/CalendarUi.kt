@@ -256,7 +256,8 @@ private fun openDateArticle(context: Context, contentViewModel: ContentViewModel
 }
 
 private fun isToday(value: Calendar, date: Int): Boolean {
-    return value.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR) && value.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH) && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == date
+    val today = Calendar.getInstance()
+    return value.get(Calendar.YEAR) == today.get(Calendar.YEAR) && value.get(Calendar.MONTH) == today.get(Calendar.MONTH) && today.get(Calendar.DAY_OF_MONTH) == date
 }
 
 private fun makeMonth(
