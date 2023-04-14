@@ -6,14 +6,13 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.number
+package jp.toastkid.number
 
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.number.NumberPlaceViewModel
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Before
