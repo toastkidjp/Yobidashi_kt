@@ -255,10 +255,10 @@ private fun openDateArticle(context: Context, contentViewModel: ContentViewModel
     ).invoke(year, monthOfYear, dayOfMonth, background)
 }
 
-private fun isToday(value: Calendar, date: Int): Boolean {
+private fun isToday(target: Calendar, date: Int): Boolean {
     val today = Calendar.getInstance()
-    return value.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-            && value.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+    return target.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+            && target.get(Calendar.MONTH) == today.get(Calendar.MONTH)
             && today.get(Calendar.DAY_OF_MONTH) == date
 }
 
