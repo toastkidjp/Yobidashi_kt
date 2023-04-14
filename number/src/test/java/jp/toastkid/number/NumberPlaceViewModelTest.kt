@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.number
 
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import jp.toastkid.number.NumberPlaceViewModel
 import org.junit.After
@@ -36,5 +37,13 @@ class NumberPlaceViewModelTest {
     fun masked() {
         assertFalse(numberPlaceViewModel.masked().fulfilled())
     }
+    @Test
+    fun place() {
+        val callback = mockk<(Boolean) -> Unit>()
 
+        numberPlaceViewModel.place(2, 3,  4, callback)
+
+        verify(inverse = true) { callback(any()) }
+    }
+    
 }
