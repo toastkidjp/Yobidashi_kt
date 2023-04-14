@@ -25,7 +25,7 @@ import java.util.Calendar
 @Composable
 fun DayLabelView(date: Int, dayOfWeek: Int, offDay: Boolean, today: Boolean, modifier: Modifier) {
     Surface(
-        color = if (today) MaterialTheme.colorScheme.primary.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surface,
+        color = getSurfaceColor(today),
         modifier = modifier
     ) {
         Box(
@@ -40,6 +40,10 @@ fun DayLabelView(date: Int, dayOfWeek: Int, offDay: Boolean, today: Boolean, mod
         }
     }
 }
+
+@Composable
+private fun getSurfaceColor(today: Boolean) =
+    if (today) MaterialTheme.colorScheme.primary.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surface
 
 private val OFF_DAY_FG:  Color = Color(220, 50, 55)
 private val SATURDAY_FG:  Color = Color(95, 90, 250)
