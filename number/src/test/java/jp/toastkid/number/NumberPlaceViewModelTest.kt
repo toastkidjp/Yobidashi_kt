@@ -12,6 +12,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.mockk
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.number.NumberPlaceViewModel
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -45,5 +46,5 @@ class NumberPlaceViewModelTest {
 
         verify(inverse = true) { callback(any()) }
     }
-    
+
 }
