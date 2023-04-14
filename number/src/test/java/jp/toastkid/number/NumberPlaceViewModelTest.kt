@@ -12,24 +12,27 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
 import jp.toastkid.number.NumberPlaceViewModel
+import org.junit.After
 import org.junit.Assert.assertFalse
+import org.junit.Before
+import org.junit.Test
 
 class NumberPlaceViewModelTest {
 
     @InjectMockKs
     private lateinit var numberPlaceViewModel: NumberPlaceViewModel
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun masked() {
         assertFalse(numberPlaceViewModel.masked().fulfilled())
     }
