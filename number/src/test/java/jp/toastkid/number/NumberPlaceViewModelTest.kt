@@ -38,6 +38,7 @@ class NumberPlaceViewModelTest {
     fun masked() {
         assertFalse(numberPlaceViewModel.masked().fulfilled())
     }
+
     @Test
     fun place() {
         val callback = mockk<(Boolean) -> Unit>()
