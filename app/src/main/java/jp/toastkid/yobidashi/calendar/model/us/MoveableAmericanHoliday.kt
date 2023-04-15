@@ -28,7 +28,7 @@ enum class MoveableAmericanHoliday(private val month: Int, val week: Int, val ti
 
         private val months = values().map { it.month }.distinct()
 
-        fun isTargetMonth(month: Int): Boolean {
+        private fun isTargetMonth(month: Int): Boolean {
             return months.contains(month)
         }
 
