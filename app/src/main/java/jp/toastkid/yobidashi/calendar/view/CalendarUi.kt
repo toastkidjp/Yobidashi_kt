@@ -161,11 +161,7 @@ fun CalendarUi() {
 
                 Button(
                     onClick = {
-                        currentDate.value = GregorianCalendar(
-                            currentDate.value.get(Calendar.YEAR),
-                            currentDate.value.get(Calendar.MONTH) + 1,
-                            1
-                        )
+                        currentDate.value = Calendar.getInstance()
                     },
                     modifier = Modifier
                 ) {
