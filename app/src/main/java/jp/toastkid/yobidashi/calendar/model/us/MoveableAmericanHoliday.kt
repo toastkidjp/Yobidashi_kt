@@ -44,7 +44,9 @@ enum class MoveableAmericanHoliday(private val month: Int, val week: Int, val ti
             val localDate = GregorianCalendar(year, month - 1, 1)
             val candidate = find(month) ?: return false
             val dayOfWeek = localDate.get(Calendar.DAY_OF_WEEK)
-            val d = if (dayOfWeek <= candidate.dayOfWeek) candidate.dayOfWeek - dayOfWeek + 1 else 7 - (dayOfWeek - candidate.dayOfWeek - 1)
+            val d =
+                if (dayOfWeek <= candidate.dayOfWeek) candidate.dayOfWeek - dayOfWeek + 1
+                else 7 - (dayOfWeek - candidate.dayOfWeek - 1)
 
             val targetWeek = when (candidate.week) {
                 -1 -> {
