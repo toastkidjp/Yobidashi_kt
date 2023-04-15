@@ -22,6 +22,10 @@ enum class MoveableAmericanHoliday(private val month: Int, val week: Int, val ti
     ;
 
     companion object {
+
+        private val DAYS_OF_WEEK_FOR_LAST_WEEK =
+            setOf(Calendar.MONDAY, Calendar.SUNDAY, Calendar.SATURDAY)
+
         private val months = values().map { it.month }.distinct()
 
         fun isTargetMonth(month: Int): Boolean {
@@ -44,7 +48,7 @@ enum class MoveableAmericanHoliday(private val month: Int, val week: Int, val ti
 
             val targetWeek = when (candidate.week) {
                 -1 -> {
-                    if (setOf(Calendar.MONDAY, Calendar.SUNDAY, Calendar.SATURDAY).contains(dayOfWeek)) {
+                    if (DAYS_OF_WEEK_FOR_LAST_WEEK.contains(dayOfWeek)) {
                         5
                     } else 4
                 }
