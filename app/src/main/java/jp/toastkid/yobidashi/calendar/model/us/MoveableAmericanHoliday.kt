@@ -53,9 +53,11 @@ enum class MoveableAmericanHoliday(
                 if (dayOfWeek <= candidate.dayOfWeek) candidate.dayOfWeek - dayOfWeek + 1
                 else 7 - (dayOfWeek - candidate.dayOfWeek - 1)
 
-            val targetWeek = if (candidate.week != -1) candidate.week
-            else if (DAYS_OF_WEEK_FOR_LAST_WEEK.contains(dayOfWeek)) 5
-            else 4
+            val targetWeek = when {
+                (candidate.week != -1) -> candidate.week
+                DAYS_OF_WEEK_FOR_LAST_WEEK.contains(dayOfWeek) -> 5
+                else -> 4
+            }
 
 
             return date == d + (7 * (targetWeek - 1))
