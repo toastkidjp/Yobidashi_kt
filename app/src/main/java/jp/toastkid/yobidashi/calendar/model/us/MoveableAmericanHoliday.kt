@@ -11,7 +11,12 @@ package jp.toastkid.yobidashi.calendar.model.us
 import java.util.Calendar
 import java.util.GregorianCalendar
 
-enum class MoveableAmericanHoliday(private val month: Int, val week: Int, val title: String, val dayOfWeek: Int = Calendar.MONDAY) {
+enum class MoveableAmericanHoliday(
+    private val month: Int,
+    val week: Int,
+    val title: String,
+    val dayOfWeek: Int = Calendar.MONDAY
+) {
 
     MARTIN_LUTHER_KING_JR_DAY(1, 3,  "Martin Luther King, Jr. Day"),
     PRESIDENT_S_DAY(2, 3, "President's Day"),
