@@ -59,7 +59,6 @@ enum class MoveableAmericanHoliday(
                 else -> 4
             }
 
-
             return date == d + (7 * (targetWeek - 1))
         }
 
