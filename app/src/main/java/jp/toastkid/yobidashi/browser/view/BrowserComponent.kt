@@ -9,15 +9,14 @@
 package jp.toastkid.yobidashi.browser.view
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 
 @Composable
@@ -28,7 +27,6 @@ internal fun BrowserTitle(
     modifier: Modifier
 ) {
     val context = LocalContext.current
-    val tint = Color(PreferenceApplier(context).fontColor)
 
     Column(
         modifier = modifier
@@ -43,14 +41,15 @@ internal fun BrowserTitle(
             text = progressTitle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            color = tint,
+            letterSpacing = 0.sp,
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 12.sp
         )
         Text(
             text = headerUrl.value ?: "",
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            color = tint,
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 10.sp
         )
     }

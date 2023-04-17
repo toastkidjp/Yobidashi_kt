@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.search.view
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -24,16 +23,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -61,7 +58,6 @@ import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 
 @OptIn(
     ExperimentalComposeUiApi::class,
-    ExperimentalMaterialApi::class,
     ExperimentalFoundationApi::class
 )
 @Composable
@@ -204,13 +200,13 @@ internal fun SearchContentsUi(
                             )
                             Text(
                                 text = stringResource(id = R.string.plus),
-                                color = MaterialTheme.colors.surface,
+                                color = MaterialTheme.colorScheme.surface,
                                 fontSize = 20.sp,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .width(36.dp)
                                     .height(32.dp)
-                                    .background(MaterialTheme.colors.onSurface)
+                                    .background(MaterialTheme.colorScheme.onSurface)
                                     .clickable { viewModel.putQuery("$it ") }
                             )
                         }
@@ -263,7 +259,7 @@ internal fun SearchContentsUi(
                                     .width(36.dp)
                                     .height(32.dp)
                                     .background(colorResource(id = R.color.pre4_ripple))
-                                    .clickable { viewModel?.putQuery("${it.title} ") }
+                                    .clickable { viewModel.putQuery("${it.title} ") }
                             )
                         }
                     }
@@ -283,8 +279,8 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
     val context = LocalContext.current
 
     Surface(
-        elevation = 4.dp,
-        modifier = Modifier.padding(8.dp)
+        shadowElevation = 4.dp,
+        modifier = Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -306,10 +302,10 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                     modifier = Modifier.padding(start = 4.dp, end = 4.dp)
                 )
             }
-            Image(
+            Icon(
                 painterResource(id = R.drawable.ic_share_black),
                 contentDescription = stringResource(id = R.string.share),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary, BlendMode.SrcIn),
+                tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .width(32.dp)
                     .clickable {
@@ -321,10 +317,10 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                         )
                     }
             )
-            Image(
+            Icon(
                 painterResource(id = R.drawable.ic_clip),
                 contentDescription = stringResource(id = R.string.clip),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary, BlendMode.SrcIn),
+                tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .width(32.dp)
                     .clickable {
@@ -337,10 +333,10 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                             )
                     }
             )
-            Image(
+            Icon(
                 painterResource(id = R.drawable.ic_edit_black),
                 contentDescription = stringResource(id = R.string.edit),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary, BlendMode.SrcIn),
+                tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .width(32.dp)
                     .clickable { setInput(currentUrl) }
@@ -352,7 +348,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
 @Composable
 private fun Header(headerTextId: Int) {
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp)
     ) {
@@ -369,7 +365,7 @@ private fun Header(headerTextId: Int) {
 @Composable
 private fun HeaderWithLink(headerTextId: Int, linkTextId: Int, onLinkClick: () -> Unit) {
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp)
     ) {
@@ -398,7 +394,7 @@ private fun HeaderWithLink(headerTextId: Int, linkTextId: Int, onLinkClick: () -
 @Composable
 private fun ItemCard(content: @Composable () -> Unit) {
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         content = content,
         modifier = Modifier.padding(2.dp)
     )

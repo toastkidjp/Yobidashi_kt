@@ -11,28 +11,28 @@ package jp.toastkid.todo.view.addition
 import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.todo.R
 import jp.toastkid.todo.model.TodoTask
@@ -53,12 +54,12 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.GregorianCalendar
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TaskEditorUi(
     screenContent: @Composable () -> Unit,
     taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel?,
-    bottomSheetScaffoldState: ModalBottomSheetState,
+    bottomSheetScaffoldState: MutableState<Boolean>,
     onTapAdd: (TodoTask) -> Unit,
     colorPair: ColorPair
 ) {
@@ -76,11 +77,14 @@ internal fun TaskEditorUi(
         0xffe53935, 0xfff8bbd0, 0xff2196f3, 0xff4caf50, 0xffffeb3b, 0xff3e2723, 0xffffffff
     )
 
-    ModalBottomSheetLayout(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        sheetContent = {
+    screenContent()
+
+    if (!bottomSheetScaffoldState.value) {
+        return
+    }
+
+    Dialog(onDismissRequest = { bottomSheetScaffoldState.value = false }) {
+        Column {
             Row {
                 TextField(
                     value = descriptionInput,
@@ -93,13 +97,13 @@ internal fun TaskEditorUi(
                     keyboardActions = KeyboardActions {
                         save(task, onTapAdd)
                         coroutineScope.launch {
-                            bottomSheetScaffoldState.hide()
+                            bottomSheetScaffoldState.value = false
                         }
                     },
                     colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colors.onSurface,
-                        backgroundColor = MaterialTheme.colors.surface,
-                        cursorColor = MaterialTheme.colors.onSurface
+                        textColor = MaterialTheme.colorScheme.onSurface,
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        cursorColor = MaterialTheme.colorScheme.onSurface
                     ),
                     trailingIcon = {
                         Icon(
@@ -118,12 +122,12 @@ internal fun TaskEditorUi(
                     onClick = {
                         save(task, onTapAdd)
                         coroutineScope.launch {
-                            bottomSheetScaffoldState.hide()
+                            bottomSheetScaffoldState.value = false
                         }
                     },
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = MaterialTheme.colors.primary,
-                        contentColor = MaterialTheme.colors.onPrimary,
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
                         disabledContentColor = Color.LightGray)
                 ) {
                     Text(text = stringResource(id = R.string.add), textAlign = TextAlign.Center)
@@ -142,6 +146,8 @@ internal fun TaskEditorUi(
                 colors.forEach { color ->
                     RadioButton(
                         selected = chosenColor == color.toInt(),
+                        colors = RadioButtonDefaults
+                            .colors(selectedColor = MaterialTheme.colorScheme.secondary),
                         onClick = {
                             task?.color = color.toInt()
                             chosenColor = color.toInt()
@@ -184,14 +190,10 @@ internal fun TaskEditorUi(
                     datePicker
                 }
             )
-        },
-        sheetState = bottomSheetScaffoldState
-    ) {
-        screenContent()
+        }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 private fun save(
     task: TodoTask?,
     onTapAdd: (TodoTask) -> Unit

@@ -11,14 +11,15 @@ package jp.toastkid.ui.dialog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.ui.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputFileNameDialogUi(
     openDialog: MutableState<Boolean>,
@@ -45,7 +47,7 @@ fun InputFileNameDialogUi(
         title = {
             Text(
                 stringResource(id = R.string.title_dialog_input_file_name),
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.titleMedium
             )
         },
         text = {
@@ -56,9 +58,9 @@ fun InputFileNameDialogUi(
                 },
                 singleLine = true,
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
+                    textColor = MaterialTheme.colorScheme.onSurface,
+                    containerColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 ),
                 trailingIcon = {
                     Icon(

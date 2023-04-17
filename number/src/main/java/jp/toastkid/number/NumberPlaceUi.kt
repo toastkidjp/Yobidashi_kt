@@ -22,12 +22,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -83,7 +83,7 @@ fun NumberPlaceUi() {
     val numberStates = mutableListOf<MutableState<String>>()
 
     Surface(
-        elevation = 4.dp
+        shadowElevation = 4.dp
     ) {
         Box(
             contentAlignment = Alignment.Center
@@ -274,19 +274,21 @@ private fun AppBarContent(
                 openMaskingCount.value,
                 onDismissRequest = { openMaskingCount.value = false }) {
                 (1..64).forEach {
-                    DropdownMenuItem(onClick = {
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = "$it",
+                                fontSize = fontSize,
+                                textAlign = TextAlign.Center
+                            )
+                        },
+                        onClick = {
                         maskingCount.value = "$it"
                         openMaskingCount.value = false
                         preferenceApplier.setMaskingCount(it)
                         deleteCurrentGame(context)
                         contentViewModel?.nextRoute("tool/number/place")
-                    }) {
-                        Text(
-                            text = "$it",
-                            fontSize = fontSize,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    })
                 }
             }
         }
@@ -313,15 +315,17 @@ private fun MaskedCell(
         )
         DropdownMenu(openState.value, onDismissRequest = { openState.value = false }) {
             (1..9).forEach {
-                DropdownMenuItem(onClick = {
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = "$it",
+                            fontSize = fontSize,
+                            textAlign = TextAlign.Center
+                        )
+                    },
+                    onClick = {
                     onMenuItemClick(it)
-                }) {
-                    Text(
-                        text = "$it",
-                        fontSize = fontSize,
-                        textAlign = TextAlign.Center
-                    )
-                }
+                })
             }
         }
     }

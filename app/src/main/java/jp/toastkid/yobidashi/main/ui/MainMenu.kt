@@ -20,10 +20,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,8 +62,8 @@ internal fun MainMenu(
             items(tooBigCount) { longIndex ->
                 val menu = Menu.values()[longIndex % menuCount]
                 Surface(
-                    color = MaterialTheme.colors.primary,
-                    elevation = 4.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shadowElevation = 4.dp,
                     modifier = Modifier
                         .padding(4.dp)
                         .clickable {
@@ -86,16 +86,17 @@ internal fun MainMenu(
                         Icon(
                             painterResource(id = menu.iconId),
                             contentDescription = stringResource(id = menu.titleId),
-                            tint = MaterialTheme.colors.onPrimary,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier.size(28.dp)
                         )
                         Text(
                             stringResource(id = menu.titleId),
-                            color = MaterialTheme.colors.onPrimary,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 12.sp,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                             textAlign = TextAlign.Center,
+                            softWrap = false,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 8.dp)

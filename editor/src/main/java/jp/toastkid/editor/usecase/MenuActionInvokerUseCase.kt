@@ -21,6 +21,7 @@ import jp.toastkid.editor.TableConverter
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.search.SearchCategory
@@ -124,7 +125,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_url_open_new -> {
-                browserViewModel?.open(text.toUri())
+                openUri(text.toUri())
                 return true
             }
             R.id.context_edit_url_open_background -> {
@@ -140,7 +141,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_web_search -> {
-                browserViewModel?.open(makeSearchResultUrl(context, text))
+                openUri(makeSearchResultUrl(context, text))
                 return true
             }
             R.id.context_edit_delete_line -> {
@@ -158,6 +159,11 @@ class MenuActionInvokerUseCase(
             else -> Unit
         }
         return false
+    }
+
+    private fun openUri(uri: Uri) {
+        Inputs().hideKeyboard(editText)
+        browserViewModel?.open(uri)
     }
 
     private fun makeSearchResultUrl(context: Context, text: String): Uri = UrlFactory().invoke(

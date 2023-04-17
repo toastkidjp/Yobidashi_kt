@@ -34,17 +34,18 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -183,7 +184,7 @@ fun ArticleListUi() {
         )
 
         if (viewModel.progressVisibility.value) {
-            CircularProgressIndicator(color = MaterialTheme.colors.primary)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
     }
 
@@ -198,7 +199,7 @@ fun ArticleListUi() {
     })
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
@@ -217,7 +218,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 label = {
                     Text(
                         stringResource(id = R.string.hint_search_articles),
-                        color = MaterialTheme.colors.onPrimary
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 singleLine = true,
@@ -229,13 +230,13 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     imeAction = ImeAction.Search
                 ),
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onPrimary,
+                    textColor = MaterialTheme.colorScheme.onPrimary,
                     cursorColor = Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, R.color.editor_cursor)))
                 ),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.Clear,
-                        tint = MaterialTheme.colors.onPrimary,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         contentDescription = "clear text",
                         modifier = Modifier
                             .offset(x = 8.dp)
@@ -248,7 +249,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             )
             Text(
                 text = viewModel.searchResult.value,
-                color = MaterialTheme.colors.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 12.sp,
                 modifier = Modifier
                     .weight(0.3f)
@@ -278,7 +279,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 painter = painterResource(id = R.drawable.ic_tab),
                 contentDescription = stringResource(id = R.string.tab),
                 colorFilter = ColorFilter.tint(
-                    MaterialTheme.colors.onPrimary,
+                    MaterialTheme.colorScheme.onPrimary,
                     BlendMode.SrcIn
                 ),
                 modifier = Modifier.align(Alignment.Center)
@@ -286,7 +287,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             Text(
                 text = tabListViewModel.tabCount.value.toString(),
                 fontSize = 9.sp,
-                color = MaterialTheme.colors.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(start = 2.dp, bottom = 2.dp)
@@ -411,7 +412,7 @@ private fun ListItem(
     )
 
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         modifier = modifier
             .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
             .combinedClickable(
@@ -456,7 +457,7 @@ private fun ListItem(
                     R.drawable.ic_more,
                     stringResource(id = R.string.menu),
                     colorFilter = ColorFilter.tint(
-                        MaterialTheme.colors.secondary,
+                        MaterialTheme.colorScheme.secondary,
                         BlendMode.SrcIn
                     ),
                     modifier = Modifier
@@ -470,13 +471,15 @@ private fun ListItem(
                     onDismissRequest = { expanded = false }
                 ) {
                     items.forEachIndexed { index, s ->
-                        DropdownMenuItem(onClick = {
+                        DropdownMenuItem(
+                            text = { Text(text = s) },
+                            onClick = {
                             when (index) {
                                 0 -> menuPopupUseCase.addToBookmark(article.id)
                                 1 -> menuPopupUseCase.delete(article.id)
                             }
                             expanded = false
-                        }) { Text(text = s) }
+                        })
                     }
                 }
             }

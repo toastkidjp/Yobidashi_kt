@@ -13,11 +13,10 @@ import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Shapes
-import androidx.compose.material.Typography
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
@@ -47,7 +46,7 @@ fun AppTheme(
     @SuppressLint("ConflictingOnColor")
     val colors =
         if (darkTheme)
-            darkColors(
+            darkColorScheme(
                 primary = primary,
                 secondary = onPrimary,
                 surface = Color(0xFF0F0F0F),
@@ -57,7 +56,7 @@ fun AppTheme(
                 onBackground = Color(0xFFF0F0F0)
             )
         else
-            lightColors(
+            lightColorScheme(
                 primary = primary,
                 secondary = primary,
                 surface = Color(0xFFF0F0F0),
@@ -70,8 +69,7 @@ fun AppTheme(
     val handleColor = Color(preferenceApplier.editorHighlightColor(Color(0xFF81D4FA).toArgb()))
 
     MaterialTheme(
-        colors = colors,
-        typography = Typography(),
+        colorScheme = colors,
         shapes = Shapes()
     ) {
         CompositionLocalProvider(

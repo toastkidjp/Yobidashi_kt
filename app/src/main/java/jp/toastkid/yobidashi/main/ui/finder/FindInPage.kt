@@ -15,11 +15,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +43,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.yobidashi.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FindInPage() {
     val activity = LocalContext.current as? ViewModelStoreOwner ?: return
@@ -58,7 +60,7 @@ internal fun FindInPage() {
         Icon(
             painterResource(id = R.drawable.ic_close),
             contentDescription = stringResource(id = R.string.content_description_close_find_area),
-            tint = MaterialTheme.colors.onPrimary,
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .clickable(onClick = closeAction)
                 .padding(start = 16.dp)
@@ -75,17 +77,17 @@ internal fun FindInPage() {
             label = {
                 Text(
                     stringResource(id = R.string.hint_find_in_page),
-                    color = MaterialTheme.colors.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             },
             singleLine = true,
             textStyle = TextStyle(
-                color = MaterialTheme.colors.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimary,
                 textAlign = TextAlign.Start,
             ),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                cursorColor = MaterialTheme.colors.onPrimary,
+                containerColor = Color.Transparent,
+                cursorColor = MaterialTheme.colorScheme.onPrimary,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
@@ -93,7 +95,7 @@ internal fun FindInPage() {
                 Icon(
                     painterResource(R.drawable.ic_clear_form),
                     contentDescription = "clear text",
-                    tint = MaterialTheme.colors.onPrimary,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .clickable {
                             pageSearcherInput.value = ""
@@ -118,7 +120,7 @@ internal fun FindInPage() {
         Icon(
             painterResource(id = R.drawable.ic_up),
             contentDescription = stringResource(id = R.string.content_description_find_upward),
-            tint = MaterialTheme.colors.onPrimary,
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .clickable {
                     pageSearcherViewModel.findUp(
@@ -130,7 +132,7 @@ internal fun FindInPage() {
         Icon(
             painterResource(id = R.drawable.ic_down),
             contentDescription = stringResource(id = R.string.content_description_find_downward),
-            tint = MaterialTheme.colors.onPrimary,
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .clickable {
                     pageSearcherViewModel.findDown(pageSearcherInput.value)

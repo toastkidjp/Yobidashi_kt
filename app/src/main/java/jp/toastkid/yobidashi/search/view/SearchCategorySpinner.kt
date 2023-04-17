@@ -11,6 +11,7 @@ package jp.toastkid.yobidashi.search.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,9 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -78,23 +79,26 @@ internal fun SearchCategorySpinner(
             LazyColumn(modifier = Modifier.size(popupWindowHeight)) {
                 items(searchCategories, { it.id }) { searchCategory ->
                     DropdownMenuItem(
+                        text = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                AsyncImage(
+                                    model = searchCategory.iconId,
+                                    contentDescription = stringResource(id = searchCategory.id),
+                                    modifier = Modifier.width(40.dp)
+                                )
+                                Text(
+                                    stringResource(id = searchCategory.id),
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            }
+                        },
                         onClick = {
                             currentCategory?.value = searchCategory.name
                             onSelect(searchCategory)
                             spinnerOpen.value = false
                         }
-                    ) {
-                        AsyncImage(
-                            model = searchCategory.iconId,
-                            contentDescription = stringResource(id = searchCategory.id),
-                            modifier = Modifier.width(40.dp)
-                        )
-                        Text(
-                            stringResource(id = searchCategory.id),
-                            fontSize = 20.sp,
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
+                    )
                 }
             }
         }

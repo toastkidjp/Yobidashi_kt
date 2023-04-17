@@ -21,9 +21,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Slider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -81,7 +81,7 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
                 context.contentResolver.openFileDescriptor(uri, "r")
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
-                return
+                return@remember null
             }
                 ?.let { PdfRenderer(it) }
         }
@@ -102,7 +102,7 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
     LazyColumn(state = listState) {
         itemsIndexed(images) { index, bitmap ->
             Surface(
-                elevation = 4.dp,
+                shadowElevation = 4.dp,
                 color = Color(0xFFF0F0F0),
                 modifier = Modifier
                     .padding(

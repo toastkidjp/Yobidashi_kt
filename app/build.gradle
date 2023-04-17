@@ -97,7 +97,7 @@ dependencies {
     implementation "androidx.webkit:webkit:1.5.0-rc01"
 
     // Compose dependencies.
-    implementation "androidx.compose.material:material:$libVersions.compose"
+    implementation "androidx.compose.material3:material3:$libVersions.compose_material3"
     implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
     implementation 'androidx.activity:activity-compose:1.4.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"

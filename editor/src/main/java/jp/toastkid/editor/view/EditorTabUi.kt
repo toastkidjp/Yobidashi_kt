@@ -40,8 +40,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -215,7 +216,7 @@ fun EditorTabUi(path: String?) {
     val openInputFileNameDialog = remember { mutableStateOf(false) }
     val observer = LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_PAUSE) {
-            fileActionUseCase.save(openInputFileNameDialog)
+            fileActionUseCase.save(openInputFileNameDialog, false)
         }
     }
 
@@ -223,7 +224,7 @@ fun EditorTabUi(path: String?) {
         localLifecycle.addObserver(observer)
 
         onDispose {
-            fileActionUseCase.save(openInputFileNameDialog)
+            fileActionUseCase.save(openInputFileNameDialog, false)
             localLifecycle.removeObserver(observer)
             contentViewModel.share.removeObservers(localLifecycleOwner)
         }
@@ -303,7 +304,7 @@ private fun AppBarContent(
             Image(
                 painterResource(R.drawable.ic_tab),
                 contentDescription = stringResource(id = R.string.tab_list),
-                colorFilter = ColorFilter.tint(Color(preferenceApplier.fontColor), BlendMode.SrcIn),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary, BlendMode.SrcIn),
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
@@ -311,7 +312,7 @@ private fun AppBarContent(
             )
             Text(
                 text = tabListViewModel.tabCount.value.toString(),
-                color = Color(preferenceApplier.fontColor),
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
             )
@@ -398,6 +399,7 @@ private fun EditorMenuItem(
             color = Color(preferenceApplier.fontColor),
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
+            softWrap = false,
             modifier = Modifier.fillMaxWidth()
         )
     }

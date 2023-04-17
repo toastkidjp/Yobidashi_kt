@@ -27,13 +27,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -76,13 +77,15 @@ fun ArticleContentUi(title: String) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
     val viewModelProvider = ViewModelProvider(context)
-    val repository = AppDatabase.find(context).articleRepository()
-    val linkBehaviorService = LinkBehaviorService(
-        viewModelProvider.get(ContentViewModel::class.java),
-        viewModelProvider.get(BrowserViewModel::class.java),
-        { repository.exists(it) > 0 }
-    )
-    val viewModel = ViewModelProvider(context).get(ContentViewerFragmentViewModel::class.java)
+    val repository = remember { AppDatabase.find(context).articleRepository() }
+    val linkBehaviorService = remember {
+        LinkBehaviorService(
+            viewModelProvider.get(ContentViewModel::class.java),
+            viewModelProvider.get(BrowserViewModel::class.java),
+            { repository.exists(it) > 0 }
+        )
+    }
+    val viewModel = viewModelProvider.get(ContentViewerFragmentViewModel::class.java)
 
     viewModel.setTitle(title)
 
@@ -141,7 +144,7 @@ binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CY
     contentViewModel.clearOptionMenus()
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
@@ -166,21 +169,21 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                         viewModel.title.value,
                         color = Color(preferenceApplier.editorFontColor())
                     )
-                        },
+                },
                 singleLine = true,
                 keyboardActions = KeyboardActions {
                     //TODO contentTextSearchUseCase.invoke(it.toString())
                 },
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = Color(preferenceApplier.fontColor),
-                    cursorColor = MaterialTheme.colors.onPrimary,
-                    unfocusedLabelColor = Color(preferenceApplier.fontColor),
-                    focusedIndicatorColor = Color(preferenceApplier.fontColor)
+                    textColor = MaterialTheme.colorScheme.onPrimary,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.Clear,
-                        tint = Color(preferenceApplier.fontColor),
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         contentDescription = "clear text",
                         modifier = Modifier
                             .offset(x = 8.dp)
@@ -211,7 +214,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 painter = painterResource(id = R.drawable.ic_tab),
                 contentDescription = stringResource(id = R.string.tab),
                 colorFilter = ColorFilter.tint(
-                    MaterialTheme.colors.onPrimary,
+                    MaterialTheme.colorScheme.onPrimary,
                     BlendMode.SrcIn
                 ),
                 modifier = Modifier.align(Alignment.Center)
@@ -219,7 +222,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
             Text(
                 text = tabListViewModel.tabCount.value.toString(),
                 fontSize = 9.sp,
-                color = MaterialTheme.colors.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(start = 2.dp, bottom = 2.dp)

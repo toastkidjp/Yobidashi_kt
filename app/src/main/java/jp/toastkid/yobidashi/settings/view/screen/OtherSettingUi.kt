@@ -19,10 +19,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,7 +54,7 @@ internal fun OtherSettingUi() {
 
     val openConfirmDialog = remember { mutableStateOf(false) }
 
-    Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
+    Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         LazyColumn {
             item {
                 jp.toastkid.yobidashi.settings.view.CheckableRow(
@@ -81,7 +81,7 @@ internal fun OtherSettingUi() {
                     Icon(
                         painterResource(id = R.drawable.ic_tab_black),
                         contentDescription = stringResource(id = R.string.title_setting_new_tab),
-                        tint = MaterialTheme.colors.secondary
+                        tint = MaterialTheme.colorScheme.secondary
                     )
                     Text(
                         stringResource(id = R.string.title_setting_new_tab),
@@ -135,7 +135,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_settings_device,
                     { activityContext.startActivity(intentFactory.makeLaunch()) },
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_settings_cell_black
                 )
             }
@@ -148,7 +148,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_settings_wifi,
                     { activityContext.startActivity(intentFactory.wifi()) },
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_wifi_black
                 )
             }
@@ -163,7 +163,7 @@ internal fun OtherSettingUi() {
                     {
                         activityContext.startActivity(intentFactory.wireless())
                     },
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_network_black
                 )
             }
@@ -178,7 +178,7 @@ internal fun OtherSettingUi() {
                     {
                         activityContext.startActivity(intentFactory.dateAndTime())
                     },
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_time
                 )
             }
@@ -191,7 +191,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_settings_display,
                     { activityContext.startActivity(intentFactory.display()) },
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_phone_android_black
                 )
             }
@@ -204,7 +204,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_settings_all_apps,
                     { activityContext.startActivity(intentFactory.allApps()) },
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_android_developer
                 )
             }
@@ -217,7 +217,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_clear_settings,
                     { openConfirmDialog.value = true },
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_close_black
                 )
             }
@@ -243,8 +243,8 @@ private fun NewTabSettingItem(
     thumbnailId: Int,
     onClick: () -> Unit
 ) {
-    val selectedColor = MaterialTheme.colors.secondary
-    Surface(elevation = 4.dp, modifier = Modifier.clickable(onClick = onClick)) {
+    val selectedColor = MaterialTheme.colorScheme.secondary
+    Surface(shadowElevation = 4.dp, modifier = Modifier.clickable(onClick = onClick)) {
         Column(
             modifier = Modifier
                 .background(if (selected) selectedColor else Color.Transparent)

@@ -8,10 +8,10 @@
 
 package jp.toastkid.todo.view.appbar
 
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -22,8 +22,8 @@ internal fun AppBarUi(onClickAdd: () -> Unit) {
     Button(
         onClick = onClickAdd,
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor = MaterialTheme.colors.surface,
-            contentColor = MaterialTheme.colors.onSurface,
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
             disabledContentColor = Color.LightGray
         )
     ) {

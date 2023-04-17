@@ -19,13 +19,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -94,7 +94,7 @@ internal fun EditorSettingUi() {
         remember { mutableStateOf(false) }
 
     Surface(
-        elevation = 4.dp,
+        shadowElevation = 4.dp,
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)
     ) {
         LazyColumn {
@@ -138,7 +138,7 @@ internal fun EditorSettingUi() {
 
                         contentViewModel?.snackShort(R.string.settings_color_done_commit)
                     },
-                    MaterialTheme.colors.secondary,
+                    MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_clip
                 )
             }
@@ -186,7 +186,7 @@ internal fun EditorSettingUi() {
                 ) {
                     Icon(
                         painterResource(id = R.drawable.ic_edit),
-                        tint = MaterialTheme.colors.secondary,
+                        tint = MaterialTheme.colorScheme.secondary,
                         contentDescription = stringResource(id = R.string.title_font_size),
                         modifier = Modifier.padding(start = 16.dp)
                     )
@@ -211,21 +211,22 @@ internal fun EditorSettingUi() {
                         ) {
                             EditorFontSize.values().forEach {
                                 DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            "${it.size}",
+                                            fontSize = it.size.sp,
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .fillMaxHeight()
+                                                .padding(8.dp)
+                                        )
+                                    },
                                     onClick = {
                                         preferenceApplier.setEditorFontSize(it.size)
                                         fontSize.value = it.size
                                         fontSizeOpen.value = false
                                     }
-                                ) {
-                                    Text(
-                                        "${it.size}",
-                                        fontSize = it.size.sp,
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .fillMaxHeight()
-                                            .padding(8.dp)
-                                    )
-                                }
+                                )
                             }
                         }
                     }
@@ -255,7 +256,7 @@ private fun ColorChooserMenu(
     ) {
         Icon(
             painterResource(id = iconId),
-            tint = MaterialTheme.colors.secondary,
+            tint = MaterialTheme.colorScheme.secondary,
             contentDescription = stringResource(id = textId)
         )
 
@@ -288,7 +289,7 @@ private fun ComponentColorSettingDialog(
     onNewColor: (Color) -> Unit
 ) {
     if (openColorChooserDialog.value) {
-        val buttonColor = MaterialTheme.colors.onSurface
+        val buttonColor = MaterialTheme.colorScheme.onSurface
 
         val choosingColor = remember { mutableStateOf(currentColor) }
 

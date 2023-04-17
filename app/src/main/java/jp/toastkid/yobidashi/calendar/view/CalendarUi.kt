@@ -15,9 +15,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -56,10 +56,10 @@ fun CalendarUi() {
     }
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
         && PreferenceApplier(context).useDarkMode()) {
-        datePicker.setBackgroundColor(MaterialTheme.colors.onSurface.toArgb())
+        datePicker.setBackgroundColor(MaterialTheme.colorScheme.onSurface.toArgb())
     }
 
-    Surface(elevation = 4.dp) {
+    Surface(shadowElevation = 4.dp) {
         Column {
             AndroidView(
                 factory = { datePicker },

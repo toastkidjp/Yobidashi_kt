@@ -27,10 +27,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -98,7 +98,7 @@ internal fun DisplaySettingUi() {
 
     val openClearImagesDialog = remember { mutableStateOf(false) }
 
-    Surface(elevation = 4.dp, modifier = Modifier.padding(8.dp)) {
+    Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -109,7 +109,7 @@ internal fun DisplaySettingUi() {
             ) {
                 Icon(
                     painterResource(id = R.drawable.ic_dark_mode_black),
-                    tint = MaterialTheme.colors.secondary,
+                    tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = stringResource(id = R.string.apply_dark_mode)
                 )
                 Text(
@@ -130,7 +130,7 @@ internal fun DisplaySettingUi() {
                     contentViewModel.setShowDisplayEffect(displayEffectState.value)
                 },
                 booleanState = displayEffectState,
-                iconTint = MaterialTheme.colors.secondary,
+                iconTint = MaterialTheme.colorScheme.secondary,
                 iconId = R.drawable.ic_snow
             )
 
@@ -148,7 +148,7 @@ internal fun DisplaySettingUi() {
             ) {
                 Icon(
                     painterResource(id = R.drawable.ic_close_black),
-                    tint = MaterialTheme.colors.secondary,
+                    tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = stringResource(id = R.string.title_bg_reset)
                 )
                 Text(
@@ -167,7 +167,7 @@ internal fun DisplaySettingUi() {
                     openClearImagesDialog.value = true
                 },
                 iconId = R.drawable.ic_clear_form,
-                iconTint = MaterialTheme.colors.secondary
+                iconTint = MaterialTheme.colorScheme.secondary
             )
 
             InsetDivider()
@@ -181,7 +181,7 @@ internal fun DisplaySettingUi() {
             ) {
                 Icon(
                     painterResource(id = R.drawable.ic_image),
-                    tint = MaterialTheme.colors.secondary,
+                    tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = stringResource(id = R.string.title_background_image_setting)
                 )
                 Text(
@@ -192,7 +192,7 @@ internal fun DisplaySettingUi() {
                 )
                 Icon(
                     painterResource(id = R.drawable.ic_add_white),
-                    tint = MaterialTheme.colors.secondary,
+                    tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = stringResource(id = R.string.add_background_image)
                 )
             }
@@ -203,7 +203,7 @@ internal fun DisplaySettingUi() {
 
             LazyVerticalGrid(columns = GridCells.Fixed(2)) {
                 items(files, { it.absolutePath + it.lastModified().toString() }) { imageFile ->
-                    Surface(elevation = 4.dp, modifier = Modifier
+                    Surface(shadowElevation = 4.dp, modifier = Modifier
                         .height(200.dp)
                         .weight(1f)
                         .padding(4.dp)

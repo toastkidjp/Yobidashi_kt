@@ -9,9 +9,8 @@ package jp.toastkid.lib
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.Animatable
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
+import jp.toastkid.lib.compat.material3.ModalBottomSheetState
+import jp.toastkid.lib.compat.material3.ModalBottomSheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -125,7 +124,6 @@ class ContentViewModel : ViewModel() {
         _hideBottomSheetAction.value = action
     }
 
-    @OptIn(ExperimentalMaterialApi::class)
     val modalBottomSheetState = ModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
         confirmStateChange = {
@@ -136,7 +134,6 @@ class ContentViewModel : ViewModel() {
         }
     )
 
-    @OptIn(ExperimentalMaterialApi::class)
     suspend fun switchBottomSheet() {
         if (modalBottomSheetState.isVisible) {
             modalBottomSheetState.hide()
@@ -145,7 +142,6 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    @OptIn(ExperimentalMaterialApi::class)
     suspend fun hideBottomSheet() {
         _hideBottomSheetAction.value()
         modalBottomSheetState.hide()

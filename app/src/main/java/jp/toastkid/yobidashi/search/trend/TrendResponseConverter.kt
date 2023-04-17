@@ -16,7 +16,7 @@ import retrofit2.Converter
 class TrendResponseConverter(private val parser: TrendParser) : Converter<ResponseBody, List<Trend>> {
 
     override fun convert(responseBody: ResponseBody): List<Trend>? {
-        val bodyString = responseBody.string()
+        val bodyString = responseBody.use { it.string() }
         return parser(bodyString)
     }
 }

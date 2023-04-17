@@ -12,11 +12,11 @@ import android.widget.DatePicker
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -48,7 +48,7 @@ internal fun DateFilterDialogUi(
             openDialog.value = false
         }
     ) {
-        Surface(elevation = 4.dp) {
+        Surface(shadowElevation = 4.dp) {
             Column {
                 AndroidView(
                     modifier = Modifier
@@ -80,8 +80,8 @@ internal fun DateFilterDialogUi(
                         )
                     },
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = MaterialTheme.colors.primary,
-                        contentColor = MaterialTheme.colors.onPrimary,
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
                         disabledContentColor = Color.LightGray
                     ),
                     modifier = Modifier.fillMaxWidth()

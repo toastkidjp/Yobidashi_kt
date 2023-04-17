@@ -44,7 +44,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$libVersions.ktx"
 
     implementation 'androidx.activity:activity-compose:1.4.0'
-    implementation "androidx.compose.material:material:$libVersions.compose"
+    implementation "androidx.compose.material3:material3:$libVersions.compose_material3"
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "io.mockk:mockk:$libVersions.mockk"

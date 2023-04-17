@@ -24,18 +24,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FractionalThreshold
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ResistanceConfig
-import androidx.compose.material.Slider
-import androidx.compose.material.Surface
-import androidx.compose.material.SwipeableState
-import androidx.compose.material.Text
-import androidx.compose.material.swipeable
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -66,12 +61,15 @@ import jp.toastkid.image.preview.attach.AttachToThisAppBackgroundUseCase
 import jp.toastkid.image.preview.detail.ExifInformationExtractorUseCase
 import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.compat.material3.FractionalThreshold
+import jp.toastkid.lib.compat.material3.ResistanceConfig
+import jp.toastkid.lib.compat.material3.SwipeableState
+import jp.toastkid.lib.compat.material3.swipeableCompat
 import jp.toastkid.ui.dialog.ConfirmDialog
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
@@ -146,8 +144,8 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 .fillMaxWidth()
                 .height(60.dp)
                 .align(Alignment.Center)
-                .swipeable(
-                    swipeableState,
+                .swipeableCompat(
+                    state = swipeableState,
                     anchors = anchors,
                     thresholds = { _, _ -> FractionalThreshold(0.75f) },
                     resistance = ResistanceConfig(0.5f),
@@ -157,7 +155,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         }
 
         Surface(
-            elevation = 4.dp,
+            shadowElevation = 4.dp,
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Column {
@@ -213,7 +211,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         Icon(
                             painterResource(id = R.drawable.ic_rotate_left),
                             contentDescription = stringResource(id = R.string.content_description_rotate_left),
-                            tint = MaterialTheme.colors.onSurface,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.clickable {
                                 coroutineScope.launch {
                                     viewModel.state.animateRotateBy(-90f)
@@ -223,7 +221,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         Icon(
                             painterResource(id = R.drawable.ic_rotate_right),
                             contentDescription = stringResource(id = R.string.content_description_rotate_right),
-                            tint = MaterialTheme.colors.onSurface,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable {
                                     coroutineScope.launch {
@@ -235,7 +233,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         Icon(
                             painterResource(id = R.drawable.ic_flip),
                             contentDescription = stringResource(id = R.string.content_description_reverse_image),
-                            tint = MaterialTheme.colors.onSurface,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable {
                                     coroutineScope.launch {
@@ -287,7 +285,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             Icon(
                                 painterResource(id = R.drawable.ic_set_to),
                                 contentDescription = stringResource(id = R.string.content_description_set_to),
-                                tint = MaterialTheme.colors.onSurface
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
 
                             DropdownMenu(
@@ -295,6 +293,12 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                 onDismissRequest = { viewModel.openOtherMenu.value = false }
                             ) {
                                 DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            stringResource(id = R.string.this_app),
+                                            fontSize = 20.sp
+                                        )
+                                    },
                                     onClick = {
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
@@ -302,32 +306,28 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                         AttachToThisAppBackgroundUseCase(contentViewModel)
                                             .invoke(context, image.path.toUri(), BitmapFactory.decodeFile(image.path))
                                     }
-                                ) {
-                                    Text(
-                                        stringResource(id = R.string.this_app),
-                                        fontSize = 20.sp
-                                    )
-                                }
+                                )
                                 DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            stringResource(id = R.string.other_app),
+                                            fontSize = 20.sp
+                                        )
+                                    },
                                     onClick = {
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
                                         AttachToAnyAppUseCase({ context.startActivity(it) })
                                             .invoke(context, BitmapFactory.decodeFile(viewModel.getCurrentImage().path))
                                     }
-                                ) {
-                                    Text(
-                                        stringResource(id = R.string.other_app),
-                                        fontSize = 20.sp
-                                    )
-                                }
+                                )
                             }
                         }
 
                         Icon(
                             painterResource(id = R.drawable.ic_info_white),
                             contentDescription = stringResource(R.string.content_description_information),
-                            tint = MaterialTheme.colors.onSurface,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable {
                                     viewModel.openDialog.value = true

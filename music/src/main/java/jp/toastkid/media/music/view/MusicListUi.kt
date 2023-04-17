@@ -28,12 +28,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -200,7 +200,7 @@ internal fun MusicList(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
-                .background(MaterialTheme.colors.primary)
+                .background(MaterialTheme.colorScheme.primary)
         ) {
             Icon(
                 painterResource(id = R.drawable.ic_stop),
@@ -269,16 +269,18 @@ internal fun MusicList(
                 ) {
                     val values = PlayingSpeed.values()
                     values.forEachIndexed { index, _ ->
-                        DropdownMenuItem(onClick = {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    stringResource(id = values[index].textId),
+                                    fontSize = 20.sp
+                                )
+                            },
+                            onClick = {
                             currentSpeed = values[index].textId
                             sendSpeedBroadcast(values[index].speed)
                             expanded = false
-                        }) {
-                            Text(
-                                stringResource(id = values[index].textId),
-                                fontSize = 20.sp
-                            )
-                        }
+                        })
                     }
                 }
             }
@@ -300,7 +302,7 @@ internal fun MusicList(
         LazyColumn {
             items(viewModel.musics, { it.description.mediaId ?: "" }) { music ->
                 Surface(
-                    elevation = 4.dp,
+                    shadowElevation = 4.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)

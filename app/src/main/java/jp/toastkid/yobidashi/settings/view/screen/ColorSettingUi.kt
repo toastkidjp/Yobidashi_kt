@@ -21,9 +21,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -66,7 +66,7 @@ internal fun ColorSettingUi() {
     val context = LocalContext.current
     val preferenceApplier = PreferenceApplier(context)
 
-    val repository = DatabaseFinder().invoke(context).savedColorRepository()
+    val repository = remember { DatabaseFinder().invoke(context).savedColorRepository() }
 
     val colorPair = preferenceApplier.colorPair()
     val initialBgColor = colorPair.bgColor()
@@ -137,7 +137,7 @@ internal fun ColorSettingUi() {
 
         if (savedColors.isNotEmpty()) {
             Surface(
-                elevation = 4.dp,
+                shadowElevation = 4.dp,
                 modifier = Modifier
                     .height(44.dp)
                     .fillMaxWidth()
@@ -154,7 +154,7 @@ internal fun ColorSettingUi() {
         LazyVerticalGrid(columns = GridCells.Fixed(3)) {
             items(savedColors, { it.id }) { savedColor ->
                 Surface(
-                    elevation = 4.dp,
+                    shadowElevation = 4.dp,
                     modifier = Modifier
                         .clickable {
                             commitNewColor(

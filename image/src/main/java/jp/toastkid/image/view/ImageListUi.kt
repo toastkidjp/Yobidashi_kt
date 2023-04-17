@@ -23,8 +23,8 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -174,7 +174,7 @@ internal fun ImageListUi(
     ) {
         items(images, { it.path }) { image ->
             Surface(
-                elevation = 4.dp,
+                shadowElevation = 4.dp,
                 modifier = Modifier
                     .padding(4.dp)
                     .animateItemPlacement()

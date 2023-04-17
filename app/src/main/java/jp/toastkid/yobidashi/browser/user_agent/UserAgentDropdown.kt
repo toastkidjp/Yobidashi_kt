@@ -8,14 +8,18 @@
 
 package jp.toastkid.yobidashi.browser.user_agent
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -31,24 +35,29 @@ fun UserAgentDropdown(open: MutableState<Boolean>, onSelect: (UserAgent) -> Unit
     ) {
         UserAgent.values().forEach { userAgent ->
             DropdownMenuItem(
+                text = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            userAgent.title(),
+                            fontSize = 20.sp,
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .padding(8.dp)
+                        )
+                        RadioButton(
+                            selected = userAgent.name == current,
+                            colors = RadioButtonDefaults
+                                .colors(selectedColor = MaterialTheme.colorScheme.secondary),
+                            onClick = {  }
+                        )
+                    }
+                },
                 onClick = {
                     onSelect(userAgent)
                     open.value = false
                 }
-            ) {
-                Text(
-                    userAgent.title(),
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .padding(8.dp)
-                )
-                RadioButton(
-                    selected = userAgent.name == current,
-                    onClick = {  }
-                )
-            }
+            )
         }
     }
 }

@@ -51,7 +51,7 @@ class RssUrlFinder(
                 if (!response.isSuccessful) {
                     return@withContext emptyList<String>()
                 }
-                rssUrlExtractor(response.body?.string())
+                rssUrlExtractor(response.body?.use { it.string() })
             }
             storeToPreferences(rssItems)
         }

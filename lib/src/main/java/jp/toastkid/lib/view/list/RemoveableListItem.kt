@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.ui.list
+package jp.toastkid.lib.view.list
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -20,19 +20,19 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.DismissDirection
-import androidx.compose.material.DismissState
-import androidx.compose.material.DismissValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FixedThreshold
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ResistanceConfig
-import androidx.compose.material.Surface
-import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.swipeable
+import jp.toastkid.lib.compat.material3.DismissDirection
+import jp.toastkid.lib.compat.material3.DismissState
+import jp.toastkid.lib.compat.material3.DismissValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import jp.toastkid.lib.compat.material3.FixedThreshold
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import jp.toastkid.lib.compat.material3.ResistanceConfig
+import androidx.compose.material3.Surface
+import jp.toastkid.lib.compat.material3.SwipeableDefaults
+import jp.toastkid.lib.compat.material3.swipeableCompat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,7 +50,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwipeToDismissItem(
     onClickDelete: () -> Unit,
@@ -66,7 +66,7 @@ fun SwipeToDismissItem(
 
     Surface(
         modifier = modifier,
-        elevation = 4.dp
+        shadowElevation = 4.dp
     ) {
         val width = LocalConfiguration.current.screenWidthDp.toFloat()
         val marginEnd = 60.dp.value
@@ -97,7 +97,7 @@ fun SwipeToDismissItem(
         }
 
         Box(
-            Modifier.swipeable(
+            Modifier.swipeableCompat(
                 state = state,
                 anchors = anchors,
                 thresholds = { _, _ ->
@@ -160,7 +160,7 @@ fun SwipeToDismissItem(
                 modifier = Modifier
                     .offset { IntOffset(state.offset.value.roundToInt(), 0) }
                     .padding(end = endOffset.value.dp)
-                    .background(MaterialTheme.colors.surface)
+                    .background(MaterialTheme.colorScheme.surface)
             )
         }
 

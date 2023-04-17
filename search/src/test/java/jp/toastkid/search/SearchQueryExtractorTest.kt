@@ -39,6 +39,7 @@ class SearchQueryExtractorTest {
         "poirot" to "https://m.facebook.com/public/poirot",
         "Soccer" to "https://www.espn.com/search/_/q/Soccer",
         "ラーメン" to "https://duckduckgo.com/?q=%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3&ia=web",
+        "ラーメン" to "https://lite.duckduckgo.com/lite/?q=%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3&ia=web",
         "orange" to "https://search.yahoo.com/search?p=orange",
         "Hamburger" to "https://www.yelp.com/search?find_desc=Hamburger&find_loc=Shinjuku%2C+%E6%9D%B1%E4%BA%AC%E9%83%BD%2C+Japan&ns=1",
         "orange" to "https://www.flickr.com/search/?text=orange",
