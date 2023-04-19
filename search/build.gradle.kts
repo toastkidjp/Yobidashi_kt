@@ -13,7 +13,7 @@ import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 plugins {
   id("com.android.library")
   id("kotlin-android")
-    id("jacoco")
+  id("jacoco.definition")
 }
 
 //TODO apply(from = "../jacoco.gradle")
