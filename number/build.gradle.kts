@@ -13,6 +13,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("org.jetbrains.kotlin.plugin.serialization") version("1.6.21")
+    id("jacoco.definition")
 }
 
 // TODO apply(from = "../jacoco.gradle.kts")
