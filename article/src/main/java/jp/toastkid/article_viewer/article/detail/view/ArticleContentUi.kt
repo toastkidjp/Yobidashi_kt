@@ -51,9 +51,12 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
 import com.halilibo.richtext.ui.RichTextStyle
@@ -62,6 +65,7 @@ import com.halilibo.richtext.ui.string.RichTextStringStyle
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.LinkBehaviorService
+import jp.toastkid.article_viewer.article.detail.LinkGenerator
 import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -85,9 +89,11 @@ fun ArticleContentUi(title: String) {
             { repository.exists(it) > 0 }
         )
     }
-    val viewModel = viewModelProvider.get(ContentViewerFragmentViewModel::class.java)
+    val viewModel = viewModel(ContentViewerFragmentViewModel::class.java)
 
     viewModel.setTitle(title)
+
+    val linkGenerator = remember { LinkGenerator() }
 
     LaunchedEffect(key1 = title, block = {
         val content = withContext(Dispatchers.IO) {
@@ -98,12 +104,12 @@ fun ArticleContentUi(title: String) {
             return@LaunchedEffect
         }
 
-        withContext(Dispatchers.Main) {
-            viewModel.setContent(content)
-        }
+        val converted = linkGenerator.invoke(content)
+        viewModel.setContent(converted)
     })
 
-    viewModelProvider.get(ContentViewModel::class.java).replaceAppBarContent {
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
+    contentViewModel.replaceAppBarContent {
         AppBarContent(viewModel)
     }
 
@@ -122,7 +128,39 @@ binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CY
             contentColor = { Color(editorFontColor) }
         ) {
             RichText(
-                style = RichTextStyle(stringStyle = stringStyle),
+                style = RichTextStyle(
+                    headingStyle = { level, textStyle ->
+                        when (level) {
+                            0 -> TextStyle(
+                                fontSize = 36.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            1 -> TextStyle(
+                                fontSize = 26.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            2 -> TextStyle(
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            3 -> TextStyle(
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            4 -> TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = textStyle.color.copy(alpha = .7F)
+                            )
+                            5 -> TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                color = textStyle.color.copy(alpha = .7f)
+                            )
+                            else -> textStyle
+                        }
+                    },
+                    stringStyle = stringStyle
+                ),
                 modifier = Modifier
                     .background(Color(preferenceApplier.editorBackgroundColor()))
                     .padding(8.dp)
@@ -138,7 +176,6 @@ binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CY
         }
     }
 
-    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
     ScrollerUseCase(contentViewModel, scrollState).invoke(LocalLifecycleOwner.current)
 
     contentViewModel.clearOptionMenus()
@@ -149,7 +186,7 @@ binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CY
 private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(activityContext)
-    val tabListViewModel = ViewModelProvider(activityContext).get(TabListViewModel::class.java)
+    val tabListViewModel = viewModel(TabListViewModel::class.java, activityContext)
 
     var searchInput by remember { mutableStateOf("") }
     Row(

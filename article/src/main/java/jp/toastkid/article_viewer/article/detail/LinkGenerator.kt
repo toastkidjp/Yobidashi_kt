@@ -12,7 +12,7 @@ import java.util.regex.Pattern
 /**
  * @author toastkidjp
  */
-class LinkGeneratorService {
+class LinkGenerator {
 
     operator fun invoke(text: String): String {
         return embedLinks(text, internalLinkPattern, 1)
@@ -20,9 +20,10 @@ class LinkGeneratorService {
 
     private fun embedLinks(text: String, pattern: Pattern, group: Int): String {
         var converted = text
-        val matcher = pattern.matcher(converted)
+        var matcher = pattern.matcher(converted)
         while (matcher.find()) {
             converted = matcher.replaceFirst(InternalLinkScheme().makeLink(matcher.group(group)))
+            matcher = pattern.matcher(converted)
         }
         return converted
     }

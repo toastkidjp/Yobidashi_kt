@@ -72,7 +72,6 @@ import androidx.lifecycle.get
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import coil.compose.AsyncImage
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
@@ -453,13 +452,10 @@ private fun ListItem(
                     .width(32.dp)
                     .fillMaxHeight()
             ) {
-                AsyncImage(
-                    R.drawable.ic_more,
+                Icon(
+                    painterResource(id = R.drawable.ic_more),
                     stringResource(id = R.string.menu),
-                    colorFilter = ColorFilter.tint(
-                        MaterialTheme.colorScheme.secondary,
-                        BlendMode.SrcIn
-                    ),
+                    tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier
                         .fillMaxSize()
                         .clickable {

@@ -14,7 +14,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -24,7 +23,6 @@ class LinkBehaviorService(
     private val browserViewModel: BrowserViewModel,
     private val exists: (String) -> Boolean,
     private val internalLinkScheme: InternalLinkScheme = InternalLinkScheme(),
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
@@ -39,8 +37,8 @@ class LinkBehaviorService(
         }
 
         val title = internalLinkScheme.extract(url)
-        CoroutineScope(mainDispatcher).launch {
-            val exists = withContext(ioDispatcher) { exists(title) }
+        CoroutineScope(ioDispatcher).launch {
+            val exists = exists(title)
             if (exists) {
                 contentViewModel.newArticle(title)
             } else {
