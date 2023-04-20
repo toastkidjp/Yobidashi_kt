@@ -16,6 +16,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.image.Image
 import jp.toastkid.lib.preference.PreferenceApplier
 import org.junit.After
 import org.junit.Before
@@ -30,7 +31,7 @@ class ImageFilterUseCaseTest {
     private lateinit var preferenceApplier: PreferenceApplier
 
     @MockK
-    private lateinit var adapter: Adapter
+    private lateinit var submitImages: (List<Image>) -> Unit
 
     @MockK
     private lateinit var imageLoaderUseCase: ImageLoaderUseCase
@@ -48,8 +49,8 @@ class ImageFilterUseCaseTest {
         every { imageLoaderUseCase.invoke() }.just(Runs)
         every { imageLoaderUseCase.clearCurrentBucket() }.just(Runs)
         every { preferenceApplier.excludedItems() }.returns(emptySet())
+        every { submitImages.invoke(any()) }.just(Runs)
         every { imageLoader.filterBy(any()) }.returns(emptyList())
-        every { adapter.submitList(any()) }.just(Runs)
         every { refreshContent.invoke() }.just(Runs)
     }
 
