@@ -8,10 +8,13 @@
 
 package jp.toastkid.lib.view.thumbnail
 
+import android.util.DisplayMetrics
 import android.view.View
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
@@ -26,10 +29,16 @@ class ThumbnailGeneratorTest {
     @MockK
     private lateinit var view: View
 
+    @MockK
+    private lateinit var displayMetrics: DisplayMetrics
+
     @Before
     fun setUp() {
         thumbnailGenerator = ThumbnailGenerator()
         MockKAnnotations.init(this)
+
+        every { view.context.resources.displayMetrics } returns displayMetrics
+        every { view.invalidate() } just Runs
     }
 
     @Test
