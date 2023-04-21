@@ -27,10 +27,6 @@ plugins {
     id("jacoco")
 }
 
-jacoco {
-    toolVersion = "0.8.8"
-}
-
 allprojects {
     repositories {
         google()
@@ -43,23 +39,24 @@ task("clean", Delete::class) {
     delete = setOf(rootProject.buildDir)
 }
 
-/*TODO
-task("jacocoMergedTestReport", JacocoReport::class)(
-    //group: "verification"
-) {
-    gradle.afterProject { project, _ ->
-        if (project.rootProject != project && project.plugins.hasPlugin('jacoco')) {
-            getExecutionData().from += "${project.buildDir}/jacoco/testDebugUnitTest.exec"
-            getSourceDirectories().from += "${project.projectDir}/src/main/java"
-            getClassDirectories().from += project.fileTree(dir = "${project.buildDir}/tmp/kotlin-classes/debug")
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+tasks.create("jacocoMergeReport", JacocoReport::class) {
+    group = "verification"
+    gradle.afterProject { 
+        if (rootProject != project && plugins.hasPlugin("jacoco.definition")) {
+            executionData.from += "${project.buildDir}/jacoco/testDebugUnitTest.exec"
+            sourceDirectories.from += "${project.projectDir}/src/main/java"
+            classDirectories.from.addAll(project.fileTree("${project.buildDir}/tmp/kotlin-classes/debug"))
         }
     }
     reports {
-        xml.required.set(true)
+        xml.required.set(false)
         html.required.set(true)
     }
 }
-*/
 
 /*TODO
 task("mergeDetektReport", io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
