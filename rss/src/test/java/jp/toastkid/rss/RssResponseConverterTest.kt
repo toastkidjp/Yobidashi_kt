@@ -3,7 +3,6 @@ package jp.toastkid.rss
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import io.mockk.verify
 import jp.toastkid.rss.model.Parser
 import jp.toastkid.rss.model.Rss
