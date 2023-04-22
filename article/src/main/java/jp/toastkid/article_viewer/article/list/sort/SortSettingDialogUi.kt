@@ -65,7 +65,11 @@ internal fun SortSettingDialogUi(
                             selected = sort == currentSort,
                             colors = RadioButtonDefaults
                                 .colors(selectedColor = MaterialTheme.colorScheme.secondary),
-                            onClick = {}
+                            onClick = {
+                                preferenceApplier.setArticleSort(sort.name)
+                                onSelect(sort)
+                                openSortDialog.value = false
+                            }
                         )
                         Text(sort.name)
                     }
