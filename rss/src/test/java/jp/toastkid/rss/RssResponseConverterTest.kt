@@ -1,8 +1,10 @@
 package jp.toastkid.rss
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.verify
 import jp.toastkid.rss.model.Parser
 import jp.toastkid.rss.model.Rss
@@ -31,11 +33,13 @@ class RssResponseConverterTest {
         every { parser.parse(any()) }.answers { Rss() }
 
         val converter = RssResponseConverter(parser)
+        every { responseBody.close() }.just(Runs)
         every { responseBody.string() }.answers { "" }
 
         converter.convert(responseBody)
 
         verify(exactly = 1) { parser.parse(any()) }
         verify(exactly = 1) { responseBody.string() }
+        verify(exactly = 1) { responseBody.close() }
     }
 }
