@@ -5,12 +5,13 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import property.*
+import property.BuildTool
+import property.LibraryVersion
 
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("jacoco")
+    id("jacoco.definition")
 }
 
 android {
@@ -18,6 +19,7 @@ android {
 
     defaultConfig {
         minSdkVersion(BuildTool.minSdk)
+        namespace = "jp.toastkid.api"
     }
 
     buildTypes {
@@ -42,11 +44,3 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
 }
 
-setUpJaCoCo()
-
-tasks.withType<Test> {
-    configure<JacocoTaskExtension> {
-        isIncludeNoLocationClasses = true
-        excludes = listOf("jdk.internal.*")
-    }
-}
