@@ -49,7 +49,11 @@ tasks.create("jacocoMergeReport", JacocoReport::class) {
         if (rootProject != project && plugins.hasPlugin("jacoco.definition")) {
             executionData.from += "${project.buildDir}/jacoco/testDebugUnitTest.exec"
             sourceDirectories.from += "${project.projectDir}/src/main/java"
-            classDirectories.from.addAll(project.fileTree("${project.buildDir}/tmp/kotlin-classes/debug"))
+            classDirectories.from.addAll(
+                project.fileTree("${project.buildDir}/tmp/kotlin-classes/debug") { 
+                    exclude("**/view/**", "**/ui/**", "**/material3/**", "**/*UiKt*", "**/*serializer**") 
+                }
+            )
         }
     }
     reports {
