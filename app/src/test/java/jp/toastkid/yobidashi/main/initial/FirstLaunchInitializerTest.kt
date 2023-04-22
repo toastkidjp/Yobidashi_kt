@@ -91,7 +91,6 @@ class FirstLaunchInitializerTest {
             context,
             preferenceApplier,
             defaultColorInsertion,
-            faviconFolderProviderService,
             defaultBackgroundImagePreparation
         )
     }
