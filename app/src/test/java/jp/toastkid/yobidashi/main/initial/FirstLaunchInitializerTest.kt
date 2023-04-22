@@ -19,7 +19,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.spyk
@@ -59,10 +58,14 @@ class FirstLaunchInitializerTest {
     @MockK
     private lateinit var editor: SharedPreferences.Editor
 
+    @MockK
+    private lateinit var bookmarkInitializer: BookmarkInitializer
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
+        every { context.applicationContext }.returns(context)
         every { context.getSharedPreferences(any(), any()) }.returns(sharedPreferences)
         every { sharedPreferences.edit() }.returns(editor)
         every { editor.putInt(any(), any()) }.returns(editor)
@@ -84,8 +87,9 @@ class FirstLaunchInitializerTest {
         every { Uri.parse(any()) }.returns(returnValue)
         mockkObject(SearchCategory)
         every { SearchCategory.getDefaultCategoryName() }.returns("yahoo")
-        mockkConstructor(BookmarkInitializer::class)
-        every { anyConstructed<BookmarkInitializer>().invoke() }.returns(mockk())
+        mockkObject(BookmarkInitializer)
+        every { BookmarkInitializer.from(any()) }.returns(bookmarkInitializer)
+        every { bookmarkInitializer.invoke(any()) }.returns(mockk())
 
         firstLaunchInitializer = FirstLaunchInitializer(
             context,
