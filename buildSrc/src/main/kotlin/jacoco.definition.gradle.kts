@@ -28,6 +28,10 @@ tasks.register("jacocoTestReport", JacocoReport::class.java) {
         html.outputLocation.set(file("${buildDir}/reports/code-coverage"))
     }
     sourceDirectories.setFrom("${projectDir}/src/main/java")
-    classDirectories.setFrom("${buildDir}/tmp/kotlin-classes/debug")
+    classDirectories.setFrom(
+        fileTree("${buildDir}/tmp/kotlin-classes/debug") { 
+            exclude("**/view/**", "**/ui/**") 
+        }
+    )
     executionData.setFrom("${buildDir}/jacoco/testDebugUnitTest.exec")
 }
