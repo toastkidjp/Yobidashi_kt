@@ -74,7 +74,7 @@ class BookmarkInitializerTest {
         coEvery { favicons.assignNewFile(any<String>()) }.returns(file)
 
         val uri = mockk<Uri>()
-        coEvery { uri.getHost() }.returns("test")
+        coEvery { uri.host }.returns("test")
         mockkStatic(Uri::class)
         coEvery { Uri.parse(any()) }.returns(uri)
 
@@ -90,14 +90,15 @@ class BookmarkInitializerTest {
 
     @Test
     fun testFrom() {
-        mockkConstructor(FaviconFolderProviderService::class)
+        mockkConstructor(FaviconFolderProviderService::class, DatabaseFinder::class)
         every { anyConstructed<FaviconFolderProviderService>().invoke(any()) }.returns(mockk())
+        every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
         mockkObject(WebClipIconLoader)
         every { WebClipIconLoader.from(any()) }.returns(mockk())
 
         BookmarkInitializer.from(context)
 
-        verify(exactly = 1) { databaseFinder.invoke(any()) }
+        verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
         verify(exactly = 1) { appDatabase.bookmarkRepository() }
         verify { anyConstructed<FaviconFolderProviderService>().invoke(any()) }
         verify { WebClipIconLoader.from(any()) }
