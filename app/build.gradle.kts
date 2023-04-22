@@ -12,7 +12,7 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
     id("com.github.triplet.play")
     id("com.cookpad.android.plugin.license-tools")
-    id("jacoco")
+    id("jacoco.definition")
 }
 
 // TODO apply(from = "../jacoco.gradle.kts")
