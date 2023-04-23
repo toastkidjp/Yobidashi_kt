@@ -210,8 +210,10 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 value = viewModel.searchInput.value,
                 onValueChange = {
                     viewModel.searchInput.value = it
-                    CoroutineScope(Dispatchers.Default).launch {
-                        //inputChannel.send(it)
+                    if (preferenceApplier.useTitleFilter()) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            viewModel.filter("%$it%")
+                        }
                     }
                 },
                 label = {
