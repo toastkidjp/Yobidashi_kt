@@ -22,11 +22,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -42,6 +44,9 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.view.SearchCategorySpinner
 import jp.toastkid.yobidashi.settings.fragment.search.category.SearchCategorySelection
 import jp.toastkid.yobidashi.settings.view.CheckableRow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun SearchSettingUi() {
@@ -76,7 +81,7 @@ internal fun SearchSettingUi() {
             .map {
                 SearchCategorySelection(
                     it,
-                    preferenceApplier.readDisableSearchCategory()?.contains(it.name)?.not() ?: true
+                    mutableStateOf(preferenceApplier.readDisableSearchCategory()?.contains(it.name)?.not() ?: true)
                 )
             }
     }
@@ -266,6 +271,7 @@ internal fun SearchSettingUi() {
             }
 
             item {
+                val allChecked = remember { mutableStateOf(selections.all { it.checked.value }) }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -281,8 +287,10 @@ internal fun SearchSettingUi() {
                             .weight(1f)
                             .padding(start = 4.dp)
                     )
-                    Checkbox(checked = false, onCheckedChange = {
-
+                    Checkbox(checked = allChecked.value, onCheckedChange = {
+                        val newState = allChecked.value.not()
+                        selections.forEach { it.checked.value = newState }
+                        allChecked.value = newState
                     })
                 }
             }
@@ -290,7 +298,11 @@ internal fun SearchSettingUi() {
             items(selections, { it.searchCategory.id }) { selection ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .clickable {
+                            selection.checked.value = selection.checked.value.not()
+                        }
                 ) {
                     AsyncImage(
                         model = selection.searchCategory.iconId,
@@ -306,13 +318,24 @@ internal fun SearchSettingUi() {
                             .padding(8.dp)
                     )
                     Checkbox(
-                        checked = selection.checked,
+                        checked = selection.checked.value,
                         onCheckedChange = {
-                            selection.checked = selection.checked.not()
+                            selection.checked.value = selection.checked.value.not()
                         }
                     )
                 }
             }
         }
     }
+
+    val localLifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(key1 = localLifecycleOwner, effect = {
+        onDispose {
+            CoroutineScope(Dispatchers.IO).launch {
+                preferenceApplier.clearDisableSearchCategory()
+                selections.filter { it.checked.value.not() }
+                    .forEach { preferenceApplier.addDisableSearchCategory(it.searchCategory.name) }
+            }
+        }
+    })
 }
