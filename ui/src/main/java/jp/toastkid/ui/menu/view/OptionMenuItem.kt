@@ -8,7 +8,6 @@
 
 package jp.toastkid.ui.menu.view
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
@@ -52,8 +51,8 @@ fun OptionMenuItem(optionMenu: OptionMenu) {
         if (checkState != null) {
             Checkbox(
                 checked = checkState.value,
-                onCheckedChange = {},
-                Modifier.clickable(false) {})
+                onCheckedChange = { optionMenu.action() }
+                )
         }
     }
 }
