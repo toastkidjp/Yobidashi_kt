@@ -8,14 +8,13 @@
 
 package jp.toastkid.loan.usecase
 
-import jp.toastkid.loan.Calculator
 import jp.toastkid.loan.model.Factor
+import jp.toastkid.loan.model.LoanPayment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
@@ -25,8 +24,8 @@ import kotlinx.coroutines.launch
 class DebouncedCalculatorUseCase(
     private val inputChannel: Channel<String>,
     private val currentFactorProvider: () -> Factor,
-    private val onResult: (Long) -> Unit,
-    private val calculator: Calculator = Calculator(),
+    private val onResult: (LoanPayment) -> Unit,
+    private val calculator: LoanCalculator = LoanCalculator(),
     private val debounceMillis: Long = 1000,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
