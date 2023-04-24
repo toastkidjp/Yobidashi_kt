@@ -351,4 +351,6 @@
     <string name="row_dialog_copy_text">テキストをコピー</string>
     <string name="message_should_input_keyword">Please input any keyword.</string>
 
+    <string name="title_converter_tool">変換ツール</string>
+
 </resources>

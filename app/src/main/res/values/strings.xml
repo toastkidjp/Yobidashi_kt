@@ -356,4 +356,6 @@
     <string name="row_dialog_copy_text">Copy Text</string>
     <string name="message_should_input_keyword">Please input any keyword.</string>
 
+    <string name="title_converter_tool">Converter tool</string>
+
 </resources>
