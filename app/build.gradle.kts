@@ -1,9 +1,9 @@
-import property.LibraryVersion
+
 import property.BuildTool
+import property.LibraryVersion
 import property.Version
-import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version("1.6.21")
@@ -115,6 +115,7 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":editor"))
     implementation(project(":number"))
+    implementation(project(":converter"))
 
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
     implementation("androidx.work:work-runtime:2.7.1")
