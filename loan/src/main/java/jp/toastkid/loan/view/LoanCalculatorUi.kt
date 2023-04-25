@@ -125,38 +125,40 @@ fun LoanCalculatorUi() {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
             )
-            OutlinedTextField(
-                value = loanTerm,
-                onValueChange = {
-                    loanTerm = format(it)
-                    onChange(inputChannel, it)
-                },
-                label = { Text(text = stringResource(R.string.hint_loan_term)) },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onSurface,
-                    containerColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = interestRate,
-                onValueChange = {
-                    interestRate = it
-                    onChange(inputChannel, it)
-                },
-                label = { Text(text = stringResource(R.string.hint_interest_rate)) },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onSurface,
-                    containerColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
+            Row {
+                OutlinedTextField(
+                    value = loanTerm,
+                    onValueChange = {
+                        loanTerm = format(it)
+                        onChange(inputChannel, it)
+                    },
+                    label = { Text(text = stringResource(R.string.hint_loan_term)) },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = MaterialTheme.colorScheme.onSurface,
+                        containerColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colorScheme.onSurface
+                    ),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.weight(1f)
+                )
+                OutlinedTextField(
+                    value = interestRate,
+                    onValueChange = {
+                        interestRate = it
+                        onChange(inputChannel, it)
+                    },
+                    label = { Text(text = stringResource(R.string.hint_interest_rate)) },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = MaterialTheme.colorScheme.onSurface,
+                        containerColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colorScheme.onSurface
+                    ),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.weight(1f)
+                )
+            }
             OutlinedTextField(
                 value = downPayment,
                 onValueChange = {
