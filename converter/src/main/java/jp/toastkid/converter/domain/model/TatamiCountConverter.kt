@@ -11,7 +11,15 @@ package jp.toastkid.converter.domain.model
 class TatamiCountConverter : TwoStringConverter {
 
     override fun title(): String {
-        return "Tatami counts <-> Square meter"
+        return "Tatami counts(畳) <-> Square meter(㎡)"
+    }
+
+    override fun firstInputLabel(): String {
+        return "Tatami counts(畳)"
+    }
+
+    override fun secondInputLabel(): String {
+        return "㎡"
     }
 
     override fun defaultFirstInputValue(): String {
