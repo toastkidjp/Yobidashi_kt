@@ -17,10 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import jp.toastkid.converter.domain.model.TatamiCountConverter
+import jp.toastkid.converter.domain.model.UnixTimeConverter
 
 @Composable
 fun ConverterToolUi() {
-    val converters = remember { listOf(TatamiCountConverter()) }
+    val converters = remember { listOf(TatamiCountConverter(), UnixTimeConverter()) }
     val currentIndex = remember { mutableStateOf(0) }
     val openChooser = remember { mutableStateOf(false) }
     Column {
