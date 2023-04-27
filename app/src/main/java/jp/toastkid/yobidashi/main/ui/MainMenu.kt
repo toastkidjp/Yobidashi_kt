@@ -31,7 +31,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -93,12 +92,12 @@ internal fun MainMenu(
                             stringResource(id = menu.titleId),
                             color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 12.sp,
+                            lineHeight = 16.sp,
                             maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
                             textAlign = TextAlign.Center,
-                            softWrap = false,
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .weight(1f)
                                 .padding(top = 8.dp)
                         )
                     }

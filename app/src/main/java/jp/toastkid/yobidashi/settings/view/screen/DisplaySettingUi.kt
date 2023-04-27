@@ -54,7 +54,7 @@ import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.load.LoadedAction
-import jp.toastkid.yobidashi.settings.view.CheckableRow
+import jp.toastkid.yobidashi.settings.view.SwitchRow
 import jp.toastkid.yobidashi.settings.view.WithIcon
 import java.io.File
 
@@ -122,7 +122,7 @@ internal fun DisplaySettingUi() {
 
             InsetDivider()
 
-            CheckableRow(
+            SwitchRow(
                 textId = R.string.title_display_effect,
                 clickable = {
                     preferenceApplier.switchShowDisplayEffect()

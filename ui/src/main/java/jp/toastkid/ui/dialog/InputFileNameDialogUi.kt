@@ -78,6 +78,7 @@ fun InputFileNameDialogUi(
         confirmButton = {
             Text(
                 text = stringResource(id = R.string.save),
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .clickable {
                         if (input.value.isNotBlank()) {
@@ -91,6 +92,7 @@ fun InputFileNameDialogUi(
         dismissButton = {
             Text(
                 text = stringResource(id = R.string.cancel),
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .clickable {
                         openDialog.value = false

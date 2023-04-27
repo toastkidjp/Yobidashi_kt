@@ -47,7 +47,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterUseCase
-import jp.toastkid.yobidashi.settings.view.CheckableRow
+import jp.toastkid.yobidashi.settings.view.SwitchRow
 import kotlin.math.roundToInt
 
 @Composable
@@ -81,7 +81,7 @@ internal fun ColorFilterSettingUi() {
                 check.value = preferenceApplier.useColorFilter()
             }
 
-            CheckableRow(
+            SwitchRow(
                 textId = R.string.title_color_filter,
                 clickable = onClick,
                 booleanState = check,

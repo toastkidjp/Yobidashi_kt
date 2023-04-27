@@ -68,7 +68,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -154,13 +153,9 @@ fun EditorTabUi(path: String?) {
             editText.setHintTextColor(preferenceApplier.editorFontColor())
             editText.isNestedScrollingEnabled = true
 
-            CursorColorSetter().invoke(
-                editText,
-                preferenceApplier.editorCursorColor(ContextCompat.getColor(context, R.color.editor_cursor))
-            )
-            editText.highlightColor = preferenceApplier.editorHighlightColor(
-                ContextCompat.getColor(context, R.color.light_blue_200_dd)
-            )
+            val substitute = Color(0xDD81D4FA).toArgb()
+            CursorColorSetter().invoke(editText, preferenceApplier.editorCursorColor(substitute))
+            editText.highlightColor = preferenceApplier.editorHighlightColor(substitute)
             fileActionUseCase.readCurrentFile()
             val scrollView = ScrollView(editText.context)
             scrollView.addView(editText)
@@ -376,7 +371,6 @@ private fun EditorMenuItem(
     iconId: Int,
     onClick: () -> Unit
 ) {
-    val preferenceApplier = PreferenceApplier(LocalContext.current)
     Column(
         modifier = Modifier
             .width(60.dp)
@@ -391,7 +385,7 @@ private fun EditorMenuItem(
         Icon(
             painter = painterResource(id = iconId),
             contentDescription = stringResource(id = labelId),
-            tint = Color(preferenceApplier.fontColor)
+            tint = MaterialTheme.colorScheme.onPrimary
         )
         Spacer(Modifier.requiredWidth(8.dp))
         Text(
