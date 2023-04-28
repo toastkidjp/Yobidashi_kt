@@ -49,7 +49,7 @@ enum class MoveableAmericanHoliday(
             val localDate = GregorianCalendar(year, month - 1, 1)
             val candidate = find(month) ?: return false
             val dayOfWeek = localDate.get(Calendar.DAY_OF_WEEK)
-            val d =
+            val offsetDays =
                 if (dayOfWeek <= candidate.dayOfWeek) candidate.dayOfWeek - dayOfWeek + 1
                 else 7 - (dayOfWeek - candidate.dayOfWeek - 1)
 
@@ -59,7 +59,7 @@ enum class MoveableAmericanHoliday(
                 else -> 4
             }
 
-            return date == d + (7 * (targetWeek - 1))
+            return date == offsetDays + (7 * (targetWeek - 1))
         }
 
     }
