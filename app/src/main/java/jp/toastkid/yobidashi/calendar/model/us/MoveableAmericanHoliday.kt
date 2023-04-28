@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.calendar.model.us
 
+import jp.toastkid.yobidashi.calendar.model.holiday.Holiday
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -41,13 +42,13 @@ enum class MoveableAmericanHoliday(
             return values().firstOrNull { it.month == month }
         }
 
-        fun isHoliday(year: Int, month: Int, date: Int): Boolean {
+        fun find(year: Int, month: Int): Holiday? {
             if (isTargetMonth(month).not()) {
-                return false
+                return null
             }
 
             val localDate = GregorianCalendar(year, month - 1, 1)
-            val candidate = find(month) ?: return false
+            val candidate = find(month) ?: return null
             val dayOfWeek = localDate.get(Calendar.DAY_OF_WEEK)
             val offsetDays =
                 if (dayOfWeek <= candidate.dayOfWeek) candidate.dayOfWeek - dayOfWeek + 1
@@ -59,7 +60,11 @@ enum class MoveableAmericanHoliday(
                 else -> 4
             }
 
-            return date == offsetDays + (7 * (targetWeek - 1))
+            return Holiday(candidate.title, candidate.month, offsetDays + (7 * (targetWeek - 1)))
+        }
+
+        fun isHoliday(year: Int, month: Int, date: Int): Boolean {
+            return find(year, month) != null
         }
 
     }
