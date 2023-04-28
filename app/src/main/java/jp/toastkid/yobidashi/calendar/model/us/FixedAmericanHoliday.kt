@@ -8,10 +8,19 @@
 
 package jp.toastkid.yobidashi.calendar.model.us
 
-enum class FixedAmericanHoliday(val month: Int, val date: Int, title: String) {
+import jp.toastkid.yobidashi.calendar.model.holiday.Holiday
+
+enum class FixedAmericanHoliday(val month: Int, val date: Int, val title: String) {
     NEW_YEAR(1, 1, "New year's day"),
     JUNE_TEENS(6, 19, "JUNE TEENS"),
     INDEPENDENCE_DAY(7, 4, "Independence Day"),
     VETERANS_DAY(11, 11, "Veterans Day"),
     CHRISTMAS(12, 25, "Christmas");
+
+    companion object {
+        fun find(month: Int) =
+            values()
+                .firstOrNull { month == it.month }
+                ?.let { Holiday(it.title, it.month, it.date) }
+    }
 }
