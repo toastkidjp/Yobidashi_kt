@@ -8,6 +8,7 @@
 
 package jp.toastkid.converter.presentation.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.DropdownMenu
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import jp.toastkid.converter.domain.model.TatamiCountConverter
 import jp.toastkid.converter.domain.model.UnixTimeConverter
 
@@ -25,7 +27,7 @@ fun ConverterToolUi() {
     val currentIndex = remember { mutableStateOf(0) }
     val openChooser = remember { mutableStateOf(false) }
     Column {
-        Box {
+        Box(modifier = Modifier.clickable { openChooser.value = true }) {
             Text(converters[currentIndex.value].title())
             DropdownMenu(expanded = openChooser.value, onDismissRequest = { openChooser.value = false }) {
                 converters.forEachIndexed { index, converter ->
