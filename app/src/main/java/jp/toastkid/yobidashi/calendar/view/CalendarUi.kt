@@ -13,15 +13,19 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -47,6 +51,7 @@ import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.calendar.model.Week
+import jp.toastkid.yobidashi.calendar.service.us.AmericanOffDayFinderService
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -68,110 +73,16 @@ fun CalendarUi() {
 
     val currentDate = rememberSaveable { mutableStateOf(Calendar.getInstance()) }
 
+    val holidays = AmericanOffDayFinderService().invoke(
+        currentDate.value.get(Calendar.YEAR),
+        currentDate.value.get(Calendar.MONTH) + 1
+    )
+
     Surface(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
         shadowElevation = 4.dp
     ) {
-        Column {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Button(onClick = {
-                    currentDate.value = GregorianCalendar(
-                        currentDate.value.get(Calendar.YEAR),
-                        currentDate.value.get(Calendar.MONTH) - 1,
-                        1
-                    )
-                }, modifier = Modifier.padding(8.dp)) {
-                    Text("<", modifier = Modifier.padding(8.dp))
-                }
-
-                Surface(modifier = Modifier.padding(8.dp)) {
-                    val openYearChooser = remember { mutableStateOf(false) }
-                    Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
-                        Text("${currentDate.value.get(Calendar.YEAR)}", fontSize = 16.sp)
-                        DropdownMenu(
-                            expanded = openYearChooser.value,
-                            onDismissRequest = { openYearChooser.value = false }) {
-                            val years = (1900..2200).toList()
-                            Box {
-                                val state =
-                                    rememberLazyListState(years.indexOf(currentDate.value.get(Calendar.YEAR)))
-                                LazyColumn(
-                                    state = state,
-                                    modifier = Modifier.size(200.dp, 500.dp)
-                                ) {
-                                    items(years) {
-                                        Text(
-                                            "${it}",
-                                            fontSize = 16.sp,
-                                            modifier = Modifier
-                                                .padding(8.dp)
-                                                .clickable {
-                                                    currentDate.value.set(Calendar.YEAR, it)
-                                                    openYearChooser.value = false
-                                                })
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Text("/", fontSize = 16.sp, modifier = Modifier.padding(8.dp))
-
-                Surface(modifier = Modifier.padding(8.dp)) {
-                    val openMonthChooser = remember { mutableStateOf(false) }
-                    Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
-                        Text("${currentDate.value.get(Calendar.MONTH) + 1}", fontSize = 16.sp)
-                        DropdownMenu(
-                            expanded = openMonthChooser.value,
-                            onDismissRequest = { openMonthChooser.value = false }) {
-                            (1..12).forEach {
-                                DropdownMenuItem(
-                                    text = { Text("${it}") },
-                                    onClick = {
-                                        currentDate.value = GregorianCalendar(
-                                            currentDate.value.get(Calendar.YEAR),
-                                            it - 1,
-                                            1
-                                        )
-                                    openMonthChooser.value = false
-                                })
-                            }
-                        }
-                    }
-                }
-
-                Button(
-                    onClick = {
-                        currentDate.value = GregorianCalendar(
-                            currentDate.value.get(Calendar.YEAR),
-                            currentDate.value.get(Calendar.MONTH) + 1,
-                            1
-                        )
-                    },
-                    modifier = Modifier
-                        .padding(8.dp)
-                ) {
-                    Text(">", modifier = Modifier.padding(8.dp))
-                }
-
-                Button(
-                    onClick = {
-                        currentDate.value = Calendar.getInstance()
-                    },
-                    modifier = Modifier
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_calendar),
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        contentDescription = "Current month"
-                    )
-                }
-            }
+        Column(modifier = Modifier.scrollable(rememberScrollState(), Orientation.Vertical)) {
             Row {
                 week.forEach { dayOfWeek ->
                     Surface(modifier = Modifier.weight(1f)) {
@@ -200,12 +111,16 @@ fun CalendarUi() {
             val weeks = makeMonth(week, firstDay)
 
             weeks.forEach { w ->
-                Row {
+                Row(modifier = Modifier
+                    .weight(0.75f)) {
                     w.days().forEach { day ->
-                        DayLabelView(day.date, day.dayOfWeek, day.offDay,
+                        val candidateHolidays = holidays.filter { it.day == day.date }
+                        DayLabelView(day.date, day.dayOfWeek,
                             isToday(currentDate.value, day.date),
+                            candidateHolidays,
                             modifier = Modifier
                                 .weight(1f)
+                                .fillMaxSize()
                                 .combinedClickable(
                                     enabled = day.date != -1,
                                     onClick = {
@@ -240,6 +155,108 @@ fun CalendarUi() {
             }
         }
     }
+
+    contentViewModel.replaceAppBarContent {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Button(onClick = {
+                currentDate.value = GregorianCalendar(
+                    currentDate.value.get(Calendar.YEAR),
+                    currentDate.value.get(Calendar.MONTH) - 1,
+                    1
+                )
+            }, modifier = Modifier.padding(8.dp)) {
+                Text("<", modifier = Modifier.padding(8.dp))
+            }
+
+            Surface(modifier = Modifier.padding(8.dp)) {
+                val openYearChooser = remember { mutableStateOf(false) }
+                Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
+                    Text("${currentDate.value.get(Calendar.YEAR)}", fontSize = 16.sp)
+                    DropdownMenu(
+                        expanded = openYearChooser.value,
+                        onDismissRequest = { openYearChooser.value = false }) {
+                        val years = (1900..2200).toList()
+                        Box {
+                            val state =
+                                rememberLazyListState(years.indexOf(currentDate.value.get(Calendar.YEAR)))
+                            LazyColumn(
+                                state = state,
+                                modifier = Modifier.size(200.dp, 500.dp)
+                            ) {
+                                items(years) {
+                                    Text(
+                                        "${it}",
+                                        fontSize = 16.sp,
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .clickable {
+                                                currentDate.value.set(Calendar.YEAR, it)
+                                                openYearChooser.value = false
+                                            })
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Text("/", fontSize = 16.sp, modifier = Modifier.padding(8.dp))
+
+            Surface(modifier = Modifier.padding(8.dp)) {
+                val openMonthChooser = remember { mutableStateOf(false) }
+                Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
+                    Text("${currentDate.value.get(Calendar.MONTH) + 1}", fontSize = 16.sp)
+                    DropdownMenu(
+                        expanded = openMonthChooser.value,
+                        onDismissRequest = { openMonthChooser.value = false }) {
+                        (1..12).forEach {
+                            DropdownMenuItem(
+                                text = { Text("${it}") },
+                                onClick = {
+                                    currentDate.value = GregorianCalendar(
+                                        currentDate.value.get(Calendar.YEAR),
+                                        it - 1,
+                                        1
+                                    )
+                                    openMonthChooser.value = false
+                                })
+                        }
+                    }
+                }
+            }
+
+            Button(
+                onClick = {
+                    currentDate.value = GregorianCalendar(
+                        currentDate.value.get(Calendar.YEAR),
+                        currentDate.value.get(Calendar.MONTH) + 1,
+                        1
+                    )
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+            ) {
+                Text(">", modifier = Modifier.padding(8.dp))
+            }
+
+            Button(
+                onClick = {
+                    currentDate.value = Calendar.getInstance()
+                },
+                modifier = Modifier
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_calendar),
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    contentDescription = "Current month"
+                )
+            }
+        }
+    }
 }
 
 private fun openDateArticle(context: Context, contentViewModel: ContentViewModel, year: Int, monthOfYear: Int, dayOfMonth: Int, background: Boolean = false) {
@@ -264,6 +281,7 @@ private fun makeMonth(
 ): MutableList<Week> {
     var hasStarted1 = false
     var current1 = GregorianCalendar(firstDay.get(Calendar.YEAR), firstDay.get(Calendar.MONTH), firstDay.get(Calendar.DAY_OF_MONTH))
+
     val weeks = mutableListOf<Week>()
     for (i in 0..5) {
         val w = Week()
