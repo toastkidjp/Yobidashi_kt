@@ -357,5 +357,7 @@
     <string name="message_should_input_keyword">Please input any keyword.</string>
 
     <string name="title_converter_tool">Converter tool</string>
+    <string name="title_use_us_calendar">🇺🇸 Use USA holidays calendar</string>
+    <string name="title_use_ja_calendar">🇯🇵 Use Japanese holidays calendar</string>
 
 </resources>
