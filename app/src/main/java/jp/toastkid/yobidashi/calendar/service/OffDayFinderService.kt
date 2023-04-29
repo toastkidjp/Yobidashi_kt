@@ -8,14 +8,14 @@
 
 package jp.toastkid.yobidashi.calendar.service
 
+import jp.toastkid.yobidashi.calendar.model.holiday.Holiday
+
 interface OffDayFinderService {
 
     operator fun invoke(
         year: Int,
         month: Int,
-        date: Int,
-        dayOfWeek: Int,
         useUserOffDay: Boolean = true
-    ): Boolean
+    ): List<Holiday>
 
 }
