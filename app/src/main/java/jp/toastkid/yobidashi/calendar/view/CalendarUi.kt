@@ -74,14 +74,22 @@ fun CalendarUi() {
 
     val currentDate = rememberSaveable { mutableStateOf(Calendar.getInstance()) }
 
-    val holidayCalendars = PreferenceApplier(context).usingHolidaysCalendar().mapNotNull { HolidayCalendar.findByName(it) }
+    val preferenceApplier = PreferenceApplier(context)
+    val primaryHolidayCalendar = HolidayCalendar.findByName(preferenceApplier.usingPrimaryHolidaysCalendar())
+    val holidayCalendars = preferenceApplier.usingHolidaysCalendar().mapNotNull { HolidayCalendar.findByName(it) }
 
-    val holidays = holidayCalendars.map {
+    val labels = holidayCalendars.map {
         it.getHolidays(
             currentDate.value.get(Calendar.YEAR),
             currentDate.value.get(Calendar.MONTH) + 1
         )
     }.flatten()
+
+    val holidays = primaryHolidayCalendar
+        ?.getHolidays(
+            currentDate.value.get(Calendar.YEAR),
+            currentDate.value.get(Calendar.MONTH) + 1
+        ) ?: emptyList()
 
     Surface(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
@@ -119,10 +127,12 @@ fun CalendarUi() {
                 Row(modifier = Modifier
                     .weight(0.75f)) {
                     w.days().forEach { day ->
-                        val candidateHolidays = holidays.filter { it.day == day.date }
+                        val isOffDay = holidays.any { it.day == day.date }
+                        val candidateLabels = labels.filter { it.day == day.date }
                         DayLabelView(day.date, day.dayOfWeek,
                             isToday(currentDate.value, day.date),
-                            candidateHolidays,
+                            isOffDay,
+                            candidateLabels,
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxSize()
