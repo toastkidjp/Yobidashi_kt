@@ -12,7 +12,7 @@ import jp.toastkid.yobidashi.calendar.model.holiday.Holiday
 
 enum class FixedAmericanHoliday(val month: Int, val date: Int, val title: String) {
     NEW_YEAR(1, 1, "New year's day"),
-    JUNE_TEENS(6, 19, "JUNE TEENS"),
+    JUNE_TEENS(6, 19, "June Teens"),
     INDEPENDENCE_DAY(7, 4, "Independence Day"),
     VETERANS_DAY(11, 11, "Veterans Day"),
     CHRISTMAS(12, 25, "Christmas");
