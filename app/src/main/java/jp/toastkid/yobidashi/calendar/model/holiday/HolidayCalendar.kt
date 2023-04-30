@@ -15,11 +15,12 @@ import jp.toastkid.yobidashi.calendar.service.us.AmericanOffDayFinderService
 
 enum class HolidayCalendar(
     val settingTitleId: Int,
-    private val offDayFinderService: OffDayFinderService
+    private val offDayFinderService: OffDayFinderService,
+    val flag: String = "\uD83C\uDDFA\uD83C\uDDF8"
     ) {
 
     USA(R.string.title_use_us_calendar, AmericanOffDayFinderService()),
-    JAPAN(R.string.title_use_ja_calendar, JapaneseOffDayFinderService());
+    JAPAN(R.string.title_use_ja_calendar, JapaneseOffDayFinderService(), "\uD83C\uDDEF\uD83C\uDDF5");
 
     fun getHolidays(year: Int, month: Int): List<Holiday> {
         return offDayFinderService.invoke(
