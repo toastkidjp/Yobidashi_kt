@@ -40,14 +40,6 @@ class SpecialCaseOffDayCalculatorService {
                     makeJapaneseHoliday("Sports day", month, 24)
                 )
             }
-            if (month == 8) {
-                return setOf(
-                    makeJapaneseHoliday("Mountain day", month, 10)
-                )
-            }
-            if (month == 10) {
-                return emptySet()
-            }
         }
 
         if (year == 2021) {
@@ -56,14 +48,6 @@ class SpecialCaseOffDayCalculatorService {
                     makeJapaneseHoliday("Marine day", month, 22),
                     makeJapaneseHoliday("Sports day", month, 23)
                 )
-            }
-            if (month == 8) {
-                return setOf(
-                    makeJapaneseHoliday("Mountain day", month, 9)
-                )
-            }
-            if (month == 10) {
-                return emptySet()
             }
         }
         return emptySet()
