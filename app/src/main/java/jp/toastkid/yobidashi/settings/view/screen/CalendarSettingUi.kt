@@ -8,11 +8,16 @@
 
 package jp.toastkid.yobidashi.settings.view.screen
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
@@ -39,9 +44,40 @@ internal fun CalendarSettingUi() {
         }
         map
     }
+    val primaryCalendar = remember {
+        mutableStateOf(
+            HolidayCalendar.findByName(preferenceApplier.usingPrimaryHolidaysCalendar())
+        )
+    }
 
     Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         LazyColumn {
+            item {
+                val open = remember { mutableStateOf(false) }
+                Box(modifier = Modifier.clickable { open.value = open.value.not() }) {
+                    Text("Primary calendar ${primaryCalendar.value?.flag ?: ""}")
+                    DropdownMenu(expanded = open.value, onDismissRequest = { open.value = false }) {
+                        DropdownMenuItem(
+                            text = { Text("Clear") },
+                            onClick = {
+                                open.value = false
+                                preferenceApplier.clearUsingPrimaryHolidaysCalendar()
+                                primaryCalendar.value = null
+                            }
+                        )
+                        holidayCalendars.keys.forEach {
+                            DropdownMenuItem(
+                                text = { Text("${it.flag}") },
+                                onClick = {
+                                    open.value = false
+                                    preferenceApplier.setUsingPrimaryHolidaysCalendar(it.name)
+                                    primaryCalendar.value = it
+                                }
+                            )
+                        }
+                    }
+                }
+            }
             items(holidayCalendars.keys.toList()) { holidayCalendar ->
                 val booleanState = holidayCalendars.get(holidayCalendar) ?: return@items
                 CheckableRow(
