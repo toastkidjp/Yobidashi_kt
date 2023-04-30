@@ -20,6 +20,10 @@ class MoveableHolidayCalculatorService {
             return null
         }
 
+        if ((year == 2020 || year == 2021) && (month == 7 || month == 10)) {
+            return null
+        }
+
         val localDate = GregorianCalendar(year, month - 1, 1)
         val targetDay = MoveableJapaneseHoliday.find(month) ?: return null
         val dayOfWeek = localDate.get(Calendar.DAY_OF_WEEK)
@@ -29,10 +33,16 @@ class MoveableHolidayCalculatorService {
             Calendar.SUNDAY - (dayOfWeek - 2)
         }
 
+        val offset = if (dayOfWeek <= Calendar.MONDAY) {
+            1
+        } else {
+            0
+        }
+
         return Holiday(
             targetDay.title,
             month,
-            d + (7 * (targetDay.week - 1)),
+            d + (7 * (targetDay.week - offset)),
             "\uD83C\uDDEF\uD83C\uDDF5"
         )
     }
