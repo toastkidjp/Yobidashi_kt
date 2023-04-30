@@ -19,7 +19,6 @@ import java.util.GregorianCalendar
 class JapaneseOffDayFinderService(
     private val equinoxDayCalculator: EquinoxDayCalculator = EquinoxDayCalculator(),
     private val userOffDayService: UserOffDayService = UserOffDayService(),
-    private val moveableHolidayCalculatorService: MoveableHolidayCalculatorService = MoveableHolidayCalculatorService(),
     private val specialCaseOffDayCalculator: SpecialCaseOffDayCalculatorService = SpecialCaseOffDayCalculatorService()
 ) : OffDayFinderService {
 
