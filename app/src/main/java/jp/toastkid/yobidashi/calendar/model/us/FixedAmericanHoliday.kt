@@ -18,9 +18,14 @@ enum class FixedAmericanHoliday(val month: Int, val date: Int, val title: String
     CHRISTMAS(12, 25, "Christmas");
 
     companion object {
-        fun find(month: Int) =
-            values()
+        fun find(year: Int, month: Int): Holiday? {
+            if (year < 2021 && month == 6) {
+                return null
+            }
+
+            return values()
                 .firstOrNull { month == it.month }
                 ?.let { Holiday(it.title, it.month, it.date) }
+        }
     }
 }

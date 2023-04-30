@@ -33,7 +33,7 @@ class AmericanOffDayFinderService : OffDayFinderService {
             holidays.add(it)
         }
 
-        FixedAmericanHoliday.find(month)?.let {
+        FixedAmericanHoliday.find(year, month)?.let {
             holidays.add(it)
 
             calendar.set(Calendar.DAY_OF_MONTH, it.day)
