@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.calendar.service.japan
 
 import jp.toastkid.yobidashi.calendar.model.holiday.Holiday
 import jp.toastkid.yobidashi.calendar.model.japan.FixedJapaneseHoliday
+import jp.toastkid.yobidashi.calendar.model.japan.MoveableJapaneseHoliday
 import jp.toastkid.yobidashi.calendar.service.OffDayFinderService
 import jp.toastkid.yobidashi.calendar.service.UserOffDayService
 import java.util.Calendar
@@ -61,10 +62,7 @@ class JapaneseOffDayFinderService(
         }
 
         holidays.addAll(specialCaseOffDayCalculator(year, month))
-
-        moveableHolidayCalculatorService.invoke(year, month)?.let {
-            holidays.add(it)
-        }
+        holidays.addAll(MoveableJapaneseHoliday.find(year, month))
 
         return substitutes.union(holidays).toList()
     }
