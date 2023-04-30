@@ -49,9 +49,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.calendar.model.Week
-import jp.toastkid.yobidashi.calendar.service.us.AmericanOffDayFinderService
+import jp.toastkid.yobidashi.calendar.model.holiday.HolidayCalendar
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -73,10 +74,14 @@ fun CalendarUi() {
 
     val currentDate = rememberSaveable { mutableStateOf(Calendar.getInstance()) }
 
-    val holidays = AmericanOffDayFinderService().invoke(
-        currentDate.value.get(Calendar.YEAR),
-        currentDate.value.get(Calendar.MONTH) + 1
-    )
+    val holidayCalendars = PreferenceApplier(context).usingHolidaysCalendar().mapNotNull { HolidayCalendar.findByName(it) }
+
+    val holidays = holidayCalendars.map {
+        it.getHolidays(
+            currentDate.value.get(Calendar.YEAR),
+            currentDate.value.get(Calendar.MONTH) + 1
+        )
+    }.flatten()
 
     Surface(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
