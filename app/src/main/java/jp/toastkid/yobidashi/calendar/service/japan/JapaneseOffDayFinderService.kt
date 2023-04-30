@@ -27,48 +27,67 @@ class JapaneseOffDayFinderService(
             return emptyList()
         }
 
+        val holidays = mutableListOf<Holiday>()
+
         if (month == 3) {
-            return listOf(Holiday("Vernal equinox day", 3, equinoxDayCalculator.calculateVernalEquinoxDay(year)))
+            val vernalEquinoxDay = equinoxDayCalculator.calculateVernalEquinoxDay(year)
+            holidays.add(vernalEquinoxDay)
         }
 
         if (month == 9) {
-            return listOf(Holiday("Autumnal equinox day", 3, equinoxDayCalculator.calculateAutumnalEquinoxDay(year)))
-        }
-
-        val specialCaseHolidays = specialCaseOffDayCalculator(year, month)
-        if (month != 5) {
-            return specialCaseHolidays.toList()
-        }
-
-        val moveableHolidayCandidate = moveableHolidayCalculatorService.invoke(year, month)
-        if (moveableHolidayCandidate != null) {
-            return listOf(moveableHolidayCandidate)
+            val autumnalEquinoxDay = equinoxDayCalculator.calculateAutumnalEquinoxDay(year)
+            holidays.add(autumnalEquinoxDay)
         }
 
         /*if (useUserOffDay && userOffDayService(month, date)) {
             return true
         }*/
 
-        var firstOrNull = FixedJapaneseHoliday.find(month)
-        if (firstOrNull.isEmpty()) {
-            return emptyList()
-        }
+        var firstOrNull = FixedJapaneseHoliday.find(year, month)
+        holidays.addAll(firstOrNull)
 
         if (month == 5) {
             val calendar = GregorianCalendar(year, month - 1, 6)
             if (calendar.get(Calendar.DAY_OF_WEEK) <= Calendar.WEDNESDAY) {
-                return firstOrNull
-                    .union(listOf(Holiday("Substitute holiday", month, 6)))
-                    .union(specialCaseHolidays).toList()
+                holidays.add(Holiday("Substitute holiday", month, 6, "\uD83C\uDDEF\uD83C\uDDF5"))
             }
         }
 
-        return firstOrNull.mapNotNull {
+        val substitutes = holidays.mapNotNull {
             val calendar = GregorianCalendar(year, month - 1, it.day)
-            if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                Holiday("Substitute Holiday", month, it.day + 1)
+            if (month != 5 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                Holiday("Substitute Holiday", month, it.day + 1, "\uD83C\uDDEF\uD83C\uDDF5")
             } else null
-        }.union(firstOrNull).toList()
+        }
+
+        holidays.addAll(specialCaseOffDayCalculator(year, month))
+
+        moveableHolidayCalculatorService.invoke(year, month)?.let {
+            holidays.add(it)
+        }
+
+        return substitutes.union(holidays).toList()
+    }
+
+    private fun makeSubstituteIfNeed(
+        year: Int,
+        vernalEquinoxDay: Holiday,
+        holidays: MutableList<Holiday>,
+        month: Int
+    ): Holiday? {
+        return if (GregorianCalendar(
+                year,
+                month - 1,
+                vernalEquinoxDay.day
+            ).get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+        ) {
+             Holiday(
+                "Substitute holiday",
+                month,
+                vernalEquinoxDay.day + 1,
+                "\uD83C\uDDEF\uD83C\uDDF5"
+            )
+        } else null
     }
 
 }
