@@ -48,7 +48,7 @@ fun DayLabelView(
                 modifier = Modifier.padding(4.dp)
             )
             candidateHolidays.forEach {
-                Text(it.title, fontSize = 9.sp, color = OFF_DAY_FG, softWrap = false,
+                Text("${it.flag} ${it.title}", fontSize = 9.sp, color = OFF_DAY_FG, softWrap = false,
                     modifier = Modifier.padding(4.dp)
                 )
             }
