@@ -23,7 +23,29 @@ enum class FixedJapaneseHoliday(val month: Int, val date: Int, val japaneseTitle
     ;
 
     companion object {
-        fun find(month: Int) = values().filter { it.month == month }
-            .map { Holiday(it.japaneseTitle, it.month, it.date, "\uD83C\uDDEF\uD83C\uDDF5") }
+        fun find(year: Int, month: Int): List<Holiday> {
+            return values().filter { it.month == month }
+                .map {
+                    Holiday(
+                        it.japaneseTitle,
+                        it.month,
+                        calculateDate(year, it),
+                        "\uD83C\uDDEF\uD83C\uDDF5"
+                    )
+                }
+        }
+
+        private inline fun calculateDate(year: Int, it: FixedJapaneseHoliday): Int {
+            if (it != MOUNTAIN_DAY) {
+                return it.date
+            }
+
+            return when (year) {
+                2020 -> 10
+                2021 -> 8
+                else -> it.date
+            }
+        }
+
     }
 }
