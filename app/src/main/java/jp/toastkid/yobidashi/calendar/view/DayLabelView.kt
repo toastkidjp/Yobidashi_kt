@@ -27,18 +27,17 @@ fun DayLabelView(
     date: Int,
     dayOfWeek: Int,
     today: Boolean,
-    candidateHolidays: List<Holiday>,
+    offDay: Boolean,
+    labels: List<Holiday>,
     modifier: Modifier
 ) {
-    val offDay = candidateHolidays.isNotEmpty()
-
     Surface(
         color = getSurfaceColor(today),
         modifier = modifier
     ) {
         Column {
             Text(if (date == -1) "" else "$date",
-                fontSize = if (candidateHolidays.isEmpty()) 16.sp else 14.sp,
+                fontSize = if (labels.isEmpty()) 16.sp else 14.sp,
                 textAlign = TextAlign.Start,
                 color = when (dayOfWeek) {
                     Calendar.SUNDAY -> OFF_DAY_FG
@@ -47,7 +46,7 @@ fun DayLabelView(
                 },
                 modifier = Modifier.padding(4.dp)
             )
-            candidateHolidays.forEach {
+            labels.forEach {
                 Text("${it.flag} ${it.title}", fontSize = 9.sp, color = OFF_DAY_FG, softWrap = false,
                     modifier = Modifier.padding(4.dp)
                 )
