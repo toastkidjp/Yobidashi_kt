@@ -49,9 +49,9 @@ dependencies {
     implementation "androidx.paging:paging-common-ktx:$libVersions.paging"
 
     implementation "androidx.compose.material3:material3:$libVersions.compose_material3"
-    implementation "io.coil-kt:coil-compose:$libVersions.coil_compose"
     implementation "androidx.paging:paging-compose:$libVersions.paging_compose"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersions.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$libVersions.lifecycle"
     implementation "androidx.compose.runtime:runtime-livedata:$libVersions.compose"
     implementation 'androidx.activity:activity-compose:1.4.0'
 
