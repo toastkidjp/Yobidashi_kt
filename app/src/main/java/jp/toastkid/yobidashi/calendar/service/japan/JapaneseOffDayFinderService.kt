@@ -69,25 +69,4 @@ class JapaneseOffDayFinderService(
         return substitutes.union(holidays).toList()
     }
 
-    private fun makeSubstituteIfNeed(
-        year: Int,
-        vernalEquinoxDay: Holiday,
-        holidays: MutableList<Holiday>,
-        month: Int
-    ): Holiday? {
-        return if (GregorianCalendar(
-                year,
-                month - 1,
-                vernalEquinoxDay.day
-            ).get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
-        ) {
-             Holiday(
-                "Substitute holiday",
-                month,
-                vernalEquinoxDay.day + 1,
-                "\uD83C\uDDEF\uD83C\uDDF5"
-            )
-        } else null
-    }
-
 }
