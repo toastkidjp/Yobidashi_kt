@@ -43,7 +43,7 @@ class JapaneseOffDayFinderService(
             return true
         }*/
 
-        var firstOrNull = FixedJapaneseHoliday.find(year, month)
+        val firstOrNull = FixedJapaneseHoliday.find(year, month)
         holidays.addAll(firstOrNull)
 
         if (month == 5) {
