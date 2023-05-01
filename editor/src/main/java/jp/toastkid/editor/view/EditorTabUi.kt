@@ -247,7 +247,6 @@ private fun AppBarContent(
     fileActionUseCase: FileActionUseCase
 ) {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = PreferenceApplier(context)
 
     val openLoadFromStorageDialog = remember { mutableStateOf(false) }
     val openInputFileNameDialog = remember { mutableStateOf(false) }

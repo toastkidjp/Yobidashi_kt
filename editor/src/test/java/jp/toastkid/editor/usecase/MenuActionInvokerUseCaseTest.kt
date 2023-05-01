@@ -36,6 +36,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.translate.TranslationUrlGenerator
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.UrlFactory
@@ -407,6 +408,22 @@ class MenuActionInvokerUseCaseTest {
 
         assertTrue(handled)
         verify(exactly = 1) { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }
+    }
+
+    @Test
+    fun testTranslate() {
+        mockkConstructor(TranslationUrlGenerator::class)
+        every { anyConstructed<TranslationUrlGenerator>().invoke(any()) }.returns("https://test/url")
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) }.returns(mockk())
+        every { browserViewModel.preview(any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_translate, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { anyConstructed<TranslationUrlGenerator>().invoke(any()) }
+        verify { browserViewModel.preview(any()) }
     }
 
 }

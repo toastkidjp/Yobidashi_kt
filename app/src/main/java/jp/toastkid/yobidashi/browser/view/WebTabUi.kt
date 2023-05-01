@@ -270,7 +270,9 @@ internal fun WebTabUi(webTab: WebTab) {
             AppBarContent(
                 browserViewModel,
                 browserModule
-            ) { readerModeText.value = it }
+            ) {
+                readerModeText.value = if (readerModeText.value.isNotEmpty()) "" else it
+            }
         }
 
         contentViewModel.toTop.observe(lifecycleOwner) {
@@ -473,6 +475,7 @@ private fun AppBarContent(
                 tint,
                 enableBack.value
             ) { browserModule.back() }
+
             HeaderSubButton(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,

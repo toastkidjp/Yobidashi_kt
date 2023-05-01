@@ -20,6 +20,12 @@
         android:icon="@drawable/ic_search"
         />
     <item
+        android:id="@+id/translate"
+        android:title="@string/translate"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_search"
+        />
+    <item
         android:id="@+id/count"
         android:title="@string/title_count"
         android:orderInCategory="100"
