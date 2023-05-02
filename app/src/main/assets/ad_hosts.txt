@@ -492,6 +492,7 @@ cdn.vt.open8.com
 cdn.x-lift.jp
 cdn.z-profit.com
 cdni.amoad.com
+cdn4.fireworktv.com
 cf.ad-v.jp
 cf.cdn.inmobi.com
 cf.smaad.net
@@ -607,6 +608,7 @@ feeda.info
 fem-staffservice.ssl-lolipop.jp
 file.gamefeat.net
 file.ziyu.net
+firework.tv
 fls-fe.amazon-adsystem.com
 footballnet.vis1.shinobi.jp
 forshrd.com
