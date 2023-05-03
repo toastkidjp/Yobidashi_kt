@@ -65,7 +65,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
@@ -80,6 +79,8 @@ import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
 import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
+import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
+import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
 import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
@@ -289,27 +290,6 @@ internal fun WebTabUi(webTab: WebTab) {
             }
         }
 
-        pageSearcherViewModel.also { viewModel ->
-            viewModel.find.observe(lifecycleOwner, Observer {
-                val word = it.getContentIfNotHandled() ?: return@Observer
-                browserModule.find(word)
-            })
-
-            viewModel.upward.observe(lifecycleOwner, Observer {
-                it.getContentIfNotHandled() ?: return@Observer
-                browserModule.findUp()
-            })
-
-            viewModel.downward.observe(lifecycleOwner, Observer {
-                it.getContentIfNotHandled() ?: return@Observer
-                browserModule.findDown()
-            })
-
-            viewModel.clear.observe(lifecycleOwner) {
-                browserModule.clearMatches()
-            }
-        }
-
         browserViewModel.event.collect {
             when (it) {
                 is OnStopLoadEvent -> {
@@ -329,6 +309,23 @@ internal fun WebTabUi(webTab: WebTab) {
                     GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
                 }
                 else -> Unit
+            }
+        }
+    })
+
+    LaunchedEffect(key1 = lifecycleOwner, block = {
+        pageSearcherViewModel.event.collect {
+            when (it) {
+                is FindInPageEvent -> {
+                    if (it.upward) {
+                        browserModule.findUp()
+                    } else {
+                        browserModule.find(it.word)
+                    }
+                }
+                is ClearFinderInputEvent -> {
+                    browserModule.clearMatches()
+                }
             }
         }
     })

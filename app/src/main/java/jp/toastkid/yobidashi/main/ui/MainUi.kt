@@ -89,6 +89,7 @@ import jp.toastkid.lib.viewmodel.event.content.NavigationEvent
 import jp.toastkid.lib.viewmodel.event.content.RefreshContentEvent
 import jp.toastkid.lib.viewmodel.event.content.ReplaceToCurrentTabContentEvent
 import jp.toastkid.lib.viewmodel.event.content.SwitchTabListEvent
+import jp.toastkid.lib.viewmodel.event.finder.CloseFinderEvent
 import jp.toastkid.lib.viewmodel.event.tab.MoveTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleListEvent
@@ -237,11 +238,14 @@ internal fun Content() {
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    pageSearcherViewModel.close.observe(activity) {
-        it?.getContentIfNotHandled() ?: return@observe
-        keyboardController?.hide()
-        focusManager.clearFocus(true)
-    }
+    LaunchedEffect(key1 = contentViewModel, block = {
+        pageSearcherViewModel.event.collect {
+            if (it is CloseFinderEvent) {
+                keyboardController?.hide()
+                focusManager.clearFocus(true)
+            }
+        }
+    })
 
     LaunchedEffect(key1 = contentViewModel, block = {
         contentViewModel.event.collect {

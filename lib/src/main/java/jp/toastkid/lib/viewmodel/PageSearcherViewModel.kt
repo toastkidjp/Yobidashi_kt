@@ -10,12 +10,23 @@ package jp.toastkid.lib.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import jp.toastkid.lib.lifecycle.Event
+import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
+import jp.toastkid.lib.viewmodel.event.finder.CloseFinderEvent
+import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
  */
 class PageSearcherViewModel : ViewModel() {
+
+    private val _event = MutableSharedFlow<jp.toastkid.lib.viewmodel.event.Event>()
+
+    val event = _event.asSharedFlow()
 
     private val _find = MutableLiveData<Event<String>>()
 
@@ -38,30 +49,32 @@ class PageSearcherViewModel : ViewModel() {
     val close: LiveData<Event<Unit>> = _close
 
     fun find(s: String?) {
-        _find.postValue(Event(s ?: ""))
+        viewModelScope.launch {
+            _event.emit(FindInPageEvent(s ?: ""))
+        }
     }
 
     fun findDown(s: String?) {
-        _downward.postValue(Event(s ?: ""))
+        viewModelScope.launch {
+            _event.emit(FindInPageEvent(s ?: ""))
+        }
     }
 
     fun findUp(s: String?) {
-        _upward.postValue(Event(s ?: ""))
-    }
-
-    fun findDown() {
-        findDown(null)
-    }
-
-    fun findUp() {
-        findUp(null)
+        viewModelScope.launch {
+            _event.emit(FindInPageEvent(s ?: "", true))
+        }
     }
 
     fun hide() {
-        _close.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(CloseFinderEvent())
+        }
     }
 
     fun clearInput() {
-        _clear.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(ClearFinderInputEvent())
+        }
     }
 }

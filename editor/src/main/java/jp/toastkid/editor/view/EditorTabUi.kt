@@ -89,6 +89,7 @@ import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
 import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
+import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
@@ -185,20 +186,6 @@ fun EditorTabUi(path: String?) {
             .padding(horizontal = 8.dp, vertical = 2.dp)
     )
 
-    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, context)
-    pageSearcherViewModel.upward.observe(context) {
-        val word = it.getContentIfNotHandled() ?: return@observe
-        finder.findUp(word)
-    }
-    pageSearcherViewModel.downward.observe(context, {
-        val word = it.getContentIfNotHandled() ?: return@observe
-        finder.findDown(word)
-    })
-    pageSearcherViewModel.find.observe(context) {
-        val word = it.getContentIfNotHandled() ?: return@observe
-        finder.findDown(word)
-    }
-
     val dialogState = remember { mutableStateOf(false) }
 
     ConfirmDialog(
@@ -233,6 +220,7 @@ fun EditorTabUi(path: String?) {
 
     contentViewModel.clearOptionMenus()
 
+    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, context)
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(key1 = Unit, block = {
         contentViewModel.showAppBar(coroutineScope)
@@ -242,6 +230,18 @@ fun EditorTabUi(path: String?) {
                 contentViewModel,
                 fileActionUseCase
             )
+        }
+
+        pageSearcherViewModel.event.collect {
+            when (it) {
+                is FindInPageEvent -> {
+                    if (it.upward) {
+                        finder.findUp(it.word)
+                    } else {
+                        finder.findDown(it.word)
+                    }
+                }
+            }
         }
     })
 }

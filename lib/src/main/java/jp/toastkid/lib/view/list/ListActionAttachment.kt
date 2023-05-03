@@ -10,6 +10,7 @@ package jp.toastkid.lib.view.list
 
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 
 class ListActionAttachment(
     private val contentViewModel: ContentViewModel?,
@@ -32,17 +34,22 @@ class ListActionAttachment(
         predicate: (T, String) -> Boolean
     ) {
         ScrollerUseCase(contentViewModel, scrollableState).invoke(lifecycleOwner)
-        pageSearcherViewModel?.find?.observe(lifecycleOwner, {
-            val word = it.getContentIfNotHandled() ?: return@observe
-            listItemState.clear()
-            if (word.isBlank()) {
-                listItemState.addAll(fullItems)
-                return@observe
-            }
+        LaunchedEffect(key1 = lifecycleOwner, block = {
+            pageSearcherViewModel?.event?.collect {
+                when (it) {
+                    is FindInPageEvent -> {
+                        listItemState.clear()
+                        if (it.word.isBlank()) {
+                            listItemState.addAll(fullItems)
+                            return@collect
+                        }
 
-            listItemState.addAll(
-                fullItems.filter { item -> predicate(item, word) }
-            )
+                        listItemState.addAll(
+                            fullItems.filter { item -> predicate(item, it.word) }
+                        )
+                    }
+                }
+            }
         })
     }
 

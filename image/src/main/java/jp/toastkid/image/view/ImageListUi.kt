@@ -27,7 +27,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +52,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -113,16 +113,22 @@ fun ImageListUi() {
             contentViewModel?.snackShort(R.string.message_audio_file_is_not_found)
         }
 
-    (context as? ViewModelStoreOwner)?.let {
+    val localLifecycleOwner = LocalLifecycleOwner.current
+    val pageSearcherViewModel = (context as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(PageSearcherViewModel::class.java)
-            .also { viewModel ->
-                val keyword = viewModel.find.observeAsState().value?.getContentIfNotHandled()
-                if (keyword.isNullOrBlank()) {
-                    return@also
-                }
-                imageFilterUseCase(keyword)
-            }
     }
+    LaunchedEffect(key1 = localLifecycleOwner, block = {
+        pageSearcherViewModel?.event?.collect {
+            when (it) {
+                is FindInPageEvent -> {
+                    if (it.word.isBlank()) {
+                        return@collect
+                    }
+                    imageFilterUseCase(it.word)
+                }
+            }
+        }
+    })
 
     if (preview.value.not()) {
         LaunchedEffect(key1 = "first_launch") {
