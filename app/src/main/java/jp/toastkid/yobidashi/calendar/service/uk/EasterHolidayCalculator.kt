@@ -14,7 +14,7 @@ class EasterHolidayCalculator(
     private val easterDateCalculator: EasterDateCalculator = EasterDateCalculator()
 ) {
 
-    operator fun invoke(year: Int): List<Holiday> {
+    operator fun invoke(year: Int, month: Int): List<Holiday> {
         val (march, _) = easterDateCalculator.invoke(year)
         val goodFridayDate = march - 2
         val easterMondayDate = march + 1
@@ -31,7 +31,7 @@ class EasterHolidayCalculator(
                 if (inMarch(easterMondayDate)) easterMondayDate else easterMondayDate - 31,
                 "\uD83C\uDDEC\uD83C\uDDE7"
             )
-        )
+        ).filter { it.month == month }
     }
 
     private fun inMarch(march: Int) = march in 1..31

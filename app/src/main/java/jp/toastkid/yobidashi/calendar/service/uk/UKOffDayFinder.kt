@@ -34,8 +34,8 @@ class UKOffDayFinder : OffDayFinderService {
             } else null
         }
 
-        holidays.addAll(MoveableUKHoliday.find(month))
-        holidays.addAll(EasterHolidayCalculator().invoke(year))
+        holidays.addAll(MoveableUKHoliday.find(year, month))
+        holidays.addAll(EasterHolidayCalculator().invoke(year, month))
 
         return substitutes.union(holidays).toList()
     }
