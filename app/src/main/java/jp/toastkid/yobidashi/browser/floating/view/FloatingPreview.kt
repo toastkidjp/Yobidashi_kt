@@ -27,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -71,7 +70,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
     }
 
     Column(modifier = Modifier.height(400.dp)) {
-        val progressState = viewModel.progress.observeAsState()
+        val progressState = viewModel.progress
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -93,8 +92,8 @@ internal fun FloatingPreviewUi(uri: Uri) {
 
             BrowserTitle(
                 progressState,
-                viewModel.title.observeAsState(),
-                viewModel.url.observeAsState(),
+                viewModel.title,
+                viewModel.url,
                 Modifier.weight(1f)
             )
 
