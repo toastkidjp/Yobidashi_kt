@@ -7,11 +7,14 @@
  */
 package jp.toastkid.lib
 
+import jp.toastkid.lib.viewmodel.event.Event
+
 /**
  * @author toastkidjp
  */
 data class SnackbarEvent(
-        val message: String,
+        val message: String? = null,
+        val messageId: Int? = null,
         val actionLabel: String? = null,
         val action: () -> Unit = {}
-)
+) : Event
