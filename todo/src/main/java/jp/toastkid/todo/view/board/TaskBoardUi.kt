@@ -82,10 +82,12 @@ fun TaskBoardUi() {
 
     val repository = TodoTaskDatabase.find(context).repository()
     val preferenceApplier = PreferenceApplier(context)
-    val bottomSheetScaffoldState = remember { mutableStateOf(false) }
 
     val menuUseCase = ItemMenuPopupActionUseCase(
-        { taskAdditionDialogFragmentViewModel?.setTask(it) },
+        {
+            taskAdditionDialogFragmentViewModel?.setTask(it)
+            taskAdditionDialogFragmentViewModel.show()
+        },
         {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
@@ -109,23 +111,19 @@ fun TaskBoardUi() {
                 .cachedIn(coroutineScope)
         }
         tasks.value = flow
-
-        taskAdditionDialogFragmentViewModel?.task?.observe(context, {
-            coroutineScope.launch {
-                bottomSheetScaffoldState.value = true
-            }
-        })
     })
 
     ViewModelProvider(context).get(ContentViewModel::class.java)
         .replaceAppBarContent {
-            AppBarUi { taskAdditionDialogFragmentViewModel?.setTask(null) }
+            AppBarUi {
+                taskAdditionDialogFragmentViewModel?.setTask(null)
+                taskAdditionDialogFragmentViewModel.show()
+            }
         }
 
     TaskEditorUi(
         { TaskBoard(tasks.value, menuUseCase) },
         taskAdditionDialogFragmentViewModel,
-        bottomSheetScaffoldState,
         {
             CoroutineScope(Dispatchers.IO).launch {
                 repository.insert(it)

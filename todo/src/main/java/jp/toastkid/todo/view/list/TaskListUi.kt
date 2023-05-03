@@ -45,7 +45,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -76,10 +75,11 @@ fun TaskListUi() {
     val taskAdditionDialogFragmentViewModel =
         viewModel(TaskAdditionDialogFragmentViewModel::class.java, context)
 
-    ViewModelProvider(context).get(ContentViewModel::class.java)
+    viewModel(ContentViewModel::class.java, context)
         .replaceAppBarContent {
             AppBarUi {
                 taskAdditionDialogFragmentViewModel?.setTask(null)
+                taskAdditionDialogFragmentViewModel.show()
             }
         }
 
@@ -105,10 +105,12 @@ fun TaskListUi() {
     })
 
     val preferenceApplier = PreferenceApplier(context)
-    val bottomSheetScaffoldState = remember { mutableStateOf(false) }
 
     val menuUseCase = ItemMenuPopupActionUseCase(
-        { taskAdditionDialogFragmentViewModel.setTask(it) },
+        {
+            taskAdditionDialogFragmentViewModel.setTask(it)
+            taskAdditionDialogFragmentViewModel.show()
+        },
         {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
@@ -118,16 +120,9 @@ fun TaskListUi() {
         }
     )
 
-    taskAdditionDialogFragmentViewModel.task?.observe(context, {
-        coroutineScope.launch {
-            bottomSheetScaffoldState.value = true
-        }
-    })
-
     TaskEditorUi(
         { TaskList(tasks.value, menuUseCase) },
         taskAdditionDialogFragmentViewModel,
-        bottomSheetScaffoldState,
         {
             CoroutineScope(Dispatchers.IO).launch {
                 repository.insert(it)
