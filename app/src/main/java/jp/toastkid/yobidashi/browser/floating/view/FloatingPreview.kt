@@ -65,7 +65,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
 
     val webView = remember {
         val view = WebViewFactory().make(context)
-        WebViewInitializer(preferenceApplier, viewModel)(view)
+        WebViewInitializer.launch(view, viewModel)
         DarkModeApplier().invoke(view, preferenceApplier.useDarkMode())
         view
     }
