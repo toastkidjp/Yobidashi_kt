@@ -11,6 +11,7 @@ package jp.toastkid.yobidashi.main.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -70,7 +71,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -78,13 +78,24 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.SnackbarEvent
+import jp.toastkid.lib.viewmodel.event.content.SnackbarEvent
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.compat.material3.ModalBottomSheetLayout
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.lib.viewmodel.event.content.NavigationEvent
+import jp.toastkid.lib.viewmodel.event.content.RefreshContentEvent
+import jp.toastkid.lib.viewmodel.event.content.ReplaceToCurrentTabContentEvent
+import jp.toastkid.lib.viewmodel.event.content.SwitchTabListEvent
+import jp.toastkid.lib.viewmodel.event.tab.MoveTabEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenArticleEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenArticleListEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenCalendarEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenEditorEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenPdfEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenWebSearchEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
@@ -155,28 +166,6 @@ internal fun Content() {
                 tabs.saveTabList()
             }
         )
-
-    initializeContentViewModel(activity, tabs, navigationHostController, snackbarHostState)
-
-    contentViewModel.replaceToCurrentTab.observe(activity) {
-        it.getContentIfNotHandled() ?: return@observe
-        replaceToCurrentTab(tabs, navigationHostController)
-    }
-    contentViewModel.refresh.observe(activity, {
-        val colorPair = preferenceApplier.colorPair()
-
-        RecentAppColoringUseCase(
-            activity::getString,
-            { activity.resources },
-            activity::setTaskDescription,
-            Build.VERSION.SDK_INT
-        ).invoke(preferenceApplier.color)
-
-        contentViewModel.setColorPair(colorPair)
-
-        contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
-        contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
-    })
 
     val activityResultLauncher: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -254,33 +243,106 @@ internal fun Content() {
         focusManager.clearFocus(true)
     }
 
-    contentViewModel.switchTabList?.observe(activity, Observer {
-        it?.getContentIfNotHandled() ?: return@Observer
-        contentViewModel?.setBottomSheetContent { TabListUi(tabs) }
-        coroutineScope?.launch {
-            contentViewModel?.switchBottomSheet()
+    LaunchedEffect(key1 = contentViewModel, block = {
+        contentViewModel.event.collect {
+            when (it) {
+                is SwitchTabListEvent -> {
+                    contentViewModel?.setBottomSheetContent { TabListUi(tabs) }
+                    coroutineScope?.launch {
+                        contentViewModel?.switchBottomSheet()
+                    }
+                }
+                is MoveTabEvent -> {
+                    if (it.movingStep == -1) {
+                        tabs.movePreviousTab()
+                    } else {
+                        tabs.moveNextTab()
+                    }
+                    replaceToCurrentTab(tabs, navigationHostController)
+                }
+                is OpenPdfEvent -> {
+                    requestPermissionForOpenPdfTab.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                }
+                is OpenEditorEvent -> {
+                    tabs.openNewEditorTab()
+                    replaceToCurrentTab(tabs, navigationHostController)
+                }
+                is SnackbarEvent -> {
+                    showSnackbar(activity, snackbarHostState, it)
+                }
+                is OpenWebSearchEvent -> {
+                    when (navigationHostController.currentDestination?.route) {
+                        "tab/web/current" -> {
+                            val currentTabWebView = GlobalWebViewPool.getLatest() ?: return@collect
+                            val currentTitle = Uri.encode(currentTabWebView.title)
+                            val currentUrl = Uri.encode(currentTabWebView.url)
+                            val query = Uri.encode(
+                                SearchQueryExtractor().invoke(currentTabWebView.url)
+                                    ?.replace("\n", "") ?: ""
+                            )
+                            navigate(
+                                navigationHostController,
+                                "search/with/?query=$query&title=$currentTitle&url=$currentUrl"
+                            )
+                        }
+                        else ->
+                            navigate(navigationHostController, "search/top")
+                    }
+                }
+                is OpenArticleEvent -> {
+                    val title = it.title
+                    val onBackground = it.onBackground
+
+                    val tab = tabs.openNewArticleTab(title, onBackground)
+
+                    if (onBackground) {
+                        showSnackbar(
+                            activity,
+                            snackbarHostState, SnackbarEvent(
+                                activity.getString(R.string.message_tab_open_background, title),
+                                actionLabel = activity.getString(R.string.open)
+                            ) {
+                                tabs.replace(tab)
+                                replaceToCurrentTab(tabs, navigationHostController)
+                            }
+                        )
+                        return@collect
+                    }
+
+                    replaceToCurrentTab(tabs, navigationHostController)
+                }
+                is OpenArticleListEvent -> {
+                    tabs.openArticleList()
+                    replaceToCurrentTab(tabs, navigationHostController)
+                }
+                is OpenCalendarEvent -> {
+                    tabs.openCalendar()
+                    replaceToCurrentTab(tabs, navigationHostController)
+                }
+                is NavigationEvent -> {
+                    navigate(navigationHostController, it.route)
+                }
+                is ReplaceToCurrentTabContentEvent -> {
+                    replaceToCurrentTab(tabs, navigationHostController)
+                }
+                is RefreshContentEvent -> {
+                    val colorPair = preferenceApplier.colorPair()
+
+                    RecentAppColoringUseCase(
+                        activity::getString,
+                        { activity.resources },
+                        activity::setTaskDescription,
+                        Build.VERSION.SDK_INT
+                    ).invoke(preferenceApplier.color)
+
+                    contentViewModel.setColorPair(colorPair)
+
+                    contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
+                    contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
+                }
+            }
         }
     })
-
-    contentViewModel.moveTab.observe(activity) {
-        val i = it?.getContentIfNotHandled() ?: return@observe
-        if (i == -1) {
-            tabs.movePreviousTab()
-        } else {
-            tabs.moveNextTab()
-        }
-        replaceToCurrentTab(tabs, navigationHostController)
-    }
-
-    contentViewModel.openPdf.observe(activity) {
-        it?.getContentIfNotHandled() ?: return@observe
-        requestPermissionForOpenPdfTab.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-    }
-    contentViewModel.openEditorTab?.observe(activity) {
-        it?.getContentIfNotHandled() ?: return@observe
-        tabs.openNewEditorTab()
-        replaceToCurrentTab(tabs, navigationHostController)
-    }
 
     val browserViewModel = viewModel(BrowserViewModel::class.java, activity)
 
@@ -551,89 +613,16 @@ private fun navigate(navigationController: NavHostController?, route: String) {
     }
 }
 
-private fun initializeContentViewModel(
-    activity: ComponentActivity,
-    tabs: TabAdapter,
-    navigationHostController: NavHostController,
-    snackbarHostState: SnackbarHostState
-) {
-    val contentViewModel = ViewModelProvider(activity).get(ContentViewModel::class.java)
-    contentViewModel?.snackbar?.observe(activity, Observer {
-        val snackbarEvent = it.getContentIfNotHandled() ?: return@Observer
-        showSnackbar(snackbarHostState, snackbarEvent)
-    })
-    contentViewModel?.snackbarRes?.observe(activity, Observer {
-        val messageId = it?.getContentIfNotHandled() ?: return@Observer
-        showSnackbar(snackbarHostState, SnackbarEvent(activity.getString(messageId)))
-    })
-    contentViewModel.webSearch.observe(activity) {
-        it?.getContentIfNotHandled() ?: return@observe
-        when (navigationHostController.currentDestination?.route) {
-            "tab/web/current" -> {
-                val currentTabWebView = GlobalWebViewPool.getLatest() ?: return@observe
-                val currentTitle = Uri.encode(currentTabWebView.title)
-                val currentUrl = Uri.encode(currentTabWebView.url)
-                val query = Uri.encode(
-                    SearchQueryExtractor().invoke(currentTabWebView.url)
-                        ?.replace("\n", "") ?: ""
-                )
-                navigate(
-                    navigationHostController,
-                    "search/with/?query=$query&title=$currentTitle&url=$currentUrl"
-                )
-            }
-            else ->
-                navigate(navigationHostController, "search/top")
-        }
-    }
-
-    contentViewModel.newArticle.observe(activity, Observer {
-        val titleAndOnBackground = it?.getContentIfNotHandled() ?: return@Observer
-
-        val title = titleAndOnBackground.first
-        val onBackground = titleAndOnBackground.second
-
-        val tab = tabs.openNewArticleTab(title, onBackground)
-
-        if (onBackground) {
-            showSnackbar(
-                snackbarHostState, SnackbarEvent(
-                    activity.getString(R.string.message_tab_open_background, title),
-                    activity.getString(R.string.open)
-                ) {
-                    tabs.replace(tab)
-                    replaceToCurrentTab(tabs, navigationHostController)
-                }
-            )
-            return@Observer
-        }
-
-        replaceToCurrentTab(tabs, navigationHostController)
-    })
-    contentViewModel.openArticleList?.observe(activity, {
-        it?.getContentIfNotHandled() ?: return@observe
-        tabs.openArticleList()
-        replaceToCurrentTab(tabs, navigationHostController)
-    })
-    contentViewModel.openCalendar.observe(activity) {
-        it?.getContentIfNotHandled() ?: return@observe
-        tabs.openCalendar()
-        replaceToCurrentTab(tabs, navigationHostController)
-    }
-    contentViewModel.nextRoute.observe(activity) {
-        val route = it?.getContentIfNotHandled() ?: return@observe
-        navigate(navigationHostController, route)
-    }
-}
-
 private fun showSnackbar(
+    context: Context,
     snackbarHostState: SnackbarHostState,
     snackbarEvent: SnackbarEvent
 ) {
+    val message = snackbarEvent.message ?: snackbarEvent.messageId?.let(context::getString) ?: return
     if (snackbarEvent.actionLabel == null) {
         CoroutineScope(Dispatchers.Main).launch {
             snackbarHostState.currentSnackbarData?.dismiss()
-            snackbarHostState.showSnackbar(snackbarEvent.message)
+            snackbarHostState.showSnackbar(message)
         }
         return
     }
@@ -641,7 +630,7 @@ private fun showSnackbar(
     CoroutineScope(Dispatchers.Main).launch {
         snackbarHostState.currentSnackbarData?.dismiss()
         val snackbarResult = snackbarHostState.showSnackbar(
-            snackbarEvent.message,
+            message,
             snackbarEvent.actionLabel ?: "",
             false,
             SnackbarDuration.Long

@@ -26,7 +26,6 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
@@ -52,6 +51,7 @@ import jp.toastkid.image.list.ImageLoaderUseCase
 import jp.toastkid.image.preview.ImagePreviewUi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -225,22 +225,6 @@ internal fun ImageListUi(
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
-    contentViewModel?.toTop?.observe(lifecycleOwner, {
-        it?.getContentIfNotHandled() ?: return@observe
-        coroutineScope.launch {
-            listState.scrollToItem(0)
-        }
-    })
-    contentViewModel?.toBottom?.observe(lifecycleOwner) {
-        it?.getContentIfNotHandled() ?: return@observe
-        coroutineScope.launch {
-            listState.scrollToItem(listState.layoutInfo.totalItemsCount)
-        }
-    }
-    DisposableEffect(key1 = lifecycleOwner, effect = {
-        onDispose {
-            contentViewModel?.toTop?.removeObservers(lifecycleOwner)
-            contentViewModel?.toBottom?.removeObservers(lifecycleOwner)
-        }
-    })
+
+    ScrollerUseCase(contentViewModel, listState).invoke(lifecycleOwner)
 }

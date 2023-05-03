@@ -86,6 +86,9 @@ import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.lib.viewmodel.event.content.ShareEvent
+import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
+import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
@@ -116,26 +119,30 @@ fun EditorTabUi(path: String?) {
     }
 
     val localLifecycleOwner = LocalLifecycleOwner.current
-    contentViewModel.toTop.observe(localLifecycleOwner) {
-        it.getContentIfNotHandled() ?: return@observe
-        editText.setSelection(0)
-    }
-    contentViewModel.toBottom.observe(localLifecycleOwner) {
-        it.getContentIfNotHandled() ?: return@observe
-        editText.setSelection(editText.text.length)
-    }
-    contentViewModel.share.observe(localLifecycleOwner) {
-        it.getContentIfNotHandled() ?: return@observe
-        val title =
-            if (path?.contains("/") == true) path.substring(path.lastIndexOf("/") + 1)
-            else path
-        val content = fileActionUseCase.getText()
-        if (content.isEmpty()) {
-            contentViewModel.snackShort(R.string.error_content_is_empty)
-            return@observe
+    LaunchedEffect(key1 = localLifecycleOwner, block = {
+        contentViewModel.event.collect {
+            when (it) {
+                is ToTopEvent -> {
+                    editText.setSelection(0)
+                }
+                is ToBottomEvent -> {
+                    editText.setSelection(editText.text.length)
+                }
+                is ShareEvent -> {
+                    val title =
+                        if (path?.contains("/") == true) path.substring(path.lastIndexOf("/") + 1)
+                        else path
+                    val content = fileActionUseCase.getText()
+                    if (content.isEmpty()) {
+                        contentViewModel.snackShort(R.string.error_content_is_empty)
+                        return@collect
+                    }
+                    context.startActivity(ShareIntentFactory().invoke(content, title))
+                }
+                else -> Unit
+            }
         }
-        context.startActivity(ShareIntentFactory().invoke(content, title))
-    }
+    })
 
     val browserViewModel = viewModel(BrowserViewModel::class.java, context)
 
@@ -221,7 +228,6 @@ fun EditorTabUi(path: String?) {
         onDispose {
             fileActionUseCase.save(openInputFileNameDialog, false)
             localLifecycle.removeObserver(observer)
-            contentViewModel.share.removeObservers(localLifecycleOwner)
         }
     }
 

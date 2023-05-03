@@ -9,6 +9,7 @@
 package jp.toastkid.lib.view.list
 
 import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +23,7 @@ class ListActionAttachment(
     private val pageSearcherViewModel: PageSearcherViewModel?
 ) {
 
+    @Composable
     operator fun <T> invoke(
         scrollableState: ScrollableState,
         lifecycleOwner: LifecycleOwner,
