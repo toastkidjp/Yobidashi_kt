@@ -12,7 +12,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import jp.toastkid.lib.lifecycle.Event
+import jp.toastkid.lib.viewmodel.event.tab.OpenNewTabEvent
+import jp.toastkid.lib.viewmodel.event.tab.SaveEditorTabEvent
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import java.io.File
 
 /**
@@ -20,12 +26,18 @@ import java.io.File
  */
 class TabListViewModel : ViewModel() {
 
+    private val _event = MutableSharedFlow<jp.toastkid.lib.viewmodel.event.Event>()
+
+    val event = _event.asSharedFlow()
+
     private val _saveEditorTab = MutableLiveData<File>()
 
     val saveEditorTab: LiveData<File> = _saveEditorTab
 
     fun saveEditorTab(nextFile: File) {
-        _saveEditorTab.postValue(nextFile)
+        viewModelScope.launch {
+            _event.emit(SaveEditorTabEvent(nextFile))
+        }
     }
 
     private val _tabCount = mutableStateOf(0)
@@ -41,12 +53,9 @@ class TabListViewModel : ViewModel() {
     val openNewTab: LiveData<Event<Unit>> = _openNewTab
 
     fun openNewTab() {
-        _openNewTab.postValue(Event(Unit))
-    }
-
-    fun openNewTabForLongTap(): Boolean {
-        _openNewTab.postValue(Event(Unit))
-        return true
+        viewModelScope.launch {
+            _event.emit(OpenNewTabEvent())
+        }
     }
 
 }

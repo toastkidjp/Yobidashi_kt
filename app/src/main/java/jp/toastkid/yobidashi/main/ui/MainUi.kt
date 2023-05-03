@@ -95,8 +95,10 @@ import jp.toastkid.lib.viewmodel.event.tab.OpenArticleEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleListEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenCalendarEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenEditorEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenNewTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenPdfEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenWebSearchEvent
+import jp.toastkid.lib.viewmodel.event.tab.SaveEditorTabEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
@@ -150,23 +152,22 @@ internal fun Content() {
     val navigationHostController = rememberAnimatedNavController()
     navigationHostController.enableOnBackPressed(false)
 
-    tabListViewModel
-        .openNewTab
-        .observe(activity, {
-            it.getContentIfNotHandled() ?: return@observe
-            openNewTab(preferenceApplier, tabs, navigationHostController)
-        })
-
-    tabListViewModel
-        .saveEditorTab
-        .observe(
-            activity,
-            Observer {
-                val currentTab = tabs.currentTab() as? EditorTab ?: return@Observer
-                currentTab.setFileInformation(it)
-                tabs.saveTabList()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(key1 = lifecycleOwner, block = {
+        tabListViewModel.event.collect {
+            when (it) {
+                is OpenNewTabEvent -> {
+                    openNewTab(preferenceApplier, tabs, navigationHostController)
+                }
+                is SaveEditorTabEvent -> {
+                    val currentTab = tabs.currentTab() as? EditorTab ?: return@collect
+                    currentTab.setFileInformation(it.file)
+                    tabs.saveTabList()
+                }
+                else -> Unit
             }
-        )
+        }
+    })
 
     val activityResultLauncher: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -584,7 +585,7 @@ internal fun Content() {
         tabs.isEmpty()
     }
 
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val lifecycle = lifecycleOwner.lifecycle
     val lifecycleObserver = LifecycleEventObserver { source, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> tabs.setCount()

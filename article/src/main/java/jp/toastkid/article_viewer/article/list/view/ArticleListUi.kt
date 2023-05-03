@@ -272,7 +272,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                             .switchTabList()
                     },
                     onLongClick = {
-                        tabListViewModel.openNewTabForLongTap()
+                        tabListViewModel.openNewTab()
                     }
                 )
         ) {
