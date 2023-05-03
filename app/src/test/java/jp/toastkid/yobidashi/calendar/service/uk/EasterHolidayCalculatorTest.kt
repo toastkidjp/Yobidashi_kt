@@ -16,7 +16,7 @@ class EasterHolidayCalculatorTest {
     @Test
     fun test() {
         val calculator = EasterHolidayCalculator()
-        val holidays = (2022..2024).map { calculator.invoke(it) }
+        val holidays = (2022..2024).map { calculator.invoke(it, 4) }
         // 2022
         assertEquals(4, holidays[0][0].month)
         assertEquals(15, holidays[0][0].day)
@@ -28,10 +28,12 @@ class EasterHolidayCalculatorTest {
         assertEquals(4, holidays[1][1].month)
         assertEquals(10, holidays[1][1].day)
         // 2024
-        assertEquals(3, holidays[2][0].month)
-        assertEquals(29, holidays[2][0].day)
-        assertEquals(4, holidays[2][1].month)
-        assertEquals(1, holidays[2][1].day)
+        assertEquals(4, holidays[2][0].month)
+        assertEquals(1, holidays[2][0].day)
+
+        val march = calculator.invoke(2024, 3)
+        assertEquals(3, march[0].month)
+        assertEquals(29, march[0].day)
     }
 
 }
