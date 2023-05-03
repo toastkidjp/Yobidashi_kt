@@ -85,6 +85,11 @@ import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
+import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
+import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
+import jp.toastkid.lib.viewmodel.event.web.PreviewUrlEvent
+import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.R
@@ -278,74 +283,62 @@ internal fun Content() {
     }
 
     val browserViewModel = viewModel(BrowserViewModel::class.java, activity)
-    browserViewModel?.open?.observe(activity, Observer {
-        val uri = it?.getContentIfNotHandled() ?: return@Observer
-        tabs.openNewWebTab(uri.toString())
-        replaceToCurrentTab(tabs, navigationHostController)
-    })
-    browserViewModel?.preview?.observe(activity, Observer {
-        val uri = it?.getContentIfNotHandled() ?: return@Observer
-        contentViewModel?.setBottomSheetContent {
-            FloatingPreviewUi(uri)
-        }
-        coroutineScope?.launch {
-            contentViewModel?.switchBottomSheet()
-        }
-    })
-    browserViewModel.openBackground.observe(activity, Observer {
-        val urlString = it?.getContentIfNotHandled()?.toString() ?: return@Observer
-        val callback = tabs.openBackgroundTab(urlString, urlString)
-        contentViewModel.snackWithAction(
-            activity.getString(R.string.message_tab_open_background, urlString),
-            activity.getString(R.string.open)
-        ) {
-            callback()
-            contentViewModel.replaceToCurrentTab()
-        }
-    })
-    browserViewModel.openBackgroundWithTitle.observe(activity, Observer {
-        val pair = it?.getContentIfNotHandled() ?: return@Observer
-        val callback = tabs.openBackgroundTab(pair.first, pair.second.toString())
-        contentViewModel.snackWithAction(
-            activity.getString(R.string.message_tab_open_background, pair.first),
-            activity.getString(R.string.open)
-        ) {
-            callback()
-            contentViewModel.replaceToCurrentTab()
-        }
-    })
-    browserViewModel.openNewWindow.observe(activity, Observer {
-        val message = it?.getContentIfNotHandled() ?: return@Observer
-        tabs.openNewWindowWebTab(message)
-        browserViewModel.switchWebViewToCurrent(tabs.currentTabId())
-    })
-    LaunchedEffect(browserViewModel) {
-        browserViewModel
-            .onPageFinished
-            .observe(activity) {
-                if (it.expired()) {
-                    return@observe
-                }
 
-                tabs.updateWebTab(it.tabId to History(it.title, it.url))
-                if (tabs.currentTabId() == it.tabId) {
-                    val currentWebView =
-                        GlobalWebViewPool.get(tabs.currentTabId()) ?: return@observe
-                    tabs.saveNewThumbnail(currentWebView)
+    LaunchedEffect(browserViewModel) {
+        browserViewModel?.event?.collect {
+            when (it) {
+                is OpenUrlEvent -> {
+                    val urlString = it.uri.toString()
+                    if (it.onBackground) {
+                        val callback = tabs.openBackgroundTab(it.title ?: urlString, urlString)
+                        contentViewModel.snackWithAction(
+                            activity.getString(R.string.message_tab_open_background, urlString),
+                            activity.getString(R.string.open)
+                        ) {
+                            callback()
+                            contentViewModel.replaceToCurrentTab()
+                        }
+                        return@collect
+                    }
+                    tabs.openNewWebTab(urlString)
+                    replaceToCurrentTab(tabs, navigationHostController)
+                }
+                is PreviewUrlEvent -> {
+                    contentViewModel?.setBottomSheetContent {
+                        FloatingPreviewUi(it.uri)
+                    }
+                    coroutineScope?.launch {
+                        contentViewModel?.switchBottomSheet()
+                    }
+                }
+                is OnLoadCompletedEvent -> {
+                    if (it.loadInformation.expired()) {
+                        return@collect
+                    }
+
+                    tabs.updateWebTab(it.loadInformation.tabId to History(it.loadInformation.title, it.loadInformation.url))
+                    if (tabs.currentTabId() == it.loadInformation.tabId) {
+                        val currentWebView =
+                            GlobalWebViewPool.get(tabs.currentTabId()) ?: return@collect
+                        tabs.saveNewThumbnail(currentWebView)
+                    }
+                }
+                is OpenNewWindowEvent -> {
+                    val message = it.resultMessage ?: return@collect
+                    tabs.openNewWindowWebTab(message)
+                    browserViewModel.switchWebViewToCurrent(tabs.currentTabId())
+                }
+                is WebSearchEvent -> {
+                    WebSearchResultTabOpenerUseCase(
+                        preferenceApplier,
+                        {
+                            tabs.openNewWebTab(it.toString())
+                            contentViewModel.replaceToCurrentTab()
+                        }
+                    ).invoke(it.query)
                 }
             }
-        browserViewModel
-            .search
-            .observe(activity) { event ->
-                val query = event?.getContentIfNotHandled() ?: return@observe
-                WebSearchResultTabOpenerUseCase(
-                    preferenceApplier,
-                    {
-                        tabs.openNewWebTab(it.toString())
-                        contentViewModel.replaceToCurrentTab()
-                    }
-                ).invoke(query)
-            }
+        }
     }
 
     val localView = LocalView.current

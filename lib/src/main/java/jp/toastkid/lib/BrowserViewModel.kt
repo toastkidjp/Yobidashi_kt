@@ -12,65 +12,91 @@ import android.os.Message
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import jp.toastkid.lib.lifecycle.Event
+import androidx.lifecycle.viewModelScope
 import jp.toastkid.lib.model.LoadInformation
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
+import jp.toastkid.lib.viewmodel.event.Event
+import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
+import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
+import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
+import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
+import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
+import jp.toastkid.lib.viewmodel.event.web.PreviewUrlEvent
+import jp.toastkid.lib.viewmodel.event.web.SwitchWebViewToCurrentEvent
+import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
  */
 class BrowserViewModel : ViewModel() {
 
-    private val _preview =  MutableLiveData<Event<Uri>>()
+    private val _preview =  MutableSharedFlow<Uri>()
 
-    val preview: LiveData<Event<Uri>> = _preview
+    val preview: SharedFlow<Uri> = _preview
 
     fun preview(uri: Uri) {
-        _preview.postValue(Event(uri))
+        viewModelScope.launch {
+            _event.emit(PreviewUrlEvent(uri))
+        }
     }
 
-    private val _open = MutableLiveData<Event<Uri>>()
+    private val _event = MutableSharedFlow<Event>()
 
-    val open: LiveData<Event<Uri>> = _open
+    val event: SharedFlow<Event> = _event
+
+    private val _open = MutableSharedFlow<Uri>()
+
+    val open: SharedFlow<Uri> = _open
 
     fun open(uri: Uri) {
-        _open.postValue(Event(uri))
+        viewModelScope.launch {
+            _event.emit(OpenUrlEvent(uri))
+        }
     }
 
-    private val _openBackground = MutableLiveData<Event<Uri>>()
+    private val _openBackground = MutableSharedFlow<Uri>()
 
-    val openBackground: LiveData<Event<Uri>> = _openBackground
+    val openBackground: SharedFlow<Uri> = _openBackground
 
     fun openBackground(uri: Uri) {
-        _openBackground.postValue(Event(uri))
+        viewModelScope.launch {
+            _event.emit(OpenUrlEvent(uri, true))
+        }
     }
 
     // TODO: Use appropriate data class.
-    private val _openBackgroundWithTitle = MutableLiveData<Event<Pair<String, Uri>>>()
+    private val _openBackgroundWithTitle = MutableSharedFlow<Pair<String, Uri>>()
 
-    val openBackgroundWithTitle: LiveData<Event<Pair<String, Uri>>> = _openBackgroundWithTitle
+    val openBackgroundWithTitle: SharedFlow<Pair<String, Uri>> = _openBackgroundWithTitle
 
     fun openBackground(title: String, uri: Uri) {
-        _openBackgroundWithTitle.postValue(Event(title to uri))
+        viewModelScope.launch {
+            _event.emit(OpenUrlEvent(uri, title = title))
+        }
     }
 
-    private val _openNewWindow = MutableLiveData<Event<Message?>>()
+    private val _openNewWindow = MutableSharedFlow<Message?>()
 
-    val openNewWindow: LiveData<Event<Message?>> = _openNewWindow
+    val openNewWindow: SharedFlow<Message?> = _openNewWindow
 
     fun openNewWindow(resultMessage: Message?) {
-        _openNewWindow.postValue(Event(resultMessage))
+        viewModelScope.launch {
+            _event.emit(OpenNewWindowEvent(resultMessage))
+        }
     }
 
-    private val _download = MutableLiveData<Event<String>>()
+    private val _download = MutableSharedFlow<String>()
 
-    val download: LiveData<Event<String>> = _download
+    val download: SharedFlow<String> = _download
 
     fun download(url: String) {
-        _download.postValue(Event(url))
+        viewModelScope.launch {
+            _event.emit(DownloadEvent(url))
+        }
     }
 
     private val _error = mutableStateOf("")
@@ -104,15 +130,15 @@ class BrowserViewModel : ViewModel() {
         openLongTapDialog.value = false
     }
 
-    private val _switchWebViewToCurrent = MutableLiveData<Event<String>>()
+    private val _switchWebViewToCurrent = MutableSharedFlow<String>()
 
-    val switchWebViewToCurrent: LiveData<Event<String>> = _switchWebViewToCurrent
+    val switchWebViewToCurrent: SharedFlow<String> = _switchWebViewToCurrent
 
     fun switchWebViewToCurrent(tabId: String) {
-        _switchWebViewToCurrent.postValue(Event(tabId))
+        viewModelScope.launch {
+            _event.emit(SwitchWebViewToCurrentEvent(tabId))
+        }
     }
-
-    //TODO WIP
 
     private val _title = mutableStateOf("")
     val title: State<String> = _title
@@ -158,28 +184,34 @@ class BrowserViewModel : ViewModel() {
         _progress.value = newProgress
     }
 
-    private val _stopProgress = MutableLiveData(Event(false))
+    private val _stopProgress = MutableSharedFlow<Boolean>()
 
-    val stopProgress: LiveData<Event<Boolean>> = _stopProgress
+    val stopProgress: SharedFlow<Boolean> = _stopProgress
 
     fun stopProgress(stop: Boolean) {
-        _stopProgress.postValue(Event(stop))
+        viewModelScope.launch {
+            _event.emit(OnStopLoadEvent())
+        }
     }
 
     private val _onPageFinished =
-        MutableLiveData<LoadInformation>()
+        MutableSharedFlow<LoadInformation>()
 
-    val onPageFinished: LiveData<LoadInformation> = _onPageFinished
+    val onPageFinished: SharedFlow<LoadInformation> = _onPageFinished
 
     fun finished(tabId: String, title: String, url: String) =
-        _onPageFinished.postValue(LoadInformation(tabId, title, url))
+        viewModelScope.launch {
+            _event.emit(OnLoadCompletedEvent(LoadInformation(tabId, title, url)))
+        }
 
-    private val _search = MutableLiveData<Event<String>>()
+    private val _search = MutableSharedFlow<String>()
 
-    val search: LiveData<Event<String>> = _search
+    val search: SharedFlow<String> = _search
 
     fun search(query: String) {
-        _search.postValue(Event(query))
+        viewModelScope.launch {
+            _event.emit(WebSearchEvent(query))
+        }
     }
 
     private val nestedScrollDispatcher = NestedScrollDispatcher()
