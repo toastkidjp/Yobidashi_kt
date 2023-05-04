@@ -15,16 +15,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.IntOffset
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import jp.toastkid.lib.compat.material3.ModalBottomSheetState
 import jp.toastkid.lib.compat.material3.ModalBottomSheetValue
-import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.viewmodel.event.Event
 import jp.toastkid.lib.viewmodel.event.content.NavigationEvent
 import jp.toastkid.lib.viewmodel.event.content.RefreshContentEvent
 import jp.toastkid.lib.viewmodel.event.content.ReplaceToCurrentTabContentEvent
@@ -43,6 +41,7 @@ import jp.toastkid.lib.viewmodel.event.tab.OpenWebSearchEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -50,9 +49,9 @@ import kotlinx.coroutines.launch
  */
 class ContentViewModel : ViewModel() {
 
-    private val _event = MutableSharedFlow<jp.toastkid.lib.viewmodel.event.Event>()
+    private val _event = MutableSharedFlow<Event>()
 
-    val event: SharedFlow<jp.toastkid.lib.viewmodel.event.Event> = _event
+    val event = _event.asSharedFlow()
 
     private val colorPair = mutableStateOf(ColorPair(Color.White.toArgb(), Color.Black.toArgb()))
 
@@ -64,21 +63,12 @@ class ContentViewModel : ViewModel() {
         this.colorPair.value = colorPair
     }
 
-    private val _snackbar = MutableLiveData<Event<SnackbarEvent>>()
-
-    val snackbar: LiveData<Event<SnackbarEvent>> = _snackbar
-
     fun snackShort(message: String) {
         viewModelScope.launch {
             _event.emit(SnackbarEvent(message))
         }
     }
 
-    private val _snackbarRes = MutableLiveData<Event<Int>>()
-
-    val snackbarRes: LiveData<Event<Int>> = _snackbarRes
-
-    // TODO care it
     fun snackShort(@StringRes messageId: Int) {
         viewModelScope.launch {
             _event.emit(SnackbarEvent(messageId = messageId))
@@ -91,19 +81,11 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    private val _toTop = MutableLiveData<Event<Unit>>()
-
-    val toTop: LiveData<Event<Unit>> = _toTop
-
     fun toTop() {
         viewModelScope.launch {
             _event.emit(ToTopEvent())
         }
     }
-
-    private val _toBottom = MutableLiveData<Event<Unit>>()
-
-    val toBottom: LiveData<Event<Unit>> = _toBottom
 
     fun toBottom() {
         viewModelScope.launch {
@@ -111,19 +93,11 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    private val _share = MutableLiveData<Event<Unit>>()
-
-    val share: LiveData<Event<Unit>> = _share
-
     fun share() {
         viewModelScope.launch {
             _event.emit(ShareEvent())
         }
     }
-
-    private val _webSearch = MutableLiveData<Event<Unit>>()
-
-    val webSearch: LiveData<Event<Unit>> = _webSearch
 
     fun webSearch() {
         viewModelScope.launch {
@@ -131,19 +105,11 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    private val _openPdf = MutableLiveData<Event<Unit>>()
-
-    val openPdf: LiveData<Event<Unit>> = _openPdf
-
     fun openPdf() {
         viewModelScope.launch {
             _event.emit(OpenPdfEvent())
         }
     }
-
-    private val _openEditorTab = MutableLiveData<Event<Unit>>()
-
-    val openEditorTab: LiveData<Event<Unit>> = _openEditorTab
 
     fun openEditorTab() {
         viewModelScope.launch {
@@ -188,29 +154,17 @@ class ContentViewModel : ViewModel() {
         modalBottomSheetState.hide()
     }
 
-    private val _nextRoute = MutableLiveData<Event<String>>()
-
-    val nextRoute: LiveData<Event<String>> = _nextRoute
-
     fun nextRoute(route: String) {
         viewModelScope.launch {
             _event.emit(NavigationEvent(route))
         }
     }
 
-    private val _switchTabList = MutableLiveData<Event<Unit>>()
-
-    val switchTabList: LiveData<Event<Unit>> = _switchTabList
-
     fun switchTabList() {
         viewModelScope.launch {
             _event.emit(SwitchTabListEvent())
         }
     }
-
-    private val _moveTab = MutableLiveData<Event<Int>>()
-
-    val moveTab: LiveData<Event<Int>> = _moveTab
 
     fun previousTab() {
         viewModelScope.launch {
@@ -224,19 +178,11 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    private val _refresh = MutableLiveData<Unit>()
-
-    val refresh: LiveData<Unit> = _refresh
-
     fun refresh() {
         viewModelScope.launch {
             _event.emit(RefreshContentEvent())
         }
     }
-
-    private val _newArticle = MutableLiveData<Event<Pair<String, Boolean>>>()
-
-    val newArticle: LiveData<Event<Pair<String, Boolean>>> = _newArticle
 
     fun newArticle(title: String) {
         viewModelScope.launch {
@@ -250,19 +196,11 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    private val _openArticleList = MutableLiveData<Event<Unit>>()
-
-    val openArticleList: LiveData<Event<Unit>> = _openArticleList
-
     fun openArticleList() {
         viewModelScope.launch {
             _event.emit(OpenArticleListEvent())
         }
     }
-
-    private val _openCalendar = MutableLiveData<Event<Unit>>()
-
-    val openCalendar: LiveData<Event<Unit>> = _openCalendar
 
     fun openCalendar() {
         viewModelScope.launch {
@@ -298,10 +236,6 @@ class ContentViewModel : ViewModel() {
             fabScale.animateTo(0f)
         }
     }
-
-    private val _replaceToCurrentTab = MutableLiveData<Event<Unit>>()
-
-    val replaceToCurrentTab: LiveData<Event<Unit>> = _replaceToCurrentTab
 
     fun replaceToCurrentTab() {
         viewModelScope.launch {
