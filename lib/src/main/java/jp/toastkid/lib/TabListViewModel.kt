@@ -9,11 +9,9 @@ package jp.toastkid.lib
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import jp.toastkid.lib.lifecycle.Event
+import jp.toastkid.lib.viewmodel.event.Event
 import jp.toastkid.lib.viewmodel.event.tab.OpenNewTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.SaveEditorTabEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,13 +24,9 @@ import java.io.File
  */
 class TabListViewModel : ViewModel() {
 
-    private val _event = MutableSharedFlow<jp.toastkid.lib.viewmodel.event.Event>()
+    private val _event = MutableSharedFlow<Event>()
 
     val event = _event.asSharedFlow()
-
-    private val _saveEditorTab = MutableLiveData<File>()
-
-    val saveEditorTab: LiveData<File> = _saveEditorTab
 
     fun saveEditorTab(nextFile: File) {
         viewModelScope.launch {
@@ -47,10 +41,6 @@ class TabListViewModel : ViewModel() {
     fun tabCount(count: Int) {
         _tabCount.value = count
     }
-
-    private val _openNewTab = MutableLiveData<Event<Unit>>()
-
-    val openNewTab: LiveData<Event<Unit>> = _openNewTab
 
     fun openNewTab() {
         viewModelScope.launch {
