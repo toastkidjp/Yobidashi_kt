@@ -7,11 +7,9 @@
  */
 package jp.toastkid.lib.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import jp.toastkid.lib.lifecycle.Event
+import jp.toastkid.lib.viewmodel.event.Event
 import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
 import jp.toastkid.lib.viewmodel.event.finder.CloseFinderEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
@@ -24,29 +22,9 @@ import kotlinx.coroutines.launch
  */
 class PageSearcherViewModel : ViewModel() {
 
-    private val _event = MutableSharedFlow<jp.toastkid.lib.viewmodel.event.Event>()
+    private val _event = MutableSharedFlow<Event>()
 
     val event = _event.asSharedFlow()
-
-    private val _find = MutableLiveData<Event<String>>()
-
-    private val _upward = MutableLiveData<Event<String>>()
-
-    private val _downward = MutableLiveData<Event<String>>()
-
-    private val _clear = MutableLiveData<Event<Unit>>()
-
-    private val _close = MutableLiveData<Event<Unit>>()
-
-    val find: LiveData<Event<String>> = _find
-
-    val upward: LiveData<Event<String>> = _upward
-
-    val downward: LiveData<Event<String>> = _downward
-
-    val clear: LiveData<Event<Unit>> = _clear
-
-    val close: LiveData<Event<Unit>> = _close
 
     fun find(s: String?) {
         viewModelScope.launch {
