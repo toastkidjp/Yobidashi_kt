@@ -10,5 +10,9 @@ package jp.toastkid.lib.viewmodel.event.web
 
 import jp.toastkid.lib.viewmodel.event.Event
 
-class WebSearchEvent(val query: String) : Event {
+data class WebSearchEvent(
+    val query: String,
+    val category: String? = null,
+    val background: Boolean = false
+) : Event {
 }

@@ -58,7 +58,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
@@ -280,21 +279,22 @@ fun SearchInputUi(
         viewModel.closeOption()
     }
 
-    viewModel.search
-        .observe(localLifecycleOwner, Observer { event ->
-            val searchEvent = event?.getContentIfNotHandled() ?: return@Observer
-
-            keyboardController?.hide()
+    LaunchedEffect(key1 = localLifecycleOwner, block = {
+        viewModel.search.collect {
+            if (it.background.not()) {
+                keyboardController?.hide()
+            }
 
             search(
                 context,
                 contentViewModel,
                 currentUrl,
-                searchEvent.category ?: categoryName.value,
-                searchEvent.query,
-                searchEvent.background
+                it.category ?: categoryName.value,
+                it.query,
+                it.background
             )
-        })
+        }
+    })
 
     DisposableEffect(key1 = localLifecycleOwner, effect = {
         onDispose {
