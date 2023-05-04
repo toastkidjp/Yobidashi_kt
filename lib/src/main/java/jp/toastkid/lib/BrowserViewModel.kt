@@ -58,7 +58,7 @@ class BrowserViewModel : ViewModel() {
 
     fun openBackground(title: String, uri: Uri) {
         viewModelScope.launch {
-            _event.emit(OpenUrlEvent(uri, title = title))
+            _event.emit(OpenUrlEvent(uri, true, title))
         }
     }
 
