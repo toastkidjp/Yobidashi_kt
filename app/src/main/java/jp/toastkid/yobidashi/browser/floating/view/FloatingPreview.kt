@@ -70,8 +70,6 @@ internal fun FloatingPreviewUi(uri: Uri) {
     }
 
     Column(modifier = Modifier.height(400.dp)) {
-        val progressState = viewModel.progress
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -91,7 +89,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
             )
 
             BrowserTitle(
-                progressState,
+                viewModel.progress,
                 viewModel.title,
                 viewModel.url,
                 Modifier.weight(1f)
@@ -107,7 +105,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
             )
         }
 
-        val progress = progressState.value?.toFloat() ?: 100f
+        val progress = viewModel.progress.value?.toFloat() ?: 100f
         if (progress < 75) {
             LinearProgressIndicator(
                 progress = progress / 100f,
