@@ -95,7 +95,7 @@ internal fun AnchorLongTapDialog(
                                 .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
                                 .verticalScroll(rememberScrollState())
                         ) {
-                            if (anchor != null) {
+                            if (anchor != null && Urls.isValidUrl(anchor)) {
                                 SingleLineText(R.string.row_dialog_open_new) {
                                     browserViewModel?.open(anchor.toUri())
                                     browserViewModel?.clearLongTapParameters()
@@ -189,5 +189,5 @@ private fun makeTitleText(title: String?, anchor: String?, imageUrl: String?) =
     when {
         title != null && title.isNotBlank() -> "$title"
         anchor != null && anchor.isNotBlank() -> "Link to: $anchor"
-        else -> "Image: ${imageUrl}"
+        else -> "Image: $imageUrl"
     }

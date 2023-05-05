@@ -24,6 +24,10 @@ class TranslationUrlGeneratorTest {
     @InjectMockKs
     private lateinit var translationUrlGenerator: TranslationUrlGenerator
 
+    private val expectedE2J = "sl=en&tl=ja"
+
+    private val expectedJ2E = "sl=ja&tl=en"
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -37,8 +41,6 @@ class TranslationUrlGeneratorTest {
         unmockkAll()
     }
 
-    private val expectedE2J = "sl=en&tl=ja"
-
     @Test
     fun testEmptyCase() {
         assertTrue(translationUrlGenerator("").contains(expectedE2J))
@@ -48,8 +50,6 @@ class TranslationUrlGeneratorTest {
     fun testOnlySingleByteCharacters() {
         assertTrue(translationUrlGenerator("Make sense?").contains(expectedE2J))
     }
-
-    private val expectedJ2E = "sl=ja&tl=en"
 
     @Test
     fun testContainsMultiByteCharacters() {
