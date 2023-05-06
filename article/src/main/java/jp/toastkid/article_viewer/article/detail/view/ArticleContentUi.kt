@@ -211,8 +211,9 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 keyboardActions = KeyboardActions {
                     //TODO contentTextSearchUseCase.invoke(it.toString())
                 },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onPrimary,
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary.copy(0.75f),
                     cursorColor = MaterialTheme.colorScheme.onPrimary,
                     unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary,
                     focusedIndicatorColor = MaterialTheme.colorScheme.onPrimary
