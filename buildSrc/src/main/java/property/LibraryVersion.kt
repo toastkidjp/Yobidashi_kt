@@ -12,7 +12,7 @@ object LibraryVersion {
     val exifinterface = "1.3.3"
     val compose = "1.2.1"
     val composeCompiler = "1.4.6"
-    val composeMaterial3 = "1.0.0"
+    val composeMaterial3 = "1.1.0-rc01"
     val navigationCompose = "2.4.1"
     val coilCompose = "2.0.0-rc01"
     val pagingCompose = "1.0.0-alpha14"
