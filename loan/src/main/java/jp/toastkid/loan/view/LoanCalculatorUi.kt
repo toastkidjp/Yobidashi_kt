@@ -116,11 +116,7 @@ fun LoanCalculatorUi() {
                     onChange(inputChannel, it)
                 },
                 label = { Text(text = stringResource(R.string.hint_loan_amount)) },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onSurface,
-                    containerColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
-                ),
+                colors = makeTextFieldColors(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
@@ -133,11 +129,7 @@ fun LoanCalculatorUi() {
                         onChange(inputChannel, it)
                     },
                     label = { Text(text = stringResource(R.string.hint_loan_term)) },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colorScheme.onSurface,
-                        containerColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.onSurface
-                    ),
+                    colors = makeTextFieldColors(),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.weight(1f)
@@ -149,11 +141,7 @@ fun LoanCalculatorUi() {
                         onChange(inputChannel, it)
                     },
                     label = { Text(text = stringResource(R.string.hint_interest_rate)) },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colorScheme.onSurface,
-                        containerColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.onSurface
-                    ),
+                    colors = makeTextFieldColors(),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.weight(1f)
@@ -166,11 +154,7 @@ fun LoanCalculatorUi() {
                     onChange(inputChannel, it)
                 },
                 label = { Text(text = stringResource(R.string.hint_down_payment)) },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onSurface,
-                    containerColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
-                ),
+                colors = makeTextFieldColors(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
@@ -182,11 +166,7 @@ fun LoanCalculatorUi() {
                     onChange(inputChannel, it)
                 },
                 label = { Text(text = "Management fee (Monthly)") },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onSurface,
-                    containerColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
-                ),
+                colors = makeTextFieldColors(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
@@ -198,11 +178,7 @@ fun LoanCalculatorUi() {
                     onChange(inputChannel, it)
                 },
                 label = { Text(text = "Renovation reserves (Monthly)") },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onSurface,
-                    containerColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
-                ),
+                colors = makeTextFieldColors(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
@@ -244,6 +220,14 @@ fun LoanCalculatorUi() {
         }
     }
 }
+
+@Composable
+private fun makeTextFieldColors() = TextFieldDefaults.colors(
+    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+    unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+    unfocusedContainerColor = Color.Transparent,
+    cursorColor = MaterialTheme.colorScheme.onSurface
+)
 
 private fun onChange(inputChannel: Channel<String>, text: String) {
     CoroutineScope(Dispatchers.IO).launch {
