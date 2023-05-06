@@ -8,15 +8,17 @@
 
 package jp.toastkid.article_viewer.article.list.date
 
-import android.widget.DatePicker
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -27,13 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.lib.preference.ColorPair
 import java.util.Calendar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DateFilterDialogUi(
     colorPair: ColorPair,
@@ -43,6 +45,7 @@ internal fun DateFilterDialogUi(
     var year by remember { mutableStateOf(0) }
     var monthOfYear by remember { mutableStateOf(0) }
     var dayOfMonth by remember { mutableStateOf(0) }
+    val datePickerState = rememberDatePickerState()
     Dialog(
         onDismissRequest = {
             openDialog.value = false
@@ -50,33 +53,24 @@ internal fun DateFilterDialogUi(
     ) {
         Surface(shadowElevation = 4.dp) {
             Column {
-                AndroidView(
+                DatePicker(
+                    state = datePickerState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp),
-                    factory = { context ->
-                        val today = Calendar.getInstance()
-                        val datePicker = DatePicker(context)
-                        datePicker.init(
-                            today.get(Calendar.YEAR),
-                            today.get(Calendar.MONTH),
-                            today.get(Calendar.DAY_OF_MONTH)
-                        ) { _, y, m, d ->
-                            year = y
-                            monthOfYear = m
-                            dayOfMonth = d
-                        }
-                        datePicker
-                    }
+                        .padding(top = 8.dp)
                 )
 
                 Button(
                     onClick = {
                         openDialog.value = false
+                        val selectedDateMillis = datePickerState.selectedDateMillis ?: return@Button
+                        val calendar = Calendar.getInstance().also {
+                            it.timeInMillis = selectedDateMillis
+                        }
                         dateSelectedActionUseCase.invoke(
-                            year,
-                            monthOfYear,
-                            dayOfMonth
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH) + 1,
+                            calendar.get(Calendar.DAY_OF_MONTH)
                         )
                     },
                     colors = ButtonDefaults.textButtonColors(
