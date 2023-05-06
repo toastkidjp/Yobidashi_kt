@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,12 +30,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,6 +46,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
+import jp.toastkid.yobidashi.settings.view.CheckableRow
 import jp.toastkid.yobidashi.settings.view.TextMenu
 import kotlin.math.roundToInt
 
@@ -77,7 +75,7 @@ internal fun BrowserSettingUi() {
         LazyColumn {
             item {
                 CheckableRow(
-                    retainTabs,
+                    R.string.title_enable_javascript,
                     {
                         val newState = !preferenceApplier.doesRetainTabs()
                         preferenceApplier.setRetainTabs(newState)
@@ -88,7 +86,7 @@ internal fun BrowserSettingUi() {
                         contentViewModel?.snackShort(messageId)
                         retainTabs.value = preferenceApplier.doesRetainTabs()
                     },
-                    R.string.title_enable_javascript,
+                    retainTabs,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_tab_black
                 )
@@ -152,7 +150,7 @@ internal fun BrowserSettingUi() {
 
             item {
                 CheckableRow(
-                    useJavaScript,
+                    R.string.title_enable_javascript,
                     {
                         val newState = !preferenceApplier.useJavaScript()
                         preferenceApplier.setUseJavaScript(newState)
@@ -163,7 +161,7 @@ internal fun BrowserSettingUi() {
                         contentViewModel?.snackShort(messageId)
                         useJavaScript.value = preferenceApplier.useJavaScript()
                     },
-                    R.string.title_enable_javascript
+                    useJavaScript
                 )
             }
 
@@ -173,13 +171,13 @@ internal fun BrowserSettingUi() {
 
             item {
                 CheckableRow(
-                    useImage,
+                    R.string.title_load_image,
                     {
                         val newState = !preferenceApplier.doesLoadImage()
                         preferenceApplier.setLoadImage(newState)
                         useImage.value = preferenceApplier.doesLoadImage()
                     },
-                    R.string.title_load_image,
+                    useImage,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_image
                 )
@@ -191,13 +189,13 @@ internal fun BrowserSettingUi() {
 
             item {
                 CheckableRow(
-                    saveFormData,
+                    R.string.title_save_form_data,
                     {
                         val newState = !preferenceApplier.doesSaveForm()
                         preferenceApplier.setSaveForm(newState)
                         saveFormData.value = preferenceApplier.doesSaveForm()
                     },
-                    R.string.title_save_form_data
+                    saveFormData
                 )
             }
 
@@ -207,13 +205,13 @@ internal fun BrowserSettingUi() {
 
             item {
                 CheckableRow(
-                    saveViewHistory,
+                    R.string.title_save_view_history,
                     {
                         val newState = !preferenceApplier.saveViewHistory
                         preferenceApplier.saveViewHistory = newState
                         saveViewHistory.value = preferenceApplier.doesSaveForm()
                     },
-                    R.string.title_save_view_history,
+                    saveViewHistory,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_open_in_browser_black
                 )
@@ -322,13 +320,13 @@ internal fun BrowserSettingUi() {
 
             item {
                 CheckableRow(
-                    useDarkMode,
+                    R.string.title_dark_mode,
                     {
                         val newState = !preferenceApplier.useDarkMode()
                         preferenceApplier.setUseDarkMode(newState)
                         useDarkMode.value = preferenceApplier.useDarkMode()
                     },
-                    R.string.title_dark_mode,
+                    useDarkMode,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_dark_mode_black
                 )
@@ -340,13 +338,13 @@ internal fun BrowserSettingUi() {
 
             item {
                 CheckableRow(
-                    useAdRemover,
+                    R.string.title_remove_ad,
                     {
                         val newState = !preferenceApplier.adRemove
                         preferenceApplier.adRemove = newState
                         useAdRemover.value = preferenceApplier.adRemove
                     },
-                    R.string.title_remove_ad,
+                    useAdRemover,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_block_black
                 )
@@ -390,40 +388,5 @@ internal fun BrowserSettingUi() {
                 Spacer(modifier = Modifier.width(1.dp).height(32.dp))
             }
         }
-    }
-}
-
-@Composable
-private fun CheckableRow(
-    booleanState: MutableState<Boolean>,
-    clickable: () -> Unit,
-    textId: Int,
-    iconTint: Color? = null,
-    iconId: Int? = null
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable(onClick = clickable)
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-    ) {
-        if (iconId != null && iconTint != null) {
-            Icon(
-                painterResource(id = iconId),
-                tint = iconTint,
-                contentDescription = stringResource(id = textId),
-                modifier = Modifier.padding(end = 4.dp)
-            )
-        }
-
-        Text(
-            stringResource(id = textId),
-            modifier = Modifier
-                .weight(1f)
-        )
-        Checkbox(
-            checked = booleanState.value, onCheckedChange = { clickable() },
-            modifier = Modifier.width(44.dp)
-        )
     }
 }
