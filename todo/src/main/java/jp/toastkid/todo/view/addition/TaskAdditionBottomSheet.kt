@@ -8,7 +8,6 @@
 
 package jp.toastkid.todo.view.addition
 
-import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -23,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +31,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,14 +44,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.todo.R
 import jp.toastkid.todo.model.TodoTask
 import kotlinx.coroutines.launch
-import java.util.Calendar
-import java.util.GregorianCalendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,6 +80,10 @@ internal fun TaskEditorUi(
 
     Dialog(onDismissRequest = { taskAdditionDialogFragmentViewModel.hide() }) {
         Column {
+            val datePickerState = rememberDatePickerState(
+                initialDisplayedMonthMillis = System.currentTimeMillis()
+            )
+
             Row {
                 TextField(
                     value = descriptionInput,
@@ -92,14 +94,18 @@ internal fun TaskEditorUi(
                     label = { stringResource(id = R.string.description) },
                     singleLine = true,
                     keyboardActions = KeyboardActions {
+                        datePickerState.selectedDateMillis?.let {
+                            task?.dueDate = it
+                        }
                         save(task, onTapAdd)
                         coroutineScope.launch {
                             taskAdditionDialogFragmentViewModel.hide()
                         }
                     },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colorScheme.onSurface,
-                        containerColor = MaterialTheme.colorScheme.surface,
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(0.75f),
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                         cursorColor = MaterialTheme.colorScheme.onSurface
                     ),
                     trailingIcon = {
@@ -117,6 +123,9 @@ internal fun TaskEditorUi(
                 )
                 Button(
                     onClick = {
+                        datePickerState.selectedDateMillis?.let {
+                            task?.dueDate = it
+                        }
                         save(task, onTapAdd)
                         taskAdditionDialogFragmentViewModel.hide()
                     },
@@ -161,29 +170,12 @@ internal fun TaskEditorUi(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            AndroidView(
+            DatePicker(
+                state = datePickerState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                factory = { context ->
-                    val today = Calendar.getInstance()
-                    task?.let {
-                        today.timeInMillis = it.dueDate
-                    }
-                    val datePicker = DatePicker(context)
-                    datePicker.init(
-                        today.get(Calendar.YEAR),
-                        today.get(Calendar.MONTH),
-                        today.get(Calendar.DAY_OF_MONTH)
-                    ) { _, year, monthOfYear, dayOfMonth ->
-                        task?.dueDate = GregorianCalendar(
-                            year,
-                            monthOfYear,
-                            dayOfMonth
-                        ).timeInMillis
-                    }
-                    datePicker
-                }
+                title = { Text("Due Date") }
             )
         }
     }
