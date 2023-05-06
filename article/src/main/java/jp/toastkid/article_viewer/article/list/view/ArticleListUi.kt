@@ -227,8 +227,9 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     autoCorrect = true,
                     imeAction = ImeAction.Search
                 ),
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onPrimary,
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
                     cursorColor = Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, R.color.editor_cursor)))
                 ),
                 trailingIcon = {
