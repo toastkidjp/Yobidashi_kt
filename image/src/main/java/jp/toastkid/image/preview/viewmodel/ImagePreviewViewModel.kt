@@ -8,7 +8,9 @@
 
 package jp.toastkid.image.preview.viewmodel
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.TransformableState
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
@@ -17,9 +19,14 @@ import androidx.compose.ui.graphics.ColorMatrix
 import jp.toastkid.image.Image
 import kotlin.math.max
 
-class ImagePreviewViewModel {
+@OptIn(ExperimentalFoundationApi::class)
+class ImagePreviewViewModel(initialPage: Int) {
 
     private val images = mutableStateListOf<Image>()
+
+    val pagerState = PagerState(initialPage)
+
+    fun pageCount() = images.size
 
     fun replaceImages(images: Collection<Image>) {
         this.images.clear()
@@ -27,7 +34,7 @@ class ImagePreviewViewModel {
     }
 
     fun getCurrentImage() =
-        if (images.isNotEmpty()) images[index.value] else Image.makeEmpty()
+        if (images.isNotEmpty()) images[pagerState.currentPage] else Image.makeEmpty()
 
     var scale = mutableStateOf(1f)
 
@@ -55,32 +62,26 @@ class ImagePreviewViewModel {
 
     val colorFilterState = mutableStateOf<ColorFilter?>(null)
 
-    val index = mutableStateOf(0)
-
     val openOtherMenu = mutableStateOf(false)
 
     val openDialog = mutableStateOf(false)
 
     fun moveToPrevious() {
-        if (index.value == 0) {
+        /*if (index == 0) {
             return
         }
-        index.value--
+        index.value--*/
 
         offset.value = Offset.Zero
     }
 
     fun moveToNext() {
-        if (index.value >= images.size) {
+        /*if (index.value >= images.size) {
             return
         }
-        index.value++
+        index.value++*/
 
         offset.value = Offset.Zero
-    }
-
-    fun setIndex(i: Int) {
-        index.value = i
     }
 
     fun updateColorFilter() {
