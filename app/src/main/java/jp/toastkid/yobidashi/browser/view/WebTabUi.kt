@@ -69,7 +69,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
@@ -433,7 +432,6 @@ private fun AppBarContent(
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
 
-    val tabListViewModel = viewModel(TabListViewModel::class.java, activity)
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     val preferenceApplier = PreferenceApplier(activity)
@@ -441,7 +439,7 @@ private fun AppBarContent(
 
     val enableBack = viewModel.enableBack
     val enableForward = viewModel.enableForward
-    val tabCountState = tabListViewModel.tabCount
+    val tabCountState = contentViewModel.tabCount
 
     Column(
         modifier = Modifier
@@ -494,7 +492,7 @@ private fun AppBarContent(
                     .combinedClickable(
                         true,
                         onClick = { contentViewModel.switchTabList() },
-                        onLongClick = { tabListViewModel.openNewTab() }
+                        onLongClick = { contentViewModel.openNewTab() }
                     )
             ) {
                 Image(
