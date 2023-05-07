@@ -70,7 +70,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -78,8 +77,6 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.viewmodel.event.content.SnackbarEvent
-import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.compat.material3.ModalBottomSheetLayout
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
@@ -88,6 +85,7 @@ import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.lib.viewmodel.event.content.NavigationEvent
 import jp.toastkid.lib.viewmodel.event.content.RefreshContentEvent
 import jp.toastkid.lib.viewmodel.event.content.ReplaceToCurrentTabContentEvent
+import jp.toastkid.lib.viewmodel.event.content.SnackbarEvent
 import jp.toastkid.lib.viewmodel.event.content.SwitchTabListEvent
 import jp.toastkid.lib.viewmodel.event.finder.CloseFinderEvent
 import jp.toastkid.lib.viewmodel.event.tab.MoveTabEvent
@@ -137,14 +135,12 @@ internal fun Content() {
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
-    val tabListViewModel = viewModel(TabListViewModel::class.java, activity)
-
     val tabs = remember {
         TabAdapter(
             { activity },
             {
                 contentViewModel.switchTabList()
-                tabListViewModel.openNewTab()
+                contentViewModel.openNewTab()
             }
         )
     }
@@ -153,21 +149,6 @@ internal fun Content() {
     navigationHostController.enableOnBackPressed(false)
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(key1 = lifecycleOwner, block = {
-        tabListViewModel.event.collect {
-            when (it) {
-                is OpenNewTabEvent -> {
-                    openNewTab(preferenceApplier, tabs, navigationHostController)
-                }
-                is SaveEditorTabEvent -> {
-                    val currentTab = tabs.currentTab() as? EditorTab ?: return@collect
-                    currentTab.setFileInformation(it.file)
-                    tabs.saveTabList()
-                }
-                else -> Unit
-            }
-        }
-    })
 
     val activityResultLauncher: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -248,7 +229,7 @@ internal fun Content() {
         }
     })
 
-    LaunchedEffect(key1 = contentViewModel, block = {
+    LaunchedEffect(key1 = lifecycleOwner, block = {
         contentViewModel.event.collect {
             when (it) {
                 is SwitchTabListEvent -> {
@@ -344,6 +325,14 @@ internal fun Content() {
 
                     contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
                     contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
+                }
+                is OpenNewTabEvent -> {
+                    openNewTab(preferenceApplier, tabs, navigationHostController)
+                }
+                is SaveEditorTabEvent -> {
+                    val currentTab = tabs.currentTab() as? EditorTab ?: return@collect
+                    currentTab.setFileInformation(it.file)
+                    tabs.saveTabList()
                 }
             }
         }
@@ -525,7 +514,7 @@ internal fun Content() {
 
                 LaunchedEffect(key1 = "first_launch", block = {
                     if (tabs.isEmpty()) {
-                        tabListViewModel.openNewTab()
+                        contentViewModel.openNewTab()
                         return@LaunchedEffect
                     }
 
