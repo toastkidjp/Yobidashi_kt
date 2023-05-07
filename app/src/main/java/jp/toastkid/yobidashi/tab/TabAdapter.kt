@@ -10,7 +10,6 @@ import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -64,7 +63,7 @@ class TabAdapter(
 
     private val bitmapCompressor = BitmapCompressor()
 
-    private var tabListViewModel: TabListViewModel? = null
+    private var contentViewModel: ContentViewModel? = null
 
     private var webViewFactory: WebViewFactoryUseCase? = null
 
@@ -77,11 +76,11 @@ class TabAdapter(
         if (viewContext is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
             browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
-            tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
+            contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
 
             webViewFactory = WebViewFactoryUseCase(
                     webViewClientFactory = WebViewClientFactory(
-                        viewModelProvider.get(ContentViewModel::class.java),
+                        contentViewModel,
                         AdRemover.make(viewContext.assets),
                         FaviconApplier(viewContext),
                         preferenceApplier,
@@ -339,7 +338,7 @@ class TabAdapter(
     }
 
     fun setCount() {
-        tabListViewModel?.tabCount(size())
+        contentViewModel?.tabCount(size())
     }
 
 }
