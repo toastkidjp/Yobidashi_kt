@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 
 @Composable
@@ -27,7 +26,6 @@ internal fun MainBackHandler(
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
-    val tabListViewModel = viewModel(TabListViewModel::class.java, activity)
 
     BackHandler(true) {
         val route = currentRoute()
@@ -51,7 +49,7 @@ internal fun MainBackHandler(
 
             if (tabsIsEmpty()) {
                 contentViewModel.switchTabList()
-                tabListViewModel.openNewTab()
+                contentViewModel.openNewTab()
                 return@BackHandler
             }
             contentViewModel.replaceToCurrentTab()
