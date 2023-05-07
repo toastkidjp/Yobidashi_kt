@@ -112,9 +112,10 @@ internal fun BrowserSettingUi() {
                             homeUrl.value = it
                         },
                         label = { stringResource(id = R.string.title_home) },
-                        colors = TextFieldDefaults.textFieldColors(
-                            textColor = MaterialTheme.colorScheme.onSurface,
-                            containerColor = MaterialTheme.colorScheme.surface,
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
                             cursorColor = MaterialTheme.colorScheme.onSurface
                         ),
                         keyboardActions = KeyboardActions(onDone = {
