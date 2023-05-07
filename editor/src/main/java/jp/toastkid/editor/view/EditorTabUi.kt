@@ -106,7 +106,6 @@ fun EditorTabUi(path: String?) {
     val finder = EditTextFinder(editText)
 
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
-    val tabListViewModel = viewModel(TabListViewModel::class.java, context)
 
     val fileActionUseCase = remember {
         FileActionUseCase(
@@ -115,7 +114,7 @@ fun EditorTabUi(path: String?) {
             mutableStateOf(path ?: ""),
             { editText.text.toString() },
             { editText.setText(it) },
-            { tabListViewModel.saveEditorTab(it) }
+            { contentViewModel.saveEditorTab(it) }
         )
     }
 
@@ -257,8 +256,6 @@ private fun AppBarContent(
     val openLoadFromStorageDialog = remember { mutableStateOf(false) }
     val openInputFileNameDialog = remember { mutableStateOf(false) }
 
-    val tabListViewModel = viewModel(TabListViewModel::class.java, context)
-
     val loadAs: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode != Activity.RESULT_OK) {
@@ -298,7 +295,7 @@ private fun AppBarContent(
                 .combinedClickable(
                     true,
                     onClick = { contentViewModel.switchTabList() },
-                    onLongClick = { tabListViewModel.openNewTab() }
+                    onLongClick = { contentViewModel.openNewTab() }
                 )
         ) {
             Image(
@@ -311,7 +308,7 @@ private fun AppBarContent(
                     .padding(12.dp)
             )
             Text(
-                text = tabListViewModel.tabCount.value.toString(),
+                text = contentViewModel.tabCount.value.toString(),
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
