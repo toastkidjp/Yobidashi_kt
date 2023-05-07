@@ -78,9 +78,7 @@ internal fun EditorSettingUi() {
 
     val highlightColor =
         remember {
-            val color = preferenceApplier.editorHighlightColor(
-                Color(0xDD81D4FA).toArgb()
-            )
+            val color = preferenceApplier.editorHighlightColor(Color(0xDD81D4FA).toArgb())
             mutableStateOf(Color(color))
         }
 

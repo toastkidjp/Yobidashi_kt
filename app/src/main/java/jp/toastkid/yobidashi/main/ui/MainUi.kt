@@ -33,7 +33,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import jp.toastkid.lib.compat.material3.ModalBottomSheetLayout
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -81,6 +80,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.SnackbarEvent
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.compat.material3.ModalBottomSheetLayout
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -348,9 +348,12 @@ internal fun Content() {
             }
     }
 
+    val localView = LocalView.current
+
     val windowInfo = LocalWindowInfo.current
     LaunchedEffect(windowInfo.isWindowFocused) {
         ClippingUrlOpener()(activity) {
+            Inputs().hideKeyboard(localView)
             browserViewModel.open(it)
         }
     }
@@ -369,8 +372,6 @@ internal fun Content() {
         }
 
     val bottomSheetState = contentViewModel.modalBottomSheetState ?: return
-
-    val localView = LocalView.current
 
     Box(
         modifier = Modifier.fillMaxSize()

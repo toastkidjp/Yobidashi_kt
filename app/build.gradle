@@ -94,7 +94,7 @@ dependencies {
 
     implementation "androidx.exifinterface:exifinterface:$libVersions.exifinterface"
     implementation "androidx.work:work-runtime:2.7.1"
-    implementation "androidx.webkit:webkit:1.5.0-rc01"
+    implementation "androidx.webkit:webkit:1.6.0"
 
     // Compose dependencies.
     implementation "androidx.compose.material3:material3:$libVersions.compose_material3"
