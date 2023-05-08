@@ -69,7 +69,6 @@ import jp.toastkid.article_viewer.article.detail.LinkGenerator
 import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.color.LinkColorGenerator
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
@@ -186,7 +185,7 @@ binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CY
 private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(activityContext)
-    val tabListViewModel = viewModel(TabListViewModel::class.java, activityContext)
+    val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
     var searchInput by remember { mutableStateOf("") }
     Row(
@@ -239,12 +238,10 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 .combinedClickable(
                     true,
                     onClick = {
-                        ViewModelProvider(activityContext)
-                            .get(ContentViewModel::class.java)
-                            .switchTabList()
+                        contentViewModel.switchTabList()
                     },
                     onLongClick = {
-                        tabListViewModel.openNewTab()
+                        contentViewModel.openNewTab()
                     }
                 )
         ) {
@@ -258,7 +255,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 modifier = Modifier.align(Alignment.Center)
             )
             Text(
-                text = tabListViewModel.tabCount.value.toString(),
+                text = contentViewModel.tabCount.value.toString(),
                 fontSize = 9.sp,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
