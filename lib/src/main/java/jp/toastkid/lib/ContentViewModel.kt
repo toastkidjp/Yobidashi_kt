@@ -36,13 +36,15 @@ import jp.toastkid.lib.viewmodel.event.tab.OpenArticleEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleListEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenCalendarEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenEditorEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenNewTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenPdfEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenWebSearchEvent
+import jp.toastkid.lib.viewmodel.event.tab.SaveEditorTabEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.io.File
 
 /**
  * @author toastkidjp
@@ -322,6 +324,26 @@ class ContentViewModel : ViewModel() {
         }
         setScreenFilterColor(preferenceApplier.useColorFilter())
         setBackgroundImagePath(preferenceApplier.backgroundImagePath)
+    }
+
+    fun saveEditorTab(nextFile: File) {
+        viewModelScope.launch {
+            _event.emit(SaveEditorTabEvent(nextFile))
+        }
+    }
+
+    private val _tabCount = mutableStateOf(0)
+
+    val tabCount: State<Int> = _tabCount
+
+    fun tabCount(count: Int) {
+        _tabCount.value = count
+    }
+
+    fun openNewTab() {
+        viewModelScope.launch {
+            _event.emit(OpenNewTabEvent())
+        }
     }
 
 }
