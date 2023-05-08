@@ -34,6 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -114,9 +115,11 @@ internal fun BrowserSettingUi() {
                         label = { stringResource(id = R.string.title_home) },
                         colors = TextFieldDefaults.colors(
                             focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            cursorColor = MaterialTheme.colorScheme.onSurface
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedContainerColor = Color.Transparent,
+                            cursorColor = MaterialTheme.colorScheme.onSurface,
+                            focusedIndicatorColor = MaterialTheme.colorScheme.onPrimary,
+                            unfocusedIndicatorColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f)
                         ),
                         keyboardActions = KeyboardActions(onDone = {
                             if (homeUrl.value.isEmpty()) {
