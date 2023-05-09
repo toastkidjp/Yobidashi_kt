@@ -32,12 +32,6 @@ class PageSearcherViewModel : ViewModel() {
         }
     }
 
-    fun findDown(s: String?) {
-        viewModelScope.launch {
-            _event.emit(FindInPageEvent(s ?: ""))
-        }
-    }
-
     fun hide() {
         viewModelScope.launch {
             _event.emit(CloseFinderEvent())
