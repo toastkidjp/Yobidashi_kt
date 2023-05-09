@@ -38,12 +38,6 @@ class PageSearcherViewModel : ViewModel() {
         }
     }
 
-    fun findUp(s: String?) {
-        viewModelScope.launch {
-            _event.emit(FindInPageEvent(s ?: "", true))
-        }
-    }
-
     fun hide() {
         viewModelScope.launch {
             _event.emit(CloseFinderEvent())
