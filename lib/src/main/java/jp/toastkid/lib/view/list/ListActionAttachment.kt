@@ -35,7 +35,7 @@ class ListActionAttachment(
     ) {
         ScrollerUseCase(contentViewModel, scrollableState).invoke(lifecycleOwner)
         LaunchedEffect(key1 = lifecycleOwner, block = {
-            pageSearcherViewModel?.event?.collect {
+            contentViewModel?.event?.collect {
                 when (it) {
                     is FindInPageEvent -> {
                         listItemState.clear()
