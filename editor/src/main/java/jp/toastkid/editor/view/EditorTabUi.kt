@@ -81,11 +81,9 @@ import jp.toastkid.editor.usecase.FileActionUseCase
 import jp.toastkid.editor.usecase.MenuActionInvokerUseCase
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
 import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
@@ -138,6 +136,13 @@ fun EditorTabUi(path: String?) {
                         return@collect
                     }
                     context.startActivity(ShareIntentFactory().invoke(content, title))
+                }
+                is FindInPageEvent -> {
+                    if (it.upward) {
+                        finder.findUp(it.word)
+                    } else {
+                        finder.findDown(it.word)
+                    }
                 }
                 else -> Unit
             }
@@ -219,7 +224,6 @@ fun EditorTabUi(path: String?) {
 
     contentViewModel.clearOptionMenus()
 
-    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, context)
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(key1 = Unit, block = {
         contentViewModel.showAppBar(coroutineScope)
@@ -229,18 +233,6 @@ fun EditorTabUi(path: String?) {
                 contentViewModel,
                 fileActionUseCase
             )
-        }
-
-        pageSearcherViewModel.event.collect {
-            when (it) {
-                is FindInPageEvent -> {
-                    if (it.upward) {
-                        finder.findUp(it.word)
-                    } else {
-                        finder.findDown(it.word)
-                    }
-                }
-            }
         }
     })
 }
