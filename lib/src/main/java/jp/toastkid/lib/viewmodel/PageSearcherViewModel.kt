@@ -10,7 +10,6 @@ package jp.toastkid.lib.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import jp.toastkid.lib.viewmodel.event.Event
-import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
 import jp.toastkid.lib.viewmodel.event.finder.CloseFinderEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -38,9 +37,4 @@ class PageSearcherViewModel : ViewModel() {
         }
     }
 
-    fun clearInput() {
-        viewModelScope.launch {
-            _event.emit(ClearFinderInputEvent())
-        }
-    }
 }
