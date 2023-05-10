@@ -10,12 +10,9 @@ package jp.toastkid.lib
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import jp.toastkid.lib.viewmodel.event.Event
-import jp.toastkid.lib.viewmodel.event.tab.OpenNewTabEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -32,12 +29,6 @@ class TabListViewModel : ViewModel() {
 
     fun tabCount(count: Int) {
         _tabCount.value = count
-    }
-
-    fun openNewTab() {
-        viewModelScope.launch {
-            _event.emit(OpenNewTabEvent())
-        }
     }
 
 }
