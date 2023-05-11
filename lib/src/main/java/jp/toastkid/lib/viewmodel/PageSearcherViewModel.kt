@@ -10,7 +10,6 @@ package jp.toastkid.lib.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import jp.toastkid.lib.viewmodel.event.Event
-import jp.toastkid.lib.viewmodel.event.finder.CloseFinderEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -28,12 +27,6 @@ class PageSearcherViewModel : ViewModel() {
     fun find(s: String?) {
         viewModelScope.launch {
             _event.emit(FindInPageEvent(s ?: ""))
-        }
-    }
-
-    fun hide() {
-        viewModelScope.launch {
-            _event.emit(CloseFinderEvent())
         }
     }
 
