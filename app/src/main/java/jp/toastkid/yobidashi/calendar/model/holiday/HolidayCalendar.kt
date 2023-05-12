@@ -13,6 +13,7 @@ import jp.toastkid.yobidashi.calendar.service.OffDayFinderService
 import jp.toastkid.yobidashi.calendar.service.japan.JapaneseOffDayFinderService
 import jp.toastkid.yobidashi.calendar.service.uk.UKOffDayFinder
 import jp.toastkid.yobidashi.calendar.service.us.AmericanOffDayFinderService
+import jp.toastkid.yobidashi.calendar.service.vietnam.VietnameseOffDayCalculator
 
 enum class HolidayCalendar(
     val settingTitleId: Int,
@@ -20,9 +21,10 @@ enum class HolidayCalendar(
     val flag: String = "\uD83C\uDDFA\uD83C\uDDF8"
     ) {
 
-    USA(R.string.title_use_us_calendar, AmericanOffDayFinderService()),
     JAPAN(R.string.title_use_ja_calendar, JapaneseOffDayFinderService(), "\uD83C\uDDEF\uD83C\uDDF5"),
-    UK(R.string.title_use_uk_calendar, UKOffDayFinder(), "\uD83C\uDDEC\uD83C\uDDE7");
+    UK(R.string.title_use_uk_calendar, UKOffDayFinder(), "\uD83C\uDDEC\uD83C\uDDE7"),
+    USA(R.string.title_use_us_calendar, AmericanOffDayFinderService()),
+    VIETNAM(R.string.title_use_vn_calendar, VietnameseOffDayCalculator(), "\uD83C\uDDFB\uD83C\uDDF3");
 
     fun getHolidays(year: Int, month: Int): List<Holiday> {
         return offDayFinderService.invoke(
