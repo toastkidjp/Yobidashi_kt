@@ -8,17 +8,11 @@
 package jp.toastkid.lib.viewmodel
 
 import androidx.lifecycle.ViewModel
-import jp.toastkid.lib.viewmodel.event.Event
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 
 /**
  * @author toastkidjp
  */
 class PageSearcherViewModel : ViewModel() {
 
-    private val _event = MutableSharedFlow<Event>()
-
-    val event = _event.asSharedFlow()
 
 }
