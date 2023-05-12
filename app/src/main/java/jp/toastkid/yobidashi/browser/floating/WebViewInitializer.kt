@@ -18,15 +18,13 @@ import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.block.AdRemover
-import jp.toastkid.yobidashi.browser.webview.usecase.DarkCssInjectorUseCase
 
 /**
  * @author toastkidjp
  */
 class WebViewInitializer(
         private val preferenceApplier: PreferenceApplier,
-        private val viewModel: FloatingPreviewViewModel,
-        private val darkCssInjectorUseCase: DarkCssInjectorUseCase = DarkCssInjectorUseCase()
+        private val viewModel: FloatingPreviewViewModel
 ) {
 
     /**
@@ -47,20 +45,8 @@ class WebViewInitializer(
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
-                if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                    darkCssInjectorUseCase(view)
-                }
-
                 viewModel.newIcon(null)
                 viewModel.newUrl(url)
-            }
-
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-
-                if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                    darkCssInjectorUseCase(view)
-                }
             }
 
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
@@ -89,7 +75,7 @@ class WebViewInitializer(
                 }
 
                 if (urlStr != null && favicon != null) {
-                    val file = faviconApplier.assignFile(urlStr) ?: return
+                    val file = faviconApplier.assignFile(urlStr)
                     if (file.exists() && file.length() != 0L) {
                         viewModel.newIcon(BitmapFactory.decodeFile(file.absolutePath))
                         return

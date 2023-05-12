@@ -476,7 +476,10 @@ internal fun Content() {
 
                 if (openMenu.value) {
                     MainMenu(
-                        { navigate(navigationHostController, it) },
+                        {
+                            Inputs().hideKeyboard(localView)
+                            navigate(navigationHostController, it)
+                        },
                         {
                             val permissions =
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

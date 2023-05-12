@@ -37,7 +37,6 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.usecase.DarkCssInjectorUseCase
 import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,8 +51,7 @@ class WebViewClientFactory(
     private val browserViewModel: BrowserViewModel? = null,
     private val rssAddingSuggestion: RssAddingSuggestion? = null,
     private val currentView: () -> WebView? = { null },
-    private val siteNameChecker: SiteNameChecker = SiteNameChecker(),
-    private val darkCssInjectorUseCase: DarkCssInjectorUseCase = DarkCssInjectorUseCase()
+    private val siteNameChecker: SiteNameChecker = SiteNameChecker()
 ) {
 
     /**
@@ -69,10 +67,6 @@ class WebViewClientFactory(
             (view as? CustomWebView)?.enablePullToRefresh = false
 
             lastStartedMs = true
-
-            if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                darkCssInjectorUseCase(view)
-            }
 
             if (view == currentView()) {
                 browserViewModel?.updateProgress(0)
@@ -91,10 +85,6 @@ class WebViewClientFactory(
                 return
             }
             lastStartedMs = false
-
-            if (DarkCssInjectorUseCase.isTarget(preferenceApplier)) {
-                darkCssInjectorUseCase(view)
-            }
 
             val title = view.title ?: ""
             val urlStr = url ?: ""
