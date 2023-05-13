@@ -5,9 +5,9 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
+import com.android.build.gradle.tasks.GenerateBuildConfig
 import property.BuildTool
 import property.LibraryVersion
-import com.android.build.gradle.tasks.GenerateBuildConfig
 
 plugins {
   id("com.android.library")
@@ -47,7 +47,7 @@ dependencies {
     implementation(project(path = ":api"))
     implementation(project(path = ":lib"))
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${BuildTool.kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
