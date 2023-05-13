@@ -11,7 +11,6 @@ package jp.toastkid.yobidashi.calendar.model
 data class CalendarDate(
     val date: Int,
     val dayOfWeek: Int,
-    val label: String = "",
-    val offDay: Boolean = false
+    val label: String = ""
 ) {
 }
