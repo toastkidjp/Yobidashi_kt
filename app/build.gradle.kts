@@ -18,16 +18,6 @@ plugins {
 // TODO apply(from = "../jacoco.gradle.kts")
 // TODO apply(from = "../detekt.gradle.kts")
 
-// Create a variable called keystorePropertiesFile, and initialize it to your
-// keystore.properties file, in the rootProject folder.
-val keystorePropertiesFile = rootProject.file("keystore.properties")
-
-// Initialize a new Properties() object called keystoreProperties.
-val keystoreProperties = Properties()
-
-// Load your keystore.properties file into the keystoreProperties object.
-keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-
 android {
     compileSdkVersion(BuildTool.compileSdk)
     buildToolsVersion(BuildTool.buildTools)
@@ -40,6 +30,20 @@ android {
         versionCode = Version.code
         versionName = Version.name
         vectorDrawables.useSupportLibrary = true
+    }
+    signingConfigs {
+        create("release") {
+            // Initialize a new Properties() object called keystoreProperties.
+            val keystoreProperties = Properties()
+
+            // Load your keystore.properties file into the keystoreProperties object.
+            keystoreProperties.load(FileInputStream(rootProject.file("keystore.properties")))
+
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+            storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
+            storePassword = keystoreProperties.getProperty("storePassword")
+        }
     }
     buildTypes {
         debug {
@@ -54,6 +58,7 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             manifestPlaceholders["app_name"] = "@string/app_name"
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     buildFeatures {
@@ -76,14 +81,6 @@ android {
     }
     lintOptions {
         isCheckReleaseBuilds = false
-    }
-    signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = file(keystoreProperties["storeFile"] as String)
-            storePassword = keystoreProperties["storePassword"] as String
-        }
     }
 }
 
