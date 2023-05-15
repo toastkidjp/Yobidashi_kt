@@ -10,23 +10,17 @@ package jp.toastkid.about.view
 
 import android.content.Intent
 import android.net.Uri
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,17 +35,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.about.R
-import jp.toastkid.about.license.LicenseContentLoaderUseCase
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
-import java.nio.charset.StandardCharsets
+import jp.toastkid.licence.usecase.LoadLicenseUseCase
 
 @Composable
 fun AboutThisAppUi(versionName: String) {
@@ -61,30 +53,6 @@ fun AboutThisAppUi(versionName: String) {
     val openLicense = remember { mutableStateOf(false) }
 
     val progress = remember { mutableStateOf(0f) }
-    val invoke = LicenseContentLoaderUseCase(context.assets).invoke()
-    val webView = WebView(context)
-    webView.settings.also {
-        it.javaScriptCanOpenWindowsAutomatically = false
-        it.javaScriptEnabled = false
-        it.blockNetworkLoads = false
-        it.databaseEnabled = false
-        it.domStorageEnabled = false
-        it.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
-    }
-    webView.webChromeClient = object : WebChromeClient() {
-        override fun onProgressChanged(view: WebView?, newProgress: Int) {
-            super.onProgressChanged(view, newProgress)
-            progress.value = newProgress.toFloat() / 100f
-        }
-    }
-
-    webView.loadDataWithBaseURL(
-        null,
-        invoke,
-        "text/html",
-        StandardCharsets.UTF_8.name(),
-        null
-    )
 
     Surface(shadowElevation = 4.dp) {
         Column(
@@ -214,20 +182,12 @@ fun AboutThisAppUi(versionName: String) {
     }
 
     if (openLicense.value) {
+        val licenses = remember { LoadLicenseUseCase().invoke(context.assets) }
         Dialog(
             onDismissRequest = { openLicense.value = false }
         ) {
             Surface(shadowElevation = 4.dp) {
-                AndroidView(
-                    factory = { webView },
-                    modifier = Modifier.fillMaxSize()
-                )
-                if (progress.value < 0.75f) {
-                    CircularProgressIndicator(
-                        progress = progress.value,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+                LicensesUi(licenses)
             }
         }
     }
