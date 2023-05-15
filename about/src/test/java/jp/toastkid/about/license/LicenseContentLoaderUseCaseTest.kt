@@ -65,4 +65,5 @@ class LicenseContentLoaderUseCaseTest {
 
         verify { assetManager.open(any()) }
     }
+
 }
