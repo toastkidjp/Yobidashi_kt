@@ -10,9 +10,8 @@ package jp.toastkid.article_viewer.article.detail.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 
-class ContentViewerFragmentViewModel : ViewModel() {
+class ContentViewerFragmentViewModel {
 
     private val _title = mutableStateOf("")
 
