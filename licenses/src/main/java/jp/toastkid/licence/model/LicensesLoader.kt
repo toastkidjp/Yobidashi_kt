@@ -33,7 +33,7 @@ class LicensesLoader {
                 licenses.add(License(title, copyright, url, text))
             }
             when {
-                line.contains("name:") -> title = line.split("name:")[1]
+                line.contains("name:") -> title = line.split("name:")[1].trim()
                 line.contains("copyrightHolder:") -> copyright = line.split("copyrightHolder:")[1]
                 line.contains("url:") -> url = line.split("url:")[1].trim()
                 line.contains("licenseUrl:") -> {
