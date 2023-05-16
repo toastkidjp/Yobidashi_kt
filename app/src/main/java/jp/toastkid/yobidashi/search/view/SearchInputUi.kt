@@ -101,7 +101,7 @@ fun SearchInputUi(
         )
     }
 
-    val viewModel = viewModel(SearchUiViewModel::class.java)
+    val viewModel = remember { SearchUiViewModel() }
 
     val queryingUseCase = remember {
         QueryingUseCase.make(viewModel, context)
