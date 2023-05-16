@@ -9,7 +9,6 @@ package jp.toastkid.article_viewer.article.list
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
@@ -26,7 +25,7 @@ class ArticleListFragmentViewModel(
     private val articleRepository: ArticleRepository,
     private val bookmarkRepository: BookmarkRepository,
     private val preferencesWrapper: PreferenceApplier
-) : ViewModel() {
+) {
 
     private val tokenizer = NgramTokenizer()
 
