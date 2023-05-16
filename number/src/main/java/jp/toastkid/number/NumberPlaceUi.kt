@@ -60,7 +60,7 @@ fun NumberPlaceUi() {
     val context = LocalContext.current
 
     val preferenceApplier = PreferenceApplier(LocalContext.current)
-    val viewModel = viewModel(NumberPlaceViewModel::class.java)
+    val viewModel = remember { NumberPlaceViewModel() }
     LaunchedEffect(key1 = viewModel, block = {
         val file = GameFileProvider().invoke(context.filesDir, preferenceApplier)
         if (file != null) {
@@ -139,7 +139,11 @@ fun NumberPlaceUi() {
                                                         columnIndex,
                                                         number
                                                     ) { done ->
-                                                        showMessageSnackbar(context, contentViewModel, done)
+                                                        showMessageSnackbar(
+                                                            context,
+                                                            contentViewModel,
+                                                            done
+                                                        )
                                                     }
                                                 }
                                             }
