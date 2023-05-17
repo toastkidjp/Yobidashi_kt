@@ -52,8 +52,6 @@ fun AboutThisAppUi(versionName: String) {
 
     val openLicense = remember { mutableStateOf(false) }
 
-    val progress = remember { mutableStateOf(0f) }
-
     Surface(shadowElevation = 4.dp) {
         Column(
             Modifier
