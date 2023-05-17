@@ -82,7 +82,6 @@ import jp.toastkid.lib.viewmodel.event.finder.FindAllEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
 import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
-import jp.toastkid.lib.viewmodel.event.web.SwitchWebViewToCurrentEvent
 import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
@@ -292,10 +291,6 @@ internal fun WebTabUi(webTab: WebTab) {
                 is OnLoadCompletedEvent -> {
                     browserViewModel.swipeRefreshState.value?.resetOffset()
                     browserViewModel.swipeRefreshState.value?.isRefreshing = false
-                }
-                is SwitchWebViewToCurrentEvent -> {
-                    browserModule.switchWebViewToCurrent(it.tabId)
-                    GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
                 }
                 else -> Unit
             }
