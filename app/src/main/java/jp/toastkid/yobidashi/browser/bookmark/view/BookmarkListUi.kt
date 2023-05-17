@@ -49,6 +49,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -104,7 +105,7 @@ fun BookmarkListUi() {
 
     val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
 
-    val viewModel = viewModel(BookmarkListViewModel::class.java)
+    val viewModel = remember { BookmarkListViewModel() }
 
     val folderHistory: Stack<String> = Stack()
 
@@ -130,7 +131,7 @@ fun BookmarkListUi() {
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
     val listState = rememberLazyListState()
 
-    BookmarkList(listState, onClick) {
+    BookmarkList(viewModel.bookmarks(), listState, onClick, {
         try {
             CoroutineScope(Dispatchers.IO).launch {
                 viewModel.deleteItem(bookmarkRepository, it)
@@ -138,7 +139,11 @@ fun BookmarkListUi() {
         } catch (e: IOException) {
             Timber.e(e)
         }
-    }
+    },
+        {
+            viewModel.query(bookmarkRepository, it)
+        }
+    )
     ScrollerUseCase(contentViewModel, listState).invoke(LocalLifecycleOwner.current)
 
     val openClearDialogState = remember { mutableStateOf(false) }
@@ -268,18 +273,19 @@ fun BookmarkListUi() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BookmarkList(
+    bookmarks: SnapshotStateList<Bookmark>,
     listState: LazyListState,
     onClick: (Bookmark, Boolean) -> Unit,
-    onDelete: (Bookmark) -> Unit
+    onDelete: (Bookmark) -> Unit,
+    query: (String) -> Unit
 ) {
-    val viewModel = viewModel(BookmarkListViewModel::class.java)
     LazyColumn(
         contentPadding = PaddingValues(bottom = 4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         state = listState,
         modifier = Modifier.padding(start = 8.dp, end = 8.dp)
     ) {
-        items(viewModel.bookmarks(), { it._id }) { bookmark ->
+        items(bookmarks, { it._id }) { bookmark ->
             val openEditor = remember { mutableStateOf(false) }
 
             SwipeToDismissItem(
@@ -361,7 +367,7 @@ private fun BookmarkList(
             )
 
             if (openEditor.value) {
-                EditorDialog(openEditor, bookmark)
+                EditorDialog(openEditor, bookmark, query)
             }
         }
     }
@@ -371,9 +377,9 @@ private fun BookmarkList(
 @Composable
 private fun EditorDialog(
     openEditor: MutableState<Boolean>,
-    currentItem: Bookmark
+    currentItem: Bookmark,
+    query: (String) -> Unit
 ) {
-    val viewModel = viewModel(BookmarkListViewModel::class.java)
     val bookmarkRepository = DatabaseFinder().invoke(LocalContext.current).bookmarkRepository()
     val folders = remember { mutableStateListOf<String>() }
     val moveTo = remember { mutableStateOf(currentItem.parent) }
@@ -415,7 +421,7 @@ private fun EditorDialog(
                                         currentItem,
                                         moveTo.value,
                                         bookmarkRepository,
-                                        viewModel
+                                        query
                                     )
                                 }
                             }
@@ -484,13 +490,13 @@ private fun moveFolder(
     currentItem: Bookmark,
     newFolder: String,
     bookmarkRepository: BookmarkRepository,
-    viewModel: BookmarkListViewModel
+    query: (String) -> Unit
 ) {
     val folder = currentItem.parent
     CoroutineScope(Dispatchers.IO).launch {
         currentItem.parent = newFolder
         bookmarkRepository.add(currentItem)
-        viewModel.query(bookmarkRepository, folder)
+        query(folder)
     }
 }
 
