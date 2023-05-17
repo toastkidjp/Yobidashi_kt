@@ -80,7 +80,6 @@ import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
 import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindAllEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
-import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
 import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
 import jp.toastkid.lib.viewmodel.event.web.SwitchWebViewToCurrentEvent
@@ -91,7 +90,6 @@ import jp.toastkid.yobidashi.browser.BrowserModule
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
 import jp.toastkid.yobidashi.browser.usecase.PrintCurrentPageUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
@@ -99,7 +97,6 @@ import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
@@ -161,21 +158,6 @@ internal fun WebTabUi(webTab: WebTab) {
             coroutineScope.launch {
                 browserViewModel.swipeRefreshState.value?.resetOffset()
             }
-        }
-
-    val downloadUrl = remember { mutableStateOf("") }
-    val downloadPermissionRequestLauncher =
-        rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
-            if (it.not()) {
-                contentViewModel
-                    .snackShort(R.string.message_requires_permission_storage)
-                return@rememberLauncherForActivityResult
-            }
-            if (downloadUrl.value.isEmpty()) {
-                return@rememberLauncherForActivityResult
-            }
-            DownloadAction(activityContext).invoke(downloadUrl.value)
-            downloadUrl.value = ""
         }
 
     Box(
@@ -311,10 +293,6 @@ internal fun WebTabUi(webTab: WebTab) {
                     browserViewModel.swipeRefreshState.value?.resetOffset()
                     browserViewModel.swipeRefreshState.value?.isRefreshing = false
                 }
-                is DownloadEvent -> {
-                    downloadUrl.value = it.url
-                    downloadPermissionRequestLauncher.launch(it.url)
-                }
                 is SwitchWebViewToCurrentEvent -> {
                     browserModule.switchWebViewToCurrent(it.tabId)
                     GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
@@ -339,7 +317,7 @@ internal fun WebTabUi(webTab: WebTab) {
             OptionMenu(titleId = R.string.translate, action = {
                 val language = activityContext.resources.configuration.locales[0].language
                 val source = if (language == "en") "ja" else "en"
-                browserViewModel.open(
+                contentViewModel.open(
                     ("https://papago.naver.net/website?locale=auto&source=${source}&target=$language&url="
                             + Uri.encode(browserModule.currentUrl()))
                         .toUri()
@@ -405,7 +383,7 @@ internal fun WebTabUi(webTab: WebTab) {
 
                 RandomWikipedia()
                     .fetchWithAction { title, link ->
-                        browserViewModel.open(link)
+                        contentViewModel.open(link)
                         contentViewModel.snackShort(
                             activityContext.getString(
                                 R.string.message_open_random_wikipedia,
@@ -556,14 +534,12 @@ private fun AppBarContent(
                 }
             }
 
-            val browserViewModel = viewModel(BrowserViewModel::class.java, activity)
             HeaderSubButton(
                 R.drawable.ic_home,
                 R.string.title_load_home,
                 tint
             ) {
-                browserViewModel
-                    .open(preferenceApplier.homeUrl.toUri())
+                contentViewModel.open(preferenceApplier.homeUrl.toUri())
             }
 
             HeaderSubButton(
