@@ -9,14 +9,13 @@ package jp.toastkid.todo.view.addition
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import jp.toastkid.todo.model.TodoTask
 import java.io.Serializable
 
 /**
  * @author toastkidjp
  */
-class TaskAdditionDialogFragmentViewModel : ViewModel(), Serializable {
+class TaskAdditionDialogFragmentViewModel : Serializable {
 
     private val _bottomSheetScaffoldState = mutableStateOf(false)
 
