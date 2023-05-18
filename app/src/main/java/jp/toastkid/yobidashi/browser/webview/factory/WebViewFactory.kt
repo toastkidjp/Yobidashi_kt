@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
@@ -135,7 +136,7 @@ internal class WebViewFactory {
                 }
                 else -> {
                     (context as? ViewModelStoreOwner)?.let {
-                        ViewModelProvider(it).get(BrowserViewModel::class.java).download(url)
+                        ViewModelProvider(it).get(ContentViewModel::class.java).download(url)
                     }
                 }
             }
