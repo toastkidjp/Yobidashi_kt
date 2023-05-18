@@ -13,7 +13,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
@@ -32,9 +31,6 @@ class LinkBehaviorServiceTest {
     private lateinit var contentViewModel: ContentViewModel
 
     @MockK
-    private lateinit var browserViewModel: BrowserViewModel
-
-    @MockK
     private lateinit var exists: (String) -> Boolean
 
     @MockK
@@ -47,7 +43,7 @@ class LinkBehaviorServiceTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { browserViewModel.open(any()) }.just(Runs)
+        every { contentViewModel.open(any()) }.just(Runs)
         every { internalLinkScheme.isInternalLink(any()) }.returns(true)
         every { internalLinkScheme.extract(any()) }.returns("yahoo")
         coEvery { contentViewModel.newArticle(any()) }.just(Runs)
@@ -58,7 +54,7 @@ class LinkBehaviorServiceTest {
     fun testNullUrl() {
         linkBehaviorService.invoke(null)
 
-        verify(exactly = 0) { browserViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.open(any()) }
         verify(exactly = 0) { contentViewModel.newArticle(any()) }
     }
 
@@ -66,7 +62,7 @@ class LinkBehaviorServiceTest {
     fun testEmptyUrl() {
         linkBehaviorService.invoke("")
 
-        verify(exactly = 0) { browserViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.open(any()) }
         verify(exactly = 0) { contentViewModel.newArticle(any()) }
     }
 
@@ -78,7 +74,7 @@ class LinkBehaviorServiceTest {
 
         linkBehaviorService.invoke("https://www.yahoo.co.jp")
 
-        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.open(any()) }
         verify(exactly = 0) { contentViewModel.newArticle(any()) }
     }
 
@@ -88,7 +84,7 @@ class LinkBehaviorServiceTest {
 
         linkBehaviorService.invoke("internal-article://yahoo")
 
-        verify(exactly = 0) { browserViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.open(any()) }
         coVerify(exactly = 0) { contentViewModel.newArticle(any()) }
         coVerify(exactly = 1) { contentViewModel.snackShort(any<String>())}
     }
@@ -99,7 +95,7 @@ class LinkBehaviorServiceTest {
 
         linkBehaviorService.invoke("internal-article://yahoo")
 
-        verify(exactly = 0) { browserViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.open(any()) }
         coVerify(exactly = 1) { contentViewModel.newArticle(any()) }
         coVerify(exactly = 0) { contentViewModel.snackShort(any<String>())}
     }
