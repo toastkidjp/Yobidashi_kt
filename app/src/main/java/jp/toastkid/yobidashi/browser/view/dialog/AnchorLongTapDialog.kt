@@ -58,6 +58,9 @@ internal fun AnchorLongTapDialog(
     val browserViewModel = (context as? ViewModelStoreOwner)?.let {
         viewModel(BrowserViewModel::class.java, it)
     }
+    val contentViewModel = (context as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, it)
+    }
 
     Dialog(
         onDismissRequest = {
@@ -97,17 +100,17 @@ internal fun AnchorLongTapDialog(
                         ) {
                             if (anchor != null && Urls.isValidUrl(anchor)) {
                                 SingleLineText(R.string.row_dialog_open_new) {
-                                    browserViewModel?.open(anchor.toUri())
+                                    contentViewModel?.open(anchor.toUri())
                                     browserViewModel?.clearLongTapParameters()
                                     visibleState.value = false
                                 }
                                 SingleLineText(R.string.row_dialog_open_background) {
-                                    browserViewModel?.openBackground(anchor.toUri())
+                                    contentViewModel?.openBackground(anchor.toUri())
                                     browserViewModel?.clearLongTapParameters()
                                     visibleState.value = false
                                 }
                                 SingleLineText(R.string.row_dialog_preview) {
-                                    browserViewModel?.preview(anchor.toUri())
+                                    contentViewModel?.preview(anchor.toUri())
                                     browserViewModel?.clearLongTapParameters()
                                     visibleState.value = false
                                 }
@@ -115,7 +118,7 @@ internal fun AnchorLongTapDialog(
 
                             if (imageUrl != null && Urls.isValidUrl(imageUrl)) {
                                 SingleLineText(R.string.row_dialog_image_search) {
-                                    browserViewModel?.open(ImageSearchUrlGenerator()(imageUrl))
+                                    contentViewModel?.open(ImageSearchUrlGenerator()(imageUrl))
                                     browserViewModel?.clearLongTapParameters()
                                     visibleState.value = false
                                 }
@@ -132,11 +135,7 @@ internal fun AnchorLongTapDialog(
                                         return@SingleLineText
                                     }
 
-                                    (context as? ViewModelStoreOwner)?.let {
-                                        ViewModelProvider(it)
-                                            .get(BrowserViewModel::class.java)
-                                            .download(imageUrl)
-                                    }
+                                    contentViewModel?.download(imageUrl)
                                     browserViewModel?.clearLongTapParameters()
                                     visibleState.value = false
                                 }
