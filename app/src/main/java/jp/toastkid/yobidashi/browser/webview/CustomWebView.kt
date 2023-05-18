@@ -57,6 +57,10 @@ internal class CustomWebView(context: Context) : WebView(context) {
         ViewModelProvider(it).get(BrowserViewModel::class.java)
     }
 
+    private val contentViewModel = (context as? ViewModelStoreOwner)?.let {
+        ViewModelProvider(it).get(ContentViewModel::class.java)
+    }
+
     override fun dispatchTouchEvent(motionEvent: MotionEvent?): Boolean {
         if (motionEvent?.action == MotionEvent.ACTION_UP) {
             scrolling = 0
@@ -200,7 +204,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
                                             }?.snackShort(R.string.message_failed_query_extraction_from_web_view)
                                             return@withAction
                                         }
-                                        viewModel?.preview(TranslationUrlGenerator()(it).toUri())
+                                        contentViewModel?.preview(TranslationUrlGenerator()(it).toUri())
                                     }
                                     mode?.finish()
                                     return true
