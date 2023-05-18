@@ -18,7 +18,6 @@ import jp.toastkid.editor.OrderedListHeadAdder
 import jp.toastkid.editor.R
 import jp.toastkid.editor.StringSurroundingUseCase
 import jp.toastkid.editor.TableConverter
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.input.Inputs
@@ -34,7 +33,6 @@ import jp.toastkid.search.UrlFactory
 class MenuActionInvokerUseCase(
     private val editText: EditText,
     private val speechMaker: SpeechMaker?,
-    private val browserViewModel: BrowserViewModel?,
     private val contentViewModel: ContentViewModel?,
     private val listHeadAdder: ListHeadAdder = ListHeadAdder()
 ) {
@@ -130,15 +128,15 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_url_open_background -> {
-                browserViewModel?.openBackground(text.toUri())
+                contentViewModel?.openBackground(text.toUri())
                 return true
             }
             R.id.context_edit_url_preview -> {
-                browserViewModel?.preview(text.toUri())
+                contentViewModel?.preview(text.toUri())
                 return true
             }
             R.id.context_edit_preview_search -> {
-                browserViewModel?.preview(makeSearchResultUrl(context, text))
+                contentViewModel?.preview(makeSearchResultUrl(context, text))
                 return true
             }
             R.id.context_edit_web_search -> {
@@ -154,7 +152,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_translate -> {
-                browserViewModel?.preview(TranslationUrlGenerator().invoke(text).toUri())
+                contentViewModel?.preview(TranslationUrlGenerator().invoke(text).toUri())
                 return true
             }
             R.id.context_edit_insert_thousand_separator -> {
@@ -168,7 +166,7 @@ class MenuActionInvokerUseCase(
 
     private fun openUri(uri: Uri) {
         Inputs().hideKeyboard(editText)
-        browserViewModel?.open(uri)
+        contentViewModel?.open(uri)
     }
 
     private fun makeSearchResultUrl(context: Context, text: String): Uri = UrlFactory().invoke(

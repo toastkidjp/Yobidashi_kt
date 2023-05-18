@@ -31,7 +31,6 @@ import jp.toastkid.editor.OrderedListHeadAdder
 import jp.toastkid.editor.R
 import jp.toastkid.editor.StringSurroundingUseCase
 import jp.toastkid.editor.TableConverter
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.input.Inputs
@@ -59,9 +58,6 @@ class MenuActionInvokerUseCaseTest {
 
     @MockK
     private lateinit var speechMaker: SpeechMaker
-
-    @MockK
-    private lateinit var browserViewModel: BrowserViewModel
 
     @MockK
     private lateinit var contentViewModel: ContentViewModel
@@ -250,7 +246,7 @@ class MenuActionInvokerUseCaseTest {
 
     @Test
     fun testOpenNew() {
-        every { browserViewModel.open(any()) }.just(Runs)
+        every { contentViewModel.open(any()) }.just(Runs)
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
 
@@ -261,14 +257,14 @@ class MenuActionInvokerUseCaseTest {
             .invoke(R.id.context_edit_url_open_new, "https://www.yahoo.co.jp")
 
         assertTrue(handled)
-        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.open(any()) }
         verify(exactly = 1) { Uri.parse(any()) }
         verify { anyConstructed<Inputs>().hideKeyboard(any()) }
     }
 
     @Test
     fun testOpenBackground() {
-        every { browserViewModel.openBackground(any()) }.just(Runs)
+        every { contentViewModel.openBackground(any()) }.just(Runs)
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
 
@@ -276,13 +272,13 @@ class MenuActionInvokerUseCaseTest {
             .invoke(R.id.context_edit_url_open_background, "https://www.yahoo.co.jp")
 
         assertTrue(handled)
-        verify(exactly = 1) { browserViewModel.openBackground(any()) }
+        verify(exactly = 1) { contentViewModel.openBackground(any()) }
         verify(exactly = 1) { Uri.parse(any()) }
     }
 
     @Test
     fun testPreview() {
-        every { browserViewModel.preview(any()) }.just(Runs)
+        every { contentViewModel.preview(any()) }.just(Runs)
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
 
@@ -290,13 +286,13 @@ class MenuActionInvokerUseCaseTest {
             .invoke(R.id.context_edit_url_preview, "https://www.yahoo.co.jp")
 
         assertTrue(handled)
-        verify(exactly = 1) { browserViewModel.preview(any()) }
+        verify(exactly = 1) { contentViewModel.preview(any()) }
         verify(exactly = 1) { Uri.parse(any()) }
     }
 
     @Test
     fun testWebSearch() {
-        every { browserViewModel.open(any()) }.just(Runs)
+        every { contentViewModel.open(any()) }.just(Runs)
         mockkConstructor(UrlFactory::class)
         every { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }.returns(mockk())
 
@@ -307,14 +303,14 @@ class MenuActionInvokerUseCaseTest {
             .invoke(R.id.context_edit_web_search, "https://www.yahoo.co.jp")
 
         assertTrue(handled)
-        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.open(any()) }
         verify(exactly = 1) { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }
         verify { anyConstructed<Inputs>().hideKeyboard(any()) }
     }
 
     @Test
     fun testPreviewSearch() {
-        every { browserViewModel.preview(any()) }.just(Runs)
+        every { contentViewModel.preview(any()) }.just(Runs)
         mockkConstructor(UrlFactory::class)
         every { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }.returns(mockk())
 
@@ -322,13 +318,13 @@ class MenuActionInvokerUseCaseTest {
             .invoke(R.id.context_edit_preview_search, "https://www.yahoo.co.jp")
 
         assertTrue(handled)
-        verify(exactly = 1) { browserViewModel.preview(any()) }
+        verify(exactly = 1) { contentViewModel.preview(any()) }
         verify(exactly = 1) { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }
     }
 
     @Test
     fun testPreviewSearchWithPreferencesReturnsNull() {
-        every { browserViewModel.preview(any()) }.just(Runs)
+        every { contentViewModel.preview(any()) }.just(Runs)
         mockkConstructor(UrlFactory::class)
         every { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }.returns(mockk())
         mockkConstructor(PreferenceApplier::class)
@@ -344,7 +340,7 @@ class MenuActionInvokerUseCaseTest {
             .invoke(R.id.context_edit_preview_search, "https://www.yahoo.co.jp")
 
         assertTrue(handled)
-        verify(exactly = 1) { browserViewModel.preview(any()) }
+        verify(exactly = 1) { contentViewModel.preview(any()) }
         verify(exactly = 1) { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }
         verify(exactly = 1) { anyConstructed<PreferenceApplier>().getDefaultSearchEngine() }
         verify(exactly = 1) { SearchCategory.getDefaultCategoryName() }
@@ -416,14 +412,14 @@ class MenuActionInvokerUseCaseTest {
         every { anyConstructed<TranslationUrlGenerator>().invoke(any()) }.returns("https://test/url")
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
-        every { browserViewModel.preview(any()) }.just(Runs)
+        every { contentViewModel.preview(any()) }.just(Runs)
 
         val handled = menuActionInvokerUseCase
             .invoke(R.id.context_edit_translate, "test")
 
         assertTrue(handled)
         verify(exactly = 1) { anyConstructed<TranslationUrlGenerator>().invoke(any()) }
-        verify { browserViewModel.preview(any()) }
+        verify { contentViewModel.preview(any()) }
     }
 
 }
