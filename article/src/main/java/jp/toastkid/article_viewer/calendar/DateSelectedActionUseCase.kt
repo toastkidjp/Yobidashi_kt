@@ -28,12 +28,17 @@ class DateSelectedActionUseCase(
 
     private val disposables = Job()
 
-    operator fun invoke(year: Int, month: Int, date: Int) {
+    operator fun invoke(year: Int, month: Int, date: Int, background: Boolean = false) {
         CoroutineScope(mainDispatcher).launch(disposables) {
             val article = withContext(ioDispatcher) {
                 repository.findFirst(TitleFilterGenerator()(year, month + 1, date))
             } ?: return@launch
-            viewModel?.newArticle(article.title)
+
+            if (background) {
+                viewModel?.newArticleOnBackground(article.title)
+            } else {
+                viewModel?.newArticle(article.title)
+            }
         }
     }
 

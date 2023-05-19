@@ -161,11 +161,7 @@ fun CalendarUi() {
 
                 Button(
                     onClick = {
-                        currentDate.value = GregorianCalendar(
-                            currentDate.value.get(Calendar.YEAR),
-                            currentDate.value.get(Calendar.MONTH) + 1,
-                            1
-                        )
+                        currentDate.value = Calendar.getInstance()
                     },
                     modifier = Modifier
                 ) {
@@ -233,7 +229,8 @@ fun CalendarUi() {
                                             contentViewModel,
                                             currentDate.value.get(Calendar.YEAR),
                                             currentDate.value.get(Calendar.MONTH),
-                                            day.date
+                                            day.date,
+                                            true
                                         )
                                     }
                                 )
@@ -245,17 +242,20 @@ fun CalendarUi() {
     }
 }
 
-private fun openDateArticle(context: Context, contentViewModel: ContentViewModel, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+private fun openDateArticle(context: Context, contentViewModel: ContentViewModel, year: Int, monthOfYear: Int, dayOfMonth: Int, background: Boolean = false) {
     DateSelectedActionUseCase(
         AppDatabase
             .find(context)
             .articleRepository(),
         contentViewModel
-    ).invoke(year, monthOfYear, dayOfMonth)
+    ).invoke(year, monthOfYear, dayOfMonth, background)
 }
 
-private fun isToday(value: Calendar, date: Int): Boolean {
-    return value.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR) && value.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH) && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == date
+private fun isToday(target: Calendar, date: Int): Boolean {
+    val today = Calendar.getInstance()
+    return target.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+            && target.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+            && today.get(Calendar.DAY_OF_MONTH) == date
 }
 
 private fun makeMonth(
@@ -301,4 +301,4 @@ private fun getDayOfWeekLabel(dayOfWeek: Int) =
     }
 
 private val OFF_DAY_FG: Color = Color(190, 50, 55)
-private val SATURDAY_FG: Color = Color(55, 50, 190)
+private val SATURDAY_FG:  Color = Color(95, 90, 250)

@@ -6,32 +6,45 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.number
+package jp.toastkid.number
 
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.mockk
 import io.mockk.unmockkAll
-import jp.toastkid.number.NumberPlaceViewModel
+import io.mockk.verify
+import org.junit.After
 import org.junit.Assert.assertFalse
+import org.junit.Before
+import org.junit.Test
 
 class NumberPlaceViewModelTest {
 
     @InjectMockKs
     private lateinit var numberPlaceViewModel: NumberPlaceViewModel
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun masked() {
         assertFalse(numberPlaceViewModel.masked().fulfilled())
+    }
+
+    @Test
+    fun place() {
+        val callback = mockk<(Boolean) -> Unit>()
+
+        numberPlaceViewModel.place(2, 3,  4, callback)
+
+        verify(inverse = true) { callback(any()) }
     }
 
 }

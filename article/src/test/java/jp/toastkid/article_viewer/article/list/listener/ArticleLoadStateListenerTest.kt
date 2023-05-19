@@ -109,7 +109,7 @@ class ArticleLoadStateListenerTest {
     }
 
     private fun makeCompleteStatus(): CombinedLoadStates {
-        val completeLoadStates = CombinedLoadStates(
+        return CombinedLoadStates(
             LoadState.NotLoading(false),
             LoadState.NotLoading(false),
             LoadState.NotLoading(false),
@@ -120,7 +120,6 @@ class ArticleLoadStateListenerTest {
             ),
             null
         )
-        return completeLoadStates
     }
 
 }

@@ -8,18 +8,18 @@
 
 package jp.toastkid.yobidashi.calendar.model
 
+import jp.toastkid.yobidashi.calendar.service.us.AmericanOffDayFinderService
 import java.util.Calendar
 
 class Week {
     private val days: MutableList<CalendarDate> = mutableListOf()
 
-    //private val offDayFinderService = OffDayFinderService()
+    private val offDayFinderService = AmericanOffDayFinderService()
 
     fun add(date: Calendar) {
         days.add(
             CalendarDate(date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.DAY_OF_WEEK),
-            offDay = false//offDayFinderService.invoke(date.year, date.month.value, date.dayOfMonth, date.dayOfWeek))
-            )
+            offDay = offDayFinderService.invoke(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.DAY_OF_WEEK)))
         )
     }
 
