@@ -39,7 +39,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.about.R
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
@@ -98,10 +97,7 @@ fun AboutThisAppUi(versionName: String) {
                     .fillMaxWidth()
                     .height(56.dp)
                     .clickable(onClick = {
-                        val browserViewModel =
-                            ViewModelProvider(context).get(BrowserViewModel::class.java)
-
-                        browserViewModel.open(
+                        ViewModelProvider(context).get(ContentViewModel::class.java).open(
                             context
                                 .getString(R.string.link_privacy_policy)
                                 .toUri()
