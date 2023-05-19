@@ -59,8 +59,6 @@ class TabAdapter(
 
     private val disposables = Job()
 
-    private var browserViewModel: BrowserViewModel? = null
-
     private val bitmapCompressor = BitmapCompressor()
 
     private var contentViewModel: ContentViewModel? = null
@@ -75,7 +73,6 @@ class TabAdapter(
 
         if (viewContext is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
-            browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
 
             webViewFactory = WebViewFactoryUseCase(

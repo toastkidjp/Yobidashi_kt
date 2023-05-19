@@ -59,7 +59,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.compat.material3.FractionalThreshold
 import jp.toastkid.lib.compat.material3.ResistanceConfig
@@ -199,7 +198,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     contentViewModel.openArticleList()
                     closeOnly(coroutineScope, contentViewModel)
                 }
-                val browserViewModel = viewModel(BrowserViewModel::class.java, context)
+
                 TabActionFab(
                     R.drawable.ic_web,
                     R.string.title_browser,
@@ -207,7 +206,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     backgroundColor,
                     Modifier.padding(4.dp)
                 ) {
-                    browserViewModel.open(preferenceApplier.homeUrl.toUri())
+                    contentViewModel.open(preferenceApplier.homeUrl.toUri())
                     closeOnly(coroutineScope, contentViewModel)
                 }
                 TabActionFab(
