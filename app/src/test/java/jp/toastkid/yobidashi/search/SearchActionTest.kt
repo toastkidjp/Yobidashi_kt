@@ -21,7 +21,7 @@ import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.UrlFactory
@@ -48,7 +48,7 @@ class SearchActionTest {
     private var saveHistory: Boolean = true
 
     @MockK
-    private lateinit var viewModelSupplier: (Context) -> BrowserViewModel?
+    private lateinit var viewModelSupplier: (Context) -> ContentViewModel?
 
     @MockK
     private lateinit var preferenceApplierSupplier: (Context) -> PreferenceApplier
@@ -57,7 +57,7 @@ class SearchActionTest {
     private lateinit var urlFactory: UrlFactory
 
     @MockK
-    private lateinit var browserViewModel: BrowserViewModel
+    private lateinit var contentViewModel: ContentViewModel
 
     @MockK
     private lateinit var searchHistoryInsertion: SearchHistoryInsertion
@@ -71,11 +71,11 @@ class SearchActionTest {
 
         every { preferenceApplier getProperty "isEnableSearchHistory"  }.returns(true)
         every { preferenceApplierSupplier.invoke(any()) }.returns(preferenceApplier)
-        every { viewModelSupplier.invoke(any()) }.returns(browserViewModel)
+        every { viewModelSupplier.invoke(any()) }.returns(contentViewModel)
         every { urlFactory.invoke(any(), any(), any()) }.returns(mockk())
         every { activityContext.getString(any(), any()) }.returns("test")
-        every { browserViewModel.openBackground(any(), any()) }.just(Runs)
-        every { browserViewModel.open(any()) }.just(Runs)
+        every { contentViewModel.openBackground(any(), any()) }.just(Runs)
+        every { contentViewModel.open(any()) }.just(Runs)
 
         mockkObject(Urls)
         every { Urls.isValidUrl(any()) }.returns(false)
@@ -109,8 +109,8 @@ class SearchActionTest {
     fun testOpenSearchByNewTabOnForeground() {
         searchAction.invoke()
 
-        verify(exactly = 1) { browserViewModel.open(any()) }
-        verify(exactly = 0) { browserViewModel.openBackground(any(), any()) }
+        verify(exactly = 1) { contentViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.openBackground(any(), any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any(), any()) }
         verify(exactly = 1) { searchHistoryInsertion.insert() }
     }
@@ -131,8 +131,8 @@ class SearchActionTest {
 
         searchAction.invoke()
 
-        verify(exactly = 0) { browserViewModel.open(any()) }
-        verify(exactly = 1) { browserViewModel.openBackground(any(), any()) }
+        verify(exactly = 0) { contentViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.openBackground(any(), any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any(), any()) }
         verify(exactly = 1) { searchHistoryInsertion.insert() }
     }
@@ -153,7 +153,7 @@ class SearchActionTest {
 
         searchAction.invoke()
 
-        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.open(any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any(), any()) }
         verify(exactly = 0) { searchHistoryInsertion.insert() }
     }
@@ -164,7 +164,7 @@ class SearchActionTest {
 
         searchAction.invoke()
 
-        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.open(any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any(), any()) }
         verify(exactly = 0) { searchHistoryInsertion.insert() }
     }
@@ -175,7 +175,7 @@ class SearchActionTest {
 
         searchAction.invoke()
 
-        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.open(any()) }
         verify(exactly = 0) { urlFactory.invoke(any(), any(), any()) }
         verify(exactly = 1) { searchHistoryInsertion.insert() }
     }
