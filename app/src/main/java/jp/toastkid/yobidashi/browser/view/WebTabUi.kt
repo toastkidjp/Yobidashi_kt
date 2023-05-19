@@ -80,8 +80,6 @@ import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
 import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindAllEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
-import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
-import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
 import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
@@ -281,20 +279,6 @@ internal fun WebTabUi(webTab: WebTab) {
                 readerModeText.value = if (readerModeText.value.isNotEmpty()) "" else it
             }
         }
-
-        browserViewModel.event.collect {
-            when (it) {
-                is OnStopLoadEvent -> {
-                    browserViewModel.swipeRefreshState.value?.resetOffset()
-                    browserViewModel.swipeRefreshState.value?.isRefreshing = false
-                }
-                is OnLoadCompletedEvent -> {
-                    browserViewModel.swipeRefreshState.value?.resetOffset()
-                    browserViewModel.swipeRefreshState.value?.isRefreshing = false
-                }
-                else -> Unit
-            }
-        }
     })
 
     val storagePermissionRequestLauncher =
@@ -408,6 +392,8 @@ private fun AppBarContent(
     val enableBack = viewModel.enableBack
     val enableForward = viewModel.enableForward
     val tabCountState = contentViewModel.tabCount
+
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -585,7 +571,9 @@ private fun AppBarContent(
                                 browserModule.reload()
                             } else {
                                 browserModule.stopLoading()
-                                viewModel.stopProgress(true)
+                                coroutineScope.launch {
+                                    viewModel.stopProgress(true)
+                                }
                             }
                         }
                 )

@@ -14,12 +14,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import jp.toastkid.lib.model.LoadInformation
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
 import jp.toastkid.lib.viewmodel.event.Event
 import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
-import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
-import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
 import jp.toastkid.lib.viewmodel.event.web.PreviewUrlEvent
@@ -73,16 +70,10 @@ class BrowserViewModel : ViewModel() {
         }
     }
 
-    fun stopProgress(stop: Boolean) {
-        viewModelScope.launch {
-            _event.emit(OnStopLoadEvent())
-        }
+    suspend fun stopProgress(stop: Boolean) {
+        swipeRefreshState.value?.resetOffset()
+        swipeRefreshState.value?.isRefreshing = false
     }
-
-    fun finished(tabId: String, title: String, url: String) =
-        viewModelScope.launch {
-            _event.emit(OnLoadCompletedEvent(LoadInformation(tabId, title, url)))
-        }
 
     fun search(query: String) {
         viewModelScope.launch {
