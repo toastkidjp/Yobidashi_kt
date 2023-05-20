@@ -13,7 +13,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.translate.TranslationUrlGenerator
@@ -53,10 +52,6 @@ internal class CustomWebView(context: Context) : WebView(context) {
 
     private val speechMaker by lazy { SpeechMaker(context) }
 
-    private val viewModel = (context as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(it).get(BrowserViewModel::class.java)
-    }
-
     private val contentViewModel = (context as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
@@ -85,7 +80,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
                 var deltaY: Float = lastY - eventY
 
                 if (enablePullToRefresh && (deltaY < 0)) {
-                    viewModel?.nestedScrollDispatcher()?.dispatchPreScroll(
+                    contentViewModel?.nestedScrollDispatcher()?.dispatchPreScroll(
                         Offset(0f, deltaY / 10f),
                         NestedScrollSource.Drag
                     )
@@ -129,7 +124,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 val returnValue = super.dispatchTouchEvent(event)
                 enablePullToRefresh = false
-                viewModel?.nestedScrollDispatcher()?.dispatchPostScroll(
+                contentViewModel?.nestedScrollDispatcher()?.dispatchPostScroll(
                     Offset.Zero,
                     Offset.Zero,
                     NestedScrollSource.Drag

@@ -22,7 +22,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
@@ -169,7 +168,7 @@ internal class WebViewFactory {
 
     private fun extractViewModel(context: Context?) =
         (context as? ViewModelStoreOwner)?.let {
-            ViewModelProvider(it).get(BrowserViewModel::class.java)
+            ViewModelProvider(it).get(ContentViewModel::class.java)
         }
 
 }

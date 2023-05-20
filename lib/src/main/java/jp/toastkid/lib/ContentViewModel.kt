@@ -16,6 +16,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -435,5 +436,22 @@ class ContentViewModel : ViewModel() {
             _event.emit(WebSearchEvent(query))
         }
     }
+
+    private val _longTapActionParameters =
+        mutableStateOf(Triple<String?, String?, String?>(null, null, null))
+
+    val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
+
+    fun setLongTapParameters(title: String?, anchor: String?, imageUrl: String?) {
+        _longTapActionParameters.value = Triple(title, anchor, imageUrl)
+    }
+
+    fun clearLongTapParameters() {
+        _longTapActionParameters.value = Triple(null, null, null)
+    }
+
+    private val nestedScrollDispatcher = NestedScrollDispatcher()
+
+    fun nestedScrollDispatcher() = nestedScrollDispatcher
 
 }

@@ -113,12 +113,12 @@ internal fun WebTabUi(webTab: WebTab) {
         frameLayout
     }
 
-    val browserModule = remember { BrowserModule(webViewContainer) }
+    val browserViewModel = remember { BrowserViewModel() }
+    val browserModule = remember { BrowserModule(webViewContainer, browserViewModel) }
     browserModule.applyNewAlpha()
     browserModule.resizePool(PreferenceApplier(activityContext).poolSize)
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
-    val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val refreshTriggerPx = with(LocalDensity.current) { 96.dp.toPx() }
@@ -147,7 +147,7 @@ internal fun WebTabUi(webTab: WebTab) {
 
     val scrollListener =
         View.OnScrollChangeListener { _, scrollX, scrollY, oldScrollX, oldScrollY ->
-            browserViewModel.nestedScrollDispatcher().dispatchPreScroll(
+            contentViewModel.nestedScrollDispatcher().dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
             )
@@ -169,7 +169,7 @@ internal fun WebTabUi(webTab: WebTab) {
             modifier = Modifier
                 .nestedScroll(
                     connection = object : NestedScrollConnection {},
-                    dispatcher = browserViewModel.nestedScrollDispatcher()
+                    dispatcher = contentViewModel.nestedScrollDispatcher()
                 )
         )
 
@@ -218,12 +218,17 @@ internal fun WebTabUi(webTab: WebTab) {
     }
 
     if (browserViewModel.openLongTapDialog.value) {
-        val value = browserViewModel.longTapActionParameters.value
+        val value = contentViewModel.longTapActionParameters.value
+        browserViewModel.openLongTapDialog.value = true
+
         AnchorLongTapDialog(
-            browserViewModel.openLongTapDialog,
             value.first,
             value.second,
-            value.third
+            value.third,
+            {
+                browserViewModel.openLongTapDialog.value = false
+                contentViewModel?.clearLongTapParameters()
+            }
         )
     }
 

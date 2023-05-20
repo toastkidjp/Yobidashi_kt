@@ -37,7 +37,8 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class BrowserModule(
-    webViewContainer: FrameLayout
+    webViewContainer: FrameLayout,
+    private var browserViewModel: BrowserViewModel
 ) {
 
     private val context = webViewContainer.context
@@ -55,8 +56,6 @@ class BrowserModule(
     private val adRemover: AdRemover = AdRemover.make(context.assets)
 
     private val autoArchive = AutoArchive.make(context)
-
-    private var browserViewModel: BrowserViewModel? = null
 
     private val webViewReplacementUseCase: WebViewReplacementUseCase
 
@@ -77,7 +76,6 @@ class BrowserModule(
 
         if (context is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(context)
-            browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
 
