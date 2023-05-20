@@ -4,25 +4,19 @@ import android.content.Context
 import android.net.Uri
 import android.os.Message
 import android.view.View
-import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
-import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab
@@ -63,8 +57,6 @@ class TabAdapter(
 
     private var contentViewModel: ContentViewModel? = null
 
-    private var webViewFactory: WebViewFactoryUseCase? = null
-
     init {
         val viewContext = contextSupplier()
         tabThumbnails = TabThumbnails.with(contextSupplier())
@@ -74,17 +66,6 @@ class TabAdapter(
         if (viewContext is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
-
-            webViewFactory = WebViewFactoryUseCase(
-                    webViewClientFactory = WebViewClientFactory(
-                        contentViewModel,
-                        AdRemover.make(viewContext.assets),
-                        FaviconApplier(viewContext),
-                        preferenceApplier,
-                        browserViewModel = viewModelProvider.get(BrowserViewModel::class.java),
-                        currentView = { GlobalWebViewPool.getLatest() }
-                    )
-            )
         }
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -130,7 +111,7 @@ class TabAdapter(
      * @param title Tab's title
      * @param url Tab's URL
      */
-    fun openBackgroundTab(title: String, url: String): () -> Unit {
+    fun openBackgroundTab(title: String, url: String): Tab {
         val context = contextSupplier()
         val tabTitle =
                 if (title.isNotBlank()) title
@@ -140,11 +121,8 @@ class TabAdapter(
         tabList.add(newTab)
         tabList.save()
 
-        val webView = webViewFactory?.invoke(context) ?: return { }
-        webView.loadUrl(url)
-        GlobalWebViewPool.put(newTab.id(), webView)
         setCount()
-        return { setIndexByTab(newTab) }
+        return newTab
     }
 
     /**
@@ -152,7 +130,7 @@ class TabAdapter(
      *
      * @param message [Message]
      */
-    fun openNewWindowWebTab(message: Message) {
+    fun openNewWindowWebTab(message: Message): Tab {
         val context = contextSupplier()
         val title = message.data?.getString("title")
         val url = message.data?.getString("url") ?: ""
@@ -165,13 +143,10 @@ class TabAdapter(
         tabList.add(newTab)
         tabList.save()
 
-        val webView = webViewFactory?.invoke(context) ?: return
-        val transport = message.obj as? WebView.WebViewTransport
-        transport?.webView = webView
-        message.sendToTarget()
-        GlobalWebViewPool.put(newTab.id(), webView)
         setIndexByTab(newTab)
         setCount()
+
+        return newTab
     }
 
     internal fun openNewEditorTab(path: String? = null) {
@@ -221,7 +196,7 @@ class TabAdapter(
      *
      * @param tab
      */
-    private fun setIndexByTab(tab: Tab) {
+    fun setIndexByTab(tab: Tab) {
         val newIndex = tabList.indexOf(tab)
         if (invalidIndex(newIndex)) {
             return
