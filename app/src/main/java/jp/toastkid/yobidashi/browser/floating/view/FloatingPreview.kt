@@ -39,7 +39,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
@@ -58,7 +57,6 @@ internal fun FloatingPreviewUi(uri: Uri) {
 
     val viewModel = remember { FloatingPreviewViewModel() }
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
-    val browserViewModel = viewModel(BrowserViewModel::class.java, context)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -77,7 +75,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
                 .padding(8.dp)
                 .clickable {
                     val currentUri = viewModel.url.value?.toUri() ?: return@clickable
-                    browserViewModel.open(currentUri)
+                    contentViewModel.open(currentUri)
                 }
         ) {
             AsyncImage(
