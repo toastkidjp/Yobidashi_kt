@@ -72,8 +72,8 @@ import jp.toastkid.lib.view.swiperefresh.SwipeRefreshNestedScrollConnection
 import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserModule
 import jp.toastkid.yobidashi.browser.FaviconApplier
+import jp.toastkid.yobidashi.browser.WebViewContainer
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
@@ -96,7 +96,7 @@ internal fun WebTabUi(webTab: WebTab) {
     val coroutineScope = rememberCoroutineScope()
     val browserViewModel = remember { BrowserViewModel() }
     val webViewContainer = remember {
-        BrowserModule(activityContext, browserViewModel, coroutineScope)
+        WebViewContainer(activityContext, browserViewModel, coroutineScope)
     }
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
@@ -326,7 +326,7 @@ internal fun WebTabUi(webTab: WebTab) {
 @Composable
 private fun AppBarContent(
     viewModel: BrowserViewModel,
-    browserModule: BrowserModule,
+    browserModule: WebViewContainer,
     resetReaderModeContent: (String) -> Unit
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return

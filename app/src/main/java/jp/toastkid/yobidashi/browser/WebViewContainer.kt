@@ -53,7 +53,7 @@ import timber.log.Timber
 /**
  * @author toastkidjp
  */
-class BrowserModule(
+class WebViewContainer(
     context: Context,
     private var browserViewModel: BrowserViewModel,
     private val coroutineScope: CoroutineScope
