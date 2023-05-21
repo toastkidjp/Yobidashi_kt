@@ -108,7 +108,7 @@ class BrowserViewModel {
         _enableBack.value = newState
     }
 
-    private val _progress = mutableStateOf(0)
+    private val _progress = mutableStateOf(100)
 
     val progress: State<Int> = _progress
 
