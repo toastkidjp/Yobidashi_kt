@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.webkit.WebView
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +20,6 @@ import jp.toastkid.lib.translate.TranslationUrlGenerator
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.webview.usecase.SelectedTextUseCase
-
 
 /**
  * Extend for disabling pull-to-refresh on Google map.
@@ -80,7 +80,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
                 var deltaY: Float = lastY - eventY
 
                 if (enablePullToRefresh && (deltaY < 0)) {
-                    contentViewModel?.nestedScrollDispatcher()?.dispatchPreScroll(
+                    nestedScrollDispatcher?.dispatchPreScroll(
                         Offset(0f, deltaY / 10f),
                         NestedScrollSource.Drag
                     )
@@ -124,7 +124,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 val returnValue = super.dispatchTouchEvent(event)
                 enablePullToRefresh = false
-                contentViewModel?.nestedScrollDispatcher()?.dispatchPostScroll(
+                nestedScrollDispatcher?.dispatchPostScroll(
                     Offset.Zero,
                     Offset.Zero,
                     NestedScrollSource.Drag
@@ -242,6 +242,17 @@ internal class CustomWebView(context: Context) : WebView(context) {
             SelectedTextUseCase.make(context)
                     ?.searchWithPreview(word, PreferenceApplier(context).getDefaultSearchEngine())
         }
+    }
+
+    private var nestedScrollDispatcher: NestedScrollDispatcher? = null
+
+    fun setNestedScrollDispatcher(nestedScrollDispatcher: NestedScrollDispatcher) {
+        this.nestedScrollDispatcher = nestedScrollDispatcher
+    }
+
+    override fun destroy() {
+        nestedScrollDispatcher = null
+        super.destroy()
     }
 
     companion object {

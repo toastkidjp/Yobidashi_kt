@@ -52,6 +52,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -81,10 +82,12 @@ import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindAllEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.rss.extractor.RssUrlFinder
+import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserModule
 import jp.toastkid.yobidashi.browser.FaviconApplier
+import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
@@ -93,7 +96,12 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
+import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
+import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewLongTapListenerFactory
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
@@ -116,7 +124,8 @@ internal fun WebTabUi(webTab: WebTab) {
     val browserViewModel = remember { BrowserViewModel() }
     val browserModule = remember { BrowserModule(webViewContainer, browserViewModel) }
     browserModule.applyNewAlpha()
-    browserModule.resizePool(PreferenceApplier(activityContext).poolSize)
+    val preferenceApplier = PreferenceApplier(activityContext)
+    browserModule.resizePool(preferenceApplier.poolSize)
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -145,9 +154,40 @@ internal fun WebTabUi(webTab: WebTab) {
         it.enabled = true
     }
 
+    val faviconApplier = remember { FaviconApplier(activityContext) }
+
+    val webViewClient = remember {
+        WebViewClientFactory(
+            contentViewModel,
+            AdRemover.make(activityContext.assets),
+            faviconApplier,
+            preferenceApplier,
+            browserViewModel,
+            RssAddingSuggestion(preferenceApplier),
+            { GlobalWebViewPool.getLatest() }
+        ).invoke()
+    }
+
+    val webChromeClient = remember {
+        WebChromeClientFactory(
+            browserViewModel,
+            faviconApplier,
+            CustomViewSwitcher({ activityContext }, { GlobalWebViewPool.getLatest() })
+        ).invoke()
+    }
+
+    val longTapListener = remember {
+        WebViewLongTapListenerFactory().invoke { title, url, imageUrl ->
+            browserViewModel.setLongTapParameters(title, url, imageUrl)
+            browserViewModel.openLongTapDialog.value = true
+        }
+    }
+
+    val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
+
     val scrollListener =
         View.OnScrollChangeListener { _, scrollX, scrollY, oldScrollX, oldScrollY ->
-            contentViewModel.nestedScrollDispatcher().dispatchPreScroll(
+            nestedScrollDispatcher.dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
             )
@@ -163,13 +203,18 @@ internal fun WebTabUi(webTab: WebTab) {
         AndroidView(
             factory = {
                 browserModule.loadWithNewTab(webTab.latest.url().toUri(), webTab.id())
-                GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
+                val latest = GlobalWebViewPool.getLatest()
+                latest?.setOnScrollChangeListener(scrollListener)
+                latest?.webViewClient = webViewClient
+                latest?.webChromeClient = webChromeClient
+                latest?.setOnLongClickListener(longTapListener)
+                (latest as? CustomWebView)?.setNestedScrollDispatcher(nestedScrollDispatcher)
                 webViewContainer
             },
             modifier = Modifier
                 .nestedScroll(
                     connection = object : NestedScrollConnection {},
-                    dispatcher = contentViewModel.nestedScrollDispatcher()
+                    dispatcher = nestedScrollDispatcher
                 )
         )
 
@@ -218,7 +263,7 @@ internal fun WebTabUi(webTab: WebTab) {
     }
 
     if (browserViewModel.openLongTapDialog.value) {
-        val value = contentViewModel.longTapActionParameters.value
+        val value = browserViewModel.longTapActionParameters.value
         browserViewModel.openLongTapDialog.value = true
 
         AnchorLongTapDialog(
@@ -227,7 +272,7 @@ internal fun WebTabUi(webTab: WebTab) {
             value.third,
             {
                 browserViewModel.openLongTapDialog.value = false
-                contentViewModel?.clearLongTapParameters()
+                browserViewModel?.clearLongTapParameters()
             }
         )
     }
@@ -341,7 +386,7 @@ internal fun WebTabUi(webTab: WebTab) {
             }),
             OptionMenu(titleId = R.string.title_add_to_rss_reader, action = {
                 RssUrlFinder(
-                    PreferenceApplier(activityContext),
+                    preferenceApplier,
                     contentViewModel
                 )
                     .invoke(browserModule.currentUrl())
@@ -352,13 +397,13 @@ internal fun WebTabUi(webTab: WebTab) {
                         contentViewModel.snackShort(R.string.message_cannot_replace_home_url)
                         return@let
                     }
-                    PreferenceApplier(activityContext).homeUrl = it
+                    preferenceApplier.homeUrl = it
                     contentViewModel
                         .snackShort(activityContext.getString(R.string.message_replace_home_url, it))
                 }
             }),
             OptionMenu(titleId = R.string.menu_random_wikipedia, action = {
-                if (PreferenceApplier(activityContext).wifiOnly &&
+                if (preferenceApplier.wifiOnly &&
                     NetworkChecker().isUnavailableWiFi(activityContext)
                 ) {
                     contentViewModel.snackShort(R.string.message_wifi_not_connecting)
