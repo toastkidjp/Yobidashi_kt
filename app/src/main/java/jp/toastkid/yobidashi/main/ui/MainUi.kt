@@ -71,7 +71,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -250,7 +249,7 @@ internal fun Content() {
                 AdRemover.make(activity.assets),
                 FaviconApplier(activity),
                 preferenceApplier,
-                browserViewModel = ViewModelProvider(activity).get(BrowserViewModel::class.java),
+                browserViewModel = BrowserViewModel(),
                 currentView = { GlobalWebViewPool.getLatest() }
             )
         )
