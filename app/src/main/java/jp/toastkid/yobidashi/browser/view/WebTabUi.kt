@@ -10,8 +10,6 @@ package jp.toastkid.yobidashi.browser.view
 
 import android.Manifest
 import android.net.Uri
-import android.view.View
-import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -47,13 +45,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -71,23 +66,14 @@ import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
-import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshNestedScrollConnection
-import jp.toastkid.lib.viewmodel.event.content.ShareEvent
-import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
-import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
-import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
-import jp.toastkid.lib.viewmodel.event.finder.FindAllEvent
-import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.rss.extractor.RssUrlFinder
-import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserModule
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
@@ -96,12 +82,7 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
-import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
-import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewLongTapListenerFactory
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
@@ -112,20 +93,11 @@ import kotlin.math.min
 internal fun WebTabUi(webTab: WebTab) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
-    val webViewContainer = remember {
-        val frameLayout = FrameLayout(activityContext)
-        frameLayout.layoutParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-        )
-        frameLayout
-    }
-
+    val coroutineScope = rememberCoroutineScope()
     val browserViewModel = remember { BrowserViewModel() }
-    val browserModule = remember { BrowserModule(webViewContainer, browserViewModel) }
-    browserModule.applyNewAlpha()
-    val preferenceApplier = PreferenceApplier(activityContext)
-    browserModule.resizePool(preferenceApplier.poolSize)
+    val webViewContainer = remember {
+        BrowserModule(activityContext, browserViewModel, coroutineScope)
+    }
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -138,14 +110,13 @@ internal fun WebTabUi(webTab: WebTab) {
             browserViewModel.swipeRefreshState.value?.animateOffsetTo(0f)
         }
     }
-    val coroutineScope = rememberCoroutineScope()
     val nestedScrollConnection = SwipeRefreshNestedScrollConnection(
         browserViewModel.swipeRefreshState.value,
         coroutineScope
     ) {
         if (browserViewModel.swipeRefreshState.value?.isRefreshing == false) {
             contentViewModel.showAppBar(coroutineScope)
-            browserModule.reload()
+            webViewContainer.reload()
             browserViewModel.swipeRefreshState.value?.isRefreshing = true
         }
         browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
@@ -154,67 +125,18 @@ internal fun WebTabUi(webTab: WebTab) {
         it.enabled = true
     }
 
-    val faviconApplier = remember { FaviconApplier(activityContext) }
-
-    val webViewClient = remember {
-        WebViewClientFactory(
-            contentViewModel,
-            AdRemover.make(activityContext.assets),
-            faviconApplier,
-            preferenceApplier,
-            browserViewModel,
-            RssAddingSuggestion(preferenceApplier),
-            { GlobalWebViewPool.getLatest() }
-        ).invoke()
-    }
-
-    val webChromeClient = remember {
-        WebChromeClientFactory(
-            browserViewModel,
-            faviconApplier,
-            CustomViewSwitcher({ activityContext }, { GlobalWebViewPool.getLatest() })
-        ).invoke()
-    }
-
-    val longTapListener = remember {
-        WebViewLongTapListenerFactory().invoke { title, url, imageUrl ->
-            browserViewModel.setLongTapParameters(title, url, imageUrl)
-            browserViewModel.openLongTapDialog.value = true
-        }
-    }
-
-    val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
-
-    val scrollListener =
-        View.OnScrollChangeListener { _, scrollX, scrollY, oldScrollX, oldScrollY ->
-            nestedScrollDispatcher.dispatchPreScroll(
-                Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
-                NestedScrollSource.Fling
-            )
-            browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
-            coroutineScope.launch {
-                browserViewModel.swipeRefreshState.value?.resetOffset()
-            }
-        }
-
     Box(
         modifier = Modifier.nestedScroll(nestedScrollConnection)
     ) {
         AndroidView(
             factory = {
-                browserModule.loadWithNewTab(webTab.latest.url().toUri(), webTab.id())
-                val latest = GlobalWebViewPool.getLatest()
-                latest?.setOnScrollChangeListener(scrollListener)
-                latest?.webViewClient = webViewClient
-                latest?.webChromeClient = webChromeClient
-                latest?.setOnLongClickListener(longTapListener)
-                (latest as? CustomWebView)?.setNestedScrollDispatcher(nestedScrollDispatcher)
-                webViewContainer
+                webViewContainer.loadWithNewTab(webTab.latest.url().toUri(), webTab.id())
+                webViewContainer.view()
             },
             modifier = Modifier
                 .nestedScroll(
                     connection = object : NestedScrollConnection {},
-                    dispatcher = nestedScrollDispatcher
+                    dispatcher = webViewContainer.nestedScrollDispatcher()
                 )
         )
 
@@ -249,7 +171,7 @@ internal fun WebTabUi(webTab: WebTab) {
 
     val readerModeText = remember { mutableStateOf("") }
     if (readerModeText.value.isNotBlank()) {
-        ReaderModeUi(browserModule.currentTitle(), readerModeText)
+        ReaderModeUi(webViewContainer.currentTitle(), readerModeText)
     }
 
     if (browserViewModel.openErrorDialog.value) {
@@ -285,38 +207,13 @@ internal fun WebTabUi(webTab: WebTab) {
 
     LaunchedEffect(key1 = lifecycleOwner, block = {
         contentViewModel.event.collect {
-            when (it) {
-                is ToTopEvent -> {
-                    browserModule.pageUp()
-                }
-                is ToBottomEvent -> {
-                    browserModule.pageDown()
-                }
-                is ShareEvent -> {
-                    activityContext.startActivity(
-                        ShareIntentFactory()(browserModule.makeShareMessage())
-                    )
-                }
-                is FindAllEvent -> {
-                    browserModule.find(it.word)
-                }
-                is FindInPageEvent -> {
-                    if (it.upward) {
-                        browserModule.findUp()
-                    } else {
-                        browserModule.findDown()
-                    }
-                }
-                is ClearFinderInputEvent -> {
-                    browserModule.clearMatches()
-                }
-                else -> Unit
-            }
+            webViewContainer.useEvent(it)
         }
     })
 
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
+        webViewContainer.refresh()
         browserViewModel.initializeSwipeRefreshState(refreshTriggerPx)
 
         focusManager.clearFocus(true)
@@ -324,7 +221,7 @@ internal fun WebTabUi(webTab: WebTab) {
         contentViewModel.replaceAppBarContent {
             AppBarContent(
                 browserViewModel,
-                browserModule
+                webViewContainer
             ) {
                 readerModeText.value = if (readerModeText.value.isNotEmpty()) "" else it
             }
@@ -338,7 +235,7 @@ internal fun WebTabUi(webTab: WebTab) {
                 return@rememberLauncherForActivityResult
             }
 
-            browserModule.downloadAllImages()
+            webViewContainer.downloadAllImages()
         }
 
     LaunchedEffect(key1 = "add_option_menu", block = {
@@ -348,7 +245,7 @@ internal fun WebTabUi(webTab: WebTab) {
                 val source = if (language == "en") "ja" else "en"
                 contentViewModel.open(
                     ("https://papago.naver.net/website?locale=auto&source=${source}&target=$language&url="
-                            + Uri.encode(browserModule.currentUrl()))
+                            + Uri.encode(webViewContainer.currentUrl()))
                         .toUri()
                 )
             }),
@@ -357,20 +254,20 @@ internal fun WebTabUi(webTab: WebTab) {
                     .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }),
             OptionMenu(titleId = R.string.add_to_home_screen, action = {
-                val shortcutUri = browserModule.currentUrl()?.toUri() ?: return@OptionMenu
+                val shortcutUri = webViewContainer.currentUrl()?.toUri() ?: return@OptionMenu
                 ShortcutUseCase(activityContext)
                     .invoke(
                         shortcutUri,
-                        browserModule.currentTitle(),
+                        webViewContainer.currentTitle(),
                         FaviconApplier(activityContext).load(shortcutUri)
                     )
             }),
             OptionMenu(titleId = R.string.title_add_bookmark, action = {
                 val faviconApplier = FaviconApplier(activityContext)
-                val url = browserModule.currentUrl() ?: ""
+                val url = webViewContainer.currentUrl() ?: ""
                 BookmarkInsertion(
                     activityContext,
-                    browserModule.currentTitle(),
+                    webViewContainer.currentTitle(),
                     url,
                     faviconApplier.makePath(url),
                     Bookmark.getRootFolderName()
@@ -382,28 +279,28 @@ internal fun WebTabUi(webTab: WebTab) {
                 PrintCurrentPageUseCase().invoke(GlobalWebViewPool.getLatest())
             }),
             OptionMenu(titleId = R.string.title_archive, action = {
-                browserModule.saveArchive()
+                webViewContainer.saveArchive()
             }),
             OptionMenu(titleId = R.string.title_add_to_rss_reader, action = {
                 RssUrlFinder(
-                    preferenceApplier,
+                    PreferenceApplier(activityContext),
                     contentViewModel
                 )
-                    .invoke(browserModule.currentUrl())
+                    .invoke(webViewContainer.currentUrl())
             }),
             OptionMenu(titleId = R.string.title_replace_home, action = {
-                browserModule.currentUrl()?.let {
+                webViewContainer.currentUrl()?.let {
                     if (Urls.isInvalidUrl(it)) {
                         contentViewModel.snackShort(R.string.message_cannot_replace_home_url)
                         return@let
                     }
-                    preferenceApplier.homeUrl = it
+                    PreferenceApplier(activityContext).homeUrl = it
                     contentViewModel
                         .snackShort(activityContext.getString(R.string.message_replace_home_url, it))
                 }
             }),
             OptionMenu(titleId = R.string.menu_random_wikipedia, action = {
-                if (preferenceApplier.wifiOnly &&
+                if (PreferenceApplier(activityContext).wifiOnly &&
                     NetworkChecker().isUnavailableWiFi(activityContext)
                 ) {
                     contentViewModel.snackShort(R.string.message_wifi_not_connecting)

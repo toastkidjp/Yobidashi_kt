@@ -1,16 +1,29 @@
 package jp.toastkid.yobidashi.browser
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.viewmodel.event.Event
+import jp.toastkid.lib.viewmodel.event.content.ShareEvent
+import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
+import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
+import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
+import jp.toastkid.lib.viewmodel.event.finder.FindAllEvent
+import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
@@ -24,22 +37,28 @@ import jp.toastkid.yobidashi.browser.usecase.HtmlSourceExtractionUseCase
 import jp.toastkid.yobidashi.browser.usecase.WebViewReplacementUseCase
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
+import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewLongTapListenerFactory
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
  * @author toastkidjp
  */
 class BrowserModule(
-    webViewContainer: FrameLayout,
-    private var browserViewModel: BrowserViewModel
+    context: Context,
+    private var browserViewModel: BrowserViewModel,
+    private val coroutineScope: CoroutineScope
 ) {
+    private val webViewContainer = FrameLayout(context)
 
     private val context = webViewContainer.context
 
@@ -63,14 +82,52 @@ class BrowserModule(
 
     private var contentViewModel: ContentViewModel? = null
 
-    private val webViewFactory: WebViewFactoryUseCase
+    private val webViewFactory: WebViewFactory
 
     private val alphaConverter = AlphaConverter()
 
     private val networkChecker = NetworkChecker()
 
+    private val webViewClient = WebViewClientFactory(
+        contentViewModel,
+        AdRemover.make(context.assets),
+        faviconApplier,
+        preferenceApplier,
+        browserViewModel,
+        RssAddingSuggestion(preferenceApplier),
+        { GlobalWebViewPool.getLatest() }
+    ).invoke()
+
+    private val webChromeClient = WebChromeClientFactory(
+        browserViewModel,
+        faviconApplier,
+        CustomViewSwitcher({ context }, { GlobalWebViewPool.getLatest() })
+    ).invoke()
+
+    private val longTapListener = WebViewLongTapListenerFactory().invoke { title, url, imageUrl ->
+        browserViewModel.setLongTapParameters(title, url, imageUrl)
+        browserViewModel.openLongTapDialog.value = true
+    }
+
+    private val nestedScrollDispatcher = NestedScrollDispatcher()
+
+    private val scrollListener =
+        View.OnScrollChangeListener { _, scrollX, scrollY, oldScrollX, oldScrollY ->
+            nestedScrollDispatcher.dispatchPreScroll(
+                Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
+                NestedScrollSource.Fling
+            )
+            browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
+            coroutineScope.launch {
+                browserViewModel.swipeRefreshState.value?.resetOffset()
+            }
+        }
+
     init {
-        GlobalWebViewPool.resize(preferenceApplier.poolSize)
+        webViewContainer.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
 
         customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
 
@@ -79,34 +136,28 @@ class BrowserModule(
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
 
-        webViewFactory = WebViewFactoryUseCase(
-                webViewClientFactory = WebViewClientFactory(
-                    contentViewModel,
-                    adRemover,
-                    faviconApplier,
-                    preferenceApplier,
-                    browserViewModel,
-                    rssAddingSuggestion,
-                    { currentView() }
-                ),
-                webChromeClientFactory = WebChromeClientFactory(
-                        browserViewModel,
-                        faviconApplier,
-                        customViewSwitcher
-                )
-        )
+        webViewFactory = WebViewFactory()
 
         webViewReplacementUseCase = WebViewReplacementUseCase(
             webViewContainer,
             WebViewStateUseCase.make(context),
-            { webViewFactory(context) },
+            { webViewFactory.make(context) },
             browserViewModel,
             preferenceApplier
         )
     }
 
     fun loadWithNewTab(uri: Uri, tabId: String) {
-        if (webViewReplacementUseCase(tabId)) {
+        val replaced = webViewReplacementUseCase(tabId)
+
+        val latest = GlobalWebViewPool.getLatest()
+        latest?.setOnScrollChangeListener(scrollListener)
+        latest?.webViewClient = webViewClient
+        latest?.webChromeClient = webChromeClient
+        latest?.setOnLongClickListener(longTapListener)
+        (latest as? CustomWebView)?.setNestedScrollDispatcher(nestedScrollDispatcher)
+
+        if (replaced) {
             loadUrl(uri.toString())
         }
     }
@@ -289,5 +340,45 @@ class BrowserModule(
     fun downloadAllImages() {
         AllImageDownloaderUseCase(DownloadAction(context)).invoke(currentView())
     }
+
+    fun refresh() {
+        applyNewAlpha()
+        val preferenceApplier = PreferenceApplier(context)
+        resizePool(preferenceApplier.poolSize)
+    }
+
+    fun useEvent(event: Event) {
+        when (event) {
+            is ToTopEvent -> {
+                pageUp()
+            }
+            is ToBottomEvent -> {
+                pageDown()
+            }
+            is ShareEvent -> {
+                context.startActivity(
+                    ShareIntentFactory()(makeShareMessage())
+                )
+            }
+            is FindAllEvent -> {
+                find(event.word)
+            }
+            is FindInPageEvent -> {
+                if (event.upward) {
+                    findUp()
+                } else {
+                    findDown()
+                }
+            }
+            is ClearFinderInputEvent -> {
+                clearMatches()
+            }
+            else -> Unit
+        }
+    }
+
+    fun view() = webViewContainer
+
+    fun nestedScrollDispatcher() = nestedScrollDispatcher
 
 }
