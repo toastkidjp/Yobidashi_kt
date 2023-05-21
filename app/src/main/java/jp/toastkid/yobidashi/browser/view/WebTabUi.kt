@@ -600,9 +600,9 @@ private fun AppBarContent(
                     }
             ) {
                 BrowserTitle(
-                    viewModel.progress,
-                    viewModel.title,
-                    viewModel.url,
+                    viewModel.title.value,
+                    viewModel.url.value,
+                    viewModel.progress.value,
                     Modifier
                         .weight(1f)
                         .padding(horizontal = 4.dp)

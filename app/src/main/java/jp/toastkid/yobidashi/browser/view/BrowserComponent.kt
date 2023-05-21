@@ -12,18 +12,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi.R
 
 @Composable
 internal fun BrowserTitle(
-    progress: State<Int?>,
-    headerTitle: State<String?>,
-    headerUrl: State<String?>,
+    title: String?,
+    url: String?,
+    progress: Int?,
     modifier: Modifier
 ) {
     val context = LocalContext.current
@@ -32,10 +32,10 @@ internal fun BrowserTitle(
         modifier = modifier
     ) {
         val progressTitle =
-            if ((progress.value ?: 100) < 70)
-                context.getString(R.string.prefix_loading) + "${progress.value}%"
+            if ((progress ?: 100) < 70)
+                stringResource(id = R.string.prefix_loading) + "$progress%"
             else
-                headerTitle.value ?: ""
+                title ?: ""
 
         Text(
             text = progressTitle,
@@ -46,7 +46,7 @@ internal fun BrowserTitle(
             fontSize = 12.sp
         )
         Text(
-            text = headerUrl.value ?: "",
+            text = url ?: "",
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onPrimary,

@@ -87,9 +87,9 @@ internal fun FloatingPreviewUi(uri: Uri) {
             )
 
             BrowserTitle(
-                viewModel.progress,
-                viewModel.title,
-                viewModel.url,
+                viewModel.title.value,
+                viewModel.url.value,
+                viewModel.progress.value,
                 Modifier.weight(1f)
             )
 
