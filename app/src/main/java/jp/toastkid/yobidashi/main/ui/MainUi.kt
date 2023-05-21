@@ -108,6 +108,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
 import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.browser.webview.factory.OnBackgroundWebViewClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.network.DownloadAction
@@ -239,6 +240,8 @@ internal fun Content() {
         }
 
     LaunchedEffect(key1 = lifecycleOwner, block = {
+        val webViewClientFactory = OnBackgroundWebViewClientFactory.with(activity)
+        val webViewFactory = WebViewFactory()
         contentViewModel.event.collect {
             when (it) {
                 is CloseFinderEvent -> {
@@ -352,7 +355,8 @@ internal fun Content() {
                     if (it.onBackground) {
                         val newTab = tabs.openBackgroundTab(it.title ?: urlString, urlString)
 
-                        val webView = WebViewFactory().make(activity)
+                        val webView = webViewFactory.make(activity)
+                        webView.webViewClient = webViewClientFactory.invoke()
                         webView.loadUrl(urlString)
                         GlobalWebViewPool.put(newTab.id(), webView)
 
@@ -392,7 +396,8 @@ internal fun Content() {
                     val message = it.resultMessage ?: return@collect
                     val newTab = tabs.openNewWindowWebTab(message)
 
-                    val webView = WebViewFactory().make(activity)
+                    val webView = webViewFactory.make(activity)
+                    webView.webViewClient = webViewClientFactory.invoke()
                     val transport = message.obj as? WebView.WebViewTransport
                     transport?.webView = webView
                     message.sendToTarget()
