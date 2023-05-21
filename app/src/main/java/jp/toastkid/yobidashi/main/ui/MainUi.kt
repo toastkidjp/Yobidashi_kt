@@ -76,7 +76,6 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import jp.toastkid.display.effect.SnowRendererView
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.compat.material3.ModalBottomSheetLayout
 import jp.toastkid.lib.input.Inputs
@@ -106,13 +105,10 @@ import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
 import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
@@ -242,19 +238,6 @@ internal fun Content() {
             downloadUrl.value = ""
         }
 
-    val webViewFactory = remember {
-        WebViewFactoryUseCase(
-            webViewClientFactory = WebViewClientFactory(
-                contentViewModel,
-                AdRemover.make(activity.assets),
-                FaviconApplier(activity),
-                preferenceApplier,
-                browserViewModel = BrowserViewModel(),
-                currentView = { GlobalWebViewPool.getLatest() }
-            )
-        )
-    }
-
     LaunchedEffect(key1 = lifecycleOwner, block = {
         contentViewModel.event.collect {
             when (it) {
@@ -369,7 +352,7 @@ internal fun Content() {
                     if (it.onBackground) {
                         val newTab = tabs.openBackgroundTab(it.title ?: urlString, urlString)
 
-                        val webView = webViewFactory.invoke(activity)
+                        val webView = WebViewFactory().make(activity)
                         webView.loadUrl(urlString)
                         GlobalWebViewPool.put(newTab.id(), webView)
 
@@ -409,7 +392,7 @@ internal fun Content() {
                     val message = it.resultMessage ?: return@collect
                     val newTab = tabs.openNewWindowWebTab(message)
 
-                    val webView = webViewFactory.invoke(activity)
+                    val webView = WebViewFactory().make(activity)
                     val transport = message.obj as? WebView.WebViewTransport
                     transport?.webView = webView
                     message.sendToTarget()
