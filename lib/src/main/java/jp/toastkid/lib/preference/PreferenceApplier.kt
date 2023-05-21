@@ -115,10 +115,8 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putStringSet(Key.DISABLE_SEARCH_CATEGORIES.name, set).apply()
     }
 
-    fun removeDisableSearchCategory(name: String) {
-        val set = readDisableSearchCategory()
-        set?.remove(name)
-        preferences.edit().putStringSet(Key.DISABLE_SEARCH_CATEGORIES.name, set).apply()
+    fun clearDisableSearchCategory() {
+        preferences.edit().putStringSet(Key.DISABLE_SEARCH_CATEGORIES.name, emptySet()).apply()
     }
 
     fun readDisableSearchCategory(): MutableSet<String>? {

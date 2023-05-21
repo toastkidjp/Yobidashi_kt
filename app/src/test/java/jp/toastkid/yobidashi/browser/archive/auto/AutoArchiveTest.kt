@@ -85,8 +85,12 @@ class AutoArchiveTest {
     fun testShouldNotUpdateTab() {
         assertFalse(AutoArchive.shouldNotUpdateTab("https://www.yahoo.co.jp/"))
 
-        assertTrue(AutoArchive.shouldNotUpdateTab("file:///data/user/0/jp.toastkid.yobidashi.d" +
+        assertFalse(AutoArchive.shouldNotUpdateTab("file:///data/user/0/jp.toastkid.yobidashi.d" +
                 "/files/auto_archives/search.yahoo.co.jp-realtime-search-" +
+                "p%3D%E5%8F%8D%E5%AF%BE%201%E7%A5%A8%26ei%3DUTF-8.mht"))
+
+        assertTrue(AutoArchive.shouldNotUpdateTab("file:///data/user/0/jp.toastkid.yobidashi.d" +
+                "/cache/auto_archives/search.yahoo.co.jp-realtime-search-" +
                 "p%3D%E5%8F%8D%E5%AF%BE%201%E7%A5%A8%26ei%3DUTF-8.mht"))
     }
 

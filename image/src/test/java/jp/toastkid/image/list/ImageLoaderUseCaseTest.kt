@@ -8,6 +8,7 @@
 
 package jp.toastkid.image.list
 
+import androidx.compose.runtime.mutableStateOf
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -18,8 +19,8 @@ import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.image.Image
+import jp.toastkid.lib.preference.PreferenceApplier
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -33,13 +34,12 @@ class ImageLoaderUseCaseTest {
     private lateinit var preferenceApplier: PreferenceApplier
 
     @MockK
-    private lateinit var adapter: Adapter
-
-    @MockK
     private lateinit var bucketLoader: BucketLoader
 
     @MockK
     private lateinit var imageLoader: ImageLoader
+
+    private val backHandlerState = mutableStateOf(true)
 
     @MockK
     private lateinit var refreshContent: () -> Unit
@@ -47,12 +47,14 @@ class ImageLoaderUseCaseTest {
     @MockK
     private lateinit var parentExtractor: ParentExtractor
 
+    @MockK
+    private lateinit var submitImages: (List<Image>) -> Unit
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { adapter.clear() }.just(Runs)
-        every { adapter.add(any()) }.just(Runs)
         every { refreshContent.invoke() }.just(Runs)
+        every { submitImages.invoke(any()) }.just(Runs)
         every { preferenceApplier.excludedItems() }.returns(setOf("test"))
         every { preferenceApplier.imageViewerSort() }.returns("test")
         every { parentExtractor.invoke(any()) }.returns("to")
@@ -74,20 +76,18 @@ class ImageLoaderUseCaseTest {
     fun testInvoke() {
         imageLoaderUseCase.invoke()
 
-        verify(exactly = 1) { adapter.clear() }
         verify(exactly = 1) { bucketLoader.invoke(any()) }
         verify(exactly = 0) { imageLoader.invoke(any(), any()) }
-        verify(exactly = 1) { adapter.add(any()) }
+        verify(exactly = 1) { submitImages(any()) }
     }
 
     @Test
     fun testInvokeWithBucket() {
         imageLoaderUseCase.invoke("test-bucket")
 
-        verify(exactly = 1) { adapter.clear() }
         verify(exactly = 0) { bucketLoader.invoke(any()) }
         verify(exactly = 1) { imageLoader.invoke(any(), any()) }
-        verify(exactly = 1) { adapter.add(any()) }
+        verify(exactly = 1) { submitImages(any()) }
     }
 
     @Test

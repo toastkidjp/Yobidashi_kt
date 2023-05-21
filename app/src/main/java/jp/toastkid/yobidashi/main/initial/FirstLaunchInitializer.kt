@@ -24,8 +24,8 @@ import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
 class FirstLaunchInitializer(
     private val context: Context,
     private val preferenceApplier: PreferenceApplier,
-    @VisibleForTesting private val defaultColorInsertion: DefaultColorInsertion = DefaultColorInsertion(),
-    @VisibleForTesting private val defaultBackgroundImagePreparation: DefaultBackgroundImagePreparation = DefaultBackgroundImagePreparation()
+    private val defaultColorInsertion: DefaultColorInsertion = DefaultColorInsertion(),
+    private val defaultBackgroundImagePreparation: DefaultBackgroundImagePreparation = DefaultBackgroundImagePreparation()
 ) {
 
     /**

@@ -56,8 +56,8 @@ class WebTabTest {
 
     private fun check_toJson(tab: WebTab, tabJsonAdapter: Json): String {
         val json = tabJsonAdapter.encodeToString(tab)
-        assertTrue(json.contains("\"title\":\"Title\""))
-        assertTrue(json.contains("\"url\":\"URL\""))
+        assertTrue(json.contains("\"a\":\"Title\""))
+        assertTrue(json.contains("\"b\":\"URL\""))
         return json
     }
 

@@ -26,6 +26,7 @@ class NumberPlaceViewModelTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+        numberPlaceViewModel.initialize(20)
     }
 
     @After

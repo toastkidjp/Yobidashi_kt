@@ -7,7 +7,6 @@
  */
 package jp.toastkid.image.list
 
-import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.MutableState
 import jp.toastkid.image.Image
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -22,7 +21,7 @@ internal class ImageLoaderUseCase(
         private val imageLoader: ImageLoader,
         private val backHandlerState: MutableState<Boolean>,
         private val refreshContent: () -> Unit,
-        @VisibleForTesting private val parentExtractor: ParentExtractor = ParentExtractor()
+        private val parentExtractor: ParentExtractor = ParentExtractor()
 ) {
 
     private var currentBucket: String? = null
