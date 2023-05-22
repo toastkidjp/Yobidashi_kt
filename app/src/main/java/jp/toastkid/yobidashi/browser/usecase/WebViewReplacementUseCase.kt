@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.browser.usecase
 import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
@@ -35,6 +36,8 @@ class WebViewReplacementUseCase(
     private val darkThemeApplier: DarkModeApplier = DarkModeApplier()
 ) {
 
+    private val noopWebViewClient = object : WebViewClient() {}
+
     /**
      *
      * @param tabId Tab's ID
@@ -46,6 +49,12 @@ class WebViewReplacementUseCase(
             val previousView = webViewContainer?.get(0)
             if (currentWebView == previousView) {
                 return false
+            }
+
+            if (previousView is WebView) {
+                previousView.webViewClient = noopWebViewClient
+                previousView.webChromeClient = null
+                previousView.setOnLongClickListener(null)
             }
         }
 
