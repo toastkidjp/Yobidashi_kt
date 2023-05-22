@@ -64,15 +64,11 @@ class WebViewContainer(
 
     private val preferenceApplier = PreferenceApplier(context)
 
-    private val rssAddingSuggestion = RssAddingSuggestion(preferenceApplier)
-
     private val faviconApplier: FaviconApplier = FaviconApplier(context)
 
     private val readerModeUseCase by lazy { ReaderModeUseCase() }
 
     private var customViewSwitcher: CustomViewSwitcher? = null
-
-    private val adRemover: AdRemover = AdRemover.make(context.assets)
 
     private val autoArchive = AutoArchive.make(context)
 
