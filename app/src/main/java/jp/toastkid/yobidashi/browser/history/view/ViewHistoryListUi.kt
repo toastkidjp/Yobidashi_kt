@@ -42,9 +42,8 @@ import kotlinx.coroutines.withContext
 fun ViewHistoryListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
 
-    val database = DatabaseFinder().invoke(context)
-    val viewHistoryRepository = database.viewHistoryRepository()
-    val fullItems = mutableListOf<ViewHistory>()
+    val viewHistoryRepository = remember { DatabaseFinder().invoke(context).viewHistoryRepository() }
+    val fullItems = remember { mutableListOf<ViewHistory>() }
     val viewHistoryItems = remember { mutableStateListOf<ViewHistory>() }
     val listState = rememberLazyListState()
 
