@@ -228,4 +228,17 @@ class WebViewClientFactory(
 
             contentViewModel?.snackShort(R.string.message_cannot_launch_app)
         }
+
+    companion object {
+        fun forBackground(
+            context: Context,
+            contentViewModel: ContentViewModel,
+            preferenceApplier: PreferenceApplier
+        ) = WebViewClientFactory(
+            contentViewModel,
+            AdRemover.make(context.assets),
+            FaviconApplier(context),
+            preferenceApplier
+        )
+    }
 }

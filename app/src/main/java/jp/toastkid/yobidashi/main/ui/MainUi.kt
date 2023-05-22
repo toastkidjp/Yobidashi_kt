@@ -108,7 +108,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
 import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.factory.OnBackgroundWebViewClientFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.network.DownloadAction
@@ -127,6 +127,7 @@ import jp.toastkid.yobidashi.tab.tab_list.view.TabListUi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -240,7 +241,11 @@ internal fun Content() {
         }
 
     LaunchedEffect(key1 = lifecycleOwner, block = {
-        val webViewClientFactory = OnBackgroundWebViewClientFactory.with(activity)
+        val webViewClientFactory = WebViewClientFactory.forBackground(
+            activity,
+            contentViewModel,
+            preferenceApplier
+        )
         val webViewFactory = WebViewFactory()
         contentViewModel.event.collect {
             when (it) {
