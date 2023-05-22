@@ -64,7 +64,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
@@ -103,7 +102,7 @@ fun BookmarkListUi() {
 
     val bookmarkRepository = DatabaseFinder().invoke(activityContext).bookmarkRepository()
 
-    val browserViewModel = viewModel(BrowserViewModel::class.java, activityContext)
+    val contentViewModel1 = viewModel(ContentViewModel::class.java, activityContext)
 
     val viewModel = remember { BookmarkListViewModel() }
 
@@ -112,7 +111,7 @@ fun BookmarkListUi() {
     val onClick: (Bookmark, Boolean) -> Unit = { bookmark, isLongClick ->
         when {
             isLongClick -> {
-                browserViewModel
+                contentViewModel1
                     .openBackground(
                         bookmark.title,
                         Uri.parse(bookmark.url)
@@ -123,7 +122,7 @@ fun BookmarkListUi() {
                 viewModel.query(bookmarkRepository, bookmark.title)
             }
             else -> {
-                browserViewModel.open(Uri.parse(bookmark.url))
+                contentViewModel1.open(Uri.parse(bookmark.url))
             }
         }
     }
