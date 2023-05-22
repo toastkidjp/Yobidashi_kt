@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.list.ListActionAttachment
 import jp.toastkid.rss.R
@@ -75,7 +75,7 @@ fun RssReaderListUi() {
 private fun RssReaderList(fullItems: List<Item>) {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val viewModelProvider = ViewModelProvider(activity)
-    val browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
+    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
 
     val listState = rememberLazyListState()
 
@@ -95,10 +95,10 @@ private fun RssReaderList(fullItems: List<Item>) {
                     .combinedClickable(
                         enabled = true,
                         onClick = {
-                            browserViewModel.open(it.link.toUri())
+                            contentViewModel.open(it.link.toUri())
                         },
                         onLongClick = {
-                            browserViewModel.openBackground(it.link.toUri())
+                            contentViewModel.openBackground(it.link.toUri())
                         }
                     )
                     .animateItemPlacement(),
