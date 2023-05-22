@@ -48,7 +48,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.barcode.R
 import jp.toastkid.barcode.model.BarcodeAnalyzer
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
@@ -174,7 +173,7 @@ fun BarcodeReaderUi() {
                                 .clickable {
                                     val activity = (context as? ViewModelStoreOwner) ?: return@clickable
                                     ViewModelProvider(activity)
-                                        .get(BrowserViewModel::class.java)
+                                        .get(ContentViewModel::class.java)
                                         .search(result.value)
                                 }
                         )
