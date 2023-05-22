@@ -5,8 +5,9 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import property.*
 import com.android.build.gradle.tasks.GenerateBuildConfig
+import property.BuildTool
+import property.LibraryVersion
 
 plugins {
     id("com.android.library")
@@ -50,7 +51,6 @@ dependencies {
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
-    implementation("androidx.compose.runtime:runtime-livedata:${LibraryVersion.compose}")
     implementation("androidx.activity:activity-compose:1.4.0")
 
     implementation("androidx.camera:camera-camera2:${LibraryVersion.cameraX}")
