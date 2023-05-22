@@ -16,7 +16,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import org.junit.After
@@ -38,7 +38,7 @@ class SearchWithClipTest {
     private lateinit var colorPair: ColorPair
 
     @MockK
-    private lateinit var browserViewModel: BrowserViewModel
+    private lateinit var contentViewModel: ContentViewModel
 
     @MockK
     private lateinit var preferenceApplier: PreferenceApplier
