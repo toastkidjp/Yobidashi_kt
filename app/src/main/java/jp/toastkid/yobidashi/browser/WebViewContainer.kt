@@ -5,7 +5,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.geometry.Offset
@@ -84,21 +86,9 @@ class WebViewContainer(
 
     private val networkChecker = NetworkChecker()
 
-    private val webViewClient = WebViewClientFactory(
-        contentViewModel,
-        AdRemover.make(context.assets),
-        faviconApplier,
-        preferenceApplier,
-        browserViewModel,
-        RssAddingSuggestion(preferenceApplier),
-        { GlobalWebViewPool.getLatest() }
-    ).invoke()
+    private val webViewClient: WebViewClient
 
-    private val webChromeClient = WebChromeClientFactory(
-        browserViewModel,
-        faviconApplier,
-        CustomViewSwitcher({ context }, { GlobalWebViewPool.getLatest() })
-    ).invoke()
+    private val webChromeClient: WebChromeClient
 
     private val longTapListener = WebViewLongTapListenerFactory().invoke { title, url, imageUrl ->
         browserViewModel.setLongTapParameters(title, url, imageUrl)
@@ -133,6 +123,22 @@ class WebViewContainer(
         }
 
         webViewFactory = WebViewFactory()
+
+        webViewClient = WebViewClientFactory(
+            contentViewModel,
+            AdRemover.make(context.assets),
+            faviconApplier,
+            preferenceApplier,
+            browserViewModel,
+            RssAddingSuggestion(preferenceApplier),
+            { GlobalWebViewPool.getLatest() }
+        ).invoke()
+
+        webChromeClient = WebChromeClientFactory(
+            browserViewModel,
+            faviconApplier,
+            CustomViewSwitcher({ context }, { GlobalWebViewPool.getLatest() })
+        ).invoke()
 
         webViewReplacementUseCase = WebViewReplacementUseCase(
             webViewContainer,
