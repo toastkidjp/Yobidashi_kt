@@ -22,7 +22,7 @@ import jp.toastkid.yobidashi.R
 internal fun BrowserTitle(
     title: String?,
     url: String?,
-    progress: Int?,
+    progress: Int,
     modifier: Modifier
 ) {
     Column(
