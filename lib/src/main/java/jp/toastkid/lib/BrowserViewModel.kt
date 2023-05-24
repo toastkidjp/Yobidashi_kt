@@ -19,7 +19,7 @@ import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
  */
 class BrowserViewModel {
 
-    fun preview(uri: Uri) {
+    fun preview() {
         /*viewModelScope.launch {
             _event.emit(PreviewUrlEvent(uri))
         }*/
