@@ -15,6 +15,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,7 +46,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.google.accompanist.flowlayout.FlowRow
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
@@ -58,7 +59,8 @@ import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 
 @OptIn(
     ExperimentalComposeUiApi::class,
-    ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class,
+    ExperimentalLayoutApi::class
 )
 @Composable
 internal fun SearchContentsUi(

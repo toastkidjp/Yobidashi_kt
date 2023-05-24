@@ -8,40 +8,43 @@
 
 package jp.toastkid.yobidashi.calendar.service.us
 
+import jp.toastkid.yobidashi.calendar.model.holiday.Holiday
 import jp.toastkid.yobidashi.calendar.model.us.FixedAmericanHoliday
 import jp.toastkid.yobidashi.calendar.model.us.MoveableAmericanHoliday
 import jp.toastkid.yobidashi.calendar.service.OffDayFinderService
 import java.util.Calendar
+import java.util.GregorianCalendar
 
 class AmericanOffDayFinderService : OffDayFinderService {
 
     override fun invoke(
         year: Int,
         month: Int,
-        date: Int,
-        dayOfWeek: Int,
         useUserOffDay: Boolean
-    ): Boolean {
+    ): List<Holiday> {
         if (month == 3 || month == 4 || month == 8) {
-            return false
+            return emptyList()
         }
 
-        if (MoveableAmericanHoliday.isHoliday(year, month, date)) {
-            return true
+        val calendar = GregorianCalendar(year, month - 1, 1)
+
+        val holidays = mutableListOf<Holiday>()
+        MoveableAmericanHoliday.find(year, month)?.also {
+            holidays.add(it)
         }
+
+        FixedAmericanHoliday.find(year, month)?.let {
+            holidays.add(it)
+
+            calendar.set(Calendar.DAY_OF_MONTH, it.day)
+            if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                holidays.add(Holiday("Substitute holiday", month, it.day + 1))
+            }
+        }
+        return holidays
 
         /*if (useUserOffDay && userOffDayService(month, date)) {
             return true
         }*/
-
-        var firstOrNull = FixedAmericanHoliday.values()
-            .firstOrNull { month == it.month && date == it.date }
-        if (firstOrNull == null) {
-            if (dayOfWeek == Calendar.MONDAY) {
-                firstOrNull = FixedAmericanHoliday.values()
-                    .firstOrNull { month == it.month && (date - 1) == it.date }
-            }
-        }
-        return firstOrNull != null
     }
 }

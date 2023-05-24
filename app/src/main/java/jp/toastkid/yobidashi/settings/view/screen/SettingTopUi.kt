@@ -54,6 +54,7 @@ fun SettingTopUi() {
             R.string.search,
             R.string.subhead_browser,
             R.string.subhead_editor,
+            R.string.title_calendar,
             R.string.title_color_filter,
             R.string.subhead_others
         )
@@ -110,8 +111,9 @@ private fun SwitchContentWithTabIndex(selectedIndex: MutableState<Int>) {
         2 -> SearchSettingUi()
         3 -> BrowserSettingUi()
         4 -> EditorSettingUi()
-        5 -> ColorFilterSettingUi()
-        6 -> OtherSettingUi()
+        5 -> CalendarSettingUi()
+        6 -> ColorFilterSettingUi()
+        7 -> OtherSettingUi()
         else -> DisplaySettingUi()
     }
 }

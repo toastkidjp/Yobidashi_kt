@@ -78,6 +78,10 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshNestedScrollConnection
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
+import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
+import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
+import jp.toastkid.lib.viewmodel.event.web.SwitchWebViewToCurrentEvent
 import jp.toastkid.rss.extractor.RssUrlFinder
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.yobidashi.R
@@ -157,12 +161,6 @@ internal fun WebTabUi(webTab: WebTab) {
             }
         }
 
-    browserViewModel.switchWebViewToCurrent.observe(lifecycleOwner) {
-        val newTabId = it?.getContentIfNotHandled() ?: return@observe
-        browserModule.switchWebViewToCurrent(newTabId)
-        GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
-    }
-
     val downloadUrl = remember { mutableStateOf("") }
     val downloadPermissionRequestLauncher =
         rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
@@ -177,11 +175,6 @@ internal fun WebTabUi(webTab: WebTab) {
             DownloadAction(activityContext).invoke(downloadUrl.value)
             downloadUrl.value = ""
         }
-    browserViewModel.download.observe(lifecycleOwner, Observer {
-        val url = it?.getContentIfNotHandled() ?: return@Observer
-        downloadUrl.value = url
-        downloadPermissionRequestLauncher.launch(url)
-    })
 
     Box(
         modifier = Modifier.nestedScroll(nestedScrollConnection)
@@ -311,24 +304,27 @@ internal fun WebTabUi(webTab: WebTab) {
             }
         }
 
-        browserViewModel
-            .onPageFinished
-            .observe(lifecycleOwner) {
-                browserModule.saveArchiveForAutoArchive()
-                coroutineScope.launch {
+        browserViewModel.event.collect {
+            when (it) {
+                is OnStopLoadEvent -> {
                     browserViewModel.swipeRefreshState.value?.resetOffset()
                     browserViewModel.swipeRefreshState.value?.isRefreshing = false
                 }
-            }
-
-        browserViewModel
-            .stopProgress
-            .observe(lifecycleOwner) {
-                coroutineScope.launch {
+                is OnLoadCompletedEvent -> {
                     browserViewModel.swipeRefreshState.value?.resetOffset()
                     browserViewModel.swipeRefreshState.value?.isRefreshing = false
                 }
+                is DownloadEvent -> {
+                    downloadUrl.value = it.url
+                    downloadPermissionRequestLauncher.launch(it.url)
+                }
+                is SwitchWebViewToCurrentEvent -> {
+                    browserModule.switchWebViewToCurrent(it.tabId)
+                    GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
+                }
+                else -> Unit
             }
+        }
     })
 
     val storagePermissionRequestLauncher =

@@ -28,6 +28,7 @@ import jp.toastkid.about.view.AboutThisAppUi
 import jp.toastkid.article_viewer.article.detail.view.ArticleContentUi
 import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.barcode.view.BarcodeReaderUi
+import jp.toastkid.converter.presentation.ui.ConverterToolUi
 import jp.toastkid.editor.view.EditorTabUi
 import jp.toastkid.image.view.ImageListUi
 import jp.toastkid.loan.view.LoanCalculatorUi
@@ -143,6 +144,9 @@ internal fun NavigationalContent(
         }
         composable("about") {
             AboutThisAppUi(BuildConfig.VERSION_NAME)
+        }
+        composable("tool/converter") {
+            ConverterToolUi()
         }
     }
 

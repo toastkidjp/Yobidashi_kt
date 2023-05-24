@@ -136,6 +136,9 @@ private fun onClickMainMenuItem(
                 "tool/loan"
             )
         }
+        Menu.CONVERTER_TOOL -> {
+            navigate("tool/converter")
+        }
         Menu.RSS_READER -> {
             navigate(
                 "tool/rss/list"

@@ -41,7 +41,7 @@ class PreferenceApplier(private val context: Context) {
         WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS, IMAGE_VIEWER_EXCLUDED_PATHS,
         IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE, USE_TITLE_FILTER,
         ARTICLE_LIST_SORT_TYPE, LAST_CLIPPED_WORD,
-        NUMBER_PLACE_MASKING_COUNT, NUMBER_PLACE_LAST_GAME_PATH
+        NUMBER_PLACE_MASKING_COUNT, NUMBER_PLACE_LAST_GAME_PATH, HOLIDAY_CALENDARS, PRIMARY_HOLIDAY_CALENDARS
     }
 
     private val preferences: SharedPreferences =
@@ -479,6 +479,26 @@ class PreferenceApplier(private val context: Context) {
 
     fun clearLastNumberPlaceGamePath() {
         preferences.edit().remove(Key.NUMBER_PLACE_LAST_GAME_PATH.name).apply()
+    }
+
+    fun setUsingHolidaysCalendar(vararg calendarNames: String) {
+        preferences.edit().putString(Key.HOLIDAY_CALENDARS.name, calendarNames.joinToString("\t")).apply()
+    }
+
+    fun usingHolidaysCalendar(): List<String> {
+        return preferences.getString(Key.HOLIDAY_CALENDARS.name, "USA")?.split("\t") ?: emptyList()
+    }
+
+    fun setUsingPrimaryHolidaysCalendar(calendarNames: String) {
+        preferences.edit().putString(Key.PRIMARY_HOLIDAY_CALENDARS.name, calendarNames).apply()
+    }
+
+    fun clearUsingPrimaryHolidaysCalendar() {
+        preferences.edit().putString(Key.PRIMARY_HOLIDAY_CALENDARS.name, null).apply()
+    }
+
+    fun usingPrimaryHolidaysCalendar(): String? {
+        return preferences.getString(Key.PRIMARY_HOLIDAY_CALENDARS.name, "USA")
     }
 
 }

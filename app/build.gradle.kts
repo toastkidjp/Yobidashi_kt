@@ -1,9 +1,9 @@
-import property.LibraryVersion
+
 import property.BuildTool
+import property.LibraryVersion
 import property.Version
-import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version("1.6.21")
@@ -115,18 +115,19 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":editor"))
     implementation(project(":number"))
+    implementation(project(":converter"))
 
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
     implementation("androidx.work:work-runtime:2.7.1")
     implementation("androidx.webkit:webkit:1.6.0")
 
     // Compose dependencies.
+    implementation("androidx.compose.ui:ui:1.4.2")
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("androidx.compose.runtime:runtime-livedata:${LibraryVersion.compose}")
     implementation("androidx.activity:activity-compose:1.4.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("com.google.accompanist:accompanist-navigation-animation:0.23.1")
-    implementation("com.google.accompanist:accompanist-flowlayout:0.24.5-alpha")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
 
@@ -134,7 +135,7 @@ dependencies {
     kapt("androidx.room:room-compiler:${LibraryVersion.room}")
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:$BuildTool.kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
     implementation("com.squareup.okhttp3:okhttp:${LibraryVersion.okhttp}")

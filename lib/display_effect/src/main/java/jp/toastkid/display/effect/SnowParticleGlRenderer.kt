@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import jp.toastkid.snow.R
+import jp.toastkid.display.effect.R
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 import kotlin.math.tan

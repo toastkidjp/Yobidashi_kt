@@ -8,35 +8,49 @@
 
 package jp.toastkid.yobidashi.calendar.view
 
-
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.yobidashi.calendar.model.holiday.Holiday
 import java.util.Calendar
 
 @Composable
-fun DayLabelView(date: Int, dayOfWeek: Int, offDay: Boolean, today: Boolean, modifier: Modifier) {
+fun DayLabelView(
+    date: Int,
+    dayOfWeek: Int,
+    today: Boolean,
+    offDay: Boolean,
+    labels: List<Holiday>,
+    modifier: Modifier
+) {
     Surface(
         color = getSurfaceColor(today),
         modifier = modifier
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.padding(vertical = 16.dp)
-        ) {
-            Text(if (date == -1) "" else "$date", fontSize = 16.sp, color = when (dayOfWeek) {
-                Calendar.SUNDAY -> OFF_DAY_FG
-                Calendar.SATURDAY -> SATURDAY_FG
-                else -> if (offDay) OFF_DAY_FG else if (today) Color.White else MaterialTheme.colorScheme.onSurface
-            })
+        Column {
+            Text(if (date == -1) "" else "$date",
+                fontSize = if (labels.isEmpty()) 16.sp else 14.sp,
+                textAlign = TextAlign.Start,
+                color = when (dayOfWeek) {
+                    Calendar.SUNDAY -> OFF_DAY_FG
+                    Calendar.SATURDAY -> SATURDAY_FG
+                    else -> if (offDay) OFF_DAY_FG else if (today) Color.White else MaterialTheme.colorScheme.onSurface
+                },
+                modifier = Modifier.padding(4.dp)
+            )
+            labels.forEach {
+                Text("${it.flag} ${it.title}", fontSize = 9.sp, color = OFF_DAY_FG, softWrap = false,
+                    modifier = Modifier.padding(4.dp)
+                )
+            }
         }
     }
 }
