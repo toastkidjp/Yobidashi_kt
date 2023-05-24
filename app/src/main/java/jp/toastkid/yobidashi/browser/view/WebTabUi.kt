@@ -496,13 +496,20 @@ private fun AppBarContent(
                         contentViewModel.webSearch()
                     }
             ) {
+                AsyncImage(
+                    model = viewModel.icon.value,
+                    contentDescription = stringResource(id = R.string.image),
+                    modifier = Modifier
+                        .size(36.dp)
+                        .padding(end = 8.dp)
+                )
                 BrowserTitle(
                     viewModel.title.value,
                     viewModel.url.value,
                     viewModel.progress.value,
                     Modifier
                         .weight(1f)
-                        .padding(horizontal = 4.dp)
+                        .padding(end = 4.dp)
                 )
 
                 val isNotLoading = 70 < viewModel.progress.value
