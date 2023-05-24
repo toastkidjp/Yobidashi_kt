@@ -7,6 +7,7 @@
  */
 package jp.toastkid.lib
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Message
 import androidx.compose.runtime.State
@@ -70,6 +71,18 @@ class BrowserViewModel {
         /*viewModelScope.launch {
             _event.emit(WebSearchEvent(query))
         }*/
+    }
+
+    private val _icon = mutableStateOf<Bitmap?>(null)
+
+    val icon: State<Bitmap?> = _icon
+
+    fun newIcon(bitmap: Bitmap) {
+        _icon.value = bitmap
+    }
+
+    fun resetIcon() {
+        _icon.value = null
     }
 
     private val _title = mutableStateOf("")
