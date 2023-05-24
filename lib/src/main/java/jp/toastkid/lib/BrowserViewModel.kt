@@ -13,18 +13,11 @@ import android.os.Message
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
-import jp.toastkid.lib.viewmodel.event.Event
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 
 /**
  * @author toastkidjp
  */
 class BrowserViewModel {
-
-    private val _event = MutableSharedFlow<Event>()
-
-    val event: SharedFlow<Event> = _event
 
     fun preview(uri: Uri) {
         /*viewModelScope.launch {
