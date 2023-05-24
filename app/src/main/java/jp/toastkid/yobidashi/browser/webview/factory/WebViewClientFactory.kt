@@ -23,6 +23,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.app.ComponentActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.BrowserViewModel
@@ -71,6 +72,13 @@ class WebViewClientFactory(
             if (view == currentView()) {
                 browserViewModel?.updateProgress(0)
                 browserViewModel?.nextUrl(url)
+                browserViewModel?.resetIcon()
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    faviconApplier.load(url.toUri())?.let {
+                        browserViewModel?.newIcon(it)
+                    }
+                }
             }
 
             rssAddingSuggestion?.invoke(view, url)
