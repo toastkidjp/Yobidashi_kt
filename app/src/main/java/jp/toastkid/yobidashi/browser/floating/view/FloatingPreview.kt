@@ -53,7 +53,6 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun FloatingPreviewUi(uri: Uri) {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = PreferenceApplier(context)
 
     val viewModel = remember { FloatingPreviewViewModel() }
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
@@ -63,7 +62,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
     val webView = remember {
         val view = WebViewFactory().make(context)
         WebViewInitializer.launch(view, viewModel)
-        DarkModeApplier().invoke(view, preferenceApplier.useDarkMode())
+        DarkModeApplier().invoke(view, PreferenceApplier(context).useDarkMode())
         view
     }
 
