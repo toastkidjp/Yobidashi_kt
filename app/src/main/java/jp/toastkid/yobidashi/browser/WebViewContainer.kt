@@ -49,6 +49,7 @@ import jp.toastkid.yobidashi.browser.webview.factory.WebViewLongTapListenerFacto
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -158,6 +159,12 @@ class WebViewContainer(
         latest?.webChromeClient = webChromeClient
         latest?.setOnLongClickListener(longTapListener)
         (latest as? CustomWebView)?.setNestedScrollDispatcher(nestedScrollDispatcher)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            faviconApplier.load(uri)?.let {
+                browserViewModel.newIcon(it)
+            }
+        }
 
         if (replaced) {
             loadUrl(uri.toString())
