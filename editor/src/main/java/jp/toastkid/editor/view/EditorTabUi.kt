@@ -100,8 +100,6 @@ fun EditorTabUi(path: String?) {
     val editText = remember { EditText(context) }
     val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
 
-    val finder = EditTextFinder(editText)
-
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     val fileActionUseCase = remember {
@@ -117,6 +115,7 @@ fun EditorTabUi(path: String?) {
 
     val localLifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = localLifecycleOwner, block = {
+        val finder = EditTextFinder(editText)
         contentViewModel.event.collect {
             when (it) {
                 is ToTopEvent -> {
