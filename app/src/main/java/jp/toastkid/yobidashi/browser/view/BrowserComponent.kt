@@ -29,7 +29,7 @@ internal fun BrowserTitle(
         modifier = modifier
     ) {
         val progressTitle =
-            if ((progress ?: 100) < 70)
+            if (progress < 70)
                 stringResource(id = R.string.prefix_loading) + "$progress%"
             else
                 title ?: ""
