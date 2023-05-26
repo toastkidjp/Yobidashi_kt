@@ -45,7 +45,11 @@ class WebViewLongTapListenerFactory {
                     webView.requestFocusNodeHref(handler.obtainMessage())
                     if (longTapItemHolder.anchor.isEmpty()) {
                         handler.postDelayed({
-                            showImageAnchorDialog(longTapItemHolder.title, longTapItemHolder.anchor, url)
+                            showImageAnchorDialog(
+                                longTapItemHolder.title,
+                                longTapItemHolder.anchor,
+                                url
+                            )
                             longTapItemHolder.reset()
                         }, 300L)
 
