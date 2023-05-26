@@ -114,8 +114,7 @@ class TabAdapter(
     fun openBackgroundTab(title: String, url: String): Tab {
         val context = contextSupplier()
         val tabTitle =
-                if (title.isNotBlank()) title
-                else context.getString(R.string.new_tab)
+            title.ifBlank { context.getString(R.string.new_tab) }
 
         val newTab = WebTab.make(tabTitle, url)
         tabList.add(newTab)
