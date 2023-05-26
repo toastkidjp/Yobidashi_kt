@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.calendar.model.uk
 
 import jp.toastkid.yobidashi.calendar.model.holiday.Holiday
+import jp.toastkid.yobidashi.calendar.model.holiday.HolidayCalendar
 
 enum class FixedUKHoliday(val month: Int, val date: Int, val title: String) {
     NEW_YEARS_DAY(1, 1, "New Year's Day"),
@@ -18,6 +19,6 @@ enum class FixedUKHoliday(val month: Int, val date: Int, val title: String) {
 
     companion object {
         fun find(month: Int) = values().filter { it.month == month }
-            .map { Holiday(it.title, month, it.date) }
+            .map { Holiday(it.title, month, it.date, HolidayCalendar.UK.flag) }
     }
 }

@@ -155,10 +155,7 @@ fun ArticleListUi() {
         }
 
     val itemFlowState = remember { mutableStateOf<Flow<PagingData<SearchResult>>?>(null) }
-
-    viewModel.dataSource.observe(context) {
-        itemFlowState.value = it.flow
-    }
+    itemFlowState.value = viewModel.dataSource.value?.flow
 
     val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
         articleRepository,
@@ -272,7 +269,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                             .switchTabList()
                     },
                     onLongClick = {
-                        tabListViewModel.openNewTabForLongTap()
+                        tabListViewModel.openNewTab()
                     }
                 )
         ) {
@@ -293,17 +290,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     .align(Alignment.Center)
                     .padding(start = 2.dp, bottom = 2.dp)
             )
-        }
-    }
-
-    viewModel.progress.observe(activityContext) {
-        it?.getContentIfNotHandled()?.let { message ->
-            viewModel.searchResult.value = message
-        }
-    }
-    viewModel.messageId.observe(activityContext) {
-        it?.getContentIfNotHandled()?.let { messageId ->
-            viewModel.searchResult.value = activityContext.getString(messageId)
         }
     }
 

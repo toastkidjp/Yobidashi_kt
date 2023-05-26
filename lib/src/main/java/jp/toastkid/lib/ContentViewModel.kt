@@ -9,28 +9,49 @@ package jp.toastkid.lib
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.Animatable
-import jp.toastkid.lib.compat.material3.ModalBottomSheetState
-import jp.toastkid.lib.compat.material3.ModalBottomSheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.IntOffset
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import jp.toastkid.lib.lifecycle.Event
+import androidx.lifecycle.viewModelScope
+import jp.toastkid.lib.compat.material3.ModalBottomSheetState
+import jp.toastkid.lib.compat.material3.ModalBottomSheetValue
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.viewmodel.event.Event
+import jp.toastkid.lib.viewmodel.event.content.NavigationEvent
+import jp.toastkid.lib.viewmodel.event.content.RefreshContentEvent
+import jp.toastkid.lib.viewmodel.event.content.ReplaceToCurrentTabContentEvent
+import jp.toastkid.lib.viewmodel.event.content.ShareEvent
+import jp.toastkid.lib.viewmodel.event.content.SnackbarEvent
+import jp.toastkid.lib.viewmodel.event.content.SwitchTabListEvent
+import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
+import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
+import jp.toastkid.lib.viewmodel.event.tab.MoveTabEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenArticleEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenArticleListEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenCalendarEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenEditorEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenPdfEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenWebSearchEvent
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
  */
 class ContentViewModel : ViewModel() {
+
+    private val _event = MutableSharedFlow<Event>()
+
+    val event = _event.asSharedFlow()
 
     private val colorPair = mutableStateOf(ColorPair(Color.White.toArgb(), Color.Black.toArgb()))
 
@@ -42,72 +63,58 @@ class ContentViewModel : ViewModel() {
         this.colorPair.value = colorPair
     }
 
-    private val _snackbar = MutableLiveData<Event<SnackbarEvent>>()
-
-    val snackbar: LiveData<Event<SnackbarEvent>> = _snackbar
-
     fun snackShort(message: String) {
-        _snackbar.postValue(Event(SnackbarEvent(message)))
+        viewModelScope.launch {
+            _event.emit(SnackbarEvent(message))
+        }
     }
 
-    private val _snackbarRes = MutableLiveData<Event<Int>>()
-
-    val snackbarRes: LiveData<Event<Int>> = _snackbarRes
-
     fun snackShort(@StringRes messageId: Int) {
-        _snackbarRes.postValue(Event(messageId))
+        viewModelScope.launch {
+            _event.emit(SnackbarEvent(messageId = messageId))
+        }
     }
 
     fun snackWithAction(message: String, actionLabel: String, action: () -> Unit) {
-        _snackbar.postValue(Event(SnackbarEvent(message, actionLabel, action)))
+        viewModelScope.launch {
+            _event.emit(SnackbarEvent(message, actionLabel = actionLabel, action = action))
+        }
     }
-
-    private val _toTop = MutableLiveData<Event<Unit>>()
-
-    val toTop: LiveData<Event<Unit>> = _toTop
 
     fun toTop() {
-        _toTop.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(ToTopEvent())
+        }
     }
-
-    private val _toBottom = MutableLiveData<Event<Unit>>()
-
-    val toBottom: LiveData<Event<Unit>> = _toBottom
 
     fun toBottom() {
-        _toBottom.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(ToBottomEvent())
+        }
     }
-
-    private val _share = MutableLiveData<Event<Unit>>()
-
-    val share: LiveData<Event<Unit>> = _share
 
     fun share() {
-        _share.value = Event(Unit)
+        viewModelScope.launch {
+            _event.emit(ShareEvent())
+        }
     }
-
-    private val _webSearch = MutableLiveData<Event<Unit>>()
-
-    val webSearch: LiveData<Event<Unit>> = _webSearch
 
     fun webSearch() {
-        _webSearch.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(OpenWebSearchEvent())
+        }
     }
-
-    private val _openPdf = MutableLiveData<Event<Unit>>()
-
-    val openPdf: LiveData<Event<Unit>> = _openPdf
 
     fun openPdf() {
-        _openPdf.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(OpenPdfEvent())
+        }
     }
 
-    private val _openEditorTab = MutableLiveData<Event<Unit>>()
-
-    val openEditorTab: LiveData<Event<Unit>> = _openEditorTab
-
     fun openEditorTab() {
-        _openEditorTab.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(OpenEditorEvent())
+        }
     }
 
     private val _bottomSheetContent = mutableStateOf<@Composable () -> Unit>({})
@@ -147,68 +154,58 @@ class ContentViewModel : ViewModel() {
         modalBottomSheetState.hide()
     }
 
-    private val _nextRoute = MutableLiveData<Event<String>>()
-
-    val nextRoute: LiveData<Event<String>> = _nextRoute
-
     fun nextRoute(route: String) {
-        _nextRoute.postValue(Event(route))
+        viewModelScope.launch {
+            _event.emit(NavigationEvent(route))
+        }
     }
-
-    private val _switchTabList = MutableLiveData<Event<Unit>>()
-
-    val switchTabList: LiveData<Event<Unit>> = _switchTabList
 
     fun switchTabList() {
-        _switchTabList.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(SwitchTabListEvent())
+        }
     }
 
-    private val _moveTab = MutableLiveData<Event<Int>>()
-
-    val moveTab: LiveData<Event<Int>> = _moveTab
-
     fun previousTab() {
-        _moveTab.postValue(Event(-1))
+        viewModelScope.launch {
+            _event.emit(MoveTabEvent(-1))
+        }
     }
 
     fun nextTab() {
-        _moveTab.postValue(Event(1))
+        viewModelScope.launch {
+            _event.emit(MoveTabEvent(1))
+        }
     }
-
-    private val _refresh = MutableLiveData<Unit>()
-
-    val refresh: LiveData<Unit> = _refresh
 
     fun refresh() {
-        _refresh.postValue(Unit)
+        viewModelScope.launch {
+            _event.emit(RefreshContentEvent())
+        }
     }
 
-    private val _newArticle = MutableLiveData<Event<Pair<String, Boolean>>>()
-
-    val newArticle: LiveData<Event<Pair<String, Boolean>>> = _newArticle
-
     fun newArticle(title: String) {
-        _newArticle.postValue(Event(title to false))
+        viewModelScope.launch {
+            _event.emit(OpenArticleEvent(title))
+        }
     }
 
     fun newArticleOnBackground(title: String) {
-        _newArticle.postValue(Event(title to true))
+        viewModelScope.launch {
+            _event.emit(OpenArticleEvent(title, true))
+        }
     }
-
-    private val _openArticleList = MutableLiveData<Event<Unit>>()
-
-    val openArticleList: LiveData<Event<Unit>> = _openArticleList
 
     fun openArticleList() {
-        _openArticleList.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(OpenArticleListEvent())
+        }
     }
 
-    private val _openCalendar = MutableLiveData<Event<Unit>>()
-
-    val openCalendar: LiveData<Event<Unit>> = _openCalendar
-
     fun openCalendar() {
-        _openCalendar.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(OpenCalendarEvent())
+        }
     }
 
     private val _optionMenus = mutableListOf<OptionMenu>()
@@ -240,12 +237,10 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    private val _replaceToCurrentTab = MutableLiveData<Event<Unit>>()
-
-    val replaceToCurrentTab: LiveData<Event<Unit>> = _replaceToCurrentTab
-
     fun replaceToCurrentTab() {
-        _replaceToCurrentTab.postValue(Event(Unit))
+        viewModelScope.launch {
+            _event.emit(ReplaceToCurrentTabContentEvent())
+        }
     }
 
     private val _useScreenFilter = mutableStateOf(false)

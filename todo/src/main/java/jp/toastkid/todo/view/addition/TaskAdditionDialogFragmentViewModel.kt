@@ -7,10 +7,9 @@
  */
 package jp.toastkid.todo.view.addition
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.todo.model.TodoTask
 import java.io.Serializable
 
@@ -19,23 +18,24 @@ import java.io.Serializable
  */
 class TaskAdditionDialogFragmentViewModel : ViewModel(), Serializable {
 
-    private val _task = MutableLiveData<TodoTask?>()
+    private val _bottomSheetScaffoldState = mutableStateOf(false)
 
-    val task: LiveData<TodoTask?> = _task
+    val bottomSheetScaffoldState: State<Boolean> = _bottomSheetScaffoldState
+
+    private val _task = mutableStateOf<TodoTask?>(null)
+
+    val task: State<TodoTask?> = _task
 
     fun setTask(task: TodoTask?) {
-        _task.postValue(
-            task
-                ?: TodoTask(0).also { it.dueDate = System.currentTimeMillis() }
-        )
+        _task.value = task ?: TodoTask(0).also { it.dueDate = System.currentTimeMillis() }
     }
 
-    private val _refresh = MutableLiveData<Event<TodoTask>>()
+    fun show() {
+        _bottomSheetScaffoldState.value = true
+    }
 
-    val refresh: LiveData<Event<TodoTask>> = _refresh
-
-    fun refresh(task: TodoTask) {
-        _refresh.postValue(Event(task))
+    fun hide() {
+        _bottomSheetScaffoldState.value = false
     }
 
 }

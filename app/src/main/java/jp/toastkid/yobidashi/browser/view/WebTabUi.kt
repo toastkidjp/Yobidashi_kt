@@ -40,7 +40,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,7 +65,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
@@ -78,6 +76,11 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshNestedScrollConnection
 import jp.toastkid.lib.viewmodel.PageSearcherViewModel
+import jp.toastkid.lib.viewmodel.event.content.ShareEvent
+import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
+import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
+import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
+import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
 import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
@@ -252,6 +255,25 @@ internal fun WebTabUi(webTab: WebTab) {
         }
     }
 
+    LaunchedEffect(key1 = lifecycleOwner, block = {
+        contentViewModel.event.collect {
+            when (it) {
+                is ToTopEvent -> {
+                    browserModule.pageUp()
+                }
+                is ToBottomEvent -> {
+                    browserModule.pageDown()
+                }
+                is ShareEvent -> {
+                    activityContext.startActivity(
+                        ShareIntentFactory()(browserModule.makeShareMessage())
+                    )
+                }
+                else -> Unit
+            }
+        }
+    })
+
     val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
@@ -265,42 +287,6 @@ internal fun WebTabUi(webTab: WebTab) {
                 browserModule
             ) {
                 readerModeText.value = if (readerModeText.value.isNotEmpty()) "" else it
-            }
-        }
-
-        contentViewModel.toTop.observe(lifecycleOwner) {
-            it.getContentIfNotHandled() ?: return@observe
-            browserModule.pageUp()
-        }
-        contentViewModel.toBottom.observe(lifecycleOwner) {
-            it.getContentIfNotHandled() ?: return@observe
-            browserModule.pageDown()
-        }
-        contentViewModel.share.observe(lifecycleOwner) {
-            it.getContentIfNotHandled() ?: return@observe
-            activityContext.startActivity(
-                ShareIntentFactory()(browserModule.makeShareMessage())
-            )
-        }
-
-        pageSearcherViewModel.also { viewModel ->
-            viewModel.find.observe(lifecycleOwner, Observer {
-                val word = it.getContentIfNotHandled() ?: return@Observer
-                browserModule.find(word)
-            })
-
-            viewModel.upward.observe(lifecycleOwner, Observer {
-                it.getContentIfNotHandled() ?: return@Observer
-                browserModule.findUp()
-            })
-
-            viewModel.downward.observe(lifecycleOwner, Observer {
-                it.getContentIfNotHandled() ?: return@Observer
-                browserModule.findDown()
-            })
-
-            viewModel.clear.observe(lifecycleOwner) {
-                browserModule.clearMatches()
             }
         }
 
@@ -323,6 +309,23 @@ internal fun WebTabUi(webTab: WebTab) {
                     GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
                 }
                 else -> Unit
+            }
+        }
+    })
+
+    LaunchedEffect(key1 = lifecycleOwner, block = {
+        pageSearcherViewModel.event.collect {
+            when (it) {
+                is FindInPageEvent -> {
+                    if (it.upward) {
+                        browserModule.findUp()
+                    } else {
+                        browserModule.find(it.word)
+                    }
+                }
+                is ClearFinderInputEvent -> {
+                    browserModule.clearMatches()
+                }
             }
         }
     })
@@ -418,12 +421,6 @@ internal fun WebTabUi(webTab: WebTab) {
                     }
             })
         )
-    })
-
-    DisposableEffect(key1 = lifecycleOwner, effect = {
-        onDispose {
-            contentViewModel.share.removeObservers(lifecycleOwner)
-        }
     })
 }
 
@@ -606,7 +603,9 @@ private fun AppBarContent(
                     viewModel.progress,
                     viewModel.title,
                     viewModel.url,
-                    Modifier.weight(1f).padding(horizontal = 4.dp)
+                    Modifier
+                        .weight(1f)
+                        .padding(horizontal = 4.dp)
                 )
 
                 val isNotLoading = 70 < viewModel.progress.value

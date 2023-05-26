@@ -32,9 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -59,11 +57,10 @@ import java.util.GregorianCalendar
 internal fun TaskEditorUi(
     screenContent: @Composable () -> Unit,
     taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel?,
-    bottomSheetScaffoldState: MutableState<Boolean>,
     onTapAdd: (TodoTask) -> Unit,
     colorPair: ColorPair
 ) {
-    val task = taskAdditionDialogFragmentViewModel?.task?.observeAsState()?.value
+    val task = taskAdditionDialogFragmentViewModel?.task?.value
     var descriptionInput by remember { mutableStateOf(task?.description ?: "") }
     var chosenColor by remember { mutableStateOf(Color.Transparent.value.toInt()) }
     task?.let {
@@ -79,11 +76,11 @@ internal fun TaskEditorUi(
 
     screenContent()
 
-    if (!bottomSheetScaffoldState.value) {
+    if (taskAdditionDialogFragmentViewModel?.bottomSheetScaffoldState?.value != true) {
         return
     }
 
-    Dialog(onDismissRequest = { bottomSheetScaffoldState.value = false }) {
+    Dialog(onDismissRequest = { taskAdditionDialogFragmentViewModel.hide() }) {
         Column {
             Row {
                 TextField(
@@ -97,7 +94,7 @@ internal fun TaskEditorUi(
                     keyboardActions = KeyboardActions {
                         save(task, onTapAdd)
                         coroutineScope.launch {
-                            bottomSheetScaffoldState.value = false
+                            taskAdditionDialogFragmentViewModel.hide()
                         }
                     },
                     colors = TextFieldDefaults.textFieldColors(
@@ -121,9 +118,7 @@ internal fun TaskEditorUi(
                 Button(
                     onClick = {
                         save(task, onTapAdd)
-                        coroutineScope.launch {
-                            bottomSheetScaffoldState.value = false
-                        }
+                        taskAdditionDialogFragmentViewModel.hide()
                     },
                     colors = ButtonDefaults.textButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,

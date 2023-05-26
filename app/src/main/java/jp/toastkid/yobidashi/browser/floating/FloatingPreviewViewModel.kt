@@ -10,8 +10,6 @@ package jp.toastkid.yobidashi.browser.floating
 import android.graphics.Bitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
@@ -19,12 +17,12 @@ import androidx.lifecycle.ViewModel
  */
 class FloatingPreviewViewModel : ViewModel() {
 
-    private val _title = MutableLiveData<String>()
+    private val _title = mutableStateOf("")
 
-    val title: LiveData<String> = _title
+    val title: State<String> = _title
 
     fun newTitle(title: String?) {
-        title?.let { _title.postValue(it) }
+        _title.value = title ?: ""
     }
 
     private val _icon = mutableStateOf<Bitmap?>(null)
@@ -35,19 +33,19 @@ class FloatingPreviewViewModel : ViewModel() {
         _icon.value = bitmap
     }
 
-    private val _url = MutableLiveData<String>()
+    private val _url = mutableStateOf("")
 
-    val url: LiveData<String> = _url
+    val url: State<String> = _url
 
     fun newUrl(url: String?) {
-        url?.let { _url.postValue(it) }
+        _url.value = url ?: ""
     }
 
-    private val _progress = MutableLiveData<Int>()
+    private val _progress = mutableStateOf(0)
 
-    val progress: LiveData<Int> = _progress
+    val progress: State<Int> = _progress
 
     fun newProgress(progress: Int) {
-        _progress.postValue(progress)
+        _progress.value = progress
     }
 }

@@ -34,9 +34,9 @@ import kotlinx.coroutines.launch
  */
 class BrowserViewModel : ViewModel() {
 
-    private val _preview =  MutableSharedFlow<Uri>()
+    private val _event = MutableSharedFlow<Event>()
 
-    val preview: SharedFlow<Uri> = _preview
+    val event: SharedFlow<Event> = _event
 
     fun preview(uri: Uri) {
         viewModelScope.launch {
@@ -44,23 +44,11 @@ class BrowserViewModel : ViewModel() {
         }
     }
 
-    private val _event = MutableSharedFlow<Event>()
-
-    val event: SharedFlow<Event> = _event
-
-    private val _open = MutableSharedFlow<Uri>()
-
-    val open: SharedFlow<Uri> = _open
-
     fun open(uri: Uri) {
         viewModelScope.launch {
             _event.emit(OpenUrlEvent(uri))
         }
     }
-
-    private val _openBackground = MutableSharedFlow<Uri>()
-
-    val openBackground: SharedFlow<Uri> = _openBackground
 
     fun openBackground(uri: Uri) {
         viewModelScope.launch {
@@ -68,20 +56,11 @@ class BrowserViewModel : ViewModel() {
         }
     }
 
-    // TODO: Use appropriate data class.
-    private val _openBackgroundWithTitle = MutableSharedFlow<Pair<String, Uri>>()
-
-    val openBackgroundWithTitle: SharedFlow<Pair<String, Uri>> = _openBackgroundWithTitle
-
     fun openBackground(title: String, uri: Uri) {
         viewModelScope.launch {
-            _event.emit(OpenUrlEvent(uri, title = title))
+            _event.emit(OpenUrlEvent(uri, true, title))
         }
     }
-
-    private val _openNewWindow = MutableSharedFlow<Message?>()
-
-    val openNewWindow: SharedFlow<Message?> = _openNewWindow
 
     fun openNewWindow(resultMessage: Message?) {
         viewModelScope.launch {
@@ -89,54 +68,32 @@ class BrowserViewModel : ViewModel() {
         }
     }
 
-    private val _download = MutableSharedFlow<String>()
-
-    val download: SharedFlow<String> = _download
-
     fun download(url: String) {
         viewModelScope.launch {
             _event.emit(DownloadEvent(url))
         }
     }
 
-    private val _error = mutableStateOf("")
-    val openErrorDialog = mutableStateOf(false)
-
-    val error: State<String> = _error
-
-    fun setError(text: String) {
-        _error.value = text
-        openErrorDialog.value = true
-    }
-
-    fun clearError() {
-        _error.value = ""
-        openErrorDialog.value = false
-    }
-
-    private val _longTapActionParameters =
-        mutableStateOf(Triple<String?, String?, String?>(null, null, null))
-    val openLongTapDialog = mutableStateOf(false)
-
-    val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
-
-    fun setLongTapParameters(title: String?, anchor: String?, imageUrl: String?) {
-        _longTapActionParameters.value = Triple(title, anchor, imageUrl)
-        openLongTapDialog.value = true
-    }
-
-    fun clearLongTapParameters() {
-        _longTapActionParameters.value = Triple(null, null, null)
-        openLongTapDialog.value = false
-    }
-
-    private val _switchWebViewToCurrent = MutableSharedFlow<String>()
-
-    val switchWebViewToCurrent: SharedFlow<String> = _switchWebViewToCurrent
-
     fun switchWebViewToCurrent(tabId: String) {
         viewModelScope.launch {
             _event.emit(SwitchWebViewToCurrentEvent(tabId))
+        }
+    }
+
+    fun stopProgress(stop: Boolean) {
+        viewModelScope.launch {
+            _event.emit(OnStopLoadEvent())
+        }
+    }
+
+    fun finished(tabId: String, title: String, url: String) =
+        viewModelScope.launch {
+            _event.emit(OnLoadCompletedEvent(LoadInformation(tabId, title, url)))
+        }
+
+    fun search(query: String) {
+        viewModelScope.launch {
+            _event.emit(WebSearchEvent(query))
         }
     }
 
@@ -184,34 +141,35 @@ class BrowserViewModel : ViewModel() {
         _progress.value = newProgress
     }
 
-    private val _stopProgress = MutableSharedFlow<Boolean>()
+    private val _error = mutableStateOf("")
+    val openErrorDialog = mutableStateOf(false)
 
-    val stopProgress: SharedFlow<Boolean> = _stopProgress
+    val error: State<String> = _error
 
-    fun stopProgress(stop: Boolean) {
-        viewModelScope.launch {
-            _event.emit(OnStopLoadEvent())
-        }
+    fun setError(text: String) {
+        _error.value = text
+        openErrorDialog.value = true
     }
 
-    private val _onPageFinished =
-        MutableSharedFlow<LoadInformation>()
+    fun clearError() {
+        _error.value = ""
+        openErrorDialog.value = false
+    }
 
-    val onPageFinished: SharedFlow<LoadInformation> = _onPageFinished
+    private val _longTapActionParameters =
+        mutableStateOf(Triple<String?, String?, String?>(null, null, null))
+    val openLongTapDialog = mutableStateOf(false)
 
-    fun finished(tabId: String, title: String, url: String) =
-        viewModelScope.launch {
-            _event.emit(OnLoadCompletedEvent(LoadInformation(tabId, title, url)))
-        }
+    val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
 
-    private val _search = MutableSharedFlow<String>()
+    fun setLongTapParameters(title: String?, anchor: String?, imageUrl: String?) {
+        _longTapActionParameters.value = Triple(title, anchor, imageUrl)
+        openLongTapDialog.value = true
+    }
 
-    val search: SharedFlow<String> = _search
-
-    fun search(query: String) {
-        viewModelScope.launch {
-            _event.emit(WebSearchEvent(query))
-        }
+    fun clearLongTapParameters() {
+        _longTapActionParameters.value = Triple(null, null, null)
+        openLongTapDialog.value = false
     }
 
     private val nestedScrollDispatcher = NestedScrollDispatcher()

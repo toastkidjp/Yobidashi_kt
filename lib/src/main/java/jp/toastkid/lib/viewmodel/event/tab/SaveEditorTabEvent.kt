@@ -6,13 +6,10 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.lib.viewmodel.event.web
+package jp.toastkid.lib.viewmodel.event.tab
 
 import jp.toastkid.lib.viewmodel.event.Event
+import java.io.File
 
-data class WebSearchEvent(
-    val query: String,
-    val category: String? = null,
-    val background: Boolean = false
-) : Event {
+class SaveEditorTabEvent(val file: File) : Event {
 }

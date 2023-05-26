@@ -9,8 +9,6 @@ package jp.toastkid.article_viewer.article.list
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -19,7 +17,6 @@ import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
-import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
@@ -44,21 +41,12 @@ class ArticleListFragmentViewModel(
         _progressVisibility.value = false
     }
 
-    private val _progress = MutableLiveData<Event<String>>()
-    val progress : LiveData<Event<String>> = _progress
-
-    private val _messageId = MutableLiveData<Event<Int>>()
-    val messageId : LiveData<Event<Int>> = _messageId
-
-    private val _sort = MutableLiveData<Event<Sort>>()
-    val sort: LiveData<Event<Sort>> = _sort
-
     fun sort(sort: Sort) {
         setNextPager { sort.invoke(articleRepository) }
     }
 
-    private val _dataSource = MutableLiveData<Pager<Int, SearchResult>>()
-    val dataSource: LiveData<Pager<Int, SearchResult>> = _dataSource
+    private val _dataSource = mutableStateOf<Pager<Int, SearchResult>?>(null)
+    val dataSource: State<Pager<Int, SearchResult>?> = _dataSource
 
     fun search(keyword: String?) {
         setNextPager {
@@ -92,11 +80,9 @@ class ArticleListFragmentViewModel(
     }
 
     private fun setNextPager(pagingSourceFactory: () -> PagingSource<Int, SearchResult>) {
-        _dataSource.postValue(
-            Pager(
-                PagingConfig(pageSize = 10, enablePlaceholders = true),
-                pagingSourceFactory = pagingSourceFactory
-            )
+        _dataSource.value = Pager(
+            PagingConfig(pageSize = 10, enablePlaceholders = true),
+            pagingSourceFactory = pagingSourceFactory
         )
     }
 

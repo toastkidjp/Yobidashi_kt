@@ -13,15 +13,16 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import jp.toastkid.lib.lifecycle.Event
-import jp.toastkid.search.value.SearchEvent
+import androidx.lifecycle.viewModelScope
+import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearch
 import jp.toastkid.yobidashi.search.history.SearchHistory
 import jp.toastkid.yobidashi.search.trend.Trend
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 class SearchUiViewModel : ViewModel() {
 
@@ -47,20 +48,26 @@ class SearchUiViewModel : ViewModel() {
 
     val searchHistories = mutableStateListOf<SearchHistory>()
 
-    private val _search = MutableLiveData<Event<SearchEvent>>()
+    private val _search = MutableSharedFlow<WebSearchEvent>()
 
-    val search: LiveData<Event<SearchEvent>> = _search
+    val search = _search.asSharedFlow()
 
     fun search(query: String) {
-        _search.postValue(Event(SearchEvent(query)))
+        viewModelScope.launch {
+            _search.emit(WebSearchEvent(query))
+        }
     }
 
     fun searchWithCategory(query: String, category: String, background: Boolean = false) {
-        _search.postValue(Event(SearchEvent(query, category, background)))
+        viewModelScope.launch {
+            _search.emit(WebSearchEvent(query, category, background))
+        }
     }
 
     fun searchOnBackground(query: String) {
-        _search.postValue(Event(SearchEvent(query, background = true)))
+        viewModelScope.launch {
+            _search.emit(WebSearchEvent(query, background = true))
+        }
     }
 
     fun enableBackHandler() =

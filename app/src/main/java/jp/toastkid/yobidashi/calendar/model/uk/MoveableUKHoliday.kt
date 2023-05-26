@@ -9,17 +9,27 @@
 package jp.toastkid.yobidashi.calendar.model.uk
 
 import jp.toastkid.yobidashi.calendar.model.holiday.Holiday
-import java.util.Calendar
+import jp.toastkid.yobidashi.calendar.model.holiday.HolidayCalendar
+import jp.toastkid.yobidashi.calendar.service.DateCalculator
 
-enum class MoveableUKHoliday(private val month: Int, val week: Int, val dayOfWeek: Int = Calendar.MONDAY, val title: String) {
-    EARLY_MAY_BANK_HOLIDAY(5, -1, title = "Early May Bank Holiday"),
-    SPRING_BANK_HOLIDAY(5, -1, title = "Spring Bank Holiday"),
-    SUMMER_BANK_HOLIDAY(8, -1, title = "Summer Bank Holiday")
+enum class MoveableUKHoliday(private val month: Int, val week: Int, val title: String) {
+    EARLY_MAY_BANK_HOLIDAY(5, 1, "Early May Bank Holiday"),
+    SPRING_BANK_HOLIDAY(5, -1, "Spring Bank Holiday"),
+    SUMMER_BANK_HOLIDAY(8, -1, "Summer Bank Holiday")
     ;
 
     companion object {
 
-        fun find(month: Int): List<Holiday> = emptyList()
+        private val dateCalculator = DateCalculator()
+
+        fun find(year: Int, month: Int): List<Holiday> = values().filter { it.month == month }.map {
+            Holiday(
+                it.title,
+                month,
+                dateCalculator.invoke(year, month, it.week),
+                HolidayCalendar.UK.flag
+            )
+        }
 
     }
 }

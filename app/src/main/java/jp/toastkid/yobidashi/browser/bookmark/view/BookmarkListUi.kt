@@ -62,7 +62,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
@@ -73,6 +72,7 @@ import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.view.list.SwipeToDismissItem
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
 import jp.toastkid.yobidashi.R
@@ -226,6 +226,22 @@ fun BookmarkListUi() {
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(key1 = lifecycleOwner, block = {
+        contentViewModel.event.collect {
+            if (it is ShareEvent) {
+                val items = withContext(Dispatchers.IO) {
+                    bookmarkRepository.all()
+                }
+                val html = withContext(Dispatchers.IO) {
+                    Exporter(items).invoke()
+                }
+
+                activityContext.startActivity(
+                    ShareIntentFactory()(html, EXPORT_FILE_NAME)
+                )
+            }
+        }
+    })
     LaunchedEffect(key1 = "first_launch", block = {
         viewModel.query(bookmarkRepository)
 
@@ -247,30 +263,6 @@ fun BookmarkListUi() {
                 openClearDialogState.value = true
             })
         )
-
-        contentViewModel.share.observe(lifecycleOwner) {
-            it.getContentIfNotHandled() ?: return@observe
-
-            contentViewModel.viewModelScope.launch {
-                val items = withContext(Dispatchers.IO) {
-                    bookmarkRepository.all()
-                }
-                val html = withContext(Dispatchers.IO) {
-                    Exporter(items).invoke()
-                }
-
-                activityContext.startActivity(
-                    ShareIntentFactory()(html, EXPORT_FILE_NAME)
-                )
-            }
-
-        }
-    })
-
-    DisposableEffect(key1 = lifecycleOwner, effect = {
-        onDispose {
-            contentViewModel.share.removeObservers(lifecycleOwner)
-        }
     })
 }
 

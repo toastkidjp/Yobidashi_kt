@@ -35,7 +35,9 @@ class WebChromeClientFactory(
             super.onProgressChanged(view, newProgress)
 
             browserViewModel?.updateProgress(newProgress)
-            browserViewModel?.stopProgress(newProgress < 65)
+            if (newProgress < 65) {
+                browserViewModel?.stopProgress(true)
+            }
         }
 
         override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {

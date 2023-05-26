@@ -6,13 +6,12 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.lib.viewmodel.event.web
+package jp.toastkid.lib.viewmodel.event.finder
 
 import jp.toastkid.lib.viewmodel.event.Event
 
-data class WebSearchEvent(
-    val query: String,
-    val category: String? = null,
-    val background: Boolean = false
+data class FindInPageEvent(
+    val word: String,
+    val upward: Boolean = false
 ) : Event {
 }

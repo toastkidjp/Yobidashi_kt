@@ -27,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -65,14 +64,12 @@ internal fun FloatingPreviewUi(uri: Uri) {
 
     val webView = remember {
         val view = WebViewFactory().make(context)
-        WebViewInitializer(preferenceApplier, viewModel)(view)
+        WebViewInitializer.launch(view, viewModel)
         DarkModeApplier().invoke(view, preferenceApplier.useDarkMode())
         view
     }
 
     Column(modifier = Modifier.height(400.dp)) {
-        val progressState = viewModel.progress.observeAsState()
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -92,9 +89,9 @@ internal fun FloatingPreviewUi(uri: Uri) {
             )
 
             BrowserTitle(
-                progressState,
-                viewModel.title.observeAsState(),
-                viewModel.url.observeAsState(),
+                viewModel.progress,
+                viewModel.title,
+                viewModel.url,
                 Modifier.weight(1f)
             )
 
@@ -108,7 +105,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
             )
         }
 
-        val progress = progressState.value?.toFloat() ?: 100f
+        val progress = viewModel.progress.value?.toFloat() ?: 100f
         if (progress < 75) {
             LinearProgressIndicator(
                 progress = progress / 100f,
