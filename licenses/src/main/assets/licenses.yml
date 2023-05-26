@@ -1,3 +1,21 @@
+- artifact: androidx.compose.material3:material3:+
+  name: material3
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/compose-material3#1.1.0-rc01
+- artifact: androidx.emoji2:emoji2:+
+  name: emoji2
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/emoji2#1.3.0
+- artifact: androidx.lifecycle:lifecycle-process:+
+  name: lifecycle-process
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/lifecycle#2.6.1
 - artifact: androidx.activity:activity-compose:+
   name: activity-compose
   copyrightHolder: The Android Open Source Project
@@ -136,12 +154,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: https://opensource.org/licenses/Apache-2.0
   url: https://developer.android.com/jetpack/androidx/releases/compose-material#1.2.1
-- artifact: androidx.compose.runtime:runtime-livedata:+
-  name: runtime-livedata
-  copyrightHolder: The Android Open Source Project
-  license: The Apache Software License, Version 2.0
-  licenseUrl: https://opensource.org/licenses/Apache-2.0
-  url: https://developer.android.com/jetpack/androidx/releases/compose-runtime#1.2.1
 - artifact: androidx.compose.runtime:runtime-saveable:+
   name: runtime-saveable
   copyrightHolder: The Android Open Source Project
@@ -262,20 +274,8 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: https://opensource.org/licenses/Apache-2.0
   url: https://developer.android.com/jetpack/androidx/releases/lifecycle#2.4.1
-- artifact: androidx.lifecycle:lifecycle-livedata-core-ktx:+
-  name: lifecycle-livedata-core-ktx
-  copyrightHolder: The Android Open Source Project
-  license: The Apache Software License, Version 2.0
-  licenseUrl: https://opensource.org/licenses/Apache-2.0
-  url: https://developer.android.com/jetpack/androidx/releases/lifecycle#2.4.1
 - artifact: androidx.lifecycle:lifecycle-livedata-core:+
   name: lifecycle-livedata-core
-  copyrightHolder: The Android Open Source Project
-  license: The Apache Software License, Version 2.0
-  licenseUrl: https://opensource.org/licenses/Apache-2.0
-  url: https://developer.android.com/jetpack/androidx/releases/lifecycle#2.4.1
-- artifact: androidx.lifecycle:lifecycle-livedata-ktx:+
-  name: lifecycle-livedata-ktx
   copyrightHolder: The Android Open Source Project
   license: The Apache Software License, Version 2.0
   licenseUrl: https://opensource.org/licenses/Apache-2.0
@@ -484,12 +484,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: https://opensource.org/licenses/Apache-2.0
   url: https://developer.android.com/jetpack/androidx/releases/webkit#1.5.0-rc01
-- artifact: androidx.work:work-runtime-ktx:+
-  name: work-runtime-ktx
-  copyrightHolder: The Android Open Source Project
-  license: The Apache Software License, Version 2.0
-  licenseUrl: https://opensource.org/licenses/Apache-2.0
-  url: https://developer.android.com/jetpack/androidx/releases/work#2.7.1
 - artifact: androidx.work:work-runtime:+
   name: work-runtime
   copyrightHolder: The Android Open Source Project
@@ -514,12 +508,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: https://opensource.org/licenses/Apache-2.0
   url: https://github.com/google/accompanist/
-- artifact: com.google.accompanist:accompanist-flowlayout:+
-  name: accompanist-flowlayout
-  copyrightHolder: Google
-  license: The Apache Software License, Version 2.0
-  licenseUrl: https://opensource.org/licenses/Apache-2.0
-  url: https://github.com/google/accompanist/
 - artifact: com.google.accompanist:accompanist-navigation-animation:+
   name: accompanist-navigation-animation
   copyrightHolder: Google
@@ -538,20 +526,14 @@
   name: core
   copyrightHolder: ZXing Authors
   license: The Apache Software License, Version 2.0
-- artifact: com.halilibo.compose-richtext:richtext-commonmark-jvm:+
-  name: richtext-commonmark-jvm
+- artifact: com.halilibo.compose-richtext:richtext-commonmark-android:+
+  name: richtext-commonmark-android
   copyrightHolder: Halil Ozercan
   license: The Apache Software License, Version 2.0
-  licenseUrl: https://opensource.org/licenses/Apache-2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/halilozercan/compose-richtext
 - artifact: com.halilibo.compose-richtext:richtext-ui-jvm:+
   name: richtext-ui-jvm
-  copyrightHolder: Halil Ozercan
-  license: The Apache Software License, Version 2.0
-  licenseUrl: https://opensource.org/licenses/Apache-2.0
-  url: https://github.com/halilozercan/compose-richtext
-- artifact: com.halilibo.compose-richtext:richtext-ui-material-jvm:+
-  name: richtext-ui-material-jvm
   copyrightHolder: Halil Ozercan
   license: The Apache Software License, Version 2.0
   licenseUrl: https://opensource.org/licenses/Apache-2.0
@@ -654,12 +636,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: https://opensource.org/licenses/Apache-2.0
   url: https://github.com/JetBrains/compose-jb
-- artifact: org.jetbrains.compose.desktop:desktop-jvm:+
-  name: desktop-jvm
-  copyrightHolder: JetBrains Team
-  license: The Apache Software License, Version 2.0
-  licenseUrl: https://opensource.org/licenses/Apache-2.0
-  url: https://github.com/JetBrains/compose-jb
 - artifact: org.jetbrains.kotlin:kotlin-android-extensions-runtime:+
   name: kotlin-android-extensions-runtime
   copyrightHolder: JetBrains Team
@@ -726,6 +702,12 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: https://opensource.org/licenses/Apache-2.0
   url: http://www.jetbrains.org
+- artifact: org.jetbrains.kotlinx:atomicfu-jvm:+
+  name: atomicfu-jvm
+  copyrightHolder: JetBrains Team
+  license: The Apache Software License, Version 2.0
+  licenseUrl: https://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/Kotlin/kotlinx.atomicfu
 - artifact: org.jsoup:jsoup:+
   name: jsoup
   copyrightHolder: Jonathan Hedley
