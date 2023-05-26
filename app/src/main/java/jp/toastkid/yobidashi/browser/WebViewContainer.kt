@@ -328,7 +328,7 @@ class WebViewContainer(
      *
      * @param poolSize
      */
-    fun resizePool(poolSize: Int) {
+    private fun resizePool(poolSize: Int) {
         GlobalWebViewPool.resize(poolSize)
     }
 
