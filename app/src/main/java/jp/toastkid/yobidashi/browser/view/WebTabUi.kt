@@ -339,6 +339,7 @@ private fun AppBarContent(
     val enableBack = viewModel.enableBack
     val enableForward = viewModel.enableForward
     val tabCountState = contentViewModel.tabCount
+    val openPageInformation = remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -446,7 +447,6 @@ private fun AppBarContent(
                 }
             }
 
-            val openPageInformation = remember { mutableStateOf(false) }
             HeaderSubButton(
                 R.drawable.ic_info,
                 R.string.title_menu_page_information,
@@ -502,6 +502,7 @@ private fun AppBarContent(
                     modifier = Modifier
                         .size(36.dp)
                         .padding(end = 8.dp)
+                        .clickable { openPageInformation.value = true }
                 )
                 BrowserTitle(
                     viewModel.title.value,
