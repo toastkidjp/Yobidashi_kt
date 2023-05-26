@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Message
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.Animatable
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -434,6 +435,14 @@ class ContentViewModel : ViewModel() {
         viewModelScope.launch {
             _event.emit(WebSearchEvent(query))
         }
+    }
+
+    private val _snackbarHostState = SnackbarHostState()
+
+    fun snackbarHostState() = _snackbarHostState
+
+    fun dismissSnackbar() {
+        _snackbarHostState.currentSnackbarData?.dismiss()
     }
 
 }
