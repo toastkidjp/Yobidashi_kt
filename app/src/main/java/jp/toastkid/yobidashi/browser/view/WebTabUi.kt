@@ -336,7 +336,6 @@ private fun AppBarContent(
     val preferenceApplier = PreferenceApplier(activity)
     val tint = MaterialTheme.colorScheme.onPrimary
 
-    val tabCountState = contentViewModel.tabCount
     val openPageInformation = remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
@@ -407,7 +406,7 @@ private fun AppBarContent(
                         .fillMaxHeight()
                 )
                 Text(
-                    text = "${tabCountState.value}",
+                    text = "${contentViewModel.tabCount.value}",
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 10.sp,
                     modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
