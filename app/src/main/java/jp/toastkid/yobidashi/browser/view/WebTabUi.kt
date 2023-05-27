@@ -336,7 +336,6 @@ private fun AppBarContent(
     val preferenceApplier = PreferenceApplier(activity)
     val tint = MaterialTheme.colorScheme.onPrimary
 
-    val enableBack = viewModel.enableBack
     val enableForward = viewModel.enableForward
     val tabCountState = contentViewModel.tabCount
     val openPageInformation = remember { mutableStateOf(false) }
@@ -366,7 +365,7 @@ private fun AppBarContent(
                 R.drawable.ic_back,
                 R.string.back,
                 tint,
-                enableBack.value
+                viewModel.enableBack.value
             ) { browserModule.back() }
 
             HeaderSubButton(
