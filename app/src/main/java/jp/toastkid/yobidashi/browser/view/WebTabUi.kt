@@ -333,8 +333,6 @@ private fun AppBarContent(
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
-    val preferenceApplier = PreferenceApplier(activity)
-
     val openPageInformation = remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
@@ -432,7 +430,7 @@ private fun AppBarContent(
                     MaterialTheme.colorScheme.onPrimary
                 ) { open.value = true }
                 UserAgentDropdown(open) {
-                    preferenceApplier.setUserAgent(it.name)
+                    PreferenceApplier(activity).setUserAgent(it.name)
                     browserModule.resetUserAgent(it.text())
                     contentViewModel.snackShort(
                         activity.getString(
@@ -463,7 +461,7 @@ private fun AppBarContent(
                 R.string.title_load_home,
                 MaterialTheme.colorScheme.onPrimary
             ) {
-                contentViewModel.open(preferenceApplier.homeUrl.toUri())
+                contentViewModel.open(PreferenceApplier(activity).homeUrl.toUri())
             }
 
             HeaderSubButton(
