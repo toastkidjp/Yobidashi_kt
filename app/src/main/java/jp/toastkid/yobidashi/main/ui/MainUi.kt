@@ -68,7 +68,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -600,11 +599,11 @@ internal fun Content() {
         tabs.isEmpty()
     }
 
-    val lifecycle = lifecycleOwner.lifecycle
-    val lifecycleObserver = LifecycleEventObserver { source, event ->
-        tabs.onLifecycleEvent(event)
-    }
     DisposableEffect(activity) {
+        val lifecycle = lifecycleOwner.lifecycle
+        val lifecycleObserver = LifecycleEventObserver { source, event ->
+            tabs.onLifecycleEvent(event)
+        }
         lifecycle.addObserver(lifecycleObserver)
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
