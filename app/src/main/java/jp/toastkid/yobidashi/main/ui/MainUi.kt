@@ -602,12 +602,7 @@ internal fun Content() {
 
     val lifecycle = lifecycleOwner.lifecycle
     val lifecycleObserver = LifecycleEventObserver { source, event ->
-        when (event) {
-            Lifecycle.Event.ON_RESUME -> tabs.setCount()
-            Lifecycle.Event.ON_PAUSE -> tabs.saveTabList()
-            Lifecycle.Event.ON_DESTROY -> tabs.dispose()
-            else -> Unit
-        }
+        tabs.onLifecycleEvent(event)
     }
     DisposableEffect(activity) {
         lifecycle.addObserver(lifecycleObserver)
