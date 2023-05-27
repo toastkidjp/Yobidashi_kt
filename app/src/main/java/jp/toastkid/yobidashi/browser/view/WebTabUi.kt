@@ -334,7 +334,6 @@ private fun AppBarContent(
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     val preferenceApplier = PreferenceApplier(activity)
-    val tint = MaterialTheme.colorScheme.onPrimary
 
     val openPageInformation = remember { mutableStateOf(false) }
 
@@ -362,21 +361,21 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_back,
                 R.string.back,
-                tint,
+                MaterialTheme.colorScheme.onPrimary,
                 viewModel.enableBack.value
             ) { browserModule.back() }
 
             HeaderSubButton(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,
-                tint,
+                MaterialTheme.colorScheme.onPrimary,
                 viewModel.enableForward.value
             ) { browserModule.forward() }
 
             HeaderSubButton(
                 R.drawable.ic_reader_mode,
                 R.string.title_menu_reader_mode,
-                tint
+                MaterialTheme.colorScheme.onPrimary
             ) {
                 browserModule.invokeContentExtraction {
                     showReader(it, contentViewModel, resetReaderModeContent)
@@ -416,13 +415,13 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_bookmark,
                 R.string.title_bookmark,
-                tint
+                MaterialTheme.colorScheme.onPrimary
             ) { contentViewModel.nextRoute("web/bookmark/list") }
 
             HeaderSubButton(
                 R.drawable.ic_history,
                 R.string.title_view_history,
-                tint
+                MaterialTheme.colorScheme.onPrimary
             ) { contentViewModel.nextRoute("web/history/list") }
 
             Box {
@@ -430,7 +429,7 @@ private fun AppBarContent(
                 HeaderSubButton(
                     R.drawable.ic_user_agent,
                     R.string.title_user_agent,
-                    tint
+                    MaterialTheme.colorScheme.onPrimary
                 ) { open.value = true }
                 UserAgentDropdown(open) {
                     preferenceApplier.setUserAgent(it.name)
@@ -447,7 +446,7 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_info,
                 R.string.title_menu_page_information,
-                tint
+                MaterialTheme.colorScheme.onPrimary
             ) {
                 openPageInformation.value = true
             }
@@ -462,7 +461,7 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_home,
                 R.string.title_load_home,
-                tint
+                MaterialTheme.colorScheme.onPrimary
             ) {
                 contentViewModel.open(preferenceApplier.homeUrl.toUri())
             }
@@ -470,7 +469,7 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_code,
                 R.string.title_menu_html_source,
-                tint
+                MaterialTheme.colorScheme.onPrimary
             ) {
                 browserModule.invokeHtmlSourceExtraction {
                     val replace = it.replace("\\u003C", "<")
@@ -516,7 +515,7 @@ private fun AppBarContent(
                 Icon(
                     painterResource(id = reloadIconId),
                     contentDescription = stringResource(id = R.string.title_menu_reload),
-                    tint = tint,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .clickable {
                             if (isNotLoading) {
