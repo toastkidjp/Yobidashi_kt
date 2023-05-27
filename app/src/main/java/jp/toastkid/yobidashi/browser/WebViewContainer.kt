@@ -160,14 +160,14 @@ class WebViewContainer(
         latest?.setOnLongClickListener(longTapListener)
         (latest as? CustomWebView)?.setNestedScrollDispatcher(nestedScrollDispatcher)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            faviconApplier.load(uri)?.let {
-                browserViewModel.newIcon(it)
-            }
-        }
-
         if (replaced) {
             loadUrl(uri.toString())
+        } else {
+            CoroutineScope(Dispatchers.IO).launch {
+                faviconApplier.load(uri)?.let {
+                    browserViewModel.newIcon(it)
+                }
+            }
         }
     }
 
