@@ -298,8 +298,6 @@ class TabAdapter(
 
     fun isEmpty(): Boolean = tabList.isEmpty
 
-    fun isNotEmpty(): Boolean = !tabList.isEmpty
-
     override fun toString(): String = tabList.toString()
 
     fun swap(from: Int, to: Int) = tabList.swap(from, to)
