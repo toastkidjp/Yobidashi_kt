@@ -31,14 +31,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import jp.toastkid.lib.compat.material3.FractionalThreshold
-import jp.toastkid.lib.compat.material3.ResistanceConfig
-import jp.toastkid.lib.compat.material3.SwipeableState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import jp.toastkid.lib.compat.material3.swipeableCompat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -65,7 +61,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.compat.material3.FractionalThreshold
+import jp.toastkid.lib.compat.material3.ResistanceConfig
+import jp.toastkid.lib.compat.material3.SwipeableState
+import jp.toastkid.lib.compat.material3.swipeableCompat
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.TabAdapter
@@ -87,7 +86,6 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
     val preferenceApplier = PreferenceApplier(context)
     val tabThumbnails = TabThumbnails.with(LocalContext.current)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
-    val tabListViewModel = viewModel(TabListViewModel::class.java, context)
     val coroutineScope = rememberCoroutineScope()
 
     val tabs = remember { mutableStateListOf<Tab>() }
@@ -221,7 +219,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                 ) {
                     // For suppressing replace screen.
                     contentViewModel.setHideBottomSheetAction {  }
-                    tabListViewModel.openNewTab()
+                    contentViewModel.openNewTab()
                     closeOnly(coroutineScope, contentViewModel)
                 }
             }

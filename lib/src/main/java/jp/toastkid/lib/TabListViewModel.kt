@@ -13,11 +13,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import jp.toastkid.lib.viewmodel.event.Event
 import jp.toastkid.lib.viewmodel.event.tab.OpenNewTabEvent
-import jp.toastkid.lib.viewmodel.event.tab.SaveEditorTabEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.io.File
 
 /**
  * @author toastkidjp
@@ -27,12 +25,6 @@ class TabListViewModel : ViewModel() {
     private val _event = MutableSharedFlow<Event>()
 
     val event = _event.asSharedFlow()
-
-    fun saveEditorTab(nextFile: File) {
-        viewModelScope.launch {
-            _event.emit(SaveEditorTabEvent(nextFile))
-        }
-    }
 
     private val _tabCount = mutableStateOf(0)
 

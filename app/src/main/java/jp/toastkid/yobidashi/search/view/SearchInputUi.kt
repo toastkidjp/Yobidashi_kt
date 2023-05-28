@@ -156,10 +156,11 @@ fun SearchInputUi(
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
                         },
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.Transparent,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
                             cursorColor = MaterialTheme.colorScheme.onPrimary,
-                            focusedIndicatorColor = Color.Transparent,
+                            focusedIndicatorColor = MaterialTheme.colorScheme.onPrimary,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
                         singleLine = true,

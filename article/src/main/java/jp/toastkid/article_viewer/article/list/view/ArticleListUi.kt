@@ -86,7 +86,6 @@ import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
 import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
@@ -227,8 +226,9 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     autoCorrect = true,
                     imeAction = ImeAction.Search
                 ),
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onPrimary,
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
                     cursorColor = Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, R.color.editor_cursor)))
                 ),
                 trailingIcon = {
@@ -255,7 +255,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             )
         }
 
-        val tabListViewModel = ViewModelProvider(activityContext).get<TabListViewModel>()
+        val contentViewModel = ViewModelProvider(activityContext).get<ContentViewModel>()
 
         Box(
             Modifier
@@ -264,12 +264,10 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 .combinedClickable(
                     true,
                     onClick = {
-                        ViewModelProvider(activityContext)
-                            .get(ContentViewModel::class.java)
-                            .switchTabList()
+                        contentViewModel.switchTabList()
                     },
                     onLongClick = {
-                        tabListViewModel.openNewTab()
+                        contentViewModel.openNewTab()
                     }
                 )
         ) {
@@ -283,7 +281,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 modifier = Modifier.align(Alignment.Center)
             )
             Text(
-                text = tabListViewModel.tabCount.value.toString(),
+                text = contentViewModel.tabCount.value.toString(),
                 fontSize = 9.sp,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier

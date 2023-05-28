@@ -8,11 +8,14 @@
 
 package jp.toastkid.yobidashi.settings.view.screen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
@@ -21,9 +24,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -35,7 +36,9 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingTopUi() {
     val activityContext = LocalContext.current
@@ -43,9 +46,11 @@ fun SettingTopUi() {
         viewModel(ContentViewModel::class.java, activityContext)
     }
 
-    val selectedIndex = remember { mutableStateOf(0) }
+    val pagerState = rememberPagerState()
 
-    SwitchContentWithTabIndex(selectedIndex)
+    HorizontalPager(pageCount = 8, state = pagerState) { page ->
+        SwitchContentWithTabIndex(page)
+    }
 
     contentViewModel?.replaceAppBarContent {
         val pages = arrayOf(
@@ -60,13 +65,13 @@ fun SettingTopUi() {
         )
 
         ScrollableTabRow(
-            selectedTabIndex = selectedIndex.value,
+            selectedTabIndex = pagerState.currentPage,
             edgePadding = 8.dp,
             containerColor = Color.Transparent,
             indicator = { tabPositions ->
                 Box(
                     modifier = Modifier
-                        .tabIndicatorOffset(tabPositions[selectedIndex.value])
+                        .tabIndicatorOffset(tabPositions[pagerState.currentPage])
                         .height(2.dp)
                         .clip(RoundedCornerShape(8.dp)) // clip modifier not working
                         .padding(horizontal = 4.dp)
@@ -76,10 +81,13 @@ fun SettingTopUi() {
             modifier = Modifier.fillMaxHeight()
         ) {
             pages.forEachIndexed { index, page ->
+                val coroutineScope = rememberCoroutineScope()
                 Tab(
-                    selected = selectedIndex.value == index,
+                    selected = pagerState.currentPage == index,
                     onClick = {
-                        selectedIndex.value = index
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
                     },
                     modifier = Modifier.padding(start = 4.dp, end = 4.dp)
                 ) {
@@ -104,8 +112,8 @@ fun SettingTopUi() {
 
 
 @Composable
-private fun SwitchContentWithTabIndex(selectedIndex: MutableState<Int>) {
-    when (selectedIndex.value) {
+private fun SwitchContentWithTabIndex(selectedIndex: Int) {
+    when (selectedIndex) {
         0 -> DisplaySettingUi()
         1 -> ColorSettingUi()
         2 -> SearchSettingUi()

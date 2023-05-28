@@ -25,12 +25,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.ui.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputFileNameDialogUi(
     openDialog: MutableState<Boolean>,
@@ -57,9 +55,10 @@ fun InputFileNameDialogUi(
                     input.value = text
                 },
                 singleLine = true,
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onSurface,
-                    containerColor = Color.Transparent,
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(0.75f),
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                     cursorColor = MaterialTheme.colorScheme.onSurface
                 ),
                 trailingIcon = {

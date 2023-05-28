@@ -10,8 +10,8 @@ package jp.toastkid.image.preview
 
 import android.graphics.BitmapFactory
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -61,22 +62,19 @@ import jp.toastkid.image.preview.attach.AttachToThisAppBackgroundUseCase
 import jp.toastkid.image.preview.detail.ExifInformationExtractorUseCase
 import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.compat.material3.FractionalThreshold
-import jp.toastkid.lib.compat.material3.ResistanceConfig
 import jp.toastkid.lib.compat.material3.SwipeableState
-import jp.toastkid.lib.compat.material3.swipeableCompat
 import jp.toastkid.ui.dialog.ConfirmDialog
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
 
-    val viewModel = remember { ImagePreviewViewModel() }
+    val viewModel = remember { ImagePreviewViewModel(initialIndex) }
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.setIndex(initialIndex)
         viewModel.replaceImages(images)
     })
 
@@ -102,55 +100,57 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val coroutineScope = rememberCoroutineScope()
 
     Box {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(viewModel.getCurrentImage().path).crossfade(true).build(),
-            imageLoader = imageLoader,
-            contentDescription = viewModel.getCurrentImage().name,
-            colorFilter = viewModel.colorFilterState.value,
-            modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer(
-                    scaleX = viewModel.scale.value,
-                    scaleY = viewModel.scale.value,
-                    rotationY = viewModel.rotationY.value,
-                    rotationZ = viewModel.rotationZ.value
-                )
-                .offset {
-                    IntOffset(
-                        viewModel.offset.value.x.toInt(),
-                        viewModel.offset.value.y.toInt()
+        HorizontalPager(pageCount = viewModel.pageCount(), state = viewModel.pagerState) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(viewModel.getCurrentImage().path).crossfade(true).build(),
+                imageLoader = imageLoader,
+                contentDescription = viewModel.getCurrentImage().name,
+                colorFilter = viewModel.colorFilterState.value,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .graphicsLayer(
+                        scaleX = viewModel.scale.value,
+                        scaleY = viewModel.scale.value,
+                        rotationY = viewModel.rotationY.value,
+                        rotationZ = viewModel.rotationZ.value
                     )
-                }
-                .transformable(state = viewModel.state)
-                .pointerInput(Unit) {
-                    detectDragGestures { change, dragAmount ->
-                        change.consume()
-                        viewModel.offset.value += dragAmount
+                    .offset {
+                        IntOffset(
+                            viewModel.offset.value.x.toInt(),
+                            viewModel.offset.value.y.toInt()
+                        )
                     }
-                }
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onPress = { /* Called when the gesture starts */ },
-                        onDoubleTap = { viewModel.resetStates() },
-                        onLongPress = { /* Called on Long Press */ },
-                        onTap = { /* Called on Tap */ }
-                    )
-                }
-        )
+                    .transformable(state = viewModel.state)
+                    .pointerInput(Unit) {
+                        detectDragGestures { change, dragAmount ->
+                            change.consume()
+                            viewModel.offset.value += dragAmount.times(0.5f)
+                        }
+                    }
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = { /* Called when the gesture starts */ },
+                            onDoubleTap = { viewModel.resetStates() },
+                            onLongPress = { /* Called on Long Press */ },
+                            onTap = { /* Called on Tap */ }
+                        )
+                    }
+            )
+        }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
                 .align(Alignment.Center)
-                .swipeableCompat(
+                /*.swipeableCompat(
                     state = swipeableState,
                     anchors = anchors,
                     thresholds = { _, _ -> FractionalThreshold(0.75f) },
                     resistance = ResistanceConfig(0.5f),
                     orientation = Orientation.Horizontal
-                )
+                )*/
         ) {
         }
 
