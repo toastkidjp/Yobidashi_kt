@@ -74,8 +74,6 @@ class WebViewReplacementUseCase(
             browserViewModel?.nextTitle(it.title)
             browserViewModel?.nextUrl(it.url)
 
-            //webViewContainer?.startAnimation(slideUpFromBottom)
-
             val activity = webViewContainer?.context
             if (activity is ViewModelStoreOwner
                     && ScreenMode.find(preferenceApplier.browserScreenMode()) != ScreenMode.FULL_SCREEN) {
