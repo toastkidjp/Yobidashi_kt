@@ -585,9 +585,7 @@ internal fun Content() {
             navigationHostController.currentBackStackEntry?.destination?.route
         },
         navigationHostController::popBackStack,
-        {
-            tabs.closeTab(tabs.index())
-        },
+        tabs::closeCurrentTab,
         tabs::currentTabIsWebTab
     ) {
         tabs.isEmpty()
