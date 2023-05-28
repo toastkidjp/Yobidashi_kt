@@ -8,7 +8,6 @@
 package jp.toastkid.lib
 
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Message
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +18,7 @@ import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
  */
 class BrowserViewModel {
 
-    fun openBackground(uri: Uri) {
+    fun openBackground() {
         /*viewModelScope.launch {
             _event.emit(OpenUrlEvent(uri, true, title))
         }*/
