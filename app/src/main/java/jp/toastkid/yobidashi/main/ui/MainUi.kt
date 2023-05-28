@@ -586,10 +586,9 @@ internal fun Content() {
         },
         navigationHostController::popBackStack,
         tabs::closeCurrentTab,
-        tabs::currentTabIsWebTab
-    ) {
-        tabs.isEmpty()
-    }
+        tabs::currentTabIsWebTab,
+        tabs::isEmpty
+    )
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(activity) {
