@@ -306,7 +306,7 @@ class TabAdapter(
         tabList.updateWithIdAndHistory(idAndHistory)
     }
 
-    fun setCount() {
+    private fun setCount() {
         contentViewModel?.tabCount(size())
     }
 
