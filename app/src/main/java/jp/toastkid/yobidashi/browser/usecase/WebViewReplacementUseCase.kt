@@ -79,7 +79,7 @@ class WebViewReplacementUseCase(
             val activity = webViewContainer?.context
             if (activity is ViewModelStoreOwner
                     && ScreenMode.find(preferenceApplier.browserScreenMode()) != ScreenMode.FULL_SCREEN) {
-                ViewModelProvider(activity).get(ContentViewModel::class.java)
+                ViewModelProvider(activity)[ContentViewModel::class.java]
                     .showAppBar()
             }
         }
