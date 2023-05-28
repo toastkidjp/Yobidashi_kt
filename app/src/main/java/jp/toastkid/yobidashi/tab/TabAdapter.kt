@@ -268,6 +268,10 @@ class TabAdapter(
         }
     }
 
+    fun closeCurrentTab() {
+        closeTab(index())
+    }
+
     fun index(): Int = tabList.getIndex()
 
     fun saveTabList() {
