@@ -18,12 +18,6 @@ import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
  */
 class BrowserViewModel {
 
-    fun openBackground() {
-        /*viewModelScope.launch {
-            _event.emit(OpenUrlEvent(uri, true, title))
-        }*/
-    }
-
     fun openNewWindow(resultMessage: Message?) {
         /*viewModelScope.launch {
             _event.emit(OpenNewWindowEvent(resultMessage))
