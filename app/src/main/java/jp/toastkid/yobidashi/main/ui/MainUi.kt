@@ -588,9 +588,7 @@ internal fun Content() {
         {
             tabs.closeTab(tabs.index())
         },
-        {
-            tabs.currentTab() is WebTab
-        }
+        tabs::currentTabIsWebTab
     ) {
         tabs.isEmpty()
     }
