@@ -586,9 +586,7 @@ internal fun Content() {
         {
             navigationHostController.currentBackStackEntry?.destination?.route
         },
-        {
-            navigationHostController.popBackStack()
-        },
+        navigationHostController::popBackStack,
         {
             tabs.closeTab(tabs.index())
         },
