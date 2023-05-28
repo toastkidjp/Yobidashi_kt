@@ -294,6 +294,8 @@ class TabAdapter(
 
     internal fun currentTab(): Tab? = tabList.get(index())
 
+    fun currentTabIsWebTab() = currentTab() is WebTab
+
     internal fun currentTabId(): String = currentTab()?.id() ?: "-1"
 
     fun isEmpty(): Boolean = tabList.isEmpty
