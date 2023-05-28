@@ -149,8 +149,6 @@ internal fun Content() {
     val navigationHostController = rememberAnimatedNavController()
     navigationHostController.enableOnBackPressed(false)
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-
     val activityResultLauncher: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode != Activity.RESULT_OK) {
@@ -234,7 +232,7 @@ internal fun Content() {
             downloadUrl.value = ""
         }
 
-    LaunchedEffect(key1 = lifecycleOwner, block = {
+    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         val webViewClientFactory = WebViewClientFactory.forBackground(
             activity,
             contentViewModel,
@@ -597,6 +595,7 @@ internal fun Content() {
         tabs.isEmpty()
     }
 
+    val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(activity) {
         val lifecycle = lifecycleOwner.lifecycle
         val lifecycleObserver = LifecycleEventObserver { source, event ->
