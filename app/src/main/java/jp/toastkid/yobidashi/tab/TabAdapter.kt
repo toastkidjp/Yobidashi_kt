@@ -277,7 +277,7 @@ class TabAdapter(
     /**
      * Dispose this object's fields.
      */
-    fun dispose() {
+    private fun dispose() {
         if (!preferenceApplier.doesRetainTabs()) {
             tabList.clear()
             tabThumbnails.clean()
