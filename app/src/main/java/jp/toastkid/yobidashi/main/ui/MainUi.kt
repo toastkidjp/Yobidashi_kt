@@ -27,14 +27,13 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -75,7 +74,6 @@ import coil.compose.AsyncImage
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.compat.material3.ModalBottomSheetLayout
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -457,115 +455,107 @@ internal fun Content() {
             modifier = Modifier.fillMaxSize()
         )
 
-        ModalBottomSheetLayout(
-            sheetState = bottomSheetState,
-            sheetContent = {
+        if (contentViewModel.showModalBottomSheet()) {
+            ModalBottomSheet(onDismissRequest = { contentViewModel.hideBottomSheet() }) {
                 Box(modifier = Modifier.defaultMinSize(1.dp, 1.dp)) {
-                    if (bottomSheetState.isVisible) {
-                        Inputs().hideKeyboard(localView)
+                    Inputs().hideKeyboard(localView)
 
-                        contentViewModel.bottomSheetContent.value.invoke()
-                    }
+                    contentViewModel.bottomSheetContent.value.invoke()
                 }
 
-                BackHandler(bottomSheetState.isVisible) {
+                BackHandler(contentViewModel.showModalBottomSheet()) {
                     coroutineScope.launch {
                         contentViewModel.hideBottomSheet()
                     }
                 }
+            }
+        }
+
+        Scaffold(
+            containerColor = Color.Transparent,
+            bottomBar = {
+                AppBar()
             },
-            sheetElevation = 4.dp,
-            sheetBackgroundColor = if (bottomSheetState.isVisible) MaterialTheme.colorScheme.surface else Color.Transparent,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-        ) {
-            Scaffold(
-                containerColor = Color.Transparent,
-                bottomBar = {
-                    AppBar()
-                },
-                snackbarHost = {
-                    SnackbarHost(
-                        hostState = contentViewModel.snackbarHostState(),
-                        snackbar = {
-                            MainSnackbar(it) { contentViewModel.dismissSnackbar() }
-                        })
-                },
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = { openMenu.value = openMenu.value.not() },
-                        containerColor = tint,
-                        modifier = Modifier
-                            .size(48.dp)
-                            .scale(contentViewModel.fabScale.value)
-                            .offset { contentViewModel.makeFabOffset() }
-                            .pointerInput(Unit) {
-                                detectDragGestures(
-                                    onDragEnd = {
-                                        preferenceApplier
-                                            .setNewMenuFabPosition(
-                                                contentViewModel.menuFabOffsetX.value,
-                                                contentViewModel.menuFabOffsetY.value
-                                            )
-                                    },
-                                    onDrag = { change, dragAmount ->
-                                        change.consume()
-                                        contentViewModel.menuFabOffsetX.value += dragAmount.x
-                                        contentViewModel.menuFabOffsetY.value += dragAmount.y
-                                    }
-                                )
-                            }
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.ic_menu),
-                            stringResource(id = R.string.menu),
-                            tint = backgroundColor
-                        )
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .nestedScroll(nestedScrollConnection)
-            ) { _ ->
-                Box {
-                    NavigationalContent(navigationHostController, tabs)
-
-                    if (contentViewModel.showSnowEffect()) {
-                        AndroidView(factory = { SnowRendererView(activity) })
-                    }
-                }
-
-                LaunchedEffect(key1 = "first_launch", block = {
-                    if (tabs.isEmpty()) {
-                        contentViewModel.openNewTab()
-                        return@LaunchedEffect
-                    }
-
-                    if (navigationHostController.currentDestination?.route == "empty") {
-                        replaceToCurrentTab(tabs, navigationHostController)
-                    }
-                })
-
-                if (openMenu.value) {
-                    MainMenu(
-                        {
-                            Inputs().hideKeyboard(localView)
-                            navigate(navigationHostController, it)
-                        },
-                        {
-                            mediaPermissionRequestLauncher.launch(MusicPlayerPermissions().invoke())
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = contentViewModel.snackbarHostState(),
+                    snackbar = {
+                        MainSnackbar(it) { contentViewModel.dismissSnackbar() }
+                    })
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { openMenu.value = openMenu.value.not() },
+                    containerColor = tint,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .scale(contentViewModel.fabScale.value)
+                        .offset { contentViewModel.makeFabOffset() }
+                        .pointerInput(Unit) {
+                            detectDragGestures(
+                                onDragEnd = {
+                                    preferenceApplier
+                                        .setNewMenuFabPosition(
+                                            contentViewModel.menuFabOffsetX.value,
+                                            contentViewModel.menuFabOffsetY.value
+                                        )
+                                },
+                                onDrag = { change, dragAmount ->
+                                    change.consume()
+                                    contentViewModel.menuFabOffsetX.value += dragAmount.x
+                                    contentViewModel.menuFabOffsetY.value += dragAmount.y
+                                }
+                            )
                         }
-                    ) { openMenu.value = false }
-                }
-
-                if (contentViewModel.useScreenFilter.value) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color(preferenceApplier.filterColor(Color.Transparent.toArgb())))
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_menu),
+                        stringResource(id = R.string.menu),
+                        tint = backgroundColor
                     )
                 }
+            },
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(nestedScrollConnection)
+        ) { _ ->
+            Box {
+                NavigationalContent(navigationHostController, tabs)
+
+                if (contentViewModel.showSnowEffect()) {
+                    AndroidView(factory = { SnowRendererView(activity) })
+                }
+            }
+
+            LaunchedEffect(key1 = "first_launch", block = {
+                if (tabs.isEmpty()) {
+                    contentViewModel.openNewTab()
+                    return@LaunchedEffect
+                }
+
+                if (navigationHostController.currentDestination?.route == "empty") {
+                    replaceToCurrentTab(tabs, navigationHostController)
+                }
+            })
+
+            if (openMenu.value) {
+                MainMenu(
+                    {
+                        Inputs().hideKeyboard(localView)
+                        navigate(navigationHostController, it)
+                    },
+                    {
+                        mediaPermissionRequestLauncher.launch(MusicPlayerPermissions().invoke())
+                    }
+                ) { openMenu.value = false }
+            }
+
+            if (contentViewModel.useScreenFilter.value) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(preferenceApplier.filterColor(Color.Transparent.toArgb())))
+                )
             }
         }
     }

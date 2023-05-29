@@ -147,6 +147,10 @@ class ContentViewModel : ViewModel() {
         _hideBottomSheetAction.value = action
     }
 
+    private val _showModalBottomSheet = mutableStateOf(false)
+
+    fun showModalBottomSheet() = _showModalBottomSheet.value
+
     val modalBottomSheetState = ModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
         confirmStateChange = {
@@ -158,16 +162,13 @@ class ContentViewModel : ViewModel() {
     )
 
     suspend fun switchBottomSheet() {
-        if (modalBottomSheetState.isVisible) {
-            modalBottomSheetState.hide()
-        } else {
-            modalBottomSheetState.show()
-        }
+        _showModalBottomSheet.value = _showModalBottomSheet.value.not()
     }
 
-    suspend fun hideBottomSheet() {
-        _hideBottomSheetAction.value()
-        modalBottomSheetState.hide()
+    fun hideBottomSheet() {
+        //_hideBottomSheetAction.value()
+        //modalBottomSheetState.hide()
+        _showModalBottomSheet.value = false
     }
 
     fun nextRoute(route: String) {
