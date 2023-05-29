@@ -100,6 +100,7 @@ import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
 import jp.toastkid.lib.viewmodel.event.web.PreviewUrlEvent
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
+import jp.toastkid.media.music.permission.MusicPlayerPermissions
 import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.R
@@ -564,7 +565,7 @@ internal fun Content() {
                                         Manifest.permission.READ_EXTERNAL_STORAGE
                                     )
                                 }
-                            mediaPermissionRequestLauncher.launch(permissions)
+                            mediaPermissionRequestLauncher.launch(MusicPlayerPermissions().invoke())
                         }
                     ) { openMenu.value = false }
                 }
