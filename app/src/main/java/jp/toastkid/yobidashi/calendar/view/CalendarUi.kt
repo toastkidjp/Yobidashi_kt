@@ -184,7 +184,7 @@ fun CalendarUi() {
                     1
                 )
             }, modifier = Modifier.padding(8.dp)) {
-                Text("<", modifier = Modifier.padding(8.dp))
+                Text("<")
             }
 
             Surface(modifier = Modifier.padding(8.dp)) {
@@ -255,21 +255,17 @@ fun CalendarUi() {
                 modifier = Modifier
                     .padding(8.dp)
             ) {
-                Text(">", modifier = Modifier.padding(8.dp))
+                Text(">")
             }
 
-            Button(
-                onClick = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_calendar),
+                tint = MaterialTheme.colorScheme.onPrimary,
+                contentDescription = "Current month",
+                modifier = Modifier.clickable {
                     currentDate.value = Calendar.getInstance()
-                },
-                modifier = Modifier
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_calendar),
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                    contentDescription = "Current month"
-                )
-            }
+                }
+            )
         }
     }
 }

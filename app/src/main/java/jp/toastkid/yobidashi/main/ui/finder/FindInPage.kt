@@ -40,18 +40,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.yobidashi.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FindInPage() {
     val activity = LocalContext.current as? ViewModelStoreOwner ?: return
-    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
     val closeAction = {
-        pageSearcherViewModel.clearInput()
-        pageSearcherViewModel.hide()
+        contentViewModel.clearFinderInput()
+        contentViewModel.hideFinder()
         contentViewModel.openFindInPageState.value = false
     }
     val pageSearcherInput = remember { mutableStateOf("") }
@@ -72,7 +70,7 @@ internal fun FindInPage() {
             value = pageSearcherInput.value,
             onValueChange = { text ->
                 pageSearcherInput.value = text
-                pageSearcherViewModel.find(text)
+                contentViewModel.find(text)
             },
             label = {
                 Text(
@@ -99,13 +97,13 @@ internal fun FindInPage() {
                     modifier = Modifier
                         .clickable {
                             pageSearcherInput.value = ""
-                            pageSearcherViewModel.clearInput()
+                            contentViewModel.clearFinderInput()
                         }
                 )
             },
             maxLines = 1,
             keyboardActions = KeyboardActions {
-                pageSearcherViewModel.findDown(pageSearcherInput.value)
+                contentViewModel.findDown(pageSearcherInput.value)
             },
             keyboardOptions = KeyboardOptions(
                 autoCorrect = true,
@@ -123,7 +121,7 @@ internal fun FindInPage() {
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .clickable {
-                    pageSearcherViewModel.findUp(
+                    contentViewModel.findUp(
                         pageSearcherInput.value
                     )
                 }
@@ -135,7 +133,7 @@ internal fun FindInPage() {
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .clickable {
-                    pageSearcherViewModel.findDown(pageSearcherInput.value)
+                    contentViewModel.findDown(pageSearcherInput.value)
                 }
                 .padding(8.dp)
         )

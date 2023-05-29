@@ -143,11 +143,12 @@ internal fun ColorSettingUi() {
                     .fillMaxWidth()
                     .padding(top = 8.dp)
             ) {
-                Text(
-                    stringResource(id = R.string.settings_color_saved_title),
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(8.dp)
-                )
+                Box(modifier = Modifier.padding(start = 8.dp), contentAlignment = Alignment.CenterStart) {
+                    Text(
+                        stringResource(id = R.string.settings_color_saved_title),
+                        fontSize = 18.sp
+                    )
+                }
             }
         }
 

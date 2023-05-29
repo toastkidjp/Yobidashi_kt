@@ -51,7 +51,6 @@ import jp.toastkid.image.preview.ImagePreviewUi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
-import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -114,11 +113,8 @@ fun ImageListUi() {
         }
 
     val localLifecycleOwner = LocalLifecycleOwner.current
-    val pageSearcherViewModel = (context as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(it).get(PageSearcherViewModel::class.java)
-    }
     LaunchedEffect(key1 = localLifecycleOwner, block = {
-        pageSearcherViewModel?.event?.collect {
+        contentViewModel?.event?.collect {
             when (it) {
                 is FindInPageEvent -> {
                     if (it.word.isBlank()) {

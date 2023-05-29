@@ -81,7 +81,6 @@ import jp.toastkid.lib.compat.material3.ModalBottomSheetLayout
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.lib.viewmodel.event.content.NavigationEvent
 import jp.toastkid.lib.viewmodel.event.content.RefreshContentEvent
 import jp.toastkid.lib.viewmodel.event.content.ReplaceToCurrentTabContentEvent
@@ -217,21 +216,16 @@ internal fun Content() {
         }
     }
 
-    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activity)
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    LaunchedEffect(key1 = contentViewModel, block = {
-        pageSearcherViewModel.event.collect {
-            if (it is CloseFinderEvent) {
-                keyboardController?.hide()
-                focusManager.clearFocus(true)
-            }
-        }
-    })
 
     LaunchedEffect(key1 = lifecycleOwner, block = {
         contentViewModel.event.collect {
             when (it) {
+                is CloseFinderEvent -> {
+                    keyboardController?.hide()
+                    focusManager.clearFocus(true)
+                }
                 is SwitchTabListEvent -> {
                     contentViewModel?.setBottomSheetContent { TabListUi(tabs) }
                     coroutineScope?.launch {

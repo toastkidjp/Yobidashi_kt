@@ -17,12 +17,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
-import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 
 class ListActionAttachment(
-    private val contentViewModel: ContentViewModel?,
-    private val pageSearcherViewModel: PageSearcherViewModel?
+    private val contentViewModel: ContentViewModel?
 ) {
 
     @Composable
@@ -35,7 +33,7 @@ class ListActionAttachment(
     ) {
         ScrollerUseCase(contentViewModel, scrollableState).invoke(lifecycleOwner)
         LaunchedEffect(key1 = lifecycleOwner, block = {
-            pageSearcherViewModel?.event?.collect {
+            contentViewModel?.event?.collect {
                 when (it) {
                     is FindInPageEvent -> {
                         listItemState.clear()
@@ -58,8 +56,7 @@ class ListActionAttachment(
         fun make(owner: ViewModelStoreOwner): ListActionAttachment {
             val viewModelProvider = ViewModelProvider(owner)
             return ListActionAttachment(
-                viewModelProvider.get(ContentViewModel::class.java),
-                viewModelProvider.get(PageSearcherViewModel::class.java)
+                viewModelProvider.get(ContentViewModel::class.java)
             )
         }
 

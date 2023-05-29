@@ -74,11 +74,11 @@ import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshNestedScrollConnection
-import jp.toastkid.lib.viewmodel.PageSearcherViewModel
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
 import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
 import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
+import jp.toastkid.lib.viewmodel.event.finder.FindAllEvent
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
@@ -268,12 +268,24 @@ internal fun WebTabUi(webTab: WebTab) {
                         ShareIntentFactory()(browserModule.makeShareMessage())
                     )
                 }
+                is FindAllEvent -> {
+                    browserModule.find(it.word)
+                }
+                is FindInPageEvent -> {
+                    if (it.upward) {
+                        browserModule.findUp()
+                    } else {
+                        browserModule.findDown()
+                    }
+                }
+                is ClearFinderInputEvent -> {
+                    browserModule.clearMatches()
+                }
                 else -> Unit
             }
         }
     })
 
-    val pageSearcherViewModel = viewModel(PageSearcherViewModel::class.java, activityContext)
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
         browserViewModel.initializeSwipeRefreshState(refreshTriggerPx)
@@ -308,23 +320,6 @@ internal fun WebTabUi(webTab: WebTab) {
                     GlobalWebViewPool.getLatest()?.setOnScrollChangeListener(scrollListener)
                 }
                 else -> Unit
-            }
-        }
-    })
-
-    LaunchedEffect(key1 = lifecycleOwner, block = {
-        pageSearcherViewModel.event.collect {
-            when (it) {
-                is FindInPageEvent -> {
-                    if (it.upward) {
-                        browserModule.findUp()
-                    } else {
-                        browserModule.find(it.word)
-                    }
-                }
-                is ClearFinderInputEvent -> {
-                    browserModule.clearMatches()
-                }
             }
         }
     })

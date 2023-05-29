@@ -31,6 +31,10 @@ import jp.toastkid.lib.viewmodel.event.content.SnackbarEvent
 import jp.toastkid.lib.viewmodel.event.content.SwitchTabListEvent
 import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
 import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
+import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
+import jp.toastkid.lib.viewmodel.event.finder.CloseFinderEvent
+import jp.toastkid.lib.viewmodel.event.finder.FindAllEvent
+import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.lib.viewmodel.event.tab.MoveTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleListEvent
@@ -343,6 +347,36 @@ class ContentViewModel : ViewModel() {
     fun openNewTab() {
         viewModelScope.launch {
             _event.emit(OpenNewTabEvent())
+        }
+    }
+
+    fun find(s: String?) {
+        viewModelScope.launch {
+            _event.emit(FindAllEvent(s ?: ""))
+        }
+    }
+
+    fun findDown(s: String?) {
+        viewModelScope.launch {
+            _event.emit(FindInPageEvent(s ?: ""))
+        }
+    }
+
+    fun findUp(s: String?) {
+        viewModelScope.launch {
+            _event.emit(FindInPageEvent(s ?: "", true))
+        }
+    }
+
+    fun hideFinder() {
+        viewModelScope.launch {
+            _event.emit(CloseFinderEvent())
+        }
+    }
+
+    fun clearFinderInput() {
+        viewModelScope.launch {
+            _event.emit(ClearFinderInputEvent())
         }
     }
 
