@@ -442,7 +442,7 @@ internal fun Content() {
             }
         }
 
-    val bottomSheetState = contentViewModel.modalBottomSheetState ?: return
+    contentViewModel.modalBottomSheetState ?: return
 
     Box(
         modifier = Modifier.fillMaxSize()
