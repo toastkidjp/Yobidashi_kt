@@ -166,8 +166,6 @@ class ContentViewModel : ViewModel() {
     }
 
     fun hideBottomSheet() {
-        //_hideBottomSheetAction.value()
-        //modalBottomSheetState.hide()
         _showModalBottomSheet.value = false
     }
 
