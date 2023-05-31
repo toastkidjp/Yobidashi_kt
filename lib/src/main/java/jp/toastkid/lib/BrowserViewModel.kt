@@ -8,7 +8,6 @@
 package jp.toastkid.lib
 
 import android.graphics.Bitmap
-import android.os.Message
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
@@ -18,7 +17,7 @@ import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
  */
 class BrowserViewModel {
 
-    fun openNewWindow(resultMessage: Message?) {
+    fun openNewWindow() {
         /*viewModelScope.launch {
             _event.emit(OpenNewWindowEvent(resultMessage))
         }*/
