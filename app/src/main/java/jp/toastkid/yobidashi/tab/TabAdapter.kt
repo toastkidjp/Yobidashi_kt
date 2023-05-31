@@ -52,8 +52,6 @@ class TabAdapter(
 
     private val webViewStateUseCase = WebViewStateUseCase.make(contextSupplier())
 
-    private val disposables = Job()
-
     private val bitmapCompressor = BitmapCompressor()
 
     private var contentViewModel: ContentViewModel? = null
@@ -286,7 +284,6 @@ class TabAdapter(
             tabList.clear()
             tabThumbnails.clean()
         }
-        disposables.cancel()
     }
 
     internal fun clear() {
