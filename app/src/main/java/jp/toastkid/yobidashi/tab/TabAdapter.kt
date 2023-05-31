@@ -36,8 +36,8 @@ import kotlinx.coroutines.launch
  * @author toastkidjp
  */
 class TabAdapter(
-        private val contextSupplier: () -> Context,
-        private val tabEmptyCallback: () -> Unit
+    private val contextSupplier: () -> Context,
+    private val tabEmptyCallback: () -> Unit
 ) {
 
     private val tabList: TabList = TabList.loadOrInit(contextSupplier())
