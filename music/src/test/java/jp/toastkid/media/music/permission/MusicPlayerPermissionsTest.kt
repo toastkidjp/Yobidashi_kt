@@ -13,6 +13,7 @@ import android.os.Build
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
+import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -28,7 +29,7 @@ class MusicPlayerPermissionsTest {
         MockKAnnotations.init(this)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
