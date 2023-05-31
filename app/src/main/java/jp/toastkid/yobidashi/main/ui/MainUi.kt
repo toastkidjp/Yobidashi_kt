@@ -442,8 +442,6 @@ internal fun Content() {
             }
         }
 
-    contentViewModel.modalBottomSheetState
-
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
