@@ -83,7 +83,6 @@ import kotlin.math.roundToInt
 internal fun TabListUi(tabAdapter: TabAdapter) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
-    val tabThumbnails = TabThumbnails.with(context)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val coroutineScope = rememberCoroutineScope()
 
@@ -125,6 +124,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     .detectReorderAfterLongPress(state)
             ) {
                 val currentIndex = tabAdapter.index()
+                val tabThumbnails = TabThumbnails.with(context)
 
                 itemsIndexed(tabs, { _, tab -> tab.id() }) { position, tab ->
                     val backgroundColor = if (currentIndex == position)
