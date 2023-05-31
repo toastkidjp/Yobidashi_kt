@@ -20,8 +20,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import jp.toastkid.lib.compat.material3.ModalBottomSheetState
-import jp.toastkid.lib.compat.material3.ModalBottomSheetValue
 import jp.toastkid.lib.model.LoadInformation
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.ColorPair
@@ -150,16 +148,6 @@ class ContentViewModel : ViewModel() {
     private val _showModalBottomSheet = mutableStateOf(false)
 
     fun showModalBottomSheet() = _showModalBottomSheet.value
-
-    val modalBottomSheetState = ModalBottomSheetState(
-        ModalBottomSheetValue.Hidden,
-        confirmStateChange = {
-            if (it == ModalBottomSheetValue.Hidden) {
-                _hideBottomSheetAction.value()
-            }
-            true
-        }
-    )
 
     suspend fun switchBottomSheet() {
         _showModalBottomSheet.value = _showModalBottomSheet.value.not()
