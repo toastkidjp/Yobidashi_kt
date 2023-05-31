@@ -154,6 +154,7 @@ class ContentViewModel : ViewModel() {
     }
 
     fun hideBottomSheet() {
+        _hideBottomSheetAction.value()
         _showModalBottomSheet.value = false
     }
 
