@@ -101,8 +101,8 @@ fun FavoriteSearchListUi() {
                         color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.Start,
                     ),
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.Transparent,
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = Color.Transparent,
                         cursorColor = MaterialTheme.colorScheme.onPrimary,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent

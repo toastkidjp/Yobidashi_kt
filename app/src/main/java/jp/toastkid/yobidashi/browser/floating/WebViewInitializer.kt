@@ -24,7 +24,8 @@ import jp.toastkid.yobidashi.browser.block.AdRemover
  */
 class WebViewInitializer(
         private val preferenceApplier: PreferenceApplier,
-        private val viewModel: FloatingPreviewViewModel
+        private val viewModel: FloatingPreviewViewModel,
+        private val faviconApplier: FaviconApplier
 ) {
 
     /**
@@ -64,8 +65,6 @@ class WebViewInitializer(
                 viewModel.newTitle(title)
             }
 
-            private val faviconApplier = FaviconApplier(context)
-
             private val bitmapCompressor = BitmapCompressor()
 
             override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
@@ -93,4 +92,18 @@ class WebViewInitializer(
             }
         }
     }
+
+    companion object {
+
+        // TODO Add unit test.
+        fun launch(view: WebView, viewModel: FloatingPreviewViewModel) {
+            WebViewInitializer(
+                PreferenceApplier(view.context),
+                viewModel,
+                FaviconApplier(view.context)
+            ).invoke(view)
+        }
+
+    }
+
 }
