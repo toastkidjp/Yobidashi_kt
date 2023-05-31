@@ -149,7 +149,7 @@ class ContentViewModel : ViewModel() {
 
     fun showModalBottomSheet() = _showModalBottomSheet.value
 
-    suspend fun switchBottomSheet() {
+    fun switchBottomSheet() {
         _showModalBottomSheet.value = _showModalBottomSheet.value.not()
     }
 
