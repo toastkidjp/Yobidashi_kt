@@ -15,6 +15,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.robolectric.util.ReflectionHelpers
 
 class MusicPlayerPermissionsTest {
@@ -22,7 +23,7 @@ class MusicPlayerPermissionsTest {
     @InjectMockKs
     private lateinit var musicPlayerPermissions: MusicPlayerPermissions
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
     }
