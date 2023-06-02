@@ -17,12 +17,6 @@ import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
  */
 class BrowserViewModel {
 
-    fun openNewWindow() {
-        /*viewModelScope.launch {
-            _event.emit(OpenNewWindowEvent(resultMessage))
-        }*/
-    }
-
     fun download(url: String) {
         /*viewModelScope.launch {
             _event.emit(DownloadEvent(url))
