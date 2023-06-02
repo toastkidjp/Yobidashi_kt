@@ -245,7 +245,7 @@ internal fun Content() {
                     focusManager.clearFocus(true)
                 }
                 is SwitchTabListEvent -> {
-                    contentViewModel?.setBottomSheetContent { TabListUi(tabs) }
+                    contentViewModel.setBottomSheetContent { TabListUi(tabs) }
                     coroutineScope?.launch {
                         contentViewModel?.switchBottomSheet()
                     }
