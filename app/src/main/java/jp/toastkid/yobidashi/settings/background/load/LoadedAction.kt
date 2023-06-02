@@ -23,10 +23,11 @@ import java.io.IOException
 /**
  * Action of loaded new background image.
  *
- * @param uri Image file URI.
- * @param parent Snackbar's parent.
- * @param colorPair Color pair.
- * @param onLoadedAction On loaded action.
+ * @param uris Image file URI
+ * @param context Use for image
+ * @param contentViewModel Use for showing snackbar
+ * @param onLoadedAction On loaded action
+ * @param fileDir storing image folder
  *
  * @author toastkidjp
  */
