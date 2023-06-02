@@ -190,12 +190,11 @@ internal fun WebTabUi(webTab: WebTab) {
         AnchorLongTapDialog(
             value.first,
             value.second,
-            value.third,
-            {
-                browserViewModel.openLongTapDialog.value = false
-                browserViewModel?.clearLongTapParameters()
-            }
-        )
+            value.third
+        ) {
+            browserViewModel.openLongTapDialog.value = false
+            browserViewModel?.clearLongTapParameters()
+        }
     }
 
     BackHandler(readerModeText.value.isNotBlank()) {
