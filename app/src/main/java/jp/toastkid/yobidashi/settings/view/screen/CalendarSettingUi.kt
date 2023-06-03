@@ -31,7 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.calendar.model.holiday.HolidayCalendar
+import jp.toastkid.calendar.model.holiday.HolidayCalendar
 import jp.toastkid.yobidashi.settings.view.CheckableRow
 
 @Composable
