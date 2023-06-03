@@ -113,6 +113,7 @@ dependencies {
     implementation(project(":editor"))
     implementation(project(":number"))
     implementation(project(":converter"))
+    implementation(project(":calendar"))
 
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
     implementation("androidx.work:work-runtime:2.7.1")
