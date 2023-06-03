@@ -353,9 +353,4 @@
 
     <string name="title_converter_tool">変換ツール</string>
 
-    <string name="title_use_us_calendar">🇺🇸 Use USA holidays calendar</string>
-    <string name="title_use_ja_calendar">🇯🇵 Use Japanese holidays calendar</string>
-    <string name="title_use_uk_calendar">🇬🇧 Use United Kingdom holidays calendar</string>
-    <string name="title_use_vn_calendar">🇻🇳 Use Vietnam holidays calendar(Experimental)</string>
-
 </resources>
