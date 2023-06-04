@@ -98,7 +98,7 @@ import kotlinx.coroutines.launch
 fun ArticleListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
 
-    val articleRepository = ArticleRepositoryFactory().invoke(context)
+    val articleRepository = remember { ArticleRepositoryFactory().invoke(context) }
 
     val preferenceApplier = PreferenceApplier(context)
 
