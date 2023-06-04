@@ -102,7 +102,7 @@ fun ArticleListUi() {
 
     val preferenceApplier = PreferenceApplier(context)
 
-    val bookmarkRepository = BookmarkRepositoryFactory().invoke(context)
+    val bookmarkRepository = remember { BookmarkRepositoryFactory().invoke(context) }
 
     val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
 
