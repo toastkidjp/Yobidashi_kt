@@ -11,7 +11,6 @@ package jp.toastkid.yobidashi.main.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -269,7 +268,8 @@ internal fun Content() {
                     replaceToCurrentTab(tabs, navigationHostController)
                 }
                 is SnackbarEvent -> {
-                    showSnackbar(activity, contentViewModel, it)
+                    val message = it.message ?: it.messageId?.let(activity::getString) ?: return@collect
+                    showSnackbar(message, contentViewModel, it)
                 }
                 is OpenWebSearchEvent -> {
                     when (navigationHostController.currentDestination?.route) {
@@ -297,11 +297,13 @@ internal fun Content() {
                     val tab = tabs.openNewArticleTab(title, onBackground)
 
                     if (onBackground) {
+                        val message =
+                            activity.getString(R.string.message_tab_open_background, title)
                         showSnackbar(
-                            activity,
+                            message,
                             contentViewModel,
                             SnackbarEvent(
-                                activity.getString(R.string.message_tab_open_background, title),
+                                message,
                                 actionLabel = activity.getString(R.string.open)
                             ) {
                                 tabs.replace(tab)
@@ -607,12 +609,10 @@ private fun navigate(navigationController: NavHostController?, route: String) {
 }
 
 private fun showSnackbar(
-    context: Context,
+    message: String,
     contentViewModel: ContentViewModel,
     snackbarEvent: SnackbarEvent
 ) {
-    val message = snackbarEvent.message ?: snackbarEvent.messageId?.let(context::getString) ?: return
-
     val snackbarHostState = contentViewModel.snackbarHostState()
 
     if (snackbarEvent.actionLabel == null) {
