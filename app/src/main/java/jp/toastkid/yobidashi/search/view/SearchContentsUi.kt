@@ -70,7 +70,6 @@ internal fun SearchContentsUi(
     val context = LocalContext.current
     val preferenceApplier = PreferenceApplier(context)
     val database = RepositoryFactory()
-    val favoriteSearchRepository = database.favoriteSearchRepository(context)
     val searchHistoryRepository = database.searchHistoryRepository(context)
 
     val itemDeletionUseCase = remember {
@@ -127,6 +126,9 @@ internal fun SearchContentsUi(
             ) {
                 viewModel.openFavoriteSearch()
             }
+
+            val favoriteSearchRepository =
+                remember { RepositoryFactory().favoriteSearchRepository(context) }
 
             viewModel.favoriteSearchItems.take(5).forEach { favoriteSearch ->
                 SearchItemContent(
@@ -285,7 +287,9 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
 
     Surface(
         shadowElevation = 4.dp,
-        modifier = Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .padding(bottom = 8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
