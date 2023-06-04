@@ -15,11 +15,10 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockkConstructor
-import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.data.DatabaseFinder
 import jp.toastkid.yobidashi.libs.db.AppDatabase
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
@@ -49,8 +48,6 @@ class FavoriteSearchInsertionTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { context.getString(any(), any()) }.returns("test message")
-
         mockkConstructor(DatabaseFinder::class)
         every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
         every { appDatabase.favoriteSearchRepository() }.returns(repository)
@@ -74,7 +71,6 @@ class FavoriteSearchInsertionTest {
 
         favoriteSearchInsertion.invoke()
 
-        verify(exactly = 1) { context.getString(any(), any()) }
         verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
         verify(exactly = 1) { appDatabase.favoriteSearchRepository() }
         verify(exactly = 1) { repository.insert(any()) }

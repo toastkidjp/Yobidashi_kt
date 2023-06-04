@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.search.history
 
 import android.content.Context
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +23,7 @@ class SearchHistoryInsertion private constructor(
         private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    private val repository =
-            DatabaseFinder().invoke(context).searchHistoryRepository()
+    private val repository = RepositoryFactory().searchHistoryRepository(context)
 
     fun insert(): Job {
         if (category.isEmpty() || query.isEmpty()) {

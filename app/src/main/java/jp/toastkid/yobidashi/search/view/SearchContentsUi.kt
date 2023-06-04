@@ -46,6 +46,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
@@ -53,7 +54,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.url_suggestion.ItemDeletionUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 
@@ -69,11 +69,11 @@ internal fun SearchContentsUi(
     currentUrl: String?
 ) {
     val preferenceApplier = PreferenceApplier(LocalContext.current)
-    val database = DatabaseFinder().invoke(LocalContext.current)
-    val bookmarkRepository: BookmarkRepository = database.bookmarkRepository()
-    val viewHistoryRepository: ViewHistoryRepository = database.viewHistoryRepository()
-    val favoriteSearchRepository = database.favoriteSearchRepository()
-    val searchHistoryRepository = database.searchHistoryRepository()
+    val database = RepositoryFactory()
+    val bookmarkRepository: BookmarkRepository = database.bookmarkRepository(LocalContext.current)
+    val viewHistoryRepository: ViewHistoryRepository = database.viewHistoryRepository(LocalContext.current)
+    val favoriteSearchRepository = database.favoriteSearchRepository(LocalContext.current)
+    val searchHistoryRepository = database.searchHistoryRepository(LocalContext.current)
 
     val itemDeletionUseCase = ItemDeletionUseCase(bookmarkRepository, viewHistoryRepository)
 

@@ -23,12 +23,12 @@ import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.data.DatabaseFinder
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
 import jp.toastkid.yobidashi.libs.db.AppDatabase
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before

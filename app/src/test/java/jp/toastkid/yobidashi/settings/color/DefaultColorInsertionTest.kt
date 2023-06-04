@@ -19,8 +19,8 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import jp.toastkid.data.DatabaseFinder
 import jp.toastkid.yobidashi.libs.db.AppDatabase
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After

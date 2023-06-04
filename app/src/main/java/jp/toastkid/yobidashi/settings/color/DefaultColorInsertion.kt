@@ -6,8 +6,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.collection.ArraySet
 import androidx.core.content.ContextCompat
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
  *
  * @author toastkidjp
  */
-class DefaultColorInsertion(private val databaseFinder: DatabaseFinder = DatabaseFinder()) {
+class DefaultColorInsertion {
 
     private val map = mapOf(
             R.color.colorPrimaryDark to R.color.textPrimary,
@@ -50,7 +50,7 @@ class DefaultColorInsertion(private val databaseFinder: DatabaseFinder = Databas
     @SuppressLint("CheckResult")
     fun insert(context: Context): Job =
             CoroutineScope(Dispatchers.IO).launch {
-                val repository = databaseFinder.invoke(context).savedColorRepository()
+                val repository = RepositoryFactory().savedColorRepository(context)
                 make(context).forEach { repository.add(it) }
             }
 

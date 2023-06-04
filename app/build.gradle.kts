@@ -9,7 +9,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version("1.6.21")
     id("com.android.application")
     id("kotlin-android")
-    id("org.jetbrains.kotlin.kapt")
     id("com.github.triplet.play")
     id("com.cookpad.android.plugin.license-tools")
     id("jacoco.definition")
@@ -98,6 +97,7 @@ play {
 dependencies {
     implementation(project(":lib"))
     implementation(project(":lib:display_effect"))
+    implementation(project(":data"))
     implementation(project(":article"))
     implementation(project(":search"))
     implementation(project(":todo"))
@@ -127,10 +127,6 @@ dependencies {
     implementation("com.google.accompanist:accompanist-navigation-animation:0.23.1")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
-
-    implementation("androidx.room:room-runtime:${LibraryVersion.room}")
-    kapt("androidx.room:room-compiler:${LibraryVersion.room}")
-
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
@@ -159,11 +155,5 @@ configurations.implementation {
 repositories{
     flatDir{
         dirs("libs")
-    }
-}
-
-kapt {
-    javacOptions {
-        option("-Xmaxerrs", 5000)
     }
 }

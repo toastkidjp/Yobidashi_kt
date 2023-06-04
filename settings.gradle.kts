@@ -8,6 +8,7 @@ pluginManagement {
 include(":todo")
 include(":search")
 include(":lib")
+include(":data")
 include(":app")
 include(":article")
 include(":licenses")

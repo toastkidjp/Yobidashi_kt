@@ -44,13 +44,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.view.SearchCategorySpinner
 import jp.toastkid.yobidashi.search.view.SearchItemContent
@@ -71,8 +71,7 @@ fun FavoriteSearchListUi() {
 
     val favoriteSearchItems = remember { mutableStateListOf<FavoriteSearch>() }
 
-    val database = DatabaseFinder().invoke(activityContext)
-    val repository = database.favoriteSearchRepository()
+    val repository = RepositoryFactory().favoriteSearchRepository(activityContext)
 
     contentViewModel.replaceAppBarContent {
             val spinnerOpen = remember { mutableStateOf(false) }

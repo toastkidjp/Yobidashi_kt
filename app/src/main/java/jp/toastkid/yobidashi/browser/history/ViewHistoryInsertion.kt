@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.browser.history
 
 import android.content.Context
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ class ViewHistoryInsertion private constructor(
         private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    private val repository = DatabaseFinder().invoke(context).viewHistoryRepository()
+    private val repository = RepositoryFactory().viewHistoryRepository(context)
 
     operator fun invoke(): Job =
             if (title.isEmpty() || url.isEmpty()) Job()

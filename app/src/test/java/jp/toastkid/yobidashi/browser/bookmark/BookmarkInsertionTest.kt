@@ -15,9 +15,9 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import jp.toastkid.data.DatabaseFinder
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.libs.db.AppDatabase
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before

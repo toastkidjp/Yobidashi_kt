@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.libs.db
+package jp.toastkid.data
 
 import android.content.Context
 import androidx.room.Room
@@ -18,6 +18,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi.libs.db.AppDatabase
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

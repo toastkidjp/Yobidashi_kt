@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,7 +31,7 @@ class BookmarkInsertion (
 
     private fun insert(bookmark: Bookmark): Job {
         return CoroutineScope(dispatcher).launch {
-            DatabaseFinder().invoke(context).bookmarkRepository()
+            RepositoryFactory().bookmarkRepository(context)
                     .add(bookmark)
         }
     }

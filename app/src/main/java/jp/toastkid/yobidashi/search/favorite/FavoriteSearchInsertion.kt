@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +27,7 @@ class FavoriteSearchInsertion(
         return CoroutineScope(mainDispatcher).launch {
             withContext(ioDispatcher) {
                 val repository =
-                        DatabaseFinder().invoke(context).favoriteSearchRepository()
+                    RepositoryFactory().favoriteSearchRepository(context)
                 repository.insert(FavoriteSearch.with(category, query))
             }
         }

@@ -23,12 +23,12 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.view.list.ListActionAttachment
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.view.SearchItemContent
 import kotlinx.coroutines.CoroutineScope
@@ -40,8 +40,7 @@ import kotlinx.coroutines.withContext
 fun SearchHistoryListUi() {
     val context = LocalContext.current
 
-    val database = DatabaseFinder().invoke(LocalContext.current)
-    val searchHistoryRepository = database.searchHistoryRepository()
+    val searchHistoryRepository = RepositoryFactory().searchHistoryRepository(LocalContext.current)
     val fullItems = mutableListOf<SearchHistory>()
     val searchHistoryItems = remember { mutableStateListOf<SearchHistory>() }
 
@@ -97,7 +96,7 @@ fun SearchHistoryListUi() {
     ) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                DatabaseFinder().invoke(context).searchHistoryRepository().deleteAll()
+                RepositoryFactory().searchHistoryRepository(context).deleteAll()
             }
 
             (context as? ComponentActivity)?.let { activity ->

@@ -72,7 +72,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.lib.ContentViewModel
@@ -315,9 +315,7 @@ internal fun Content() {
                 }
                 is OpenDateArticleEvent -> {
                     DateSelectedActionUseCase(
-                        AppDatabase
-                            .find(activity)
-                            .articleRepository(),
+                        ArticleRepositoryFactory().invoke(activity),
                         contentViewModel
                     ).invoke(it.year, it.month, it.date, it.background)
                 }
