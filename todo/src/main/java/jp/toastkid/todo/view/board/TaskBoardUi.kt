@@ -80,7 +80,7 @@ fun TaskBoardUi() {
     val taskAdditionDialogFragmentViewModel =
         remember { TaskAdditionDialogFragmentViewModel() }
 
-    val repository = TodoTaskDataAccessorFactory().invoke(context)
+    val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
     val preferenceApplier = PreferenceApplier(context)
 
     val menuUseCase = ItemMenuPopupActionUseCase(
