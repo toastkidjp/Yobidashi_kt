@@ -68,12 +68,13 @@ internal fun SearchContentsUi(
     currentTitle: String?,
     currentUrl: String?
 ) {
-    val preferenceApplier = PreferenceApplier(LocalContext.current)
+    val context = LocalContext.current
+    val preferenceApplier = PreferenceApplier(context)
     val database = RepositoryFactory()
-    val bookmarkRepository: BookmarkRepository = database.bookmarkRepository(LocalContext.current)
-    val viewHistoryRepository: ViewHistoryRepository = database.viewHistoryRepository(LocalContext.current)
-    val favoriteSearchRepository = database.favoriteSearchRepository(LocalContext.current)
-    val searchHistoryRepository = database.searchHistoryRepository(LocalContext.current)
+    val bookmarkRepository: BookmarkRepository = database.bookmarkRepository(context)
+    val viewHistoryRepository: ViewHistoryRepository = database.viewHistoryRepository(context)
+    val favoriteSearchRepository = database.favoriteSearchRepository(context)
+    val searchHistoryRepository = database.searchHistoryRepository(context)
 
     val itemDeletionUseCase = ItemDeletionUseCase(bookmarkRepository, viewHistoryRepository)
 
@@ -81,7 +82,7 @@ internal fun SearchContentsUi(
 
     val contentViewModel = viewModel(
         ContentViewModel::class.java,
-        LocalContext.current as ViewModelStoreOwner
+        context as ViewModelStoreOwner
     )
 
     Column(
