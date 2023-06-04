@@ -63,7 +63,7 @@ import com.halilibo.richtext.ui.RichTextStyle
 import com.halilibo.richtext.ui.RichTextThemeIntegration
 import com.halilibo.richtext.ui.string.RichTextStringStyle
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.article.detail.LinkBehaviorService
 import jp.toastkid.article_viewer.article.detail.LinkGenerator
 import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
@@ -78,7 +78,7 @@ import kotlinx.coroutines.withContext
 fun ArticleContentUi(title: String) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
-    val repository = remember { AppDatabase.find(context).articleRepository() }
+    val repository = remember { ArticleRepositoryFactory().invoke(context) }
     val linkBehaviorService = remember {
         val viewModelProvider = ViewModelProvider(context)
         LinkBehaviorService(

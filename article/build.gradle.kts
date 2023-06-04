@@ -1,6 +1,7 @@
+
 import com.android.build.gradle.tasks.GenerateBuildConfig
-import property.*
-import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import property.BuildTool
+import property.LibraryVersion
 
 /*
  * Copyright (c) 2021 toastkidjp.
@@ -12,7 +13,6 @@ import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("org.jetbrains.kotlin.kapt")
     id("jacoco.definition")
 }
 //TODO apply from: '../jacoco.gradle'
@@ -60,6 +60,7 @@ tasks.withType<GenerateBuildConfig> {
 }
 
 dependencies {
+    implementation(project(":data"))
     implementation(project(":lib"))
     implementation(project(":search"))
 
@@ -78,9 +79,6 @@ dependencies {
     implementation("androidx.paging:paging-common:${LibraryVersion.paging}")
     implementation("androidx.paging:paging-common-ktx:${LibraryVersion.paging}")
     implementation("androidx.work:work-runtime:2.7.1")
-    implementation("androidx.room:room-runtime:${LibraryVersion.room}")
-    implementation("androidx.room:room-paging:${LibraryVersion.room}")
-    kapt("androidx.room:room-compiler:${LibraryVersion.room}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")

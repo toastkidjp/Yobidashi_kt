@@ -73,7 +73,8 @@ import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
+import jp.toastkid.article_viewer.article.data.BookmarkRepositoryFactory
 import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
 import jp.toastkid.article_viewer.article.list.SearchResult
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogUi
@@ -96,13 +97,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun ArticleListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val dataBase = AppDatabase.find(context)
 
-    val articleRepository = dataBase.articleRepository()
+    val articleRepository = ArticleRepositoryFactory().invoke(context)
 
     val preferenceApplier = PreferenceApplier(context)
 
-    val bookmarkRepository = AppDatabase.find(context).bookmarkRepository()
+    val bookmarkRepository = BookmarkRepositoryFactory().invoke(context)
 
     val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
 
@@ -352,7 +352,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
         DateFilterDialogUi(
             preferenceApplier.colorPair(),
             openDateDialog,
-            DateSelectedActionUseCase(AppDatabase.find(activityContext).articleRepository(), contentViewModel)
+            DateSelectedActionUseCase(ArticleRepositoryFactory().invoke(activityContext), contentViewModel)
         )
     }
 }

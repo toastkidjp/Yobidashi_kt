@@ -56,6 +56,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("androidx.room:room-runtime:${LibraryVersion.room}")
+    implementation("androidx.room:room-paging:${LibraryVersion.room}")
     kapt("androidx.room:room-compiler:${LibraryVersion.room}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
