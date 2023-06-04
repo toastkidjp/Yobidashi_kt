@@ -83,7 +83,7 @@ fun TaskListUi() {
             }
         }
 
-    val repository = TodoTaskDataAccessorFactory().invoke(context)
+    val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
 
     val tasks = remember { mutableStateOf<Flow<PagingData<TodoTask>>?>(null) }
 
