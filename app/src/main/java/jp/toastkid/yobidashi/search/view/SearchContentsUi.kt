@@ -52,7 +52,6 @@ import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.search.url_suggestion.ItemDeletionUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
@@ -71,12 +70,14 @@ internal fun SearchContentsUi(
     val context = LocalContext.current
     val preferenceApplier = PreferenceApplier(context)
     val database = RepositoryFactory()
-    val bookmarkRepository: BookmarkRepository = database.bookmarkRepository(context)
     val viewHistoryRepository: ViewHistoryRepository = database.viewHistoryRepository(context)
     val favoriteSearchRepository = database.favoriteSearchRepository(context)
     val searchHistoryRepository = database.searchHistoryRepository(context)
 
-    val itemDeletionUseCase = ItemDeletionUseCase(bookmarkRepository, viewHistoryRepository)
+    val itemDeletionUseCase = ItemDeletionUseCase(
+        database.bookmarkRepository(context),
+        viewHistoryRepository
+    )
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
