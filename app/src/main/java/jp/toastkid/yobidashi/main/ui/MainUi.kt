@@ -376,7 +376,7 @@ internal fun Content() {
                 is OpenNewWindowEvent -> {
                     val message = it.resultMessage ?: return@collect
                     tabs.openNewWindowWebTab(message)
-                    browserViewModel.switchWebViewToCurrent(tabs.currentTabId())
+                    replaceToCurrentTab(tabs, navigationHostController)
                 }
                 is WebSearchEvent -> {
                     WebSearchResultTabOpenerUseCase(

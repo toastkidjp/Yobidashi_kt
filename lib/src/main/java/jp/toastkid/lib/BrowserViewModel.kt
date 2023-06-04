@@ -23,7 +23,6 @@ import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
 import jp.toastkid.lib.viewmodel.event.web.PreviewUrlEvent
-import jp.toastkid.lib.viewmodel.event.web.SwitchWebViewToCurrentEvent
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -71,12 +70,6 @@ class BrowserViewModel : ViewModel() {
     fun download(url: String) {
         viewModelScope.launch {
             _event.emit(DownloadEvent(url))
-        }
-    }
-
-    fun switchWebViewToCurrent(tabId: String) {
-        viewModelScope.launch {
-            _event.emit(SwitchWebViewToCurrentEvent(tabId))
         }
     }
 

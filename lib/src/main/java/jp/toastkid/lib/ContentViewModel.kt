@@ -7,6 +7,8 @@
  */
 package jp.toastkid.lib
 
+import android.net.Uri
+import android.os.Message
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.Animatable
 import androidx.compose.runtime.Composable
@@ -19,6 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import jp.toastkid.lib.compat.material3.ModalBottomSheetState
 import jp.toastkid.lib.compat.material3.ModalBottomSheetValue
+import jp.toastkid.lib.model.LoadInformation
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -44,6 +47,13 @@ import jp.toastkid.lib.viewmodel.event.tab.OpenNewTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenPdfEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenWebSearchEvent
 import jp.toastkid.lib.viewmodel.event.tab.SaveEditorTabEvent
+import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
+import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
+import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
+import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
+import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
+import jp.toastkid.lib.viewmodel.event.web.PreviewUrlEvent
+import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -377,6 +387,59 @@ class ContentViewModel : ViewModel() {
     fun clearFinderInput() {
         viewModelScope.launch {
             _event.emit(ClearFinderInputEvent())
+        }
+    }
+
+    fun preview(uri: Uri) {
+        viewModelScope.launch {
+            _event.emit(PreviewUrlEvent(uri))
+        }
+    }
+
+    fun open(uri: Uri) {
+        viewModelScope.launch {
+            _event.emit(OpenUrlEvent(uri))
+        }
+    }
+
+    fun openBackground(uri: Uri) {
+        viewModelScope.launch {
+            _event.emit(OpenUrlEvent(uri, true))
+        }
+    }
+
+    fun openBackground(title: String, uri: Uri) {
+        viewModelScope.launch {
+            _event.emit(OpenUrlEvent(uri, true, title))
+        }
+    }
+
+    fun openNewWindow(resultMessage: Message?) {
+        viewModelScope.launch {
+            _event.emit(OpenNewWindowEvent(resultMessage))
+        }
+    }
+
+    fun download(url: String) {
+        viewModelScope.launch {
+            _event.emit(DownloadEvent(url))
+        }
+    }
+
+    fun stopProgress(stop: Boolean) {
+        viewModelScope.launch {
+            _event.emit(OnStopLoadEvent())
+        }
+    }
+
+    fun finished(tabId: String, title: String, url: String) =
+        viewModelScope.launch {
+            _event.emit(OnLoadCompletedEvent(LoadInformation(tabId, title, url)))
+        }
+
+    fun search(query: String) {
+        viewModelScope.launch {
+            _event.emit(WebSearchEvent(query))
         }
     }
 

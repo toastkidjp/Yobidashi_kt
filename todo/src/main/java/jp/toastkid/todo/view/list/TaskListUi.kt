@@ -73,7 +73,7 @@ fun TaskListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
 
     val taskAdditionDialogFragmentViewModel =
-        viewModel(TaskAdditionDialogFragmentViewModel::class.java, context)
+        remember { TaskAdditionDialogFragmentViewModel() }
 
     viewModel(ContentViewModel::class.java, context)
         .replaceAppBarContent {

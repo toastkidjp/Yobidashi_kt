@@ -11,7 +11,6 @@ package jp.toastkid.yobidashi.browser.bookmark.viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.ViewModel
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class BookmarkListViewModel : ViewModel() {
+class BookmarkListViewModel {
 
     private val _currentFolder = mutableStateOf(Bookmark.getRootFolderName())
 

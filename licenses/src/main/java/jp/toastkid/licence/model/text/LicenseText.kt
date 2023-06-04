@@ -6,9 +6,12 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.lib.viewmodel.event.web
+package jp.toastkid.licence.model.text
 
-import jp.toastkid.lib.viewmodel.event.Event
+interface LicenseText {
 
-class SwitchWebViewToCurrentEvent(val tabId: String) : Event {
+    fun url(): String
+
+    fun text(): String
+
 }

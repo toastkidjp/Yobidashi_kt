@@ -78,7 +78,7 @@ import kotlin.math.roundToInt
 fun TaskBoardUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
     val taskAdditionDialogFragmentViewModel =
-        ViewModelProvider(context).get(TaskAdditionDialogFragmentViewModel::class.java)
+        remember { TaskAdditionDialogFragmentViewModel() }
 
     val repository = TodoTaskDatabase.find(context).repository()
     val preferenceApplier = PreferenceApplier(context)

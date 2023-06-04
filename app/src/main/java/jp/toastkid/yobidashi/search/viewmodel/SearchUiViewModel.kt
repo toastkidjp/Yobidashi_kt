@@ -13,18 +13,19 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearch
 import jp.toastkid.yobidashi.search.history.SearchHistory
 import jp.toastkid.yobidashi.search.trend.Trend
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class SearchUiViewModel : ViewModel() {
+class SearchUiViewModel(private val workDispatcher: CoroutineDispatcher = Dispatchers.Default) {
 
     private val _input = mutableStateOf(TextFieldValue())
 
@@ -53,19 +54,19 @@ class SearchUiViewModel : ViewModel() {
     val search = _search.asSharedFlow()
 
     fun search(query: String) {
-        viewModelScope.launch {
+        CoroutineScope(workDispatcher).launch {
             _search.emit(WebSearchEvent(query))
         }
     }
 
     fun searchWithCategory(query: String, category: String, background: Boolean = false) {
-        viewModelScope.launch {
+        CoroutineScope(Dispatchers.Default).launch {
             _search.emit(WebSearchEvent(query, category, background))
         }
     }
 
     fun searchOnBackground(query: String) {
-        viewModelScope.launch {
+        CoroutineScope(workDispatcher).launch {
             _search.emit(WebSearchEvent(query, background = true))
         }
     }

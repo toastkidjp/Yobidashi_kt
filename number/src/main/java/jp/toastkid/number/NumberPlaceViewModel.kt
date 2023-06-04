@@ -12,14 +12,13 @@ import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.number.factory.GameFileProvider
 import jp.toastkid.number.model.NumberBoard
 import jp.toastkid.number.model.NumberPlaceGame
 import jp.toastkid.number.repository.GameRepositoryImplementation
 
-class NumberPlaceViewModel : ViewModel() {
+class NumberPlaceViewModel {
 
     private val _game = mutableStateOf(NumberPlaceGame())
 

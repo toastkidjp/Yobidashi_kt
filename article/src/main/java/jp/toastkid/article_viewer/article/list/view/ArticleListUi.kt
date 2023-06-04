@@ -75,7 +75,6 @@ import androidx.paging.compose.items
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
-import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModelFactory
 import jp.toastkid.article_viewer.article.list.SearchResult
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogUi
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
@@ -108,12 +107,11 @@ fun ArticleListUi() {
     val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
 
     val viewModel = remember {
-        ArticleListFragmentViewModelFactory(
+        ArticleListFragmentViewModel(
             articleRepository,
             bookmarkRepository,
             preferenceApplier
         )
-            .create(ArticleListFragmentViewModel::class.java)
     }
 
     val progressBroadcastReceiver = object : BroadcastReceiver() {

@@ -10,12 +10,11 @@ package jp.toastkid.yobidashi.browser.floating
 import android.graphics.Bitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 
 /**
  * @author toastkidjp
  */
-class FloatingPreviewViewModel : ViewModel() {
+class FloatingPreviewViewModel {
 
     private val _title = mutableStateOf("")
 

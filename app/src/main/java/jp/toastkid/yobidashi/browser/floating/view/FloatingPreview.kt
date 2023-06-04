@@ -56,7 +56,7 @@ internal fun FloatingPreviewUi(uri: Uri) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
 
-    val viewModel = viewModel(FloatingPreviewViewModel::class.java)
+    val viewModel = remember { FloatingPreviewViewModel() }
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val browserViewModel = viewModel(BrowserViewModel::class.java, context)
 
