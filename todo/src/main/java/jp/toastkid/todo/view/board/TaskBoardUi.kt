@@ -60,7 +60,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDataAccessor
-import jp.toastkid.todo.data.TodoTaskDatabase
+import jp.toastkid.todo.data.TodoTaskDataAccessorFactory
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskEditorUi
@@ -80,7 +80,7 @@ fun TaskBoardUi() {
     val taskAdditionDialogFragmentViewModel =
         remember { TaskAdditionDialogFragmentViewModel() }
 
-    val repository = TodoTaskDatabase.find(context).repository()
+    val repository = TodoTaskDataAccessorFactory().invoke(context)
     val preferenceApplier = PreferenceApplier(context)
 
     val menuUseCase = ItemMenuPopupActionUseCase(
@@ -137,7 +137,7 @@ fun TaskBoardUi() {
 @Composable
 fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActionUseCase) {
     val context = LocalContext.current
-    val repository = TodoTaskDatabase.find(context).repository()
+    val repository = TodoTaskDataAccessorFactory().invoke(context)
     val color = PreferenceApplier(context).color
 
     val tasks = flow?.collectAsLazyPagingItems() ?: return
