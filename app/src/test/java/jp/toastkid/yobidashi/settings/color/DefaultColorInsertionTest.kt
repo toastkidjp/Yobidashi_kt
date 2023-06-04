@@ -16,11 +16,11 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import jp.toastkid.data.DatabaseFinder
-import jp.toastkid.yobidashi.libs.db.AppDatabase
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
@@ -33,20 +33,14 @@ class DefaultColorInsertionTest {
     private lateinit var defaultColorInsertion: DefaultColorInsertion
 
     @MockK
-    private lateinit var databaseFinder: DatabaseFinder
-
-    @MockK
-    private lateinit var appDatabase: AppDatabase
-
-    @MockK
     private lateinit var savedColorRepository: SavedColorRepository
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        coEvery { databaseFinder.invoke(any()) }.returns(appDatabase)
-        coEvery { appDatabase.savedColorRepository() }.returns(savedColorRepository)
+        mockkConstructor(RepositoryFactory::class)
+        coEvery { anyConstructed<RepositoryFactory>().savedColorRepository(any()) }.returns(savedColorRepository)
         coEvery { savedColorRepository.add(any()) }.answers { 1L }
 
         mockkStatic(ContextCompat::class)
@@ -67,8 +61,7 @@ class DefaultColorInsertionTest {
 
         delay(1000L)
 
-        coVerify (exactly = 1) { databaseFinder.invoke(any()) }
-        coVerify (exactly = 1) { appDatabase.savedColorRepository() }
+        coVerify (exactly = 1) { anyConstructed<RepositoryFactory>().savedColorRepository(any()) }
         coVerify (atLeast = 1) { savedColorRepository.add(any()) }
         coVerify (atLeast = 1) { ContextCompat.getColor(any(), any()) }
         coVerify (atLeast = 1) { SavedColor.make(any(), any()) }

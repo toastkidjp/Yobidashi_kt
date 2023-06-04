@@ -23,12 +23,11 @@ import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.data.DatabaseFinder
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.icon.WebClipIconLoader
-import jp.toastkid.yobidashi.libs.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
@@ -46,12 +45,6 @@ class BookmarkInitializerTest {
     private lateinit var webClipIconLoader: WebClipIconLoader
 
     @MockK
-    private lateinit var databaseFinder: DatabaseFinder
-
-    @MockK
-    private lateinit var appDatabase: AppDatabase
-
-    @MockK
     private lateinit var bookmarkRepository: BookmarkRepository
 
     @MockK
@@ -64,8 +57,7 @@ class BookmarkInitializerTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { databaseFinder.invoke(any()) }.returns(appDatabase)
-        every { appDatabase.bookmarkRepository() }.returns(bookmarkRepository)
+        every { anyConstructed<RepositoryFactory>().bookmarkRepository(context) }.returns(bookmarkRepository)
         coEvery { bookmarkRepository.add(any()) }.just(Runs)
         coEvery { onComplete.invoke() }.just(Runs)
 
@@ -90,16 +82,15 @@ class BookmarkInitializerTest {
 
     @Test
     fun testFrom() {
-        mockkConstructor(FaviconFolderProviderService::class, DatabaseFinder::class)
+        mockkConstructor(FaviconFolderProviderService::class, RepositoryFactory::class)
         every { anyConstructed<FaviconFolderProviderService>().invoke(any()) }.returns(mockk())
-        every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
+        every { anyConstructed<RepositoryFactory>().bookmarkRepository(any()) }.returns(bookmarkRepository)
         mockkObject(WebClipIconLoader)
         every { WebClipIconLoader.from(any()) }.returns(mockk())
 
         BookmarkInitializer.from(context)
 
-        verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        verify(exactly = 1) { appDatabase.bookmarkRepository() }
+        verify(exactly = 1) { anyConstructed<RepositoryFactory>().bookmarkRepository(any()) }
         verify { anyConstructed<FaviconFolderProviderService>().invoke(any()) }
         verify { WebClipIconLoader.from(any()) }
     }

@@ -19,7 +19,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.data.DatabaseFinder
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
@@ -40,9 +40,8 @@ class SearchHistoryInsertionTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        mockkConstructor(DatabaseFinder::class)
-        every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
-        every { appDatabase.searchHistoryRepository() }.returns(repository)
+        mockkConstructor(RepositoryFactory::class)
+        every { anyConstructed<RepositoryFactory>().searchHistoryRepository(any()) }.returns(repository)
         coEvery { repository.insert(any()) }.just(Runs)
     }
 
@@ -62,8 +61,7 @@ class SearchHistoryInsertionTest {
 
         searchHistoryInsertion.insert()
 
-        verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        verify(exactly = 1) { appDatabase.searchHistoryRepository() }
+        verify(exactly = 1) { anyConstructed<RepositoryFactory>().searchHistoryRepository(any()) }
         coVerify(exactly = 1) { repository.insert(any()) }
     }
 
@@ -78,8 +76,7 @@ class SearchHistoryInsertionTest {
 
         searchHistoryInsertion.insert()
 
-        verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        verify(exactly = 1) { appDatabase.searchHistoryRepository() }
+        verify(exactly = 1) { anyConstructed<RepositoryFactory>().searchHistoryRepository(any()) }
         coVerify(exactly = 0) { repository.insert(any()) }
     }
 
@@ -94,8 +91,7 @@ class SearchHistoryInsertionTest {
 
         searchHistoryInsertion.insert()
 
-        verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        verify(exactly = 1) { appDatabase.searchHistoryRepository() }
+        verify(exactly = 1) { anyConstructed<RepositoryFactory>().searchHistoryRepository(any()) }
         coVerify(exactly = 0) { repository.insert(any()) }
     }
 
