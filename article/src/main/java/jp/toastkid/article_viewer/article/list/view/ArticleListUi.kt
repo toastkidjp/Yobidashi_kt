@@ -196,7 +196,7 @@ fun ArticleListUi() {
 @Composable
 private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = PreferenceApplier(activityContext)
+    val preferenceApplier = remember { PreferenceApplier(activityContext) }
 
     Row {
         Column(Modifier.weight(1f)) {
