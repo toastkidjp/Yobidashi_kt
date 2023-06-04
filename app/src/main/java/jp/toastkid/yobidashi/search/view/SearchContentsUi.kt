@@ -30,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -72,10 +73,12 @@ internal fun SearchContentsUi(
     val favoriteSearchRepository = database.favoriteSearchRepository(context)
     val searchHistoryRepository = database.searchHistoryRepository(context)
 
-    val itemDeletionUseCase = ItemDeletionUseCase(
-        database.bookmarkRepository(context),
-        database.viewHistoryRepository(context)
-    )
+    val itemDeletionUseCase = remember {
+        ItemDeletionUseCase(
+            database.bookmarkRepository(context),
+            database.viewHistoryRepository(context)
+        )
+    }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
