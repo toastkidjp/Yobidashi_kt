@@ -100,7 +100,7 @@ fun ArticleListUi() {
 
     val articleRepository = remember { ArticleRepositoryFactory().invoke(context) }
 
-    val preferenceApplier = PreferenceApplier(context)
+    val preferenceApplier = remember { PreferenceApplier(context) }
 
     val bookmarkRepository = remember { BookmarkRepositoryFactory().invoke(context) }
 
