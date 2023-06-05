@@ -111,7 +111,7 @@ internal fun TaskEditorUi(
                     trailingIcon = {
                         Icon(
                             Icons.Filled.Clear,
-                            tint = Color(colorPair.fontColor()),
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             contentDescription = "clear text",
                             modifier = Modifier
                                 .offset(x = 8.dp)
