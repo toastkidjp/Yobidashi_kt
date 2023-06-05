@@ -185,7 +185,6 @@ internal fun MusicList(
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
     val preferenceApplier = PreferenceApplier(context)
-    val iconColor = preferenceApplier.colorPair().fontColor()
     var expanded by remember { mutableStateOf(false) }
     @StringRes var currentSpeed by remember { mutableStateOf(PlayingSpeed.getDefault().textId) }
     val sendSpeedBroadcast: (Float) -> Unit = { speed ->
