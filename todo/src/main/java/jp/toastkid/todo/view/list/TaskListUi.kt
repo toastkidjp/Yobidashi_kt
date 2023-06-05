@@ -104,8 +104,6 @@ fun TaskListUi() {
         }
     })
 
-    val preferenceApplier = PreferenceApplier(context)
-
     val menuUseCase = ItemMenuPopupActionUseCase(
         {
             taskAdditionDialogFragmentViewModel.setTask(it)
@@ -128,7 +126,7 @@ fun TaskListUi() {
                 repository.insert(it)
             }
         },
-        preferenceApplier.colorPair()
+        PreferenceApplier(context).colorPair()
     )
 }
 
