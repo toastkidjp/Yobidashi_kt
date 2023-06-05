@@ -114,22 +114,6 @@ fun ArticleListUi() {
         )
     }
 
-    val progressBroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(p0: Context?, p1: Intent?) {
-            viewModel.hideProgress()
-            showFeedback()
-        }
-
-        private fun showFeedback() {
-            contentViewModel.snackShort(R.string.message_done_import)
-        }
-    }
-
-    context.registerReceiver(
-        progressBroadcastReceiver,
-        ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
-    )
-
     contentViewModel.replaceAppBarContent {
             AppBarContent(viewModel)
             val openSortDialog = remember { mutableStateOf(false) }
@@ -186,6 +170,21 @@ fun ArticleListUi() {
     })
 
     DisposableEffect(key1 = "unregisterReceiver", effect = {
+        val progressBroadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {
+                viewModel.hideProgress()
+                showFeedback()
+            }
+
+            private fun showFeedback() {
+                contentViewModel.snackShort(R.string.message_done_import)
+            }
+        }
+
+        context.registerReceiver(
+            progressBroadcastReceiver,
+            ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
+        )
         onDispose {
             context.unregisterReceiver(progressBroadcastReceiver)
         }
