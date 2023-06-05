@@ -9,15 +9,14 @@ package jp.toastkid.lib.view
 
 import android.view.Window
 import androidx.core.graphics.ColorUtils
-import jp.toastkid.lib.preference.ColorPair
 
 /**
  * @author toastkidjp
  */
 class WindowOptionColorApplier {
 
-    operator fun invoke(window: Window, colorPair: ColorPair) {
-        val color = ColorUtils.setAlphaComponent(colorPair.bgColor(), 255)
+    operator fun invoke(window: Window, colorPair: Int) {
+        val color = ColorUtils.setAlphaComponent(colorPair, 255)
         window.statusBarColor     = color
         window.navigationBarColor = color
     }
