@@ -43,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -206,7 +205,7 @@ internal fun MusicList(
             Icon(
                 painterResource(id = R.drawable.ic_stop),
                 contentDescription = stringResource(id = R.string.action_stop),
-                tint = Color(iconColor),
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
@@ -215,7 +214,7 @@ internal fun MusicList(
             Icon(
                 painterResource(R.drawable.ic_previous_media),
                 contentDescription = stringResource(id = R.string.action_skip_to_previous),
-                tint = Color(iconColor),
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
@@ -224,7 +223,7 @@ internal fun MusicList(
             Icon(
                 painterResource(if (playing) R.drawable.ic_pause else R.drawable.ic_play_media),
                 contentDescription = stringResource(id = if (playing) R.string.action_pause else R.string.action_play),
-                tint = Color(iconColor),
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
@@ -233,7 +232,7 @@ internal fun MusicList(
             Icon(
                 painterResource(R.drawable.ic_next_media),
                 contentDescription = stringResource(id = R.string.action_skip_to_next),
-                tint = Color(iconColor),
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
@@ -242,7 +241,7 @@ internal fun MusicList(
             Icon(
                 painterResource(R.drawable.ic_shuffle),
                 contentDescription = stringResource(id = R.string.action_shuffle),
-                tint = Color(iconColor),
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
@@ -260,7 +259,7 @@ internal fun MusicList(
             ) {
                 Text(
                     text = stringResource(id = currentSpeed),
-                    style = TextStyle(Color(iconColor), fontWeight = FontWeight.Bold),
+                    style = TextStyle(MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold),
                     fontSize = 20.sp,
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -289,7 +288,7 @@ internal fun MusicList(
             Icon(
                 painterResource(id = R.drawable.ic_close),
                 contentDescription = stringResource(id = R.string.close),
-                tint = Color(iconColor),
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
@@ -346,7 +345,7 @@ internal fun MusicList(
                         Icon(
                             painterResource(id = R.drawable.ic_lyrics),
                             contentDescription = "TODO",
-                            tint = Color(iconColor),
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
                                 .width(36.dp)
                                 .fillMaxHeight()
