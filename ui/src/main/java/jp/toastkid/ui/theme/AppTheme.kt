@@ -37,7 +37,7 @@ fun AppTheme(
     val preferenceApplier = PreferenceApplier(LocalContext.current)
 
     (LocalContext.current as? Activity)?.window?.let {
-        WindowOptionColorApplier()(it, colorPair)
+        WindowOptionColorApplier()(it, colorPair.bgColor())
     }
 
     val primary = Color(colorPair.bgColor())
