@@ -170,6 +170,13 @@ class WebViewClientFactory(
                     return@let true
                 }
 
+                if (uri.host == "approach.yahoo.co.jp") {
+                    val fallbackUrl = uri.getQueryParameter("fallbackWebURL") ?: return@let false
+                    view?.stopLoading()
+                    view?.loadUrl(Uri.decode(fallbackUrl))
+                    return@let false
+                }
+
                     if (RedirectionUseCase.isTarget(uri)) {
                         RedirectionUseCase().invoke(view, uri)
                         return@let false
