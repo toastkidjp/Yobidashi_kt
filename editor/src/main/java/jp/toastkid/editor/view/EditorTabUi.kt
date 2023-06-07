@@ -95,7 +95,6 @@ import jp.toastkid.ui.dialog.InputFileNameDialogUi
 @Composable
 fun EditorTabUi(path: String?) {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = PreferenceApplier(context)
 
     val editText = remember { EditText(context) }
     val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
@@ -154,6 +153,7 @@ fun EditorTabUi(path: String?) {
                 MenuActionInvokerUseCase(editText, SpeechMaker(it), contentViewModel)
             )
             editText.setBackgroundColor(Color.Transparent.toArgb())
+            val preferenceApplier = PreferenceApplier(context)
             editText.setTextColor(preferenceApplier.editorFontColor())
             editText.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
             editText.typeface = Typeface.MONOSPACE
@@ -178,7 +178,7 @@ fun EditorTabUi(path: String?) {
         },
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(preferenceApplier.editorBackgroundColor()))
+            .background(Color(PreferenceApplier(context).editorBackgroundColor()))
             .nestedScroll(
                 object : NestedScrollConnection {},
                 nestedScrollDispatcher
