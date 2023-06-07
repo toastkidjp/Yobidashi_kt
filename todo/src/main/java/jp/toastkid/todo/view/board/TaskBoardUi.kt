@@ -123,14 +123,12 @@ fun TaskBoardUi() {
 
     TaskEditorUi(
         { TaskBoard(tasks.value, menuUseCase) },
-        taskAdditionDialogFragmentViewModel,
-        {
-            CoroutineScope(Dispatchers.IO).launch {
-                repository.insert(it)
-            }
-        },
-        preferenceApplier.colorPair()
-    )
+        taskAdditionDialogFragmentViewModel
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.insert(it)
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
