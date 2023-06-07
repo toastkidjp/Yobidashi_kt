@@ -53,7 +53,6 @@ import androidx.paging.cachedIn
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDataAccessorFactory
 import jp.toastkid.todo.model.TodoTask
@@ -120,14 +119,12 @@ fun TaskListUi() {
 
     TaskEditorUi(
         { TaskList(tasks.value, menuUseCase) },
-        taskAdditionDialogFragmentViewModel,
-        {
-            CoroutineScope(Dispatchers.IO).launch {
-                repository.insert(it)
-            }
-        },
-        PreferenceApplier(context).colorPair()
-    )
+        taskAdditionDialogFragmentViewModel
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.insert(it)
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
