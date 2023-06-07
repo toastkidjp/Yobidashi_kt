@@ -45,7 +45,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.todo.R
 import jp.toastkid.todo.model.TodoTask
 import kotlinx.coroutines.launch
@@ -55,8 +54,7 @@ import kotlinx.coroutines.launch
 internal fun TaskEditorUi(
     screenContent: @Composable () -> Unit,
     taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel?,
-    onTapAdd: (TodoTask) -> Unit,
-    colorPair: ColorPair
+    onTapAdd: (TodoTask) -> Unit
 ) {
     val task = taskAdditionDialogFragmentViewModel?.task?.value
     var descriptionInput by remember { mutableStateOf(task?.description ?: "") }
