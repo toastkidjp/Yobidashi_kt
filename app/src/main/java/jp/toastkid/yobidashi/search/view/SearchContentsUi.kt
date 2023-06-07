@@ -70,7 +70,7 @@ internal fun SearchContentsUi(
     val context = LocalContext.current
     val preferenceApplier = PreferenceApplier(context)
     val database = remember { RepositoryFactory() }
-    val searchHistoryRepository = database.searchHistoryRepository(context)
+    val searchHistoryRepository = remember { database.searchHistoryRepository(context) }
 
     val itemDeletionUseCase = remember {
         ItemDeletionUseCase(
