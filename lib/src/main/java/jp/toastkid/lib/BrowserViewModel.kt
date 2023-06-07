@@ -11,83 +11,65 @@ import android.net.Uri
 import android.os.Message
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import jp.toastkid.lib.model.LoadInformation
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
 import jp.toastkid.lib.viewmodel.event.Event
-import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
-import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
-import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
-import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
-import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
-import jp.toastkid.lib.viewmodel.event.web.PreviewUrlEvent
-import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
  */
-class BrowserViewModel : ViewModel() {
+class BrowserViewModel {
 
     private val _event = MutableSharedFlow<Event>()
 
     val event: SharedFlow<Event> = _event
 
     fun preview(uri: Uri) {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             _event.emit(PreviewUrlEvent(uri))
-        }
+        }*/
     }
 
     fun open(uri: Uri) {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             _event.emit(OpenUrlEvent(uri))
-        }
+        }*/
     }
 
     fun openBackground(uri: Uri) {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             _event.emit(OpenUrlEvent(uri, true))
-        }
+        }*/
     }
 
     fun openBackground(title: String, uri: Uri) {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             _event.emit(OpenUrlEvent(uri, true, title))
-        }
+        }*/
     }
 
     fun openNewWindow(resultMessage: Message?) {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             _event.emit(OpenNewWindowEvent(resultMessage))
-        }
+        }*/
     }
 
     fun download(url: String) {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             _event.emit(DownloadEvent(url))
-        }
+        }*/
     }
 
-    fun stopProgress(stop: Boolean) {
-        viewModelScope.launch {
-            _event.emit(OnStopLoadEvent())
-        }
+    suspend fun stopProgress(stop: Boolean) {
+        swipeRefreshState.value?.resetOffset()
+        swipeRefreshState.value?.isRefreshing = false
     }
-
-    fun finished(tabId: String, title: String, url: String) =
-        viewModelScope.launch {
-            _event.emit(OnLoadCompletedEvent(LoadInformation(tabId, title, url)))
-        }
 
     fun search(query: String) {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             _event.emit(WebSearchEvent(query))
-        }
+        }*/
     }
 
     private val _title = mutableStateOf("")
@@ -126,7 +108,7 @@ class BrowserViewModel : ViewModel() {
         _enableBack.value = newState
     }
 
-    private val _progress = mutableStateOf(0)
+    private val _progress = mutableStateOf(100)
 
     val progress: State<Int> = _progress
 
@@ -149,26 +131,6 @@ class BrowserViewModel : ViewModel() {
         openErrorDialog.value = false
     }
 
-    private val _longTapActionParameters =
-        mutableStateOf(Triple<String?, String?, String?>(null, null, null))
-    val openLongTapDialog = mutableStateOf(false)
-
-    val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
-
-    fun setLongTapParameters(title: String?, anchor: String?, imageUrl: String?) {
-        _longTapActionParameters.value = Triple(title, anchor, imageUrl)
-        openLongTapDialog.value = true
-    }
-
-    fun clearLongTapParameters() {
-        _longTapActionParameters.value = Triple(null, null, null)
-        openLongTapDialog.value = false
-    }
-
-    private val nestedScrollDispatcher = NestedScrollDispatcher()
-
-    fun nestedScrollDispatcher() = nestedScrollDispatcher
-
     val swipeRefreshState = mutableStateOf<SwipeRefreshState?>(null)
 
     fun initializeSwipeRefreshState(refreshTriggerPx: Float) {
@@ -188,5 +150,20 @@ class BrowserViewModel : ViewModel() {
                     .coerceIn(0f, 1f)
         else
             progress.value.toFloat() / 100f
+
+    val openLongTapDialog = mutableStateOf(false)
+
+    private val _longTapActionParameters =
+        mutableStateOf(Triple<String?, String?, String?>(null, null, null))
+
+    val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
+
+    fun setLongTapParameters(title: String?, anchor: String?, imageUrl: String?) {
+        _longTapActionParameters.value = Triple(title, anchor, imageUrl)
+    }
+
+    fun clearLongTapParameters() {
+        _longTapActionParameters.value = Triple(null, null, null)
+    }
 
 }

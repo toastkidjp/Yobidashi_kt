@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.ColorPair
@@ -21,7 +20,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
  * @param clipboardManager For monitoring clipboard.
  * @param parent Use for showing snackbar.
  * @param colorPair Use for showing snackbar.
- * @param browserViewModel [BrowserViewModel].
+ * @param contentViewModel [ContentViewModel].
  * @param preferenceApplier [PreferenceApplier]
  *
  * @author toastkidjp
@@ -30,7 +29,7 @@ class SearchWithClip(
     private val clipboardManager: ClipboardManager,
     private val parent: View,
     private val colorPair: ColorPair,
-    private val browserViewModel: BrowserViewModel?,
+    private val contentViewModel: ContentViewModel?,
     private val preferenceApplier: PreferenceApplier
 ) {
 
@@ -104,7 +103,7 @@ class SearchWithClip(
                 if (Urls.isValidUrl(query)) query
                 else UrlFactory()(preferenceApplier.getDefaultSearchEngine()
                         ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(), query).toString()
-        browserViewModel?.preview(url.toUri())
+        contentViewModel?.preview(url.toUri())
     }
 
     /**

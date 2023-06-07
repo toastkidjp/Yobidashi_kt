@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.view.list.ListActionAttachment
@@ -43,9 +42,8 @@ import kotlinx.coroutines.withContext
 fun ViewHistoryListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
 
-    val database = DatabaseFinder().invoke(context)
-    val viewHistoryRepository = database.viewHistoryRepository()
-    val fullItems = mutableListOf<ViewHistory>()
+    val viewHistoryRepository = remember { DatabaseFinder().invoke(context).viewHistoryRepository() }
+    val fullItems = remember { mutableListOf<ViewHistory>() }
     val viewHistoryItems = remember { mutableStateListOf<ViewHistory>() }
     val listState = rememberLazyListState()
 
@@ -69,15 +67,13 @@ fun ViewHistoryListUi() {
         }
     })
 
-    val browserViewModel = viewModel(BrowserViewModel::class.java, context)
-
     val onClick: (ViewHistory, Boolean) -> Unit = { viewHistory, isLongClick ->
         when (isLongClick) {
             true -> {
-                browserViewModel.openBackground(viewHistory.title, Uri.parse(viewHistory.url))
+                contentViewModel.openBackground(viewHistory.title, Uri.parse(viewHistory.url))
             }
             false -> {
-                browserViewModel.open(Uri.parse(viewHistory.url))
+                contentViewModel.open(Uri.parse(viewHistory.url))
             }
         }
     }

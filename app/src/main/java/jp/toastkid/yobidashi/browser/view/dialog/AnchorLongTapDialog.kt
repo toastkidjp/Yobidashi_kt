@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,7 +34,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.clip.Clipboard
@@ -45,24 +43,19 @@ import jp.toastkid.yobidashi.R
 
 @Composable
 internal fun AnchorLongTapDialog(
-    visibleState: MutableState<Boolean>,
     title: String?,
     anchor: String?,
     imageUrl: String?,
+    close: () -> Unit
 ) {
-    if (visibleState.value.not()) {
-        return
-    }
-
     val context = LocalContext.current
-    val browserViewModel = (context as? ViewModelStoreOwner)?.let {
-        viewModel(BrowserViewModel::class.java, it)
+    val contentViewModel = (context as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, it)
     }
 
     Dialog(
         onDismissRequest = {
-            browserViewModel?.clearLongTapParameters()
-            visibleState.value = false
+            close()
         },
         content = {
             Surface(shadowElevation = 4.dp) {
@@ -97,27 +90,23 @@ internal fun AnchorLongTapDialog(
                         ) {
                             if (anchor != null && Urls.isValidUrl(anchor)) {
                                 SingleLineText(R.string.row_dialog_open_new) {
-                                    browserViewModel?.open(anchor.toUri())
-                                    browserViewModel?.clearLongTapParameters()
-                                    visibleState.value = false
+                                    contentViewModel?.open(anchor.toUri())
+                                    close()
                                 }
                                 SingleLineText(R.string.row_dialog_open_background) {
-                                    browserViewModel?.openBackground(anchor.toUri())
-                                    browserViewModel?.clearLongTapParameters()
-                                    visibleState.value = false
+                                    contentViewModel?.openBackground(anchor.toUri())
+                                    close()
                                 }
                                 SingleLineText(R.string.row_dialog_preview) {
-                                    browserViewModel?.preview(anchor.toUri())
-                                    browserViewModel?.clearLongTapParameters()
-                                    visibleState.value = false
+                                    contentViewModel?.preview(anchor.toUri())
+                                    close()
                                 }
                             }
 
                             if (imageUrl != null && Urls.isValidUrl(imageUrl)) {
                                 SingleLineText(R.string.row_dialog_image_search) {
-                                    browserViewModel?.open(ImageSearchUrlGenerator()(imageUrl))
-                                    browserViewModel?.clearLongTapParameters()
-                                    visibleState.value = false
+                                    contentViewModel?.open(ImageSearchUrlGenerator()(imageUrl))
+                                    close()
                                 }
                             }
 
@@ -128,17 +117,12 @@ internal fun AnchorLongTapDialog(
                                             ViewModelProvider(it).get(ContentViewModel::class.java)
                                         }?.snackShort(R.string.message_cannot_downloading_image)
 
-                                        visibleState.value = false
+                                        close()
                                         return@SingleLineText
                                     }
 
-                                    (context as? ViewModelStoreOwner)?.let {
-                                        ViewModelProvider(it)
-                                            .get(BrowserViewModel::class.java)
-                                            .download(imageUrl)
-                                    }
-                                    browserViewModel?.clearLongTapParameters()
-                                    visibleState.value = false
+                                    contentViewModel?.download(imageUrl)
+                                    close()
                                 }
                             }
 
@@ -150,14 +134,14 @@ internal fun AnchorLongTapDialog(
                             if (clipLink != null) {
                                 SingleLineText(R.string.row_dialog_copy) {
                                     Clipboard.clip(context, clipLink)
-                                    visibleState.value = false
+                                    close()
                                 }
                             }
 
                             if (title != null && title.isNotBlank()) {
                                 SingleLineText(R.string.row_dialog_copy_text) {
                                     Clipboard.clip(context, title)
-                                    visibleState.value = false
+                                    close()
                                 }
                             }
                         }
@@ -173,8 +157,7 @@ internal fun AnchorLongTapDialog(
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable {
-                                    browserViewModel?.clearLongTapParameters()
-                                    visibleState.value = false
+                                    close()
                                 }
                                 .padding(16.dp)
                         )

@@ -49,7 +49,6 @@ import jp.toastkid.lib.viewmodel.event.tab.OpenWebSearchEvent
 import jp.toastkid.lib.viewmodel.event.tab.SaveEditorTabEvent
 import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
-import jp.toastkid.lib.viewmodel.event.web.OnStopLoadEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
 import jp.toastkid.lib.viewmodel.event.web.PreviewUrlEvent
@@ -423,12 +422,6 @@ class ContentViewModel : ViewModel() {
     fun download(url: String) {
         viewModelScope.launch {
             _event.emit(DownloadEvent(url))
-        }
-    }
-
-    fun stopProgress(stop: Boolean) {
-        viewModelScope.launch {
-            _event.emit(OnStopLoadEvent())
         }
     }
 

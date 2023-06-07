@@ -67,7 +67,6 @@ import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.LinkBehaviorService
 import jp.toastkid.article_viewer.article.detail.LinkGenerator
 import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.color.LinkColorGenerator
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -84,7 +83,6 @@ fun ArticleContentUi(title: String) {
         val viewModelProvider = ViewModelProvider(context)
         LinkBehaviorService(
             viewModelProvider.get(ContentViewModel::class.java),
-            viewModelProvider.get(BrowserViewModel::class.java),
             { repository.exists(it) > 0 }
         )
     }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.UrlFactory
@@ -33,9 +33,9 @@ class SearchAction(
         private val currentUrl: String? = null,
         private val onBackground: Boolean = false,
         private val saveHistory: Boolean = true,
-        private val viewModelSupplier: (Context) -> BrowserViewModel? = {
+        private val viewModelSupplier: (Context) -> ContentViewModel? = {
             (activityContext as? ViewModelStoreOwner)?.let {
-                ViewModelProvider(it).get(BrowserViewModel::class.java)
+                ViewModelProvider(it).get(ContentViewModel::class.java)
             }
         },
         private val preferenceApplierSupplier: (Context) -> PreferenceApplier = {
@@ -90,7 +90,7 @@ class SearchAction(
         openUri(browserViewModel, searchUri)
     }
 
-    private fun openUri(browserViewModel: BrowserViewModel?, uri: Uri) {
+    private fun openUri(browserViewModel: ContentViewModel?, uri: Uri) {
         if (onBackground)
             browserViewModel?.openBackground(
                     activityContext.getString(R.string.title_tab_background_search, query),

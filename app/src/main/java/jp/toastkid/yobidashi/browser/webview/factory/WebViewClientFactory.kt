@@ -92,12 +92,11 @@ class WebViewClientFactory(
             val tabId = GlobalWebViewPool.getTabId(view)
             if (tabId?.isNotBlank() == true) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    browserViewModel?.finished(tabId, title, urlStr)
+                    contentViewModel?.finished(tabId, title, urlStr)
                 }
             }
 
             browserViewModel?.updateProgress(100)
-            browserViewModel?.stopProgress(true)
 
             try {
                 if (view == currentView()) {
@@ -128,7 +127,6 @@ class WebViewClientFactory(
             super.onReceivedError(view, request, error)
 
             browserViewModel?.updateProgress(100)
-            browserViewModel?.stopProgress(true)
         }
 
         override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
@@ -230,4 +228,17 @@ class WebViewClientFactory(
 
             contentViewModel?.snackShort(R.string.message_cannot_launch_app)
         }
+
+    companion object {
+        fun forBackground(
+            context: Context,
+            contentViewModel: ContentViewModel,
+            preferenceApplier: PreferenceApplier
+        ) = WebViewClientFactory(
+            contentViewModel,
+            AdRemover.make(context.assets),
+            FaviconApplier(context),
+            preferenceApplier
+        )
+    }
 }

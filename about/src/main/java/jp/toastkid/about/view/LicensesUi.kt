@@ -29,13 +29,13 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.licence.model.License
 
 @Composable
 internal fun LicensesUi(licenses: List<License>) {
     val browserViewModel = (LocalView.current.context as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(it).get(BrowserViewModel::class.java)
+        ViewModelProvider(it).get(ContentViewModel::class.java)
     }
     LazyColumn {
         items(licenses) { license ->

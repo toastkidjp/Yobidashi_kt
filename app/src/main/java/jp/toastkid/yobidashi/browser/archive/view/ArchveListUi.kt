@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.list.ListActionAttachment
@@ -56,13 +55,11 @@ fun ArchiveListUi() {
     val fullItems = makeNew.listFiles()
 
     val viewModelProvider = ViewModelProvider(activityContext)
+    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
     if (fullItems.isEmpty()) {
-        viewModelProvider.get(ContentViewModel::class.java)
-            .snackShort(R.string.message_empty_archives)
+        contentViewModel.snackShort(R.string.message_empty_archives)
         return
     }
-
-    val browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
 
     val preferenceApplier = PreferenceApplier(activityContext)
 
@@ -87,7 +84,7 @@ fun ArchiveListUi() {
                         Modifier
                             .padding(start = 16.dp, end = 16.dp)
                             .clickable {
-                                browserViewModel.open(Uri.fromFile(archiveFile))
+                                contentViewModel.open(Uri.fromFile(archiveFile))
                             }
                             .animateItemPlacement()
                     ) {

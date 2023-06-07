@@ -13,7 +13,6 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.search.SearchCategory
@@ -23,8 +22,7 @@ import jp.toastkid.yobidashi.R
 class SelectedTextUseCase(
         private val urlFactory: UrlFactory = UrlFactory(),
         private val stringResolver: (Int, Any) -> String,
-        private val contentViewModel: ContentViewModel,
-        private val browserViewModel: BrowserViewModel
+        private val contentViewModel: ContentViewModel
 ) {
 
     fun countCharacters(word: String) {
@@ -35,12 +33,12 @@ class SelectedTextUseCase(
 
     fun search(word: String, searchEngine: String?) {
         val url = calculateToUri(word, searchEngine) ?: return
-        browserViewModel.open(url)
+        contentViewModel.open(url)
     }
 
     fun searchWithPreview(word: String, searchEngine: String?) {
         val url = calculateToUri(word, searchEngine) ?: return
-        browserViewModel.preview(url)
+        contentViewModel.preview(url)
     }
 
     private fun calculateToUri(word: String, searchEngine: String?): Uri? {
@@ -71,8 +69,7 @@ class SelectedTextUseCase(
                 val viewModelProvider = ViewModelProvider(activity)
                 return SelectedTextUseCase(
                     stringResolver = { resource, additional -> context.getString(resource, additional) },
-                    contentViewModel = viewModelProvider.get(ContentViewModel::class.java),
-                    browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
+                    contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
                 )
             }
 

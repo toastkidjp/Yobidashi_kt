@@ -16,6 +16,7 @@ import android.webkit.WebView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
@@ -35,9 +36,6 @@ class WebChromeClientFactory(
             super.onProgressChanged(view, newProgress)
 
             browserViewModel?.updateProgress(newProgress)
-            if (newProgress < 65) {
-                browserViewModel?.stopProgress(true)
-            }
         }
 
         override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
@@ -72,7 +70,7 @@ class WebChromeClientFactory(
 
             (view?.context as? ViewModelStoreOwner)?.also { fragmentActivity ->
                 ViewModelProvider(fragmentActivity)
-                        .get(BrowserViewModel::class.java)
+                        .get(ContentViewModel::class.java)
                         .openNewWindow(resultMsg)
             }
 

@@ -15,6 +15,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -75,7 +76,6 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import jp.toastkid.display.effect.SnowRendererView
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.compat.material3.ModalBottomSheetLayout
 import jp.toastkid.lib.input.Inputs
@@ -96,6 +96,7 @@ import jp.toastkid.lib.viewmodel.event.tab.OpenNewTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenPdfEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenWebSearchEvent
 import jp.toastkid.lib.viewmodel.event.tab.SaveEditorTabEvent
+import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
@@ -105,8 +106,12 @@ import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
+import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
+import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
@@ -122,6 +127,7 @@ import jp.toastkid.yobidashi.tab.tab_list.view.TabListUi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -219,7 +225,28 @@ internal fun Content() {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
+    val downloadUrl = remember { mutableStateOf("") }
+    val downloadPermissionRequestLauncher =
+        rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
+            if (it.not()) {
+                contentViewModel
+                    .snackShort(R.string.message_requires_permission_storage)
+                return@rememberLauncherForActivityResult
+            }
+            if (downloadUrl.value.isEmpty()) {
+                return@rememberLauncherForActivityResult
+            }
+            DownloadAction(activity).invoke(downloadUrl.value)
+            downloadUrl.value = ""
+        }
+
     LaunchedEffect(key1 = lifecycleOwner, block = {
+        val webViewClientFactory = WebViewClientFactory.forBackground(
+            activity,
+            contentViewModel,
+            preferenceApplier
+        )
+        val webViewFactory = WebViewFactory()
         contentViewModel.event.collect {
             when (it) {
                 is CloseFinderEvent -> {
@@ -328,24 +355,21 @@ internal fun Content() {
                     currentTab.setFileInformation(it.file)
                     tabs.saveTabList()
                 }
-            }
-        }
-    })
-
-    val browserViewModel = viewModel(BrowserViewModel::class.java, activity)
-
-    LaunchedEffect(browserViewModel) {
-        browserViewModel?.event?.collect {
-            when (it) {
                 is OpenUrlEvent -> {
                     val urlString = it.uri.toString()
                     if (it.onBackground) {
-                        val callback = tabs.openBackgroundTab(it.title ?: urlString, urlString)
+                        val newTab = tabs.openBackgroundTab(it.title ?: urlString, urlString)
+
+                        val webView = webViewFactory.make(activity)
+                        webView.webViewClient = webViewClientFactory.invoke()
+                        webView.loadUrl(urlString)
+                        GlobalWebViewPool.put(newTab.id(), webView)
+
                         contentViewModel.snackWithAction(
                             activity.getString(R.string.message_tab_open_background, urlString),
                             activity.getString(R.string.open)
                         ) {
-                            callback()
+                            tabs.setIndexByTab(newTab)
                             contentViewModel.replaceToCurrentTab()
                         }
                         return@collect
@@ -375,7 +399,15 @@ internal fun Content() {
                 }
                 is OpenNewWindowEvent -> {
                     val message = it.resultMessage ?: return@collect
-                    tabs.openNewWindowWebTab(message)
+                    val newTab = tabs.openNewWindowWebTab(message)
+
+                    val webView = webViewFactory.make(activity)
+                    webView.webViewClient = webViewClientFactory.invoke()
+                    val transport = message.obj as? WebView.WebViewTransport
+                    transport?.webView = webView
+                    message.sendToTarget()
+                    GlobalWebViewPool.put(newTab.id(), webView)
+
                     replaceToCurrentTab(tabs, navigationHostController)
                 }
                 is WebSearchEvent -> {
@@ -387,9 +419,13 @@ internal fun Content() {
                         }
                     ).invoke(it.query)
                 }
+                is DownloadEvent -> {
+                    downloadUrl.value = it.url
+                    downloadPermissionRequestLauncher.launch(it.url)
+                }
             }
         }
-    }
+    })
 
     val localView = LocalView.current
 
@@ -397,7 +433,7 @@ internal fun Content() {
     LaunchedEffect(windowInfo.isWindowFocused) {
         ClippingUrlOpener()(activity) {
             Inputs().hideKeyboard(localView)
-            browserViewModel.open(it)
+            contentViewModel.open(it)
         }
     }
 

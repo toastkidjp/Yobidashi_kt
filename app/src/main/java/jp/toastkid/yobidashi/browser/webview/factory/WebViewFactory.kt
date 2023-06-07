@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
-import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
@@ -68,58 +68,6 @@ internal class WebViewFactory {
 
         val preferenceApplier = PreferenceApplier(context)
 
-        webView.setOnLongClickListener {
-            if ((webView as? CustomWebView)?.enablePullToRefresh == true) {
-                return@setOnLongClickListener true
-            }
-
-            val hitResult = webView.hitTestResult
-            when (hitResult.type) {
-                WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
-                    val url = hitResult.extra ?: return@setOnLongClickListener false
-                    webView.requestFocusNodeHref(handler.obtainMessage())
-                    if (longTapItemHolder.anchor.isEmpty()) {
-                        handler.postDelayed({
-                            showImageAnchorDialog(url, context)
-                            longTapItemHolder.reset()
-                        }, 300L)
-
-                        return@setOnLongClickListener true
-                    }
-                    showImageAnchorDialog(url, context)
-                    false
-                }
-                WebView.HitTestResult.IMAGE_TYPE -> {
-                    val url = hitResult.extra ?: return@setOnLongClickListener false
-                    extractViewModel(context)?.setLongTapParameters(
-                        longTapItemHolder.title,
-                        longTapItemHolder.anchor,
-                        url
-                    )
-                    true
-                }
-                WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
-                    webView.requestFocusNodeHref(handler.obtainMessage())
-
-                    handler.postDelayed(
-                        {
-                            extractViewModel(context)?.setLongTapParameters(
-                                longTapItemHolder.title,
-                                longTapItemHolder.anchor,
-                                null
-                            )
-                            longTapItemHolder.reset()
-                        },
-                        300L
-                    )
-                    false
-                }
-                else -> {
-                    false
-                }
-            }
-        }
-
         WebSettingApplier(preferenceApplier).invoke(webView.settings)
 
         webView.isNestedScrollingEnabled = true
@@ -135,7 +83,7 @@ internal class WebViewFactory {
                 }
                 else -> {
                     (context as? ViewModelStoreOwner)?.let {
-                        ViewModelProvider(it).get(BrowserViewModel::class.java).download(url)
+                        ViewModelProvider(it).get(ContentViewModel::class.java).download(url)
                     }
                 }
             }
@@ -151,24 +99,5 @@ internal class WebViewFactory {
 
         return webView
     }
-
-    /**
-     * Show image anchor type dialog.
-     *
-     * @param imageUrl URL string
-     * @param context [Context]
-     */
-    private fun showImageAnchorDialog(imageUrl: String, context: Context) {
-        extractViewModel(context)?.setLongTapParameters(
-            longTapItemHolder.title,
-            longTapItemHolder.anchor,
-            imageUrl
-        )
-    }
-
-    private fun extractViewModel(context: Context?) =
-        (context as? ViewModelStoreOwner)?.let {
-            ViewModelProvider(it).get(BrowserViewModel::class.java)
-        }
 
 }

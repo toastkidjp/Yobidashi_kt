@@ -40,6 +40,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,7 +57,6 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.media.R
@@ -69,8 +69,8 @@ import kotlinx.coroutines.launch
 fun MusicListUi() {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val viewModelProvider = ViewModelProvider(activity)
-    val browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
-    val mediaPlayerPopupViewModel = viewModelProvider.get(MediaPlayerPopupViewModel::class.java)
+    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
+    val mediaPlayerPopupViewModel = remember { MediaPlayerPopupViewModel() }
 
     var mediaBrowser: MediaBrowserCompat? = null
 
@@ -146,7 +146,7 @@ fun MusicListUi() {
             play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
         },
         {
-            browserViewModel.open("https://www.google.com/search?q=$it Lyrics".toUri())
+            contentViewModel.open("https://www.google.com/search?q=$it Lyrics".toUri())
         },
         {
             mediaPlayerPopupViewModel.previous()?.let {
@@ -163,7 +163,9 @@ fun MusicListUi() {
         {
             val random = mediaPlayerPopupViewModel.musics.random()
             play(random, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
-        }
+        },
+        mediaPlayerPopupViewModel.musics,
+        mediaPlayerPopupViewModel.playing
     )
 }
 
@@ -175,12 +177,11 @@ internal fun MusicList(
     next: () -> Unit,
     stop: () -> Unit,
     switchState: () -> Unit,
-    shuffle: () -> Unit
+    shuffle: () -> Unit,
+    mediaItems: SnapshotStateList<MediaBrowserCompat.MediaItem>,
+    playing: Boolean
 ) {
     val context = LocalContext.current
-    val viewModel = (context as? ComponentActivity)?.let {
-        ViewModelProvider(it).get(MediaPlayerPopupViewModel::class.java)
-    } ?: return
     val contentViewModel = (context as? ComponentActivity)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
@@ -221,8 +222,8 @@ internal fun MusicList(
                     .clickable { previous() }
             )
             Icon(
-                painterResource(if (viewModel.playing) R.drawable.ic_pause else R.drawable.ic_play_media),
-                contentDescription = stringResource(id = if (viewModel.playing) R.string.action_pause else R.string.action_play),
+                painterResource(if (playing) R.drawable.ic_pause else R.drawable.ic_play_media),
+                contentDescription = stringResource(id = if (playing) R.string.action_pause else R.string.action_play),
                 tint = Color(iconColor),
                 modifier = Modifier
                     .width(44.dp)
@@ -300,7 +301,7 @@ internal fun MusicList(
             )
         }
         LazyColumn {
-            items(viewModel.musics, { it.description.mediaId ?: "" }) { music ->
+            items(mediaItems, { it.description.mediaId ?: "" }) { music ->
                 Surface(
                     shadowElevation = 4.dp,
                     modifier = Modifier

@@ -20,7 +20,6 @@ import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.search.UrlFactory
@@ -42,17 +41,14 @@ class SelectedTextUseCaseTest {
     @MockK
     private lateinit var contentViewModel: ContentViewModel
 
-    @MockK
-    private lateinit var browserViewModel: BrowserViewModel
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { stringResolver.invoke(any(), any()) }.returns("Count: 4")
         every { contentViewModel.snackShort(any<String>()) }.just(Runs)
         every { contentViewModel.snackShort(any<Int>()) }.just(Runs)
-        every { browserViewModel.open(any()) }.just(Runs)
-        every { browserViewModel.preview(any()) }.just(Runs)
+        every { contentViewModel.open(any()) }.just(Runs)
+        every { contentViewModel.preview(any()) }.just(Runs)
         every { urlFactory.invoke(any(), any()) }.returns(mockk())
 
         mockkObject(Urls)
@@ -70,8 +66,8 @@ class SelectedTextUseCaseTest {
 
         verify(exactly = 1) { contentViewModel.snackShort(any<String>()) }
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { browserViewModel.open(any()) }
-        verify(exactly = 0) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { contentViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.preview(any()) }
         verify(exactly = 0) { urlFactory.invoke(any(), any()) }
     }
 
@@ -80,8 +76,8 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.search("test", "test")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 1) { browserViewModel.open(any()) }
-        verify(exactly = 0) { browserViewModel.preview(any()) }
+        verify(exactly = 1) { contentViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.preview(any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any()) }
     }
 
@@ -90,8 +86,8 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.searchWithPreview("test", "test")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { browserViewModel.open(any()) }
-        verify(exactly = 1) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { contentViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.preview(any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any()) }
     }
 
@@ -104,8 +100,8 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.search("https://www.yahoo.co.jp", "test")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 1) { browserViewModel.open(any()) }
-        verify(exactly = 0) { browserViewModel.preview(any()) }
+        verify(exactly = 1) { contentViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.preview(any()) }
         verify(exactly = 0) { urlFactory.invoke(any(), any()) }
         verify(exactly = 1) { Uri.parse(any()) }
     }
@@ -119,8 +115,8 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.searchWithPreview("https://www.yahoo.co.jp", "test")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { browserViewModel.open(any()) }
-        verify(exactly = 1) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { contentViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.preview(any()) }
         verify(exactly = 0) { urlFactory.invoke(any(), any()) }
         verify(exactly = 1) { Uri.parse(any()) }
     }
@@ -130,8 +126,8 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.search("", "test")
 
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { browserViewModel.open(any()) }
-        verify(exactly = 0) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { contentViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.preview(any()) }
         verify(exactly = 0) { urlFactory.invoke(any(), any()) }
     }
 
@@ -140,8 +136,8 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.search("\"\"", "test")
 
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { browserViewModel.open(any()) }
-        verify(exactly = 0) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { contentViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.preview(any()) }
         verify(exactly = 0) { urlFactory.invoke(any(), any()) }
     }
 

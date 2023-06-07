@@ -79,7 +79,6 @@ import jp.toastkid.editor.load.LoadFromStorageDialogUi
 import jp.toastkid.editor.load.StorageFilesFinder
 import jp.toastkid.editor.usecase.FileActionUseCase
 import jp.toastkid.editor.usecase.MenuActionInvokerUseCase
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
@@ -149,13 +148,11 @@ fun EditorTabUi(path: String?) {
         }
     })
 
-    val browserViewModel = viewModel(BrowserViewModel::class.java, context)
-
     AndroidView(
         factory = {
             EditorContextMenuInitializer().invoke(
                 editText,
-                MenuActionInvokerUseCase(editText, SpeechMaker(it), browserViewModel, contentViewModel)
+                MenuActionInvokerUseCase(editText, SpeechMaker(it), contentViewModel)
             )
             editText.setBackgroundColor(Color.Transparent.toArgb())
             editText.setTextColor(preferenceApplier.editorFontColor())
