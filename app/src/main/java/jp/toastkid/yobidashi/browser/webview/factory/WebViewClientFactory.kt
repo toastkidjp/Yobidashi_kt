@@ -38,6 +38,7 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.browser.webview.usecase.ApproachFallbackUrlExtractor
 import jp.toastkid.yobidashi.browser.webview.usecase.RedirectionUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -159,6 +160,8 @@ class WebViewClientFactory(
                     super.shouldInterceptRequest(view, request)
                 }
 
+        private val approachFallbackUrlExtractor = ApproachFallbackUrlExtractor()
+
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
             request?.url?.toString()?.let { url ->
                     val context: Context? = view?.context
@@ -170,10 +173,11 @@ class WebViewClientFactory(
                     return@let true
                 }
 
-                if (uri.host == "approach.yahoo.co.jp") {
-                    val fallbackUrl = uri.getQueryParameter("fallbackWebURL") ?: return@let false
-                    view?.stopLoading()
-                    view?.loadUrl(Uri.decode(fallbackUrl))
+                if (approachFallbackUrlExtractor.isTarget(uri.host)) {
+                    approachFallbackUrlExtractor.invoke(uri) {
+                        view?.stopLoading()
+                        view?.loadUrl(it)
+                    }
                     return@let false
                 }
 
