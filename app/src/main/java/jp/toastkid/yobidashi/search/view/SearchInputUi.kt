@@ -239,9 +239,7 @@ fun SearchInputUi(
                     )
                 }
                 LaunchedEffect(key1 = queryingUseCase, block = {
-                    val text = inputQuery ?: ""
-                    viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
-                    focusRequester.requestFocus()
+                    queryingUseCase.withDebounce()
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val trendItems = try {
@@ -258,7 +256,9 @@ fun SearchInputUi(
                         viewModel.trends.addAll(taken)
                     }
 
-                    queryingUseCase.withDebounce()
+                    val text = inputQuery ?: ""
+                    viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
+                    focusRequester.requestFocus()
                 })
             }
         })
