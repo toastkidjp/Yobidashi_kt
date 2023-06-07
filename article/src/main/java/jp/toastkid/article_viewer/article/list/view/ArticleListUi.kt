@@ -114,7 +114,8 @@ fun ArticleListUi() {
         )
     }
 
-    contentViewModel.replaceAppBarContent {
+    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
+        contentViewModel.replaceAppBarContent {
             AppBarContent(viewModel)
             val openSortDialog = remember { mutableStateOf(false) }
 
@@ -134,6 +135,7 @@ fun ArticleListUi() {
                 )
             }
         }
+    })
 
     val itemFlowState = remember { mutableStateOf<Flow<PagingData<SearchResult>>?>(null) }
     itemFlowState.value = viewModel.dataSource.value?.flow
