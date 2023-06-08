@@ -42,7 +42,7 @@ class ApproachFallbackUrlExtractorTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         every { uri.getQueryParameter(any()) } returns "https://www.yahoo.co.jp"
         mockkStatic(Uri::class)
         every { Uri.decode("https://www.yahoo.co.jp") } returns "https://www.yahoo.co.jp"
