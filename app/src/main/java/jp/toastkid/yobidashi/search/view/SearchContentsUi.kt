@@ -69,10 +69,10 @@ internal fun SearchContentsUi(
 ) {
     val context = LocalContext.current
     val preferenceApplier = PreferenceApplier(context)
-    val database = remember { RepositoryFactory() }
-    val searchHistoryRepository = remember { database.searchHistoryRepository(context) }
+    val searchHistoryRepository = remember { RepositoryFactory().searchHistoryRepository(context) }
 
     val itemDeletionUseCase = remember {
+        val database = RepositoryFactory()
         ItemDeletionUseCase(
             database.bookmarkRepository(context),
             database.viewHistoryRepository(context)
