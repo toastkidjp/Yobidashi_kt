@@ -10,9 +10,11 @@ package jp.toastkid.yobidashi.browser.webview.usecase
 
 import android.net.Uri
 import io.mockk.MockKAnnotations
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -52,6 +54,19 @@ class ApproachFallbackUrlExtractorTest {
             verify { uri.getQueryParameter(any()) }
             verify { Uri.decode("https://www.yahoo.co.jp") }
         }
+    }
+
+    @Test
+    fun testInvokeNotContainsFallback() {
+        every { uri.getQueryParameter(any()) } returns null
+        mockkStatic(Uri::class)
+        every { Uri.decode("https://www.yahoo.co.jp") } returns "https://www.yahoo.co.jp"
+        val callback = mockk<(String) -> Unit>()
+
+        approachFallbackUrlExtractor.invoke(uri, callback)
+
+        verify(inverse = true) { Uri.decode(any()) }
+        verify { callback wasNot called }
     }
 
     @Test
