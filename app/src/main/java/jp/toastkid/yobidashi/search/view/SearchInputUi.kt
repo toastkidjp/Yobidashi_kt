@@ -89,7 +89,7 @@ fun SearchInputUi(
 ) {
     val context = LocalContext.current as? ComponentActivity ?: return
 
-    val preferenceApplier = PreferenceApplier(context)
+    val preferenceApplier = remember { PreferenceApplier(context) }
 
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
