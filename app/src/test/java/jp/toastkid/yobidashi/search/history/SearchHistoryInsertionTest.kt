@@ -20,7 +20,6 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.data.repository.factory.RepositoryFactory
-import jp.toastkid.yobidashi.libs.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
@@ -29,9 +28,6 @@ import org.junit.Test
 class SearchHistoryInsertionTest {
 
     private lateinit var searchHistoryInsertion: SearchHistoryInsertion
-
-    @MockK
-    private lateinit var appDatabase: AppDatabase
 
     @MockK
     private lateinit var repository: SearchHistoryRepository
