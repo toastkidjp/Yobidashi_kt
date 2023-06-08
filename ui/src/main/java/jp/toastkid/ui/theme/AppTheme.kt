@@ -34,7 +34,6 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     val colorPair = colorState.value
-    val preferenceApplier = PreferenceApplier(LocalContext.current)
 
     (LocalContext.current as? Activity)?.window?.let {
         WindowOptionColorApplier()(it, colorPair.bgColor())
@@ -66,7 +65,7 @@ fun AppTheme(
                 onBackground = Color(0xFF000B00)
             )
 
-    val handleColor = Color(preferenceApplier.editorHighlightColor(Color(0xFF81D4FA).toArgb()))
+    val handleColor = Color(PreferenceApplier(LocalContext.current).editorHighlightColor(Color(0xFF81D4FA).toArgb()))
 
     MaterialTheme(
         colorScheme = colors,
