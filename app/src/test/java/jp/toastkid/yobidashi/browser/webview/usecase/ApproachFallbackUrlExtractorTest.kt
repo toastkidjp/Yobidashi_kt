@@ -59,4 +59,5 @@ class ApproachFallbackUrlExtractorTest {
         assertTrue(approachFallbackUrlExtractor.isTarget("approach.yahoo.co.jp"))
         assertFalse(approachFallbackUrlExtractor.isTarget("other.yahoo.co.jp"))
     }
+
 }
