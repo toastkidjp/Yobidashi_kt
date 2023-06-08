@@ -16,9 +16,12 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 
 class ApproachFallbackUrlExtractorTest {
 
@@ -28,17 +31,17 @@ class ApproachFallbackUrlExtractorTest {
     @MockK
     private lateinit var uri: Uri
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         every { uri.getQueryParameter(any()) } returns "https://www.yahoo.co.jp"
         mockkStatic(Uri::class)
@@ -51,7 +54,7 @@ class ApproachFallbackUrlExtractorTest {
         }
     }
 
-    @org.junit.Test
+    @Test
     fun isTarget() {
         assertTrue(approachFallbackUrlExtractor.isTarget("approach.yahoo.co.jp"))
         assertFalse(approachFallbackUrlExtractor.isTarget("other.yahoo.co.jp"))
