@@ -8,7 +8,6 @@
 
 package jp.toastkid.calendar.view
 
-import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -143,7 +142,6 @@ fun CalendarUi() {
                                             return@combinedClickable
                                         }
                                         openDateArticle(
-                                            context,
                                             contentViewModel,
                                             currentDate.value.get(Calendar.YEAR),
                                             currentDate.value.get(Calendar.MONTH),
@@ -155,7 +153,6 @@ fun CalendarUi() {
                                             return@combinedClickable
                                         }
                                         openDateArticle(
-                                            context,
                                             contentViewModel,
                                             currentDate.value.get(Calendar.YEAR),
                                             currentDate.value.get(Calendar.MONTH),
@@ -274,7 +271,13 @@ fun CalendarUi() {
     })
 }
 
-private fun openDateArticle(context: Context, contentViewModel: ContentViewModel, year: Int, monthOfYear: Int, dayOfMonth: Int, background: Boolean = false) {
+private fun openDateArticle(
+    contentViewModel: ContentViewModel,
+    year: Int,
+    monthOfYear: Int,
+    dayOfMonth: Int,
+    background: Boolean = false
+) {
     contentViewModel.openDateArticle(year, monthOfYear, dayOfMonth, background)
 }
 
