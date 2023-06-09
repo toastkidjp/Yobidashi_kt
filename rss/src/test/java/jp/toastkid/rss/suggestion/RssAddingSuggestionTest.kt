@@ -9,7 +9,7 @@
 package jp.toastkid.rss.suggestion
 
 import android.view.View
-import androidx.fragment.app.FragmentActivity
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelStoreOwner
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -53,7 +53,7 @@ class RssAddingSuggestionTest {
     private lateinit var view: View
 
     @MockK
-    private lateinit var fragmentAfter: FragmentActivity
+    private lateinit var activity: ComponentActivity
 
     @Before
     fun setUp() {
@@ -61,8 +61,8 @@ class RssAddingSuggestionTest {
 
         every { contentViewModelFactory.invoke(any()) }.returns(contentViewModel)
         every { contentViewModel.snackWithAction(any(), any(), any()) }.returns(mockk())
-        every { view.context }.returns(fragmentAfter)
-        every { fragmentAfter.getString(any()) }.returns("test")
+        every { view.context }.returns(activity)
+        every { activity.getString(any()) }.returns("test")
     }
 
     @After
