@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.search.trend
+package jp.toastkid.api.trend
 
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -15,6 +15,9 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.api.trend.Trend
+import jp.toastkid.api.trend.TrendApi
+import jp.toastkid.api.trend.TrendService
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

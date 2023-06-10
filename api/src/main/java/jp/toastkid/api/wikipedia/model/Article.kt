@@ -5,13 +5,16 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.search.trend
+package jp.toastkid.api.wikipedia.model
+
+import kotlinx.serialization.Serializable
 
 /**
  * @author toastkidjp
  */
-data class Trend(
-        val title: String,
-        val link: String,
-        val image: String
+@Serializable
+data class Article(
+        val id: Long,
+        val ns: Int,
+        val title: String
 )

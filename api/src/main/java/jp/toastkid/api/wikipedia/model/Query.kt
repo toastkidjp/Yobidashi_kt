@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.wikipedia.random.model
+package jp.toastkid.api.wikipedia.model
 
 import kotlinx.serialization.Serializable
 
@@ -13,8 +13,6 @@ import kotlinx.serialization.Serializable
  * @author toastkidjp
  */
 @Serializable
-data class Article(
-        val id: Long,
-        val ns: Int,
-        val title: String
-)
+class Query {
+    var random: Array<Article>? = null
+}
