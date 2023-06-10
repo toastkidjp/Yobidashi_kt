@@ -9,9 +9,11 @@
 package jp.toastkid.yobidashi.search.trend
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -37,6 +39,7 @@ class TrendResponseConverterTest {
 
         every { parser.invoke(any()) }.returns(mockk())
         every { responseBody.string() }.returns("test")
+        every { responseBody.close() }.just(Runs)
     }
 
     @After
@@ -50,6 +53,7 @@ class TrendResponseConverterTest {
 
         verify(exactly = 1) { parser.invoke(any()) }
         verify(exactly = 1) { responseBody.string() }
+        verify(exactly = 1) { responseBody.close() }
     }
 
 }
