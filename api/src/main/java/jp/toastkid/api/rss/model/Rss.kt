@@ -1,38 +1,38 @@
 /*
- * Copyright (c) 2019 toastkidjp.
+ * Copyright (c) 2023 toastkidjp.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.rss.model
+package jp.toastkid.api.rss.model
 
 /**
  * @author toastkidjp
  */
 data class Rss(
-        /** RSS' title.  */
+    /** RSS' title.  */
         var title: String? = null,
 
-        /** RSS' subjects.  */
+    /** RSS' subjects.  */
         var subjects: MutableList<String> = mutableListOf(),
 
-        /** RSS' creator.  */
+    /** RSS' creator.  */
         var creator: String? = null,
 
-        /** RSS' date.  */
+    /** RSS' date.  */
         var date: String? = null,
 
-        /** RSS' items.  */
+    /** RSS' items.  */
         var items: MutableList<Item> = mutableListOf(),
 
-        /** RSS' Link.  */
+    /** RSS' Link.  */
         var link: String? = null,
 
-        /** RSS' URL.  */
+    /** RSS' URL.  */
         var url: String? = null,
 
-        /** RSS' description.  */
+    /** RSS' description.  */
         var description: String? = null
 ) {
 

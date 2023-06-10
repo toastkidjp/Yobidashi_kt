@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.rss.api
+package jp.toastkid.api.rss
 
 import android.net.Uri
 import io.mockk.MockKAnnotations
@@ -18,7 +18,9 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.rss.model.Rss
+import jp.toastkid.api.rss.RssReaderApi
+import jp.toastkid.api.rss.RssService
+import jp.toastkid.api.rss.model.Rss
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

@@ -42,8 +42,8 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.list.ListActionAttachment
 import jp.toastkid.rss.R
-import jp.toastkid.rss.api.RssReaderApi
-import jp.toastkid.rss.model.Item
+import jp.toastkid.api.rss.RssReaderApi
+import jp.toastkid.api.rss.model.Item
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.mapNotNull

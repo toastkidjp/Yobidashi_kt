@@ -1,15 +1,15 @@
 /*
- * Copyright (c) 2019 toastkidjp.
+ * Copyright (c) 2023 toastkidjp.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.rss.api
+package jp.toastkid.api.rss
 
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
-import jp.toastkid.rss.model.Rss
+import jp.toastkid.api.rss.model.Rss
 import retrofit2.Retrofit
 
 /**

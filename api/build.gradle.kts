@@ -36,8 +36,11 @@ android {
 }
 
 dependencies {
+    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("com.squareup.okhttp3:okhttp:${LibraryVersion.okhttp}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation("com.squareup.retrofit2:retrofit:2.6.2")
+    implementation("org.jsoup:jsoup:${LibraryVersion.jsoup}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
