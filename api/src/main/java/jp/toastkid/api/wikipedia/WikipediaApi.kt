@@ -21,10 +21,10 @@ import retrofit2.Retrofit
  * @author toastkidjp
  */
 class WikipediaApi(
-        /**
-         * Wikipedia URL decider.
-         */
-        private val urlDecider: UrlDecider = UrlDecider()
+    /**
+     * Wikipedia URL decider.
+     */
+    private val urlDecider: UrlDecider = UrlDecider()
 ) {
 
     private val json = Json { ignoreUnknownKeys = true }
