@@ -12,7 +12,6 @@ import property.LibraryVersion
 plugins {
   id("com.android.library")
   id("kotlin-android")
-  id("org.jetbrains.kotlin.kapt")
   id("jacoco.definition")
 }
 
@@ -55,9 +54,6 @@ dependencies {
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
     implementation("androidx.activity:activity-compose:1.4.0")
-
-    implementation("com.squareup.retrofit2:retrofit:2.6.2")
-    implementation("org.jsoup:jsoup:${LibraryVersion.jsoup}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
