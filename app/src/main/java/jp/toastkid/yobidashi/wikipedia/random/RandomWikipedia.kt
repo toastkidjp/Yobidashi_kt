@@ -11,7 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
-import jp.toastkid.api.wikipedia.UrlDecider
+import jp.toastkid.yobidashi.wikipedia.UrlDecider
 import jp.toastkid.api.wikipedia.WikipediaApi
 import jp.toastkid.yobidashi.main.MainActivity
 import kotlinx.coroutines.CoroutineDispatcher

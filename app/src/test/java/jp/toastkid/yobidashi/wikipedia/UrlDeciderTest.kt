@@ -5,21 +5,25 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.api.wikipedia
 
+package jp.toastkid.yobidashi.wikipedia
+
+import org.junit.Assert.assertTrue
+import org.junit.Test
 import java.util.Locale
 
 /**
- * Generator for Wikipedia domain.
+ * [UrlDecider]'s test case.
  *
  * @author toastkidjp
  */
-class UrlDecider {
+class UrlDeciderTest {
 
     /**
-     * Generate Wikipedia domain.
-     *
-     * @return Wikipedia domain
+     * Check for generating URL.
      */
-    operator fun invoke() = "https://${Locale.getDefault().language}.wikipedia.org/"
+    @Test
+    fun test() {
+        assertTrue(UrlDecider().invoke().startsWith("https://${Locale.getDefault().language}."))
+    }
 }
