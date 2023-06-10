@@ -18,9 +18,9 @@ import java.lang.reflect.Type
 class TrendResponseConverterFactory private constructor(): Converter.Factory() {
 
     override fun responseBodyConverter(
-            type: Type?,
-            annotations: Array<Annotation>?,
-            retrofit: Retrofit?
+            type: Type,
+            annotations: Array<out Annotation>,
+            retrofit: Retrofit
     ): Converter<ResponseBody, *> = TrendResponseConverter(TrendParser())
 
     companion object {
