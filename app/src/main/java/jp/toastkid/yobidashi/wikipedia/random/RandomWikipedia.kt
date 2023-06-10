@@ -25,7 +25,7 @@ import kotlin.random.Random
  * @author toastkidjp
  */
 class RandomWikipedia(
-    private val wikipediaApi: WikipediaApi = WikipediaApi(),
+    private val wikipediaApi: WikipediaApi = WikipediaApi(UrlDecider()()),
     private val urlDecider: UrlDecider = UrlDecider(),
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO

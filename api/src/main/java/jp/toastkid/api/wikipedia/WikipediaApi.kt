@@ -24,7 +24,7 @@ class WikipediaApi(
     /**
      * Wikipedia URL decider.
      */
-    private val urlDecider: UrlDecider = UrlDecider()
+    private val baseUrl: String
 ) {
 
     private val json = Json { ignoreUnknownKeys = true }
@@ -36,7 +36,7 @@ class WikipediaApi(
     @WorkerThread
     operator fun invoke(): Array<Article>? {
         val retrofit = Retrofit.Builder()
-                .baseUrl(urlDecider())
+                .baseUrl(baseUrl)
                 .addConverterFactory(
                     json
                         .asConverterFactory("application/json".toMediaType())
