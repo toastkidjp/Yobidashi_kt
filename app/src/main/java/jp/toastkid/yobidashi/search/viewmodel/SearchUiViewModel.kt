@@ -17,7 +17,7 @@ import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearch
 import jp.toastkid.yobidashi.search.history.SearchHistory
-import jp.toastkid.yobidashi.search.trend.Trend
+import jp.toastkid.api.trend.Trend
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -68,7 +68,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
-import jp.toastkid.yobidashi.search.trend.TrendApi
+import jp.toastkid.api.trend.TrendApi
 import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import jp.toastkid.yobidashi.search.voice.VoiceSearchIntentFactory
