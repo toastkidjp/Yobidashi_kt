@@ -115,10 +115,6 @@ class QueryingUseCase(
         channel.close()
     }
 
-    private fun cannotUseNetwork(context: Context) =
-        NetworkChecker().isNotAvailable(context) ||
-                (PreferenceApplier(context).wifiOnly && NetworkChecker().isUnavailableWiFi(context))
-
     companion object {
         fun make(viewModel: SearchUiViewModel, context: Context): QueryingUseCase {
             // TODO extract
