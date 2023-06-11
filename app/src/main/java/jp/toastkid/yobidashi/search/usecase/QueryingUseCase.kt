@@ -13,7 +13,6 @@ import android.util.LruCache
 import jp.toastkid.api.suggestion.SuggestionApi
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchRepository
 import jp.toastkid.yobidashi.search.history.SearchHistoryRepository
 import jp.toastkid.yobidashi.search.url_suggestion.UrlItemQueryUseCase
@@ -117,7 +116,7 @@ class QueryingUseCase(
 
     companion object {
         fun make(viewModel: SearchUiViewModel, context: Context): QueryingUseCase {
-            // TODO extract
+            val repositoryFactory = RepositoryFactory()
             return QueryingUseCase(
                 viewModel,
                 PreferenceApplier(context),
@@ -126,12 +125,12 @@ class QueryingUseCase(
                         viewModel.urlItems.clear()
                         viewModel.urlItems.addAll(it)
                     },
-                    RepositoryFactory().bookmarkRepository(context),
-                    RepositoryFactory().viewHistoryRepository(context),
+                    repositoryFactory.bookmarkRepository(context),
+                    repositoryFactory.viewHistoryRepository(context),
                     { }
                 ),
-                RepositoryFactory().favoriteSearchRepository(context),
-                RepositoryFactory().searchHistoryRepository(context)
+                repositoryFactory.favoriteSearchRepository(context),
+                repositoryFactory.searchHistoryRepository(context)
             )
         }
 
