@@ -28,8 +28,7 @@ class WikipediaApiTest {
     @InjectMockKs
     private lateinit var wikipediaApi: WikipediaApi
 
-    @MockK
-    private lateinit var urlDecider: UrlDecider
+    private val baseUrl = "https://en.wikipedia.org/"
 
     @MockK
     private lateinit var requestBuilder: Retrofit.Builder
@@ -53,8 +52,6 @@ class WikipediaApiTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { urlDecider.invoke() }.returns("https://en.wikipedia.org/")
-
         mockkConstructor(Retrofit.Builder::class)
         every { anyConstructed<Retrofit.Builder>().baseUrl(any<String>()) }.returns(requestBuilder)
         every { requestBuilder.addConverterFactory(any()) }.returns(requestBuilder)
@@ -77,7 +74,6 @@ class WikipediaApiTest {
     fun testInvoke() {
         wikipediaApi.invoke()
 
-        verify(exactly = 1) { urlDecider.invoke() }
         verify(exactly = 1) { anyConstructed<Retrofit.Builder>().baseUrl(any<String>()) }
         verify(exactly = 1) { requestBuilder.addConverterFactory(any()) }
         verify(exactly = 1) { requestBuilder.build() }
