@@ -195,12 +195,12 @@ fun LoanCalculatorUi() {
                                     .background(if (scrollState.firstVisibleItemIndex != 0) MaterialTheme.colorScheme.surface else Color.Transparent)
                             ) {
                                 Text(
-                                    "回数",
+                                    stringResource(R.string.title_column_loan_payment_count),
                                     modifier = Modifier.weight(0.4f)
                                 )
-                                Text("元本", modifier = Modifier.weight(1f))
-                                Text("利息", modifier = Modifier.weight(1f))
-                                Text("残金", modifier = Modifier.weight(1f))
+                                Text(stringResource(R.string.title_column_principal), modifier = Modifier.weight(1f))
+                                Text(stringResource(R.string.title_column_interest), modifier = Modifier.weight(1f))
+                                Text(stringResource(R.string.title_column_balance), modifier = Modifier.weight(1f))
                             }
                         }
                         itemsIndexed(scheduleState) { index, it ->
