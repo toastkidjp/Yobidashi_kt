@@ -86,10 +86,6 @@ class QueryingUseCase(
             return
         }
 
-        if (cannotUseNetwork(contextSupplier())) {
-            return
-        }
-
         suggestionApi.fetchAsync(keyword) { suggestions ->
             searchUiViewModel.suggestions.clear()
             if (suggestions.isEmpty()) {
