@@ -34,7 +34,6 @@ class QueryingUseCase(
     private val urlItemQueryUseCase: UrlItemQueryUseCase,
     private val favoriteSearchRepository: FavoriteSearchRepository,
     private val searchHistoryRepository: SearchHistoryRepository,
-    private val contextSupplier: () -> Context,
     private val suggestionApi: SuggestionApi = SuggestionApi(),
     private val channel: Channel<String> = Channel(),
     private val cache: LruCache<String, List<String>> = LruCache<String, List<String>>(30),
@@ -136,8 +135,7 @@ class QueryingUseCase(
                     { }
                 ),
                 RepositoryFactory().favoriteSearchRepository(context),
-                RepositoryFactory().searchHistoryRepository(context),
-                { context }
+                RepositoryFactory().searchHistoryRepository(context)
             )
         }
 
