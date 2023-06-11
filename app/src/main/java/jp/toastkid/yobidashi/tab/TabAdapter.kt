@@ -6,6 +6,7 @@ import android.os.Message
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.annotation.UiThread
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.image.BitmapCompressor
@@ -114,8 +115,7 @@ class TabAdapter(
     fun openBackgroundTab(title: String, url: String): Tab {
         val context = contextSupplier()
         val tabTitle =
-                if (title.isNotBlank()) title
-                else context.getString(R.string.new_tab)
+            title.ifBlank { context.getString(R.string.new_tab) }
 
         val newTab = WebTab.make(tabTitle, url)
         tabList.add(newTab)
@@ -310,6 +310,15 @@ class TabAdapter(
 
     fun setCount() {
         contentViewModel?.tabCount(size())
+    }
+
+    fun onLifecycleEvent(event: Lifecycle.Event) {
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> setCount()
+            Lifecycle.Event.ON_PAUSE -> saveTabList()
+            Lifecycle.Event.ON_DESTROY -> dispose()
+            else -> Unit
+        }
     }
 
 }

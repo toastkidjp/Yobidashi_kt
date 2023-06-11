@@ -13,7 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
@@ -23,16 +22,14 @@ import jp.toastkid.yobidashi.R
 internal fun BrowserTitle(
     title: String?,
     url: String?,
-    progress: Int?,
+    progress: Int,
     modifier: Modifier
 ) {
-    val context = LocalContext.current
-
     Column(
         modifier = modifier
     ) {
         val progressTitle =
-            if ((progress ?: 100) < 70)
+            if (progress < 70)
                 stringResource(id = R.string.prefix_loading) + "$progress%"
             else
                 title ?: ""

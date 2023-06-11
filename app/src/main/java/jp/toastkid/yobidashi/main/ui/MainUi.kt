@@ -38,7 +38,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -69,7 +68,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -127,13 +125,11 @@ import jp.toastkid.yobidashi.tab.tab_list.view.TabListUi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 internal fun Content() {
-    val snackbarHostState = SnackbarHostState()
     val activity = LocalContext.current as? ComponentActivity ?: return
 
     val preferenceApplier = PreferenceApplier(activity)
@@ -182,8 +178,6 @@ internal fun Content() {
         }
 
     val openMenu = remember { mutableStateOf(false) }
-
-    val rememberSnackbarHostState = remember { snackbarHostState }
 
     val backgroundColor = MaterialTheme.colorScheme.primary
     val tint = MaterialTheme.colorScheme.onPrimary
@@ -275,7 +269,7 @@ internal fun Content() {
                     replaceToCurrentTab(tabs, navigationHostController)
                 }
                 is SnackbarEvent -> {
-                    showSnackbar(activity, snackbarHostState, it)
+                    showSnackbar(activity, contentViewModel, it)
                 }
                 is OpenWebSearchEvent -> {
                     when (navigationHostController.currentDestination?.route) {
@@ -305,7 +299,8 @@ internal fun Content() {
                     if (onBackground) {
                         showSnackbar(
                             activity,
-                            snackbarHostState, SnackbarEvent(
+                            contentViewModel,
+                            SnackbarEvent(
                                 activity.getString(R.string.message_tab_open_background, title),
                                 actionLabel = activity.getString(R.string.open)
                             ) {
@@ -493,9 +488,9 @@ internal fun Content() {
                 },
                 snackbarHost = {
                     SnackbarHost(
-                        hostState = rememberSnackbarHostState,
+                        hostState = contentViewModel.snackbarHostState(),
                         snackbar = {
-                            MainSnackbar(it) { rememberSnackbarHostState.currentSnackbarData?.dismiss() }
+                            MainSnackbar(it) { contentViewModel.dismissSnackbar() }
                         })
                 },
                 floatingActionButton = {
@@ -604,16 +599,11 @@ internal fun Content() {
         tabs.isEmpty()
     }
 
-    val lifecycle = lifecycleOwner.lifecycle
-    val lifecycleObserver = LifecycleEventObserver { source, event ->
-        when (event) {
-            Lifecycle.Event.ON_RESUME -> tabs.setCount()
-            Lifecycle.Event.ON_PAUSE -> tabs.saveTabList()
-            Lifecycle.Event.ON_DESTROY -> tabs.dispose()
-            else -> Unit
-        }
-    }
     DisposableEffect(activity) {
+        val lifecycle = lifecycleOwner.lifecycle
+        val lifecycleObserver = LifecycleEventObserver { source, event ->
+            tabs.onLifecycleEvent(event)
+        }
         lifecycle.addObserver(lifecycleObserver)
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
@@ -639,10 +629,13 @@ private fun navigate(navigationController: NavHostController?, route: String) {
 
 private fun showSnackbar(
     context: Context,
-    snackbarHostState: SnackbarHostState,
+    contentViewModel: ContentViewModel,
     snackbarEvent: SnackbarEvent
 ) {
     val message = snackbarEvent.message ?: snackbarEvent.messageId?.let(context::getString) ?: return
+
+    val snackbarHostState = contentViewModel.snackbarHostState()
+
     if (snackbarEvent.actionLabel == null) {
         CoroutineScope(Dispatchers.Main).launch {
             snackbarHostState.currentSnackbarData?.dismiss()

@@ -7,41 +7,17 @@
  */
 package jp.toastkid.lib
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Message
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
-import jp.toastkid.lib.viewmodel.event.Event
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 
 /**
  * @author toastkidjp
  */
 class BrowserViewModel {
-
-    private val _event = MutableSharedFlow<Event>()
-
-    val event: SharedFlow<Event> = _event
-
-    fun preview(uri: Uri) {
-        /*viewModelScope.launch {
-            _event.emit(PreviewUrlEvent(uri))
-        }*/
-    }
-
-    fun open(uri: Uri) {
-        /*viewModelScope.launch {
-            _event.emit(OpenUrlEvent(uri))
-        }*/
-    }
-
-    fun openBackground(uri: Uri) {
-        /*viewModelScope.launch {
-            _event.emit(OpenUrlEvent(uri, true))
-        }*/
-    }
 
     fun openBackground(title: String, uri: Uri) {
         /*viewModelScope.launch {
@@ -70,6 +46,18 @@ class BrowserViewModel {
         /*viewModelScope.launch {
             _event.emit(WebSearchEvent(query))
         }*/
+    }
+
+    private val _icon = mutableStateOf<Bitmap?>(null)
+
+    val icon: State<Bitmap?> = _icon
+
+    fun newIcon(bitmap: Bitmap) {
+        _icon.value = bitmap
+    }
+
+    fun resetIcon() {
+        _icon.value = null
     }
 
     private val _title = mutableStateOf("")

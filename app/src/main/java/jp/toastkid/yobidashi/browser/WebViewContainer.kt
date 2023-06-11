@@ -49,6 +49,7 @@ import jp.toastkid.yobidashi.browser.webview.factory.WebViewLongTapListenerFacto
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -161,6 +162,12 @@ class WebViewContainer(
 
         if (replaced) {
             loadUrl(uri.toString())
+        } else {
+            CoroutineScope(Dispatchers.IO).launch {
+                faviconApplier.load(uri)?.let {
+                    browserViewModel.newIcon(it)
+                }
+            }
         }
     }
 
@@ -321,7 +328,7 @@ class WebViewContainer(
      *
      * @param poolSize
      */
-    fun resizePool(poolSize: Int) {
+    private fun resizePool(poolSize: Int) {
         GlobalWebViewPool.resize(poolSize)
     }
 
