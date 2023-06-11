@@ -17,8 +17,8 @@
     <string name="default_value_interest_rate">1.0</string>
     <string name="hint_down_payment">Down payment</string>
     <string name="default_value_down_payment">1,000,000</string>
-    <string name="title_column_loan_payment_count">回数</string>
-    <string name="title_column_principal">元本</string>
-    <string name="title_column_interest">利息</string>
-    <string name="title_column_balance">残金</string>
+    <string name="title_column_loan_payment_count">Count</string>
+    <string name="title_column_principal">Principal</string>
+    <string name="title_column_interest">Interest</string>
+    <string name="title_column_balance">Balance</string>
 </resources>
