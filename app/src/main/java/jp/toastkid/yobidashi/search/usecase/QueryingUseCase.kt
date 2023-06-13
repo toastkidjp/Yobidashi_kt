@@ -56,7 +56,7 @@ class QueryingUseCase(
         }
 
         if (preferenceApplier.isEnableFavoriteSearch) {
-            CoroutineScope(backgroundDispatcher).launch {
+            CoroutineScope(backgroundDispatcher).launch(disposables) {
                 searchUiViewModel.favoriteSearchItems.clear()
                 searchUiViewModel.favoriteSearchItems.addAll(
                     if (keyword.isBlank()) {
