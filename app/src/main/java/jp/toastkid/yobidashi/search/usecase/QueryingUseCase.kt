@@ -43,7 +43,7 @@ class QueryingUseCase(
 
     private fun invoke(keyword: String) {
         if (preferenceApplier.isEnableSearchHistory) {
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.IO).launch(disposables) {
                 searchUiViewModel.searchHistories.clear()
                 searchUiViewModel.searchHistories.addAll(
                     if (keyword.isBlank()) {
