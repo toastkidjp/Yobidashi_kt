@@ -54,5 +54,13 @@ fun OptionMenuItem(optionMenu: OptionMenu) {
                 onCheckedChange = { optionMenu.action() }
                 )
         }
+
+        val checked = optionMenu.check
+        if (checked != null) {
+            Checkbox(
+                checked = checked,
+                onCheckedChange = { optionMenu.action() }
+            )
+        }
     }
 }
