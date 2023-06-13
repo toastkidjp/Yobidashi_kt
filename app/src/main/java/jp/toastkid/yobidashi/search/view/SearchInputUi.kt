@@ -30,7 +30,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -59,6 +58,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.api.trend.TrendApi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -68,7 +68,6 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
-import jp.toastkid.api.trend.TrendApi
 import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import jp.toastkid.yobidashi.search.voice.VoiceSearchIntentFactory
@@ -78,8 +77,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
-    ExperimentalMaterial3Api::class
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class
 )
 @Composable
 fun SearchInputUi(
