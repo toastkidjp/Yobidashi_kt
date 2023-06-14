@@ -278,6 +278,59 @@ fun SearchInputUi(
     }
 
     LaunchedEffect(key1 = localLifecycleOwner, block = {
+        contentViewModel.optionMenus(
+            OptionMenu(
+                titleId = R.string.title_context_editor_double_quote,
+                action = {
+                    val queryOrEmpty = viewModel.input.value.text
+                    if (queryOrEmpty.isNotBlank()) {
+                        viewModel.putQuery("\"$queryOrEmpty\"")
+                    }
+                }
+            ),
+            OptionMenu(
+                titleId = R.string.title_context_editor_set_default_search_category,
+                action = {
+                    categoryName.value = preferenceApplier.getDefaultSearchEngine()
+                        ?: SearchCategory.getDefaultCategoryName()
+                }
+            ),
+            OptionMenu(
+                titleId = R.string.title_enable_suggestion,
+                action = {
+                    preferenceApplier.switchEnableSuggestion()
+                    viewModel.copyFrom(preferenceApplier)
+                    if (preferenceApplier.isEnableSuggestion.not()) {
+                        viewModel.suggestions.clear()
+                    }
+                },
+                check = { viewModel.isEnableSuggestion() }
+            ),
+            OptionMenu(
+                titleId = R.string.title_use_search_history,
+                action = {
+                    preferenceApplier.switchEnableSearchHistory()
+                    viewModel.copyFrom(preferenceApplier)
+                    if (preferenceApplier.isEnableSearchHistory.not()) {
+                        viewModel.searchHistories.clear()
+                    }
+                },
+                check = { viewModel.isEnableSearchHistory() }
+            ),
+            OptionMenu(
+                titleId = R.string.title_favorite_search,
+                action = {
+                    viewModel.openFavoriteSearch()
+                }
+            ),
+            OptionMenu(
+                titleId = R.string.title_search_history,
+                action = {
+                    viewModel.openSearchHistory()
+                }
+            )
+        )
+
         viewModel.search.collect {
             if (it.background.not()) {
                 keyboardController?.hide()
@@ -299,59 +352,6 @@ fun SearchInputUi(
             viewModel.dispose()
         }
     })
-
-    contentViewModel.optionMenus(
-        OptionMenu(
-            titleId = R.string.title_context_editor_double_quote,
-            action = {
-                val queryOrEmpty = viewModel.input.value.text
-                if (queryOrEmpty.isNotBlank()) {
-                    viewModel.putQuery("\"$queryOrEmpty\"")
-                }
-            }
-        ),
-        OptionMenu(
-            titleId = R.string.title_context_editor_set_default_search_category,
-            action = {
-                categoryName.value = preferenceApplier.getDefaultSearchEngine()
-                    ?: SearchCategory.getDefaultCategoryName()
-            }
-        ),
-        OptionMenu(
-            titleId = R.string.title_enable_suggestion,
-            action = {
-                preferenceApplier.switchEnableSuggestion()
-                viewModel.copyFrom(preferenceApplier)
-                if (preferenceApplier.isEnableSuggestion.not()) {
-                    viewModel.suggestions.clear()
-                }
-            },
-            check = { viewModel.isEnableSuggestion() }
-        ),
-        OptionMenu(
-            titleId = R.string.title_use_search_history,
-            action = {
-                preferenceApplier.switchEnableSearchHistory()
-                viewModel.copyFrom(preferenceApplier)
-                if (preferenceApplier.isEnableSearchHistory.not()) {
-                    viewModel.searchHistories.clear()
-                }
-            },
-            check = { viewModel.isEnableSearchHistory() }
-        ),
-        OptionMenu(
-            titleId = R.string.title_favorite_search,
-            action = {
-                viewModel.openFavoriteSearch()
-            }
-        ),
-        OptionMenu(
-            titleId = R.string.title_search_history,
-            action = {
-                viewModel.openSearchHistory()
-            }
-        )
-    )
 }
 
 private inline fun search(
