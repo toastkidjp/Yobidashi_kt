@@ -36,8 +36,6 @@ class VoiceSearchTest {
 
         mockkConstructor(Intent::class)
         every { anyConstructed<Intent>().putExtra(any(), any<String>()) }.returns(mockk())
-
-        every { context.getPackageName() }.returns("test")
     }
 
     @After
@@ -50,7 +48,6 @@ class VoiceSearchTest {
         voiceSearchIntentFactory.invoke()
 
         verify(atLeast = 1) { anyConstructed<Intent>().putExtra(any(), any<String>()) }
-        verify(atLeast = 1) { context.getPackageName() }
     }
 
 }
