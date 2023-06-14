@@ -433,8 +433,8 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putBoolean(Key.BROWSER_DARK_MODE.name, newState).apply()
     }
 
-    fun switchUseTitleFilter(checked: Boolean) {
-        preferences.edit().putBoolean(Key.USE_TITLE_FILTER.name, checked).apply()
+    fun switchUseTitleFilter() {
+        preferences.edit().putBoolean(Key.USE_TITLE_FILTER.name, useTitleFilter().not()).apply()
     }
 
     fun useTitleFilter(): Boolean {
