@@ -51,7 +51,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AppBar() {
     val activity = LocalContext.current as? ComponentActivity ?: return
