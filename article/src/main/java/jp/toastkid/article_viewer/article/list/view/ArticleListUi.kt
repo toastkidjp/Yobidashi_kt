@@ -337,7 +337,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     preferenceApplier.switchUseTitleFilter(newState)
                     useTitleFilter.value = newState
                 },
-                checkState = useTitleFilter
+                check = { useTitleFilter.value }
             )
         )
     })
