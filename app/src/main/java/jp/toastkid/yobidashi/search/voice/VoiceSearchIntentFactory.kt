@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.search.voice
 
 import android.content.Intent
 import android.speech.RecognizerIntent
-import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.yobidashi.BuildConfig
 
 /**
@@ -26,11 +25,5 @@ class VoiceSearchIntentFactory {
                 )
                 it.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, BuildConfig.APPLICATION_ID)
             }
-
-    /**
-     * Make Google App [Intent].
-     */
-    private fun makeGoogleAppInstallIntent() =
-        GooglePlayIntentFactory()("com.google.android.googlequicksearchbox")
 
 }
