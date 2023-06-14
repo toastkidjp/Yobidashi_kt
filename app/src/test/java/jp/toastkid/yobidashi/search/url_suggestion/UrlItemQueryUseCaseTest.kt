@@ -9,11 +9,9 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
 import io.mockk.MockKAnnotations
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import io.mockk.just
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
@@ -41,12 +39,6 @@ class UrlItemQueryUseCaseTest {
     @MockK
     private lateinit var viewHistoryRepository: ViewHistoryRepository
 
-    @MockK
-    private lateinit var switchVisibility: (Boolean) -> Unit
-
-    @MockK
-    private lateinit var rtsSuggestionUseCase: RtsSuggestionUseCase
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -54,12 +46,9 @@ class UrlItemQueryUseCaseTest {
         coEvery { submitItems.invoke(any()) }.returns(Unit)
         coEvery { bookmarkRepository.search(any(), any()) }.returns(listOf(Bookmark()))
         coEvery { viewHistoryRepository.search(any(), any()) }.returns(listOf(ViewHistory()))
-        coEvery { switchVisibility.invoke(any()) }.returns(Unit)
-        coEvery { rtsSuggestionUseCase.invoke(any(), any()) }.just(Runs)
 
         urlItemQueryUseCase = UrlItemQueryUseCase(
-            submitItems, bookmarkRepository, viewHistoryRepository, switchVisibility,
-            rtsSuggestionUseCase,
+            submitItems, bookmarkRepository, viewHistoryRepository,
             Dispatchers.Unconfined, Dispatchers.Unconfined
         )
     }
@@ -76,7 +65,6 @@ class UrlItemQueryUseCaseTest {
         coVerify(exactly = 1) { submitItems.invoke(any()) }
         coVerify(exactly = 1) { bookmarkRepository.search(any(), any()) }
         coVerify(exactly = 1) { viewHistoryRepository.search(any(), any()) }
-        coVerify { rtsSuggestionUseCase.invoke(any(), any()) }
     }
 
     @Test
@@ -86,7 +74,6 @@ class UrlItemQueryUseCaseTest {
         coVerify(exactly = 1) { submitItems.invoke(any()) }
         coVerify(exactly = 0) { bookmarkRepository.search(any(), any()) }
         coVerify(exactly = 1) { viewHistoryRepository.search(any(), any()) }
-        coVerify { rtsSuggestionUseCase.invoke(any(), any()) }
     }
 
 }
