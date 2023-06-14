@@ -47,14 +47,6 @@ fun OptionMenuItem(optionMenu: OptionMenu) {
                 .padding(start = 4.dp)
         )
 
-        val checkState = optionMenu.checkState
-        if (checkState != null) {
-            Checkbox(
-                checked = checkState.value,
-                onCheckedChange = { optionMenu.action() }
-            )
-        }
-
         val checked = optionMenu.check?.invoke()
         if (checked != null) {
             Checkbox(
