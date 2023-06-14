@@ -8,8 +8,6 @@
 package jp.toastkid.lib
 
 import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Message
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
@@ -18,18 +16,6 @@ import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
  * @author toastkidjp
  */
 class BrowserViewModel {
-
-    fun openBackground(title: String, uri: Uri) {
-        /*viewModelScope.launch {
-            _event.emit(OpenUrlEvent(uri, true, title))
-        }*/
-    }
-
-    fun openNewWindow(resultMessage: Message?) {
-        /*viewModelScope.launch {
-            _event.emit(OpenNewWindowEvent(resultMessage))
-        }*/
-    }
 
     fun download(url: String) {
         /*viewModelScope.launch {

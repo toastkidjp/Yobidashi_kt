@@ -27,7 +27,6 @@ import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 /**
@@ -36,8 +35,8 @@ import kotlinx.coroutines.launch
  * @author toastkidjp
  */
 class TabAdapter(
-        private val contextSupplier: () -> Context,
-        private val tabEmptyCallback: () -> Unit
+    private val contextSupplier: () -> Context,
+    private val tabEmptyCallback: () -> Unit
 ) {
 
     private val tabList: TabList = TabList.loadOrInit(contextSupplier())
@@ -51,8 +50,6 @@ class TabAdapter(
     private val autoArchive = AutoArchive.make(contextSupplier())
 
     private val webViewStateUseCase = WebViewStateUseCase.make(contextSupplier())
-
-    private val disposables = Job()
 
     private val bitmapCompressor = BitmapCompressor()
 
@@ -268,6 +265,10 @@ class TabAdapter(
         }
     }
 
+    fun closeCurrentTab() {
+        closeTab(index())
+    }
+
     fun index(): Int = tabList.getIndex()
 
     fun saveTabList() {
@@ -277,12 +278,11 @@ class TabAdapter(
     /**
      * Dispose this object's fields.
      */
-    fun dispose() {
+    private fun dispose() {
         if (!preferenceApplier.doesRetainTabs()) {
             tabList.clear()
             tabThumbnails.clean()
         }
-        disposables.cancel()
     }
 
     internal fun clear() {
@@ -294,11 +294,11 @@ class TabAdapter(
 
     internal fun currentTab(): Tab? = tabList.get(index())
 
+    fun currentTabIsWebTab() = currentTab() is WebTab
+
     internal fun currentTabId(): String = currentTab()?.id() ?: "-1"
 
     fun isEmpty(): Boolean = tabList.isEmpty
-
-    fun isNotEmpty(): Boolean = !tabList.isEmpty
 
     override fun toString(): String = tabList.toString()
 
@@ -308,7 +308,7 @@ class TabAdapter(
         tabList.updateWithIdAndHistory(idAndHistory)
     }
 
-    fun setCount() {
+    private fun setCount() {
         contentViewModel?.tabCount(size())
     }
 

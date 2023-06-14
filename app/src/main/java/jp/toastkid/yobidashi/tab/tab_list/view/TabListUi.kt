@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -83,7 +82,6 @@ import kotlin.math.roundToInt
 internal fun TabListUi(tabAdapter: TabAdapter) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = PreferenceApplier(context)
-    val tabThumbnails = TabThumbnails.with(LocalContext.current)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val coroutineScope = rememberCoroutineScope()
 
@@ -125,6 +123,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     .detectReorderAfterLongPress(state)
             ) {
                 val currentIndex = tabAdapter.index()
+                val tabThumbnails = TabThumbnails.with(context)
 
                 itemsIndexed(tabs, { _, tab -> tab.id() }) { position, tab ->
                     val backgroundColor = if (currentIndex == position)
@@ -251,7 +250,6 @@ private fun closeOnly(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TabItem(
     tab: Tab,

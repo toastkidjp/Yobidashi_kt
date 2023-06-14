@@ -57,7 +57,6 @@ dependencies {
     implementation("androidx.paging:paging-compose:${LibraryVersion.pagingCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
-    implementation("androidx.compose.runtime:runtime-livedata:${LibraryVersion.compose}")
     implementation("androidx.activity:activity-compose:1.4.0")
 
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")

@@ -100,7 +100,6 @@ internal fun WebTabUi(webTab: WebTab) {
     }
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
-    val lifecycleOwner = LocalLifecycleOwner.current
 
     val refreshTriggerPx = with(LocalDensity.current) { 96.dp.toPx() }
     val verticalIndicatorOffsetPx = with(LocalDensity.current) { -24.dp.toPx() }.toInt()
@@ -191,12 +190,11 @@ internal fun WebTabUi(webTab: WebTab) {
         AnchorLongTapDialog(
             value.first,
             value.second,
-            value.third,
-            {
-                browserViewModel.openLongTapDialog.value = false
-                browserViewModel?.clearLongTapParameters()
-            }
-        )
+            value.third
+        ) {
+            browserViewModel.openLongTapDialog.value = false
+            browserViewModel?.clearLongTapParameters()
+        }
     }
 
     BackHandler(readerModeText.value.isNotBlank()) {
@@ -205,14 +203,14 @@ internal fun WebTabUi(webTab: WebTab) {
         }
     }
 
-    LaunchedEffect(key1 = lifecycleOwner, block = {
+    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         contentViewModel.event.collect {
             webViewContainer.useEvent(it)
         }
     })
 
     val focusManager = LocalFocusManager.current
-    LaunchedEffect(key1 = lifecycleOwner, block = {
+    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         webViewContainer.refresh()
         browserViewModel.initializeSwipeRefreshState(refreshTriggerPx)
 

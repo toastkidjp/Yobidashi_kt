@@ -55,7 +55,6 @@ dependencies {
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
-    implementation("androidx.compose.runtime:runtime-livedata:${LibraryVersion.compose}")
     implementation("androidx.activity:activity-compose:1.4.0")
 
     implementation("androidx.media:media:1.3.0")

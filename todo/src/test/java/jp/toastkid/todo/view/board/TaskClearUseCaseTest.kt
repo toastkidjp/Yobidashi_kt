@@ -38,10 +38,9 @@ class TaskClearUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { tasks.toArray() }.answers { arrayOf() }
         every { tasks.clear() }.answers { Unit }
         every { clearBoard.invoke() }.answers { Unit }
-        every { contentViewModel.snackWithAction(any(), any(), any()) }.answers { Unit }
+        every { contentViewModel.snackShort(any<String>()) }.answers { Unit }
     }
 
     @After
@@ -53,10 +52,9 @@ class TaskClearUseCaseTest {
     fun testInvoke() {
         taskClearUseCase.invoke()
 
-        verify(exactly = 1) { tasks.toArray() }
         verify(exactly = 1) { tasks.clear() }
         verify(exactly = 1) { clearBoard.invoke() }
-        verify(exactly = 1) { contentViewModel.snackWithAction(any(), any(), any()) }
+        verify(exactly = 1) { contentViewModel.snackShort(any<String>()) }
     }
 
 }

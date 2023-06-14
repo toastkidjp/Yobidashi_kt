@@ -66,7 +66,7 @@ class TabList {
             }
 
     internal fun set(index: Int, currentTab: Tab) {
-        val target = if (invalidIndex(index)) { 0 } else { index }
+        val target = if (invalidIndex(index)) 0 else index
         tabs[target] = currentTab
     }
 
