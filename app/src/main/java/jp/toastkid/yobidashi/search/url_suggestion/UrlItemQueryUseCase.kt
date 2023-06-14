@@ -20,7 +20,6 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class UrlItemQueryUseCase(
-    private val submitItems: (List<UrlItem>) -> Unit,
     private val bookmarkRepository: BookmarkRepository,
     private val viewHistoryRepository: ViewHistoryRepository,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
