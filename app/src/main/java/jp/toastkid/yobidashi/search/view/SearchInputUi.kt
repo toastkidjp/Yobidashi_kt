@@ -99,10 +99,10 @@ fun SearchInputUi(
         )
     }
 
-    val viewModel = remember { SearchUiViewModel() }
-
-    val queryingUseCase = remember {
-        QueryingUseCase.make(viewModel, context)
+    val viewModel = remember {
+        val vm = SearchUiViewModel(QueryingUseCase.make(context))
+        vm.copyFrom(preferenceApplier)
+        vm
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -146,7 +146,6 @@ fun SearchInputUi(
                         onValueChange = { text ->
                             viewModel.setInput(text)
                             useVoice.value = text.text.isBlank()
-                            queryingUseCase.send(text.text)
                         },
                         label = {
                             Text(
@@ -236,8 +235,8 @@ fun SearchInputUi(
                             )
                     )
                 }
-                LaunchedEffect(key1 = queryingUseCase, block = {
-                    queryingUseCase.withDebounce()
+                LaunchedEffect(key1 = viewModel, block = {
+                    viewModel.startReceiver()
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val trendItems = try {
@@ -297,12 +296,9 @@ fun SearchInputUi(
 
     DisposableEffect(key1 = localLifecycleOwner, effect = {
         onDispose {
-            queryingUseCase.dispose()
+            viewModel.dispose()
         }
     })
-
-    val isEnableSuggestion = remember { mutableStateOf(preferenceApplier.isEnableSuggestion) }
-    val isEnableSearchHistory = remember { mutableStateOf(preferenceApplier.isEnableSearchHistory) }
 
     contentViewModel.optionMenus(
         OptionMenu(
@@ -325,23 +321,23 @@ fun SearchInputUi(
             titleId = R.string.title_enable_suggestion,
             action = {
                 preferenceApplier.switchEnableSuggestion()
-                isEnableSuggestion.value = preferenceApplier.isEnableSuggestion
+                viewModel.copyFrom(preferenceApplier)
                 if (preferenceApplier.isEnableSuggestion.not()) {
                     viewModel.suggestions.clear()
                 }
             },
-            checkState = isEnableSuggestion
+            check = viewModel.isEnableSuggestion()
         ),
         OptionMenu(
             titleId = R.string.title_use_search_history,
             action = {
                 preferenceApplier.switchEnableSearchHistory()
-                isEnableSearchHistory.value = preferenceApplier.isEnableSearchHistory
+                viewModel.copyFrom(preferenceApplier)
                 if (preferenceApplier.isEnableSearchHistory.not()) {
                     viewModel.searchHistories.clear()
                 }
             },
-            checkState = isEnableSearchHistory
+            check = viewModel.isEnableSearchHistory()
         ),
         OptionMenu(
             titleId = R.string.title_favorite_search,
