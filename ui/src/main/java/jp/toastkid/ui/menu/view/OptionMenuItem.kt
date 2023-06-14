@@ -55,7 +55,7 @@ fun OptionMenuItem(optionMenu: OptionMenu) {
                 )
         }
 
-        val checked = optionMenu.check
+        val checked = optionMenu.check?.invoke()
         if (checked != null) {
             Checkbox(
                 checked = checked,

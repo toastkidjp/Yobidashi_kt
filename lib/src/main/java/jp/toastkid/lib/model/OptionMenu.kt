@@ -16,6 +16,6 @@ data class OptionMenu(
     @DrawableRes val iconId: Int? = null,
     @StringRes val titleId: Int,
     val action: () -> Unit,
-    val check: Boolean? = null,
+    val check: (() -> Boolean)? = null,
     @Deprecated("You should use check.") val checkState: State<Boolean>? = null
 )

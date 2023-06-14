@@ -326,7 +326,7 @@ fun SearchInputUi(
                     viewModel.suggestions.clear()
                 }
             },
-            check = viewModel.isEnableSuggestion()
+            check = { viewModel.isEnableSuggestion() }
         ),
         OptionMenu(
             titleId = R.string.title_use_search_history,
@@ -337,7 +337,7 @@ fun SearchInputUi(
                     viewModel.searchHistories.clear()
                 }
             },
-            check = viewModel.isEnableSearchHistory()
+            check = { viewModel.isEnableSearchHistory() }
         ),
         OptionMenu(
             titleId = R.string.title_favorite_search,
