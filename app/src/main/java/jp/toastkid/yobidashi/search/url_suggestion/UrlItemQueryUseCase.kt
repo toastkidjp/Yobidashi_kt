@@ -23,8 +23,6 @@ class UrlItemQueryUseCase(
     private val submitItems: (List<UrlItem>) -> Unit,
     private val bookmarkRepository: BookmarkRepository,
     private val viewHistoryRepository: ViewHistoryRepository,
-    private val switchVisibility: (Boolean) -> Unit,
-    private val rtsSuggestionUseCase: RtsSuggestionUseCase = RtsSuggestionUseCase(),
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
@@ -32,8 +30,6 @@ class UrlItemQueryUseCase(
     operator fun invoke(q: CharSequence) {
         CoroutineScope(mainDispatcher).launch {
             val newItems = mutableListOf<UrlItem>()
-
-            rtsSuggestionUseCase.invoke(q.toString()) { newItems.add(0, it) }
 
             withContext(ioDispatcher) {
                 if (q.isBlank()) {
@@ -46,8 +42,8 @@ class UrlItemQueryUseCase(
                 viewHistoryRepository.search("%$q%", ITEM_LIMIT).forEach { newItems.add(it) }
             }
 
-            switchVisibility(newItems.isNotEmpty())
-            submitItems(newItems)
+            //viewModel.urlItems.clear()
+            //viewModel.urlItems.addAll(newItems)
         }
     }
 
