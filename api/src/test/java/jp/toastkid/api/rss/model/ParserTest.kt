@@ -16,6 +16,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.io.FileNotFoundException
 import java.io.InputStream
 
 /**
@@ -94,5 +95,5 @@ class ParserTest {
 
     private fun readStream(filePath: String): InputStream =
             javaClass.classLoader?.getResourceAsStream(filePath)
-                    ?: throw RuntimeException()
+                    ?: throw FileNotFoundException("Resource $filePath is cannot found.")
 }
