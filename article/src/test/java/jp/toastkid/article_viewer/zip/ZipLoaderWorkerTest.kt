@@ -23,7 +23,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
-import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import kotlinx.coroutines.Dispatchers
 import org.junit.Assert.assertEquals
 import java.io.InputStream
@@ -47,8 +47,8 @@ class ZipLoaderWorkerTest {
         every { context.contentResolver }.returns(contentResolver)
         every { contentResolver.openInputStream(any()) }.returns(InputStream.nullInputStream())
 
-        mockkObject(AppDatabase)
-        every { AppDatabase.find(context).articleRepository() }.returns(mockk())
+        mockkConstructor(ArticleRepositoryFactory::class)
+        every { anyConstructed<ArticleRepositoryFactory>().invoke(any()) }.returns(mockk())
 
         mockkConstructor(ZipLoader::class)
         every { anyConstructed<ZipLoader>().invoke(any()) }.just(Runs)
