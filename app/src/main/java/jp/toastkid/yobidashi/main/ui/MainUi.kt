@@ -72,6 +72,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.input.Inputs
@@ -87,6 +89,7 @@ import jp.toastkid.lib.viewmodel.event.tab.MoveTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleListEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenCalendarEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenDateArticleEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenEditorEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenNewTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenPdfEvent
@@ -309,6 +312,14 @@ internal fun Content() {
                     }
 
                     replaceToCurrentTab(tabs, navigationHostController)
+                }
+                is OpenDateArticleEvent -> {
+                    DateSelectedActionUseCase(
+                        AppDatabase
+                            .find(activity)
+                            .articleRepository(),
+                        contentViewModel
+                    ).invoke(it.year, it.month, it.date, it.background)
                 }
                 is OpenArticleListEvent -> {
                     tabs.openArticleList()

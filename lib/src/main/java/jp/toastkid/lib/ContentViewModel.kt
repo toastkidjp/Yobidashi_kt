@@ -41,6 +41,7 @@ import jp.toastkid.lib.viewmodel.event.tab.MoveTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleListEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenCalendarEvent
+import jp.toastkid.lib.viewmodel.event.tab.OpenDateArticleEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenEditorEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenNewTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenPdfEvent
@@ -422,6 +423,12 @@ class ContentViewModel : ViewModel() {
     fun search(query: String) {
         viewModelScope.launch {
             _event.emit(WebSearchEvent(query))
+        }
+    }
+
+    fun openDateArticle(year: Int, month: Int, date: Int, background: Boolean = false) {
+        viewModelScope.launch {
+            _event.emit(OpenDateArticleEvent(year, month, date, background))
         }
     }
 
