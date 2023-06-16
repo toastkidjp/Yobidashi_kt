@@ -29,10 +29,10 @@ import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.view.list.ListActionAttachment
+import jp.toastkid.search.view.BindItemContent
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.history.ViewHistory
-import jp.toastkid.yobidashi.search.view.BindItemContent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
