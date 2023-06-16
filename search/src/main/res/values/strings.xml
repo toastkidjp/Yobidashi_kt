@@ -89,4 +89,33 @@
     <string name="search_category_economist">Economist</string>
     <string name="search_category_ebay">eBay</string>
     <string name="search_category_japan_search">Japan Search</string>
+
+    <string name="title_tab_background_search">Search of \'%s\'</string>
+    <string name="title_clear_favorite_search">Clear all favorite search</string>
+    <string name="favorite_search_addition_successful_format">It has been insert "{0}" to "Favorite search word".</string>
+    <string name="word">Word</string>
+    <string name="title_clear_search_history">Clear all search history</string>
+    <string name="settings_color_delete">It has been done!</string>
+    <string name="title_favorite_search">Favorite Search</string>
+    <string name="title_search_history">Search history</string>
+    <string name="link_open_history">Open history</string>
+    <string name="title_search_suggestion">Search suggestion</string>
+    <string name="plus">+</string>
+    <string name="hourly_trends">Hourly trends</string>
+    <string name="title_search_action">Search</string>
+    <string name="message_should_input_keyword">Please input any keyword.</string>
+    <string name="title_context_editor_set_default_search_category">Set default search category</string>
+    <string name="title_enable_suggestion">Use search input suggestion</string>
+    <string name="title_use_search_history">Use search history</string>
+    <string name="title_default_search_engine">Default Search Engine</string>
+    <string name="title_use_search_query_extractor">Use search query extractor</string>
+    <string name="title_enable_search_with_clip">Use "Search with Clip"</string>
+    <string name="message_enable_swc">It has enabled "Search with Clip".</string>
+    <string name="message_disable_swc">It has disabled "Search with Clip".</string>
+    <string name="use_view_history">Use view history</string>
+    <string name="title_url_module">Use URL module</string>
+    <string name="title_trend_module">Use hot trend</string>
+    <string name="subhead_search_category_setting">Search category setting</string>
+    <string name="title_use_favorite_search">Use Favorite Search</string>
+
 </resources>

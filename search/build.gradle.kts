@@ -38,6 +38,12 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = LibraryVersion.composeCompiler
+    }
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
@@ -54,6 +60,18 @@ tasks.withType<GenerateBuildConfig> {
 }
 
 dependencies {
+    implementation(project(":api"))
+    implementation(project(":data"))
+    implementation(project(":lib"))
+    implementation(project(":ui"))
+
+    implementation("androidx.compose.ui:ui:1.4.2")
+    implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
+    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
+    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     testImplementation("junit:junit:${LibraryVersion.junit}")
