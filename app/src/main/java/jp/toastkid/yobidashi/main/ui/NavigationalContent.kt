@@ -43,9 +43,9 @@ import jp.toastkid.yobidashi.browser.bookmark.view.BookmarkListUi
 import jp.toastkid.yobidashi.browser.history.view.ViewHistoryListUi
 import jp.toastkid.yobidashi.browser.view.WebTabUi
 import jp.toastkid.calendar.view.CalendarUi
-import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
-import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
-import jp.toastkid.yobidashi.search.view.SearchInputUi
+import jp.toastkid.search.favorite.FavoriteSearchListUi
+import jp.toastkid.search.history.SearchHistoryListUi
+import jp.toastkid.search.view.SearchInputUi
 import jp.toastkid.yobidashi.settings.view.screen.SettingTopUi
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
