@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -155,7 +154,6 @@ private fun OverflowMenu(
 ) {
     val openOptionMenu = remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val preferenceApplier = PreferenceApplier(context)
     val contentViewModel = (context as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, context)
     }
@@ -173,7 +171,7 @@ private fun OverflowMenu(
             OptionMenu(
                 titleId = R.string.reset_button_position,
                 action = {
-                    preferenceApplier.clearMenuFabPosition()
+                    PreferenceApplier(context).clearMenuFabPosition()
                     contentViewModel?.resetMenuFabPosition()
                 }),
             OptionMenu(
