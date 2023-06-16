@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.search.view.setting.SearchSettingUi
 import jp.toastkid.yobidashi.R
 import kotlinx.coroutines.launch
 
