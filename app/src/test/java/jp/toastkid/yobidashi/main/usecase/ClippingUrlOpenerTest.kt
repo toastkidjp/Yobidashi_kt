@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2021 toastkidjp.
+ * Copyright (c) 2023 toastkidjp.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.libs.clip
+package jp.toastkid.yobidashi.main.usecase
 
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +25,6 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.yobidashi.main.usecase.ClippingUrlOpener
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
