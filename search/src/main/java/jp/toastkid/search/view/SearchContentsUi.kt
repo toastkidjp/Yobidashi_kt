@@ -222,7 +222,7 @@ internal fun SearchContentsUi(
             }
         }
 
-        if (preferenceApplier.isEnableTrendModule() && viewModel.trends.isNotEmpty()) {
+        if (viewModel.useTrend()) {
             HeaderWithLink(R.string.hourly_trends, R.string.open) {
                 viewModel.search("https://trends.google.co.jp/trends/trendingsearches/realtime")
             }
