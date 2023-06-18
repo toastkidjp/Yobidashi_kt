@@ -85,7 +85,6 @@ class SwipeRefreshNestedScrollConnection(
     }
 
     override suspend fun onPreFling(available: Velocity): Velocity {
-        println("onscroll onPreFling available.y ${available.y}")
         // If we're dragging, not currently refreshing and scrolled
         // past the trigger point, refresh!
         if (state?.isRefreshing != null && state.indicatorOffset >= refreshTrigger) {
