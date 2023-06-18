@@ -109,7 +109,7 @@ import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContrac
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
-import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
+import jp.toastkid.yobidashi.main.usecase.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp

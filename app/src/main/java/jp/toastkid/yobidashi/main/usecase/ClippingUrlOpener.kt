@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.libs.clip
+package jp.toastkid.yobidashi.main.usecase
 
 import android.content.Context
 import android.net.Uri
