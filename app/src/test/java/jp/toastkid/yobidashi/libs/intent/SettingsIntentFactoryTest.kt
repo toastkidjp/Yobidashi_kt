@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.libs.intent
 
+import jp.toastkid.yobidashi.settings.intent.SettingsIntentFactory
 import org.junit.Before
 import org.junit.Test
 
