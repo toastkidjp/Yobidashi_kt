@@ -17,8 +17,8 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
+import jp.toastkid.lib.image.VectorToBitmap
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.VectorToBitmap
 import jp.toastkid.yobidashi.main.MainActivity
 
 /**
