@@ -118,6 +118,7 @@ class SearchUiViewModel(
     private val isEnableViewHistory = mutableStateOf(false)
     private val isEnableSuggestion = mutableStateOf(false)
     private val isEnableTrend = mutableStateOf(false)
+    private val isEnableUrlCard = mutableStateOf(false)
 
     fun isEnableSearchHistory() = isEnableSearchHistory.value
 
@@ -128,6 +129,8 @@ class SearchUiViewModel(
     fun isEnableViewHistory() = isEnableViewHistory.value
 
     fun useTrend() = isEnableTrend.value && trends.isNotEmpty()
+
+    fun useUrlCard() = isEnableUrlCard.value
 
     fun copyFrom(preferenceApplier: PreferenceApplier) {
         if (isEnableSearchHistory.value != preferenceApplier.isEnableSearchHistory) {
@@ -144,6 +147,9 @@ class SearchUiViewModel(
         }
         if (isEnableTrend.value != preferenceApplier.isEnableTrendModule()) {
             isEnableTrend.value = preferenceApplier.isEnableTrendModule()
+        }
+        if (isEnableUrlCard.value != preferenceApplier.isEnableUrlModule()) {
+            isEnableUrlCard.value = preferenceApplier.isEnableUrlModule()
         }
     }
 
