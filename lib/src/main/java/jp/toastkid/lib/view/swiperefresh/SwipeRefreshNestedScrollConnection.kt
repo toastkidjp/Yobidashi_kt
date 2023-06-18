@@ -72,7 +72,7 @@ class SwipeRefreshNestedScrollConnection(
         }
 
         val newOffset = (available.y * DragMultiplier + (state?.indicatorOffset ?: 0f)).coerceAtLeast(0f)
-        val dragConsumed = newOffset - (state?.indicatorOffset ?: 0f)
+        val dragConsumed = (available.y * -1) - (state?.indicatorOffset ?: 0f)//newOffset - (state?.indicatorOffset ?: 0f)
 
         return if (dragConsumed.absoluteValue >= 0.5f) {
             coroutineScope.launch {
@@ -86,6 +86,7 @@ class SwipeRefreshNestedScrollConnection(
     }
 
     override suspend fun onPreFling(available: Velocity): Velocity {
+        println("onscroll onPreFling available.y ${available.y}")
         // If we're dragging, not currently refreshing and scrolled
         // past the trigger point, refresh!
         if (state?.isRefreshing != null && state.indicatorOffset >= refreshTrigger) {
