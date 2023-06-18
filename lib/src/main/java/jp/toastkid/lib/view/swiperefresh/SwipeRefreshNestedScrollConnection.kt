@@ -71,7 +71,6 @@ class SwipeRefreshNestedScrollConnection(
             state.isSwipeInProgress = false
         }
 
-        val newOffset = (available.y * DragMultiplier + (state?.indicatorOffset ?: 0f)).coerceAtLeast(0f)
         val dragConsumed = (available.y * -1) - (state?.indicatorOffset ?: 0f)//newOffset - (state?.indicatorOffset ?: 0f)
 
         return if (dragConsumed.absoluteValue >= 0.5f) {
