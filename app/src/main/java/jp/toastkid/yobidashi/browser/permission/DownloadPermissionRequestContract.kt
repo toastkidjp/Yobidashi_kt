@@ -32,10 +32,9 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Boolea
             return true
         }
         if (resultCode != Activity.RESULT_OK) return false
-        val granted = intent
+        return intent
             ?.getIntArrayExtra(ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
             ?.getOrNull(0) == PackageManager.PERMISSION_GRANTED
-        return granted
     }
 
     companion object {
