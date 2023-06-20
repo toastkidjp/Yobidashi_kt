@@ -19,8 +19,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi.libs.db.AppDatabase
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
@@ -31,18 +30,14 @@ class SearchHistoryInsertionTest {
     private lateinit var searchHistoryInsertion: SearchHistoryInsertion
 
     @MockK
-    private lateinit var appDatabase: AppDatabase
-
-    @MockK
     private lateinit var repository: SearchHistoryRepository
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        mockkConstructor(DatabaseFinder::class)
-        every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
-        every { appDatabase.searchHistoryRepository() }.returns(repository)
+        mockkConstructor(RepositoryFactory::class)
+        every { anyConstructed<RepositoryFactory>().searchHistoryRepository(any()) }.returns(repository)
         coEvery { repository.insert(any()) }.just(Runs)
     }
 
@@ -62,8 +57,7 @@ class SearchHistoryInsertionTest {
 
         searchHistoryInsertion.insert()
 
-        verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        verify(exactly = 1) { appDatabase.searchHistoryRepository() }
+        verify(exactly = 1) { anyConstructed<RepositoryFactory>().searchHistoryRepository(any()) }
         coVerify(exactly = 1) { repository.insert(any()) }
     }
 
@@ -78,8 +72,7 @@ class SearchHistoryInsertionTest {
 
         searchHistoryInsertion.insert()
 
-        verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        verify(exactly = 1) { appDatabase.searchHistoryRepository() }
+        verify(exactly = 1) { anyConstructed<RepositoryFactory>().searchHistoryRepository(any()) }
         coVerify(exactly = 0) { repository.insert(any()) }
     }
 
@@ -94,8 +87,7 @@ class SearchHistoryInsertionTest {
 
         searchHistoryInsertion.insert()
 
-        verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        verify(exactly = 1) { appDatabase.searchHistoryRepository() }
+        verify(exactly = 1) { anyConstructed<RepositoryFactory>().searchHistoryRepository(any()) }
         coVerify(exactly = 0) { repository.insert(any()) }
     }
 

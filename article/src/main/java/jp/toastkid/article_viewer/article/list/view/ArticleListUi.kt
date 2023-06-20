@@ -73,7 +73,8 @@ import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
+import jp.toastkid.article_viewer.article.data.BookmarkRepositoryFactory
 import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
 import jp.toastkid.article_viewer.article.list.SearchResult
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogUi
@@ -96,13 +97,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun ArticleListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val dataBase = AppDatabase.find(context)
 
-    val articleRepository = dataBase.articleRepository()
+    val articleRepository = remember { ArticleRepositoryFactory().invoke(context) }
 
-    val preferenceApplier = PreferenceApplier(context)
+    val preferenceApplier = remember { PreferenceApplier(context) }
 
-    val bookmarkRepository = AppDatabase.find(context).bookmarkRepository()
+    val bookmarkRepository = remember { BookmarkRepositoryFactory().invoke(context) }
 
     val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
 
@@ -114,23 +114,8 @@ fun ArticleListUi() {
         )
     }
 
-    val progressBroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(p0: Context?, p1: Intent?) {
-            viewModel.hideProgress()
-            showFeedback()
-        }
-
-        private fun showFeedback() {
-            contentViewModel.snackShort(R.string.message_done_import)
-        }
-    }
-
-    context.registerReceiver(
-        progressBroadcastReceiver,
-        ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
-    )
-
-    contentViewModel.replaceAppBarContent {
+    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
+        contentViewModel.replaceAppBarContent {
             AppBarContent(viewModel)
             val openSortDialog = remember { mutableStateOf(false) }
 
@@ -150,6 +135,7 @@ fun ArticleListUi() {
                 )
             }
         }
+    })
 
     val itemFlowState = remember { mutableStateOf<Flow<PagingData<SearchResult>>?>(null) }
     itemFlowState.value = viewModel.dataSource.value?.flow
@@ -186,6 +172,21 @@ fun ArticleListUi() {
     })
 
     DisposableEffect(key1 = "unregisterReceiver", effect = {
+        val progressBroadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {
+                viewModel.hideProgress()
+                showFeedback()
+            }
+
+            private fun showFeedback() {
+                contentViewModel.snackShort(R.string.message_done_import)
+            }
+        }
+
+        context.registerReceiver(
+            progressBroadcastReceiver,
+            ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
+        )
         onDispose {
             context.unregisterReceiver(progressBroadcastReceiver)
         }
@@ -196,7 +197,7 @@ fun ArticleListUi() {
 @Composable
 private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = PreferenceApplier(activityContext)
+    val preferenceApplier = remember { PreferenceApplier(activityContext) }
 
     Row {
         Column(Modifier.weight(1f)) {
@@ -352,7 +353,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
         DateFilterDialogUi(
             preferenceApplier.colorPair(),
             openDateDialog,
-            DateSelectedActionUseCase(AppDatabase.find(activityContext).articleRepository(), contentViewModel)
+            DateSelectedActionUseCase(ArticleRepositoryFactory().invoke(activityContext), contentViewModel)
         )
     }
 }

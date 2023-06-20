@@ -493,7 +493,7 @@ private fun AppBarContent(
                     contentDescription = stringResource(id = R.string.image),
                     modifier = Modifier
                         .size(36.dp)
-                        .padding(end = 8.dp)
+                        .padding(horizontal = 4.dp)
                         .clickable { openPageInformation.value = true }
                 )
                 BrowserTitle(

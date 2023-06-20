@@ -64,6 +64,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
@@ -83,7 +84,6 @@ import jp.toastkid.yobidashi.browser.bookmark.Exporter
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.bookmark.viewmodel.BookmarkListViewModel
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -100,7 +100,7 @@ private const val EXPORT_FILE_NAME = "bookmark.html"
 fun BookmarkListUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
-    val bookmarkRepository = DatabaseFinder().invoke(activityContext).bookmarkRepository()
+    val bookmarkRepository = RepositoryFactory().bookmarkRepository(activityContext)
 
     val contentViewModel1 = viewModel(ContentViewModel::class.java, activityContext)
 
@@ -379,7 +379,7 @@ private fun EditorDialog(
     currentItem: Bookmark,
     query: (String) -> Unit
 ) {
-    val bookmarkRepository = DatabaseFinder().invoke(LocalContext.current).bookmarkRepository()
+    val bookmarkRepository = RepositoryFactory().bookmarkRepository(LocalContext.current)
     val folders = remember { mutableStateListOf<String>() }
     val moveTo = remember { mutableStateOf(currentItem.parent) }
 

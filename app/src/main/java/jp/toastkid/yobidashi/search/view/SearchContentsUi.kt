@@ -30,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -46,14 +47,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
-import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.url_suggestion.ItemDeletionUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 
@@ -68,20 +67,23 @@ internal fun SearchContentsUi(
     currentTitle: String?,
     currentUrl: String?
 ) {
-    val preferenceApplier = PreferenceApplier(LocalContext.current)
-    val database = DatabaseFinder().invoke(LocalContext.current)
-    val bookmarkRepository: BookmarkRepository = database.bookmarkRepository()
-    val viewHistoryRepository: ViewHistoryRepository = database.viewHistoryRepository()
-    val favoriteSearchRepository = database.favoriteSearchRepository()
-    val searchHistoryRepository = database.searchHistoryRepository()
+    val context = LocalContext.current
+    val preferenceApplier = PreferenceApplier(context)
+    val searchHistoryRepository = remember { RepositoryFactory().searchHistoryRepository(context) }
 
-    val itemDeletionUseCase = ItemDeletionUseCase(bookmarkRepository, viewHistoryRepository)
+    val itemDeletionUseCase = remember {
+        val database = RepositoryFactory()
+        ItemDeletionUseCase(
+            database.bookmarkRepository(context),
+            database.viewHistoryRepository(context)
+        )
+    }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val contentViewModel = viewModel(
         ContentViewModel::class.java,
-        LocalContext.current as ViewModelStoreOwner
+        context as ViewModelStoreOwner
     )
 
     Column(
@@ -124,6 +126,9 @@ internal fun SearchContentsUi(
             ) {
                 viewModel.openFavoriteSearch()
             }
+
+            val favoriteSearchRepository =
+                remember { RepositoryFactory().favoriteSearchRepository(context) }
 
             viewModel.favoriteSearchItems.take(5).forEach { favoriteSearch ->
                 SearchItemContent(
@@ -282,7 +287,9 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
 
     Surface(
         shadowElevation = 4.dp,
-        modifier = Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .padding(bottom = 8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

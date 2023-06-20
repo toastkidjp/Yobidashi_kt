@@ -15,9 +15,8 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
-import jp.toastkid.yobidashi.libs.db.AppDatabase
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
@@ -34,18 +33,14 @@ class BookmarkInsertionTest {
     private lateinit var context: Context
 
     @MockK
-    private lateinit var appDatabase: AppDatabase
-
-    @MockK
     private lateinit var bookmarkRepository: BookmarkRepository
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        mockkConstructor(DatabaseFinder::class)
-        coEvery { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
-        coEvery { appDatabase.bookmarkRepository() }.returns(bookmarkRepository)
+        mockkConstructor(RepositoryFactory::class)
+        coEvery { anyConstructed<RepositoryFactory>().bookmarkRepository(any()) }.returns(bookmarkRepository)
         coEvery { bookmarkRepository.add(any()) }.returns(Unit)
     }
 
@@ -60,8 +55,7 @@ class BookmarkInsertionTest {
 
         bookmarkInsertion.insert()
 
-        coVerify(exactly = 0) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        coVerify(exactly = 0) { appDatabase.bookmarkRepository() }
+        coVerify(exactly = 0) { anyConstructed<RepositoryFactory>().bookmarkRepository(any()) }
         coVerify(exactly = 0) { bookmarkRepository.add(any()) }
     }
 
@@ -76,8 +70,7 @@ class BookmarkInsertionTest {
 
         bookmarkInsertion.insert()
 
-        coVerify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        coVerify(exactly = 1) { appDatabase.bookmarkRepository() }
+        coVerify(exactly = 1) { anyConstructed<RepositoryFactory>().bookmarkRepository(any()) }
         coVerify(exactly = 1) { bookmarkRepository.add(any()) }
     }
 

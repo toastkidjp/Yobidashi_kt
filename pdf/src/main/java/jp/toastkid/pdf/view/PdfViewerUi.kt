@@ -72,7 +72,6 @@ fun PdfViewerUi(uri: Uri) {
 
 @Composable
 private fun PdfPageList(uri: Uri, listState: LazyListState) {
-    val pdfImageFactory = PdfImageFactory()
     val context = LocalContext.current
 
     val pdfRenderer =
@@ -90,6 +89,7 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
     val images = remember { mutableStateListOf<Bitmap>() }
     LaunchedEffect(uri) {
         withContext(Dispatchers.IO) {
+            val pdfImageFactory = PdfImageFactory()
             images.addAll(
                 (0 until pdfRenderer.pageCount).map {
                     pdfImageFactory.invoke(pdfRenderer.openPage(it))
@@ -163,6 +163,6 @@ private fun AppBarUi(scrollState: LazyListState) {
                 )
             }
         },
-        steps = (scrollState.layoutInfo.totalItemsCount ?: 1) - 1
+        steps = scrollState.layoutInfo.totalItemsCount - 1
     )
 }

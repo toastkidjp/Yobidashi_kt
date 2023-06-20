@@ -15,9 +15,6 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.lib.image.BitmapScaling
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Response
 import org.jsoup.Jsoup
 import timber.log.Timber
 import java.io.IOException
@@ -56,22 +53,14 @@ class WebClipIconLoader(
             ?.firstOrNull()
             ?: return
 
-        downloadApi.invoke(webClipUrl.toString(), object : Callback {
-
-            override fun onFailure(call: Call, e: IOException) {
-                Timber.e(e)
+        downloadApi.invoke(webClipUrl.toString(), {
+            it?.use { stream ->
+                val bitmap = BitmapFactory.decodeStream(stream)
+                val longer = if (bitmap.width > bitmap.height) bitmap.width else bitmap.height
+                val sampling = 128.0 / longer.toDouble()
+                bitmapCompressor
+                    .invoke(bitmapScaling.invoke(bitmap, sampling, sampling), file)
             }
-
-            override fun onResponse(call: Call, response: Response) {
-                response.body?.byteStream()?.use { stream ->
-                    val bitmap = BitmapFactory.decodeStream(stream)
-                    val longer = if (bitmap.width > bitmap.height) bitmap.width else bitmap.height
-                    val sampling = 128.0 / longer.toDouble()
-                    bitmapCompressor
-                        .invoke(bitmapScaling.invoke(bitmap, sampling, sampling), file)
-                }
-            }
-
         })
     }
 

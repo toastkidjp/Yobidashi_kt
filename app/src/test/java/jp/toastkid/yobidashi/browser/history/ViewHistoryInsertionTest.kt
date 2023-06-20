@@ -17,8 +17,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import jp.toastkid.yobidashi.libs.db.AppDatabase
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
@@ -29,19 +28,14 @@ class ViewHistoryInsertionTest {
     private lateinit var viewHistoryInsertion: ViewHistoryInsertion
 
     @MockK
-    private lateinit var appDatabase: AppDatabase
-
-    @MockK
     private lateinit var repository: ViewHistoryRepository
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        mockkConstructor(DatabaseFinder::class)
-        coEvery { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
-
-        coEvery { appDatabase.viewHistoryRepository() }.returns(repository)
+        mockkConstructor(RepositoryFactory::class)
+        coEvery { anyConstructed<RepositoryFactory>().viewHistoryRepository(any()) }.returns(repository)
         coEvery { repository.add(any()) }.just(Runs)
     }
 
@@ -58,8 +52,7 @@ class ViewHistoryInsertionTest {
 
         viewHistoryInsertion.invoke()
 
-        coVerify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        coVerify(exactly = 1) { appDatabase.viewHistoryRepository() }
+        coVerify(exactly = 1) { anyConstructed<RepositoryFactory>().viewHistoryRepository(any()) }
         coVerify(exactly = 1) { repository.add(any()) }
     }
 
@@ -71,8 +64,7 @@ class ViewHistoryInsertionTest {
 
         viewHistoryInsertion.invoke()
 
-        coVerify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        coVerify(exactly = 1) { appDatabase.viewHistoryRepository() }
+        coVerify(exactly = 1) { anyConstructed<RepositoryFactory>().viewHistoryRepository(any()) }
         coVerify(exactly = 0) { repository.add(any()) }
     }
 
@@ -84,8 +76,7 @@ class ViewHistoryInsertionTest {
 
         viewHistoryInsertion.invoke()
 
-        coVerify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        coVerify(exactly = 1) { appDatabase.viewHistoryRepository() }
+        coVerify(exactly = 1) { anyConstructed<RepositoryFactory>().viewHistoryRepository(any()) }
         coVerify(exactly = 0) { repository.add(any()) }
     }
 

@@ -17,7 +17,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +37,7 @@ class ZipLoaderWorker(
     override fun doWork(): Result {
         val file = workerParams.inputData.getString("target")?.toUri() ?: return Result.failure()
 
-        val articleRepository = AppDatabase.find(context).articleRepository()
+        val articleRepository = ArticleRepositoryFactory().invoke(context)
         val zipLoader = ZipLoader(articleRepository)
 
         CoroutineScope(mainDispatcher()).launch {

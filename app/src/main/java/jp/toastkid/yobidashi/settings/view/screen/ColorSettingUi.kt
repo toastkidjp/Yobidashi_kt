@@ -44,12 +44,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
 import jp.toastkid.yobidashi.settings.color.RandomColorInsertion
 import jp.toastkid.yobidashi.settings.color.SavedColor
@@ -66,7 +66,7 @@ internal fun ColorSettingUi() {
     val context = LocalContext.current
     val preferenceApplier = PreferenceApplier(context)
 
-    val repository = remember { DatabaseFinder().invoke(context).savedColorRepository() }
+    val repository = remember { RepositoryFactory().savedColorRepository(context) }
 
     val colorPair = preferenceApplier.colorPair()
     val initialBgColor = colorPair.bgColor()
@@ -244,7 +244,7 @@ internal fun ColorSettingUi() {
     ) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                DatabaseFinder().invoke(context).searchHistoryRepository().deleteAll()
+                RepositoryFactory().searchHistoryRepository(context).deleteAll()
             }
 
             (context as? ComponentActivity)?.let { activity ->

@@ -7,7 +7,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.preference.ColorPair
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -32,7 +31,7 @@ class WindowOptionColorApplierTest {
 
     @Test
     fun test() {
-        windowOptionColorApplier.invoke(window, ColorPair(Color.BLACK, Color.WHITE))
+        windowOptionColorApplier.invoke(window, Color.BLACK)
 
         verify(exactly = 1) { window.setStatusBarColor(any()) }
         verify(exactly = 1) { window.setNavigationBarColor(any()) }

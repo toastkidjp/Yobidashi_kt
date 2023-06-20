@@ -195,12 +195,12 @@ fun LoanCalculatorUi() {
                                     .background(if (scrollState.firstVisibleItemIndex != 0) MaterialTheme.colorScheme.surface else Color.Transparent)
                             ) {
                                 Text(
-                                    "回数",
+                                    stringResource(R.string.title_column_loan_payment_count),
                                     modifier = Modifier.weight(0.4f)
                                 )
-                                Text("元本", modifier = Modifier.weight(1f))
-                                Text("利息", modifier = Modifier.weight(1f))
-                                Text("残金", modifier = Modifier.weight(1f))
+                                Text(stringResource(R.string.title_column_principal), modifier = Modifier.weight(1f))
+                                Text(stringResource(R.string.title_column_interest), modifier = Modifier.weight(1f))
+                                Text(stringResource(R.string.title_column_balance), modifier = Modifier.weight(1f))
                             }
                         }
                         itemsIndexed(scheduleState) { index, it ->
@@ -209,8 +209,8 @@ fun LoanCalculatorUi() {
                                     "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
                                     modifier = Modifier.weight(0.4f)
                                 )
-                                Text(it.principal.roundToInt().toString(), modifier = Modifier.weight(1f))
-                                Text(it.interest.roundToInt().toString(), modifier = Modifier.weight(1f))
+                                Text(roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
+                                Text(roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
                                 Text(it.amount.toString(), modifier = Modifier.weight(1f))
                             }
                         }
@@ -220,6 +220,9 @@ fun LoanCalculatorUi() {
         }
     }
 }
+
+private fun roundToIntSafely(d: Double) =
+    if (d.isNaN()) "0" else d.roundToInt().toString()
 
 @Composable
 private fun makeTextFieldColors() = TextFieldDefaults.colors(

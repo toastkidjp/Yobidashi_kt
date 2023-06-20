@@ -12,7 +12,6 @@ import property.LibraryVersion
 plugins {
   id("com.android.library")
   id("kotlin-android")
-  id("org.jetbrains.kotlin.kapt")
   id("jacoco.definition")
 }
 // TODO apply(from = "../jacoco.gradle.kts")
@@ -46,6 +45,7 @@ tasks.withType<GenerateBuildConfig> {
 }
 
 dependencies {
+    implementation(project(path = ":data"))
     implementation(project(path = ":lib"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
 
@@ -61,10 +61,6 @@ dependencies {
 
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
-
-    implementation("androidx.room:room-runtime:${LibraryVersion.room}")
-    implementation("androidx.room:room-paging:${LibraryVersion.room}")
-    kapt("androidx.room:room-compiler:${LibraryVersion.room}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")

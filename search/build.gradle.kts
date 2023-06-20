@@ -5,10 +5,9 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
+import com.android.build.gradle.tasks.GenerateBuildConfig
 import property.BuildTool
 import property.LibraryVersion
-import com.android.build.gradle.tasks.GenerateBuildConfig
-import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 
 plugins {
   id("com.android.library")

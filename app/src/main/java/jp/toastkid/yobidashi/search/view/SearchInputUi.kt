@@ -68,7 +68,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
-import jp.toastkid.yobidashi.search.trend.TrendApi
+import jp.toastkid.api.trend.TrendApi
 import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import jp.toastkid.yobidashi.search.voice.VoiceSearchIntentFactory
@@ -89,7 +89,7 @@ fun SearchInputUi(
 ) {
     val context = LocalContext.current as? ComponentActivity ?: return
 
-    val preferenceApplier = PreferenceApplier(context)
+    val preferenceApplier = remember { PreferenceApplier(context) }
 
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
@@ -239,9 +239,7 @@ fun SearchInputUi(
                     )
                 }
                 LaunchedEffect(key1 = queryingUseCase, block = {
-                    val text = inputQuery ?: ""
-                    viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
-                    focusRequester.requestFocus()
+                    queryingUseCase.withDebounce()
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val trendItems = try {
@@ -258,7 +256,9 @@ fun SearchInputUi(
                         viewModel.trends.addAll(taken)
                     }
 
-                    queryingUseCase.withDebounce()
+                    val text = inputQuery ?: ""
+                    viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
+                    focusRequester.requestFocus()
                 })
             }
         })

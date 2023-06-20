@@ -53,9 +53,8 @@ import androidx.paging.cachedIn
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
-import jp.toastkid.todo.data.TodoTaskDatabase
+import jp.toastkid.todo.data.TodoTaskDataAccessorFactory
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskEditorUi
@@ -83,7 +82,7 @@ fun TaskListUi() {
             }
         }
 
-    val repository = TodoTaskDatabase.find(context).repository()
+    val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
 
     val tasks = remember { mutableStateOf<Flow<PagingData<TodoTask>>?>(null) }
 
@@ -104,8 +103,6 @@ fun TaskListUi() {
         }
     })
 
-    val preferenceApplier = PreferenceApplier(context)
-
     val menuUseCase = ItemMenuPopupActionUseCase(
         {
             taskAdditionDialogFragmentViewModel.setTask(it)
@@ -122,14 +119,12 @@ fun TaskListUi() {
 
     TaskEditorUi(
         { TaskList(tasks.value, menuUseCase) },
-        taskAdditionDialogFragmentViewModel,
-        {
-            CoroutineScope(Dispatchers.IO).launch {
-                repository.insert(it)
-            }
-        },
-        preferenceApplier.colorPair()
-    )
+        taskAdditionDialogFragmentViewModel
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.insert(it)
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -160,7 +155,7 @@ private fun TaskListItem(
         stringResource(id = R.string.delete)
     )
 
-    val repository = TodoTaskDatabase.find(LocalContext.current).repository()
+    val repository = TodoTaskDataAccessorFactory().invoke(LocalContext.current)
 
     Surface(
         shadowElevation = 4.dp,

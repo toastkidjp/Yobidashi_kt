@@ -27,7 +27,7 @@ class ArticleInsertion(
     @VisibleForTesting private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    private val repository = AppDatabase.find(context).articleRepository()
+    private val repository = ArticleRepositoryFactory().invoke(context)
 
     private val tokenizer = NgramTokenizer()
 
