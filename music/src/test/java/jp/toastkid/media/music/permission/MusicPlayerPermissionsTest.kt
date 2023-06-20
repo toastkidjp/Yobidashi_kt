@@ -41,7 +41,7 @@ class MusicPlayerPermissionsTest {
 
         val permissions = musicPlayerPermissions.invoke()
 
-        assertTrue(permissions.contains(Manifest.permission.READ_EXTERNAL_STORAGE))
+        assertTrue(permissions.contains(Manifest.permission.READ_MEDIA_IMAGES))
         assertTrue(permissions.contains(Manifest.permission.POST_NOTIFICATIONS))
     }
 
