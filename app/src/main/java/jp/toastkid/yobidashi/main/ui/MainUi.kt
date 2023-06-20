@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.main.ui
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -109,10 +108,10 @@ import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContrac
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
-import jp.toastkid.yobidashi.main.usecase.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
+import jp.toastkid.yobidashi.main.usecase.ClippingUrlOpener
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
 import jp.toastkid.yobidashi.tab.History
 import jp.toastkid.yobidashi.tab.TabAdapter
@@ -261,7 +260,7 @@ internal fun Content() {
                     replaceToCurrentTab(tabs, navigationHostController)
                 }
                 is OpenPdfEvent -> {
-                    requestPermissionForOpenPdfTab.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    activityResultLauncher.launch(OpenDocumentIntentFactory()("application/pdf"))
                 }
                 is OpenEditorEvent -> {
                     tabs.openNewEditorTab()
