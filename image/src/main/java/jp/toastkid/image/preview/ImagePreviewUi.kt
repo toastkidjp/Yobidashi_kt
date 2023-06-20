@@ -83,17 +83,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
 
     val sizePx = with(LocalDensity.current) { 200.dp.toPx() }
     val anchors = mapOf(sizePx to -1, 0f to 0, -sizePx to 1)
-    val swipeableState = SwipeableState(
-        initialValue = 0,
-        confirmStateChange = {
-            if (it == -1) {
-                viewModel.moveToPrevious()
-            } else if (it == 1) {
-                viewModel.moveToNext()
-            }
-            true
-        }
-    )
 
     val coroutineScope = rememberCoroutineScope()
 
