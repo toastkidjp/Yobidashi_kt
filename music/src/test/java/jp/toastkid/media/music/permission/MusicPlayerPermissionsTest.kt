@@ -17,6 +17,7 @@ import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Test
 import org.robolectric.util.ReflectionHelpers
 
 class MusicPlayerPermissionsTest {
@@ -34,7 +35,7 @@ class MusicPlayerPermissionsTest {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         ReflectionHelpers.setStaticField(Build.VERSION::class.java, "SDK_INT", Build.VERSION_CODES.TIRAMISU)
 
@@ -44,7 +45,7 @@ class MusicPlayerPermissionsTest {
         assertTrue(permissions.contains(Manifest.permission.POST_NOTIFICATIONS))
     }
 
-    @org.junit.Test
+    @Test
     fun invokeUnderT() {
         ReflectionHelpers.setStaticField(Build.VERSION::class.java, "SDK_INT", Build.VERSION_CODES.S)
 
