@@ -14,15 +14,14 @@ import android.os.Build
 class MusicPlayerPermissions {
 
     operator fun invoke() =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             arrayOf(
                 Manifest.permission.READ_MEDIA_AUDIO,
                 Manifest.permission.POST_NOTIFICATIONS
             )
-        } else {
+        else
             arrayOf(
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
-        }
 
 }
