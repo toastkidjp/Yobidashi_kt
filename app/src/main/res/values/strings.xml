@@ -241,7 +241,7 @@
     <string name="invert_content_coloring">Invert content coloring</string>
     <string name="title_clear_coolie">Clear Cookie</string>
     <string name="title_wifi_only">Wi-Fi Only Mode</string>
-    <string name="message_wifi_not_connecting">It isn\'t connecting Wi-Fi.</string>
+    <string name="message_wifi_not_connecting">It cannot use Wi-Fi.</string>
     <string name="wikipedia">Wikipedia</string>
     <string name="add_schedule">Add schedule</string>
     <string name="minus">-</string>
