@@ -342,12 +342,15 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     }
 
     if (viewModel.openDialog.value) {
-        val inputStream = FileInputStream(File(viewModel.getCurrentImage().path))
-        val exifInterface = ExifInterface(inputStream)
+        val message = FileInputStream(File(viewModel.getCurrentImage().path)).use {
+            val exifInterface = ExifInterface(it)
+            ExifInformationExtractorUseCase().invoke(exifInterface)
+        }
+
         ConfirmDialog(
             visibleState = viewModel.openDialog,
             title = viewModel.getCurrentImage().name,
-            message = ExifInformationExtractorUseCase().invoke(exifInterface) ?: "Not found"
+            message = message ?: "Not found"
         )
     }
 
