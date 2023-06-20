@@ -144,13 +144,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 .fillMaxWidth()
                 .height(60.dp)
                 .align(Alignment.Center)
-                /*.swipeableCompat(
-                    state = swipeableState,
-                    anchors = anchors,
-                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                    resistance = ResistanceConfig(0.5f),
-                    orientation = Orientation.Horizontal
-                )*/
         ) {
         }
 
