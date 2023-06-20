@@ -9,6 +9,7 @@
 package jp.toastkid.image.view
 
 import android.Manifest
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -128,7 +129,13 @@ fun ImageListUi() {
 
     if (preview.value.not()) {
         LaunchedEffect(key1 = "first_launch") {
-            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            requestPermissionLauncher.launch(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    Manifest.permission.READ_MEDIA_IMAGES
+                } else {
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                }
+            )
         }
     }
 
