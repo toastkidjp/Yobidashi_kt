@@ -328,7 +328,7 @@ class WebViewContainer(
         GlobalWebViewPool.resize(poolSize)
     }
 
-    fun applyNewAlpha() {
+    private fun applyNewAlpha() {
         GlobalWebViewPool.applyNewAlpha(alphaConverter.readBackground(context))
     }
 
