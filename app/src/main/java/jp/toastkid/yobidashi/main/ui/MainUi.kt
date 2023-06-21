@@ -166,15 +166,6 @@ internal fun Content() {
             contentViewModel.replaceToCurrentTab()
         }
 
-    val requestPermissionForOpenPdfTab =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (!it) {
-                return@rememberLauncherForActivityResult
-            }
-
-            activityResultLauncher.launch(OpenDocumentIntentFactory()("application/pdf"))
-        }
-
     val openMenu = remember { mutableStateOf(false) }
 
     val backgroundColor = MaterialTheme.colorScheme.primary
