@@ -60,7 +60,6 @@ import jp.toastkid.image.preview.attach.AttachToThisAppBackgroundUseCase
 import jp.toastkid.image.preview.detail.ExifInformationExtractorUseCase
 import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.compat.material3.SwipeableState
 import jp.toastkid.ui.dialog.ConfirmDialog
 import kotlinx.coroutines.launch
 import java.io.File
@@ -82,7 +81,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val context = LocalContext.current
 
     val sizePx = with(LocalDensity.current) { 200.dp.toPx() }
-    val anchors = mapOf(sizePx to -1, 0f to 0, -sizePx to 1)
 
     val coroutineScope = rememberCoroutineScope()
 
