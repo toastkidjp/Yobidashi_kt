@@ -33,7 +33,9 @@ class DownloadPermissionRequestContract : ActivityResultContract<String?, Boolea
         }
         if (resultCode != Activity.RESULT_OK) return false
         return intent
-            ?.getIntArrayExtra(ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
+            ?.getIntArrayExtra(
+                ActivityResultContracts.RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS
+            )
             ?.getOrNull(0) == PackageManager.PERMISSION_GRANTED
     }
 
