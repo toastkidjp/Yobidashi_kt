@@ -47,7 +47,7 @@ class SwipeRefreshNestedScrollConnection(
     ): Offset {
         if (state?.isRefreshing == false && state.indicatorOffset >= refreshTrigger) {
             onRefresh()
-            state?.isSwipeInProgress = false
+            state.isSwipeInProgress = false
         } else {
             coroutineScope.launch {
                 state?.resetOffset()
