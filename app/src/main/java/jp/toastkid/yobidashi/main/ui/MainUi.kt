@@ -168,7 +168,6 @@ internal fun Content() {
 
     val openMenu = remember { mutableStateOf(false) }
 
-    val backgroundColor = MaterialTheme.colorScheme.primary
     val tint = MaterialTheme.colorScheme.onPrimary
 
     val bottomBarHeightPx = with(LocalDensity.current) { 72.dp.toPx() }
@@ -510,7 +509,7 @@ internal fun Content() {
                     Icon(
                         painterResource(id = R.drawable.ic_menu),
                         stringResource(id = R.string.menu),
-                        tint = backgroundColor
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             },
