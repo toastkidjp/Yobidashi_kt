@@ -484,7 +484,7 @@ internal fun Content() {
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = { openMenu.value = openMenu.value.not() },
-                    containerColor = tint,
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .size(48.dp)
                         .scale(contentViewModel.fabScale.value)
