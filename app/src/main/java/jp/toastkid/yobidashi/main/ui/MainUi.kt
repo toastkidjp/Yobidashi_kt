@@ -168,8 +168,6 @@ internal fun Content() {
 
     val openMenu = remember { mutableStateOf(false) }
 
-    val tint = MaterialTheme.colorScheme.onPrimary
-
     val bottomBarHeightPx = with(LocalDensity.current) { 72.dp.toPx() }
     contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
 
