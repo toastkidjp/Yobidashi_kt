@@ -52,6 +52,9 @@ class WebSettingApplierTest {
         every { webSettings.getUserAgentString() }.returns("test")
         every { webSettings.setUserAgentString(any()) }.answers { Unit }
         every { webSettings.setAllowFileAccess(any()) }.answers { Unit }
+        every { webSettings.setMixedContentMode(any()) }.answers { Unit }
+        every { webSettings.setUseWideViewPort(any()) }.answers { Unit }
+        every { webSettings.setLoadWithOverviewMode(any()) }.answers { Unit }
     }
 
     @Test
@@ -66,12 +69,10 @@ class WebSettingApplierTest {
         webSettingApplier.invoke(webSettings)
 
         verify (exactly = 1) { preferenceApplier.useJavaScript() }
-        verify (exactly = 1) { preferenceApplier.doesSaveForm() }
         verify (exactly = 1) { preferenceApplier.doesLoadImage() }
         verify (exactly = 1) { preferenceApplier.userAgent() }
 
         verify (exactly = 1) { webSettings.setJavaScriptEnabled(any()) }
-        verify (exactly = 1) { webSettings.setSaveFormData(any()) }
         verify (exactly = 1) { webSettings.setLoadsImagesAutomatically(any()) }
         verify (exactly = 1) { webSettings.setBuiltInZoomControls(any()) }
         verify (exactly = 1) { webSettings.setDisplayZoomControls(any()) }
@@ -91,12 +92,10 @@ class WebSettingApplierTest {
         webSettingApplier.invoke(webSettings)
 
         verify (exactly = 1) { preferenceApplier.useJavaScript() }
-        verify (exactly = 1) { preferenceApplier.doesSaveForm() }
         verify (exactly = 1) { preferenceApplier.doesLoadImage() }
         verify (exactly = 1) { preferenceApplier.userAgent() }
 
         verify (exactly = 1) { webSettings.setJavaScriptEnabled(any()) }
-        verify (exactly = 1) { webSettings.setSaveFormData(any()) }
         verify (exactly = 1) { webSettings.setLoadsImagesAutomatically(any()) }
         verify (exactly = 1) { webSettings.setBuiltInZoomControls(any()) }
         verify (exactly = 1) { webSettings.setDisplayZoomControls(any()) }
