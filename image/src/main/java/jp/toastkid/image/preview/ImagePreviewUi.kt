@@ -40,7 +40,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -79,8 +78,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
     val context = LocalContext.current
-
-    val sizePx = with(LocalDensity.current) { 200.dp.toPx() }
 
     val coroutineScope = rememberCoroutineScope()
 
