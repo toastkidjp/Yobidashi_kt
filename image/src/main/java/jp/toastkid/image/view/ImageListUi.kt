@@ -71,7 +71,6 @@ fun ImageListUi() {
 
     val backHandlerState = remember { mutableStateOf(false) }
 
-    val imageLoader = ImageLoader(contentResolver)
     val imageLoaderUseCase = remember {
         ImageLoaderUseCase(
             preferenceApplier,
@@ -80,7 +79,7 @@ fun ImageListUi() {
                 images.addAll(it)
             },
             BucketLoader(contentResolver),
-            imageLoader,
+            ImageLoader(contentResolver),
             backHandlerState,
             { }
         )
@@ -94,7 +93,7 @@ fun ImageListUi() {
                 images.addAll(it)
             },
             imageLoaderUseCase,
-            imageLoader,
+            ImageLoader(contentResolver),
             { }
         )
     }
