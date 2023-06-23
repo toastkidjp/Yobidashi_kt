@@ -5,7 +5,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import jp.toastkid.yobidashi.libs.network.DownloadAction
+import jp.toastkid.lib.network.DownloadAction
 import org.junit.Before
 import org.junit.Test
 

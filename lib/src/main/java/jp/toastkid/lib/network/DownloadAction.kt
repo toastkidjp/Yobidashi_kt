@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.libs.network
+package jp.toastkid.lib.network
 
 import android.app.DownloadManager
 import android.content.Context

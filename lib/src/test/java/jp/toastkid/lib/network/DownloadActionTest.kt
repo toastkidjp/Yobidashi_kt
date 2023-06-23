@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2022 toastkidjp.
+ * Copyright (c) 2023 toastkidjp.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.libs.network
+package jp.toastkid.lib.network
 
 import android.app.DownloadManager
 import android.content.Context
@@ -56,9 +56,6 @@ class DownloadActionTest {
         mockkConstructor(PreferenceApplier::class)
         every { anyConstructed<PreferenceApplier>().wifiOnly }.returns(true)
 
-        mockkConstructor(NetworkChecker::class)
-        every { anyConstructed<NetworkChecker>().isUnavailableWiFi(any()) }.returns(false)
-
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(uri)
         every { uri.lastPathSegment }.returns("test")
@@ -75,13 +72,6 @@ class DownloadActionTest {
     @After
     fun tearDown() {
         unmockkAll()
-    }
-
-    @Test
-    fun testNoopOnUnavailableWiFiCase() {
-        every { anyConstructed<NetworkChecker>().isUnavailableWiFi(any()) }.returns(true)
-
-        downloadAction.invoke("https://www.search.yahoo.co.jp")
     }
 
     @Test

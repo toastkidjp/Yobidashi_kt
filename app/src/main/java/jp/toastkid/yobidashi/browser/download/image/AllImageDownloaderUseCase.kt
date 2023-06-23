@@ -9,7 +9,7 @@ package jp.toastkid.yobidashi.browser.download.image
 
 import android.webkit.WebView
 import jp.toastkid.lib.Urls
-import jp.toastkid.yobidashi.libs.network.DownloadAction
+import jp.toastkid.lib.network.DownloadAction
 
 /**
  * @author toastkidjp
