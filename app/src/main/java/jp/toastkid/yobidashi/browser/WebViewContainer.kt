@@ -47,7 +47,7 @@ import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewLongTapListenerFactory
 import jp.toastkid.lib.network.DownloadAction
-import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.lib.network.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

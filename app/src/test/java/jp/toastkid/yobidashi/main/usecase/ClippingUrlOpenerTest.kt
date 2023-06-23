@@ -24,7 +24,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.lib.network.NetworkChecker
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
