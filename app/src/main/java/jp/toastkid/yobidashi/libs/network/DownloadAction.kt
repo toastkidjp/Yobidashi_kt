@@ -5,11 +5,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import androidx.core.net.toUri
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
-import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.R
 
 
 /**
@@ -25,14 +20,6 @@ class DownloadAction(private val context: Context) {
     }
 
     operator fun invoke(urls: Collection<String>) {
-        if (PreferenceApplier(context).wifiOnly && NetworkChecker().isUnavailableWiFi(context)) {
-            (context as? ViewModelStoreOwner)?.let {
-                ViewModelProvider(it).get(ContentViewModel::class.java)
-                    .snackShort(R.string.message_wifi_not_connecting)
-            }
-            return
-        }
-
         enqueue(urls)
     }
 

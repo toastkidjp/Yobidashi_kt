@@ -109,6 +109,7 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.libs.network.DownloadAction
+import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.ClippingUrlOpener
@@ -214,6 +215,10 @@ internal fun Content() {
                 return@rememberLauncherForActivityResult
             }
             if (downloadUrl.value.isEmpty()) {
+                return@rememberLauncherForActivityResult
+            }
+            if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(activity)) {
+                contentViewModel.snackShort(R.string.message_wifi_not_connecting)
                 return@rememberLauncherForActivityResult
             }
             DownloadAction(activity).invoke(downloadUrl.value)
