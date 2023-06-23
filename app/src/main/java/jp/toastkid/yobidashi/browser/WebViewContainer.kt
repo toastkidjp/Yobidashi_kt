@@ -343,6 +343,10 @@ class WebViewContainer(
     }
 
     fun downloadAllImages() {
+        if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(context)) {
+            contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
+            return
+        }
         AllImageDownloaderUseCase(DownloadAction(context)).invoke(currentView())
     }
 
