@@ -8,9 +8,9 @@
 
 package jp.toastkid.yobidashi.browser.usecase
 
-import android.content.Context
 import android.webkit.WebView
 import android.widget.FrameLayout
+import androidx.activity.ComponentActivity
 import androidx.collection.LruCache
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -62,6 +62,9 @@ class WebViewReplacementUseCaseTest {
     @MockK
     private lateinit var webView: WebView
 
+    @MockK
+    private lateinit var context: ComponentActivity
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -70,7 +73,7 @@ class WebViewReplacementUseCaseTest {
         every { webViewContainer.addView(any()) }.returns(Unit)
         every { webViewContainer.removeAllViews() }.returns(Unit)
         every { webViewContainer.startAnimation(any()) }.returns(Unit)
-        every { webViewContainer.getContext() }.returns(mockk<Context>()) // TODO Other case
+        every { webViewContainer.getContext() }.returns(context)
 
         every { webView.onResume() }.returns(Unit)
         every { webView.getParent() }.returns(webViewContainer)
