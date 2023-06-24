@@ -10,11 +10,10 @@ package jp.toastkid.lib.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.runtime.State
 
 data class OptionMenu(
     @DrawableRes val iconId: Int? = null,
     @StringRes val titleId: Int,
     val action: () -> Unit,
-    val checkState: State<Boolean>? = null
+    val check: (() -> Boolean)? = null
 )

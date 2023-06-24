@@ -12,11 +12,11 @@ import android.content.Context
 import android.util.LruCache
 import jp.toastkid.api.suggestion.SuggestionApi
 import jp.toastkid.data.repository.factory.RepositoryFactory
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.yobidashi.browser.UrlItem
+import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
+import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchRepository
 import jp.toastkid.yobidashi.search.history.SearchHistoryRepository
-import jp.toastkid.yobidashi.search.url_suggestion.UrlItemQueryUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -27,27 +27,29 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class QueryingUseCase(
-    private val searchUiViewModel: SearchUiViewModel,
-    private val preferenceApplier: PreferenceApplier,
-    private val urlItemQueryUseCase: UrlItemQueryUseCase,
+    private val bookmarkRepository: BookmarkRepository,
+    private val viewHistoryRepository: ViewHistoryRepository,
     private val favoriteSearchRepository: FavoriteSearchRepository,
     private val searchHistoryRepository: SearchHistoryRepository,
-    private val contextSupplier: () -> Context,
     private val suggestionApi: SuggestionApi = SuggestionApi(),
     private val channel: Channel<String> = Channel(),
     private val cache: LruCache<String, List<String>> = LruCache<String, List<String>>(30),
-    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
+    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     private var disposables = Job()
 
     private fun invoke(keyword: String) {
-        if (preferenceApplier.isEnableSearchHistory) {
-            CoroutineScope(Dispatchers.IO).launch {
-                searchUiViewModel.searchHistories.clear()
-                searchUiViewModel.searchHistories.addAll(
+        val viewModel = viewModel ?: return
+
+        if (viewModel.isEnableSearchHistory()) {
+            CoroutineScope(Dispatchers.IO).launch(disposables) {
+                viewModel.searchHistories.clear()
+                viewModel.searchHistories.addAll(
                     if (keyword.isBlank()) {
                         searchHistoryRepository.find(5)
                     } else {
@@ -57,10 +59,10 @@ class QueryingUseCase(
             }
         }
 
-        if (preferenceApplier.isEnableFavoriteSearch) {
-            CoroutineScope(backgroundDispatcher).launch {
-                searchUiViewModel.favoriteSearchItems.clear()
-                searchUiViewModel.favoriteSearchItems.addAll(
+        if (viewModel.isEnableFavoriteSearch()) {
+            CoroutineScope(backgroundDispatcher).launch(disposables) {
+                viewModel.favoriteSearchItems.clear()
+                viewModel.favoriteSearchItems.addAll(
                     if (keyword.isBlank()) {
                         favoriteSearchRepository.find(5)
                     } else {
@@ -70,33 +72,41 @@ class QueryingUseCase(
             }
         }
 
-        if (preferenceApplier.isEnableViewHistory) {
-            urlItemQueryUseCase.invoke(keyword)
-        }
+        if (viewModel.isEnableViewHistory()) {
+            CoroutineScope(backgroundDispatcher).launch {
+                val newItems = mutableListOf<UrlItem>()
 
-        if (preferenceApplier.isEnableSuggestion) {
-            querySuggestions(keyword)
-        }
-    }
+                withContext(ioDispatcher) {
+                    if (keyword.isBlank()) {
+                        return@withContext
+                    }
+                    bookmarkRepository.search("%$keyword%", ITEM_LIMIT).forEach { newItems.add(it) }
+                }
 
-    private fun querySuggestions(keyword: String) {
-        if (cache.snapshot().containsKey(keyword)) {
-            searchUiViewModel.suggestions.clear()
-            searchUiViewModel.suggestions.addAll(cache.get(keyword))
-            return
-        }
+                withContext(ioDispatcher) {
+                    viewHistoryRepository.search("%$keyword%", ITEM_LIMIT).forEach { newItems.add(it) }
+                }
 
-        if (cannotUseNetwork(contextSupplier())) {
-            return
-        }
-
-        suggestionApi.fetchAsync(keyword) { suggestions ->
-            searchUiViewModel.suggestions.clear()
-            if (suggestions.isEmpty()) {
-                return@fetchAsync
+                viewModel.urlItems.clear()
+                viewModel.urlItems.addAll(newItems)
             }
-            cache.put(keyword, suggestions)
-            searchUiViewModel.suggestions.addAll(suggestions)
+        }
+
+        if (viewModel.isEnableSuggestion()) {
+            if (cache.snapshot().containsKey(keyword)) {
+                viewModel.suggestions.clear()
+                viewModel.suggestions.addAll(cache.get(keyword))
+                return
+            }
+
+            suggestionApi.fetchAsync(keyword) { suggestions ->
+                viewModel.suggestions.clear()
+                if (suggestions.isEmpty()) {
+                    return@fetchAsync
+                }
+                cache.put(keyword, suggestions)
+                viewModel.suggestions.addAll(suggestions)
+            }
         }
     }
 
@@ -120,28 +130,25 @@ class QueryingUseCase(
         channel.close()
     }
 
-    private fun cannotUseNetwork(context: Context) =
-        NetworkChecker().isNotAvailable(context) ||
-                (PreferenceApplier(context).wifiOnly && NetworkChecker().isUnavailableWiFi(context))
+    private var viewModel: SearchUiViewModel? = null
+
+    fun setViewModel(searchUiViewModel: SearchUiViewModel) {
+        viewModel = searchUiViewModel
+    }
 
     companion object {
-        fun make(viewModel: SearchUiViewModel, context: Context): QueryingUseCase {
-            // TODO extract
+        /**
+         * Item limit.
+         */
+        private const val ITEM_LIMIT = 3
+
+        fun make(context: Context): QueryingUseCase {
+            val repositoryFactory = RepositoryFactory()
             return QueryingUseCase(
-                viewModel,
-                PreferenceApplier(context),
-                UrlItemQueryUseCase(
-                    {
-                        viewModel.urlItems.clear()
-                        viewModel.urlItems.addAll(it)
-                    },
-                    RepositoryFactory().bookmarkRepository(context),
-                    RepositoryFactory().viewHistoryRepository(context),
-                    { }
-                ),
-                RepositoryFactory().favoriteSearchRepository(context),
-                RepositoryFactory().searchHistoryRepository(context),
-                { context }
+                repositoryFactory.bookmarkRepository(context),
+                repositoryFactory.viewHistoryRepository(context),
+                repositoryFactory.favoriteSearchRepository(context),
+                repositoryFactory.searchHistoryRepository(context)
             )
         }
 

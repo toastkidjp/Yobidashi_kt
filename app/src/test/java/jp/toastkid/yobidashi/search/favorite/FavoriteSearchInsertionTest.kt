@@ -14,7 +14,6 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -46,7 +45,7 @@ class FavoriteSearchInsertionTest {
         MockKAnnotations.init(this)
 
         mockkConstructor(RepositoryFactory::class)
-        every { anyConstructed<RepositoryFactory>().favoriteSearchRepository(mockk()) }.returns(repository)
+        every { anyConstructed<RepositoryFactory>().favoriteSearchRepository(any()) }.returns(repository)
         every { repository.insert(any()) }.just(Runs)
     }
 
@@ -67,7 +66,7 @@ class FavoriteSearchInsertionTest {
 
         favoriteSearchInsertion.invoke()
 
-        verify(exactly = 1) { anyConstructed<RepositoryFactory>().favoriteSearchRepository(mockk()) }
+        verify(exactly = 1) { anyConstructed<RepositoryFactory>().favoriteSearchRepository(any()) }
         verify(exactly = 1) { repository.insert(any()) }
     }
 

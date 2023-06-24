@@ -9,7 +9,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkObject
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import jp.toastkid.article_viewer.article.ArticleRepository
 import kotlinx.coroutines.Dispatchers
@@ -33,10 +33,8 @@ class ArticleInsertionTest {
 
         val context = mockk<Context>()
 
-        val database = mockk<AppDatabase>()
-        mockkObject(AppDatabase)
-        every { AppDatabase.find(any()) }.answers { database }
-        every { database.articleRepository() }.answers { repository }
+        mockkConstructor(ArticleRepositoryFactory::class)
+        every { anyConstructed<ArticleRepositoryFactory>().invoke(any()) }.answers { repository }
         coEvery { repository.insert(any()) }.just(Runs)
 
         articleInsertion = ArticleInsertion(context, Dispatchers.Unconfined)
@@ -45,7 +43,6 @@ class ArticleInsertionTest {
     @After
     fun tearDown() {
         unmockkAll()
-        AppDatabase.clearInstance()
     }
 
     @Test

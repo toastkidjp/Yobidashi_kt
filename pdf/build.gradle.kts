@@ -12,7 +12,6 @@ import property.LibraryVersion
 plugins {
   id("com.android.library")
   id("kotlin-android")
-  id("org.jetbrains.kotlin.kapt")
   id("jacoco.definition")
 }
 // TODO apply(from = "../jacoco.gradle.kts")

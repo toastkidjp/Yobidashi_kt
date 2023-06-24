@@ -57,6 +57,7 @@ class BookmarkInitializerTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
+        mockkConstructor(RepositoryFactory::class)
         every { anyConstructed<RepositoryFactory>().bookmarkRepository(context) }.returns(bookmarkRepository)
         coEvery { bookmarkRepository.add(any()) }.just(Runs)
         coEvery { onComplete.invoke() }.just(Runs)

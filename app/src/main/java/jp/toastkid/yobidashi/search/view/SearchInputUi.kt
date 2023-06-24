@@ -30,7 +30,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -59,6 +58,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.api.trend.TrendApi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -68,7 +68,6 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchListUi
 import jp.toastkid.yobidashi.search.history.SearchHistoryListUi
-import jp.toastkid.api.trend.TrendApi
 import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.search.viewmodel.SearchUiViewModel
 import jp.toastkid.yobidashi.search.voice.VoiceSearchIntentFactory
@@ -78,8 +77,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
-    ExperimentalMaterial3Api::class
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class
 )
 @Composable
 fun SearchInputUi(
@@ -101,10 +99,10 @@ fun SearchInputUi(
         )
     }
 
-    val viewModel = remember { SearchUiViewModel() }
-
-    val queryingUseCase = remember {
-        QueryingUseCase.make(viewModel, context)
+    val viewModel = remember {
+        val vm = SearchUiViewModel(QueryingUseCase.make(context))
+        vm.copyFrom(preferenceApplier)
+        vm
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -148,7 +146,6 @@ fun SearchInputUi(
                         onValueChange = { text ->
                             viewModel.setInput(text)
                             useVoice.value = text.text.isBlank()
-                            queryingUseCase.send(text.text)
                         },
                         label = {
                             Text(
@@ -238,8 +235,8 @@ fun SearchInputUi(
                             )
                     )
                 }
-                LaunchedEffect(key1 = queryingUseCase, block = {
-                    queryingUseCase.withDebounce()
+                LaunchedEffect(key1 = viewModel, block = {
+                    viewModel.startReceiver()
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val trendItems = try {
@@ -281,6 +278,59 @@ fun SearchInputUi(
     }
 
     LaunchedEffect(key1 = localLifecycleOwner, block = {
+        contentViewModel.optionMenus(
+            OptionMenu(
+                titleId = R.string.title_context_editor_double_quote,
+                action = {
+                    val queryOrEmpty = viewModel.input.value.text
+                    if (queryOrEmpty.isNotBlank()) {
+                        viewModel.putQuery("\"$queryOrEmpty\"")
+                    }
+                }
+            ),
+            OptionMenu(
+                titleId = R.string.title_context_editor_set_default_search_category,
+                action = {
+                    categoryName.value = preferenceApplier.getDefaultSearchEngine()
+                        ?: SearchCategory.getDefaultCategoryName()
+                }
+            ),
+            OptionMenu(
+                titleId = R.string.title_enable_suggestion,
+                action = {
+                    preferenceApplier.switchEnableSuggestion()
+                    viewModel.copyFrom(preferenceApplier)
+                    if (preferenceApplier.isEnableSuggestion.not()) {
+                        viewModel.suggestions.clear()
+                    }
+                },
+                check = { viewModel.isEnableSuggestion() }
+            ),
+            OptionMenu(
+                titleId = R.string.title_use_search_history,
+                action = {
+                    preferenceApplier.switchEnableSearchHistory()
+                    viewModel.copyFrom(preferenceApplier)
+                    if (preferenceApplier.isEnableSearchHistory.not()) {
+                        viewModel.searchHistories.clear()
+                    }
+                },
+                check = { viewModel.isEnableSearchHistory() }
+            ),
+            OptionMenu(
+                titleId = R.string.title_favorite_search,
+                action = {
+                    viewModel.openFavoriteSearch()
+                }
+            ),
+            OptionMenu(
+                titleId = R.string.title_search_history,
+                action = {
+                    viewModel.openSearchHistory()
+                }
+            )
+        )
+
         viewModel.search.collect {
             if (it.background.not()) {
                 keyboardController?.hide()
@@ -299,65 +349,9 @@ fun SearchInputUi(
 
     DisposableEffect(key1 = localLifecycleOwner, effect = {
         onDispose {
-            queryingUseCase.dispose()
+            viewModel.dispose()
         }
     })
-
-    val isEnableSuggestion = remember { mutableStateOf(preferenceApplier.isEnableSuggestion) }
-    val isEnableSearchHistory = remember { mutableStateOf(preferenceApplier.isEnableSearchHistory) }
-
-    contentViewModel.optionMenus(
-        OptionMenu(
-            titleId = R.string.title_context_editor_double_quote,
-            action = {
-                val queryOrEmpty = viewModel.input.value.text
-                if (queryOrEmpty.isNotBlank()) {
-                    viewModel.putQuery("\"$queryOrEmpty\"")
-                }
-            }
-        ),
-        OptionMenu(
-            titleId = R.string.title_context_editor_set_default_search_category,
-            action = {
-                categoryName.value = preferenceApplier.getDefaultSearchEngine()
-                    ?: SearchCategory.getDefaultCategoryName()
-            }
-        ),
-        OptionMenu(
-            titleId = R.string.title_enable_suggestion,
-            action = {
-                preferenceApplier.switchEnableSuggestion()
-                isEnableSuggestion.value = preferenceApplier.isEnableSuggestion
-                if (preferenceApplier.isEnableSuggestion.not()) {
-                    viewModel.suggestions.clear()
-                }
-            },
-            checkState = isEnableSuggestion
-        ),
-        OptionMenu(
-            titleId = R.string.title_use_search_history,
-            action = {
-                preferenceApplier.switchEnableSearchHistory()
-                isEnableSearchHistory.value = preferenceApplier.isEnableSearchHistory
-                if (preferenceApplier.isEnableSearchHistory.not()) {
-                    viewModel.searchHistories.clear()
-                }
-            },
-            checkState = isEnableSearchHistory
-        ),
-        OptionMenu(
-            titleId = R.string.title_favorite_search,
-            action = {
-                viewModel.openFavoriteSearch()
-            }
-        ),
-        OptionMenu(
-            titleId = R.string.title_search_history,
-            action = {
-                viewModel.openSearchHistory()
-            }
-        )
-    )
 }
 
 private inline fun search(

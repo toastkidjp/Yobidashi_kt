@@ -299,7 +299,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             UpdateUseCase(viewModel) { activityContext }.invokeIfNeed(it.data?.data)
         }
 
-    val useTitleFilter = remember { mutableStateOf(preferenceApplier.useTitleFilter()) }
     val openSortDialog = remember { mutableStateOf(false) }
     val openDateDialog = remember { mutableStateOf(false) }
 
@@ -333,11 +332,9 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             OptionMenu(
                 titleId = R.string.action_switch_title_filter,
                 action = {
-                    val newState = !useTitleFilter.value
-                    preferenceApplier.switchUseTitleFilter(newState)
-                    useTitleFilter.value = newState
+                    preferenceApplier.switchUseTitleFilter()
                 },
-                checkState = useTitleFilter
+                check = { preferenceApplier.useTitleFilter() }
             )
         )
     })

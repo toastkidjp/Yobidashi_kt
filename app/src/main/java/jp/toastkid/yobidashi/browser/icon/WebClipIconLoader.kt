@@ -53,7 +53,7 @@ class WebClipIconLoader(
             ?.firstOrNull()
             ?: return
 
-        downloadApi.invoke(webClipUrl.toString(), {
+        downloadApi.invoke(webClipUrl.toString()) {
             it?.use { stream ->
                 val bitmap = BitmapFactory.decodeStream(stream)
                 val longer = if (bitmap.width > bitmap.height) bitmap.width else bitmap.height
@@ -61,7 +61,7 @@ class WebClipIconLoader(
                 bitmapCompressor
                     .invoke(bitmapScaling.invoke(bitmap, sampling, sampling), file)
             }
-        })
+        }
     }
 
     private fun fetchDocument(url: URL) = try {

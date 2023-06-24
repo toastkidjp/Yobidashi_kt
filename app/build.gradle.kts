@@ -131,10 +131,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
-    implementation("com.squareup.okhttp3:okhttp:${LibraryVersion.okhttp}")
-    implementation("com.squareup.retrofit2:retrofit:2.6.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
     implementation("org.jsoup:jsoup:${LibraryVersion.jsoup}")
 
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.2")

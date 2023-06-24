@@ -13,11 +13,13 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import jp.toastkid.api.trend.Trend
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearch
 import jp.toastkid.yobidashi.search.history.SearchHistory
-import jp.toastkid.api.trend.Trend
+import jp.toastkid.yobidashi.search.usecase.QueryingUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +27,14 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class SearchUiViewModel(private val workDispatcher: CoroutineDispatcher = Dispatchers.Default) {
+class SearchUiViewModel(
+    private val queryingUseCase: QueryingUseCase,
+    private val workDispatcher: CoroutineDispatcher = Dispatchers.Default
+) {
+
+    init {
+        queryingUseCase.setViewModel(this)
+    }
 
     private val _input = mutableStateOf(TextFieldValue())
 
@@ -33,6 +42,7 @@ class SearchUiViewModel(private val workDispatcher: CoroutineDispatcher = Dispat
 
     fun setInput(textInputValue: TextFieldValue) {
         _input.value = textInputValue
+        queryingUseCase.send(textInputValue.text)
     }
 
     fun putQuery(query: String) {
@@ -93,6 +103,42 @@ class SearchUiViewModel(private val workDispatcher: CoroutineDispatcher = Dispat
 
     fun openFavoriteSearch() {
         _openFavoriteSearch.value = true
+    }
+
+    fun startReceiver() {
+        queryingUseCase.withDebounce()
+    }
+
+    fun dispose() {
+        queryingUseCase.dispose()
+    }
+
+    private val isEnableSearchHistory = mutableStateOf(false)
+    private val isEnableFavoriteSearch = mutableStateOf(false)
+    private val isEnableViewHistory = mutableStateOf(false)
+    private val isEnableSuggestion = mutableStateOf(false)
+
+    fun isEnableSearchHistory() = isEnableSearchHistory.value
+
+    fun isEnableFavoriteSearch() = isEnableFavoriteSearch.value
+
+    fun isEnableSuggestion() = isEnableSuggestion.value
+
+    fun isEnableViewHistory() = isEnableViewHistory.value
+
+    fun copyFrom(preferenceApplier: PreferenceApplier) {
+        if (isEnableSearchHistory.value != preferenceApplier.isEnableSearchHistory) {
+            isEnableSearchHistory.value = preferenceApplier.isEnableSearchHistory
+        }
+        if (isEnableFavoriteSearch.value != preferenceApplier.isEnableFavoriteSearch) {
+            isEnableFavoriteSearch.value = preferenceApplier.isEnableFavoriteSearch
+        }
+        if (isEnableViewHistory.value != preferenceApplier.isEnableViewHistory) {
+            isEnableViewHistory.value = preferenceApplier.isEnableViewHistory
+        }
+        if (isEnableSuggestion.value != preferenceApplier.isEnableSuggestion) {
+            isEnableSuggestion.value = preferenceApplier.isEnableSuggestion
+        }
     }
 
 }

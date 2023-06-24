@@ -5,14 +5,13 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
+import com.android.build.gradle.tasks.GenerateBuildConfig
 import property.BuildTool
 import property.LibraryVersion
-import com.android.build.gradle.tasks.GenerateBuildConfig
 
 plugins {
   id("com.android.library")
   id("kotlin-android")
-  id("org.jetbrains.kotlin.kapt")
   id("jacoco.definition")
 }
 
