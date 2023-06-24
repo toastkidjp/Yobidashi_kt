@@ -196,7 +196,7 @@ class CustomWebView(context: Context) : WebView(context) {
                                             contentViewModel?.snackShort(R.string.message_failed_query_extraction_from_web_view)
                                             return@withAction
                                         }
-                                        contentViewModel?.preview(TranslationUrlGenerator()(it).toUri())
+                                        contentViewModel?.preview(TranslationUrlGenerator()(it))
                                     }
                                     mode?.finish()
                                     return true

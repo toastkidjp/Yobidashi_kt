@@ -8,8 +8,7 @@
 
 package jp.toastkid.lib.viewmodel.event.web
 
-import android.net.Uri
 import jp.toastkid.lib.viewmodel.event.Event
 
-class PreviewUrlEvent(val uri: Uri) : Event {
+class PreviewEvent(val text: String) : Event {
 }

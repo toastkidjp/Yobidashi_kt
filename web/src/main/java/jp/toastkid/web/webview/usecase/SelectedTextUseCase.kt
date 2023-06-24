@@ -31,9 +31,7 @@ class SelectedTextUseCase(
     }
 
     fun searchWithPreview(word: String, searchEngine: String?) {
-        // TODO
-        /*val url = calculateToUri(word, searchEngine) ?: return
-        contentViewModel.preview(url)*/
+        contentViewModel.search(word)
     }
 
     companion object {
