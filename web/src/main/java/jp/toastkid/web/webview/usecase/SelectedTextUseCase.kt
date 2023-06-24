@@ -31,7 +31,7 @@ class SelectedTextUseCase(
     }
 
     fun searchWithPreview(word: String, searchEngine: String?) {
-        contentViewModel.search(word)
+        contentViewModel.preview(word)
     }
 
     companion object {
