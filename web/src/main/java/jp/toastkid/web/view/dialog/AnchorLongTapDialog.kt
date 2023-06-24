@@ -97,7 +97,7 @@ internal fun AnchorLongTapDialog(
                                     close()
                                 }
                                 SingleLineText(R.string.row_dialog_preview) {
-                                    contentViewModel?.preview(anchor.toUri())
+                                    contentViewModel?.preview(anchor)
                                     close()
                                 }
                             }
