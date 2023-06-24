@@ -118,7 +118,7 @@ private fun SwitchContentWithTabIndex(selectedIndex: Int) {
         0 -> DisplaySettingUi()
         1 -> ColorSettingUi()
         2 -> SearchSettingUi()
-        3 -> BrowserSettingUi()
+        3 -> WebSettingUi()
         4 -> EditorSettingUi()
         5 -> CalendarSettingUi()
         6 -> ColorFilterSettingUi()

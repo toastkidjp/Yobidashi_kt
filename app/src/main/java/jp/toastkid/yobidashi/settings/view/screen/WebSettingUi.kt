@@ -53,7 +53,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun BrowserSettingUi() {
+internal fun WebSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
