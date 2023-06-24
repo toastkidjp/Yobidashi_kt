@@ -46,7 +46,6 @@ tasks.withType<GenerateBuildConfig> {
 dependencies {
     implementation(project(":lib"))
     implementation(project(":ui"))
-    implementation(project(":search"))
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
