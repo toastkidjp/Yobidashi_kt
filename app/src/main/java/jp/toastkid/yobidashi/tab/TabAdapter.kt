@@ -14,10 +14,10 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.archive.IdGenerator
-import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
-import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
+import jp.toastkid.web.archive.IdGenerator
+import jp.toastkid.web.archive.auto.AutoArchive
+import jp.toastkid.web.webview.GlobalWebViewPool
+import jp.toastkid.web.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab

@@ -87,16 +87,12 @@
     <string name="title_show_notification_widget">Show notification area app-widget</string>
     <string name="title_planning_poker">Planning Poker</string>
     <string name="message_confirm_back">Do you want to go back?</string>
-    <string name="back">Back</string>
     <string name="message_done_showing_notification_widget">It has done!</string>
     <string name="message_remove_notification_widget">It has removed a notification widget.</string>
 
-    <string name="title_menu_reload">Reload</string>
     <string name="title_menu_to_top">Go top</string>
     <string name="title_menu_to_bottom">Go bottom</string>
     <string name="title_menu_back">Back</string>
-    <string name="title_menu_forward">Forward</string>
-    <string name="title_menu_page_information">Page information</string>
 
     <string name="message_js_enabled">It has changed to enable JavaScript.</string>
     <string name="message_js_disabled">It has changed to disable JavaScript.</string>
@@ -109,32 +105,24 @@
     <string name="subhead_setting_browser">Web</string>
     <string name="subhead_others">Others</string>
     <string name="subhead_notification">Notifications</string>
-    <string name="prefix_loading">Loading: </string>
     <string name="title_clear_cache">Clear cache</string>
     <string name="clear_form_data">Clear form data</string>
     <string name="title_load_image">Show images</string>
     <string name="title_save_form_data">Save form data</string>
     <string name="title_share_by_code">Share Barcode</string>
-    <string name="title_user_agent">User Agent</string>
-    <string name="format_result_user_agent">It has set %s.</string>
     <string name="title_screenshot">Screenshot</string>
     <string name="title_screenshots">Screenshots</string>
-    <string name="message_done_save">It has saved. : </string>
     <string name="message_empty_screenshots">It does not have any screenshots.</string>
-    <string name="message_empty_archives">It does not have any screenshots.</string>
-    <string name="title_instant_barcode">Generate barcode</string>
-    <string name="generate">Generate</string>
+
     <string name="title_home">Home</string>
     <string name="title_open_url">Open URL</string>
     <string name="message_invalid_url">Input URL is invalid.</string>
     <string name="message_commit_home">It has set \"%s\" to home page.</string>
     <string name="title_open_chrome">Open by Chrome</string>
-    <string name="title_archive">Archive this page</string>
     <string name="title_archives">Archives</string>
     <string name="all">All</string>
 
     <string name="close_menu">Close Menu</string>
-    <string name="message_save_failed">It has failed saving archive.</string>
     <string name="message_disable_archive">This menu cannot use under OS 4.4.</string>
     <string name="message_cannot_draw_overlay">If you want to use color filter, you should permit overlay.</string>
     <string name="message_enable_color_filter">It has be enabled to display color filter.</string>
@@ -162,41 +150,19 @@
         Keyword: %s
     </string>
     <string name="message_none_search_histories">It does not exists any search histories.</string>
-    <string name="message_cannot_downloading_image">This file cannot download...</string>
     <string name="title_download_image">Download this image file</string>
     <string name="message_confirm_downloading_image">Would you like to download this image file?</string>
     <string name="title_startup_start">Start</string>
     <string name="title_setting_new_tab">New tab</string>
-    <string name="title_load_home">Load home page</string>
-    <string name="title_replace_home">Replace home page</string>
-    <string name="message_cannot_replace_home_url">This page cannot replace home page.</string>
-    <string name="message_replace_home_url">It has replaced home url. : %s</string>
-    <string name="title_clear_view_history">Clear view history</string>
     <string name="title_save_view_history">Save Web History</string>
     <string name="title_clear_all_tabs">Clear all tabs</string>
     <string name="name_default_bookmark_folder">Preset</string>
-    <string name="title_print_page">Print page</string>
-    <string name="title_bookmark">Bookmark</string>
-    <string name="title_clear_bookmark">Clear All Bookmarks</string>
     <string name="message_none_bookmarks">There is no bookmarks.</string>
-    <string name="title_add_bookmark">Add bookmark</string>
-    <string name="message_done_added_bookmark">It has done adding bookmark.</string>
-    <string name="title_add_default_bookmark">Add default bookmarks</string>
-    <string name="message_add_default_bookmark">Would you like to add default bookmarks?</string>
-    <string name="message_add_bookmark">Would you like to add bookmark?</string>
     <string name="hint_find_in_page">Input keyword</string>
     <string name="title_tab_histories">Tab histories</string>
     <string name="title_settings_display">Display setting</string>
     <string name="message_empty_histories">There are no histories.</string>
 
-    <string name="title_ssl_connection_error">TLS Error!</string>
-    <string name="message_ssl_error_first_line">This site\'s certificate can\'t be trusted.
-        It had canceled connection. \n\nBecause: \n</string>
-    <string name="message_ssl_error_expired">This site\'s certificate is expired. \n\nExpired date time=</string>
-    <string name="message_ssl_error_id_mismatch">Mismatched site name.\n\nCN=</string>
-    <string name="message_ssl_error_not_yet_valid">This site\'s certificate is not yet valid.\n\nStart time=</string>
-    <string name="message_ssl_error_untrusted">CA is untrusted.\n\nCA=</string>
-    <string name="message_ssl_error_unknown">Occurred unknown error!</string>
     <string name="title_filter_color">Filter\'s color</string>
     <string name="title_default">Default</string>
 
@@ -208,14 +174,10 @@
     <string name="title_editor">Text Editor</string>
     <string name="save_backup">Backup</string>
     <string name="title_torch">Torch</string>
-    <string name="title_add_folder">Add Folder</string>
-    <string name="title_import_bookmark">Import Bookmark</string>
-    <string name="title_export_bookmark">Export Bookmark</string>
 
     <string name="top">top</string>
     <string name="bottom">bottom</string>
 
-    <string name="title_option_menu">Option Menu</string>
     <string name="message_snackbar_suggestion_select_background_image">Let\'s select your favorite image!</string>
 
     <string name="message_disusable_menu">Sorry, but this device couldn\'t use this menu.</string>
@@ -241,7 +203,6 @@
     <string name="invert_content_coloring">Invert content coloring</string>
     <string name="title_clear_coolie">Clear Cookie</string>
     <string name="title_wifi_only">Wi-Fi Only Mode</string>
-    <string name="message_wifi_not_connecting">It cannot use Wi-Fi.</string>
     <string name="wikipedia">Wikipedia</string>
     <string name="add_schedule">Add schedule</string>
     <string name="minus">-</string>
@@ -249,7 +210,6 @@
     <string name="sample_a">A</string>
     <string name="title_remove_ad">Remove AD</string>
     <string name="run">Run</string>
-    <string name="message_cannot_launch_app">It has cannot open App.</string>
     <string name="title_tab_retaining_size">Tab retaining size</string>
 
     <string name="message_tab_open_new">Open new tab: \n%s</string>
@@ -266,7 +226,6 @@
     <string name="message_install_suggestion_google_app">Please would you install Google App?</string>
     <string name="content_description_background">Background image</string>
     <string name="is_center">center</string>
-    <string name="title_icon">icon</string>
     <string name="reset_button_position">Reset Button Position</string>
     <string name="title_dialog_color_chooser">Choose color</string>
     <string name="current_color">Current color:</string>
@@ -275,15 +234,11 @@
     <string name="title_highlight_color">Selected text color</string>
     <string name="menu_random_wikipedia">Random Wikipedia</string>
     <string name="message_open_random_wikipedia">Open Wikipedia article "%s".</string>
-    <string name="title_menu_reader_mode">Reader mode</string>
-    <string name="title_menu_html_source">HTML source</string>
     <string name="launcher">Launcher</string>
     <string name="barcode">Barcode</string>
     <string name="title_number_place">Number Place</string>
     <string name="title_rss_reader">RSS Reader</string>
-    <string name="title_add_to_rss_reader">Add to RSS Reader</string>
     <string name="message_rss_reader_launch_failed">You should add any RSS link via header\'s menu if you want to use this function.</string>
-    <string name="message_failure_extracting_rss">This site doesn\'t contains any RSS feeds.</string>
     <string name="title_rss_setting">RSS setting</string>
     <string name="clipboard">Clipboard</string>
     <string name="title_current_page">Current Page</string>
@@ -300,30 +255,15 @@
     <string name="search_category">Search category</string>
 
     <string name="title_gesture_memo">Gesture memo</string>
-    <string name="button_clip_url">Clip URL</string>
-    <string name="button_clip_cookie">Clip Cookie</string>
-    <string name="add_to_home_screen">Add to Home screen</string>
+
 
     <string name="title_add_default_background">Add default background</string>
     <string name="title_article_viewer">Article Viewer</string>
-    <string name="translate">Translate</string>
-    <string name="download_all_images">Download all images</string>
-    <string name="title_todo_tasks">TODO tasks</string>
-    <string name="title_todo_tasks_board">Task board</string>
-    <string name="title_search_with_map_app">Search with map app</string>
-    <string name="message_failed_query_extraction_from_web_view">Query extraction failed. Please would you retry or copy to clipboard?</string>
+
 
     <string name="message_clipping_url_open">Would you like to open "%s"?</string>
     <string name="sample_text_color_filter">A</string>
     <string name="apply_dark_mode">Apply dark mode</string>
-
-    <string name="row_dialog_open_new">Open new tab</string>
-    <string name="row_dialog_open_background">Open background tab</string>
-    <string name="row_dialog_image_search">Image search</string>
-    <string name="row_dialog_preview">Preview</string>
-    <string name="row_dialog_download">Download this image file</string>
-    <string name="row_dialog_copy">Copy URL</string>
-    <string name="row_dialog_copy_text">Copy Text</string>
 
     <string name="title_converter_tool">Converter tool</string>
 

@@ -87,16 +87,12 @@
     <string name="title_show_notification_widget">通知領域にウィジェットを表示</string>
     <string name="title_planning_poker">Planning Poker</string>
     <string name="message_confirm_back">戻りますか？</string>
-    <string name="back">戻る</string>
     <string name="message_done_showing_notification_widget">通知領域にウィジェットを表示しました。</string>
     <string name="message_remove_notification_widget">通知領域のウィジェットを削除しました。</string>
 
-    <string name="title_menu_reload">リロード</string>
     <string name="title_menu_to_top">上に戻る</string>
     <string name="title_menu_to_bottom">下に進む</string>
     <string name="title_menu_back">戻る</string>
-    <string name="title_menu_forward">進む</string>
-    <string name="title_menu_page_information">ページ情報</string>
     <string name="message_js_enabled">JavaScript を有効にしました。</string>
     <string name="message_js_disabled">JavaScript を無効にしました。</string>
     <string name="title_menu_position">メニューの位置</string>
@@ -108,32 +104,24 @@
     <string name="subhead_setting_browser">Web</string>
     <string name="subhead_others">その他</string>
     <string name="subhead_notification">通知</string>
-    <string name="prefix_loading">ロード中: </string>
     <string name="title_clear_cache">キャッシュを消去</string>
     <string name="clear_form_data">フォームデータを消去</string>
     <string name="title_load_image">画像を表示</string>
     <string name="title_save_form_data">フォームデータを保存</string>
     <string name="title_share_by_code">コードでシェア</string>
-    <string name="title_user_agent">ユーザーエージェント</string>
-    <string name="format_result_user_agent">%s に設定しました。</string>
     <string name="title_screenshot">スクリーンショット</string>
     <string name="title_screenshots">スクリーンショット一覧</string>
-    <string name="message_done_save">保存しました。: </string>
     <string name="message_empty_screenshots">スクリーンショットが保存されていません。</string>
-    <string name="message_empty_archives">ページが保存されていません。</string>
-    <string name="title_instant_barcode">インスタントバーコード作成</string>
-    <string name="generate">生成</string>
+
     <string name="title_home">ホーム</string>
     <string name="title_open_url">URL を開く</string>
     <string name="message_invalid_url">URL が不正です。</string>
     <string name="message_commit_home">\"%s\" をホームページに設定しました。</string>
     <string name="title_open_chrome">Chrome で開く</string>
-    <string name="title_archive">現在のページを保存</string>
     <string name="title_archives">保存したページ一覧</string>
     <string name="all">すべて</string>
 
     <string name="close_menu">メニューを閉じる</string>
-    <string name="message_save_failed">保存に失敗しました。</string>
     <string name="message_disable_archive">OS バージョン 4.3 以下では使用できません。</string>
     <string name="message_cannot_draw_overlay">カラーフィルター機能を使用するにはオーバレイの権限が必要です。</string>
     <string name="message_enable_color_filter">カラーフィルターを有効にしました。</string>
@@ -158,40 +146,19 @@
     <string name="message_add_favorite_search" formatted="false" >
         種別: %s\nキーワード: %s\nをお気に入り検索に追加しますか？</string>
     <string name="message_none_search_histories">履歴がありません。</string>
-    <string name="message_cannot_downloading_image">このファイルはダウンロードできません。</string>
     <string name="title_download_image">画像をダウンロード</string>
     <string name="message_confirm_downloading_image">この画像をダウンロードしますか？</string>
     <string name="title_startup_start">スタート</string>
     <string name="title_setting_new_tab">新しいタブ</string>
-    <string name="title_load_home">ホームページを開く</string>
-    <string name="title_replace_home">ホームページに設定</string>
-    <string name="message_cannot_replace_home_url">このページはホームに設定できません。</string>
-    <string name="message_replace_home_url">ホームページを変更しました。: %s</string>
-    <string name="title_clear_view_history">履歴をすべて削除</string>
     <string name="title_save_view_history">Web の履歴を保存</string>
     <string name="title_clear_all_tabs">タブをすべて削除</string>
     <string name="name_default_bookmark_folder">デフォルト</string>
-    <string name="title_print_page">ページをプリント</string>
-    <string name="title_bookmark">ブックマーク</string>
-    <string name="title_clear_bookmark">ブックマークをすべて削除</string>
     <string name="message_none_bookmarks">ブックマークがありません。</string>
-    <string name="title_add_bookmark">ブックマークを追加</string>
-    <string name="message_done_added_bookmark">ブックマークを追加しました。</string>
-    <string name="title_add_default_bookmark">デフォルトのブックマークを追加</string>
-    <string name="message_add_default_bookmark">デフォルトのブックマークを追加します。</string>
-    <string name="message_add_bookmark">ブックマークを追加しますか？</string>
     <string name="hint_find_in_page">キーワードを入力</string>
     <string name="title_tab_histories">タブの履歴一覧</string>
     <string name="title_settings_display">ディスプレイの設定</string>
     <string name="message_empty_histories">履歴はありません。</string>
 
-    <string name="title_ssl_connection_error">TLS エラー!</string>
-    <string name="message_ssl_error_first_line">サイトのセキュリティ証明書が信頼できません。接続を終了しました。\n\nエラーの原因\n</string>
-    <string name="message_ssl_error_expired">証明書の有効期限が切れています。\n\n終了時刻=</string>
-    <string name="message_ssl_error_id_mismatch">ホスト名が一致しません。  CN=</string>
-    <string name="message_ssl_error_not_yet_valid">証明書はまだ有効ではありません  開始時刻=</string>
-    <string name="message_ssl_error_untrusted">証明書を発行した認証局が信頼できません  認証局</string>
-    <string name="message_ssl_error_unknown">原因不明のエラーが発生しました</string>
     <string name="title_filter_color">カラーフィルターの色</string>
     <string name="title_default">デフォルト</string>
     <string name="title_screen_mode_full">フルスクリーン</string>
@@ -203,14 +170,10 @@
 
     <string name="save_backup">バックアップ</string>
     <string name="title_torch">ライト</string>
-    <string name="title_add_folder">フォルダーを追加</string>
-    <string name="title_import_bookmark">ブックマークをインポート</string>
-    <string name="title_export_bookmark">ブックマークをエクスポート</string>
 
     <string name="top">上へ</string>
     <string name="bottom">下へ</string>
 
-    <string name="title_option_menu">オプションメニュー</string>
     <string name="message_snackbar_suggestion_select_background_image">
         好きな画像を背景画像を設定しましょう！</string>
     <string name="message_disusable_menu">この機能はOS 4.4以降でのみ利用可能です。</string>
@@ -237,7 +200,6 @@
     <string name="invert_content_coloring">コンテンツの色を反転させる</string>
     <string name="title_clear_coolie">Cookie を削除</string>
     <string name="title_wifi_only">Wi-Fi 接続時だけ通信する</string>
-    <string name="message_wifi_not_connecting">Wi-Fi に接続していません。</string>
     <string name="wikipedia">Wikipedia</string>
     <string name="add_schedule">スケジュールに追加</string>
     <string name="minus">-</string>
@@ -245,7 +207,6 @@
     <string name="sample_a">あ</string>
     <string name="title_remove_ad">広告を消す</string>
     <string name="run">実行</string>
-    <string name="message_cannot_launch_app">アプリを起動できませんでした。</string>
     <string name="title_tab_retaining_size">タブを保持する枚数</string>
 
     <string name="message_tab_open_new">新しいタブで開きました: \n%s</string>
@@ -262,7 +223,6 @@
     <string name="message_install_suggestion_google_app">Google 検索アプリをインストールしてください。</string>
     <string name="content_description_background">背景画像</string>
     <string name="is_center">center</string>
-    <string name="title_icon">アイコン</string>
     <string name="reset_button_position">ボタンの位置をリセット</string>
     <string name="title_dialog_color_chooser">色を選択</string>
     <string name="current_color">現在の色:</string>
@@ -271,15 +231,11 @@
     <string name="title_highlight_color">テキスト選択の色</string>
     <string name="menu_random_wikipedia">ランダム Wikipedia</string>
     <string name="message_open_random_wikipedia">Wikipedia の「%s」を開きました。</string>
-    <string name="title_menu_reader_mode">リーダーモード</string>
-    <string name="title_menu_html_source">HTML source</string>
     <string name="launcher">アプリ起動</string>
     <string name="barcode">バーコード</string>
     <string name="title_number_place">ナンバープレイス</string>
     <string name="title_rss_reader">RSS リーダー</string>
-    <string name="title_add_to_rss_reader">RSS リーダーに追加</string>
     <string name="message_rss_reader_launch_failed">You should add any RSS link via header\'s menu if you want to use this function.</string>
-    <string name="message_failure_extracting_rss">This site doesn\'t contains any RSS feeds.</string>
     <string name="clipboard">クリップボード</string>
     <string name="title_current_page">現在のページ</string>
     <string name="title_audio_player">音楽プレイヤー</string>
@@ -296,29 +252,13 @@
     <string name="search_category">検索種別</string>
 
     <string name="title_gesture_memo">ジェスチャーメモ</string>
-    <string name="button_clip_url">URL をコピー</string>
-    <string name="button_clip_cookie">Cookie をコピー</string>
-    <string name="add_to_home_screen">ショートカットを設置</string>
     <string name="title_add_default_background">デフォルトの背景を追加</string>
     <string name="title_article_viewer">記事</string>
-    <string name="translate">翻訳</string>
-    <string name="download_all_images">すべての画像を保存</string>
-    <string name="title_todo_tasks">タスクリスト</string>
-    <string name="title_todo_tasks_board">タスクボード</string>
-    <string name="title_search_with_map_app">地図アプリで検索</string>
-    <string name="message_failed_query_extraction_from_web_view">キーワードを取得できませんでした。再度実行するか、クリップボードにコピーして検索してください。</string>
+
 
     <string name="message_clipping_url_open">この URL を開きますか？ "%s"</string>
     <string name="sample_text_color_filter">あ</string>
     <string name="apply_dark_mode">ダークモードにする</string>
-
-    <string name="row_dialog_open_new">新しいタブで開く</string>
-    <string name="row_dialog_open_background">バックグラウンドで開く</string>
-    <string name="row_dialog_image_search">この画像で検索</string>
-    <string name="row_dialog_preview">ちょっと見る</string>
-    <string name="row_dialog_download">画像をダウンロード</string>
-    <string name="row_dialog_copy">リンク先のURLをコピー</string>
-    <string name="row_dialog_copy_text">テキストをコピー</string>
 
     <string name="title_converter_tool">変換ツール</string>
 

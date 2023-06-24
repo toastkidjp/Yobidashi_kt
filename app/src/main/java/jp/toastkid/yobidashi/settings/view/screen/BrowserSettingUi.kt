@@ -45,8 +45,8 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.parts.InsetDivider
+import jp.toastkid.web.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.user_agent.UserAgentDropdown
 import jp.toastkid.yobidashi.settings.view.CheckableRow
 import jp.toastkid.yobidashi.settings.view.TextMenu
 import kotlin.math.roundToInt

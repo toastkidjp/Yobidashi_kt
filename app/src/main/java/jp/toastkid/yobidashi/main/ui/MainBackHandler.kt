@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.web.webview.GlobalWebViewPool
 
 @Composable
 internal fun MainBackHandler(

@@ -104,12 +104,12 @@ import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import jp.toastkid.media.music.permission.MusicPlayerPermissions
 import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchQueryExtractor
+import jp.toastkid.web.floating.view.FloatingPreviewUi
+import jp.toastkid.web.permission.DownloadPermissionRequestContract
+import jp.toastkid.web.webview.GlobalWebViewPool
+import jp.toastkid.web.webview.factory.WebViewClientFactory
+import jp.toastkid.web.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
-import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
-import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.ClippingUrlOpener
