@@ -39,6 +39,7 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.ui.parts.SingleLineText
 import jp.toastkid.web.R
+import jp.toastkid.web.usecase.ImageSearchUrlGenerator
 
 @Composable
 internal fun AnchorLongTapDialog(
@@ -102,12 +103,12 @@ internal fun AnchorLongTapDialog(
                                 }
                             }
 
-                            /*TODO if (imageUrl != null && Urls.isValidUrl(imageUrl)) {
+                            if (imageUrl != null && Urls.isValidUrl(imageUrl)) {
                                 SingleLineText(R.string.row_dialog_image_search) {
                                     contentViewModel?.open(ImageSearchUrlGenerator()(imageUrl))
                                     close()
                                 }
-                            }*/
+                            }
 
                             if (imageUrl != null && Urls.isValidUrl(imageUrl)) {
                                 SingleLineText(R.string.row_dialog_download) {

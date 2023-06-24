@@ -1,4 +1,4 @@
-package jp.toastkid.search
+package jp.toastkid.web.usecase
 
 import android.net.Uri
 import io.mockk.every
