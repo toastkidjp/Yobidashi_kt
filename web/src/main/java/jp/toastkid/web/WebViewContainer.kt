@@ -104,9 +104,6 @@ class WebViewContainer(
                 NestedScrollSource.Fling
             )
             browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
-            coroutineScope.launch {
-                browserViewModel.swipeRefreshState.value?.resetOffset()
-            }
         }
 
     init {
