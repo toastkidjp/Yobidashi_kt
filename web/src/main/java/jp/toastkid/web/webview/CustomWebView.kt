@@ -33,11 +33,6 @@ class CustomWebView(context: Context) : WebView(context) {
      */
     var enablePullToRefresh = false
 
-    /**
-     * Scrolling value.
-     */
-    private var scrolling: Int = 1
-
     private var nestedOffsetY: Float = 0f
 
     private var lastY: Float = 0f
@@ -57,10 +52,6 @@ class CustomWebView(context: Context) : WebView(context) {
     }
 
     override fun dispatchTouchEvent(motionEvent: MotionEvent?): Boolean {
-        if (motionEvent?.action == MotionEvent.ACTION_UP) {
-            scrolling = 0
-        }
-
         if (isMultiTap(motionEvent)) {
             return super.dispatchTouchEvent(motionEvent)
         }
@@ -114,6 +105,9 @@ class CustomWebView(context: Context) : WebView(context) {
                 return returnValue
             }
             MotionEvent.ACTION_DOWN -> {
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    parent.requestDisallowInterceptTouchEvent(true)
+                }
                 val returnValue = super.dispatchTouchEvent(event)
                 lastX = eventX.toFloat()
                 lastY = eventY.toFloat()
@@ -141,13 +135,11 @@ class CustomWebView(context: Context) : WebView(context) {
             (motionEvent?.pointerCount ?: 0) >= 2
 
     override fun onOverScrolled(scrollX: Int, scrollY: Int, clampedX: Boolean, clampedY: Boolean) {
+        if (clampedX || clampedY) {
+            parent.requestDisallowInterceptTouchEvent(false)
+        }
         super.onOverScrolled(scrollX, scrollY, clampedX, clampedY)
-        enablePullToRefresh = scrolling <= 0
-    }
-
-    override fun onScrollChanged(horizontal: Int, vertical: Int, oldHorizontal: Int, oldVertical: Int) {
-        super.onScrollChanged(horizontal, vertical, oldHorizontal, oldVertical)
-        scrolling += vertical
+        enablePullToRefresh = clampedY
     }
 
     override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode? =
