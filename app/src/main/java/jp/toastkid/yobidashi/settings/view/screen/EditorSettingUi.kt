@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -196,7 +195,7 @@ internal fun EditorSettingUi() {
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            .size(dimensionResource(id = R.dimen.search_category_spinner_width))
+                            .size(44.dp)
                             .padding(end = 16.dp)
                     ) {
                         Text("${fontSize.value}")
@@ -265,7 +264,7 @@ private fun ColorChooserMenu(
         Box(
             modifier = Modifier
                 .background(colorState.value)
-                .size(dimensionResource(id = R.dimen.search_category_spinner_width))
+                .size(44.dp)
         ) { }
     }
 
