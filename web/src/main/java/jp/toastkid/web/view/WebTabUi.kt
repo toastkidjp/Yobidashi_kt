@@ -92,6 +92,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
 
     val coroutineScope = rememberCoroutineScope()
     val browserViewModel = remember { BrowserViewModel() }
+
     val webViewContainer = remember {
         WebViewContainer(activityContext, browserViewModel, coroutineScope)
     }
@@ -100,12 +101,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
 
     val refreshTriggerPx = with(LocalDensity.current) { 96.dp.toPx() }
     val verticalIndicatorOffsetPx = with(LocalDensity.current) { -24.dp.toPx() }.toInt()
-    LaunchedEffect(browserViewModel.swipeRefreshState.value?.isSwipeInProgress) {
-        if (browserViewModel.swipeRefreshState.value?.isSwipeInProgress == false) {
-            // If there's not a swipe in progress, rest the indicator at 0f
-            browserViewModel.swipeRefreshState.value?.animateOffsetTo(0f)
-        }
-    }
+
     val nestedScrollConnection = SwipeRefreshNestedScrollConnection(
         browserViewModel.swipeRefreshState.value,
         coroutineScope
