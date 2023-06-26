@@ -278,10 +278,13 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     BlendMode.SrcIn
                 ),
                 modifier = Modifier.align(Alignment.Center)
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(8.dp)
             )
             Text(
                 text = contentViewModel.tabCount.value.toString(),
-                fontSize = 9.sp,
+                fontSize = 10.sp,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .align(Alignment.Center)
