@@ -28,7 +28,7 @@ class BrowserViewModel {
         swipeRefreshState.value?.isRefreshing = false
     }
 
-    fun search(query: String) {
+    fun search() {
         /*viewModelScope.launch {
             _event.emit(WebSearchEvent(query))
         }*/
