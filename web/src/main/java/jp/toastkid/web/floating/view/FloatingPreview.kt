@@ -44,7 +44,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.R
 import jp.toastkid.web.floating.FloatingPreviewViewModel
 import jp.toastkid.web.floating.WebViewInitializer
-import jp.toastkid.web.view.BrowserTitle
+import jp.toastkid.web.view.TitleUrlBox
 import jp.toastkid.web.webview.DarkModeApplier
 import jp.toastkid.web.webview.factory.WebViewFactory
 import kotlinx.coroutines.CoroutineScope
@@ -85,7 +85,7 @@ fun FloatingPreviewUi(uri: Uri) {
                     .padding(end = 8.dp)
             )
 
-            BrowserTitle(
+            TitleUrlBox(
                 viewModel.title.value,
                 viewModel.url.value,
                 viewModel.progress.value,

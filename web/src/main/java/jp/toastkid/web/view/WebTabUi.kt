@@ -63,9 +63,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshNestedScrollConnection
@@ -471,7 +471,7 @@ private fun AppBarContent(
                         .padding(horizontal = 4.dp)
                         .clickable { openPageInformation.value = true }
                 )
-                BrowserTitle(
+                TitleUrlBox(
                     viewModel.title.value,
                     viewModel.url.value,
                     viewModel.progress.value,
