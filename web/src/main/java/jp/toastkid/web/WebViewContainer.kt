@@ -14,9 +14,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.network.DownloadAction
 import jp.toastkid.lib.network.NetworkChecker
@@ -57,8 +57,7 @@ import timber.log.Timber
  */
 class WebViewContainer(
     context: Context,
-    private var browserViewModel: WebTabUiViewModel,
-    private val coroutineScope: CoroutineScope
+    private var browserViewModel: WebTabUiViewModel
 ) {
     private val webViewContainer = FrameLayout(context)
 

@@ -94,7 +94,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val browserViewModel = remember { WebTabUiViewModel() }
 
     val webViewContainer = remember {
-        WebViewContainer(activityContext, browserViewModel, coroutineScope)
+        WebViewContainer(activityContext, browserViewModel)
     }
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
