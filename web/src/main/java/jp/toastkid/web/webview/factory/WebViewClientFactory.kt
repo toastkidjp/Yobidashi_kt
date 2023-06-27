@@ -26,7 +26,7 @@ import androidx.core.app.ComponentActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewFeature
-import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.FaviconApplier
@@ -50,7 +50,7 @@ class WebViewClientFactory(
     private val adRemover: AdRemover,
     private val faviconApplier: FaviconApplier,
     private val preferenceApplier: PreferenceApplier,
-    private val browserViewModel: BrowserViewModel? = null,
+    private val browserViewModel: WebTabUiViewModel? = null,
     private val rssAddingSuggestion: RssAddingSuggestion? = null,
     private val currentView: () -> WebView? = { null },
     private val siteNameChecker: SiteNameChecker = SiteNameChecker()

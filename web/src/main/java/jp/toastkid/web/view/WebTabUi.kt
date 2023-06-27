@@ -63,7 +63,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.model.OptionMenu
@@ -91,7 +91,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
     val coroutineScope = rememberCoroutineScope()
-    val browserViewModel = remember { BrowserViewModel() }
+    val browserViewModel = remember { WebTabUiViewModel() }
 
     val webViewContainer = remember {
         WebViewContainer(activityContext, browserViewModel, coroutineScope)
@@ -298,7 +298,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(
-    viewModel: BrowserViewModel,
+    viewModel: WebTabUiViewModel,
     browserModule: WebViewContainer,
     resetReaderModeContent: (String) -> Unit
 ) {

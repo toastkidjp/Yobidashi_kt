@@ -21,7 +21,7 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.ScreenMode
 import jp.toastkid.web.webview.DarkModeApplier
@@ -51,7 +51,7 @@ class WebViewReplacementUseCaseTest {
     private lateinit var makeWebView: () -> WebView
 
     @MockK
-    private lateinit var browserViewModel: BrowserViewModel
+    private lateinit var webTabUiViewModel: WebTabUiViewModel
 
     @MockK
     private lateinit var preferenceApplier: PreferenceApplier
@@ -86,10 +86,10 @@ class WebViewReplacementUseCaseTest {
         every { preferenceApplier.useDarkMode() }.returns(true)
         every { preferenceApplier.browserScreenMode() }.returns("fixed")
 
-        every { browserViewModel.setBackButtonIsEnabled(any()) }.returns(Unit)
-        every { browserViewModel.setForwardButtonIsEnabled(any()) }.returns(Unit)
-        every { browserViewModel.nextTitle(any()) }.returns(Unit)
-        every { browserViewModel.nextUrl(any()) }.returns(Unit)
+        every { webTabUiViewModel.setBackButtonIsEnabled(any()) }.returns(Unit)
+        every { webTabUiViewModel.setForwardButtonIsEnabled(any()) }.returns(Unit)
+        every { webTabUiViewModel.nextTitle(any()) }.returns(Unit)
+        every { webTabUiViewModel.nextUrl(any()) }.returns(Unit)
         every { makeWebView.invoke() }.returns(webView)
         every { webViewStateUseCase.restore(any(), any()) }.returns(Unit)
 
@@ -131,10 +131,10 @@ class WebViewReplacementUseCaseTest {
         verify(exactly = 1) { darkThemeApplier.invoke(any(), any()) }
         verify(exactly = 1) { preferenceApplier.useDarkMode() }
         verify(exactly = 1) { preferenceApplier.browserScreenMode() }
-        verify(exactly = 1) { browserViewModel.setBackButtonIsEnabled(any()) }
-        verify(exactly = 1) { browserViewModel.setForwardButtonIsEnabled(any()) }
-        verify(exactly = 1) { browserViewModel.nextTitle(any()) }
-        verify(exactly = 1) { browserViewModel.nextUrl(any()) }
+        verify(exactly = 1) { webTabUiViewModel.setBackButtonIsEnabled(any()) }
+        verify(exactly = 1) { webTabUiViewModel.setForwardButtonIsEnabled(any()) }
+        verify(exactly = 1) { webTabUiViewModel.nextTitle(any()) }
+        verify(exactly = 1) { webTabUiViewModel.nextUrl(any()) }
         verify(exactly = 1) { makeWebView.invoke() }
         verify(exactly = 1) { webViewStateUseCase.restore(any(), any()) }
         verify(exactly = 1) { GlobalWebViewPool.containsKey(any()) }

@@ -15,8 +15,8 @@ import android.widget.FrameLayout
 import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.ScreenMode
 import jp.toastkid.web.webview.DarkModeApplier
@@ -31,7 +31,7 @@ class WebViewReplacementUseCase(
     private val webViewContainer: FrameLayout?,
     private val webViewStateUseCase: WebViewStateUseCase,
     private val makeWebView: () -> WebView,
-    private val browserViewModel: BrowserViewModel?,
+    private val browserViewModel: WebTabUiViewModel?,
     private val preferenceApplier: PreferenceApplier,
     private val darkThemeApplier: DarkModeApplier = DarkModeApplier()
 ) {
