@@ -90,12 +90,12 @@ class SearchAction(
 
     private fun openUri(browserViewModel: ContentViewModel?, uri: Uri) {
         if (onBackground)
-            browserViewModel?.openBackground(
+            viewModelSupplier(activityContext)?.openBackground(
                     activityContext.getString(R.string.title_tab_background_search, query),
                     uri
             )
         else
-            browserViewModel?.open(uri)
+            viewModelSupplier(activityContext)?.open(uri)
     }
 
 }
