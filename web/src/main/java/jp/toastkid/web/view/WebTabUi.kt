@@ -299,7 +299,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
 @Composable
 private fun AppBarContent(
     viewModel: WebTabUiViewModel,
-    browserModule: WebViewContainer,
+    webViewContainer: WebViewContainer,
     resetReaderModeContent: (String) -> Unit
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
@@ -334,21 +334,21 @@ private fun AppBarContent(
                 R.string.back,
                 MaterialTheme.colorScheme.onPrimary,
                 viewModel.enableBack.value
-            ) { browserModule.back() }
+            ) { webViewContainer.back() }
 
             HeaderSubButton(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,
                 MaterialTheme.colorScheme.onPrimary,
                 viewModel.enableForward.value
-            ) { browserModule.forward() }
+            ) { webViewContainer.forward() }
 
             HeaderSubButton(
                 R.drawable.ic_reader_mode,
                 R.string.title_menu_reader_mode,
                 MaterialTheme.colorScheme.onPrimary
             ) {
-                browserModule.invokeContentExtraction {
+                webViewContainer.invokeContentExtraction {
                     showReader(it, contentViewModel, resetReaderModeContent)
                 }
             }
@@ -404,7 +404,7 @@ private fun AppBarContent(
                 ) { open.value = true }
                 UserAgentDropdown(open) {
                     PreferenceApplier(activity).setUserAgent(it.name)
-                    browserModule.resetUserAgent(it.text())
+                    webViewContainer.resetUserAgent(it.text())
                     contentViewModel.snackShort(
                         activity.getString(
                             R.string.format_result_user_agent,
@@ -423,7 +423,7 @@ private fun AppBarContent(
             }
 
             if (openPageInformation.value) {
-                val pageInformation = browserModule.makeCurrentPageInformation()
+                val pageInformation = webViewContainer.makeCurrentPageInformation()
                 if (pageInformation.isEmpty.not()) {
                     PageInformationDialog(openPageInformation, pageInformation)
                 }
@@ -442,7 +442,7 @@ private fun AppBarContent(
                 R.string.title_menu_html_source,
                 MaterialTheme.colorScheme.onPrimary
             ) {
-                browserModule.invokeHtmlSourceExtraction {
+                webViewContainer.invokeHtmlSourceExtraction {
                     val replace = it.replace("\\u003C", "<")
                     showReader(replace, contentViewModel, resetReaderModeContent)
                 }
@@ -490,9 +490,9 @@ private fun AppBarContent(
                     modifier = Modifier
                         .clickable {
                             if (isNotLoading) {
-                                browserModule.reload()
+                                webViewContainer.reload()
                             } else {
-                                browserModule.stopLoading()
+                                webViewContainer.stopLoading()
                                 coroutineScope.launch {
                                     viewModel.stopProgress(true)
                                 }
