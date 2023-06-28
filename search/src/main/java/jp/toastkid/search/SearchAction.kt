@@ -80,15 +80,15 @@ class SearchAction(
         val viewModel = viewModelSupplier(activityContext)
 
         if (validatedUrl) {
-            openUri(viewModel, Uri.parse(query))
+            openUri(Uri.parse(query))
             return
         }
 
         val searchUri = urlFactory(category, query, currentUrl)
-        openUri(viewModel, searchUri)
+        openUri(searchUri)
     }
 
-    private fun openUri(browserViewModel: ContentViewModel?, uri: Uri) {
+    private fun openUri(uri: Uri) {
         if (onBackground)
             viewModelSupplier(activityContext)?.openBackground(
                     activityContext.getString(R.string.title_tab_background_search, query),
