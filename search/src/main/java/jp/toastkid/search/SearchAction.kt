@@ -52,7 +52,7 @@ class SearchAction(
 
         val validatedUrl = Urls.isValidUrl(query)
 
-        withInternalBrowser(validatedUrl)
+        openUrl(validatedUrl)
         return disposable
     }
 
@@ -76,7 +76,7 @@ class SearchAction(
      *
      * @param validatedUrl passed query is URL.
      */
-    private fun withInternalBrowser(validatedUrl: Boolean) {
+    private fun openUrl(validatedUrl: Boolean) {
         val browserViewModel = viewModelSupplier(activityContext)
 
         if (validatedUrl) {
