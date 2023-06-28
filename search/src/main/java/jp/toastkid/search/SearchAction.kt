@@ -77,8 +77,6 @@ class SearchAction(
      * @param validatedUrl passed query is URL.
      */
     private fun openUrl(validatedUrl: Boolean) {
-        val viewModel = viewModelSupplier(activityContext)
-
         if (validatedUrl) {
             openUri(Uri.parse(query))
             return
