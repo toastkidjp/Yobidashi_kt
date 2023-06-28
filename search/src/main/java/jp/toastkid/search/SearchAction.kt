@@ -77,15 +77,15 @@ class SearchAction(
      * @param validatedUrl passed query is URL.
      */
     private fun openUrl(validatedUrl: Boolean) {
-        val browserViewModel = viewModelSupplier(activityContext)
+        val viewModel = viewModelSupplier(activityContext)
 
         if (validatedUrl) {
-            openUri(browserViewModel, Uri.parse(query))
+            openUri(viewModel, Uri.parse(query))
             return
         }
 
         val searchUri = urlFactory(category, query, currentUrl)
-        openUri(browserViewModel, searchUri)
+        openUri(viewModel, searchUri)
     }
 
     private fun openUri(browserViewModel: ContentViewModel?, uri: Uri) {
