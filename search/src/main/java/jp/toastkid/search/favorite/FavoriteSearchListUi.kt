@@ -67,8 +67,6 @@ import java.text.MessageFormat
 fun FavoriteSearchListUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
-    val preferenceApplier = PreferenceApplier(activityContext)
-
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
     val favoriteSearchItems = remember { mutableStateListOf<FavoriteSearch>() }
