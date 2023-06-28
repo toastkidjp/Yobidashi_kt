@@ -56,12 +56,10 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class WebViewContainer(
-    context: Context,
+    private val context: Context,
     private var browserViewModel: WebTabUiViewModel
 ) {
     private val webViewContainer = FrameLayout(context)
-
-    private val context = webViewContainer.context
 
     private val preferenceApplier = PreferenceApplier(context)
 
