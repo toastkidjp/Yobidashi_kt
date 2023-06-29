@@ -77,13 +77,9 @@ class SearchAction(
      * @param validatedUrl passed query is URL.
      */
     private fun openUrl(validatedUrl: Boolean) {
-        if (validatedUrl) {
-            openUri(Uri.parse(query))
-            return
-        }
-
-        val searchUri = urlFactory(category, query, currentUrl)
-        openUri(searchUri)
+        val uri =
+            if (validatedUrl) { Uri.parse(query) } else { urlFactory(category, query, currentUrl) }
+        openUri(uri)
     }
 
     private fun openUri(uri: Uri) {
