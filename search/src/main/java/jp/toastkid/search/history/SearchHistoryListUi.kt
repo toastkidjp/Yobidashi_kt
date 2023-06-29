@@ -40,7 +40,7 @@ import kotlinx.coroutines.withContext
 fun SearchHistoryListUi() {
     val context = LocalContext.current
 
-    val searchHistoryRepository = RepositoryFactory().searchHistoryRepository(context)
+    val searchHistoryRepository = remember { RepositoryFactory().searchHistoryRepository(context) }
     val fullItems = mutableListOf<SearchHistory>()
     val searchHistoryItems = remember { mutableStateListOf<SearchHistory>() }
 
