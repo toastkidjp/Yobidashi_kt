@@ -213,7 +213,7 @@ class WebViewContainer(
         currentView()?.findAllAsync(keyword)
     }
 
-    fun findUp() {
+    private fun findUp() {
         currentView()?.findNext(false)
     }
 
