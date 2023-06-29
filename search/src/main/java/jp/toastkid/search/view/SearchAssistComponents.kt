@@ -112,9 +112,7 @@ internal fun SearchItemContent(
     )
 }
 
-/**
- * TODO Move to ui.
- */
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BindItemContent(
