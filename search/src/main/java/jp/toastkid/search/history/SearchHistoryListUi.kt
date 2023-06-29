@@ -17,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.ViewModelProvider
@@ -44,8 +43,6 @@ fun SearchHistoryListUi() {
     val searchHistoryRepository = RepositoryFactory().searchHistoryRepository(LocalContext.current)
     val fullItems = mutableListOf<SearchHistory>()
     val searchHistoryItems = remember { mutableStateListOf<SearchHistory>() }
-
-    val coroutineScope = rememberCoroutineScope()
 
     val listState = rememberLazyListState()
 
