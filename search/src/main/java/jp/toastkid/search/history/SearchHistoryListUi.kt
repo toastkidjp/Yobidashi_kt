@@ -69,7 +69,7 @@ fun SearchHistoryListUi() {
         }
     }
 
-    val fullItems = mutableListOf<SearchHistory>()
+    val fullItems = remember { mutableListOf<SearchHistory>() }
 
     LaunchedEffect(key1 = "initial_load", block = {
         val loaded = withContext(Dispatchers.IO) {
