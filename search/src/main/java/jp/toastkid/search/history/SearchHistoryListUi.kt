@@ -69,6 +69,7 @@ fun SearchHistoryListUi() {
         }
     }
 
+    val contentViewModel = viewModel(modelClass = ContentViewModel::class.java)
     val fullItems = remember { mutableListOf<SearchHistory>() }
 
     LaunchedEffect(key1 = "initial_load", block = {
@@ -78,16 +79,16 @@ fun SearchHistoryListUi() {
         searchHistoryItems.clear()
         searchHistoryItems.addAll(loaded)
         fullItems.addAll(loaded)
-    })
 
-    viewModel(modelClass = ContentViewModel::class.java).optionMenus(
-        OptionMenu(
-            titleId = R.string.title_clear_search_history,
-            action = {
-                openConfirmDialog.value = true
-            }
+        contentViewModel.optionMenus(
+            OptionMenu(
+                titleId = R.string.title_clear_search_history,
+                action = {
+                    openConfirmDialog.value = true
+                }
+            )
         )
-    )
+    })
 
     DestructiveChangeConfirmDialog(
         openConfirmDialog,
