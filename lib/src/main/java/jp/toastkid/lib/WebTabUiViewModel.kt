@@ -28,12 +28,6 @@ class WebTabUiViewModel {
         swipeRefreshState.value?.isRefreshing = false
     }
 
-    fun search() {
-        /*viewModelScope.launch {
-            _event.emit(WebSearchEvent(query))
-        }*/
-    }
-
     private val _icon = mutableStateOf<Bitmap?>(null)
 
     val icon: State<Bitmap?> = _icon
