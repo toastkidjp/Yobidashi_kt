@@ -228,11 +228,6 @@ private fun FavoriteSearchItemList(
                         favoriteSearch.query ?: "",
                         onBackground = it
                     ).invoke()
-                    SearchAction(
-                        context,
-                        favoriteSearch.category ?: "",
-                        favoriteSearch.query ?: ""
-                    ).invoke()
                 },
                 {
                     repository.delete(favoriteSearch)
