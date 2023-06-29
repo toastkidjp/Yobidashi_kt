@@ -41,7 +41,6 @@ fun SearchHistoryListUi() {
     val context = LocalContext.current
 
     val searchHistoryRepository = remember { RepositoryFactory().searchHistoryRepository(context) }
-    val fullItems = mutableListOf<SearchHistory>()
     val searchHistoryItems = remember { mutableStateListOf<SearchHistory>() }
 
     val listState = rememberLazyListState()
@@ -69,6 +68,8 @@ fun SearchHistoryListUi() {
             )
         }
     }
+
+    val fullItems = mutableListOf<SearchHistory>()
 
     LaunchedEffect(key1 = "initial_load", block = {
         val loaded = withContext(Dispatchers.IO) {
