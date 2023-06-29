@@ -323,6 +323,10 @@ private fun AppBarContent(
                     .height(1.dp)
                     .fillMaxWidth()
             )
+        } else {
+            coroutineScope.launch {
+                viewModel.swipeRefreshState.value?.resetOffset()
+            }
         }
 
         Row(
