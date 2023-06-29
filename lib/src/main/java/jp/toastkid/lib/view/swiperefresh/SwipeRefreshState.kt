@@ -54,6 +54,7 @@ class SwipeRefreshState(
     }
 
     suspend fun resetOffset() {
+        isRefreshing = false
         _indicatorOffset.animateTo(-maximumOffset)
     }
 }
