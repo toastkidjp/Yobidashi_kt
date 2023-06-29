@@ -71,7 +71,7 @@ fun FavoriteSearchListUi() {
 
     val favoriteSearchItems = remember { mutableStateListOf<FavoriteSearch>() }
 
-    val repository = RepositoryFactory().favoriteSearchRepository(activityContext)
+    val repository = remember { RepositoryFactory().favoriteSearchRepository(activityContext) }
 
     contentViewModel.replaceAppBarContent {
             val spinnerOpen = remember { mutableStateOf(false) }
