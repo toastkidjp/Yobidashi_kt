@@ -17,7 +17,7 @@ import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
  */
 class WebTabUiViewModel {
 
-    fun download(url: String) {
+    fun download() {
         /*viewModelScope.launch {
             _event.emit(DownloadEvent(url))
         }*/
