@@ -17,12 +17,6 @@ import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
  */
 class WebTabUiViewModel {
 
-    fun download() {
-        /*viewModelScope.launch {
-            _event.emit(DownloadEvent(url))
-        }*/
-    }
-
     suspend fun stopProgress(stop: Boolean) {
         swipeRefreshState.value?.resetOffset()
         swipeRefreshState.value?.isRefreshing = false
