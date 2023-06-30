@@ -9,10 +9,9 @@ package jp.toastkid.web.block
 
 import android.content.res.AssetManager
 import android.webkit.WebResourceResponse
-import okio.buffer
-import okio.source
 import java.io.ByteArrayInputStream
 import java.io.InputStream
+import java.io.InputStreamReader
 
 /**
  * This class is "shouldInterceptRequest" delegation for blocking load AD content.
@@ -25,9 +24,8 @@ class AdRemover(inputStream: InputStream) {
      * Blacklist of AD hosts.
      */
     private var blackList: Set<String> =
-            inputStream.source().buffer().use { bufferedSource ->
-                bufferedSource.readUtf8()
-                        .split("\n")
+            InputStreamReader(inputStream).use { reader ->
+                reader.readLines()
                         .filter { it.isNotBlank() }
                         .map { it.trim() }
                         .toHashSet()
