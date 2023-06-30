@@ -88,8 +88,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okio.buffer
-import okio.sink
 import timber.log.Timber
 import java.io.IOException
 import java.util.Stack
@@ -540,8 +538,8 @@ private fun exportBookmark(
 ) {
     val items = bookmarkRepository.all()
     context.contentResolver?.openOutputStream(uri)?.use { stream ->
-        stream.sink().buffer().use {
-            it.writeUtf8(Exporter(items).invoke())
+        stream.bufferedWriter().use {
+            it.write(Exporter(items).invoke())
         }
     }
 }
