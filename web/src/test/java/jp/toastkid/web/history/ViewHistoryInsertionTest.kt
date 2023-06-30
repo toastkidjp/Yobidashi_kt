@@ -18,6 +18,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import jp.toastkid.data.repository.factory.RepositoryFactory
+import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
