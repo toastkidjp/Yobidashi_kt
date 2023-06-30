@@ -98,7 +98,7 @@ private const val EXPORT_FILE_NAME = "bookmark.html"
 fun BookmarkListUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
-    val bookmarkRepository = RepositoryFactory().bookmarkRepository(activityContext)
+    val bookmarkRepository = remember { RepositoryFactory().bookmarkRepository(activityContext) }
 
     val contentViewModel1 = viewModel(ContentViewModel::class.java, activityContext)
 
