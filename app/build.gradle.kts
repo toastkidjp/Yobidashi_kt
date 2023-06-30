@@ -2,6 +2,7 @@
 import property.BuildTool
 import property.LibraryVersion
 import property.Version
+import java.io.BufferedInputStream
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -36,7 +37,9 @@ android {
             val keystoreProperties = Properties()
 
             // Load your keystore.properties file into the keystoreProperties object.
-            keystoreProperties.load(FileInputStream(rootProject.file("keystore.properties")))
+            BufferedInputStream(FileInputStream(rootProject.file("keystore.properties"))).use {
+                keystoreProperties.load(it)
+            }
 
             keyAlias = keystoreProperties.getProperty("keyAlias")
             keyPassword = keystoreProperties.getProperty("keyPassword")
