@@ -61,6 +61,7 @@ import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.ui.dialog.ConfirmDialog
 import kotlinx.coroutines.launch
+import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
 
@@ -309,7 +310,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     }
 
     if (viewModel.openDialog.value) {
-        val message = FileInputStream(File(viewModel.getCurrentImage().path)).use {
+        val message = BufferedInputStream(FileInputStream(File(viewModel.getCurrentImage().path))).use {
             val exifInterface = ExifInterface(it)
             ExifInformationExtractorUseCase().invoke(exifInterface)
         }
