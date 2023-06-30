@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.main.ui
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -77,6 +76,8 @@ import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
+import jp.toastkid.lib.network.DownloadAction
+import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.event.content.NavigationEvent
 import jp.toastkid.lib.viewmodel.event.content.RefreshContentEvent
@@ -109,10 +110,9 @@ import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContrac
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
-import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
-import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
+import jp.toastkid.yobidashi.main.usecase.ClippingUrlOpener
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
 import jp.toastkid.yobidashi.tab.History
 import jp.toastkid.yobidashi.tab.TabAdapter
@@ -167,19 +167,7 @@ internal fun Content() {
             contentViewModel.replaceToCurrentTab()
         }
 
-    val requestPermissionForOpenPdfTab =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (!it) {
-                return@rememberLauncherForActivityResult
-            }
-
-            activityResultLauncher.launch(OpenDocumentIntentFactory()("application/pdf"))
-        }
-
     val openMenu = remember { mutableStateOf(false) }
-
-    val backgroundColor = MaterialTheme.colorScheme.primary
-    val tint = MaterialTheme.colorScheme.onPrimary
 
     val bottomBarHeightPx = with(LocalDensity.current) { 72.dp.toPx() }
     contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
@@ -229,6 +217,10 @@ internal fun Content() {
             if (downloadUrl.value.isEmpty()) {
                 return@rememberLauncherForActivityResult
             }
+            if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(activity)) {
+                contentViewModel.snackShort(R.string.message_wifi_not_connecting)
+                return@rememberLauncherForActivityResult
+            }
             DownloadAction(activity).invoke(downloadUrl.value)
             downloadUrl.value = ""
         }
@@ -261,7 +253,7 @@ internal fun Content() {
                     replaceToCurrentTab(tabs, navigationHostController)
                 }
                 is OpenPdfEvent -> {
-                    requestPermissionForOpenPdfTab.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    activityResultLauncher.launch(OpenDocumentIntentFactory()("application/pdf"))
                 }
                 is OpenEditorEvent -> {
                     tabs.openNewEditorTab()
@@ -495,7 +487,7 @@ internal fun Content() {
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = { openMenu.value = openMenu.value.not() },
-                    containerColor = tint,
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .size(48.dp)
                         .scale(contentViewModel.fabScale.value)
@@ -520,7 +512,7 @@ internal fun Content() {
                     Icon(
                         painterResource(id = R.drawable.ic_menu),
                         stringResource(id = R.string.menu),
-                        tint = backgroundColor
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             },

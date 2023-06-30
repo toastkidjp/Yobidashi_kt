@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.libs.intent
+package jp.toastkid.yobidashi.settings.intent
 
 import android.content.Intent
 import android.provider.Settings

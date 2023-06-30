@@ -46,8 +46,8 @@ import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewLongTapListenerFactory
-import jp.toastkid.yobidashi.libs.network.DownloadAction
-import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.lib.network.DownloadAction
+import jp.toastkid.lib.network.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -328,7 +328,7 @@ class WebViewContainer(
         GlobalWebViewPool.resize(poolSize)
     }
 
-    fun applyNewAlpha() {
+    private fun applyNewAlpha() {
         GlobalWebViewPool.applyNewAlpha(alphaConverter.readBackground(context))
     }
 
@@ -343,6 +343,10 @@ class WebViewContainer(
     }
 
     fun downloadAllImages() {
+        if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(context)) {
+            contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
+            return
+        }
         AllImageDownloaderUseCase(DownloadAction(context)).invoke(currentView())
     }
 

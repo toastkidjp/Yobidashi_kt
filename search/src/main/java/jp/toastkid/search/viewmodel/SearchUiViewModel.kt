@@ -16,10 +16,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.api.trend.Trend
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
+import jp.toastkid.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearch
 import jp.toastkid.yobidashi.search.history.SearchHistory
-import jp.toastkid.search.usecase.QueryingUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -117,6 +117,8 @@ class SearchUiViewModel(
     private val isEnableFavoriteSearch = mutableStateOf(false)
     private val isEnableViewHistory = mutableStateOf(false)
     private val isEnableSuggestion = mutableStateOf(false)
+    private val isEnableTrend = mutableStateOf(false)
+    private val isEnableUrlCard = mutableStateOf(false)
 
     fun isEnableSearchHistory() = isEnableSearchHistory.value
 
@@ -125,6 +127,10 @@ class SearchUiViewModel(
     fun isEnableSuggestion() = isEnableSuggestion.value
 
     fun isEnableViewHistory() = isEnableViewHistory.value
+
+    fun useTrend() = isEnableTrend.value && trends.isNotEmpty()
+
+    fun useUrlCard() = isEnableUrlCard.value
 
     fun copyFrom(preferenceApplier: PreferenceApplier) {
         if (isEnableSearchHistory.value != preferenceApplier.isEnableSearchHistory) {
@@ -138,6 +144,12 @@ class SearchUiViewModel(
         }
         if (isEnableSuggestion.value != preferenceApplier.isEnableSuggestion) {
             isEnableSuggestion.value = preferenceApplier.isEnableSuggestion
+        }
+        if (isEnableTrend.value != preferenceApplier.isEnableTrendModule()) {
+            isEnableTrend.value = preferenceApplier.isEnableTrendModule()
+        }
+        if (isEnableUrlCard.value != preferenceApplier.isEnableUrlModule()) {
+            isEnableUrlCard.value = preferenceApplier.isEnableUrlModule()
         }
     }
 

@@ -19,6 +19,7 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import org.junit.After
 import org.junit.Before
@@ -41,11 +42,15 @@ class WebViewInitializerTest {
     @MockK
     private lateinit var context: Context
 
+    @MockK
+    private lateinit var faviconApplier: FaviconApplier
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
         every { context.getAssets() }.returns(mockk())
+        every { context.getFilesDir() }.returns(mockk())
 
         every { webView.getContext() }.returns(context)
 

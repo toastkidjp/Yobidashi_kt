@@ -9,6 +9,7 @@
 package jp.toastkid.image.view
 
 import android.Manifest
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -70,7 +71,6 @@ fun ImageListUi() {
 
     val backHandlerState = remember { mutableStateOf(false) }
 
-    val imageLoader = ImageLoader(contentResolver)
     val imageLoaderUseCase = remember {
         ImageLoaderUseCase(
             preferenceApplier,
@@ -79,7 +79,7 @@ fun ImageListUi() {
                 images.addAll(it)
             },
             BucketLoader(contentResolver),
-            imageLoader,
+            ImageLoader(contentResolver),
             backHandlerState,
             { }
         )
@@ -93,7 +93,7 @@ fun ImageListUi() {
                 images.addAll(it)
             },
             imageLoaderUseCase,
-            imageLoader,
+            ImageLoader(contentResolver),
             { }
         )
     }
@@ -128,7 +128,12 @@ fun ImageListUi() {
 
     if (preview.value.not()) {
         LaunchedEffect(key1 = "first_launch") {
-            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            requestPermissionLauncher.launch(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    Manifest.permission.READ_MEDIA_IMAGES
+                else
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            )
         }
     }
 

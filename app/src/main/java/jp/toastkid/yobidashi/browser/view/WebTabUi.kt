@@ -83,7 +83,7 @@ import jp.toastkid.yobidashi.browser.view.dialog.AnchorLongTapDialog
 import jp.toastkid.yobidashi.browser.view.dialog.PageInformationDialog
 import jp.toastkid.yobidashi.browser.view.reader.ReaderModeUi
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.launch

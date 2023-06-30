@@ -28,6 +28,7 @@ class WikipediaApiTest {
     @InjectMockKs
     private lateinit var wikipediaApi: WikipediaApi
 
+    @Suppress("unused")
     private val baseUrl = "https://en.wikipedia.org/"
 
     @MockK

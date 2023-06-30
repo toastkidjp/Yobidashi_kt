@@ -22,7 +22,7 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi.libs.VectorToBitmap
+import jp.toastkid.lib.image.VectorToBitmap
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

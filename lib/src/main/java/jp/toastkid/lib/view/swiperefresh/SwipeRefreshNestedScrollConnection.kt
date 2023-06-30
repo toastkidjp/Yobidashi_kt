@@ -47,7 +47,7 @@ class SwipeRefreshNestedScrollConnection(
     ): Offset {
         if (state?.isRefreshing == false && state.indicatorOffset >= refreshTrigger) {
             onRefresh()
-            state?.isSwipeInProgress = false
+            state.isSwipeInProgress = false
         } else {
             coroutineScope.launch {
                 state?.resetOffset()
@@ -71,8 +71,7 @@ class SwipeRefreshNestedScrollConnection(
             state.isSwipeInProgress = false
         }
 
-        val newOffset = (available.y * DragMultiplier + (state?.indicatorOffset ?: 0f)).coerceAtLeast(0f)
-        val dragConsumed = newOffset - (state?.indicatorOffset ?: 0f)
+        val dragConsumed = (available.y * -1) - (state?.indicatorOffset ?: 0f)
 
         return if (dragConsumed.absoluteValue >= 0.5f) {
             coroutineScope.launch {

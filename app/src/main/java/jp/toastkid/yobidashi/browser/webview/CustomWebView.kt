@@ -81,7 +81,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
 
                 if (enablePullToRefresh && (deltaY < 0)) {
                     nestedScrollDispatcher?.dispatchPreScroll(
-                        Offset(0f, deltaY / 10f),
+                        Offset(0f, deltaY),
                         NestedScrollSource.Drag
                     )
                     return true
@@ -194,9 +194,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
                                 R.id.translate -> {
                                     selectedTextExtractor.withAction(this@CustomWebView) {
                                         if (it.isBlank()) {
-                                            (context as? ViewModelStoreOwner)?.let {
-                                                ViewModelProvider(it).get(ContentViewModel::class.java)
-                                            }?.snackShort(R.string.message_failed_query_extraction_from_web_view)
+                                            contentViewModel?.snackShort(R.string.message_failed_query_extraction_from_web_view)
                                             return@withAction
                                         }
                                         contentViewModel?.preview(TranslationUrlGenerator()(it).toUri())

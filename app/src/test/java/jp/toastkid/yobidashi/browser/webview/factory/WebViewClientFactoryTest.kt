@@ -19,6 +19,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.block.AdRemover
+import jp.toastkid.yobidashi.browser.block.SiteNameChecker
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -48,6 +49,9 @@ class WebViewClientFactoryTest {
 
     @MockK
     private lateinit var currentView: () -> WebView
+
+    @MockK
+    private lateinit var siteNameChecker: SiteNameChecker
 
     @Before
     fun setUp() {

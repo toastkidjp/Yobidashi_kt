@@ -61,6 +61,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.api.trend.TrendApi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
+import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.R
 import jp.toastkid.search.SearchAction
@@ -361,10 +362,10 @@ private inline fun search(
     query: String,
     onBackground: Boolean = false
 ) {
-    /*TODO if (NetworkChecker().isNotAvailable(context)) {
+    if (NetworkChecker().isNotAvailable(context)) {
         contentViewModel?.snackShort("Network is not available...")
         return
-    }*/
+    }
 
     if (query.isBlank()) {
         contentViewModel?.snackShort(R.string.message_should_input_keyword)

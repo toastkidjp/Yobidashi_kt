@@ -38,9 +38,9 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.settings.PreferencesClearUseCase
+import jp.toastkid.yobidashi.settings.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.settings.view.WithIcon
 
 @Composable

@@ -20,8 +20,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -42,7 +40,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -62,7 +59,6 @@ import jp.toastkid.image.preview.attach.AttachToThisAppBackgroundUseCase
 import jp.toastkid.image.preview.detail.ExifInformationExtractorUseCase
 import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.compat.material3.SwipeableState
 import jp.toastkid.ui.dialog.ConfirmDialog
 import kotlinx.coroutines.launch
 import java.io.File
@@ -82,20 +78,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
     val context = LocalContext.current
-
-    val sizePx = with(LocalDensity.current) { 200.dp.toPx() }
-    val anchors = mapOf(sizePx to -1, 0f to 0, -sizePx to 1)
-    val swipeableState = SwipeableState(
-        initialValue = 0,
-        confirmStateChange = {
-            if (it == -1) {
-                viewModel.moveToPrevious()
-            } else if (it == 1) {
-                viewModel.moveToNext()
-            }
-            true
-        }
-    )
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -137,21 +119,6 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                         )
                     }
             )
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-                .align(Alignment.Center)
-                /*.swipeableCompat(
-                    state = swipeableState,
-                    anchors = anchors,
-                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                    resistance = ResistanceConfig(0.5f),
-                    orientation = Orientation.Horizontal
-                )*/
-        ) {
         }
 
         Surface(
@@ -342,12 +309,15 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     }
 
     if (viewModel.openDialog.value) {
-        val inputStream = FileInputStream(File(viewModel.getCurrentImage().path))
-        val exifInterface = ExifInterface(inputStream)
+        val message = FileInputStream(File(viewModel.getCurrentImage().path)).use {
+            val exifInterface = ExifInterface(it)
+            ExifInformationExtractorUseCase().invoke(exifInterface)
+        }
+
         ConfirmDialog(
             visibleState = viewModel.openDialog,
             title = viewModel.getCurrentImage().name,
-            message = ExifInformationExtractorUseCase().invoke(exifInterface) ?: "Not found"
+            message = message ?: "Not found"
         )
     }
 

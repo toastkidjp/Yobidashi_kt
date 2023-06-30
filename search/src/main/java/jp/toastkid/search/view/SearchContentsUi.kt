@@ -51,7 +51,6 @@ import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.R
 import jp.toastkid.search.url_suggestion.ItemDeletionUseCase
 import jp.toastkid.search.viewmodel.SearchUiViewModel
@@ -68,7 +67,6 @@ internal fun SearchContentsUi(
     currentUrl: String?
 ) {
     val context = LocalContext.current
-    val preferenceApplier = PreferenceApplier(context)
     val searchHistoryRepository = remember { RepositoryFactory().searchHistoryRepository(context) }
 
     val itemDeletionUseCase = remember {
@@ -91,7 +89,7 @@ internal fun SearchContentsUi(
             .padding(top = 8.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        if (preferenceApplier.isEnableUrlModule()) {
+        if (viewModel.useUrlCard()) {
             UrlCard(currentTitle, currentUrl) { viewModel.putQuery(it) }
         }
 
@@ -222,7 +220,7 @@ internal fun SearchContentsUi(
             }
         }
 
-        if (preferenceApplier.isEnableTrendModule() && viewModel.trends.isNotEmpty()) {
+        if (viewModel.useTrend()) {
             HeaderWithLink(R.string.hourly_trends, R.string.open) {
                 viewModel.search("https://trends.google.co.jp/trends/trendingsearches/realtime")
             }
