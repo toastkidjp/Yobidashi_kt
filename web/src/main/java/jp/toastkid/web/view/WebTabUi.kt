@@ -324,8 +324,10 @@ private fun AppBarContent(
                     .fillMaxWidth()
             )
         } else {
-            coroutineScope.launch {
-                viewModel.swipeRefreshState.value?.resetOffset()
+            LaunchedEffect(key1 = viewModel.progress.value) {
+                coroutineScope.launch {
+                    viewModel.swipeRefreshState.value?.resetOffset()
+                }
             }
         }
 
