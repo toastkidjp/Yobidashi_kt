@@ -76,8 +76,8 @@ fun ImageListUi() {
                 images.clear()
                 images.addAll(it)
             },
-            BucketLoader(contentResolver),
-            ImageLoader(contentResolver),
+            BucketLoader(context.contentResolver),
+            ImageLoader(context.contentResolver),
             backHandlerState,
             { }
         )
@@ -91,7 +91,7 @@ fun ImageListUi() {
                 images.addAll(it)
             },
             imageLoaderUseCase,
-            ImageLoader(contentResolver),
+            ImageLoader(context.contentResolver),
             { }
         )
     }
