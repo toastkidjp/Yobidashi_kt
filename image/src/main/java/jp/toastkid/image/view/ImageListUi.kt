@@ -61,8 +61,6 @@ import kotlinx.coroutines.launch
 fun ImageListUi() {
     val context = LocalContext.current
 
-    val contentResolver = context.contentResolver ?: return
-
     val preview = remember { mutableStateOf(false) }
 
     val images = remember { mutableStateListOf<Image>() }
