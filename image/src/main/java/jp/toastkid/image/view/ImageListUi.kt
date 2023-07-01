@@ -63,8 +63,6 @@ fun ImageListUi() {
 
     val contentResolver = context.contentResolver ?: return
 
-    val preferenceApplier = PreferenceApplier(context)
-
     val preview = remember { mutableStateOf(false) }
 
     val images = remember { mutableStateListOf<Image>() }
@@ -73,7 +71,7 @@ fun ImageListUi() {
 
     val imageLoaderUseCase = remember {
         ImageLoaderUseCase(
-            preferenceApplier,
+            PreferenceApplier(context),
             {
                 images.clear()
                 images.addAll(it)
@@ -87,7 +85,7 @@ fun ImageListUi() {
 
     val imageFilterUseCase = remember {
         ImageFilterUseCase(
-            preferenceApplier,
+            PreferenceApplier(context),
             {
                 images.clear()
                 images.addAll(it)
