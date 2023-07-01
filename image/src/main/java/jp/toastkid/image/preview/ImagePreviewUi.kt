@@ -87,7 +87,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(viewModel.getCurrentImage().path).crossfade(true).build(),
-                imageLoader = imageLoader,
+                imageLoader = GifImageLoaderFactory().invoke(LocalContext.current),
                 contentDescription = viewModel.getCurrentImage().name,
                 colorFilter = viewModel.colorFilterState.value,
                 modifier = Modifier
