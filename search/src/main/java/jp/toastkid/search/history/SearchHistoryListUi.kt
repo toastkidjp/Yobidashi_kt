@@ -94,7 +94,7 @@ fun SearchHistoryListUi() {
     ) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                RepositoryFactory().searchHistoryRepository(context).deleteAll()
+                searchHistoryRepository.deleteAll()
             }
 
             contentViewModel
