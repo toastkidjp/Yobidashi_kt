@@ -39,9 +39,6 @@ class ImageFilterUseCaseTest {
     @MockK
     private lateinit var imageLoader: ImageLoader
 
-    @MockK
-    private lateinit var refreshContent: () -> Unit
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -51,7 +48,6 @@ class ImageFilterUseCaseTest {
         every { preferenceApplier.excludedItems() }.returns(emptySet())
         every { submitImages.invoke(any()) }.just(Runs)
         every { imageLoader.filterBy(any()) }.returns(emptyList())
-        every { refreshContent.invoke() }.just(Runs)
     }
 
     @After

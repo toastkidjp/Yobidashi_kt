@@ -88,8 +88,7 @@ fun ImageListUi() {
                 images.addAll(it)
             },
             imageLoaderUseCase,
-            ImageLoader(context.contentResolver),
-            { }
+            ImageLoader(context.contentResolver)
         )
     }
 

@@ -17,8 +17,7 @@ internal class ImageFilterUseCase(
     private val preferenceApplier: PreferenceApplier,
     private val submitImages: (List<Image>) -> Unit,
     private val imageLoaderUseCase: ImageLoaderUseCase,
-    private val imageLoader: ImageLoader,
-    private val refreshContent: () -> Unit
+    private val imageLoader: ImageLoader
 ) {
 
     operator fun invoke(keyword: String?) {
@@ -33,8 +32,6 @@ internal class ImageFilterUseCase(
         submitImages(newList)
 
         imageLoaderUseCase.clearCurrentBucket()
-
-        refreshContent()
     }
 
 }
