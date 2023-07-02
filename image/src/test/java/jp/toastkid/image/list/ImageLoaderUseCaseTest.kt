@@ -42,9 +42,6 @@ class ImageLoaderUseCaseTest {
     private val backHandlerState = mutableStateOf(true)
 
     @MockK
-    private lateinit var refreshContent: () -> Unit
-
-    @MockK
     private lateinit var parentExtractor: ParentExtractor
 
     @MockK
@@ -53,7 +50,6 @@ class ImageLoaderUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { refreshContent.invoke() }.just(Runs)
         every { submitImages.invoke(any()) }.just(Runs)
         every { preferenceApplier.excludedItems() }.returns(setOf("test"))
         every { preferenceApplier.imageViewerSort() }.returns("test")
