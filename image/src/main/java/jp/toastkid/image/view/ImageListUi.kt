@@ -75,8 +75,7 @@ fun ImageListUi() {
             },
             BucketLoader(context.contentResolver),
             ImageLoader(context.contentResolver),
-            backHandlerState,
-            { }
+            backHandlerState
         )
     }
 
