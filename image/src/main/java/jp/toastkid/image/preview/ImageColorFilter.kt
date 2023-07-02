@@ -28,19 +28,5 @@ enum class ImageColorFilter(val filter: ColorMatrixColorFilter) {
                     }
             )
     ),
-    REVERSE(
-            ColorMatrixColorFilter(
-                    ColorMatrix().also {
-                        it.set(
-                                floatArrayOf(
-                                        -1f,0f,0f,0f,255f,
-                                        0f,-1f,0f,0f,255f,
-                                        0f,0f,-1f,0f,255f,
-                                        0f,0f,0f,1f,255f
-                                )
-                        )
-                    }
-            )
-    ),
 
 }
