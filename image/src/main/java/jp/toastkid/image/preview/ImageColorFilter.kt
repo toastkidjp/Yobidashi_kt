@@ -43,6 +43,4 @@ enum class ImageColorFilter(val filter: ColorMatrixColorFilter) {
             )
     ),
 
-    GRAY_SCALE(ColorMatrixColorFilter(ColorMatrix().also{ it.setSaturation(0.0f) }));
-
 }
