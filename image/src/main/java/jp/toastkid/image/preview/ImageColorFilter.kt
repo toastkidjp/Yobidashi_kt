@@ -7,26 +7,11 @@
  */
 package jp.toastkid.image.preview
 
-import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 
 /**
  * @author toastkidjp
  */
 enum class ImageColorFilter(val filter: ColorMatrixColorFilter) {
-    SEPIA(
-            ColorMatrixColorFilter(
-                    ColorMatrix().also {
-                        it.set(
-                                floatArrayOf(
-                                        0.9f,0f,0f,0f,000f,
-                                        0f,0.7f,0f,0f,000f,
-                                        0f,0f,0.4f,0f,000f,
-                                        0f,0f,0f,1f,000f
-                                )
-                        )
-                    }
-            )
-    ),
 
 }
