@@ -68,8 +68,6 @@ import java.io.FileInputStream
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
-    val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
-
     val viewModel = remember { ImagePreviewViewModel(initialIndex) }
     LaunchedEffect(key1 = Unit, block = {
         viewModel.replaceImages(images)
