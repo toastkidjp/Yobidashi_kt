@@ -13,5 +13,5 @@ package jp.toastkid.image.list
 class ExcludingItemFilter(private val excludingItems: Set<String>) {
 
     operator fun invoke(path: String?) =
-            excludingItems.isNullOrEmpty() || !excludingItems.contains(path)
+            excludingItems.isEmpty() || !excludingItems.contains(path)
 }
