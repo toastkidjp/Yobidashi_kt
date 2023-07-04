@@ -70,7 +70,7 @@ internal fun ColorSettingUi() {
 
     val colorPair = preferenceApplier.colorPair()
     val initialBgColor = remember { preferenceApplier.color }
-    val initialFontColor = remember { colorPair.fontColor() }
+    val initialFontColor = remember { preferenceApplier.fontColor }
 
     val coroutineScope = rememberCoroutineScope()
 
