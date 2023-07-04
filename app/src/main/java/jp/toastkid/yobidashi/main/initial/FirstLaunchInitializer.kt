@@ -9,12 +9,11 @@
 package jp.toastkid.yobidashi.main.initial
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
+import jp.toastkid.web.bookmark.BookmarkInitializer
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
 

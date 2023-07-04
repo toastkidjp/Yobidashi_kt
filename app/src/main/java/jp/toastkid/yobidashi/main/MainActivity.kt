@@ -16,7 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.theme.AppTheme
-import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.web.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.main.ui.Content
 
 class MainActivity : ComponentActivity() {

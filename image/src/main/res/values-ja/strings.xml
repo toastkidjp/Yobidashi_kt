@@ -8,7 +8,6 @@
     <string name="content_description_rotate_right">右に回転</string>
     <string name="content_description_set_to">画像を設定</string>
     <string name="content_description_edit_image">画像を編集</string>
-    <string name="message_cannot_launch_app">アプリを起動できませんでした。</string>
     <string name="title_excluding_item_setting">除外設定</string>
     <string name="title_sort_by_date">日付でソート</string>
     <string name="title_sort_by_name">名前でソート</string>

@@ -114,10 +114,10 @@ dependencies {
     implementation(project(":number"))
     implementation(project(":converter"))
     implementation(project(":calendar"))
+    implementation(project(":web"))
 
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
     implementation("androidx.work:work-runtime:2.7.1")
-    implementation("androidx.webkit:webkit:1.6.0")
 
     // Compose dependencies.
     implementation("androidx.compose.ui:ui:1.4.2")
@@ -132,7 +132,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
-    implementation("org.jsoup:jsoup:${LibraryVersion.jsoup}")
 
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.2")
 

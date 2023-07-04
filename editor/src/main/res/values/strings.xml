@@ -41,7 +41,6 @@
     <string name="title_context_editor_task_list">Task list</string>
     <string name="title_context_editor_code_block">Code block</string>
     <string name="title_context_editor_insert_thousand_separator">Insert thousand separator</string>
-    <string name="title_count">Count</string>
     <string name="context_editor_translate">Translate</string>
 
 </resources>

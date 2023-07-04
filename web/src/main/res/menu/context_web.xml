@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/preview_search"
+        android:title="Preview search"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_search"
+        />
+    <item
+        android:id="@+id/search_with_map_app"
+        android:title="@string/title_search_with_map_app"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_search"
+        />
+    <item
+        android:id="@+id/web_search"
+        android:title="@string/web_search"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_search"
+        />
+    <item
+        android:id="@+id/translate"
+        android:title="@string/translate"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_search"
+        />
+    <item
+        android:id="@+id/context_edit_speech"
+        android:title="Speech"
+        android:orderInCategory="100"
+        />
+    <item
+        android:id="@+id/count"
+        android:title="@string/title_count"
+        android:orderInCategory="100"
+        />
+</menu>

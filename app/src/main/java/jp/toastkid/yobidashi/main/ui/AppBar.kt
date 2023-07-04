@@ -27,7 +27,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -42,10 +41,12 @@ import jp.toastkid.lib.compat.material3.ResistanceConfig
 import jp.toastkid.lib.compat.material3.SwipeableState
 import jp.toastkid.lib.compat.material3.swipeableCompat
 import jp.toastkid.lib.model.OptionMenu
+import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.menu.view.OptionMenuItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.ui.finder.FindInPage
+import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -139,7 +140,6 @@ internal fun AppBar() {
         }
 
         OverflowMenu(
-            MaterialTheme.colorScheme.onPrimary,
             contentViewModel.optionMenus,
             { contentViewModel.switchTabList() }
         ) { activity.finish() }
@@ -149,7 +149,6 @@ internal fun AppBar() {
 
 @Composable
 private fun OverflowMenu(
-    tint: Color,
     menus: List<OptionMenu>,
     switchTabList: () -> Unit,
     finishApp: () -> Unit
@@ -167,7 +166,7 @@ private fun OverflowMenu(
         Icon(
             painterResource(id = R.drawable.ic_option_menu),
             contentDescription = stringResource(id = R.string.title_option_menu),
-            tint = tint,
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.align(Alignment.Center)
         )
 
@@ -178,6 +177,25 @@ private fun OverflowMenu(
                     PreferenceApplier(context).clearMenuFabPosition()
                     contentViewModel?.resetMenuFabPosition()
                 }),
+            OptionMenu(titleId = R.string.menu_random_wikipedia, action = {
+                if (PreferenceApplier(context).wifiOnly &&
+                    NetworkChecker().isUnavailableWiFi(context)
+                ) {
+                    contentViewModel?.snackShort(jp.toastkid.web.R.string.message_wifi_not_connecting)
+                    return@OptionMenu
+                }
+
+                RandomWikipedia()
+                    .fetchWithAction { title, link ->
+                        contentViewModel?.open(link)
+                        contentViewModel?.snackShort(
+                            context.getString(
+                                R.string.message_open_random_wikipedia,
+                                title
+                            )
+                        )
+                    }
+            }),
             OptionMenu(
                 titleId = R.string.title_tab_list,
                 action = switchTabList),

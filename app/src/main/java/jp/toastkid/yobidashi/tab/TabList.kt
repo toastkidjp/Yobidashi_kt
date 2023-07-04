@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi.tab
 
 import android.content.Context
 import androidx.annotation.Keep
-import jp.toastkid.yobidashi.browser.archive.IdGenerator
+import jp.toastkid.web.archive.IdGenerator
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab

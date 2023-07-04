@@ -65,6 +65,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -74,6 +75,7 @@ import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.display.effect.SnowRendererView
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.Urls
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
 import jp.toastkid.lib.network.DownloadAction
@@ -99,17 +101,19 @@ import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
-import jp.toastkid.lib.viewmodel.event.web.PreviewUrlEvent
+import jp.toastkid.lib.viewmodel.event.web.PreviewEvent
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import jp.toastkid.media.music.permission.MusicPlayerPermissions
 import jp.toastkid.media.music.view.MusicListUi
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.SearchQueryExtractor
+import jp.toastkid.search.UrlFactory
+import jp.toastkid.web.floating.view.FloatingPreviewUi
+import jp.toastkid.web.permission.DownloadPermissionRequestContract
+import jp.toastkid.web.webview.GlobalWebViewPool
+import jp.toastkid.web.webview.factory.WebViewClientFactory
+import jp.toastkid.web.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.floating.view.FloatingPreviewUi
-import jp.toastkid.yobidashi.browser.permission.DownloadPermissionRequestContract
-import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.main.usecase.ClippingUrlOpener
@@ -372,9 +376,16 @@ internal fun Content() {
                     tabs.openNewWebTab(urlString)
                     replaceToCurrentTab(tabs, navigationHostController)
                 }
-                is PreviewUrlEvent -> {
+                is PreviewEvent -> {
                     contentViewModel?.setBottomSheetContent {
-                        FloatingPreviewUi(it.uri)
+                        val uri = if (Urls.isValidUrl(it.text)) it.text.toUri() else
+                            UrlFactory().invoke(
+                                PreferenceApplier(activity).getDefaultSearchEngine()
+                                    ?: SearchCategory.getDefaultCategoryName(),
+                                it.text
+                            )
+
+                        FloatingPreviewUi(uri)
                     }
                     coroutineScope?.launch {
                         contentViewModel?.switchBottomSheet()

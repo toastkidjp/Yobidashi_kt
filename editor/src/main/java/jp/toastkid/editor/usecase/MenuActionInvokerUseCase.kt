@@ -7,7 +7,6 @@
  */
 package jp.toastkid.editor.usecase
 
-import android.content.Context
 import android.net.Uri
 import android.widget.EditText
 import androidx.annotation.IdRes
@@ -21,11 +20,8 @@ import jp.toastkid.editor.TableConverter
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.input.Inputs
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.translate.TranslationUrlGenerator
 import jp.toastkid.libs.speech.SpeechMaker
-import jp.toastkid.search.SearchCategory
-import jp.toastkid.search.UrlFactory
 
 /**
  * @author toastkidjp
@@ -132,15 +128,15 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_url_preview -> {
-                contentViewModel?.preview(text.toUri())
+                contentViewModel?.preview(text)
                 return true
             }
             R.id.context_edit_preview_search -> {
-                contentViewModel?.preview(makeSearchResultUrl(context, text))
+                contentViewModel?.preview(text)
                 return true
             }
             R.id.context_edit_web_search -> {
-                openUri(makeSearchResultUrl(context, text))
+                contentViewModel?.search(text)
                 return true
             }
             R.id.context_edit_delete_line -> {
@@ -152,7 +148,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_translate -> {
-                contentViewModel?.preview(TranslationUrlGenerator().invoke(text).toUri())
+                contentViewModel?.preview(TranslationUrlGenerator().invoke(text))
                 return true
             }
             R.id.context_edit_insert_thousand_separator -> {
@@ -168,11 +164,5 @@ class MenuActionInvokerUseCase(
         Inputs().hideKeyboard(editText)
         contentViewModel?.open(uri)
     }
-
-    private fun makeSearchResultUrl(context: Context, text: String): Uri = UrlFactory().invoke(
-        PreferenceApplier(context).getDefaultSearchEngine()
-            ?: SearchCategory.getDefaultCategoryName(),
-        text
-    )
 
 }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2022 toastkidjp.
+  ~ All rights reserved. This program and the accompanying materials
+  ~ are made available under the terms of the Eclipse Public License v1.0
+  ~ which accompany this distribution.
+  ~ The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+  -->
+
+<resources>
+    <string name="message_empty_archives">It does not have any screenshots.</string>
+    <string name="title_clear_bookmark">Clear All Bookmarks</string>
+    <string name="title_add_folder">Add Folder</string>
+    <string name="title_import_bookmark">Import Bookmark</string>
+    <string name="title_export_bookmark">Export Bookmark</string>
+    <string name="title_add_bookmark">Add bookmark</string>
+    <string name="message_done_added_bookmark">It has done adding bookmark.</string>
+    <string name="title_add_default_bookmark">Add default bookmarks</string>
+    <string name="message_add_default_bookmark">Would you like to add default bookmarks?</string>
+    <string name="message_add_bookmark">Would you like to add bookmark?</string>
+    <string name="title_ssl_connection_error">TLS Error!</string>
+    <string name="message_ssl_error_first_line">This site\'s certificate can\'t be trusted.
+        It had canceled connection. \n\nBecause: \n</string>
+    <string name="message_ssl_error_expired">This site\'s certificate is expired. \n\nExpired date time=</string>
+    <string name="message_ssl_error_id_mismatch">Mismatched site name.\n\nCN=</string>
+    <string name="message_ssl_error_not_yet_valid">This site\'s certificate is not yet valid.\n\nStart time=</string>
+    <string name="message_ssl_error_untrusted">CA is untrusted.\n\nCA=</string>
+    <string name="message_ssl_error_unknown">Occurred unknown error!</string>
+    <string name="message_add_rss_target">Would you add this RSS?</string>
+    <string name="message_failed_query_extraction_from_web_view">Query extraction failed. Please would you retry or copy to clipboard?</string>
+    <string name="title_clear_view_history">Clear view history</string>
+    <string name="message_failure_extracting_rss">This site doesn\'t contains any RSS feeds.</string>
+    <string name="prefix_loading">Loading: </string>
+    <string name="translate">Translate</string>
+    <string name="download_all_images">Download all images</string>
+    <string name="title_todo_tasks">TODO tasks</string>
+    <string name="title_todo_tasks_board">Task board</string>
+    <string name="title_search_with_map_app">Search with map app</string>
+    <string name="button_clip_url">Clip URL</string>
+    <string name="button_clip_cookie">Clip Cookie</string>
+    <string name="add_to_home_screen">Add to Home screen</string>
+    <string name="title_archive">Archive this page</string>
+    <string name="title_print_page">Print page</string>
+    <string name="title_add_to_rss_reader">Add to RSS Reader</string>
+    <string name="title_replace_home">Replace home page</string>
+
+    <string name="message_cannot_replace_home_url">This page cannot replace home page.</string>
+    <string name="message_replace_home_url">It has replaced home url. : %s</string>
+    <string name="back">Back</string>
+    <string name="title_menu_forward">Forward</string>
+
+    <string name="title_menu_reader_mode">Reader mode</string>
+    <string name="title_menu_html_source">HTML source</string>
+    <string name="title_bookmark">Bookmark</string>
+    <string name="title_user_agent">User Agent</string>
+    <string name="format_result_user_agent">It has set %s.</string>
+    <string name="title_menu_page_information">Page information</string>
+    <string name="title_menu_reload">Reload</string>
+    <string name="title_load_home">Load home page</string>
+
+    <string name="row_dialog_open_new">Open new tab</string>
+    <string name="row_dialog_open_background">Open background tab</string>
+    <string name="row_dialog_image_search">Image search</string>
+    <string name="row_dialog_preview">Preview</string>
+    <string name="row_dialog_download">Download this image file</string>
+    <string name="row_dialog_copy">Copy URL</string>
+    <string name="row_dialog_copy_text">Copy Text</string>
+    <string name="message_cannot_downloading_image">This file cannot download...</string>
+    <string name="title_icon">icon</string>
+    <string name="title_instant_barcode">Generate barcode</string>
+    <string name="generate">Generate</string>
+</resources>

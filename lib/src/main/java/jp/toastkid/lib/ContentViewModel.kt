@@ -51,7 +51,7 @@ import jp.toastkid.lib.viewmodel.event.web.DownloadEvent
 import jp.toastkid.lib.viewmodel.event.web.OnLoadCompletedEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
-import jp.toastkid.lib.viewmodel.event.web.PreviewUrlEvent
+import jp.toastkid.lib.viewmodel.event.web.PreviewEvent
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -379,9 +379,9 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    fun preview(uri: Uri) {
+    fun preview(text: String) {
         viewModelScope.launch {
-            _event.emit(PreviewUrlEvent(uri))
+            _event.emit(PreviewEvent(text))
         }
     }
 
