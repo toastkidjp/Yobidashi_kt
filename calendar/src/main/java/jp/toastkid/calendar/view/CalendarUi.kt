@@ -168,105 +168,105 @@ fun CalendarUi() {
         }
     }
 
-    contentViewModel.replaceAppBarContent {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(8.dp)
-        ) {
-            Button(onClick = {
-                currentDate.value = GregorianCalendar(
-                    currentDate.value.get(Calendar.YEAR),
-                    currentDate.value.get(Calendar.MONTH) - 1,
-                    1
-                )
-            }, modifier = Modifier.padding(8.dp)) {
-                Text("<")
-            }
+    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
+        contentViewModel.replaceAppBarContent {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Button(onClick = {
+                    currentDate.value = GregorianCalendar(
+                        currentDate.value.get(Calendar.YEAR),
+                        currentDate.value.get(Calendar.MONTH) - 1,
+                        1
+                    )
+                }, modifier = Modifier.padding(8.dp)) {
+                    Text("<")
+                }
 
-            Surface(modifier = Modifier.padding(8.dp)) {
-                val openYearChooser = remember { mutableStateOf(false) }
-                Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
-                    Text("${currentDate.value.get(Calendar.YEAR)}", fontSize = 16.sp)
-                    DropdownMenu(
-                        expanded = openYearChooser.value,
-                        onDismissRequest = { openYearChooser.value = false }) {
-                        val years = (1900..2200).toList()
-                        Box {
-                            val state =
-                                rememberLazyListState(years.indexOf(currentDate.value.get(Calendar.YEAR)))
-                            LazyColumn(
-                                state = state,
-                                modifier = Modifier.size(200.dp, 500.dp)
-                            ) {
-                                items(years) {
-                                    Text(
-                                        "${it}",
-                                        fontSize = 16.sp,
-                                        modifier = Modifier
-                                            .padding(8.dp)
-                                            .clickable {
-                                                currentDate.value.set(Calendar.YEAR, it)
-                                                openYearChooser.value = false
-                                            })
+                Surface(modifier = Modifier.padding(8.dp)) {
+                    val openYearChooser = remember { mutableStateOf(false) }
+                    Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
+                        Text("${currentDate.value.get(Calendar.YEAR)}", fontSize = 16.sp)
+                        DropdownMenu(
+                            expanded = openYearChooser.value,
+                            onDismissRequest = { openYearChooser.value = false }) {
+                            val years = (1900..2200).toList()
+                            Box {
+                                val state =
+                                    rememberLazyListState(years.indexOf(currentDate.value.get(Calendar.YEAR)))
+                                LazyColumn(
+                                    state = state,
+                                    modifier = Modifier.size(200.dp, 500.dp)
+                                ) {
+                                    items(years) {
+                                        Text(
+                                            "${it}",
+                                            fontSize = 16.sp,
+                                            modifier = Modifier
+                                                .padding(8.dp)
+                                                .clickable {
+                                                    currentDate.value.set(Calendar.YEAR, it)
+                                                    openYearChooser.value = false
+                                                })
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            Text("/", fontSize = 16.sp, modifier = Modifier.padding(8.dp))
+                Text("/", fontSize = 16.sp, modifier = Modifier.padding(8.dp))
 
-            Surface(modifier = Modifier.padding(8.dp)) {
-                val openMonthChooser = remember { mutableStateOf(false) }
-                Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
-                    Text("${currentDate.value.get(Calendar.MONTH) + 1}", fontSize = 16.sp)
-                    DropdownMenu(
-                        expanded = openMonthChooser.value,
-                        onDismissRequest = { openMonthChooser.value = false }) {
-                        (1..12).forEach {
-                            DropdownMenuItem(
-                                text = { Text("${it}") },
-                                onClick = {
-                                    currentDate.value = GregorianCalendar(
-                                        currentDate.value.get(Calendar.YEAR),
-                                        it - 1,
-                                        1
-                                    )
-                                    openMonthChooser.value = false
-                                })
+                Surface(modifier = Modifier.padding(8.dp)) {
+                    val openMonthChooser = remember { mutableStateOf(false) }
+                    Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
+                        Text("${currentDate.value.get(Calendar.MONTH) + 1}", fontSize = 16.sp)
+                        DropdownMenu(
+                            expanded = openMonthChooser.value,
+                            onDismissRequest = { openMonthChooser.value = false }) {
+                            (1..12).forEach {
+                                DropdownMenuItem(
+                                    text = { Text("${it}") },
+                                    onClick = {
+                                        currentDate.value = GregorianCalendar(
+                                            currentDate.value.get(Calendar.YEAR),
+                                            it - 1,
+                                            1
+                                        )
+                                        openMonthChooser.value = false
+                                    })
+                            }
                         }
                     }
                 }
-            }
 
-            Button(
-                onClick = {
-                    currentDate.value = GregorianCalendar(
-                        currentDate.value.get(Calendar.YEAR),
-                        currentDate.value.get(Calendar.MONTH) + 1,
-                        1
-                    )
-                },
-                modifier = Modifier
-                    .padding(8.dp)
-            ) {
-                Text(">")
-            }
-
-            Icon(
-                painter = painterResource(id = R.drawable.ic_calendar),
-                tint = MaterialTheme.colorScheme.onPrimary,
-                contentDescription = "Current month",
-                modifier = Modifier.clickable {
-                    currentDate.value = Calendar.getInstance()
+                Button(
+                    onClick = {
+                        currentDate.value = GregorianCalendar(
+                            currentDate.value.get(Calendar.YEAR),
+                            currentDate.value.get(Calendar.MONTH) + 1,
+                            1
+                        )
+                    },
+                    modifier = Modifier
+                        .padding(8.dp)
+                ) {
+                    Text(">")
                 }
-            )
-        }
-    }
 
-    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_calendar),
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    contentDescription = "Current month",
+                    modifier = Modifier.clickable {
+                        currentDate.value = Calendar.getInstance()
+                    }
+                )
+            }
+        }
+
         contentViewModel.showAppBar()
     })
 }
