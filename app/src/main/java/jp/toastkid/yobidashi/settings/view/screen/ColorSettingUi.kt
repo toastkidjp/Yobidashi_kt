@@ -68,7 +68,6 @@ internal fun ColorSettingUi() {
 
     val repository = remember { RepositoryFactory().savedColorRepository(context) }
 
-    val colorPair = preferenceApplier.colorPair()
     val initialBgColor = remember { preferenceApplier.color }
     val initialFontColor = remember { preferenceApplier.fontColor }
 
