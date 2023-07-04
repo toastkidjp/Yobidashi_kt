@@ -379,6 +379,12 @@ class ContentViewModel : ViewModel() {
         }
     }
 
+    fun closeFindInPage() {
+        clearFinderInput()
+        hideFinder()
+        openFindInPageState.value = false
+    }
+
     fun preview(text: String) {
         viewModelScope.launch {
             _event.emit(PreviewEvent(text))
