@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
-private const val DragMultiplier = -1f
+private const val DragMultiplier = 0.5f
 
 class SwipeRefreshNestedScrollConnection(
     private val state: SwipeRefreshState?,
