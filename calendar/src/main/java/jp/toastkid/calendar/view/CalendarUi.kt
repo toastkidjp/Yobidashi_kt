@@ -76,14 +76,13 @@ fun CalendarUi() {
     val preferenceApplier = remember { PreferenceApplier(context) }
 
     val labels = preferenceApplier.usingHolidaysCalendar()
-        .mapNotNull {
+        .flatMap {
             HolidayCalendar.findByName(it)
                 ?.getHolidays(
                     currentDate.value.get(Calendar.YEAR),
                     currentDate.value.get(Calendar.MONTH) + 1
-                )
+                ) ?: emptyList()
         }
-        .flatten()
 
     val holidays = HolidayCalendar.findByName(preferenceApplier.usingPrimaryHolidaysCalendar())
         ?.getHolidays(
