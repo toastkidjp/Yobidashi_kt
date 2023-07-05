@@ -206,7 +206,11 @@ fun CalendarUi() {
                                             modifier = Modifier
                                                 .padding(8.dp)
                                                 .clickable {
-                                                    currentDate.value.set(Calendar.YEAR, it)
+                                                    currentDate.value = GregorianCalendar(
+                                                        it,
+                                                        currentDate.value.get(Calendar.MONTH),
+                                                        1
+                                                    )
                                                     openYearChooser.value = false
                                                 })
                                     }
