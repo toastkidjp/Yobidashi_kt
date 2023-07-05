@@ -20,8 +20,8 @@ data class LongTapItemHolder(var title: String = "", var anchor: String = "") {
     }
 
     fun extract(bundle: Bundle) {
-        title = bundle.get(KEY_TITLE)?.toString()?.trim() ?: ""
-        anchor = bundle.get(KEY_URL)?.toString() ?: ""
+        title = bundle.getString(KEY_TITLE)?.trim() ?: ""
+        anchor = bundle.getString(KEY_URL) ?: ""
     }
 
     companion object {
