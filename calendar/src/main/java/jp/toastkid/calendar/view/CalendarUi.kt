@@ -75,21 +75,6 @@ fun CalendarUi() {
 
     val preferenceApplier = remember { PreferenceApplier(context) }
 
-    val labels = preferenceApplier.usingHolidaysCalendar()
-        .flatMap {
-            HolidayCalendar.findByName(it)
-                ?.getHolidays(
-                    currentDate.value.get(Calendar.YEAR),
-                    currentDate.value.get(Calendar.MONTH) + 1
-                ) ?: emptyList()
-        }
-
-    val holidays = HolidayCalendar.findByName(preferenceApplier.usingPrimaryHolidaysCalendar())
-        ?.getHolidays(
-            currentDate.value.get(Calendar.YEAR),
-            currentDate.value.get(Calendar.MONTH) + 1
-        ) ?: emptyList()
-
     Surface(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
         shadowElevation = 4.dp
@@ -119,6 +104,21 @@ fun CalendarUi() {
                 currentDate.value.get(Calendar.MONTH),
                 1,
             )
+
+            val labels = preferenceApplier.usingHolidaysCalendar()
+                .flatMap {
+                    HolidayCalendar.findByName(it)
+                        ?.getHolidays(
+                            currentDate.value.get(Calendar.YEAR),
+                            currentDate.value.get(Calendar.MONTH) + 1
+                        ) ?: emptyList()
+                }
+
+            val holidays = HolidayCalendar.findByName(preferenceApplier.usingPrimaryHolidaysCalendar())
+                ?.getHolidays(
+                    currentDate.value.get(Calendar.YEAR),
+                    currentDate.value.get(Calendar.MONTH) + 1
+                ) ?: emptyList()
 
             val weeks = makeMonth(week, firstDay)
 
