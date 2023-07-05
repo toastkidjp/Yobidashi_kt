@@ -74,7 +74,6 @@ fun CalendarUi() {
     val currentDate = rememberSaveable { mutableStateOf(Calendar.getInstance()) }
 
     val preferenceApplier = PreferenceApplier(context)
-    val primaryHolidayCalendar = HolidayCalendar.findByName(preferenceApplier.usingPrimaryHolidaysCalendar())
     val holidayCalendars = preferenceApplier.usingHolidaysCalendar().mapNotNull { HolidayCalendar.findByName(it) }
 
     val labels = holidayCalendars.map {
@@ -84,7 +83,7 @@ fun CalendarUi() {
         )
     }.flatten()
 
-    val holidays = primaryHolidayCalendar
+    val holidays = HolidayCalendar.findByName(preferenceApplier.usingPrimaryHolidaysCalendar())
         ?.getHolidays(
             currentDate.value.get(Calendar.YEAR),
             currentDate.value.get(Calendar.MONTH) + 1
