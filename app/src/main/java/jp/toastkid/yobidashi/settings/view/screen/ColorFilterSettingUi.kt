@@ -67,11 +67,13 @@ internal fun ColorFilterSettingUi() {
         viewModel(ContentViewModel::class.java, activityContext)
     }
 
-    val useCase = OverlayColorFilterUseCase(
-        preferenceApplier,
-        { ContextCompat.getColor(activityContext, it) },
-        contentViewModel
-    )
+    val useCase = remember {
+        OverlayColorFilterUseCase(
+            preferenceApplier,
+            { ContextCompat.getColor(activityContext, it) },
+            contentViewModel
+        )
+    }
 
     Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         Column {
