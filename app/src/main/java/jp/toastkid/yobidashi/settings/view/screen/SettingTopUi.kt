@@ -42,9 +42,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingTopUi() {
-    val activityContext = LocalContext.current
-    val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
-        viewModel(ContentViewModel::class.java, activityContext)
+    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, it)
     }
 
     val pagerState = rememberPagerState()
