@@ -123,7 +123,7 @@ dependencies {
     implementation("androidx.work:work-runtime:2.7.1")
 
     // Compose dependencies.
-    implementation("androidx.compose.ui:ui:1.4.2")
+    implementation("androidx.compose.ui:ui:1.6.0")
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("androidx.activity:activity-compose:1.4.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
