@@ -153,7 +153,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
                     .align(Alignment.TopCenter)
             ) {
                 CircularProgressIndicator(
-                    progress = browserViewModel.calculateSwipingProgress(refreshTriggerPx),
+                    progress = { browserViewModel.calculateSwipingProgress(refreshTriggerPx) },
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.padding(4.dp)
                 )
