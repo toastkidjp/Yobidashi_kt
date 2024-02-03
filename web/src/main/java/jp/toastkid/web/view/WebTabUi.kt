@@ -317,7 +317,7 @@ private fun AppBarContent(
     ) {
         if (viewModel.progress.value < 70) {
             LinearProgressIndicator(
-                progress = viewModel.progress.value.toFloat() / 100f,
+                progress = { viewModel.progress.value.toFloat() / 100f },
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .height(1.dp)
