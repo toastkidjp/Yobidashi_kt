@@ -133,10 +133,10 @@ internal fun NavigationalContent(
             val url = Uri.decode(it.getString("url"))
             SearchInputUi(query, title, url)
         }
-        composable("search/history/list") {
+        slideInComposable("search/history/list") {
             SearchHistoryListUi()
         }
-        composable("search/favorite/list") {
+        slideInComposable("search/favorite/list") {
             FavoriteSearchListUi()
         }
         composable("about") {
