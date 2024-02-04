@@ -72,7 +72,6 @@ class WebViewReplacementUseCaseTest {
         every { webViewContainer.getChildAt(any()) }.returns(webView)
         every { webViewContainer.addView(any()) }.returns(Unit)
         every { webViewContainer.removeAllViews() }.returns(Unit)
-        every { webViewContainer.startAnimation(any()) }.returns(Unit)
         every { webViewContainer.getContext() }.returns(context)
 
         every { webView.onResume() }.returns(Unit)
