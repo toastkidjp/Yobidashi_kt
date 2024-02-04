@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -43,6 +41,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.licence.usecase.LoadLicenseUseCase
+import jp.toastkid.ui.parts.InsetDivider
 
 @Composable
 fun AboutThisAppUi(versionName: String) {
@@ -188,15 +187,4 @@ fun AboutThisAppUi(versionName: String) {
 
     val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
     ScrollerUseCase(contentViewModel, scrollState).invoke(LocalLifecycleOwner.current)
-}
-
-@Composable
-private fun InsetDivider() {
-    Divider(
-        color = colorResource(id = R.color.gray_500_dd),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(1.dp)
-            .padding(start = 16.dp, end = 16.dp)
-    )
 }

@@ -41,6 +41,7 @@ tasks.withType<GenerateBuildConfig> {
 
 dependencies {
     implementation(project(path = ":lib"))
+    implementation(project(path = ":ui"))
     implementation(project(path = ":licenses"))
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")

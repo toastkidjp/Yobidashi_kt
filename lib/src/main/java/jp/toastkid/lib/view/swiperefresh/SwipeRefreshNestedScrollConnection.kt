@@ -71,7 +71,7 @@ class SwipeRefreshNestedScrollConnection(
             state.isSwipeInProgress = false
         }
 
-        val dragConsumed = (available.y * -1) - (state?.indicatorOffset ?: 0f)
+        val dragConsumed = ((available.y * -1) - (state?.indicatorOffset ?: 0f)) / 5f
 
         return if (dragConsumed.absoluteValue >= 0.5f) {
             coroutineScope.launch {

@@ -531,6 +531,7 @@ cnt.fout.jp
 competition7472.megaprizes-server76.loan
 conf.smartnews-ads.com
 connect.newzia.jp
+content1.avplayer.com
 contents.7gogo.jp
 contents.adingo.jp.eimg.jp
 contents.purelovers.com
@@ -1178,6 +1179,7 @@ tck.lmadps.jp
 tds-01.atas.io
 text.j-a-net.jp
 tg.socdm.com
+tg1.aniview.com
 theporndude.com
 ti.impact-ad.jp
 tm1.hoiplay.com
