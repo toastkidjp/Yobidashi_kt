@@ -601,11 +601,6 @@ private fun navigate(navigationController: NavHostController?, route: String) {
     }
 
     navigationController?.navigate(route) {
-        if (route.startsWith("tab/")) {
-            anim {
-                enter = R.anim.slide_up
-            }
-        }
         launchSingleTop = true
     }
 }
