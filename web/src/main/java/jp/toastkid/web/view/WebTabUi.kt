@@ -500,7 +500,7 @@ private fun AppBarContent(
                             } else {
                                 webViewContainer.stopLoading()
                                 coroutineScope.launch {
-                                    viewModel.stopProgress(true)
+                                    viewModel.stopProgress()
                                 }
                             }
                         }
