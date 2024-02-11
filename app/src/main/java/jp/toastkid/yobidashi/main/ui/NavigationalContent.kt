@@ -14,9 +14,7 @@ import android.view.View
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
 import androidx.navigation.NavGraphBuilder
@@ -172,14 +170,8 @@ private fun NavGraphBuilder.tabComposable(route: String, content: @Composable (B
         enterTransition = {
             slideInVertically(initialOffsetY = { it })
         },
-        exitTransition = {
-            slideOutHorizontally { it }
-        },
         popEnterTransition = {
             slideInVertically(initialOffsetY = { it })
-        },
-        popExitTransition = {
-            slideOutHorizontally { it }
         }
     ) {
         content(it.arguments)
