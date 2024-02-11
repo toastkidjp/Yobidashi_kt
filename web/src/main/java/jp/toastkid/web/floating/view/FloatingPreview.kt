@@ -71,6 +71,7 @@ fun FloatingPreviewUi(uri: Uri) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primary)
+                .height(52.dp)
                 .padding(8.dp)
                 .clickable {
                     val currentUri = viewModel.url.value?.toUri() ?: return@clickable
