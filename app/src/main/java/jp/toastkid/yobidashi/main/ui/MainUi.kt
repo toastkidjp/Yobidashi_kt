@@ -128,6 +128,7 @@ import jp.toastkid.yobidashi.tab.tab_list.view.TabListUi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -150,7 +151,6 @@ internal fun Content() {
     }
 
     val navigationHostController = rememberNavController()
-    navigationHostController.enableOnBackPressed(false)
 
     val activityResultLauncher: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -534,6 +534,16 @@ internal fun Content() {
                 if (contentViewModel.showSnowEffect()) {
                     AndroidView(factory = { SnowRendererView(activity) })
                 }
+
+                MainBackHandler(
+                    {
+                        navigationHostController.currentBackStackEntry?.destination?.route
+                    },
+                    navigationHostController::popBackStack,
+                    tabs::closeCurrentTab,
+                    tabs::currentTabIsWebTab,
+                    tabs::isEmpty
+                )
             }
 
             LaunchedEffect(key1 = "first_launch", block = {
@@ -568,16 +578,6 @@ internal fun Content() {
             }
         }
     }
-
-    MainBackHandler(
-        {
-            navigationHostController.currentBackStackEntry?.destination?.route
-        },
-        navigationHostController::popBackStack,
-        tabs::closeCurrentTab,
-        tabs::currentTabIsWebTab,
-        tabs::isEmpty
-    )
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(activity) {
