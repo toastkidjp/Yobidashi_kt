@@ -13,7 +13,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
-import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.FaviconApplier
@@ -42,7 +42,7 @@ class WebViewClientFactoryTest {
     private lateinit var preferenceApplier: PreferenceApplier
 
     @MockK
-    private lateinit var browserViewModel: BrowserViewModel
+    private lateinit var browserViewModel: WebTabUiViewModel
 
     @MockK
     private lateinit var rssAddingSuggestion: RssAddingSuggestion

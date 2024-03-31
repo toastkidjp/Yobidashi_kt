@@ -14,9 +14,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.network.DownloadAction
 import jp.toastkid.lib.network.NetworkChecker
@@ -56,13 +56,10 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class WebViewContainer(
-    context: Context,
-    private var browserViewModel: BrowserViewModel,
-    private val coroutineScope: CoroutineScope
+    private val context: Context,
+    private var browserViewModel: WebTabUiViewModel
 ) {
     private val webViewContainer = FrameLayout(context)
-
-    private val context = webViewContainer.context
 
     private val preferenceApplier = PreferenceApplier(context)
 
@@ -216,7 +213,7 @@ class WebViewContainer(
         currentView()?.findAllAsync(keyword)
     }
 
-    fun findUp() {
+    private fun findUp() {
         currentView()?.findNext(false)
     }
 

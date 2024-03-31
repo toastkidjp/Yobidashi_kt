@@ -11,6 +11,7 @@ import property.LibraryVersion
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("org.jetbrains.kotlin.plugin.serialization") version("1.6.21")
 }
 
 android {
@@ -57,7 +58,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
     implementation("org.jsoup:jsoup:${LibraryVersion.jsoup}")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
     testImplementation("junit:junit:4.12")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
+    testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")
 }

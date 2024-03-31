@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.web.R
 
 @Composable
-internal fun BrowserTitle(
+internal fun TitleUrlBox(
     title: String?,
     url: String?,
     progress: Int,

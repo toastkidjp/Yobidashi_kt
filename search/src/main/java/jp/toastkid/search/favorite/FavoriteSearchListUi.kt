@@ -67,13 +67,11 @@ import java.text.MessageFormat
 fun FavoriteSearchListUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
 
-    val preferenceApplier = PreferenceApplier(activityContext)
-
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
     val favoriteSearchItems = remember { mutableStateListOf<FavoriteSearch>() }
 
-    val repository = RepositoryFactory().favoriteSearchRepository(activityContext)
+    val repository = remember { RepositoryFactory().favoriteSearchRepository(activityContext) }
 
     contentViewModel.replaceAppBarContent {
             val spinnerOpen = remember { mutableStateOf(false) }
@@ -229,11 +227,6 @@ private fun FavoriteSearchItemList(
                         favoriteSearch.category ?: "",
                         favoriteSearch.query ?: "",
                         onBackground = it
-                    ).invoke()
-                    SearchAction(
-                        context,
-                        favoriteSearch.category ?: "",
-                        favoriteSearch.query ?: ""
                     ).invoke()
                 },
                 {

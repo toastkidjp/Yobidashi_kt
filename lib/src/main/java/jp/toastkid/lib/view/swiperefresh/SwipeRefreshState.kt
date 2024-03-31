@@ -31,7 +31,6 @@ class SwipeRefreshState(
      * Whether a swipe/drag is currently in progress.
      */
     var isSwipeInProgress: Boolean by mutableStateOf(false)
-        set
 
     /**
      * The current offset for the indicator, in pixels.
@@ -54,6 +53,7 @@ class SwipeRefreshState(
     }
 
     suspend fun resetOffset() {
+        isRefreshing = false
         _indicatorOffset.animateTo(-maximumOffset)
     }
 }

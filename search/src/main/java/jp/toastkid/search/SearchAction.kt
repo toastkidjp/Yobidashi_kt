@@ -52,7 +52,7 @@ class SearchAction(
 
         val validatedUrl = Urls.isValidUrl(query)
 
-        withInternalBrowser(validatedUrl)
+        openUrl(validatedUrl)
         return disposable
     }
 
@@ -76,26 +76,20 @@ class SearchAction(
      *
      * @param validatedUrl passed query is URL.
      */
-    private fun withInternalBrowser(validatedUrl: Boolean) {
-        val browserViewModel = viewModelSupplier(activityContext)
-
-        if (validatedUrl) {
-            openUri(browserViewModel, Uri.parse(query))
-            return
-        }
-
-        val searchUri = urlFactory(category, query, currentUrl)
-        openUri(browserViewModel, searchUri)
+    private fun openUrl(validatedUrl: Boolean) {
+        val uri =
+            if (validatedUrl) { Uri.parse(query) } else { urlFactory(category, query, currentUrl) }
+        openUri(uri)
     }
 
-    private fun openUri(browserViewModel: ContentViewModel?, uri: Uri) {
+    private fun openUri(uri: Uri) {
         if (onBackground)
-            browserViewModel?.openBackground(
+            viewModelSupplier(activityContext)?.openBackground(
                     activityContext.getString(R.string.title_tab_background_search, query),
                     uri
             )
         else
-            browserViewModel?.open(uri)
+            viewModelSupplier(activityContext)?.open(uri)
     }
 
 }

@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
-private const val DragMultiplier = -0.1f
+private const val DragMultiplier = -1f
 
 class SwipeRefreshNestedScrollConnection(
     private val state: SwipeRefreshState?,
@@ -71,7 +71,7 @@ class SwipeRefreshNestedScrollConnection(
             state.isSwipeInProgress = false
         }
 
-        val dragConsumed = ((available.y * -1) - (state?.indicatorOffset ?: 0f)) / 5f
+        val dragConsumed = ((available.y * -1) - (state?.indicatorOffset ?: 0f))
 
         return if (dragConsumed.absoluteValue >= 0.5f) {
             coroutineScope.launch {

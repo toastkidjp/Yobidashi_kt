@@ -15,23 +15,11 @@ import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
 /**
  * @author toastkidjp
  */
-class BrowserViewModel {
-
-    fun download(url: String) {
-        /*viewModelScope.launch {
-            _event.emit(DownloadEvent(url))
-        }*/
-    }
+class WebTabUiViewModel {
 
     suspend fun stopProgress(stop: Boolean) {
         swipeRefreshState.value?.resetOffset()
         swipeRefreshState.value?.isRefreshing = false
-    }
-
-    fun search(query: String) {
-        /*viewModelScope.launch {
-            _event.emit(WebSearchEvent(query))
-        }*/
     }
 
     private val _icon = mutableStateOf<Bitmap?>(null)

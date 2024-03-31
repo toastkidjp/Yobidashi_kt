@@ -17,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.ViewModelProvider
@@ -41,11 +40,8 @@ import kotlinx.coroutines.withContext
 fun SearchHistoryListUi() {
     val context = LocalContext.current
 
-    val searchHistoryRepository = RepositoryFactory().searchHistoryRepository(LocalContext.current)
-    val fullItems = mutableListOf<SearchHistory>()
+    val searchHistoryRepository = remember { RepositoryFactory().searchHistoryRepository(context) }
     val searchHistoryItems = remember { mutableStateListOf<SearchHistory>() }
-
-    val coroutineScope = rememberCoroutineScope()
 
     val listState = rememberLazyListState()
 
@@ -73,6 +69,9 @@ fun SearchHistoryListUi() {
         }
     }
 
+    val contentViewModel = viewModel(modelClass = ContentViewModel::class.java)
+    val fullItems = remember { mutableListOf<SearchHistory>() }
+
     LaunchedEffect(key1 = "initial_load", block = {
         val loaded = withContext(Dispatchers.IO) {
             searchHistoryRepository.findAll()
@@ -80,16 +79,16 @@ fun SearchHistoryListUi() {
         searchHistoryItems.clear()
         searchHistoryItems.addAll(loaded)
         fullItems.addAll(loaded)
-    })
 
-    viewModel(modelClass = ContentViewModel::class.java).optionMenus(
-        OptionMenu(
-            titleId = R.string.title_clear_search_history,
-            action = {
-                openConfirmDialog.value = true
-            }
+        contentViewModel.optionMenus(
+            OptionMenu(
+                titleId = R.string.title_clear_search_history,
+                action = {
+                    openConfirmDialog.value = true
+                }
+            )
         )
-    )
+    })
 
     DestructiveChangeConfirmDialog(
         openConfirmDialog,

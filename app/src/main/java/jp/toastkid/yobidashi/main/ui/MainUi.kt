@@ -377,14 +377,13 @@ internal fun Content() {
                     replaceToCurrentTab(tabs, navigationHostController)
                 }
                 is PreviewEvent -> {
+                    val uri = if (Urls.isValidUrl(it.text)) it.text.toUri() else
+                        UrlFactory().invoke(
+                            PreferenceApplier(activity).getDefaultSearchEngine()
+                                ?: SearchCategory.getDefaultCategoryName(),
+                            it.text
+                        )
                     contentViewModel?.setBottomSheetContent {
-                        val uri = if (Urls.isValidUrl(it.text)) it.text.toUri() else
-                            UrlFactory().invoke(
-                                PreferenceApplier(activity).getDefaultSearchEngine()
-                                    ?: SearchCategory.getDefaultCategoryName(),
-                                it.text
-                            )
-
                         FloatingPreviewUi(uri)
                     }
                     coroutineScope?.launch {
