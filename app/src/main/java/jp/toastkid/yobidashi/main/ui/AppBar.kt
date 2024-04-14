@@ -9,8 +9,16 @@
 package jp.toastkid.yobidashi.main.ui
 
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.gestures.snapTo
+import androidx.compose.foundation.layout.Arrangement.Absolute.Center
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,8 +31,11 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,10 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.compat.material3.FractionalThreshold
-import jp.toastkid.lib.compat.material3.ResistanceConfig
-import jp.toastkid.lib.compat.material3.SwipeableState
-import jp.toastkid.lib.compat.material3.swipeableCompat
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -53,47 +60,74 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun AppBar() {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     val sizePx = with(LocalDensity.current) { 72.dp.toPx() }
-    val anchors = mapOf(-sizePx to 1, 0f to 0)
-    val verticalState = remember { mutableStateOf(0) }
-    val swipeableState = SwipeableState(
-        initialValue = verticalState.value,
-        confirmStateChange = {
-            if (it == 1) {
-                verticalState.value = 1
-                contentViewModel.switchTabList()
-                CoroutineScope(Dispatchers.IO).launch {
-                    delay(400L)
-                    verticalState.value = 0
-                }
+    val anchors = DraggableAnchors {
+        "Start" at 0f
+        "End" at -sizePx
+    }
+    val swipeableState = remember {
+        AnchoredDraggableState(
+            initialValue = "Start",
+            anchors = anchors,
+            positionalThreshold = { sizePx * 0.5f },
+            velocityThreshold = { 120.dp.value },
+            animationSpec = spring(),
+            confirmValueChange = {
+                true
             }
-            true
-        }
-    )
+        )
+    }
 
     val widthPx = with(LocalDensity.current) { 72.dp.toPx() }
-    val horizontalAnchors = mapOf(0f to 0, widthPx to 1, -widthPx to 2)
-    val stateValue = remember { mutableStateOf(0) }
-    val horizontalSwipeableState = SwipeableState(
-        initialValue = stateValue.value,
-        confirmStateChange = {
-            if (it == 1) {
-                stateValue.value = 1
-                contentViewModel.previousTab()
-                stateValue.value = 0
-            } else if (it == 2) {
-                stateValue.value = 2
-                contentViewModel.nextTab()
-                stateValue.value = 0
+    val horizontalAnchors = DraggableAnchors {
+        AnimatedContentTransitionScope.SlideDirection.Start at widthPx
+        Center at 0f
+        AnimatedContentTransitionScope.SlideDirection.End at -widthPx
+    }
+    val horizontalSwipeableState = remember {
+        AnchoredDraggableState(
+            initialValue = Center,
+            anchors = horizontalAnchors,
+            positionalThreshold = { widthPx * 0.75f },
+            velocityThreshold = { 300.dp.value },
+            animationSpec = spring(),
+            confirmValueChange = {
+                true
             }
-            true
+        )
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(horizontalSwipeableState.currentValue) {
+        if (horizontalSwipeableState.currentValue == AnimatedContentTransitionScope.SlideDirection.Start) {
+            contentViewModel.previousTab()
+        } else if (horizontalSwipeableState.currentValue == AnimatedContentTransitionScope.SlideDirection.End) {
+            contentViewModel.nextTab()
         }
-    )
+        coroutineScope.launch {
+            horizontalSwipeableState.snapTo(Center)
+        }
+    }
+    LaunchedEffect(swipeableState.currentValue) {
+        if (swipeableState.currentValue == "End") {
+            contentViewModel.switchTabList()
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(400L)
+                swipeableState.snapTo("Start")
+            }
+        }
+    }
+    SideEffect {
+        if (!horizontalSwipeableState.isAnimationRunning) {
+            coroutineScope.launch { horizontalSwipeableState.snapTo(Center) }
+        }
+    }
 
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -111,24 +145,22 @@ internal fun AppBar() {
         Box(
             modifier = Modifier
                 .weight(1f)
-                .swipeableCompat(
+                .anchoredDraggable(
                     state = horizontalSwipeableState,
-                    anchors = horizontalAnchors,
-                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                    resistance = ResistanceConfig(0.5f),
                     orientation = Orientation.Horizontal
                 )
-                .swipeableCompat(
+                .anchoredDraggable(
                     state = swipeableState,
-                    anchors = anchors,
-                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                    resistance = ResistanceConfig(0.5f),
                     orientation = Orientation.Vertical
                 )
                 .offset {
                     IntOffset(
-                        horizontalSwipeableState.offset.value.toInt(),
-                        swipeableState.offset.value.toInt()
+                        horizontalSwipeableState
+                            .requireOffset()
+                            .toInt(),
+                        swipeableState
+                            .requireOffset()
+                            .toInt()
                     )
                 }
         ) {
