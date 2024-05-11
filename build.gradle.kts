@@ -40,7 +40,7 @@ task("clean", Delete::class) {
 }
 
 jacoco {
-    toolVersion = "0.8.8"
+    toolVersion = "0.8.12"
 }
 
 tasks.create("jacocoMergeReport", JacocoReport::class) {
