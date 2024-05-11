@@ -114,9 +114,9 @@ fun NumberPlaceUi() {
 
                                 MaskedCell(
                                     open,
-                                    number,
+                                    number.value,
                                     {
-                                        number.value = "$it"
+                                        number.value = viewModel.numberLabel(it)
                                         open.value = false
                                         viewModel.place(rowIndex, columnIndex, it) { done ->
                                             showMessageSnackbar(context, contentViewModel, done)
@@ -302,7 +302,7 @@ private fun AppBarContent(
 @Composable
 private fun MaskedCell(
     openState: MutableState<Boolean>,
-    numberState: MutableState<String>,
+    numberLabel: String,
     onMenuItemClick: (Int) -> Unit,
     fontSize: TextUnit,
     modifier: Modifier
@@ -312,12 +312,24 @@ private fun MaskedCell(
         modifier = modifier
     ) {
         Text(
-            numberState.value,
+            numberLabel,
             color = Color(0xFFAA99FF),
             fontSize = fontSize,
             textAlign = TextAlign.Center
         )
         DropdownMenu(openState.value, onDismissRequest = { openState.value = false }) {
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = "_",
+                        fontSize = fontSize,
+                        textAlign = TextAlign.Center
+                    )
+                },
+                onClick = {
+                    onMenuItemClick(-1)
+                })
+
             (1..9).forEach {
                 DropdownMenuItem(
                     text = {
