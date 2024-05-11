@@ -14,6 +14,7 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
@@ -46,6 +47,12 @@ class NumberPlaceViewModelTest {
         numberPlaceViewModel.place(2, 3,  4, callback)
 
         verify(inverse = true) { callback(any()) }
+    }
+
+    @Test
+    fun numberLabel() {
+        assertEquals("_", numberPlaceViewModel.numberLabel(-1))
+        assertEquals("1", numberPlaceViewModel.numberLabel(1))
     }
 
 }
