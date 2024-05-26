@@ -186,7 +186,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
             value.third
         ) {
             browserViewModel.openLongTapDialog.value = false
-            browserViewModel?.clearLongTapParameters()
+            browserViewModel.clearLongTapParameters()
         }
     }
 

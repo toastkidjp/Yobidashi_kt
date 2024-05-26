@@ -64,13 +64,12 @@ import kotlinx.coroutines.withContext
 @Composable
 internal fun ColorSettingUi() {
     val context = LocalContext.current
-    val preferenceApplier = PreferenceApplier(context)
+    val preferenceApplier = remember { PreferenceApplier(context) }
 
     val repository = remember { RepositoryFactory().savedColorRepository(context) }
 
-    val colorPair = preferenceApplier.colorPair()
-    val initialBgColor = colorPair.bgColor()
-    val initialFontColor = colorPair.fontColor()
+    val initialBgColor = remember { preferenceApplier.color }
+    val initialFontColor = remember { preferenceApplier.fontColor }
 
     val coroutineScope = rememberCoroutineScope()
 

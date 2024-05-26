@@ -37,12 +37,6 @@ class SwipeRefreshState(
      */
     val indicatorOffset: Float get() = _indicatorOffset.value
 
-    suspend fun animateOffsetTo(offset: Float) {
-        mutatorMutex.mutate {
-            _indicatorOffset.animateTo(offset)
-        }
-    }
-
     /**
      * Dispatch scroll delta in pixels from touch events.
      */

@@ -68,8 +68,6 @@ import java.io.FileInputStream
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
-    val imageLoader = GifImageLoaderFactory().invoke(LocalContext.current)
-
     val viewModel = remember { ImagePreviewViewModel(initialIndex) }
     LaunchedEffect(key1 = Unit, block = {
         viewModel.replaceImages(images)
@@ -87,7 +85,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(viewModel.getCurrentImage().path).crossfade(true).build(),
-                imageLoader = imageLoader,
+                imageLoader = GifImageLoaderFactory().invoke(LocalContext.current),
                 contentDescription = viewModel.getCurrentImage().name,
                 colorFilter = viewModel.colorFilterState.value,
                 modifier = Modifier

@@ -8,7 +8,6 @@
 
 package jp.toastkid.search.history
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,7 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.data.repository.factory.RepositoryFactory
@@ -96,13 +94,11 @@ fun SearchHistoryListUi() {
     ) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                RepositoryFactory().searchHistoryRepository(context).deleteAll()
+                searchHistoryRepository.deleteAll()
             }
 
-            (context as? ComponentActivity)?.let { activity ->
-                ViewModelProvider(activity).get(ContentViewModel::class.java)
+            contentViewModel
                     .snackShort(R.string.settings_color_delete)
-            }
         }
     }
 

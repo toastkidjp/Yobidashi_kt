@@ -20,7 +20,6 @@ internal class ImageLoaderUseCase(
         private val bucketLoader: BucketLoader,
         private val imageLoader: ImageLoader,
         private val backHandlerState: MutableState<Boolean>,
-        private val refreshContent: () -> Unit,
         private val parentExtractor: ParentExtractor = ParentExtractor()
 ) {
 
@@ -45,7 +44,6 @@ internal class ImageLoaderUseCase(
 
         currentBucket = bucket
         backHandlerState.value = currentBucket != null
-        refreshContent()
     }
 
     fun clearCurrentBucket() {

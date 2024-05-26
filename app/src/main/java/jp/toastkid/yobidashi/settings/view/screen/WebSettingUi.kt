@@ -51,11 +51,10 @@ import jp.toastkid.yobidashi.settings.view.CheckableRow
 import jp.toastkid.yobidashi.settings.view.TextMenu
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WebSettingUi() {
     val activityContext = LocalContext.current
-    val preferenceApplier = PreferenceApplier(activityContext)
+    val preferenceApplier = remember { PreferenceApplier(activityContext) }
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, activityContext)
     }

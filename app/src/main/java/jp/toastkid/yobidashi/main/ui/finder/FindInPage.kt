@@ -47,11 +47,6 @@ import jp.toastkid.yobidashi.R
 internal fun FindInPage() {
     val activity = LocalContext.current as? ViewModelStoreOwner ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
-    val closeAction = {
-        contentViewModel.clearFinderInput()
-        contentViewModel.hideFinder()
-        contentViewModel.openFindInPageState.value = false
-    }
     val pageSearcherInput = remember { mutableStateOf("") }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -60,7 +55,7 @@ internal fun FindInPage() {
             contentDescription = stringResource(id = R.string.content_description_close_find_area),
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
-                .clickable(onClick = closeAction)
+                .clickable(onClick = contentViewModel::closeFindInPage)
                 .padding(start = 16.dp)
         )
 
@@ -139,7 +134,7 @@ internal fun FindInPage() {
         )
 
         BackHandler(contentViewModel.openFindInPageState.value) {
-            closeAction()
+            contentViewModel.closeFindInPage()
         }
 
         LaunchedEffect(key1 = "find_in_page_first_launch", block = {

@@ -38,12 +38,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.api.rss.RssReaderApi
+import jp.toastkid.api.rss.model.Item
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.list.ListActionAttachment
 import jp.toastkid.rss.R
-import jp.toastkid.api.rss.RssReaderApi
-import jp.toastkid.api.rss.model.Item
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.mapNotNull
@@ -74,8 +74,7 @@ fun RssReaderListUi() {
 @Composable
 private fun RssReaderList(fullItems: List<Item>) {
     val activity = LocalContext.current as? ComponentActivity ?: return
-    val viewModelProvider = ViewModelProvider(activity)
-    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
+    val contentViewModel = ViewModelProvider(activity).get(ContentViewModel::class.java)
 
     val listState = rememberLazyListState()
 

@@ -31,7 +31,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -61,10 +60,6 @@ import kotlinx.coroutines.launch
 fun ImageListUi() {
     val context = LocalContext.current
 
-    val contentResolver = context.contentResolver ?: return
-
-    val preferenceApplier = PreferenceApplier(context)
-
     val preview = remember { mutableStateOf(false) }
 
     val images = remember { mutableStateListOf<Image>() }
@@ -73,28 +68,26 @@ fun ImageListUi() {
 
     val imageLoaderUseCase = remember {
         ImageLoaderUseCase(
-            preferenceApplier,
+            PreferenceApplier(context),
             {
                 images.clear()
                 images.addAll(it)
             },
-            BucketLoader(contentResolver),
-            ImageLoader(contentResolver),
-            backHandlerState,
-            { }
+            BucketLoader(context.contentResolver),
+            ImageLoader(context.contentResolver),
+            backHandlerState
         )
     }
 
     val imageFilterUseCase = remember {
         ImageFilterUseCase(
-            preferenceApplier,
+            PreferenceApplier(context),
             {
                 images.clear()
                 images.addAll(it)
             },
             imageLoaderUseCase,
-            ImageLoader(contentResolver),
-            { }
+            ImageLoader(context.contentResolver)
         )
     }
 
@@ -228,7 +221,6 @@ internal fun ImageListUi(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val coroutineScope = rememberCoroutineScope()
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }

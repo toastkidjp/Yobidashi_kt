@@ -139,7 +139,7 @@ class CustomWebView(context: Context) : WebView(context) {
             parent.requestDisallowInterceptTouchEvent(false)
         }
         super.onOverScrolled(scrollX, scrollY, clampedX, clampedY)
-        enablePullToRefresh = clampedY
+        enablePullToRefresh = clampedY && this.scrollY == 0
     }
 
     override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode? =
