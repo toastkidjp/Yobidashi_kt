@@ -27,7 +27,7 @@ import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.barcode.view.BarcodeReaderUi
 import jp.toastkid.calendar.view.CalendarUi
 import jp.toastkid.converter.presentation.ui.ConverterToolUi
-import jp.toastkid.editor.view.EditorTabUi
+import jp.toastkid.editor.view.EditorTabView
 import jp.toastkid.image.view.ImageListUi
 import jp.toastkid.loan.view.LoanCalculatorUi
 import jp.toastkid.number.NumberPlaceUi
@@ -81,7 +81,9 @@ internal fun NavigationalContent(
         }
         tabComposable("tab/editor/current") {
             val currentTab = tabs.currentTab() as? EditorTab ?: return@tabComposable
-            EditorTabUi(currentTab.path)
+
+            EditorTabView(currentTab.path)
+
             takeScreenshot(tabs, LocalView.current)
         }
         tabComposable("web/bookmark/list") {
