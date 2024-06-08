@@ -9,7 +9,6 @@
 package jp.toastkid.editor
 
 import android.widget.EditText
-import androidx.lifecycle.ViewModelProvider
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -19,9 +18,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -34,20 +30,11 @@ class EditorContextMenuInitializerTest {
     @MockK
     private lateinit var editText: EditText
 
-    @MockK
-    private lateinit var speechMaker: SpeechMaker
-
-    @MockK
-    private lateinit var viewModelProvider: ViewModelProvider
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
         every { editText.context }.returns(mockk())
-        every { viewModelProvider.get(BrowserViewModel::class.java) }.returns(mockk())
-        every { viewModelProvider.get(ContentViewModel::class.java) }.returns(mockk())
-
         every { editText.customInsertionActionModeCallback = any() }.just(Runs)
         every { editText.customSelectionActionModeCallback = any() }.just(Runs)
     }
@@ -59,14 +46,14 @@ class EditorContextMenuInitializerTest {
 
     @Test
     fun testEditTextIsNullCase() {
-        editorContextMenuInitializer.invoke(null, speechMaker, viewModelProvider)
+        editorContextMenuInitializer.invoke(null, mockk())
 
         verify(exactly = 0) { editText.context }
     }
 
     @Test
     fun testCompleteInitializing() {
-        editorContextMenuInitializer.invoke(editText, speechMaker, viewModelProvider)
+        editorContextMenuInitializer.invoke(editText, mockk())
 
         verify(exactly = 1) { editText.context }
         verify(exactly = 1) { editText.customInsertionActionModeCallback = any() }
