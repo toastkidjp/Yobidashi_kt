@@ -297,7 +297,7 @@ private fun makeMonth(
     firstDay: Calendar
 ): MutableList<Week> {
     var hasStarted1 = false
-    var current1 = GregorianCalendar(
+    val current1 = GregorianCalendar(
         firstDay.get(Calendar.YEAR),
         firstDay.get(Calendar.MONTH),
         firstDay.get(Calendar.DAY_OF_MONTH)
