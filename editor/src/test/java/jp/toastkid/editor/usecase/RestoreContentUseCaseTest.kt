@@ -17,8 +17,8 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.editor.ContentHolderService
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.yobidashi.editor.ContentHolderService
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
