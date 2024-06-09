@@ -118,6 +118,7 @@ dependencies {
     implementation(project(":converter"))
     implementation(project(":calendar"))
     implementation(project(":web"))
+    implementation(project(":chat"))
 
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
     implementation("androidx.work:work-runtime:2.7.1")
