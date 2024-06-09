@@ -67,6 +67,7 @@ ad-move.jp
 ad-nex.com
 ad-sell.com
 ad-shot.com
+ad-spire.genieesspv.jp
 ad-trip.com
 ad-wisteria.excite.co.jp
 ad.2ch.live
@@ -279,6 +280,7 @@ aimds.er.cyberwing.co.jp
 aimg.fc2.com
 aio.lp.mydas.mobi
 ak.assets.adlantis.jp
+al.dmm.com
 ala.durasite.net
 aladdin.genieesspv.jp
 alea.adam.ad.daum.net
@@ -387,6 +389,7 @@ as.yl.impact-ad.jp
 ashot.txxx.com
 asp.m-live.jp
 aspm.jp
+asset.fwcdn3.com
 assets.gunosy.com
 associate.microad.jp
 au.adserver.yahoo.com
@@ -612,6 +615,7 @@ engine.spotscenered.info
 enhance.genieesspv.jp
 entrypoint.search.yahooapis.jp
 ero-advertising.com
+eropasture.com
 erosoku.net
 erotube69.pw
 et.w.inmobi.com
@@ -737,6 +741,7 @@ img.bbchat.tv
 img.bypass.jp
 img.dailyfortune.jp
 img.dlsite.jp
+img.dsp.bance.jp
 img.e-nls.com
 img.fam-ad.com
 img.fluct.jp
@@ -821,6 +826,7 @@ js.rfp.fout.jp
 js.spacenine.biz
 js.speead.jp
 js.sprout-ad.com
+js.ssp.bance.jp
 js.tapone.jp
 js.toki-aiad.com
 js.unitedblades.jp
@@ -889,6 +895,7 @@ mobylog.jp
 momoemoe.com
 moneytizer-d.openx.net
 moradu.com
+mostlypillow.com
 movie-wiki.net
 moviegate1.net
 msend.microad.jp
@@ -945,8 +952,10 @@ pc.tunnel-vision.info
 pcmax.jp
 penta.a.one.impact-ad.jp
 pic.tokyo-tube-ad.com
+pics.dmm.com
 pink.clicktx.jp
 pixel.mathtag.com
+player.gliacloud.com
 playfolders.com
 playtune.info
 pokoran.com
@@ -1102,6 +1111,7 @@ sh.adingo.jp
 sh.i2i.jp
 sh.zucks.net
 shopapi.ranking.rakuten.co.jp
+skirthoetwoutb.com
 smaad.jp
 smart-c.jp
 smartaccess.biz
@@ -1162,6 +1172,7 @@ ssum-sec.casalemedia.com
 stat.gamy.ameba.jp
 static-cdn.ashleyrnadison.com
 static.a-ads.com
+static.ad-spire.net
 static.adgger.jp
 static.adlantis.jp
 static.adroute.focas.jp
@@ -1220,7 +1231,9 @@ tools.sbs-ad.com
 touch.vivid-memory.com
 tpc.googlesyndication.com
 tr.adplatform.jp
+tr.dsp.bance.jp
 tr.find-a.jp
+tr.ssp.bance.jp
 tracer.a-cast.jp
 tracer.jp
 track.bannerbridge.net
@@ -1235,6 +1248,7 @@ tsyndicate.com
 u.openx.net
 uac.advertising.com
 umamistreet.analytics.qlook.net
+unpkg.com
 ups.analytics.yahoo.com
 ups.virool.com
 us.themoneytizer.com
@@ -1256,6 +1270,7 @@ webtrackerplus.com
 webtrendslive.com
 whos.amung.us
 widget-view.dmm.co.jp
+widget-view.dmm.com
 widget.blogram.jp
 widget.iid-network.jp
 widget.plugrush.com
@@ -1374,15 +1389,3 @@ yj-a.p.adnxs.com
 yjaxc.yahoo.co.jp
 yourbest.exclusiveoffer.today
 z.moatads.com
-pics.dmm.com
-al.dmm.com
-widget-view.dmm.com
-pagead2.googlesyndication.com
-cdn4.fireworktv.com
-asset.fwcdn3.com
-player.gliacloud.com
-static.ad-spire.net
-ad-spire.genieesspv.jp
-skirthoetwoutb.com
-mostlypillow.com
-eropasture.com
