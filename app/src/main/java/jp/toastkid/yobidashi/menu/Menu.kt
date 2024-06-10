@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import jp.toastkid.yobidashi.R
 
 /**
- * In App Browser's circular menu.
+ * App's circular menu.
  *
  * @param titleId Menu title resource ID
  * @param iconId Menu icon resource ID
@@ -38,6 +38,8 @@ enum class Menu(
     LOAN_CALCULATOR(R.string.title_loan_calculator, R.drawable.ic_loan_calculator),
 
     CONVERTER_TOOL(R.string.title_converter_tool, R.drawable.ic_converter),
+
+    CHAT(R.string.title_chat, R.drawable.ic_chat),
 
     RSS_READER(R.string.title_rss_reader, R.drawable.ic_rss_feed),
 
