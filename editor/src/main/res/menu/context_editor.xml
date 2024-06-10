@@ -58,4 +58,11 @@
         tools:ignore="AlwaysShowAction"
         />
 
+    <item
+        android:id="@+id/context_edit_show_app_bar"
+        android:title="Show app bar"
+        android:orderInCategory="100"
+        tools:ignore="AlwaysShowAction"
+        />
+
 </menu>
