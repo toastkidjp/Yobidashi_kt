@@ -139,6 +139,9 @@ private fun onClickMainMenuItem(
         Menu.CONVERTER_TOOL -> {
             navigate("tool/converter")
         }
+        Menu.CHAT -> {
+            navigate("tool/chat")
+        }
         Menu.RSS_READER -> {
             navigate(
                 "tool/rss/list"
