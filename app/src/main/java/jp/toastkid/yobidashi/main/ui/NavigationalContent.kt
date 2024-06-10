@@ -26,6 +26,7 @@ import jp.toastkid.article_viewer.article.detail.view.ArticleContentUi
 import jp.toastkid.article_viewer.article.list.view.ArticleListUi
 import jp.toastkid.barcode.view.BarcodeReaderUi
 import jp.toastkid.calendar.view.CalendarUi
+import jp.toastkid.chat.presentation.ChatTabView
 import jp.toastkid.converter.presentation.ui.ConverterToolUi
 import jp.toastkid.editor.view.EditorTabView
 import jp.toastkid.image.view.ImageListUi
@@ -143,6 +144,9 @@ internal fun NavigationalContent(
         }
         composable("tool/converter") {
             ConverterToolUi()
+        }
+        composable("tool/chat") {
+            ChatTabView()
         }
     }
 }
