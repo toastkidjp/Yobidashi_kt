@@ -13,6 +13,7 @@ import androidx.compose.ui.text.input.getSelectedText
 import androidx.core.net.toUri
 import jp.toastkid.editor.R
 import jp.toastkid.editor.view.EditorTabViewModel
+import jp.toastkid.editor.view.menu.text.CommaInserter
 import jp.toastkid.editor.view.menu.text.LinkFormInsertion
 import jp.toastkid.editor.view.menu.text.ListHeadAdder
 import jp.toastkid.editor.view.menu.text.NumberedListHeadAdder
@@ -169,12 +170,20 @@ class MenuActionInvoker(
             R.id.context_edit_translate -> {
                 contentViewModel.preview(TranslationUrlGenerator().invoke(viewModel.content().getSelectedText().text))
                 return true
-            }/*
+            }
             R.id.context_edit_insert_thousand_separator -> {
-                ThousandSeparatorInsertionUseCase().invoke(editText, text)
+                val selectedText = viewModel.content().getSelectedText().text
+                val converted = CommaInserter().invoke(selectedText)
+                if (converted.isNullOrBlank()) {
+                    return false
+                }
+                viewModel.replaceText(converted)
                 return true
             }
-*/
+            R.id.context_edit_show_app_bar -> {
+                contentViewModel.showAppBar()
+                return true
+            }
             else -> Unit
         }
         return false
