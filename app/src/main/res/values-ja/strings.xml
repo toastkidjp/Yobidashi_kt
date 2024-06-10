@@ -261,5 +261,6 @@
     <string name="apply_dark_mode">ダークモードにする</string>
 
     <string name="title_converter_tool">変換ツール</string>
+    <string name="title_chat">Chat</string>
 
 </resources>
