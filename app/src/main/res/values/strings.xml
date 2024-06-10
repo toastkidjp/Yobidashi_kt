@@ -266,5 +266,6 @@
     <string name="apply_dark_mode">Apply dark mode</string>
 
     <string name="title_converter_tool">Converter tool</string>
+    <string name="title_chat">Chat</string>
 
 </resources>
