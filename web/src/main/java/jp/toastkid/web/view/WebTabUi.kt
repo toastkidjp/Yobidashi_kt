@@ -153,7 +153,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
                     .align(Alignment.TopCenter)
             ) {
                 CircularProgressIndicator(
-                    progress = browserViewModel.calculateSwipingProgress(refreshTriggerPx),
+                    progress = { browserViewModel.calculateSwipingProgress(refreshTriggerPx) },
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.padding(4.dp)
                 )
@@ -317,7 +317,7 @@ private fun AppBarContent(
     ) {
         if (viewModel.progress.value < 70) {
             LinearProgressIndicator(
-                progress = viewModel.progress.value.toFloat() / 100f,
+                progress = { viewModel.progress.value.toFloat() / 100f },
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .height(1.dp)

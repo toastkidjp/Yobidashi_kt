@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -80,13 +82,15 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
 
     val coroutineScope = rememberCoroutineScope()
 
+    val pagerState = rememberPagerState(initialIndex) { viewModel.pageCount() }
+
     Box {
-        HorizontalPager(pageCount = viewModel.pageCount(), state = viewModel.pagerState) {
+        HorizontalPager(pageSize = PageSize.Fill, state = pagerState) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(viewModel.getCurrentImage().path).crossfade(true).build(),
+                    .data(viewModel.getCurrentImage(pagerState.currentPage).path).crossfade(true).build(),
                 imageLoader = GifImageLoaderFactory().invoke(LocalContext.current),
-                contentDescription = viewModel.getCurrentImage().name,
+                contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
                 colorFilter = viewModel.colorFilterState.value,
                 modifier = Modifier
                     .fillMaxSize()
@@ -268,7 +272,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                     onClick = {
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
-                                        val image = viewModel.getCurrentImage()
+                                        val image = viewModel.getCurrentImage(pagerState.currentPage)
                                         AttachToThisAppBackgroundUseCase(contentViewModel)
                                             .invoke(context, image.path.toUri(), BitmapFactory.decodeFile(image.path))
                                     }
@@ -284,7 +288,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
                                         AttachToAnyAppUseCase({ context.startActivity(it) })
-                                            .invoke(context, BitmapFactory.decodeFile(viewModel.getCurrentImage().path))
+                                            .invoke(context, BitmapFactory.decodeFile(viewModel.getCurrentImage(pagerState.currentPage).path))
                                     }
                                 )
                             }
@@ -308,14 +312,14 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     }
 
     if (viewModel.openDialog.value) {
-        val message = BufferedInputStream(FileInputStream(File(viewModel.getCurrentImage().path))).use {
+        val message = BufferedInputStream(FileInputStream(File(viewModel.getCurrentImage(pagerState.currentPage).path))).use {
             val exifInterface = ExifInterface(it)
             ExifInformationExtractorUseCase().invoke(exifInterface)
         }
 
         ConfirmDialog(
             visibleState = viewModel.openDialog,
-            title = viewModel.getCurrentImage().name,
+            title = viewModel.getCurrentImage(pagerState.currentPage).name,
             message = message ?: "Not found"
         )
     }

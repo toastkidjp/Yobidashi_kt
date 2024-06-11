@@ -69,8 +69,8 @@ import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.display.effect.SnowRendererView
@@ -151,7 +151,7 @@ internal fun Content() {
         )
     }
 
-    val navigationHostController = rememberAnimatedNavController()
+    val navigationHostController = rememberNavController()
     navigationHostController.enableOnBackPressed(false)
 
     val activityResultLauncher: ActivityResultLauncher<Intent> =

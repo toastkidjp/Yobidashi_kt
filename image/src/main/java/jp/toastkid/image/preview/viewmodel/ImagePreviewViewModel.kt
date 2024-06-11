@@ -10,7 +10,6 @@ package jp.toastkid.image.preview.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.TransformableState
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
@@ -24,8 +23,6 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     private val images = mutableStateListOf<Image>()
 
-    val pagerState = PagerState(initialPage)
-
     fun pageCount() = images.size
 
     fun replaceImages(images: Collection<Image>) {
@@ -33,8 +30,8 @@ class ImagePreviewViewModel(initialPage: Int) {
         this.images.addAll(images)
     }
 
-    fun getCurrentImage() =
-        if (images.isNotEmpty()) images[pagerState.currentPage] else Image.makeEmpty()
+    fun getCurrentImage(currentPage: Int) =
+        if (images.isNotEmpty()) images[currentPage] else Image.makeEmpty()
 
     var scale = mutableStateOf(1f)
 

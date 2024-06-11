@@ -304,7 +304,7 @@ private fun ComponentColorSettingDialog(
             confirmButton = {
                 Text(
                     text = stringResource(id = jp.toastkid.ui.R.string.ok),
-                    color = buttonColor,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .clickable {
                             val newColor = choosingColor.value
@@ -317,7 +317,7 @@ private fun ComponentColorSettingDialog(
             dismissButton = {
                 Text(
                     text = stringResource(id = jp.toastkid.ui.R.string.cancel),
-                    color = buttonColor,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .clickable {
                             openColorChooserDialog.value = false

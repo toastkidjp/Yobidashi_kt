@@ -14,16 +14,14 @@ import android.view.View
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import jp.toastkid.about.view.AboutThisAppUi
 import jp.toastkid.article_viewer.article.detail.view.ArticleContentUi
 import jp.toastkid.article_viewer.article.list.view.ArticleListUi
@@ -58,11 +56,9 @@ internal fun NavigationalContent(
     navigationHostController: NavHostController,
     tabs: TabAdapter
 ) {
-    AnimatedNavHost(
+    NavHost(
         navController = navigationHostController,
-        startDestination = "empty",
-        modifier = Modifier
-            .fillMaxSize()
+        startDestination = "empty"
     ) {
         composable("empty")  {
 
@@ -149,7 +145,6 @@ internal fun NavigationalContent(
             ConverterToolUi()
         }
     }
-
 }
 
 private fun takeScreenshot(tabs: TabAdapter, view: View) {

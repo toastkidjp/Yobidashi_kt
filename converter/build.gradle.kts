@@ -13,11 +13,11 @@ plugins {
 
 android {
     namespace = "jp.toastkid.converter"
-    compileSdk = 32
+    compileSdk = property.BuildTool.compileSdk
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 32
+        targetSdk = property.BuildTool.compileSdk
     }
 
     buildTypes {

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -42,14 +43,13 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingTopUi() {
-    val activityContext = LocalContext.current
-    val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
-        viewModel(ContentViewModel::class.java, activityContext)
+    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, it)
     }
 
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { 8 }
 
-    HorizontalPager(pageCount = 8, state = pagerState) { page ->
+    HorizontalPager(pageSize = PageSize.Fill, state = pagerState) { page ->
         SwitchContentWithTabIndex(page)
     }
 
