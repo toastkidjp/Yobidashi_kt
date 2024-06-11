@@ -62,6 +62,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":lib"))
     implementation(project(":search"))
+    implementation(project(":ui"))
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
@@ -74,6 +75,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation("com.halilibo.compose-richtext:richtext-commonmark-android:0.15.0")
+    implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
 
     implementation("androidx.paging:paging-common:${LibraryVersion.paging}")
     implementation("androidx.paging:paging-common-ktx:${LibraryVersion.paging}")
