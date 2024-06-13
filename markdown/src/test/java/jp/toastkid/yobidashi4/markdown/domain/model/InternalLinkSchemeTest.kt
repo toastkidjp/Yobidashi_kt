@@ -1,5 +1,14 @@
-package jp.toastkid.article_viewer.article.detail
+/*
+ * Copyright (c) 2024 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
 
+package jp.toastkid.yobidashi4.markdown.domain.model
+
+import jp.toastkid.markdown.domain.model.InternalLinkScheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -23,6 +32,10 @@ class InternalLinkSchemeTest {
         assertEquals(
                 "[tomato](http://internal/tomato)",
                 internalLinkScheme.makeLink("tomato")
+        )
+        assertEquals(
+            "[tomato stake](http://internal/tomato%20stake)",
+            internalLinkScheme.makeLink("tomato stake")
         )
     }
 
