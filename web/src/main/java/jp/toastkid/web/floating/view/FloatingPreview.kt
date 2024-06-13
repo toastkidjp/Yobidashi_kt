@@ -105,7 +105,7 @@ fun FloatingPreviewUi(uri: Uri) {
         val progress = viewModel.progress.value.toFloat()
         if (progress < 75) {
             LinearProgressIndicator(
-                progress = progress / 100f,
+                progress = { progress / 100f },
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.height(1.dp)
             )
