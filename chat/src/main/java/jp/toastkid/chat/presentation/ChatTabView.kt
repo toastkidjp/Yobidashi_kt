@@ -87,7 +87,7 @@ fun ChatTabView() {
                     }
                     HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
-                    LaunchedEffect(key1 = viewModel.messages().size, block = {
+                    LaunchedEffect(key1 = viewModel.messages().last().text, block = {
                         coroutineScope.launch {
                             viewModel.scrollState().animateScrollToItem(viewModel.messages().size)
                         }
