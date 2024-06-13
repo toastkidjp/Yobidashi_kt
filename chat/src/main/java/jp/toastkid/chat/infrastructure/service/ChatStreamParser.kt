@@ -1,7 +1,6 @@
 package jp.toastkid.chat.infrastructure.service
 
 import org.json.JSONObject
-import java.util.regex.Pattern
 
 class ChatStreamParser {
 
@@ -10,9 +9,15 @@ class ChatStreamParser {
             return null
         }
 
-        return JSONObject(line.substring(5))
+        val firstCandidate = JSONObject(line.substring(5))
             .getJSONArray("candidates")
             .getJSONObject(0)
+
+        if (!firstCandidate.has("content")) {
+            return null
+        }
+
+        return firstCandidate
             .getJSONObject("content")
             .getJSONArray("parts")
             .getJSONObject(0)
@@ -20,5 +25,3 @@ class ChatStreamParser {
     }
 
 }
-
-private val pattern = Pattern.compile("\\{\"parts\": \\[\\{\"text\": \"(.+?)\"\\}\\]", Pattern.DOTALL)
