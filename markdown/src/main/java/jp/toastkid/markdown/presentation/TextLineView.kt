@@ -15,19 +15,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.markdown.domain.service.LinkBehaviorService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
 fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
-    val context = LocalContext.current
+    val context = LocalContext.current as? ViewModelStoreOwner ?: return
 
-    val viewModel = remember { TextLineViewModel() }
+    val viewModel = remember {
+        val linkBehaviorService = LinkBehaviorService(
+            ViewModelProvider(context).get(ContentViewModel::class.java),
+            { true }
+        )
+        TextLineViewModel(linkBehaviorService)
+    }
 
     ClickableText(
         viewModel.annotatedString(),
         style = textStyle,
-        onClick = ::print,
+        onClick = viewModel::onClick,
         onTextLayout = viewModel::putLayoutResult,
         modifier = modifier
     )
