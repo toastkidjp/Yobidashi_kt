@@ -11,11 +11,14 @@ package jp.toastkid.markdown.presentation
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
+import jp.toastkid.markdown.domain.service.LinkGenerator
 import jp.toastkid.ui.text.KeywordHighlighter
 
 class TextLineViewModel {
 
     private val lastLayoutResult = mutableStateOf<TextLayoutResult?>(null)
+
+    private val linkGenerator = LinkGenerator()
 
     private val annotatedString = mutableStateOf(AnnotatedString(""))
 
@@ -26,11 +29,10 @@ class TextLineViewModel {
     fun annotatedString() = annotatedString.value
 
     suspend fun launch(text: String) {
-        annotatedString.value = annotate(text)
+        annotatedString.value = annotate(linkGenerator.invoke(text))
     }
 
     fun putLayoutResult(layoutResult: TextLayoutResult) {
         lastLayoutResult.value = layoutResult
     }
-
 }
