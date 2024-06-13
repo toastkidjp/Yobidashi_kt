@@ -75,7 +75,6 @@ dependencies {
     implementation("androidx.paging:paging-compose:${LibraryVersion.pagingCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
-    implementation("com.halilibo.compose-richtext:richtext-commonmark-android:0.15.0")
 
     implementation("androidx.paging:paging-common:${LibraryVersion.paging}")
     implementation("androidx.paging:paging-common-ktx:${LibraryVersion.paging}")
