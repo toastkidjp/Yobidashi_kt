@@ -19,10 +19,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,8 +35,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.parts.InsetDivider
@@ -47,6 +55,9 @@ import jp.toastkid.yobidashi.settings.view.WithIcon
 internal fun OtherSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
+    val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, it)
+    }
 
     val intentFactory = SettingsIntentFactory()
 
@@ -54,8 +65,41 @@ internal fun OtherSettingUi() {
 
     val openConfirmDialog = remember { mutableStateOf(false) }
 
+    val chatApiKeyInput = remember { mutableStateOf(TextFieldValue(preferenceApplier.chatApiKey() ?: "")) }
+
     Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         LazyColumn {
+            item {
+                Column {
+                    TextField(
+                        value = chatApiKeyInput.value,
+                        onValueChange = { chatApiKeyInput.value = it },
+                        label = { Text("Please input Gemini's API Key if you want to use chat function in this app.") },
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                preferenceApplier.setChatApiKey(chatApiKeyInput.value.text)
+                            }
+                        ),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+                    )
+                    
+                    Text(text = "This function is experimental. This API Key will be not send to any sites except Google LLC.")
+
+                    if (chatApiKeyInput.value.text.isNotBlank()) {
+                        WithIcon(
+                            R.string.title_chat,
+                            { contentViewModel?.nextRoute("tool/chat") },
+                            MaterialTheme.colorScheme.secondary,
+                            R.drawable.ic_chat
+                        )
+                    }
+                }
+            }
+
+            item {
+                InsetDivider()
+            }
+
             item {
                 jp.toastkid.yobidashi.settings.view.CheckableRow(
                     R.string.title_wifi_only,
@@ -223,7 +267,9 @@ internal fun OtherSettingUi() {
             }
 
             item {
-                Spacer(modifier = Modifier.width(1.dp).height(48.dp))
+                Spacer(modifier = Modifier
+                    .width(1.dp)
+                    .height(48.dp))
             }
         }
     }
