@@ -39,8 +39,6 @@ enum class Menu(
 
     CONVERTER_TOOL(R.string.title_converter_tool, R.drawable.ic_converter),
 
-    CHAT(R.string.title_chat, R.drawable.ic_chat),
-
     RSS_READER(R.string.title_rss_reader, R.drawable.ic_rss_feed),
 
     NUMBER_PLACE(R.string.title_number_place, R.drawable.ic_number_place),
