@@ -17,6 +17,7 @@ object LibraryVersion {
     val workManager = "2.9.0"
     val coilCompose = "2.0.0-rc01"
     val pagingCompose = "1.0.0-alpha14"
+    val activityCompose = "1.9.0"
     val junit = "4.12"
     val robolectric = "4.8.1"
     val mockk = "1.10.6"
