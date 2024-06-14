@@ -23,16 +23,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalTextToolbar
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.markdown.domain.model.data.CodeBlockLine
 import jp.toastkid.markdown.domain.model.data.HorizontalRule
 import jp.toastkid.markdown.domain.model.data.ImageLine
@@ -40,6 +47,7 @@ import jp.toastkid.markdown.domain.model.data.ListLine
 import jp.toastkid.markdown.domain.model.data.TableLine
 import jp.toastkid.markdown.domain.model.data.TextBlock
 import jp.toastkid.markdown.domain.model.entity.Markdown
+import jp.toastkid.markdown.presentation.menu.ContextMenuToolbar
 
 @Composable
 fun MarkdownPreview(
@@ -48,74 +56,85 @@ fun MarkdownPreview(
     modifier: Modifier
 ) {
     val viewModel = remember { MarkdownPreviewViewModel(scrollState) }
+    val context = LocalContext.current as ViewModelStoreOwner
+    val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
 
-    SelectionContainer {
-        Column(modifier = modifier.verticalScroll(scrollState).padding(8.dp)) {
-            content.lines().forEach { line ->
-                when (line) {
-                    is TextBlock -> {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            if (line.quote) {
-                                VerticalDivider(
-                                    modifier = Modifier.padding(start = 4.dp, end = 8.dp).height(36.dp),
-                                    thickness = 2.dp,
-                                    color = Color(0x88CCAAFF),
-                                )
-                            }
-                            TextLineView(
-                                line.text,
-                                TextStyle(
-                                    color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colorScheme.onSurface,
-                                    fontSize = line.fontSize().sp,
-                                    fontWeight = viewModel.makeFontWeight(line.level),
-                                ),
-                                Modifier.padding(bottom = 8.dp, top = viewModel.makeTopMargin(line.level).dp)
-                            )
-                        }
-                    }
-
-                    is ListLine -> Column {
-                        line.list.forEachIndexed { index, it ->
+    val selected = remember { mutableStateOf("") }
+    CompositionLocalProvider(
+        LocalTextToolbar provides ContextMenuToolbar(LocalView.current, contentViewModel, { selected.value })
+    ) {
+        SelectionContainer {
+            Column(modifier = modifier
+                .verticalScroll(scrollState)
+                .padding(8.dp)) {
+                content.lines().forEach { line ->
+                    when (line) {
+                        is TextBlock -> {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                when {
-                                    line.ordered -> DisableSelection {
-                                        Text("${index + 1}. ", fontSize = 14.sp)
-                                    }
-
-                                    line.taskList -> Checkbox(
-                                        checked = it.startsWith("[x]"),
-                                        enabled = false,
-                                        onCheckedChange = null,
-                                        modifier = Modifier.size(32.dp)
+                                if (line.quote) {
+                                    VerticalDivider(
+                                        modifier = Modifier
+                                            .padding(start = 4.dp, end = 8.dp)
+                                            .height(36.dp),
+                                        thickness = 2.dp,
+                                        color = Color(0x88CCAAFF),
                                     )
-
-                                    else -> DisableSelection {
-                                        Text("・ ", fontSize = 14.sp)
-                                    }
                                 }
                                 TextLineView(
-                                    viewModel.extractText(it, line.taskList),
-                                    TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp),
-                                    Modifier.padding(bottom = 4.dp)
+                                    line.text,
+                                    TextStyle(
+                                        color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colorScheme.onSurface,
+                                        fontSize = line.fontSize().sp,
+                                        fontWeight = viewModel.makeFontWeight(line.level),
+                                    ),
+                                    Modifier.padding(bottom = 8.dp, top = viewModel.makeTopMargin(line.level).dp)
                                 )
                             }
                         }
-                    }
 
-                    is ImageLine -> {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(line.source)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = line.source,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-                    }
+                        is ListLine -> Column {
+                            line.list.forEachIndexed { index, it ->
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    when {
+                                        line.ordered -> DisableSelection {
+                                            Text("${index + 1}. ", fontSize = 14.sp)
+                                        }
 
-                    is HorizontalRule -> HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
-                    is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+                                        line.taskList -> Checkbox(
+                                            checked = it.startsWith("[x]"),
+                                            enabled = false,
+                                            onCheckedChange = null,
+                                            modifier = Modifier.size(32.dp)
+                                        )
+
+                                        else -> DisableSelection {
+                                            Text("・ ", fontSize = 14.sp)
+                                        }
+                                    }
+                                    TextLineView(
+                                        viewModel.extractText(it, line.taskList),
+                                        TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp),
+                                        Modifier.padding(bottom = 4.dp)
+                                    )
+                                }
+                            }
+                        }
+
+                        is ImageLine -> {
+                            AsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(line.source)
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = line.source,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
+
+                        is HorizontalRule -> HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                        is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+                        is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+                    }
                 }
             }
         }
