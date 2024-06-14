@@ -83,7 +83,10 @@ internal fun OtherSettingUi() {
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                     )
                     
-                    Text(text = "This function is experimental. This API Key will be not send to any sites except Google LLC.")
+                    Text(
+                        "This function is experimental. This API Key will be not send to any sites except Google LLC.",
+                        modifier = Modifier.padding(16.dp)
+                    )
 
                     if (chatApiKeyInput.value.text.isNotBlank()) {
                         WithIcon(
