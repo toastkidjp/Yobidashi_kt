@@ -13,7 +13,7 @@ object LibraryVersion {
     val compose = "1.2.1"
     val composeCompiler = "1.4.6"
     val composeMaterial3 = "1.2.0-rc01"
-    val navigationCompose = "2.4.1"
+    val navigationCompose = "2.7.7"
     val coilCompose = "2.0.0-rc01"
     val pagingCompose = "1.0.0-alpha14"
     val junit = "4.12"
