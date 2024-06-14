@@ -121,7 +121,7 @@ dependencies {
     implementation(project(":chat"))
 
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
-    implementation("androidx.work:work-runtime:2.7.1")
+    implementation("androidx.work:work-runtime:${LibraryVersion.workManager}")
 
     // Compose dependencies.
     implementation("androidx.compose.ui:ui:1.6.7")
