@@ -48,4 +48,13 @@ class TextLineViewModel(private val linkBehaviorService: LinkBehaviorService) {
         linkBehaviorService.invoke(stringRange.item)
     }
 
+    fun onLongClick(it: Int) {
+        val stringRange = annotatedString
+            .value
+            .getStringAnnotations(tag = "URL", start = it, end = it)
+            .firstOrNull() ?: return
+
+        linkBehaviorService.invoke(stringRange.item, true)
+    }
+
 }
