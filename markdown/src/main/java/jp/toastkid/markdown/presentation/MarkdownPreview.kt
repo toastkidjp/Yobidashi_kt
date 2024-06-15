@@ -87,6 +87,7 @@ fun MarkdownPreview(
                                         fontSize = line.fontSize().sp,
                                         fontWeight = viewModel.makeFontWeight(line.level),
                                     ),
+                                    { selected.value = it },
                                     Modifier.padding(bottom = 8.dp, top = viewModel.makeTopMargin(line.level).dp)
                                 )
                             }
@@ -114,6 +115,7 @@ fun MarkdownPreview(
                                     TextLineView(
                                         viewModel.extractText(it, line.taskList),
                                         TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp),
+                                        { selected.value = it },
                                         Modifier.padding(bottom = 4.dp)
                                     )
                                 }
