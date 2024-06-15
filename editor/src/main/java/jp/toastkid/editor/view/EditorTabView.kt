@@ -124,7 +124,6 @@ fun EditorTabView(path: String?) {
 
     val localLifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = localLifecycleOwner, block = {
-        //val finder = EditTextFinder(editText)
         contentViewModel.event.collect {
             when (it) {
                 is ToTopEvent -> {
@@ -149,11 +148,11 @@ fun EditorTabView(path: String?) {
                     context.startActivity(ShareIntentFactory().invoke(content, title))
                 }
                 is FindInPageEvent -> {
-                    /*TODO if (it.upward) {
-                        finder.findUp(it.word)
+                    if (it.upward) {
+                        viewModel.findUp(it.word)
                     } else {
-                        finder.findDown(it.word)
-                    }*/
+                        viewModel.findDown(it.word)
+                    }
                 }
                 else -> Unit
             }
