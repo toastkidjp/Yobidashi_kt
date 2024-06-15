@@ -15,7 +15,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
 import androidx.navigation.NavGraphBuilder
@@ -50,7 +49,6 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.WebTab
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun NavigationalContent(
     navigationHostController: NavHostController,
@@ -132,10 +130,10 @@ internal fun NavigationalContent(
             val url = Uri.decode(it.getString("url"))
             SearchInputUi(query, title, url)
         }
-        composable("search/history/list") {
+        slideInComposable("search/history/list") {
             SearchHistoryListUi()
         }
-        composable("search/favorite/list") {
+        slideInComposable("search/favorite/list") {
             FavoriteSearchListUi()
         }
         composable("about") {
@@ -170,6 +168,9 @@ private fun NavGraphBuilder.tabComposable(route: String, content: @Composable (B
     composable(
         route,
         enterTransition = {
+            slideInVertically(initialOffsetY = { it })
+        },
+        popEnterTransition = {
             slideInVertically(initialOffsetY = { it })
         }
     ) {

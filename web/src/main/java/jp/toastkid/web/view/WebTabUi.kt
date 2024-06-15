@@ -497,11 +497,12 @@ private fun AppBarContent(
                         .clickable {
                             if (isNotLoading) {
                                 webViewContainer.reload()
-                            } else {
-                                webViewContainer.stopLoading()
-                                coroutineScope.launch {
-                                    viewModel.stopProgress(true)
-                                }
+                                return@clickable
+                            }
+
+                            webViewContainer.stopLoading()
+                            coroutineScope.launch {
+                                viewModel.stopProgress()
                             }
                         }
                 )
