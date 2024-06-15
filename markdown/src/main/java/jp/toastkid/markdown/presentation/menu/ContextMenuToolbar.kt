@@ -17,6 +17,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.platform.TextToolbarStatus
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.markdonw.R
 import java.util.concurrent.atomic.AtomicReference
 
@@ -87,12 +88,30 @@ class ContextMenuToolbar(
                         onSelectAllRequested?.invoke()
                         true
                     }
+                    R.id.preview_search -> {
+                        val present = Clipboard.getPrimary(view.context)
+                        onCopyRequested?.invoke()
+                        val primary = Clipboard.getPrimary(view.context)
+                        Clipboard.clip(view.context, present?.toString() ?: "")
+                        if (primary.isNullOrBlank()) {
+                            return true
+                        }
+                        contentViewModel.preview(primary.toString())
+                        return true
+                    }
                     R.id.web_search -> {
-                        val selection = currentSelection()
+                        /*val selection = currentSelection()
                         if (selection.isEmpty()) {
                             return false
+                        }*/
+                        val present = Clipboard.getPrimary(view.context)
+                        onCopyRequested?.invoke()
+                        val primary = Clipboard.getPrimary(view.context)
+                        Clipboard.clip(view.context, present?.toString() ?: "")
+                        if (primary.isNullOrBlank()) {
+                            return true
                         }
-                        contentViewModel.search(selection)
+                        contentViewModel.search(primary.toString())
                         true
                     }
                     else -> false
