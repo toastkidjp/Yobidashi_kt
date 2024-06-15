@@ -196,4 +196,22 @@ class EditorTabViewModel {
         )
     }
 
+    fun findUp(text: String) {
+        val content = content()
+        val index = content.text.lastIndexOf(text, content.selection.start - 1)
+        if (index == -1) {
+            return
+        }
+        this.content.value = content.copy(selection = TextRange(index, index + text.length))
+    }
+
+    fun findDown(text: String) {
+        val content = content()
+        val index = content.text.indexOf(text, content.selection.end)
+        if (index == -1) {
+            return
+        }
+        this.content.value = content.copy(selection = TextRange(index, index + text.length))
+    }
+
 }
