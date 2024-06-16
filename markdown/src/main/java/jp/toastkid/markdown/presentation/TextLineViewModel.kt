@@ -29,7 +29,7 @@ class TextLineViewModel(private val linkBehaviorService: LinkBehaviorService) {
 
     fun annotatedString() = annotatedString.value
 
-    suspend fun launch(text: String) {
+    fun launch(text: String) {
         annotatedString.value = annotate(linkGenerator.invoke(text))
     }
 
