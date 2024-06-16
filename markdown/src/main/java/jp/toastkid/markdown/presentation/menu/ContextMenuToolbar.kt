@@ -23,8 +23,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 class ContextMenuToolbar(
     private val view: View,
-    private val contentViewModel: ContentViewModel,
-    private val currentSelection: () -> String
+    private val contentViewModel: ContentViewModel
 ) : TextToolbar {
 
     private val holder = AtomicReference<ActionMode?>(null)
