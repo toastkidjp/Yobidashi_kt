@@ -27,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -282,6 +283,15 @@ internal fun OtherSettingUi() {
         titleId = R.string.title_clear_settings
     ) {
         PreferencesClearUseCase.make(activityContext).invoke()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            val newValue = chatApiKeyInput.value.text
+            if (newValue.isNotBlank()) {
+                preferenceApplier.setChatApiKey(newValue)
+            }
+        }
     }
 }
 
