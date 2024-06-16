@@ -27,7 +27,7 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicReference
 
 @Composable
-fun TextLineView(text: String, textStyle: TextStyle, onSelected: (String) -> Unit = {}, modifier: Modifier) {
+fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
     val context = LocalContext.current as? ViewModelStoreOwner ?: return
 
     val viewModel = remember {
