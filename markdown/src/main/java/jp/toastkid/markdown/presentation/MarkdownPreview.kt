@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,9 +58,8 @@ fun MarkdownPreview(
     val context = LocalContext.current as ViewModelStoreOwner
     val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
 
-    val selected = remember { mutableStateOf("") }
     CompositionLocalProvider(
-        LocalTextToolbar provides ContextMenuToolbar(LocalView.current, contentViewModel, { selected.value })
+        LocalTextToolbar provides ContextMenuToolbar(LocalView.current, contentViewModel)
     ) {
         SelectionContainer {
             Column(modifier = modifier
@@ -87,7 +85,6 @@ fun MarkdownPreview(
                                         fontSize = line.fontSize().sp,
                                         fontWeight = viewModel.makeFontWeight(line.level),
                                     ),
-                                    { selected.value = it },
                                     Modifier.padding(bottom = 8.dp, top = viewModel.makeTopMargin(line.level).dp)
                                 )
                             }
@@ -115,7 +112,6 @@ fun MarkdownPreview(
                                     TextLineView(
                                         viewModel.extractText(it, line.taskList),
                                         TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp),
-                                        { selected.value = it },
                                         Modifier.padding(bottom = 4.dp)
                                     )
                                 }
