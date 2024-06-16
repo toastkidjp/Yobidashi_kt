@@ -77,17 +77,20 @@ class MenuActionInvoker(
                 return true
             }
             R.id.context_edit_duplicate_current_line -> {
-                /*TODO CurrentLineDuplicatorUseCase().invoke(editText)
-                viewModel.insertText(content, "----${System.lineSeparator()}")*/
+                viewModel.duplicateCurrentLine()
                 return true
             }
             R.id.context_edit_select_current_line -> {
-                //TODO CurrentLineSelectionUseCase().invoke(editText)
+                viewModel.selectCurrentLine()
+                return true
+            }
+            R.id.context_edit_delete_line -> {
+                viewModel.deleteCurrentLine()
                 return true
             }
             R.id.context_edit_speech -> {
                 val speechText = viewModel.content().getSelectedText().text
-                    .ifBlank { viewModel.content().text.toString() }
+                    .ifBlank { viewModel.content().text }
                 SpeechMaker(context).invoke(speechText)
                 return true
             }
@@ -107,7 +110,7 @@ class MenuActionInvoker(
                 return true
             }
             R.id.context_edit_convert_to_table -> {
-                val newText = TableFormConverter().invoke(viewModel.content().getSelectedText().text) ?: return true
+                val newText = TableFormConverter().invoke(viewModel.content().getSelectedText().text)
                 viewModel.replaceText(newText)
                 return true
             }
@@ -116,27 +119,27 @@ class MenuActionInvoker(
                 viewModel.replaceText(newText)
                 return true
             }
-            /*R.id.context_edit_code_block -> {
-                CodeBlockUseCase().invoke(editText, text)
+            R.id.context_edit_code_block -> {
+                val lineSeparator = System.lineSeparator()
+                viewModel.replaceText("```${lineSeparator}${viewModel.content().getSelectedText().text}${lineSeparator}```")
                 return true
             }
             R.id.context_edit_double_quote -> {
-                StringSurroundingUseCase()(editText, '"')
+                viewModel.replaceText("\"${viewModel.content().getSelectedText().text}\"")
                 return true
             }
             R.id.context_edit_bold -> {
-                StringSurroundingUseCase()(editText, "**")
+                viewModel.replaceText("**${viewModel.content().getSelectedText().text}**")
                 return true
             }
             R.id.context_edit_italic -> {
-                StringSurroundingUseCase()(editText, "*")
+                viewModel.replaceText("***${viewModel.content().getSelectedText().text}***")
                 return true
             }
             R.id.context_edit_strikethrough -> {
-                StringSurroundingUseCase()(editText, "~~")
+                viewModel.replaceText("~~${viewModel.content().getSelectedText().text}~~")
                 return true
             }
-            */
             R.id.context_edit_url_open_new -> {
                 contentViewModel.open(viewModel.content().getSelectedText().text.toUri())
                 return true
@@ -157,12 +160,6 @@ class MenuActionInvoker(
                 contentViewModel.search(viewModel.content().getSelectedText().text)
                 return true
             }
-/*
-            R.id.context_edit_delete_line -> {
-                CurrentLineDeletionUseCase().invoke(editText)
-                return true
-            }
-            */
             R.id.context_edit_count -> {
                 TextCounter().invoke(context, viewModel, contentViewModel)
                 return true
