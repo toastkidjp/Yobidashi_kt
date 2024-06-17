@@ -33,7 +33,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:${property.LibraryVersion.composeMaterial3}")
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${property.LibraryVersion.lifecycle}")
-    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.activity:activity-compose:${property.LibraryVersion.activityCompose}")
 
     testImplementation("junit:junit:${property.LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${property.LibraryVersion.mockk}")
