@@ -53,7 +53,7 @@ dependencies {
     // Compose dependencies.
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
-    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
 
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
