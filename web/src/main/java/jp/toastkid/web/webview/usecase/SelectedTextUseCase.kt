@@ -25,7 +25,6 @@ class SelectedTextUseCase(
         contentViewModel.snackShort(message)
     }
 
-    // TODO
     fun search(word: String) {
         contentViewModel.search(word)
     }
