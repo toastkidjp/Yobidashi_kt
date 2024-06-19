@@ -1,14 +1,18 @@
 package jp.toastkid.chat.presentation
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -31,7 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import jp.toastkid.chat.R
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.launch
@@ -67,15 +75,29 @@ fun ChatTabView() {
                         verticalAlignment = Alignment.Bottom,
                         modifier = Modifier.padding(4.dp)
                     ) {
-                        Text(
-                            viewModel.name(it.role),
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = viewModel.nameColor(it.role),
-                            modifier = Modifier
-                                .padding(horizontal = 4.dp)
-                                .weight(0.2f)
-                        )
+                        Column(modifier = Modifier.weight(0.2f)) {
+                            Icon(
+                                painterResource(id = R.drawable.ic_clip),
+                                contentDescription = stringResource(id = R.string.title_option_menu),
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(24.dp)
+                                    .align(Alignment.CenterHorizontally)
+                                    .clickable {
+                                        Clipboard.clip(context, it.text)
+                                        contentViewModel?.snackShort(context.getString(R.string.message_clip_to, "\"${it.text}\""))
+                                    }
+                            )
+                            Text(
+                                viewModel.name(it.role),
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = viewModel.nameColor(it.role),
+                                modifier = Modifier
+                                    .padding(horizontal = 4.dp)
+                            )
+                        }
                         MessageContent(
                             it.text,
                             modifier = Modifier
