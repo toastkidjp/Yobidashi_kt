@@ -76,7 +76,7 @@ class SelectedTextUseCaseTest {
 
     @Test
     fun searchWithPreview() {
-        selectedTextUseCase.searchWithPreview("test", "test")
+        selectedTextUseCase.searchWithPreview("test")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 0) { contentViewModel.open(any()) }
@@ -103,7 +103,7 @@ class SelectedTextUseCaseTest {
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
 
-        selectedTextUseCase.searchWithPreview("https://www.yahoo.co.jp", "test")
+        selectedTextUseCase.searchWithPreview("https://www.yahoo.co.jp")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 0) { contentViewModel.open(any()) }

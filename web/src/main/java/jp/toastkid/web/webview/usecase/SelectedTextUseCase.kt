@@ -30,7 +30,7 @@ class SelectedTextUseCase(
         contentViewModel.search(word)
     }
 
-    fun searchWithPreview(word: String, searchEngine: String?) {
+    fun searchWithPreview(word: String) {
         contentViewModel.preview(word)
     }
 
