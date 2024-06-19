@@ -60,8 +60,6 @@ internal fun OtherSettingUi() {
         viewModel(ContentViewModel::class.java, it)
     }
 
-    val intentFactory = SettingsIntentFactory()
-
     val wifiOnly = remember { mutableStateOf(preferenceApplier.wifiOnly) }
 
     val openConfirmDialog = remember { mutableStateOf(false) }
@@ -182,7 +180,7 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_settings_device,
-                    { activityContext.startActivity(intentFactory.makeLaunch()) },
+                    { activityContext.startActivity(SettingsIntentFactory().makeLaunch()) },
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_settings_cell_black
                 )
@@ -195,7 +193,7 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_settings_wifi,
-                    { activityContext.startActivity(intentFactory.wifi()) },
+                    { activityContext.startActivity(SettingsIntentFactory().wifi()) },
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_wifi_black
                 )
@@ -209,7 +207,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_settings_wireless,
                     {
-                        activityContext.startActivity(intentFactory.wireless())
+                        activityContext.startActivity(SettingsIntentFactory().wireless())
                     },
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_network_black
@@ -224,7 +222,7 @@ internal fun OtherSettingUi() {
                 WithIcon(
                     R.string.title_settings_date_and_time,
                     {
-                        activityContext.startActivity(intentFactory.dateAndTime())
+                        activityContext.startActivity(SettingsIntentFactory().dateAndTime())
                     },
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_time
@@ -238,7 +236,7 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_settings_display,
-                    { activityContext.startActivity(intentFactory.display()) },
+                    { activityContext.startActivity(SettingsIntentFactory().display()) },
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_phone_android_black
                 )
@@ -251,7 +249,7 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_settings_all_apps,
-                    { activityContext.startActivity(intentFactory.allApps()) },
+                    { activityContext.startActivity(SettingsIntentFactory().allApps()) },
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_android_developer
                 )
