@@ -25,13 +25,17 @@ class LinkBehaviorService(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    operator fun invoke(url: String?) {
+    operator fun invoke(url: String?, onBackground: Boolean = false) {
         if (url.isNullOrBlank()) {
             return
         }
 
         if (!internalLinkScheme.isInternalLink(url)) {
-            contentViewModel.open(url.toUri())
+            if (onBackground) {
+                contentViewModel.openBackground(url.toUri())
+            } else {
+                contentViewModel.open(url.toUri())
+            }
             return
         }
 
