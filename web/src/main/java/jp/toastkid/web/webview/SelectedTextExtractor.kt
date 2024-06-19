@@ -9,7 +9,6 @@ class SelectedTextExtractor {
 
     fun withAction(webView: WebView, callback: (String) -> Unit) {
         webView.evaluateJavascript(SCRIPT) {
-            println(it)
             callback(it)
         }
     }
