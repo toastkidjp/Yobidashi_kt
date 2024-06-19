@@ -67,7 +67,7 @@ class SelectedTextUseCaseTest {
 
     @Test
     fun search() {
-        selectedTextUseCase.search("test", "test")
+        selectedTextUseCase.search("test")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 1) { contentViewModel.open(any()) }
@@ -89,7 +89,7 @@ class SelectedTextUseCaseTest {
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
 
-        selectedTextUseCase.search("https://www.yahoo.co.jp", "test")
+        selectedTextUseCase.search("https://www.yahoo.co.jp")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 1) { contentViewModel.open(any()) }
@@ -113,7 +113,7 @@ class SelectedTextUseCaseTest {
 
     @Test
     fun searchWithEmptyWord() {
-        selectedTextUseCase.search("", "test")
+        selectedTextUseCase.search("")
 
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 0) { contentViewModel.open(any()) }
@@ -122,7 +122,7 @@ class SelectedTextUseCaseTest {
 
     @Test
     fun searchWithOnlyDoubleQuotes() {
-        selectedTextUseCase.search("\"\"", "test")
+        selectedTextUseCase.search("\"\"")
 
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 0) { contentViewModel.open(any()) }

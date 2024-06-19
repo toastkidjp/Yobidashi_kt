@@ -26,7 +26,7 @@ class SelectedTextUseCase(
     }
 
     // TODO
-    fun search(word: String, searchEngine: String?) {
+    fun search(word: String) {
         contentViewModel.search(word)
     }
 

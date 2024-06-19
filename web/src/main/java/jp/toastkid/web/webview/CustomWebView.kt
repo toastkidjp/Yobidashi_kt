@@ -222,7 +222,7 @@ class CustomWebView(context: Context) : WebView(context) {
     private fun search() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
             SelectedTextUseCase.make(context)
-                    ?.search(word, PreferenceApplier(context).getDefaultSearchEngine())
+                    ?.search(word)
         }
     }
 
