@@ -75,7 +75,7 @@ fun FloatingPreviewUi(uri: Uri) {
                 .height(52.dp)
                 .padding(8.dp)
                 .clickable {
-                    val currentUri = viewModel.url.value.toUri() ?: return@clickable
+                    val currentUri = viewModel.url.value.toUri()
                     contentViewModel.open(currentUri)
                 }
         ) {
