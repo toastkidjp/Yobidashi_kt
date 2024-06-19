@@ -13,6 +13,13 @@ class ChatStreamParser {
             .getJSONArray("candidates")
             .getJSONObject(0)
 
+        if (firstCandidate.has("finishReason")) {
+            val finishReason = firstCandidate.getString("finishReason")
+            if (finishReason == "SAFETY" || finishReason == "OTHER") {
+                return "[ERROR]"
+            }
+        }
+
         if (!firstCandidate.has("content")) {
             return null
         }
