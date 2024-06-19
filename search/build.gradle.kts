@@ -65,7 +65,6 @@ dependencies {
     implementation(project(":lib"))
     implementation(project(":ui"))
 
-    implementation("androidx.compose.ui:ui:1.6.0")
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
