@@ -18,7 +18,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +42,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import kotlinx.coroutines.launch
 
 @Composable
@@ -86,7 +87,12 @@ fun ChatTabView() {
                                     .align(Alignment.CenterHorizontally)
                                     .clickable {
                                         Clipboard.clip(context, it.text)
-                                        contentViewModel?.snackShort(context.getString(R.string.message_clip_to, "\"${it.text}\""))
+                                        contentViewModel?.snackShort(
+                                            context.getString(
+                                                R.string.message_clip_to,
+                                                "\"${it.text}\""
+                                            )
+                                        )
                                     }
                             )
                             Text(
@@ -145,13 +151,5 @@ fun ChatTabView() {
         })
     }
 
-    DisposableEffect(Unit/*chatTab*/) {
-        /*viewModel.launch(
-            //chatTab.chat()
-        )*/
-
-        onDispose {
-            //viewModel.update(chatTab)
-        }
-    }
+    ScrollerUseCase(contentViewModel, viewModel.scrollState()).invoke(viewLifecycleOwner = LocalLifecycleOwner.current)
 }
