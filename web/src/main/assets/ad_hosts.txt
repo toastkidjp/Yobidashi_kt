@@ -230,6 +230,7 @@ ads.yahoo.com
 ads1.msads.net
 ads2.contentabc.com
 adserver.adtechjp.com
+adserver.assistads.net
 adserver.juicyads.com
 adserver.yahoo.co.jp
 adserver.yahoo.com
