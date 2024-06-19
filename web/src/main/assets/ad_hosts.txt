@@ -1381,3 +1381,5 @@ pagead2.googlesyndication.com
 cdn4.fireworktv.com
 asset.fwcdn3.com
 player.gliacloud.com
+static.ad-spire.net
+ad-spire.genieesspv.jp
