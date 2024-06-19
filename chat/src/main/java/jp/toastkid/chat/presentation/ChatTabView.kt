@@ -37,7 +37,6 @@ import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChatTabView() {
     val context = LocalContext.current
