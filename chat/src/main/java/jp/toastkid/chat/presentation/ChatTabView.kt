@@ -1,5 +1,7 @@
 package jp.toastkid.chat.presentation
 
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +20,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,6 +47,9 @@ import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.ui.menu.context.ContextMenuToolbar
+import jp.toastkid.ui.menu.context.MenuActionCallback
+import jp.toastkid.ui.menu.context.MenuInjector
 import kotlinx.coroutines.launch
 
 @Composable
@@ -69,55 +76,104 @@ fun ChatTabView() {
         shadowElevation = 4.dp,
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)
     ) {
-        SelectionContainer(modifier = Modifier.padding(8.dp)) {
-            LazyColumn(state = viewModel.scrollState()) {
-                items(viewModel.messages()) {
-                    Row(
-                        verticalAlignment = Alignment.Bottom,
-                        modifier = Modifier.padding(4.dp)
-                    ) {
-                        Column(modifier = Modifier.weight(0.2f)) {
-                            Icon(
-                                painterResource(id = R.drawable.ic_clip),
-                                contentDescription = stringResource(id = R.string.title_option_menu),
-                                tint = MaterialTheme.colorScheme.onPrimary,
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .size(24.dp)
-                                    .align(Alignment.CenterHorizontally)
-                                    .clickable {
-                                        Clipboard.clip(context, it.text)
-                                        contentViewModel?.snackShort(
-                                            context.getString(
-                                                R.string.message_clip_to,
-                                                "\"${it.text}\""
+        CompositionLocalProvider(LocalTextToolbar provides ContextMenuToolbar(
+            LocalView.current,
+            object : MenuInjector {
+                override fun invoke(menu: Menu?) {
+                    MenuInflater(context).inflate(R.menu.context_chat, menu)
+                }
+            },
+            object : MenuActionCallback {
+                override fun invoke(
+                    menuId: Int,
+                    onCopyRequested: (() -> Unit)?,
+                    onPasteRequested: (() -> Unit)?,
+                    onCutRequested: (() -> Unit)?,
+                    onSelectAllRequested: (() -> Unit)?
+                ): Boolean = when (menuId) {
+                    R.id.context_copy -> {
+                        onCopyRequested?.invoke()
+                        true
+                    }
+                    R.id.context_select_all -> {
+                        onSelectAllRequested?.invoke()
+                        true
+                    }
+                    R.id.preview_search -> {
+                        val present = Clipboard.getPrimary(context)
+                        onCopyRequested?.invoke()
+                        val primary = Clipboard.getPrimary(context)
+                        Clipboard.clip(context, present?.toString() ?: "")
+                        if (primary != null && primary.isNotBlank()) {
+                            contentViewModel?.preview(primary.toString())
+                        }
+                        true
+                    }
+                    R.id.web_search -> {
+                        val present = Clipboard.getPrimary(context)
+                        onCopyRequested?.invoke()
+                        val primary = Clipboard.getPrimary(context)
+                        Clipboard.clip(context, present?.toString() ?: "")
+                        if (primary != null && primary.isNotBlank()) {
+                            contentViewModel?.search(primary.toString())
+                        }
+                        true
+                    }
+                    else -> false
+                }
+
+            }
+        )) {
+            SelectionContainer(modifier = Modifier.padding(8.dp)) {
+                LazyColumn(state = viewModel.scrollState()) {
+                    items(viewModel.messages()) {
+                        Row(
+                            verticalAlignment = Alignment.Bottom,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
+                            Column(modifier = Modifier.weight(0.2f)) {
+                                Icon(
+                                    painterResource(id = R.drawable.ic_clip),
+                                    contentDescription = stringResource(id = R.string.title_option_menu),
+                                    tint = MaterialTheme.colorScheme.onPrimary,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .size(24.dp)
+                                        .align(Alignment.CenterHorizontally)
+                                        .clickable {
+                                            Clipboard.clip(context, it.text)
+                                            contentViewModel?.snackShort(
+                                                context.getString(
+                                                    R.string.message_clip_to,
+                                                    "\"${it.text}\""
+                                                )
                                             )
-                                        )
-                                    }
-                            )
-                            Text(
-                                viewModel.name(it.role),
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = viewModel.nameColor(it.role),
+                                        }
+                                )
+                                Text(
+                                    viewModel.name(it.role),
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    color = viewModel.nameColor(it.role),
+                                    modifier = Modifier
+                                        .padding(horizontal = 4.dp)
+                                )
+                            }
+                            MessageContent(
+                                it.text,
                                 modifier = Modifier
                                     .padding(horizontal = 4.dp)
+                                    .weight(1f)
                             )
                         }
-                        MessageContent(
-                            it.text,
-                            modifier = Modifier
-                                .padding(horizontal = 4.dp)
-                                .weight(1f)
-                        )
-                    }
-                    HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+                        HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
-                    LaunchedEffect(key1 = viewModel.messages().last().text, block = {
-                        coroutineScope.launch {
-                            viewModel.scrollState().animateScrollToItem(viewModel.messages().size)
-                        }
-                    })
+                        LaunchedEffect(key1 = viewModel.messages().last().text, block = {
+                            coroutineScope.launch {
+                                viewModel.scrollState().animateScrollToItem(viewModel.messages().size)
+                            }
+                        })
+                    }
                 }
             }
         }
