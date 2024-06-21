@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.min
 
 class EditorTabViewModel {
 
@@ -212,6 +213,42 @@ class EditorTabViewModel {
             return
         }
         this.content.value = content.copy(selection = TextRange(index, index + text.length))
+    }
+
+    fun duplicateCurrentLine() {
+        val textLayoutResult = lastParagraph ?: return
+        val currentContent = content()
+        val currentLine = textLayoutResult.getLineForOffset(currentContent.selection.start)
+        val lineStart = textLayoutResult.getLineStart(currentLine)
+        val lineEnd = textLayoutResult.getLineEnd(currentLine)
+        val safeEnd = min(currentContent.text.length, lineEnd)
+        val newText = StringBuilder(currentContent.text)
+            .insert(safeEnd, "\n${currentContent.text.substring(lineStart, safeEnd)}")
+            .toString()
+        onValueChange(currentContent.copy(text = newText))
+    }
+
+    fun deleteCurrentLine() {
+        val textLayoutResult = lastParagraph ?: return
+        val currentContent = content()
+        val currentLine = textLayoutResult.getLineForOffset(currentContent.selection.start)
+        val lineStart = textLayoutResult.getLineStart(currentLine)
+        val lineEnd = textLayoutResult.getLineEnd(currentLine)
+        val targetEnd = min(currentContent.text.length, lineEnd + 1)
+        val newText = StringBuilder(currentContent.text)
+            .delete(lineStart, targetEnd)
+            .toString()
+        onValueChange(currentContent.copy(text = newText))
+    }
+
+    fun selectCurrentLine() {
+        val textLayoutResult = lastParagraph ?: return
+        val currentContent = content()
+        val currentLine = textLayoutResult.getLineForOffset(currentContent.selection.start)
+        val lineStart = textLayoutResult.getLineStart(currentLine)
+        val lineEnd = textLayoutResult.getLineEnd(currentLine)
+        val targetEnd = min(currentContent.text.length, lineEnd + 1)
+        onValueChange(currentContent.copy(selection = TextRange(lineStart, targetEnd)))
     }
 
 }
