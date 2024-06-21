@@ -1,7 +1,5 @@
 package jp.toastkid.chat.presentation
 
-import android.view.Menu
-import android.view.MenuInflater
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,9 +45,7 @@ import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
-import jp.toastkid.ui.menu.context.ContextMenuToolbar
-import jp.toastkid.ui.menu.context.MenuActionCallback
-import jp.toastkid.ui.menu.context.MenuInjector
+import jp.toastkid.ui.menu.context.common.CommonContextMenuToolbarFactory
 import kotlinx.coroutines.launch
 
 @Composable
@@ -76,54 +72,9 @@ fun ChatTabView() {
         shadowElevation = 4.dp,
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)
     ) {
-        CompositionLocalProvider(LocalTextToolbar provides ContextMenuToolbar(
-            LocalView.current,
-            object : MenuInjector {
-                override fun invoke(menu: Menu?) {
-                    MenuInflater(context).inflate(R.menu.context_chat, menu)
-                }
-            },
-            object : MenuActionCallback {
-                override fun invoke(
-                    menuId: Int,
-                    onCopyRequested: (() -> Unit)?,
-                    onPasteRequested: (() -> Unit)?,
-                    onCutRequested: (() -> Unit)?,
-                    onSelectAllRequested: (() -> Unit)?
-                ): Boolean = when (menuId) {
-                    R.id.context_copy -> {
-                        onCopyRequested?.invoke()
-                        true
-                    }
-                    R.id.context_select_all -> {
-                        onSelectAllRequested?.invoke()
-                        true
-                    }
-                    R.id.preview_search -> {
-                        val present = Clipboard.getPrimary(context)
-                        onCopyRequested?.invoke()
-                        val primary = Clipboard.getPrimary(context)
-                        Clipboard.clip(context, present?.toString() ?: "")
-                        if (primary != null && primary.isNotBlank()) {
-                            contentViewModel?.preview(primary.toString())
-                        }
-                        true
-                    }
-                    R.id.web_search -> {
-                        val present = Clipboard.getPrimary(context)
-                        onCopyRequested?.invoke()
-                        val primary = Clipboard.getPrimary(context)
-                        Clipboard.clip(context, present?.toString() ?: "")
-                        if (primary != null && primary.isNotBlank()) {
-                            contentViewModel?.search(primary.toString())
-                        }
-                        true
-                    }
-                    else -> false
-                }
-
-            }
-        )) {
+        CompositionLocalProvider(
+            LocalTextToolbar provides CommonContextMenuToolbarFactory().invoke(LocalView.current)
+        ) {
             SelectionContainer(modifier = Modifier.padding(8.dp)) {
                 LazyColumn(state = viewModel.scrollState()) {
                     items(viewModel.messages()) {
