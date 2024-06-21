@@ -12,6 +12,8 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.text.format.DateFormat
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -76,10 +78,12 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -87,8 +91,10 @@ import jp.toastkid.editor.R
 import jp.toastkid.editor.load.LoadFromStorageDialogUi
 import jp.toastkid.editor.load.StorageFilesFinder
 import jp.toastkid.editor.usecase.FileActionUseCase
-import jp.toastkid.editor.view.menu.CustomTextToolbar
+import jp.toastkid.editor.view.menu.MenuActionInvoker
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -99,6 +105,9 @@ import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
+import jp.toastkid.ui.menu.context.ContextMenuToolbar
+import jp.toastkid.ui.menu.context.MenuActionCallback
+import jp.toastkid.ui.menu.context.MenuInjector
 import kotlinx.coroutines.launch
 
 @Composable
@@ -162,8 +171,53 @@ fun EditorTabView(path: String?) {
     val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
 
     val preferenceApplier = remember { PreferenceApplier(context) }
+
+    val menuActionInvoker = remember { MenuActionInvoker(viewModel, context, contentViewModel) }
+
     CompositionLocalProvider(
-        LocalTextToolbar provides CustomTextToolbar(LocalView.current, viewModel, contentViewModel)
+        LocalTextToolbar provides ContextMenuToolbar(
+            LocalView.current,
+            object : MenuInjector {
+                override fun invoke(menu: Menu?) {
+                    val menuInflater = MenuInflater(context)
+
+                    if (Urls.isValidUrl(Clipboard.getPrimary(context)?.toString())) {
+                        menuInflater.inflate(R.menu.context_editor_clipping_url, menu)
+                    }
+                    val textFieldValue = viewModel.content()
+                    val text = textFieldValue.getSelectedText().text
+                    if (Urls.isValidUrl(text)) {
+                        menuInflater.inflate(R.menu.context_editor_url, menu)
+                    }
+                    if (text.isDigitsOnly()) {
+                        menuInflater.inflate(R.menu.context_editor_digit, menu)
+                    }
+                    if (textFieldValue.getSelectedText().isNotEmpty()) {
+                        menuInflater.inflate(R.menu.context_editor_selected, menu)
+                    }
+                    menuInflater.inflate(R.menu.context_editor, menu)
+                    menuInflater.inflate(R.menu.context_speech, menu)
+                }
+            },
+            object : MenuActionCallback {
+                override fun invoke(
+                    menuId: Int,
+                    onCopyRequested: (() -> Unit)?,
+                    onPasteRequested: (() -> Unit)?,
+                    onCutRequested: (() -> Unit)?,
+                    onSelectAllRequested: (() -> Unit)?
+                ): Boolean {
+                    return menuActionInvoker(
+                        menuId,
+                        onCopyRequested,
+                        onPasteRequested,
+                        onCutRequested,
+                        onSelectAllRequested
+                    )
+                }
+
+            }
+        )
     ) {
         BasicTextField(
             value = viewModel.content(),
@@ -187,7 +241,9 @@ fun EditorTabView(path: String?) {
                                     .clickable {
                                         viewModel.onClickLineNumber(lineNumber)
                                     }
-                                    .semantics { contentDescription = "Line number $lineNumberText" }
+                                    .semantics {
+                                        contentDescription = "Line number $lineNumberText"
+                                    }
                             ) {
                                 Text(
                                     lineNumberText,
