@@ -5,8 +5,8 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import property.LibraryVersion
 import property.BuildTool
+import property.LibraryVersion
 
 plugins {
     id("com.android.library")
@@ -47,5 +47,6 @@ android {
 dependencies {
     implementation(project(path = ":lib"))
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     testImplementation("junit:junit:4.12")
 }
