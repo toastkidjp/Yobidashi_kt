@@ -13,6 +13,8 @@ interface MenuActionCallback {
     operator fun invoke(
         menuId: Int,
         onCopyRequested: (() -> Unit)?,
+        onPasteRequested: (() -> Unit)?,
+        onCutRequested: (() -> Unit)?,
         onSelectAllRequested: (() -> Unit)?
     ): Boolean
 
