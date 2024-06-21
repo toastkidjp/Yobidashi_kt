@@ -6,10 +6,11 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.ui.menu.context
+package jp.toastkid.ui.menu.context.common
 
 import android.view.View
 import androidx.compose.ui.platform.TextToolbar
+import jp.toastkid.ui.menu.context.ContextMenuToolbar
 
 class CommonContextMenuToolbarFactory {
 

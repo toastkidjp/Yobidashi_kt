@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.ui.menu.context
+package jp.toastkid.ui.menu.context.common
 
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.ui.R
+import jp.toastkid.ui.menu.context.MenuActionCallback
 
 class CommonMenuActionCallback(private val context: Context) : MenuActionCallback {
 
