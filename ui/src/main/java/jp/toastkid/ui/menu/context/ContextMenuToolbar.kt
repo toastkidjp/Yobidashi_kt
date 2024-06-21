@@ -57,6 +57,8 @@ class ContextMenuToolbar(
                 val handled = menuActionCallback(
                     menu?.itemId ?: -1,
                     onCopyRequested,
+                    onPasteRequested,
+                    onCutRequested,
                     onSelectAllRequested
                 )
                 if (handled) {
