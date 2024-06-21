@@ -9,12 +9,19 @@
 package jp.toastkid.yobidashi.tab.tab_list.view
 
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,10 +66,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.compat.material3.FractionalThreshold
-import jp.toastkid.lib.compat.material3.ResistanceConfig
-import jp.toastkid.lib.compat.material3.SwipeableState
-import jp.toastkid.lib.compat.material3.swipeableCompat
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.TabAdapter
@@ -141,7 +144,6 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                             tab,
                             tabThumbnails.assignNewFile(tab.thumbnailPath()),
                             backgroundColor,
-                            anchors,
                             visibility = {
                                 deletedTabIds.contains(it.id()).not()
                             },
@@ -250,20 +252,29 @@ private fun closeOnly(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TabItem(
     tab: Tab,
     thumbnail: File,
     backgroundColor: Color,
-    anchors: Map<Float, Int>,
     visibility: (Tab) -> Boolean,
     onClick: (Tab) -> Unit,
     onClose: (Tab) -> Unit
 ) {
-    val swipeableState = SwipeableState(
-        initialValue = 0,
-        confirmStateChange = {
-            if (it == 1) {
+    val dismissSnackbarDistance = with(LocalDensity.current) { -160.dp.toPx() }
+    val anchors = DraggableAnchors {
+        Start at 0f
+        End at dismissSnackbarDistance
+    }
+    val swipeableState = AnchoredDraggableState(
+        initialValue = Start,
+        anchors = anchors,
+        positionalThreshold = { dismissSnackbarDistance * 0.75f },
+        velocityThreshold = { 3000000.dp.value },
+        animationSpec = spring(),
+        confirmValueChange = {
+            if (it == End) {
                 onClose(tab)
             }
             true
@@ -284,13 +295,9 @@ private fun TabItem(
                     onClick(tab)
                 }
                 .background(backgroundColor)
-                .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
-                .swipeableCompat(
+                .offset { IntOffset(0, swipeableState.requireOffset().roundToInt()) }
+                .anchoredDraggable(
                     state = swipeableState,
-                    anchors = anchors,
-                    thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                    resistance = ResistanceConfig(0.5f),
-                    velocityThreshold = 3000000.dp,
                     orientation = Orientation.Vertical
                 )
         ) {

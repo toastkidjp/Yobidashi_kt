@@ -8,10 +8,17 @@
 
 package jp.toastkid.lib.view.list
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.gestures.snapTo
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -22,45 +29,46 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import jp.toastkid.lib.compat.material3.DismissDirection
-import jp.toastkid.lib.compat.material3.DismissState
-import jp.toastkid.lib.compat.material3.DismissValue
-import androidx.compose.material3.ExperimentalMaterial3Api
-import jp.toastkid.lib.compat.material3.FixedThreshold
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import jp.toastkid.lib.compat.material3.ResistanceConfig
 import androidx.compose.material3.Surface
-import jp.toastkid.lib.compat.material3.SwipeableDefaults
-import jp.toastkid.lib.compat.material3.swipeableCompat
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SwipeToDismissItem(
     onClickDelete: () -> Unit,
     modifier: Modifier = Modifier,
     dismissContent: @Composable RowScope.() -> Unit
 ) {
-    val directions: Set<DismissDirection> = setOf(
-        DismissDirection.EndToStart,
-        DismissDirection.StartToEnd
-    )
+    val dismissSnackbarDistance = with(LocalDensity.current) { -60.dp.toPx() }
+    val anchors = DraggableAnchors {
+        Start at 0f
+        End at dismissSnackbarDistance
+    }
+
+    val marginEnd = 60.dp.value
+
+    val anchoredDraggableState = remember {
+        AnchoredDraggableState(
+            initialValue = Start,
+            anchors = anchors,
+            positionalThreshold = { 120.dp.value },
+            velocityThreshold = { 120.dp.value },
+            animationSpec = spring(),
+            confirmValueChange = { true }
+        )
+    }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -68,59 +76,16 @@ fun SwipeToDismissItem(
         modifier = modifier,
         shadowElevation = 4.dp
     ) {
-        val width = LocalConfiguration.current.screenWidthDp.toFloat()
-        val marginEnd = 60.dp.value
-        val anchors = mutableMapOf(0f to DismissValue.Default)
-        if (DismissDirection.StartToEnd in directions) {
-            anchors += width to DismissValue.DismissedToEnd
-        }
-        if (DismissDirection.EndToStart in directions) {
-            anchors += -width to DismissValue.DismissedToStart
-        }
-
-        val minFactor =
-            if (DismissDirection.EndToStart in directions) SwipeableDefaults.StandardResistanceFactor
-            else SwipeableDefaults.StiffResistanceFactor
-        val maxFactor =
-            if (DismissDirection.StartToEnd in directions) SwipeableDefaults.StandardResistanceFactor
-            else SwipeableDefaults.StiffResistanceFactor
-
-        val endOffset = remember { mutableStateOf(0f) }
-
-        val state = remember {
-            DismissState(
-                initialValue = DismissValue.Default,
-                confirmStateChange = {
-                    endOffset.value < marginEnd && endOffset.value != 0f
-                }
-            )
-        }
-
         Box(
-            Modifier.swipeableCompat(
-                state = state,
-                anchors = anchors,
-                thresholds = { _, _ ->
-                    FixedThreshold(3000000.dp)
-                },
-                orientation = Orientation.Horizontal,
-                enabled = state.currentValue == DismissValue.Default,
-                reverseDirection = false,
-                resistance = ResistanceConfig(
-                    basis = width,
-                    factorAtMin = minFactor,
-                    factorAtMax = maxFactor
-                ),
-                velocityThreshold = 3000000.dp
-            )
+            Modifier
+                .anchoredDraggable(
+                    anchoredDraggableState,
+                    orientation = Orientation.Horizontal
+                )
         ) {
             Row(
                 horizontalArrangement = Arrangement.End,
                 content = {
-                    val scale by animateFloatAsState(
-                        if (state.targetValue == DismissValue.Default) 0.75f else 1f
-                    )
-
                     Box(
                         Modifier
                             .fillMaxHeight()
@@ -129,37 +94,28 @@ fun SwipeToDismissItem(
                             .padding(horizontal = 20.dp)
                             .clickable {
                                 coroutineScope.launch {
-                                    state.dismiss(DismissDirection.EndToStart)
+                                    anchoredDraggableState.dispatchRawDelta(-600.dp.value)
                                     onClickDelete()
-                                    state.reset()
-                                    endOffset.value = 0f
+                                    anchoredDraggableState.snapTo(Start)
                                 }
                             },
                         contentAlignment = Alignment.CenterEnd
                     ) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "Localized description",
-                            modifier = Modifier.scale(scale)
+                            contentDescription = "Localized description"
                         )
                     }
                 },
                 modifier = Modifier.matchParentSize()
             )
 
-            val min = min(marginEnd, max(-state.offset.value, 0f))
-            if (state.dismissDirection == DismissDirection.EndToStart
-                && endOffset.value < min) {
-                endOffset.value = min
-            } else if (state.dismissDirection == DismissDirection.StartToEnd) {
-                endOffset.value = min
-            }
-
             Row(
                 content = dismissContent,
                 modifier = Modifier
-                    .offset { IntOffset(state.offset.value.roundToInt(), 0) }
-                    .padding(end = endOffset.value.dp)
+                    .offset {
+                        IntOffset(min(anchoredDraggableState.requireOffset(), marginEnd).toInt(), 0)
+                    }
                     .background(MaterialTheme.colorScheme.surface)
             )
         }

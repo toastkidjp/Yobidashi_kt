@@ -83,4 +83,8 @@ class NumberPlaceViewModel {
         return _game.value.pickSolving(rowIndex, columnIndex)
     }
 
+    fun numberLabel(number: Int): String {
+        return if (number == -1) "_" else "$number"
+    }
+
 }
