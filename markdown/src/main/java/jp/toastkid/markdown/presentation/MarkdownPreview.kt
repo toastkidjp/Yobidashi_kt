@@ -80,6 +80,8 @@ fun MarkdownPreview(
                 override fun invoke(
                     menuId: Int,
                     onCopyRequested: (() -> Unit)?,
+                    onPasteRequested: (() -> Unit)?,
+                    onCutRequested: (() -> Unit)?,
                     onSelectAllRequested: (() -> Unit)?
                 ): Boolean = when (menuId) {
                     R.id.copy -> {
