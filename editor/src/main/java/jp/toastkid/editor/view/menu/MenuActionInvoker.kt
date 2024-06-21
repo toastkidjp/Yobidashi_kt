@@ -24,21 +24,22 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.translate.TranslationUrlGenerator
 import jp.toastkid.libs.speech.SpeechMaker
+import jp.toastkid.ui.menu.context.MenuActionCallback
 
 class MenuActionInvoker(
     private val viewModel: EditorTabViewModel,
     private val context: Context,
     private val contentViewModel: ContentViewModel
-) {
+) : MenuActionCallback {
 
-    operator fun invoke(
-        itemId: Int,
+    override operator fun invoke(
+        menuId: Int,
         onCopyRequested: (() -> Unit)?,
         onPasteRequested: (() -> Unit)?,
         onCutRequested: (() -> Unit)?,
         onSelectAllRequested: (() -> Unit)?
     ): Boolean {
-        when (itemId) {
+        when (menuId) {
             R.id.context_edit_copy -> {
                 onCopyRequested?.invoke()
                 return true
