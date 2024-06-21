@@ -8,6 +8,8 @@
 
 package jp.toastkid.markdown.presentation
 
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +41,8 @@ import androidx.lifecycle.ViewModelStoreOwner
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.clip.Clipboard
+import jp.toastkid.markdonw.R
 import jp.toastkid.markdown.domain.model.data.CodeBlockLine
 import jp.toastkid.markdown.domain.model.data.HorizontalRule
 import jp.toastkid.markdown.domain.model.data.ImageLine
@@ -46,7 +50,9 @@ import jp.toastkid.markdown.domain.model.data.ListLine
 import jp.toastkid.markdown.domain.model.data.TableLine
 import jp.toastkid.markdown.domain.model.data.TextBlock
 import jp.toastkid.markdown.domain.model.entity.Markdown
-import jp.toastkid.markdown.presentation.menu.ContextMenuToolbar
+import jp.toastkid.ui.menu.context.ContextMenuToolbar
+import jp.toastkid.ui.menu.context.MenuActionCallback
+import jp.toastkid.ui.menu.context.MenuInjector
 
 @Composable
 fun MarkdownPreview(
@@ -55,11 +61,63 @@ fun MarkdownPreview(
     modifier: Modifier
 ) {
     val viewModel = remember { MarkdownPreviewViewModel(scrollState) }
-    val context = LocalContext.current as ViewModelStoreOwner
-    val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
+    val context = LocalContext.current
+    val viewModelStoreOwner = context as ViewModelStoreOwner
+    val contentViewModel = ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
 
     CompositionLocalProvider(
-        LocalTextToolbar provides ContextMenuToolbar(LocalView.current, contentViewModel)
+        LocalTextToolbar provides ContextMenuToolbar(
+            LocalView.current,
+            object : MenuInjector {
+                override fun invoke(menu: Menu?) {
+                    val menuInflater = MenuInflater(context)
+
+                    menuInflater.inflate(R.menu.context_article_content_search, menu)
+                }
+            },
+            object : MenuActionCallback {
+
+                override fun invoke(
+                    menuId: Int,
+                    onCopyRequested: (() -> Unit)?,
+                    onSelectAllRequested: (() -> Unit)?
+                ): Boolean = when (menuId) {
+                    R.id.copy -> {
+                        onCopyRequested?.invoke()
+                        true
+                    }
+                    R.id.select_all -> {
+                        onSelectAllRequested?.invoke()
+                        true
+                    }
+                    R.id.preview_search -> {
+                        val present = Clipboard.getPrimary(context)
+                        onCopyRequested?.invoke()
+                        val primary = Clipboard.getPrimary(context)
+                        Clipboard.clip(context, present?.toString() ?: "")
+                        if (primary != null && primary.isNotBlank()) {
+                            contentViewModel.preview(primary.toString())
+                        }
+                        true
+                    }
+                    R.id.web_search -> {
+                        /*val selection = currentSelection()
+                        if (selection.isEmpty()) {
+                            return false
+                        }*/
+                        val present = Clipboard.getPrimary(context)
+                        onCopyRequested?.invoke()
+                        val primary = Clipboard.getPrimary(context)
+                        Clipboard.clip(context, present?.toString() ?: "")
+                        if (primary != null && primary.isNotBlank()) {
+                            contentViewModel.search(primary.toString())
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+        )
     ) {
         SelectionContainer {
             Column(modifier = modifier
