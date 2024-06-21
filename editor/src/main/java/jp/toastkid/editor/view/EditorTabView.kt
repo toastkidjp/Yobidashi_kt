@@ -106,7 +106,6 @@ import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
 import jp.toastkid.ui.menu.context.ContextMenuToolbar
-import jp.toastkid.ui.menu.context.MenuActionCallback
 import jp.toastkid.ui.menu.context.MenuInjector
 import kotlinx.coroutines.launch
 
@@ -199,24 +198,7 @@ fun EditorTabView(path: String?) {
                     menuInflater.inflate(R.menu.context_speech, menu)
                 }
             },
-            object : MenuActionCallback {
-                override fun invoke(
-                    menuId: Int,
-                    onCopyRequested: (() -> Unit)?,
-                    onPasteRequested: (() -> Unit)?,
-                    onCutRequested: (() -> Unit)?,
-                    onSelectAllRequested: (() -> Unit)?
-                ): Boolean {
-                    return menuActionInvoker(
-                        menuId,
-                        onCopyRequested,
-                        onPasteRequested,
-                        onCutRequested,
-                        onSelectAllRequested
-                    )
-                }
-
-            }
+            menuActionInvoker
         )
     ) {
         BasicTextField(
