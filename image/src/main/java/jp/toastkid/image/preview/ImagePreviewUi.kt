@@ -13,7 +13,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
@@ -108,27 +107,26 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             viewModel.offset.value.y.toInt()
                         )
                     }
-                    .transformable(state = viewModel.state)
-                    .pointerInput(Unit) {
-                        detectDragGestures { change, dragAmount ->
-                            change.consume()
-                            viewModel.offset.value += dragAmount.times(0.5f)
-                        }
-                    }
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onPress = { /* Called when the gesture starts */ },
                             onDoubleTap = { viewModel.resetStates() },
-                            onLongPress = { /* Called on Long Press */ },
+                            onLongPress = { viewModel.setTransformable() },
                             onTap = { /* Called on Tap */ }
                         )
                     }
+                    .transformable(
+                        state = viewModel.state,
+                        enabled = viewModel.transformable()
+                    )
             )
         }
 
         Surface(
             shadowElevation = 4.dp,
-            modifier = Modifier.align(Alignment.BottomCenter).alpha(0.75f)
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .alpha(0.75f)
         ) {
             Column {
                 Box(
@@ -329,6 +327,10 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             title = viewModel.getCurrentImage(pagerState.currentPage).name,
             message = message ?: "Not found"
         )
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        viewModel.unsetTransformable()
     }
 
     BackHandler(viewModel.openMenu.value) {
