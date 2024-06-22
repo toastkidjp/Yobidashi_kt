@@ -76,10 +76,13 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         viewModel.replaceImages(images)
     })
 
-    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(it).get(ContentViewModel::class.java)
-    }
     val context = LocalContext.current
+
+    val contentViewModel = remember {
+        (context as? ViewModelStoreOwner)?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java)
+        }
+    }
 
     val coroutineScope = rememberCoroutineScope()
 
