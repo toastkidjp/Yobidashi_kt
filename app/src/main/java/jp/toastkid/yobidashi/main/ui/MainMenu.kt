@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.menu.Menu
 
 @Composable
@@ -47,6 +48,7 @@ internal fun MainMenu(
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
     val menuCount = remember { Menu.values().size }
     val tooBigCount = remember { Menu.values().size * 10 }
+    val enableChat = remember { PreferenceApplier(activity).chatApiKey()?.isNotBlank() ?: false }
 
     Box(
         contentAlignment = Alignment.Center,
@@ -60,6 +62,9 @@ internal fun MainMenu(
         ) {
             items(tooBigCount) { longIndex ->
                 val menu = Menu.values()[longIndex % menuCount]
+                if (!enableChat && menu == Menu.CHAT) {
+                    return@items
+                }
                 Surface(
                     color = MaterialTheme.colorScheme.primary,
                     shadowElevation = 4.dp,
@@ -102,10 +107,12 @@ internal fun MainMenu(
                         )
                     }
                 }
-                BackHandler {
-                    hideMenu()
-                }
+
             }
+        }
+
+        BackHandler {
+            hideMenu()
         }
     }
 }
@@ -193,6 +200,9 @@ private fun onClickMainMenuItem(
         }
         Menu.FIND_IN_PAGE -> {
             contentViewModel.openFindInPageState.value = true
+        }
+        Menu.CHAT -> {
+            navigate("tool/chat")
         }
     }
 }
