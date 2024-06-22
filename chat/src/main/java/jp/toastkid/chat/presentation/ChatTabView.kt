@@ -1,5 +1,6 @@
 package jp.toastkid.chat.presentation
 
+import android.text.format.DateFormat
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,11 +43,14 @@ import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.chat.R
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
+import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.menu.context.common.CommonContextMenuToolbarFactory
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @Composable
 fun ChatTabView() {
@@ -159,4 +163,18 @@ fun ChatTabView() {
     }
 
     ScrollerUseCase(contentViewModel, viewModel.scrollState()).invoke(viewLifecycleOwner = LocalLifecycleOwner.current)
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(key1 = lifecycleOwner, block = {
+        contentViewModel?.event?.collect {
+            if (it is ShareEvent) {
+                context.startActivity(
+                    ShareIntentFactory()(
+                        viewModel.exportableContent(),
+                        "Chat_${DateFormat.format("yyyyMMdd-HH-mm-ss", Calendar.getInstance())}"
+                    )
+                )
+            }
+        }
+    })
 }
