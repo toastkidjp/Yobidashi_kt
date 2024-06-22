@@ -86,10 +86,16 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
     val pagerState = rememberPagerState(initialIndex) { viewModel.pageCount() }
 
     Box {
-        HorizontalPager(pageSize = PageSize.Fill, state = pagerState) {
+        HorizontalPager(
+            pageSize = PageSize.Fill,
+            pageSpacing = 100.dp,
+            state = pagerState
+        ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(viewModel.getCurrentImage(pagerState.currentPage).path).crossfade(true).build(),
+                    .data(viewModel.getCurrentImage(pagerState.currentPage).path)
+                    .memoryCacheKey(viewModel.getCurrentImage(pagerState.currentPage).path)
+                    .crossfade(true).build(),
                 imageLoader = GifImageLoaderFactory().invoke(LocalContext.current),
                 contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
                 colorFilter = viewModel.colorFilterState.value,
