@@ -13,13 +13,13 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -38,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -75,20 +76,29 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         viewModel.replaceImages(images)
     })
 
-    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(it).get(ContentViewModel::class.java)
-    }
     val context = LocalContext.current
+
+    val contentViewModel = remember {
+        (context as? ViewModelStoreOwner)?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java)
+        }
+    }
 
     val coroutineScope = rememberCoroutineScope()
 
     val pagerState = rememberPagerState(initialIndex) { viewModel.pageCount() }
 
     Box {
-        HorizontalPager(pageSize = PageSize.Fill, state = pagerState) {
+        HorizontalPager(
+            pageSize = PageSize.Fill,
+            pageSpacing = 100.dp,
+            state = pagerState
+        ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(viewModel.getCurrentImage(pagerState.currentPage).path).crossfade(true).build(),
+                    .data(viewModel.getCurrentImage(pagerState.currentPage).path)
+                    .memoryCacheKey(viewModel.getCurrentImage(pagerState.currentPage).path)
+                    .crossfade(true).build(),
                 imageLoader = GifImageLoaderFactory().invoke(LocalContext.current),
                 contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
                 colorFilter = viewModel.colorFilterState.value,
@@ -106,39 +116,43 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                             viewModel.offset.value.y.toInt()
                         )
                     }
-                    .transformable(state = viewModel.state)
-                    .pointerInput(Unit) {
-                        detectDragGestures { change, dragAmount ->
-                            change.consume()
-                            viewModel.offset.value += dragAmount.times(0.5f)
-                        }
-                    }
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onPress = { /* Called when the gesture starts */ },
                             onDoubleTap = { viewModel.resetStates() },
-                            onLongPress = { /* Called on Long Press */ },
+                            onLongPress = { viewModel.setTransformable() },
                             onTap = { /* Called on Tap */ }
                         )
                     }
+                    .transformable(
+                        state = viewModel.state,
+                        enabled = viewModel.transformable()
+                    )
             )
         }
 
         Surface(
             shadowElevation = 4.dp,
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .alpha(0.75f)
         ) {
             Column {
-                Icon(
-                    painterResource(id = if (viewModel.openMenu.value) R.drawable.ic_down else R.drawable.ic_up),
-                    contentDescription = stringResource(id = R.string.open),
+                Box(
                     modifier = Modifier
                         .clickable {
                             viewModel.openMenu.value = viewModel.openMenu.value.not()
                         }
-                        .padding(8.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
+                        .fillMaxWidth()
+                ) {
+                    Icon(
+                        painterResource(id = if (viewModel.openMenu.value) R.drawable.ic_down else R.drawable.ic_up),
+                        contentDescription = stringResource(id = R.string.open),
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .align(Alignment.Center)
+                    )
+                }
 
                 if (viewModel.openMenu.value) {
                     Row(
@@ -322,6 +336,10 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             title = viewModel.getCurrentImage(pagerState.currentPage).name,
             message = message ?: "Not found"
         )
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        viewModel.unsetTransformable()
     }
 
     BackHandler(viewModel.openMenu.value) {

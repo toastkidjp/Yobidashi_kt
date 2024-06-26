@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import jp.toastkid.yobidashi.R
 
 /**
- * In App Browser's circular menu.
+ * App's circular menu.
  *
  * @param titleId Menu title resource ID
  * @param iconId Menu icon resource ID
@@ -48,6 +48,8 @@ enum class Menu(
     IMAGE_VIEWER(R.string.title_image_viewer, R.drawable.ic_photo),
 
     ABOUT_THIS_APP(R.string.title_about_this_app, R.drawable.ic_yobidashi),
+
+    CHAT(R.string.title_chat, R.drawable.ic_chat),
 
     TODO_TASKS_BOARD(R.string.title_todo_tasks_board, R.drawable.ic_board),
 

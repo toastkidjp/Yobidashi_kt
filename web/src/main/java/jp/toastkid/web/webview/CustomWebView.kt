@@ -15,7 +15,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.translate.TranslationUrlGenerator
 import jp.toastkid.libs.speech.SpeechMaker
 import jp.toastkid.web.R
@@ -222,14 +221,14 @@ class CustomWebView(context: Context) : WebView(context) {
     private fun search() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
             SelectedTextUseCase.make(context)
-                    ?.search(word, PreferenceApplier(context).getDefaultSearchEngine())
+                    ?.search(word)
         }
     }
 
     private fun searchWithPreview() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
             SelectedTextUseCase.make(context)
-                    ?.searchWithPreview(word, PreferenceApplier(context).getDefaultSearchEngine())
+                    ?.searchWithPreview(word)
         }
     }
 

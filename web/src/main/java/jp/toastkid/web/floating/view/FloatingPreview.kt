@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -58,11 +57,13 @@ fun FloatingPreviewUi(uri: Uri) {
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     val coroutineScope = rememberCoroutineScope()
+    val height = with(LocalDensity.current) { 400.dp.toPx() }
 
     val webView = remember {
         val view = WebViewFactory().make(context)
         WebViewInitializer.launch(view, viewModel)
         DarkModeApplier().invoke(view, PreferenceApplier(context).useDarkMode())
+        view.layoutParams.height = height.toInt()
         view
     }
 
@@ -74,7 +75,7 @@ fun FloatingPreviewUi(uri: Uri) {
                 .height(52.dp)
                 .padding(8.dp)
                 .clickable {
-                    val currentUri = viewModel.url.value?.toUri() ?: return@clickable
+                    val currentUri = viewModel.url.value.toUri()
                     contentViewModel.open(currentUri)
                 }
         ) {
@@ -115,8 +116,7 @@ fun FloatingPreviewUi(uri: Uri) {
         AndroidView(
             factory = {
                 webView
-            },
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            }
         )
     }
 

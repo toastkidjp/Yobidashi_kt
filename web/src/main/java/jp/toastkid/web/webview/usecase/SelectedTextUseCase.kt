@@ -25,12 +25,11 @@ class SelectedTextUseCase(
         contentViewModel.snackShort(message)
     }
 
-    // TODO
-    fun search(word: String, searchEngine: String?) {
+    fun search(word: String) {
         contentViewModel.search(word)
     }
 
-    fun searchWithPreview(word: String, searchEngine: String?) {
+    fun searchWithPreview(word: String) {
         contentViewModel.preview(word)
     }
 

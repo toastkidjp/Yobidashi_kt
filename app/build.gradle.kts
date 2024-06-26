@@ -118,16 +118,17 @@ dependencies {
     implementation(project(":converter"))
     implementation(project(":calendar"))
     implementation(project(":web"))
+    implementation(project(":chat"))
 
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
-    implementation("androidx.work:work-runtime:2.7.1")
+    implementation("androidx.work:work-runtime:${LibraryVersion.workManager}")
 
     // Compose dependencies.
-    implementation("androidx.compose.ui:ui:1.6.0")
+    implementation("androidx.compose.ui:ui:1.6.7")
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
-    implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("androidx.navigation:navigation-compose:2.7.6")
-    implementation("androidx.navigation:navigation-runtime-ktx:2.7.6")
+    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
+    implementation("androidx.navigation:navigation-compose:${LibraryVersion.navigationCompose}")
+    implementation("androidx.navigation:navigation-runtime-ktx:${LibraryVersion.navigationCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")

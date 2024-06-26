@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Message
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -328,6 +329,10 @@ class ContentViewModel : ViewModel() {
         setScreenFilterColor(preferenceApplier.useColorFilter())
         setBackgroundImagePath(preferenceApplier.backgroundImagePath)
     }
+
+    private val menuScrollState = LazyListState(60)
+
+    fun menuScrollState() = menuScrollState
 
     fun saveEditorTab(nextFile: File) {
         viewModelScope.launch {

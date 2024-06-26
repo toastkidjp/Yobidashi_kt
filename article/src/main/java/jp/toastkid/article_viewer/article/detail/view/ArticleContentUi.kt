@@ -11,7 +11,6 @@ package jp.toastkid.article_viewer.article.detail.view
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -23,19 +22,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,44 +46,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalTextToolbar
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.RichText
-import com.halilibo.richtext.ui.RichTextStyle
-import com.halilibo.richtext.ui.RichTextThemeIntegration
-import com.halilibo.richtext.ui.string.RichTextStringStyle
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
-import jp.toastkid.article_viewer.article.detail.LinkBehaviorService
 import jp.toastkid.article_viewer.article.detail.LinkGenerator
+import jp.toastkid.article_viewer.article.detail.view.menu.ContextMenuToolbar
 import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.color.LinkColorGenerator
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.markdown.presentation.MarkdownPreview
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
 fun ArticleContentUi(title: String) {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = PreferenceApplier(context)
     val repository = remember { ArticleRepositoryFactory().invoke(context) }
-    val linkBehaviorService = remember {
-        val viewModelProvider = ViewModelProvider(context)
-        LinkBehaviorService(
-            viewModelProvider.get(ContentViewModel::class.java),
-            { repository.exists(it) > 0 }
-        )
-    }
     val viewModel = remember { ContentViewerFragmentViewModel() }
 
     viewModel.setTitle(title)
@@ -110,70 +93,22 @@ fun ArticleContentUi(title: String) {
         AppBarContent(viewModel)
     }
 
-    val scrollState = rememberScrollState()
-
-        /*
-binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CYAN)*/
-
-    val editorFontColor = preferenceApplier.editorFontColor()
-    val stringStyle = RichTextStringStyle(
-        linkStyle = SpanStyle(Color(LinkColorGenerator().invoke(editorFontColor)))
-    )
-
-    SelectionContainer {
-        RichTextThemeIntegration(
-            contentColor = { Color(editorFontColor) }
+    CompositionLocalProvider(
+        LocalTextToolbar provides ContextMenuToolbar(LocalView.current)
+    ) {
+        Surface(
+            color = MaterialTheme.colorScheme.primary,
+            shadowElevation = 4.dp
         ) {
-            RichText(
-                style = RichTextStyle(
-                    headingStyle = { level, textStyle ->
-                        when (level) {
-                            0 -> TextStyle(
-                                fontSize = 36.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            1 -> TextStyle(
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            2 -> TextStyle(
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            3 -> TextStyle(
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            4 -> TextStyle(
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = textStyle.color.copy(alpha = .7F)
-                            )
-                            5 -> TextStyle(
-                                fontWeight = FontWeight.Bold,
-                                color = textStyle.color.copy(alpha = .7f)
-                            )
-                            else -> textStyle
-                        }
-                    },
-                    stringStyle = stringStyle
-                ),
-                modifier = Modifier
-                    .background(Color(preferenceApplier.editorBackgroundColor()))
-                    .padding(8.dp)
-                    .verticalScroll(scrollState)
-            ) {
-                Markdown(
-                    viewModel.content.value,
-                    onLinkClicked = {
-                        linkBehaviorService.invoke(it)
-                    }
-                )
-            }
+            MarkdownPreview(
+                content = viewModel.content(),
+                scrollState = viewModel.scrollState(),
+                modifier = Modifier.padding(8.dp)
+            )
         }
     }
 
-    ScrollerUseCase(contentViewModel, scrollState).invoke(LocalLifecycleOwner.current)
+    ScrollerUseCase(contentViewModel, viewModel.scrollState()).invoke(LocalLifecycleOwner.current)
 
     contentViewModel.clearOptionMenus()
 }

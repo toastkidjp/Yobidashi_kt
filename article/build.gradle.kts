@@ -62,6 +62,8 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":lib"))
     implementation(project(":search"))
+    implementation(project(":ui"))
+    implementation(project(":markdown"))
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
@@ -69,15 +71,14 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
 
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
-    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
     implementation("androidx.paging:paging-compose:${LibraryVersion.pagingCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
-    implementation("com.halilibo.compose-richtext:richtext-commonmark-android:0.15.0")
 
     implementation("androidx.paging:paging-common:${LibraryVersion.paging}")
     implementation("androidx.paging:paging-common-ktx:${LibraryVersion.paging}")
-    implementation("androidx.work:work-runtime:2.7.1")
+    implementation("androidx.work:work-runtime:${LibraryVersion.workManager}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")

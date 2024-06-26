@@ -46,7 +46,7 @@ dependencies {
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
-    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")

@@ -19,12 +19,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.menu.Menu
 
 @Composable
@@ -45,21 +46,25 @@ internal fun MainMenu(
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
+    val menuCount = remember { Menu.values().size }
+    val tooBigCount = remember { Menu.values().size * 10 }
+    val enableChat = remember { PreferenceApplier(activity).chatApiKey()?.isNotBlank() ?: false }
 
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        val menuCount = Menu.values().size
-        val tooBigCount = menuCount * 10
         LazyRow(
-            state = rememberLazyListState(tooBigCount / 2),
+            state = contentViewModel.menuScrollState(),
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
         ) {
             items(tooBigCount) { longIndex ->
                 val menu = Menu.values()[longIndex % menuCount]
+                if (!enableChat && menu == Menu.CHAT) {
+                    return@items
+                }
                 Surface(
                     color = MaterialTheme.colorScheme.primary,
                     shadowElevation = 4.dp,
@@ -102,10 +107,12 @@ internal fun MainMenu(
                         )
                     }
                 }
-                BackHandler {
-                    hideMenu()
-                }
+
             }
+        }
+
+        BackHandler {
+            hideMenu()
         }
     }
 }
@@ -193,6 +200,9 @@ private fun onClickMainMenuItem(
         }
         Menu.FIND_IN_PAGE -> {
             contentViewModel.openFindInPageState.value = true
+        }
+        Menu.CHAT -> {
+            navigate("tool/chat")
         }
     }
 }

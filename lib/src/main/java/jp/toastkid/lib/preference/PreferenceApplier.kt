@@ -41,7 +41,8 @@ class PreferenceApplier(private val context: Context) {
         WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS, IMAGE_VIEWER_EXCLUDED_PATHS,
         IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE, USE_TITLE_FILTER,
         ARTICLE_LIST_SORT_TYPE, LAST_CLIPPED_WORD,
-        NUMBER_PLACE_MASKING_COUNT, NUMBER_PLACE_LAST_GAME_PATH, HOLIDAY_CALENDARS, PRIMARY_HOLIDAY_CALENDARS
+        NUMBER_PLACE_MASKING_COUNT, NUMBER_PLACE_LAST_GAME_PATH, HOLIDAY_CALENDARS, PRIMARY_HOLIDAY_CALENDARS,
+        CHAT_API_KEY,
     }
 
     private val preferences: SharedPreferences =
@@ -499,6 +500,14 @@ class PreferenceApplier(private val context: Context) {
 
     fun usingPrimaryHolidaysCalendar(): String? {
         return preferences.getString(Key.PRIMARY_HOLIDAY_CALENDARS.name, "USA")
+    }
+
+    fun chatApiKey(): String? {
+        return preferences.getString(Key.CHAT_API_KEY.name, null)
+    }
+
+    fun setChatApiKey(newValue: String) {
+        preferences.edit().putString(Key.CHAT_API_KEY.name, newValue).apply()
     }
 
 }

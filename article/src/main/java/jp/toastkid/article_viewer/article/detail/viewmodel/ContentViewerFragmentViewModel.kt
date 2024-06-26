@@ -8,8 +8,14 @@
 
 package jp.toastkid.article_viewer.article.detail.viewmodel
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import jp.toastkid.markdown.domain.model.entity.Markdown
+import jp.toastkid.markdown.domain.service.MarkdownParser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ContentViewerFragmentViewModel {
 
@@ -21,12 +27,20 @@ class ContentViewerFragmentViewModel {
         _title.value = newTitle
     }
 
-    private val _content = mutableStateOf("")
+    private val _content = mutableStateOf(Markdown("Now loading..."))
 
-    val content: State<String> = _content
+    fun content(): Markdown = _content.value
+
+    private val markdownParser = MarkdownParser()
 
     fun setContent(newContent: String) {
-        _content.value = newContent
+        CoroutineScope(Dispatchers.IO).launch {
+            _content.value = markdownParser.invoke(newContent, title.value)
+        }
     }
+
+    private val scrollState = ScrollState(0)
+
+    fun scrollState() = scrollState
 
 }

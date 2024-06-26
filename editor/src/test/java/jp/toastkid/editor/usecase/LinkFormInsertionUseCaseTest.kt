@@ -22,7 +22,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
-import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.lib.clip.Clipboard
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.junit.After

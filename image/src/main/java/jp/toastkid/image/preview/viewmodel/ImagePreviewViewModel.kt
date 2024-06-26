@@ -63,6 +63,18 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     val openDialog = mutableStateOf(false)
 
+    private val transformable = mutableStateOf(false)
+
+    fun transformable() = transformable.value
+
+    fun setTransformable() {
+        transformable.value = true
+    }
+
+    fun unsetTransformable() {
+        transformable.value = false
+    }
+
     fun moveToPrevious() {
         /*if (index == 0) {
             return
@@ -121,6 +133,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         offset.value = Offset.Zero
         rotationY.value = 0f
         rotationZ.value = 0f
+        transformable.value = false
     }
 
 }

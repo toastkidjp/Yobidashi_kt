@@ -53,7 +53,7 @@ dependencies {
 
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
-    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")

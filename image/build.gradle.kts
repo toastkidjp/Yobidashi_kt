@@ -55,7 +55,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
     implementation("io.coil-kt:coil-gif:${LibraryVersion.coilCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
-    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
