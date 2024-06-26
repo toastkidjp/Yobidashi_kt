@@ -185,6 +185,8 @@ fun AboutThisAppUi(versionName: String) {
         }
     }
 
-    val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
-    ScrollerUseCase(contentViewModel, scrollState).invoke(LocalLifecycleOwner.current)
+    ScrollerUseCase(
+        ViewModelProvider(context).get(ContentViewModel::class.java),
+        scrollState
+    ).invoke(LocalLifecycleOwner.current)
 }
