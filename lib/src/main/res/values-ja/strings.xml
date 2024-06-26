@@ -16,12 +16,14 @@
     <string name="share">シェア</string>
     <string name="search">検索</string>
     <string name="select">選択</string>
+    <string name="select_all">すべて選択</string>
     <string name="check_all">すべて選択</string>
     <string name="edit">編集</string>
     <string name="add">追加</string>
     <string name="delete">削除</string>
     <string name="commit">決定</string>
     <string name="reset">戻す</string>
+    <string name="copy">コピー</string>
     <string name="clip">クリップボードにコピー</string>
     <string name="undo">戻す</string>
     <string name="save">保存</string>
