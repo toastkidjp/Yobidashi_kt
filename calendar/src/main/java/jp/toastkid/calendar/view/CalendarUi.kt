@@ -36,7 +36,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,11 +47,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.calendar.R
-import jp.toastkid.calendar.model.holiday.HolidayCalendar
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import java.util.Calendar
-import java.util.GregorianCalendar
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -60,9 +57,6 @@ fun CalendarUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val viewModel = remember { CalendarViewModel() }
-
-    val currentDate = rememberSaveable { mutableStateOf(Calendar.getInstance()) }
-
     val preferenceApplier = remember { PreferenceApplier(context) }
 
     Surface(
@@ -89,28 +83,14 @@ fun CalendarUi() {
                 }
             }
 
-            val firstDay = GregorianCalendar(
-                currentDate.value.get(Calendar.YEAR),
-                currentDate.value.get(Calendar.MONTH),
-                1,
-            )
-
             val labels = preferenceApplier.usingHolidaysCalendar()
                 .flatMap {
-                    HolidayCalendar.findByName(it)
-                        ?.getHolidays(
-                            currentDate.value.get(Calendar.YEAR),
-                            currentDate.value.get(Calendar.MONTH) + 1
-                        ) ?: emptyList()
+                    viewModel.calculateHolidays(it)
                 }
 
-            val holidays = HolidayCalendar.findByName(preferenceApplier.usingPrimaryHolidaysCalendar())
-                ?.getHolidays(
-                    currentDate.value.get(Calendar.YEAR),
-                    currentDate.value.get(Calendar.MONTH) + 1
-                ) ?: emptyList()
+            val holidays = viewModel.calculateHolidays(preferenceApplier.usingPrimaryHolidaysCalendar())
 
-            val weeks = viewModel.makeMonth(firstDay)
+            val weeks = viewModel.makeMonth()
 
             weeks.forEach { w ->
                 Row(modifier = Modifier
@@ -119,7 +99,7 @@ fun CalendarUi() {
                         val isOffDay = holidays.any { it.day == day.date }
                         val candidateLabels = labels.filter { it.day == day.date }
                         DayLabelView(day.date, day.dayOfWeek,
-                            viewModel.isToday(currentDate.value, day.date),
+                            viewModel.isToday(day.date),
                             isOffDay,
                             candidateLabels,
                             modifier = Modifier
@@ -133,8 +113,6 @@ fun CalendarUi() {
                                         }
                                         viewModel.openDateArticle(
                                             contentViewModel,
-                                            currentDate.value.get(Calendar.YEAR),
-                                            currentDate.value.get(Calendar.MONTH),
                                             day.date
                                         )
                                     },
@@ -144,8 +122,6 @@ fun CalendarUi() {
                                         }
                                         viewModel.openDateArticle(
                                             contentViewModel,
-                                            currentDate.value.get(Calendar.YEAR),
-                                            currentDate.value.get(Calendar.MONTH),
                                             day.date,
                                             true
                                         )
@@ -166,11 +142,7 @@ fun CalendarUi() {
                 modifier = Modifier.padding(8.dp)
             ) {
                 Button(onClick = {
-                    currentDate.value = GregorianCalendar(
-                        currentDate.value.get(Calendar.YEAR),
-                        currentDate.value.get(Calendar.MONTH) - 1,
-                        1
-                    )
+                    viewModel.moveMonth(-1)
                 }, modifier = Modifier.padding(8.dp)) {
                     Text("<")
                 }
@@ -178,14 +150,14 @@ fun CalendarUi() {
                 Surface(modifier = Modifier.padding(8.dp)) {
                     val openYearChooser = remember { mutableStateOf(false) }
                     Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
-                        Text("${currentDate.value.get(Calendar.YEAR)}", fontSize = 16.sp)
+                        Text("${viewModel.currentYearLabel()}", fontSize = 16.sp)
                         DropdownMenu(
                             expanded = openYearChooser.value,
                             onDismissRequest = { openYearChooser.value = false }) {
                             val years = (1900..2200).toList()
                             Box {
                                 val state =
-                                    rememberLazyListState(years.indexOf(currentDate.value.get(Calendar.YEAR)))
+                                    rememberLazyListState(years.indexOf(viewModel.year()))
                                 LazyColumn(
                                     state = state,
                                     modifier = Modifier.size(200.dp, 500.dp)
@@ -197,11 +169,7 @@ fun CalendarUi() {
                                             modifier = Modifier
                                                 .padding(8.dp)
                                                 .clickable {
-                                                    currentDate.value = GregorianCalendar(
-                                                        it,
-                                                        currentDate.value.get(Calendar.MONTH),
-                                                        1
-                                                    )
+                                                    viewModel.setYear(it)
                                                     openYearChooser.value = false
                                                 })
                                     }
@@ -216,7 +184,7 @@ fun CalendarUi() {
                 Surface(modifier = Modifier.padding(8.dp)) {
                     val openMonthChooser = remember { mutableStateOf(false) }
                     Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
-                        Text("${currentDate.value.get(Calendar.MONTH) + 1}", fontSize = 16.sp)
+                        Text("${viewModel.currentMonthLabel()}", fontSize = 16.sp)
                         DropdownMenu(
                             expanded = openMonthChooser.value,
                             onDismissRequest = { openMonthChooser.value = false }) {
@@ -224,11 +192,7 @@ fun CalendarUi() {
                                 DropdownMenuItem(
                                     text = { Text("${it}") },
                                     onClick = {
-                                        currentDate.value = GregorianCalendar(
-                                            currentDate.value.get(Calendar.YEAR),
-                                            it - 1,
-                                            1
-                                        )
+                                        viewModel.setMonth(it)
                                         openMonthChooser.value = false
                                     })
                             }
@@ -238,11 +202,7 @@ fun CalendarUi() {
 
                 Button(
                     onClick = {
-                        currentDate.value = GregorianCalendar(
-                            currentDate.value.get(Calendar.YEAR),
-                            currentDate.value.get(Calendar.MONTH) + 1,
-                            1
-                        )
+                        viewModel.moveMonth(1)
                     },
                     modifier = Modifier
                         .padding(8.dp)
@@ -255,7 +215,7 @@ fun CalendarUi() {
                     tint = MaterialTheme.colorScheme.onPrimary,
                     contentDescription = "Current month",
                     modifier = Modifier.clickable {
-                        currentDate.value = Calendar.getInstance()
+                        viewModel.moveToCurrentMonth()
                     }
                 )
             }
