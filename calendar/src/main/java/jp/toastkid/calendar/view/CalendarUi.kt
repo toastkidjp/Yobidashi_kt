@@ -164,7 +164,7 @@ fun CalendarUi() {
                                 ) {
                                     items(years) {
                                         Text(
-                                            "${it}",
+                                            "$it",
                                             fontSize = 16.sp,
                                             modifier = Modifier
                                                 .padding(8.dp)
