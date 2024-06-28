@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -36,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,6 +54,7 @@ import jp.toastkid.calendar.model.Week
 import jp.toastkid.calendar.model.holiday.Holiday
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -61,19 +65,26 @@ fun CalendarUi() {
     val viewModel = remember { CalendarViewModel() }
     val preferenceApplier = remember { PreferenceApplier(context) }
 
+    val coroutineScope = rememberCoroutineScope()
+
+    val pagerState = rememberPagerState(viewModel.calculateInitialPage()) { 4000 * 12 }
+
     Surface(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
         shadowElevation = 4.dp
     ) {
-        MonthCalendar(
-            viewModel.week(),
-            viewModel.makeMonth(),
-            preferenceApplier.usingHolidaysCalendar()
-                .flatMap { viewModel.calculateHolidays(it) },
-            viewModel.calculateHolidays(preferenceApplier.usingPrimaryHolidaysCalendar()),
-            { date, onBackground -> viewModel.openDateArticle(contentViewModel, date, onBackground) },
-            { viewModel.isToday(it) }
-        ) { viewModel.getDayOfWeekLabel(it) }
+        HorizontalPager(state = pagerState) {
+            val calendar = viewModel.fromPage(pagerState.currentPage)
+            MonthCalendar(
+                viewModel.week(),
+                viewModel.makeMonth(calendar),
+                preferenceApplier.usingHolidaysCalendar()
+                    .flatMap { viewModel.calculateHolidays(calendar, it) },
+                viewModel.calculateHolidays(calendar, preferenceApplier.usingPrimaryHolidaysCalendar()),
+                { date, onBackground -> viewModel.openDateArticle(contentViewModel, pagerState.currentPage, date, onBackground) },
+                { viewModel.isToday(calendar, it) }
+            ) { viewModel.getDayOfWeekLabel(it) }
+        }
     }
 
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
@@ -84,7 +95,7 @@ fun CalendarUi() {
                 modifier = Modifier.padding(8.dp)
             ) {
                 Button(onClick = {
-                    viewModel.moveMonth(-1)
+                    coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
                 }, modifier = Modifier.padding(8.dp)) {
                     Text("<")
                 }
@@ -92,14 +103,14 @@ fun CalendarUi() {
                 Surface(modifier = Modifier.padding(8.dp)) {
                     val openYearChooser = remember { mutableStateOf(false) }
                     Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
-                        Text(viewModel.currentYearLabel(), fontSize = 16.sp)
+                        Text(viewModel.currentYearLabel(pagerState.currentPage), fontSize = 16.sp)
                         DropdownMenu(
                             expanded = openYearChooser.value,
                             onDismissRequest = { openYearChooser.value = false }) {
                             val years = (1900..2200).toList()
                             Box {
                                 val state =
-                                    rememberLazyListState(years.indexOf(viewModel.year()))
+                                    rememberLazyListState(years.indexOf(viewModel.year(pagerState.currentPage)))
                                 LazyColumn(
                                     state = state,
                                     modifier = Modifier.size(200.dp, 500.dp)
@@ -111,7 +122,14 @@ fun CalendarUi() {
                                             modifier = Modifier
                                                 .padding(8.dp)
                                                 .clickable {
-                                                    viewModel.setYear(it)
+                                                    val fromPage =
+                                                        viewModel.fromPage(pagerState.currentPage)
+                                                    fromPage.set(Calendar.YEAR, it)
+                                                    coroutineScope.launch {
+                                                        pagerState.animateScrollToPage(
+                                                            viewModel.toPage(fromPage)
+                                                        )
+                                                    }
                                                     openYearChooser.value = false
                                                 })
                                     }
@@ -126,7 +144,7 @@ fun CalendarUi() {
                 Surface(modifier = Modifier.padding(8.dp)) {
                     val openMonthChooser = remember { mutableStateOf(false) }
                     Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
-                        Text(viewModel.currentMonthLabel(), fontSize = 16.sp)
+                        Text(viewModel.currentMonthLabel(pagerState.currentPage), fontSize = 16.sp)
                         DropdownMenu(
                             expanded = openMonthChooser.value,
                             onDismissRequest = { openMonthChooser.value = false }) {
@@ -134,7 +152,14 @@ fun CalendarUi() {
                                 DropdownMenuItem(
                                     text = { Text("${it}") },
                                     onClick = {
-                                        viewModel.setMonth(it)
+                                        coroutineScope.launch {
+                                            val fromPage =
+                                                viewModel.fromPage(pagerState.currentPage)
+                                            fromPage.set(Calendar.MONTH, it - 1)
+                                            pagerState.animateScrollToPage(
+                                                viewModel.toPage(fromPage)
+                                            )
+                                        }
                                         openMonthChooser.value = false
                                     })
                             }
@@ -144,7 +169,7 @@ fun CalendarUi() {
 
                 Button(
                     onClick = {
-                        viewModel.moveMonth(1)
+                        coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
                     },
                     modifier = Modifier
                         .padding(8.dp)
@@ -157,7 +182,9 @@ fun CalendarUi() {
                     tint = MaterialTheme.colorScheme.onPrimary,
                     contentDescription = "Current month",
                     modifier = Modifier.clickable {
-                        viewModel.moveToCurrentMonth()
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(viewModel.calculateInitialPage())
+                        }
                     }
                 )
             }
