@@ -69,7 +69,7 @@ fun CalendarUi() {
                     Surface(modifier = Modifier.weight(1f)) {
                         Box(contentAlignment = Alignment.Center) {
                             Text(
-                                "${viewModel.getDayOfWeekLabel(dayOfWeek)}",
+                                viewModel.getDayOfWeekLabel(dayOfWeek),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = when (dayOfWeek) {
