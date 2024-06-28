@@ -47,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.calendar.R
+import jp.toastkid.calendar.model.Week
+import jp.toastkid.calendar.model.holiday.Holiday
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import java.util.Calendar
@@ -63,75 +65,15 @@ fun CalendarUi() {
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
         shadowElevation = 4.dp
     ) {
-        Column(modifier = Modifier.scrollable(rememberScrollState(), Orientation.Vertical)) {
-            Row {
-                viewModel.week().forEach { dayOfWeek ->
-                    Surface(modifier = Modifier.weight(1f)) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text(
-                                viewModel.getDayOfWeekLabel(dayOfWeek),
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = when (dayOfWeek) {
-                                    Calendar.SUNDAY -> OFF_DAY_FG
-                                    Calendar.SATURDAY -> SATURDAY_FG
-                                    else -> MaterialTheme.colorScheme.onSurface
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
-            val labels = preferenceApplier.usingHolidaysCalendar()
-                .flatMap {
-                    viewModel.calculateHolidays(it)
-                }
-
-            val holidays = viewModel.calculateHolidays(preferenceApplier.usingPrimaryHolidaysCalendar())
-
-            val weeks = viewModel.makeMonth()
-
-            weeks.forEach { w ->
-                Row(modifier = Modifier
-                    .weight(0.75f)) {
-                    w.days().forEach { day ->
-                        val isOffDay = holidays.any { it.day == day.date }
-                        val candidateLabels = labels.filter { it.day == day.date }
-                        DayLabelView(day.date, day.dayOfWeek,
-                            viewModel.isToday(day.date),
-                            isOffDay,
-                            candidateLabels,
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxSize()
-                                .combinedClickable(
-                                    enabled = day.date != -1,
-                                    onClick = {
-                                        if (day.date == -1) {
-                                            return@combinedClickable
-                                        }
-                                        viewModel.openDateArticle(
-                                            contentViewModel,
-                                            day.date
-                                        )
-                                    },
-                                    onLongClick = {
-                                        if (day.date == -1) {
-                                            return@combinedClickable
-                                        }
-                                        viewModel.openDateArticle(
-                                            contentViewModel,
-                                            day.date,
-                                            true
-                                        )
-                                    }
-                                )
-                        )
-                    }
-                }
-            }
-        }
+        MonthCalendar(
+            viewModel.week(),
+            viewModel.makeMonth(),
+            preferenceApplier.usingHolidaysCalendar()
+                .flatMap { viewModel.calculateHolidays(it) },
+            viewModel.calculateHolidays(preferenceApplier.usingPrimaryHolidaysCalendar()),
+            { date, onBackground -> viewModel.openDateArticle(contentViewModel, date, onBackground) },
+            { viewModel.isToday(it) }
+        ) { viewModel.getDayOfWeekLabel(it) }
     }
 
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
@@ -223,6 +165,80 @@ fun CalendarUi() {
 
         contentViewModel.showAppBar()
     })
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun MonthCalendar(
+    week: Array<Int>,
+    month: List<Week>,
+    labels: List<Holiday>,
+    holidays: List<Holiday>,
+    openDateArticle: (Int, Boolean) -> Unit,
+    isToday: (Int) -> Boolean,
+    getDayOfWeekLabel: (Int) -> String,
+) {
+    Column(modifier = Modifier.scrollable(rememberScrollState(), Orientation.Vertical)) {
+        Row {
+            week.forEach { dayOfWeek ->
+                Surface(modifier = Modifier.weight(1f)) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            getDayOfWeekLabel(dayOfWeek),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = when (dayOfWeek) {
+                                Calendar.SUNDAY -> OFF_DAY_FG
+                                Calendar.SATURDAY -> SATURDAY_FG
+                                else -> MaterialTheme.colorScheme.onSurface
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        month.forEach { w ->
+            Row(
+                modifier = Modifier
+                    .weight(0.75f)
+            ) {
+                w.days().forEach { day ->
+                    val isOffDay = holidays.any { it.day == day.date }
+                    val candidateLabels = labels.filter { it.day == day.date }
+                    DayLabelView(day.date, day.dayOfWeek,
+                        isToday(day.date),
+                        isOffDay,
+                        candidateLabels,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxSize()
+                            .combinedClickable(
+                                enabled = day.date != -1,
+                                onClick = {
+                                    if (day.date == -1) {
+                                        return@combinedClickable
+                                    }
+                                    openDateArticle(
+                                        day.date,
+                                        false
+                                    )
+                                },
+                                onLongClick = {
+                                    if (day.date == -1) {
+                                        return@combinedClickable
+                                    }
+                                    openDateArticle(
+                                        day.date,
+                                        true
+                                    )
+                                }
+                            )
+                    )
+                }
+            }
+        }
+    }
 }
 
 private val OFF_DAY_FG: Color = Color(190, 50, 55)
