@@ -7,7 +7,7 @@
 
     <item
         android:id="@+id/context_edit_paste"
-        android:title="Paste"
+        android:title="@string/paste"
         android:orderInCategory="100"
         />
 
