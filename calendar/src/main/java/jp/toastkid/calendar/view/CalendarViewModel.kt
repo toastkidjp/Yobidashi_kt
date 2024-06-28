@@ -32,10 +32,7 @@ class CalendarViewModel {
                 && today.get(Calendar.DAY_OF_MONTH) == date
     }
 
-    fun makeMonth(
-        week: Array<Int>,
-        firstDay: Calendar
-    ): MutableList<Week> {
+    fun makeMonth(firstDay: Calendar): MutableList<Week> {
         var hasStarted1 = false
         val current1 = GregorianCalendar(
             firstDay.get(Calendar.YEAR),
@@ -78,5 +75,17 @@ class CalendarViewModel {
             Calendar.SATURDAY -> "Sat"
             else -> ""
         }
-    
+
+    fun week() = week
+
 }
+
+private val week = arrayOf(
+    Calendar.SUNDAY,
+    Calendar.MONDAY,
+    Calendar.TUESDAY,
+    Calendar.WEDNESDAY,
+    Calendar.THURSDAY,
+    Calendar.FRIDAY,
+    Calendar.SATURDAY
+)

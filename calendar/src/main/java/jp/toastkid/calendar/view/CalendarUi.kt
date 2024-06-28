@@ -61,16 +61,6 @@ fun CalendarUi() {
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val viewModel = remember { CalendarViewModel() }
 
-    val week = arrayOf(
-        Calendar.SUNDAY,
-        Calendar.MONDAY,
-        Calendar.TUESDAY,
-        Calendar.WEDNESDAY,
-        Calendar.THURSDAY,
-        Calendar.FRIDAY,
-        Calendar.SATURDAY
-    )
-
     val currentDate = rememberSaveable { mutableStateOf(Calendar.getInstance()) }
 
     val preferenceApplier = remember { PreferenceApplier(context) }
@@ -81,7 +71,7 @@ fun CalendarUi() {
     ) {
         Column(modifier = Modifier.scrollable(rememberScrollState(), Orientation.Vertical)) {
             Row {
-                week.forEach { dayOfWeek ->
+                viewModel.week().forEach { dayOfWeek ->
                     Surface(modifier = Modifier.weight(1f)) {
                         Box(contentAlignment = Alignment.Center) {
                             Text(
@@ -120,7 +110,7 @@ fun CalendarUi() {
                     currentDate.value.get(Calendar.MONTH) + 1
                 ) ?: emptyList()
 
-            val weeks = viewModel.makeMonth(week, firstDay)
+            val weeks = viewModel.makeMonth(firstDay)
 
             weeks.forEach { w ->
                 Row(modifier = Modifier
