@@ -150,7 +150,7 @@ fun CalendarUi() {
                 Surface(modifier = Modifier.padding(8.dp)) {
                     val openYearChooser = remember { mutableStateOf(false) }
                     Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
-                        Text("${viewModel.currentYearLabel()}", fontSize = 16.sp)
+                        Text(viewModel.currentYearLabel(), fontSize = 16.sp)
                         DropdownMenu(
                             expanded = openYearChooser.value,
                             onDismissRequest = { openYearChooser.value = false }) {
