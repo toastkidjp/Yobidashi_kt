@@ -8,7 +8,6 @@
 
 package jp.toastkid.calendar.view
 
-import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.calendar.model.Week
 import jp.toastkid.calendar.model.holiday.HolidayCalendar
 import jp.toastkid.lib.ContentViewModel
@@ -17,29 +16,28 @@ import java.util.GregorianCalendar
 
 class CalendarViewModel {
 
-    private val currentDate = mutableStateOf(Calendar.getInstance())
-
     fun openDateArticle(
         contentViewModel: ContentViewModel,
+        currentPage: Int,
         dayOfMonth: Int,
         background: Boolean = false
     ) {
-        contentViewModel.openDateArticle(currentDate.value.get(Calendar.YEAR),
-            currentDate.value.get(Calendar.MONTH), dayOfMonth, background)
+        val currentDate = fromPage(currentPage)
+        contentViewModel.openDateArticle(currentDate.get(Calendar.YEAR),
+            currentDate.get(Calendar.MONTH), dayOfMonth, background)
     }
 
-    fun isToday(date: Int): Boolean {
+    fun isToday(target: Calendar, date: Int): Boolean {
         val today = Calendar.getInstance()
-        val target = currentDate.value
         return target.get(Calendar.YEAR) == today.get(Calendar.YEAR)
                 && target.get(Calendar.MONTH) == today.get(Calendar.MONTH)
                 && today.get(Calendar.DAY_OF_MONTH) == date
     }
 
-    fun makeMonth(): MutableList<Week> {
+    fun makeMonth(calendar: Calendar): MutableList<Week> {
         val firstDay = GregorianCalendar(
-            currentDate.value.get(Calendar.YEAR),
-            currentDate.value.get(Calendar.MONTH),
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
             1,
         )
 
@@ -86,52 +84,35 @@ class CalendarViewModel {
             else -> ""
         }
 
-    fun calculateHolidays(calendarName: String?) =
+    fun calculateHolidays(calendar: Calendar, calendarName: String?) =
         HolidayCalendar.findByName(calendarName)
             ?.getHolidays(
-                year(),
-                currentDate.value.get(Calendar.MONTH) + 1
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1
             ) ?: emptyList()
 
-    fun moveMonth(moveBy: Int) {
-        currentDate.value = GregorianCalendar(
-            year(),
-            currentDate.value.get(Calendar.MONTH) + moveBy,
-            1
-        )
+    fun year(currentPage: Int) = fromPage(currentPage).get(Calendar.YEAR)
+
+    fun currentYearLabel(currentPage: Int): String {
+        return "${year(currentPage)}"
     }
 
-    fun moveToCurrentMonth() {
-        currentDate.value = Calendar.getInstance()
-    }
-
-    fun setMonth(month: Int) {
-        currentDate.value = GregorianCalendar(
-            year(),
-            month - 1,
-            1
-        )
-    }
-
-    fun setYear(year: Int) {
-        currentDate.value = GregorianCalendar(
-            year,
-            currentDate.value.get(Calendar.MONTH),
-            1
-        )
-    }
-
-    fun year() = currentDate.value.get(Calendar.YEAR)
-
-    fun currentYearLabel(): String {
-        return "${year()}"
-    }
-
-    fun currentMonthLabel(): String {
-        return "${currentDate.value.get(Calendar.MONTH) + 1}"
+    fun currentMonthLabel(currentPage: Int): String {
+        return "${fromPage(currentPage).get(Calendar.MONTH) + 1}"
     }
 
     fun week() = week
+
+    fun calculateInitialPage() = toPage(Calendar.getInstance())
+
+    fun fromPage(currentPage: Int): Calendar {
+        val year = (currentPage / 12) + 1
+        return GregorianCalendar(year, currentPage % 12, 1)
+    }
+
+    fun toPage(calendar: Calendar): Int {
+        return ((calendar.get(Calendar.YEAR) - 1) * 12) + (calendar.get(Calendar.MONTH))
+    }
 
 }
 
