@@ -184,7 +184,7 @@ fun CalendarUi() {
                 Surface(modifier = Modifier.padding(8.dp)) {
                     val openMonthChooser = remember { mutableStateOf(false) }
                     Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
-                        Text("${viewModel.currentMonthLabel()}", fontSize = 16.sp)
+                        Text(viewModel.currentMonthLabel(), fontSize = 16.sp)
                         DropdownMenu(
                             expanded = openMonthChooser.value,
                             onDismissRequest = { openMonthChooser.value = false }) {
