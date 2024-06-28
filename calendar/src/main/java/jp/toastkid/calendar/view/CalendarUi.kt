@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.calendar.R
-import jp.toastkid.calendar.model.Week
 import jp.toastkid.calendar.model.holiday.HolidayCalendar
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -60,6 +59,7 @@ import java.util.GregorianCalendar
 fun CalendarUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
+    val viewModel = remember { CalendarViewModel() }
 
     val week = arrayOf(
         Calendar.SUNDAY,
@@ -85,7 +85,7 @@ fun CalendarUi() {
                     Surface(modifier = Modifier.weight(1f)) {
                         Box(contentAlignment = Alignment.Center) {
                             Text(
-                                "${getDayOfWeekLabel(dayOfWeek)}",
+                                "${viewModel.getDayOfWeekLabel(dayOfWeek)}",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = when (dayOfWeek) {
@@ -120,7 +120,7 @@ fun CalendarUi() {
                     currentDate.value.get(Calendar.MONTH) + 1
                 ) ?: emptyList()
 
-            val weeks = makeMonth(week, firstDay)
+            val weeks = viewModel.makeMonth(week, firstDay)
 
             weeks.forEach { w ->
                 Row(modifier = Modifier
@@ -129,7 +129,7 @@ fun CalendarUi() {
                         val isOffDay = holidays.any { it.day == day.date }
                         val candidateLabels = labels.filter { it.day == day.date }
                         DayLabelView(day.date, day.dayOfWeek,
-                            isToday(currentDate.value, day.date),
+                            viewModel.isToday(currentDate.value, day.date),
                             isOffDay,
                             candidateLabels,
                             modifier = Modifier
@@ -141,7 +141,7 @@ fun CalendarUi() {
                                         if (day.date == -1) {
                                             return@combinedClickable
                                         }
-                                        openDateArticle(
+                                        viewModel.openDateArticle(
                                             contentViewModel,
                                             currentDate.value.get(Calendar.YEAR),
                                             currentDate.value.get(Calendar.MONTH),
@@ -152,7 +152,7 @@ fun CalendarUi() {
                                         if (day.date == -1) {
                                             return@combinedClickable
                                         }
-                                        openDateArticle(
+                                        viewModel.openDateArticle(
                                             contentViewModel,
                                             currentDate.value.get(Calendar.YEAR),
                                             currentDate.value.get(Calendar.MONTH),
@@ -274,70 +274,6 @@ fun CalendarUi() {
         contentViewModel.showAppBar()
     })
 }
-
-private fun openDateArticle(
-    contentViewModel: ContentViewModel,
-    year: Int,
-    monthOfYear: Int,
-    dayOfMonth: Int,
-    background: Boolean = false
-) {
-    contentViewModel.openDateArticle(year, monthOfYear, dayOfMonth, background)
-}
-
-private fun isToday(target: Calendar, date: Int): Boolean {
-    val today = Calendar.getInstance()
-    return target.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-            && target.get(Calendar.MONTH) == today.get(Calendar.MONTH)
-            && today.get(Calendar.DAY_OF_MONTH) == date
-}
-
-private fun makeMonth(
-    week: Array<Int>,
-    firstDay: Calendar
-): MutableList<Week> {
-    var hasStarted1 = false
-    val current1 = GregorianCalendar(
-        firstDay.get(Calendar.YEAR),
-        firstDay.get(Calendar.MONTH),
-        firstDay.get(Calendar.DAY_OF_MONTH)
-    )
-
-    val weeks = mutableListOf<Week>()
-    for (i in 0..5) {
-        val w = Week()
-        week.forEach { dayOfWeek ->
-            if (hasStarted1.not() && dayOfWeek != firstDay.get(Calendar.DAY_OF_WEEK)) {
-                w.addEmpty()
-                return@forEach
-            }
-            hasStarted1 = true
-
-            if (firstDay.get(Calendar.MONTH) != current1.get(Calendar.MONTH)) {
-                w.addEmpty()
-            } else {
-                w.add(current1)
-            }
-            current1.add(Calendar.DAY_OF_MONTH, 1)
-        }
-        if (w.anyApplicableDate()) {
-            weeks.add(w)
-        }
-    }
-    return weeks
-}
-
-private fun getDayOfWeekLabel(dayOfWeek: Int) =
-    when (dayOfWeek) {
-        Calendar.SUNDAY -> "Sun"
-        Calendar.MONDAY -> "Mon"
-        Calendar.TUESDAY -> "Tue"
-        Calendar.WEDNESDAY -> "Wed"
-        Calendar.THURSDAY -> "Thu"
-        Calendar.FRIDAY -> "Fri"
-        Calendar.SATURDAY -> "Sat"
-        else -> ""
-    }
 
 private val OFF_DAY_FG: Color = Color(190, 50, 55)
 private val SATURDAY_FG:  Color = Color(95, 90, 250)
