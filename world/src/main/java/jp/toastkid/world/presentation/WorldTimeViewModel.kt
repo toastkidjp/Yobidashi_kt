@@ -47,7 +47,7 @@ class WorldTimeViewModel {
             WorldTime(
                 it,
                 DateFormat.format(
-                    "yyyy-MM-dd(E)HH:mm:ss",
+                    "yyyy-MM-dd(E) HH:mm:ss",
                     Calendar.getInstance(TimeZone.getTimeZone(it))
                 ).toString()
             )
