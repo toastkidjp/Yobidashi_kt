@@ -8,11 +8,12 @@
 
 package jp.toastkid.ui.menu.context.common
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.ui.R
 import jp.toastkid.ui.menu.context.MenuActionCallback
 
@@ -38,26 +39,42 @@ class CommonMenuActionCallback(private val context: Context) : MenuActionCallbac
             true
         }
         R.id.preview_search -> {
-            val present = Clipboard.getPrimary(context)
-            onCopyRequested?.invoke()
-            val primary = Clipboard.getPrimary(context)
-            Clipboard.clip(context, present?.toString() ?: "")
-            if (primary != null && primary.isNotBlank()) {
-                contentViewModel?.preview(primary.toString())
+            val text = extractSelectedTextWithDirtyAccess(onCopyRequested)
+            if (text != null && text.isNotBlank()) {
+                contentViewModel?.preview(text.toString())
             }
             true
         }
         R.id.web_search -> {
-            val present = Clipboard.getPrimary(context)
-            onCopyRequested?.invoke()
-            val primary = Clipboard.getPrimary(context)
-            Clipboard.clip(context, present?.toString() ?: "")
-            if (primary != null && primary.isNotBlank()) {
-                contentViewModel?.search(primary.toString())
+            val text = extractSelectedTextWithDirtyAccess(onCopyRequested)
+            if (text != null && text.isNotBlank()) {
+                contentViewModel?.search(text.toString())
             }
             true
         }
         else -> false
     }
+
+    private fun extractSelectedTextWithDirtyAccess(onCopyRequested: (() -> Unit)?): CharSequence? {
+        val clipboardManager = clipboardManager(context)
+        val present = clipboardManager?.primaryClip
+
+        onCopyRequested?.invoke()
+        val primary = clipboardManager?.primaryClip
+
+        clipboardManager?.setPrimaryClip(
+            if (present?.getItemAt(0)?.text != null) present
+            else ClipData.newPlainText("", "")
+        )
+        return primary?.getItemAt(0)?.text
+    }
+
+    /**
+     * Get clipboard.
+     *
+     * @param context
+     */
+    private fun clipboardManager(context: Context): ClipboardManager? =
+        context.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager?
 
 }
