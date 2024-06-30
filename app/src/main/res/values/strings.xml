@@ -267,5 +267,6 @@
 
     <string name="title_converter_tool">Converter tool</string>
     <string name="title_chat">Chat</string>
+    <string name="title_world_time">World time</string>
 
 </resources>
