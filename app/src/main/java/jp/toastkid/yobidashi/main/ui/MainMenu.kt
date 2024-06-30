@@ -204,5 +204,8 @@ private fun onClickMainMenuItem(
         Menu.CHAT -> {
             navigate("tool/chat")
         }
+        Menu.WORLD_TIME -> {
+            navigate("tool/world_time")
+        }
     }
 }
