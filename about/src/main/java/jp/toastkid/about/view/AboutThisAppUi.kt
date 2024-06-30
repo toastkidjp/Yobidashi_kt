@@ -11,7 +11,6 @@ package jp.toastkid.about.view
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -78,8 +79,9 @@ fun AboutThisAppUi(versionName: String) {
                     })
                     .padding(start = 16.dp, end = 16.dp)
             ) {
-                Image(
+                Icon(
                     painter = painterResource(id = R.drawable.ic_store_black),
+                    tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = stringResource(R.string.title_go_google_play)
                 )
                 Text(
@@ -104,8 +106,9 @@ fun AboutThisAppUi(versionName: String) {
                     })
                     .padding(start = 16.dp, end = 16.dp)
             ) {
-                Image(
+                Icon(
                     painter = painterResource(id = R.drawable.ic_privacy),
+                    tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = stringResource(R.string.privacy_policy)
                 )
                 Text(
@@ -126,8 +129,9 @@ fun AboutThisAppUi(versionName: String) {
                     })
                     .padding(start = 16.dp, end = 16.dp)
             ) {
-                Image(
+                Icon(
                     painter = painterResource(id = R.drawable.ic_license_black),
+                    tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = stringResource(R.string.title_licenses)
                 )
                 Text(
@@ -185,6 +189,8 @@ fun AboutThisAppUi(versionName: String) {
         }
     }
 
-    val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
-    ScrollerUseCase(contentViewModel, scrollState).invoke(LocalLifecycleOwner.current)
+    ScrollerUseCase(
+        ViewModelProvider(context).get(ContentViewModel::class.java),
+        scrollState
+    ).invoke(LocalLifecycleOwner.current)
 }

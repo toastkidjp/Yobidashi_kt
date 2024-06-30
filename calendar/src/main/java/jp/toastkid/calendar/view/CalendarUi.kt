@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -36,7 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,122 +51,39 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.calendar.R
 import jp.toastkid.calendar.model.Week
-import jp.toastkid.calendar.model.holiday.HolidayCalendar
+import jp.toastkid.calendar.model.holiday.Holiday
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.GregorianCalendar
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalendarUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
-
-    val week = arrayOf(
-        Calendar.SUNDAY,
-        Calendar.MONDAY,
-        Calendar.TUESDAY,
-        Calendar.WEDNESDAY,
-        Calendar.THURSDAY,
-        Calendar.FRIDAY,
-        Calendar.SATURDAY
-    )
-
-    val currentDate = rememberSaveable { mutableStateOf(Calendar.getInstance()) }
-
+    val viewModel = remember { CalendarViewModel() }
     val preferenceApplier = remember { PreferenceApplier(context) }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val pagerState = rememberPagerState(viewModel.calculateInitialPage()) { 4000 * 12 }
 
     Surface(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
         shadowElevation = 4.dp
     ) {
-        Column(modifier = Modifier.scrollable(rememberScrollState(), Orientation.Vertical)) {
-            Row {
-                week.forEach { dayOfWeek ->
-                    Surface(modifier = Modifier.weight(1f)) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text(
-                                "${getDayOfWeekLabel(dayOfWeek)}",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = when (dayOfWeek) {
-                                    Calendar.SUNDAY -> OFF_DAY_FG
-                                    Calendar.SATURDAY -> SATURDAY_FG
-                                    else -> MaterialTheme.colorScheme.onSurface
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
-            val firstDay = GregorianCalendar(
-                currentDate.value.get(Calendar.YEAR),
-                currentDate.value.get(Calendar.MONTH),
-                1,
-            )
-
-            val labels = preferenceApplier.usingHolidaysCalendar()
-                .flatMap {
-                    HolidayCalendar.findByName(it)
-                        ?.getHolidays(
-                            currentDate.value.get(Calendar.YEAR),
-                            currentDate.value.get(Calendar.MONTH) + 1
-                        ) ?: emptyList()
-                }
-
-            val holidays = HolidayCalendar.findByName(preferenceApplier.usingPrimaryHolidaysCalendar())
-                ?.getHolidays(
-                    currentDate.value.get(Calendar.YEAR),
-                    currentDate.value.get(Calendar.MONTH) + 1
-                ) ?: emptyList()
-
-            val weeks = makeMonth(week, firstDay)
-
-            weeks.forEach { w ->
-                Row(modifier = Modifier
-                    .weight(0.75f)) {
-                    w.days().forEach { day ->
-                        val isOffDay = holidays.any { it.day == day.date }
-                        val candidateLabels = labels.filter { it.day == day.date }
-                        DayLabelView(day.date, day.dayOfWeek,
-                            isToday(currentDate.value, day.date),
-                            isOffDay,
-                            candidateLabels,
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxSize()
-                                .combinedClickable(
-                                    enabled = day.date != -1,
-                                    onClick = {
-                                        if (day.date == -1) {
-                                            return@combinedClickable
-                                        }
-                                        openDateArticle(
-                                            contentViewModel,
-                                            currentDate.value.get(Calendar.YEAR),
-                                            currentDate.value.get(Calendar.MONTH),
-                                            day.date
-                                        )
-                                    },
-                                    onLongClick = {
-                                        if (day.date == -1) {
-                                            return@combinedClickable
-                                        }
-                                        openDateArticle(
-                                            contentViewModel,
-                                            currentDate.value.get(Calendar.YEAR),
-                                            currentDate.value.get(Calendar.MONTH),
-                                            day.date,
-                                            true
-                                        )
-                                    }
-                                )
-                        )
-                    }
-                }
-            }
+        HorizontalPager(state = pagerState) {
+            val calendar = viewModel.fromPage(pagerState.currentPage)
+            MonthCalendar(
+                viewModel.week(),
+                viewModel.makeMonth(calendar),
+                preferenceApplier.usingHolidaysCalendar()
+                    .flatMap { viewModel.calculateHolidays(calendar, it) },
+                viewModel.calculateHolidays(calendar, preferenceApplier.usingPrimaryHolidaysCalendar()),
+                { date, onBackground -> viewModel.openDateArticle(contentViewModel, pagerState.currentPage, date, onBackground) },
+                { viewModel.isToday(calendar, it) }
+            ) { viewModel.getDayOfWeekLabel(it) }
         }
     }
 
@@ -176,11 +95,7 @@ fun CalendarUi() {
                 modifier = Modifier.padding(8.dp)
             ) {
                 Button(onClick = {
-                    currentDate.value = GregorianCalendar(
-                        currentDate.value.get(Calendar.YEAR),
-                        currentDate.value.get(Calendar.MONTH) - 1,
-                        1
-                    )
+                    coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
                 }, modifier = Modifier.padding(8.dp)) {
                     Text("<")
                 }
@@ -188,30 +103,33 @@ fun CalendarUi() {
                 Surface(modifier = Modifier.padding(8.dp)) {
                     val openYearChooser = remember { mutableStateOf(false) }
                     Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
-                        Text("${currentDate.value.get(Calendar.YEAR)}", fontSize = 16.sp)
+                        Text(viewModel.currentYearLabel(pagerState.currentPage), fontSize = 16.sp)
                         DropdownMenu(
                             expanded = openYearChooser.value,
                             onDismissRequest = { openYearChooser.value = false }) {
                             val years = (1900..2200).toList()
                             Box {
                                 val state =
-                                    rememberLazyListState(years.indexOf(currentDate.value.get(Calendar.YEAR)))
+                                    rememberLazyListState(years.indexOf(viewModel.year(pagerState.currentPage)))
                                 LazyColumn(
                                     state = state,
                                     modifier = Modifier.size(200.dp, 500.dp)
                                 ) {
                                     items(years) {
                                         Text(
-                                            "${it}",
+                                            "$it",
                                             fontSize = 16.sp,
                                             modifier = Modifier
                                                 .padding(8.dp)
                                                 .clickable {
-                                                    currentDate.value = GregorianCalendar(
-                                                        it,
-                                                        currentDate.value.get(Calendar.MONTH),
-                                                        1
-                                                    )
+                                                    val fromPage =
+                                                        viewModel.fromPage(pagerState.currentPage)
+                                                    fromPage.set(Calendar.YEAR, it)
+                                                    coroutineScope.launch {
+                                                        pagerState.animateScrollToPage(
+                                                            viewModel.toPage(fromPage)
+                                                        )
+                                                    }
                                                     openYearChooser.value = false
                                                 })
                                     }
@@ -226,7 +144,7 @@ fun CalendarUi() {
                 Surface(modifier = Modifier.padding(8.dp)) {
                     val openMonthChooser = remember { mutableStateOf(false) }
                     Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
-                        Text("${currentDate.value.get(Calendar.MONTH) + 1}", fontSize = 16.sp)
+                        Text(viewModel.currentMonthLabel(pagerState.currentPage), fontSize = 16.sp)
                         DropdownMenu(
                             expanded = openMonthChooser.value,
                             onDismissRequest = { openMonthChooser.value = false }) {
@@ -234,11 +152,14 @@ fun CalendarUi() {
                                 DropdownMenuItem(
                                     text = { Text("${it}") },
                                     onClick = {
-                                        currentDate.value = GregorianCalendar(
-                                            currentDate.value.get(Calendar.YEAR),
-                                            it - 1,
-                                            1
-                                        )
+                                        coroutineScope.launch {
+                                            val fromPage =
+                                                viewModel.fromPage(pagerState.currentPage)
+                                            fromPage.set(Calendar.MONTH, it - 1)
+                                            pagerState.animateScrollToPage(
+                                                viewModel.toPage(fromPage)
+                                            )
+                                        }
                                         openMonthChooser.value = false
                                     })
                             }
@@ -248,11 +169,7 @@ fun CalendarUi() {
 
                 Button(
                     onClick = {
-                        currentDate.value = GregorianCalendar(
-                            currentDate.value.get(Calendar.YEAR),
-                            currentDate.value.get(Calendar.MONTH) + 1,
-                            1
-                        )
+                        coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
                     },
                     modifier = Modifier
                         .padding(8.dp)
@@ -265,7 +182,9 @@ fun CalendarUi() {
                     tint = MaterialTheme.colorScheme.onPrimary,
                     contentDescription = "Current month",
                     modifier = Modifier.clickable {
-                        currentDate.value = Calendar.getInstance()
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(viewModel.calculateInitialPage())
+                        }
                     }
                 )
             }
@@ -275,69 +194,79 @@ fun CalendarUi() {
     })
 }
 
-private fun openDateArticle(
-    contentViewModel: ContentViewModel,
-    year: Int,
-    monthOfYear: Int,
-    dayOfMonth: Int,
-    background: Boolean = false
-) {
-    contentViewModel.openDateArticle(year, monthOfYear, dayOfMonth, background)
-}
-
-private fun isToday(target: Calendar, date: Int): Boolean {
-    val today = Calendar.getInstance()
-    return target.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-            && target.get(Calendar.MONTH) == today.get(Calendar.MONTH)
-            && today.get(Calendar.DAY_OF_MONTH) == date
-}
-
-private fun makeMonth(
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun MonthCalendar(
     week: Array<Int>,
-    firstDay: Calendar
-): MutableList<Week> {
-    var hasStarted1 = false
-    val current1 = GregorianCalendar(
-        firstDay.get(Calendar.YEAR),
-        firstDay.get(Calendar.MONTH),
-        firstDay.get(Calendar.DAY_OF_MONTH)
-    )
-
-    val weeks = mutableListOf<Week>()
-    for (i in 0..5) {
-        val w = Week()
-        week.forEach { dayOfWeek ->
-            if (hasStarted1.not() && dayOfWeek != firstDay.get(Calendar.DAY_OF_WEEK)) {
-                w.addEmpty()
-                return@forEach
+    month: List<Week>,
+    labels: List<Holiday>,
+    holidays: List<Holiday>,
+    openDateArticle: (Int, Boolean) -> Unit,
+    isToday: (Int) -> Boolean,
+    getDayOfWeekLabel: (Int) -> String,
+) {
+    Column(modifier = Modifier.scrollable(rememberScrollState(), Orientation.Vertical)) {
+        Row {
+            week.forEach { dayOfWeek ->
+                Surface(modifier = Modifier.weight(1f)) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            getDayOfWeekLabel(dayOfWeek),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = when (dayOfWeek) {
+                                Calendar.SUNDAY -> OFF_DAY_FG
+                                Calendar.SATURDAY -> SATURDAY_FG
+                                else -> MaterialTheme.colorScheme.onSurface
+                            }
+                        )
+                    }
+                }
             }
-            hasStarted1 = true
-
-            if (firstDay.get(Calendar.MONTH) != current1.get(Calendar.MONTH)) {
-                w.addEmpty()
-            } else {
-                w.add(current1)
-            }
-            current1.add(Calendar.DAY_OF_MONTH, 1)
         }
-        if (w.anyApplicableDate()) {
-            weeks.add(w)
+
+        month.forEach { w ->
+            Row(
+                modifier = Modifier
+                    .weight(0.75f)
+            ) {
+                w.days().forEach { day ->
+                    val isOffDay = holidays.any { it.day == day.date }
+                    val candidateLabels = labels.filter { it.day == day.date }
+                    DayLabelView(day.date, day.dayOfWeek,
+                        isToday(day.date),
+                        isOffDay,
+                        candidateLabels,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxSize()
+                            .combinedClickable(
+                                enabled = day.date != -1,
+                                onClick = {
+                                    if (day.date == -1) {
+                                        return@combinedClickable
+                                    }
+                                    openDateArticle(
+                                        day.date,
+                                        false
+                                    )
+                                },
+                                onLongClick = {
+                                    if (day.date == -1) {
+                                        return@combinedClickable
+                                    }
+                                    openDateArticle(
+                                        day.date,
+                                        true
+                                    )
+                                }
+                            )
+                    )
+                }
+            }
         }
     }
-    return weeks
 }
-
-private fun getDayOfWeekLabel(dayOfWeek: Int) =
-    when (dayOfWeek) {
-        Calendar.SUNDAY -> "Sun"
-        Calendar.MONDAY -> "Mon"
-        Calendar.TUESDAY -> "Tue"
-        Calendar.WEDNESDAY -> "Wed"
-        Calendar.THURSDAY -> "Thu"
-        Calendar.FRIDAY -> "Fri"
-        Calendar.SATURDAY -> "Sat"
-        else -> ""
-    }
 
 private val OFF_DAY_FG: Color = Color(190, 50, 55)
 private val SATURDAY_FG:  Color = Color(95, 90, 250)

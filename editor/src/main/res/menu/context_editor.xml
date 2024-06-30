@@ -7,13 +7,13 @@
 
     <item
         android:id="@+id/context_edit_paste"
-        android:title="Paste"
+        android:title="@string/paste"
         android:orderInCategory="100"
         />
 
     <item
         android:id="@+id/context_edit_select_all"
-        android:title="Select all"
+        android:title="@string/select_all"
         android:orderInCategory="100"
         />
 

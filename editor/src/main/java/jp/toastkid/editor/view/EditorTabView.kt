@@ -188,7 +188,7 @@ fun EditorTabView(path: String?) {
                     if (Urls.isValidUrl(text)) {
                         menuInflater.inflate(R.menu.context_editor_url, menu)
                     }
-                    if (text.isDigitsOnly()) {
+                    if (text.isNotBlank() && text.isDigitsOnly()) {
                         menuInflater.inflate(R.menu.context_editor_digit, menu)
                     }
                     if (textFieldValue.getSelectedText().isNotEmpty()) {
