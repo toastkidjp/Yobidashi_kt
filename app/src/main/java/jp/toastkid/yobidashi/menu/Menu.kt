@@ -51,6 +51,8 @@ enum class Menu(
 
     CHAT(R.string.title_chat, R.drawable.ic_chat),
 
+    WORLD_TIME(R.string.title_world_time, R.drawable.ic_time),
+
     TODO_TASKS_BOARD(R.string.title_todo_tasks_board, R.drawable.ic_board),
 
     TODO_TASKS(R.string.title_todo_tasks, R.drawable.ic_todo_task),
