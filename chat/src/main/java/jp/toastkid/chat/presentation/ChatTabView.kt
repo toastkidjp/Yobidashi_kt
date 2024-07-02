@@ -76,7 +76,7 @@ fun ChatTabView() {
 
     Surface(
         shadowElevation = 4.dp,
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)
+        modifier = Modifier.padding(8.dp)
     ) {
         CompositionLocalProvider(
             LocalTextToolbar provides CommonContextMenuToolbarFactory().invoke(LocalView.current)
