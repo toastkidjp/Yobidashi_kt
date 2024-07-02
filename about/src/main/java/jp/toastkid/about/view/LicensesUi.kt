@@ -34,7 +34,7 @@ import jp.toastkid.licence.model.License
 
 @Composable
 internal fun LicensesUi(licenses: List<License>) {
-    val browserViewModel = (LocalView.current.context as? ViewModelStoreOwner)?.let {
+    val viewModel = (LocalView.current.context as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
     LazyColumn {
@@ -45,7 +45,7 @@ internal fun LicensesUi(licenses: List<License>) {
                 Text(
                     license.url,
                     color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.clickable { browserViewModel?.open(license.url.toUri()) }
+                    modifier = Modifier.clickable { viewModel?.open(license.url.toUri()) }
                 )
                 val lineCount = remember { mutableStateOf(3) }
                 val maxLines = animateIntAsState(targetValue = lineCount.value)
