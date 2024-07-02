@@ -21,6 +21,8 @@ class ChatTabViewModel(apiKey: String) {
 
     private val scrollState = LazyListState()
 
+    private val connecting = mutableStateOf(false)
+
     fun messages(): List<ChatMessage> = service.messages()
 
     suspend fun send() {
@@ -31,11 +33,11 @@ class ChatTabViewModel(apiKey: String) {
 
         textInput.value = TextFieldValue()
 
-        labelState.value = "Connecting in progress..."
+        connecting.value = true
         withContext(Dispatchers.IO) {
             service.send(text)
         }
-        labelState.value = DEFAULT_LABEL
+        connecting.value = false
     }
 
     fun textInput() = textInput.value
@@ -62,7 +64,7 @@ class ChatTabViewModel(apiKey: String) {
     private val labelState = mutableStateOf(DEFAULT_LABEL)
 
     fun label(): String {
-        return labelState.value
+        return if (connecting.value) "Connecting in progress..." else DEFAULT_LABEL
     }
 
     fun name(role: String): String {
