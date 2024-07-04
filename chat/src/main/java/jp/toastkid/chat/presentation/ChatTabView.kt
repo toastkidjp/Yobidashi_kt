@@ -60,7 +60,7 @@ fun ChatTabView() {
     val contentViewModel = (LocalView.current.context as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
-    val apiKey = PreferenceApplier(context).chatApiKey()
+    val apiKey = remember { PreferenceApplier(context).chatApiKey() }
     if (apiKey.isNullOrBlank()) {
         contentViewModel?.snackShort("API Key is invalid, Please set available API key for Gemini.")
         return
