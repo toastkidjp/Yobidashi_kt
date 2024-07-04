@@ -82,8 +82,9 @@ fun CalendarUi() {
                     .flatMap { viewModel.calculateHolidays(calendar, it) },
                 viewModel.calculateHolidays(calendar, preferenceApplier.usingPrimaryHolidaysCalendar()),
                 { date, onBackground -> viewModel.openDateArticle(contentViewModel, pagerState.currentPage, date, onBackground) },
-                { viewModel.isToday(calendar, it) }
-            ) { viewModel.getDayOfWeekLabel(it) }
+                { viewModel.isToday(calendar, it) },
+                viewModel::getDayOfWeekLabel
+            )
         }
     }
 
