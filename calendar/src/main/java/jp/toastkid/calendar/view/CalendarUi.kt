@@ -250,9 +250,6 @@ private fun MonthCalendar(
                                     )
                                 },
                                 onLongClick = {
-                                    if (day.date == -1) {
-                                        return@combinedClickable
-                                    }
                                     openDateArticle(
                                         day.date,
                                         true
