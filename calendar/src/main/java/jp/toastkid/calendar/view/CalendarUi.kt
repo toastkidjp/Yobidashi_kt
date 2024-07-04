@@ -197,7 +197,7 @@ fun CalendarUi() {
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun MonthCalendar(
-    week: Array<Int>,
+    week: IntArray,
     month: List<Week>,
     labels: List<Holiday>,
     holidays: List<Holiday>,
