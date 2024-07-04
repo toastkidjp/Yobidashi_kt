@@ -63,8 +63,6 @@ class ChatTabViewModel(apiKey: String) {
         mainViewModel.replaceTab(chatTab,  ChatTab(service.getChat()))
     }*/
 
-    private val labelState = mutableStateOf(DEFAULT_LABEL)
-
     fun label(): String {
         return if (connecting.value) "Connecting in progress..." else DEFAULT_LABEL
     }
