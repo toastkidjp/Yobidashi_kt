@@ -40,7 +40,7 @@ import jp.toastkid.search.SearchCategory
 @Composable
 internal fun SearchCategorySpinner(
     spinnerOpen: MutableState<Boolean>,
-    currentCategory: MutableState<String>?,
+    currentCategory: String,
     onSelect: (SearchCategory) -> Unit = {}
 ) {
     val initialDisables = PreferenceApplier(LocalContext.current).readDisableSearchCategory()
@@ -55,7 +55,7 @@ internal fun SearchCategorySpinner(
             .height(56.dp)
             .background(Color(0xDDFFFFFF))
     ) {
-        val category = SearchCategory.findByCategory(currentCategory?.value)
+        val category = SearchCategory.findByCategory(currentCategory)
 
         AsyncImage(
             category.iconId,
@@ -92,7 +92,6 @@ internal fun SearchCategorySpinner(
                             }
                         },
                         onClick = {
-                            currentCategory?.value = searchCategory.name
                             onSelect(searchCategory)
                             spinnerOpen.value = false
                         }
