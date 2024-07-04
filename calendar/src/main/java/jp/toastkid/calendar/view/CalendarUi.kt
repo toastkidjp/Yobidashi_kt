@@ -244,9 +244,6 @@ private fun MonthCalendar(
                             .combinedClickable(
                                 enabled = day.date != -1,
                                 onClick = {
-                                    if (day.date == -1) {
-                                        return@combinedClickable
-                                    }
                                     openDateArticle(
                                         day.date,
                                         false
