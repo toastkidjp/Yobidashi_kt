@@ -25,7 +25,7 @@ class ChatTabViewModel(apiKey: String) {
 
     fun messages(): List<ChatMessage> = service.messages()
 
-    fun autoScrollingKey() = messages().last().text.length
+    fun autoScrollingKey() = if (messages().isEmpty()) 0 else messages().last().text.length
 
     suspend fun send() {
         val text = textInput.value.text
