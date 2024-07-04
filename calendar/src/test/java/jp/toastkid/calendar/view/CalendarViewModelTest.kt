@@ -10,6 +10,7 @@ package jp.toastkid.calendar.view
 
 import io.mockk.unmockkAll
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.Calendar
 
@@ -41,6 +42,12 @@ class CalendarViewModelTest {
 
     @org.junit.Test
     fun getDayOfWeekLabel() {
+        val week = subject.week()
+        assertEquals(
+            week.size,
+            week.map { subject.getDayOfWeekLabel(it) }.filter { it.length != 0 }.size
+        )
+        assertTrue(subject.getDayOfWeekLabel(22).isEmpty())
     }
 
     @org.junit.Test
