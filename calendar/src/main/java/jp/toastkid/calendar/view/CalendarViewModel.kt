@@ -51,7 +51,7 @@ class CalendarViewModel {
         val weeks = mutableListOf<Week>()
         for (i in 0..5) {
             val w = Week()
-            week.forEach { dayOfWeek ->
+            week().forEach { dayOfWeek ->
                 if (hasStarted1.not() && dayOfWeek != firstDay.get(Calendar.DAY_OF_WEEK)) {
                     w.addEmpty()
                     return@forEach
@@ -72,17 +72,7 @@ class CalendarViewModel {
         return weeks
     }
 
-    fun getDayOfWeekLabel(dayOfWeek: Int) =
-        when (dayOfWeek) {
-            Calendar.SUNDAY -> "Sun"
-            Calendar.MONDAY -> "Mon"
-            Calendar.TUESDAY -> "Tue"
-            Calendar.WEDNESDAY -> "Wed"
-            Calendar.THURSDAY -> "Thu"
-            Calendar.FRIDAY -> "Fri"
-            Calendar.SATURDAY -> "Sat"
-            else -> ""
-        }
+    fun getDayOfWeekLabel(dayOfWeek: Int) = week.get(dayOfWeek) ?: ""
 
     fun calculateHolidays(calendar: Calendar, calendarName: String?) =
         HolidayCalendar.findByName(calendarName)
@@ -101,7 +91,7 @@ class CalendarViewModel {
         return "${fromPage(currentPage).get(Calendar.MONTH) + 1}"
     }
 
-    fun week() = week
+    fun week() = weekArray
 
     fun calculateInitialPage() = toPage(Calendar.getInstance())
 
@@ -116,12 +106,14 @@ class CalendarViewModel {
 
 }
 
-private val week = arrayOf(
-    Calendar.SUNDAY,
-    Calendar.MONDAY,
-    Calendar.TUESDAY,
-    Calendar.WEDNESDAY,
-    Calendar.THURSDAY,
-    Calendar.FRIDAY,
-    Calendar.SATURDAY
+private val week = mapOf(
+    Calendar.SUNDAY to "Sun",
+    Calendar.MONDAY to "Mon",
+    Calendar.TUESDAY to "Tue",
+    Calendar.WEDNESDAY to "Wed",
+    Calendar.THURSDAY to "Thu",
+    Calendar.FRIDAY to "Fri",
+    Calendar.SATURDAY to "Sat"
 )
+
+private val weekArray = week.keys.toIntArray()
