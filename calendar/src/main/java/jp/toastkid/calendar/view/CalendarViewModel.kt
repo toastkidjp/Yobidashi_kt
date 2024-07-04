@@ -22,6 +22,10 @@ class CalendarViewModel {
         dayOfMonth: Int,
         background: Boolean = false
     ) {
+        if (dayOfMonth == -1) {
+            return
+        }
+
         val currentDate = fromPage(currentPage)
         contentViewModel.openDateArticle(currentDate.get(Calendar.YEAR),
             currentDate.get(Calendar.MONTH), dayOfMonth, background)
