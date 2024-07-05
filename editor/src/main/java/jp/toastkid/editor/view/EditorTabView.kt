@@ -248,7 +248,6 @@ fun EditorTabView(path: String?) {
                 lineHeight = 1.55.em,
                 background = Color.Transparent
             ),
-            //scrollState = viewModel.verticalScrollState(),
             cursorBrush = SolidColor(Color(preferenceApplier.editorCursorColor(Color(0xDD81D4FA).toArgb()))),
             modifier = Modifier
                 .focusRequester(viewModel.focusRequester())
