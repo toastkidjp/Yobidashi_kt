@@ -282,7 +282,8 @@ fun EditorTabView(path: String?) {
                     },
                     nestedScrollDispatcher
                 )
-                .padding(horizontal = 8.dp, vertical = 2.dp)
+                .padding(vertical = 2.dp)
+                .padding(start = 2.dp, end = 4.dp)
         )
     }
 
