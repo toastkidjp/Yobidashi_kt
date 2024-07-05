@@ -44,6 +44,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -213,7 +214,7 @@ fun EditorTabView(path: String?) {
                     Column(
                         modifier = Modifier
                             .verticalScroll(viewModel.lineNumberScrollState())
-                            .padding(horizontal = 8.dp)
+                            .padding(horizontal = 4.dp)
                             .wrapContentSize(unbounded = true)
                     ) {
                         viewModel.lineNumbers().forEach { (lineNumber, lineNumberText) ->
@@ -238,6 +239,7 @@ fun EditorTabView(path: String?) {
                             }
                         }
                     }
+                    VerticalDivider()
                     it()
                 }
             },
