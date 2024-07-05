@@ -471,9 +471,7 @@ private fun EditorMenuItem(
         modifier = Modifier
             .width(60.dp)
             .fillMaxHeight()
-            .clickable {
-                onClick()
-            }
+            .clickable(onClick = onClick)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
