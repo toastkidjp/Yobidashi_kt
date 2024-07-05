@@ -172,8 +172,6 @@ fun EditorTabView(path: String?) {
 
     val preferenceApplier = remember { PreferenceApplier(context) }
 
-    val menuActionInvoker = remember { MenuActionInvoker(viewModel, context, contentViewModel) }
-
     CompositionLocalProvider(
         LocalTextToolbar provides ContextMenuToolbar(
             LocalView.current,
@@ -199,7 +197,7 @@ fun EditorTabView(path: String?) {
                     menuInflater.inflate(R.menu.context_speech, menu)
                 }
             },
-            menuActionInvoker
+            MenuActionInvoker(viewModel, context, contentViewModel)
         )
     ) {
         BasicTextField(
