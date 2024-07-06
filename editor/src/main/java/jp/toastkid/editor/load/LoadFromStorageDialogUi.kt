@@ -17,7 +17,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -35,8 +34,8 @@ import java.io.IOException
 
 @Composable
 internal fun LoadFromStorageDialogUi(
-    openDialog: MutableState<Boolean>,
     files: Array<File>?,
+    onDismissRequest: () -> Unit,
     onSelect: (File) -> Unit
 ) {
     files ?: return
@@ -44,9 +43,7 @@ internal fun LoadFromStorageDialogUi(
     fileItems.addAll(files)
 
     Dialog(
-        onDismissRequest = {
-            openDialog.value = false
-        }
+        onDismissRequest = onDismissRequest
     ) {
         Surface(shadowElevation = 4.dp) {
             LazyColumn {
@@ -84,7 +81,7 @@ internal fun LoadFromStorageDialogUi(
                                 modifier = Modifier
                                     .clickable {
                                         onSelect(file)
-                                        openDialog.value = false
+                                        onDismissRequest()
                                     }
                                     .fillParentMaxWidth()
                                     .padding(16.dp)

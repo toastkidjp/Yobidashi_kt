@@ -44,6 +44,8 @@ class EditorTabViewModel {
 
     private val darkMode = mutableStateOf(true)
 
+    private val openConfirmDialog = mutableStateOf(false)
+
     private val nestedScrollDispatcher = NestedScrollDispatcher()
 
     fun content() = content.value
@@ -260,6 +262,54 @@ class EditorTabViewModel {
 
     fun openInputFileNameDialog() {
         openInputFileNameDialog.value = true
+    }
+
+    fun isOpenInputFileNameDialog(): Boolean {
+        return openInputFileNameDialog.value
+    }
+
+    fun closeInputFileNameDialog() {
+        openInputFileNameDialog.value = false
+    }
+
+    fun isOpenConfirmDialog(): Boolean {
+        return openConfirmDialog.value
+    }
+
+    fun openConfirmDialog() {
+        openConfirmDialog.value = true
+    }
+
+    fun closeConfirmDialog() {
+        openConfirmDialog.value = false
+    }
+
+    private val exitDialogState = mutableStateOf(false)
+
+    fun isOpenExitDialog(): Boolean {
+        return exitDialogState.value
+    }
+
+    fun openExitDialog() {
+        exitDialogState.value = true
+    }
+
+    fun closeExitDialog() {
+        exitDialogState.value = false
+    }
+
+    private val openLoadFromStorageDialog = mutableStateOf(false)
+
+    fun isOpenLoadFromStorageDialog(): Boolean {
+        return openLoadFromStorageDialog.value
+    }
+
+    fun openLoadFromStorageDialog() {
+        openLoadFromStorageDialog.value = true
+    }
+
+    fun closeLoadFromStorageDialog() {
+        openLoadFromStorageDialog.value = false
     }
 
 }

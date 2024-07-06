@@ -282,20 +282,18 @@ fun EditorTabView(path: String?) {
         )
     }
 
-    val dialogState = remember { mutableStateOf(false) }
-
-    if (dialogState.value) {
+    if (viewModel.isOpenExitDialog()) {
         ConfirmDialog(
             context.getString(R.string.confirmation),
             context.getString(R.string.message_confirm_exit),
-            onDismissRequest = { dialogState.value = false }
+            onDismissRequest = viewModel::closeExitDialog
         ) {
             context.finish()
         }
     }
 
     BackHandler {
-        dialogState.value = true
+        viewModel.openExitDialog()
     }
 
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
@@ -323,6 +321,31 @@ fun EditorTabView(path: String?) {
 
     }
 
+    if (viewModel.isOpenConfirmDialog()) {
+        DestructiveChangeConfirmDialog(
+            titleId = R.string.title_clear_text,
+            onDismissRequest = viewModel::closeConfirmDialog,
+            onClickOk = {
+                fileActionUseCase.setText("")
+            }
+        )
+    }
+
+    if (viewModel.isOpenLoadFromStorageDialog()) {
+        LoadFromStorageDialogUi(
+            files = StorageFilesFinder().invoke(context),
+            onDismissRequest = viewModel::closeLoadFromStorageDialog,
+            onSelect = { fileActionUseCase.readFromFileUri(Uri.fromFile(it)) }
+        )
+    }
+
+    if (viewModel.isOpenInputFileNameDialog()) {
+        InputFileNameDialogUi(
+            onCommit = { fileActionUseCase.makeNewFileWithName(it, viewModel::openInputFileNameDialog) },
+            onDismissRequest = viewModel::closeInputFileNameDialog
+        )
+    }
+
     contentViewModel.clearOptionMenus()
 
     LaunchedEffect(key1 = Unit, block = {
@@ -335,6 +358,9 @@ fun EditorTabView(path: String?) {
                 {
                     fileActionUseCase.makeNewFileWithName(it, viewModel::openInputFileNameDialog)
                 },
+                viewModel::openConfirmDialog,
+                viewModel::openInputFileNameDialog,
+                viewModel::openLoadFromStorageDialog,
                 fileActionUseCase
             )
         }
@@ -347,12 +373,12 @@ private fun AppBarContent(
     contentViewModel: ContentViewModel,
     saveFile: () -> Unit,
     makeNewFile: (String) -> Unit,
+    openConfirmDialog: () -> Unit,
+    openInputFileNameDialog: () -> Unit,
+    openLoadFromStorageDialog: () -> Unit,
     fileActionUseCase: FileActionUseCase
 ) {
     val context = LocalContext.current as? ComponentActivity ?: return
-
-    val openLoadFromStorageDialog = remember { mutableStateOf(false) }
-    val openInputFileNameDialog = remember { mutableStateOf(false) }
 
     val loadAs: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -362,11 +388,9 @@ private fun AppBarContent(
 
             it.data?.data?.let { uri ->
                 fileActionUseCase.readFromFileUri(uri)
-                openInputFileNameDialog.value = true
+                openInputFileNameDialog()
             }
         }
-
-    val openConfirmDialog = remember { mutableStateOf(false) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -383,7 +407,7 @@ private fun AppBarContent(
 
         EditorMenuItem(R.string.save, R.drawable.ic_save) { saveFile() }
 
-        EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog.value = true }
+        EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog() }
 
         Box(
             contentAlignment = Alignment.Center,
@@ -414,7 +438,7 @@ private fun AppBarContent(
         }
 
         EditorMenuItem(R.string.load_from_storage, R.drawable.ic_load) {
-            openLoadFromStorageDialog.value = true
+            openLoadFromStorageDialog()
         }
 
         Text(
@@ -438,33 +462,8 @@ private fun AppBarContent(
         )
 
         EditorMenuItem(R.string.clear_all, R.drawable.ic_clear_form) {
-            openConfirmDialog.value = true
+            openConfirmDialog()
         }
-    }
-
-    if (openLoadFromStorageDialog.value) {
-        LoadFromStorageDialogUi(
-            openDialog = openLoadFromStorageDialog,
-            files = StorageFilesFinder().invoke(context),
-            onSelect = { fileActionUseCase.readFromFileUri(Uri.fromFile(it)) }
-        )
-    }
-
-    if (openInputFileNameDialog.value) {
-        InputFileNameDialogUi(
-            onCommit = makeNewFile,
-            onDismissRequest = { openInputFileNameDialog.value = false }
-        )
-    }
-
-    if (openConfirmDialog.value) {
-        DestructiveChangeConfirmDialog(
-            titleId = R.string.title_clear_text,
-            onDismissRequest = { openConfirmDialog.value = false },
-            onClickOk = {
-                fileActionUseCase.setText("")
-            }
-        )
     }
 }
 
