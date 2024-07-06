@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -42,6 +43,8 @@ class EditorTabViewModel {
     private val focusRequester = FocusRequester()
 
     private val darkMode = mutableStateOf(true)
+
+    private val nestedScrollDispatcher = NestedScrollDispatcher()
 
     fun content() = content.value
 
@@ -249,6 +252,14 @@ class EditorTabViewModel {
         val lineEnd = textLayoutResult.getLineEnd(currentLine)
         val targetEnd = min(currentContent.text.length, lineEnd + 1)
         onValueChange(currentContent.copy(selection = TextRange(lineStart, targetEnd)))
+    }
+
+    fun nestedScrollDispatcher() = nestedScrollDispatcher
+
+    private val openInputFileNameDialog = mutableStateOf(false)
+
+    fun openInputFileNameDialog() {
+        openInputFileNameDialog.value = true
     }
 
 }

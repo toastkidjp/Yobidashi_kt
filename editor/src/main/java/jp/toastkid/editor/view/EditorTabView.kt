@@ -64,7 +64,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -167,8 +166,6 @@ fun EditorTabView(path: String?) {
             }
         }
     })
-
-    val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
 
     val preferenceApplier = remember { PreferenceApplier(context) }
 
@@ -278,7 +275,7 @@ fun EditorTabView(path: String?) {
                             return super.onPreScroll(available, source)
                         }
                     },
-                    nestedScrollDispatcher
+                    viewModel.nestedScrollDispatcher()
                 )
                 .padding(vertical = 2.dp)
                 .padding(start = 2.dp, end = 4.dp)
@@ -301,10 +298,9 @@ fun EditorTabView(path: String?) {
 
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
-    val openInputFileNameDialog = remember { mutableStateOf(false) }
     val observer = LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_PAUSE) {
-            fileActionUseCase.save(openInputFileNameDialog, false)
+            fileActionUseCase.save(viewModel::openInputFileNameDialog, false)
         }
     }
 
@@ -318,7 +314,7 @@ fun EditorTabView(path: String?) {
         localLifecycle.addObserver(observer)
 
         onDispose {
-            fileActionUseCase.save(openInputFileNameDialog, false)
+            fileActionUseCase.save(viewModel::openInputFileNameDialog, false)
             localLifecycle.removeObserver(observer)
             viewModel.dispose()
         }
@@ -333,6 +329,10 @@ fun EditorTabView(path: String?) {
         contentViewModel.replaceAppBarContent {
             AppBarContent(
                 contentViewModel,
+                { fileActionUseCase.save(viewModel::openInputFileNameDialog) },
+                {
+                    fileActionUseCase.makeNewFileWithName(it, fileActionUseCase, viewModel::openInputFileNameDialog)
+                },
                 fileActionUseCase
             )
         }
@@ -343,6 +343,8 @@ fun EditorTabView(path: String?) {
 @Composable
 private fun AppBarContent(
     contentViewModel: ContentViewModel,
+    saveFile: () -> Unit,
+    makeNewFile: (String) -> Unit,
     fileActionUseCase: FileActionUseCase
 ) {
     val context = LocalContext.current as? ComponentActivity ?: return
@@ -377,7 +379,7 @@ private fun AppBarContent(
             loadAs.launch(GetContentIntentFactory()("text/plain"))
         }
 
-        EditorMenuItem(R.string.save, R.drawable.ic_save) { fileActionUseCase.save(openInputFileNameDialog) }
+        EditorMenuItem(R.string.save, R.drawable.ic_save) { saveFile() }
 
         EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog.value = true }
 
@@ -448,9 +450,7 @@ private fun AppBarContent(
 
     InputFileNameDialogUi(
         openInputFileNameDialog,
-        onCommit = {
-            fileActionUseCase.makeNewFileWithName(it, fileActionUseCase, openInputFileNameDialog)
-        }
+        onCommit = makeNewFile
     )
 
     DestructiveChangeConfirmDialog(

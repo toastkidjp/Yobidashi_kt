@@ -34,9 +34,9 @@ class FileActionUseCase(
     /**
      * Save current content to file.
      */
-    fun save(openInputFileNameDialog: MutableState<Boolean>, showSnack: Boolean = true) {
+    fun save(openDialog: () -> Unit, showSnack: Boolean = true) {
         if (path.value.isBlank()) {
-            openInputFileNameDialog.value = true
+            openDialog()
             return
         }
         saveToFile(path.value, showSnack)
@@ -145,7 +145,7 @@ class FileActionUseCase(
     fun makeNewFileWithName(
         fileName: String,
         fileActionUseCase: FileActionUseCase,
-        openInputFileNameDialog: MutableState<Boolean>
+        openInputFileNameDialog: () -> Unit
     ) {
         val appropriateName =
             if (fileName.endsWith(".md") || fileName.endsWith(".txt")) fileName
