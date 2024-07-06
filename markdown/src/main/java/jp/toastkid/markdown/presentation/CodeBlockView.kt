@@ -13,7 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
@@ -45,6 +45,9 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
         BasicTextField(
             value = viewModel.content(),
             onValueChange = viewModel::onValueChange,
+            onTextLayout = {
+                viewModel.setMultiParagraph(it.multiParagraph)
+            },
             visualTransformation = {
                 viewModel.transform(it)
             },
@@ -77,9 +80,11 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                 color = MaterialTheme.colorScheme.onSurface,
                 fontSize = fontSize,
                 fontFamily = FontFamily.Monospace,
-                lineHeight = 1.5.em
+                lineHeight = 1.55.em
             ),
-            modifier = modifier.background(MaterialTheme.colorScheme.surface).heightIn(max = viewModel.maxHeight(fontSize))
+            modifier = modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .height(viewModel.maxHeight(fontSize))
         )
 
     }

@@ -11,11 +11,14 @@ package jp.toastkid.markdown.presentation
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import kotlin.math.min
 
 class CodeBlockViewModel {
@@ -24,7 +27,11 @@ class CodeBlockViewModel {
 
     private val codeStringBuilder = CodeStringBuilder()
 
-    fun maxHeight(fontSize: TextUnit) = min(content.value.text.split("\n").size * fontSize.value, 800f).dp
+    private val lineCountState = mutableStateOf(1)
+
+    fun maxHeight(fontSize: TextUnit): Dp {
+        return min(lineCountState.value * fontSize.value * 1.55.em.value, 800f).dp
+    }
 
     fun content() = content.value
 
@@ -56,6 +63,12 @@ class CodeBlockViewModel {
 
     fun start(code: String) {
         content.value = TextFieldValue(code)
+    }
+
+
+    fun setMultiParagraph(multiParagraph: MultiParagraph) {
+        val lineCount = multiParagraph.lineCount
+        lineCountState.value = lineCount
     }
 
 }
