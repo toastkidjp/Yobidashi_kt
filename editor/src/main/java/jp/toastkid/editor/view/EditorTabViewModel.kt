@@ -58,6 +58,12 @@ class EditorTabViewModel {
         applyStyle(it)
     }
 
+    fun clearText() {
+        content.value = TextFieldValue()
+    }
+
+    fun contentLength() = content.value.text.length
+
     private fun applyStyle(it: TextFieldValue) {
         //val newContent = if (tab.editable()) it else it.copy(text = content.value.text)
 

@@ -171,8 +171,4 @@ class FileActionUseCase(
         contentViewModel.snackShort(message)
     }
 
-    fun getText() = textGetter()
-
-    fun setText(newText: String) = textSetter(newText)
-
 }

@@ -148,7 +148,7 @@ fun EditorTabView(path: String?) {
                     val title =
                         if (path?.contains("/") == true) path.substring(path.lastIndexOf("/") + 1)
                         else path
-                    val content = fileActionUseCase.getText()
+                    val content = viewModel.content().text
                     if (content.isEmpty()) {
                         contentViewModel.snackShort(R.string.error_content_is_empty)
                         return@collect
@@ -325,9 +325,7 @@ fun EditorTabView(path: String?) {
         DestructiveChangeConfirmDialog(
             titleId = R.string.title_clear_text,
             onDismissRequest = viewModel::closeConfirmDialog,
-            onClickOk = {
-                fileActionUseCase.setText("")
-            }
+            onClickOk = viewModel::clearText
         )
     }
 
@@ -354,6 +352,15 @@ fun EditorTabView(path: String?) {
         contentViewModel.replaceAppBarContent {
             AppBarContent(
                 contentViewModel,
+                {
+                    Text(
+                        text = context.getString(R.string.message_character_count, viewModel.contentLength()),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 14.sp,
+                        maxLines = 2,
+                        modifier = it
+                    )
+                },
                 { fileActionUseCase.save(viewModel::openInputFileNameDialog) },
                 {
                     fileActionUseCase.makeNewFileWithName(it, viewModel::openInputFileNameDialog)
@@ -371,6 +378,7 @@ fun EditorTabView(path: String?) {
 @Composable
 private fun AppBarContent(
     contentViewModel: ContentViewModel,
+    ContentLength: @Composable (Modifier) -> Unit,
     saveFile: () -> Unit,
     makeNewFile: (String) -> Unit,
     openConfirmDialog: () -> Unit,
@@ -451,12 +459,8 @@ private fun AppBarContent(
                 .align(Alignment.CenterVertically)
         )
 
-        Text(
-            text = context.getString(R.string.message_character_count, fileActionUseCase.getText().length),
-            color = MaterialTheme.colorScheme.onPrimary,
-            fontSize = 14.sp,
-            maxLines = 2,
-            modifier = Modifier
+        ContentLength(
+            Modifier
                 .padding(start = 4.dp, end = 4.dp)
                 .align(Alignment.CenterVertically)
         )
