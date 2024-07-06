@@ -45,8 +45,7 @@ class CodeBlockViewModel {
     }
 
     fun lineNumberTexts(): List<String> {
-        val textLines = content.value.text.split("\n")
-        val max = textLines.size
+        val max = lineCountState.value
         val length = max.toString().length
 
         return (0 until max).map {
@@ -64,7 +63,6 @@ class CodeBlockViewModel {
     fun start(code: String) {
         content.value = TextFieldValue(code)
     }
-
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
         val lineCount = multiParagraph.lineCount
