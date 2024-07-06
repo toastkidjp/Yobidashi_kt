@@ -237,20 +237,23 @@ internal fun ColorSettingUi() {
         )
     )
 
-    DestructiveChangeConfirmDialog(
-        openConfirmDialog,
-        titleId = R.string.title_clear_saved_color
-    ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                RepositoryFactory().searchHistoryRepository(context).deleteAll()
-            }
+    if (openConfirmDialog.value) {
+        DestructiveChangeConfirmDialog(
+            titleId = R.string.title_clear_saved_color,
+            onDismissRequest = { openConfirmDialog.value = false },
+            onClickOk = {
+                CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.IO) {
+                        RepositoryFactory().searchHistoryRepository(context).deleteAll()
+                    }
 
-            (context as? ComponentActivity)?.let { activity ->
-                ViewModelProvider(activity).get(ContentViewModel::class.java)
-                    .snackShort(R.string.settings_color_delete)
+                    (context as? ComponentActivity)?.let { activity ->
+                        ViewModelProvider(activity).get(ContentViewModel::class.java)
+                            .snackShort(R.string.settings_color_delete)
+                    }
+                }
             }
-        }
+        )
     }
 
     LaunchedEffect("initial_load") {

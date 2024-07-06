@@ -276,11 +276,13 @@ internal fun OtherSettingUi() {
         }
     }
 
-    DestructiveChangeConfirmDialog(
-        visibleState = openConfirmDialog,
-        titleId = R.string.title_clear_settings
-    ) {
-        PreferencesClearUseCase.make(activityContext).invoke()
+    if (openConfirmDialog.value) {
+        DestructiveChangeConfirmDialog(
+            titleId = R.string.title_clear_settings,
+            onDismissRequest = { openConfirmDialog.value = false }
+        ) {
+            PreferencesClearUseCase.make(activityContext).invoke()
+        }
     }
 
     DisposableEffect(Unit) {

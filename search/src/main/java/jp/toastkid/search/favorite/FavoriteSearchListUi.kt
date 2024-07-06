@@ -158,17 +158,19 @@ fun FavoriteSearchListUi() {
         })
     )
 
-    DestructiveChangeConfirmDialog(
-        clearConfirmDialogState,
-        R.string.title_clear_favorite_search
-    ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                repository.deleteAll()
-            }
-            favoriteSearchItems.clear()
+    if (clearConfirmDialogState.value) {
+        DestructiveChangeConfirmDialog(
+            R.string.title_clear_favorite_search,
+            onDismissRequest = { clearConfirmDialogState.value = false }
+        ) {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    repository.deleteAll()
+                }
+                favoriteSearchItems.clear()
 
-            contentViewModel.snackShort(R.string.done_clear)
+                contentViewModel.snackShort(R.string.done_clear)
+            }
         }
     }
 }

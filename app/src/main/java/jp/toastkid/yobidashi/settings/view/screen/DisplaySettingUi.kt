@@ -264,13 +264,14 @@ internal fun DisplaySettingUi() {
 
     if (openClearImagesDialog.value) {
         DestructiveChangeConfirmDialog(
-            openClearImagesDialog,
-            R.string.clear_all
-        ) {
-            filesDir.clean()
-            files.clear()
-            contentViewModel.snackShort(R.string.message_success_image_removal)
-        }
+            R.string.clear_all,
+            onDismissRequest = { openClearImagesDialog.value = false },
+            onClickOk = {
+                filesDir.clean()
+                files.clear()
+                contentViewModel.snackShort(R.string.message_success_image_removal)
+            }
+        )
     }
 }
 

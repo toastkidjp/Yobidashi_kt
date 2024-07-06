@@ -210,15 +210,17 @@ fun BookmarkListUi() {
         }
     })
 
-    DestructiveChangeConfirmDialog(
-        openClearDialogState,
-        R.string.title_clear_bookmark
-    ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) { bookmarkRepository.clear() }
+    if (openClearDialogState.value) {
+        DestructiveChangeConfirmDialog(
+            R.string.title_clear_bookmark,
+            onDismissRequest = { openClearDialogState.value = false }
+        ) {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) { bookmarkRepository.clear() }
 
-            contentViewModel.snackShort(R.string.done_clear)
-            viewModel.clearItems()
+                contentViewModel.snackShort(R.string.done_clear)
+                viewModel.clearItems()
+            }
         }
     }
 

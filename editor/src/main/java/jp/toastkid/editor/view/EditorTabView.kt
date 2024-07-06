@@ -284,12 +284,14 @@ fun EditorTabView(path: String?) {
 
     val dialogState = remember { mutableStateOf(false) }
 
-    ConfirmDialog(
-        dialogState,
-        context.getString(R.string.confirmation),
-        context.getString(R.string.message_confirm_exit)
-    ) {
-        context.finish()
+    if (dialogState.value) {
+        ConfirmDialog(
+            context.getString(R.string.confirmation),
+            context.getString(R.string.message_confirm_exit),
+            onDismissRequest = { dialogState.value = false }
+        ) {
+            context.finish()
+        }
     }
 
     BackHandler {
@@ -453,11 +455,14 @@ private fun AppBarContent(
         onCommit = makeNewFile
     )
 
-    DestructiveChangeConfirmDialog(
-        visibleState = openConfirmDialog,
-        titleId = R.string.title_clear_text
-    ) {
-        fileActionUseCase.setText("")
+    if (openConfirmDialog.value) {
+        DestructiveChangeConfirmDialog(
+            titleId = R.string.title_clear_text,
+            onDismissRequest = { openConfirmDialog.value = false },
+            onClickOk = {
+                fileActionUseCase.setText("")
+            }
+        )
     }
 }
 

@@ -112,17 +112,19 @@ fun ViewHistoryListUi() {
             { item, word -> item.title.contains(word) || item.url.contains(word) }
         )
 
-    DestructiveChangeConfirmDialog(
-        clearConfirmDialogState,
-        R.string.title_clear_view_history
-    ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                viewHistoryRepository.deleteAll()
-            }
-            viewHistoryItems.clear()
+    if (clearConfirmDialogState.value) {
+        DestructiveChangeConfirmDialog(
+            R.string.title_clear_view_history,
+            onDismissRequest = { clearConfirmDialogState.value = false }
+        ) {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    viewHistoryRepository.deleteAll()
+                }
+                viewHistoryItems.clear()
 
-            contentViewModel.snackShort(R.string.done_clear)
+                contentViewModel.snackShort(R.string.done_clear)
+            }
         }
     }
 }
