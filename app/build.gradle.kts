@@ -119,12 +119,13 @@ dependencies {
     implementation(project(":calendar"))
     implementation(project(":web"))
     implementation(project(":chat"))
+    implementation(project(":world"))
 
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
     implementation("androidx.work:work-runtime:${LibraryVersion.workManager}")
 
     // Compose dependencies.
-    implementation("androidx.compose.ui:ui:1.6.7")
+    implementation("androidx.compose.ui:ui:${LibraryVersion.composeUi}")
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
     implementation("androidx.navigation:navigation-compose:${LibraryVersion.navigationCompose}")

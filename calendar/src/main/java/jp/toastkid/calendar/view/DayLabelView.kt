@@ -47,7 +47,11 @@ fun DayLabelView(
                 modifier = Modifier.padding(4.dp)
             )
             labels.forEach {
-                Text("${it.flag} ${it.title}", fontSize = 9.sp, color = OFF_DAY_FG, softWrap = false,
+                Text(
+                    "${it.flag} ${it.title}",
+                    fontSize = 9.sp,
+                    color = OFF_DAY_FG,
+                    lineHeight = 10.sp,
                     modifier = Modifier.padding(4.dp)
                 )
             }

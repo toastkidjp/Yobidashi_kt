@@ -10,7 +10,7 @@ object LibraryVersion {
     val okhttp = "4.9.0"
     val jsoup = "1.14.3"
     val exifinterface = "1.3.3"
-    val compose = "1.2.1"
+    val composeUi = "1.6.8"
     val composeCompiler = "1.4.6"
     val composeMaterial3 = "1.2.0-rc01"
     val navigationCompose = "2.7.7"

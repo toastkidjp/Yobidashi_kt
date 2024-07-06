@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.api.trend.Trend
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.usecase.QueryingUseCase
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearch
@@ -152,5 +153,17 @@ class SearchUiViewModel(
             isEnableUrlCard.value = preferenceApplier.isEnableUrlModule()
         }
     }
+
+    private val categoryName = mutableStateOf(SearchCategory.getDefaultCategoryName())
+
+    fun setCategory(newCategoryName: SearchCategory) {
+        categoryName.value = newCategoryName.name
+    }
+
+    fun setCategoryName(newCategoryName: String) {
+        categoryName.value = newCategoryName
+    }
+
+    fun categoryName() = categoryName.value
 
 }

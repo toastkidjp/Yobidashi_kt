@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalTextToolbar
@@ -58,7 +60,7 @@ fun ChatTabView() {
     val contentViewModel = (LocalView.current.context as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
-    val apiKey = PreferenceApplier(context).chatApiKey()
+    val apiKey = remember { PreferenceApplier(context).chatApiKey() }
     if (apiKey.isNullOrBlank()) {
         contentViewModel?.snackShort("API Key is invalid, Please set available API key for Gemini.")
         return
@@ -74,12 +76,12 @@ fun ChatTabView() {
 
     Surface(
         shadowElevation = 4.dp,
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)
+        modifier = Modifier.padding(8.dp)
     ) {
         CompositionLocalProvider(
             LocalTextToolbar provides CommonContextMenuToolbarFactory().invoke(LocalView.current)
         ) {
-            SelectionContainer(modifier = Modifier.padding(8.dp)) {
+            SelectionContainer {
                 LazyColumn(state = viewModel.scrollState()) {
                     items(viewModel.messages()) {
                         Row(
@@ -122,17 +124,17 @@ fun ChatTabView() {
                             )
                         }
                         HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
-
-                        LaunchedEffect(key1 = viewModel.messages().last().text, block = {
-                            coroutineScope.launch {
-                                viewModel.scrollState().animateScrollToItem(viewModel.messages().size)
-                            }
-                        })
                     }
                 }
             }
         }
     }
+
+    LaunchedEffect(key1 = viewModel.autoScrollingKey(), block = {
+        coroutineScope.launch {
+            viewModel.scrollState().animateScrollToItem(viewModel.messages().size)
+        }
+    })
 
     contentViewModel?.replaceAppBarContent {
         TextField(
@@ -140,6 +142,12 @@ fun ChatTabView() {
             label = { Text(viewModel.label(), color = MaterialTheme.colorScheme.onPrimary) },
             maxLines = Int.MAX_VALUE,
             onValueChange = viewModel::onValueChanged,
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                unfocusedContainerColor = Color.Transparent,
+                cursorColor = MaterialTheme.colorScheme.secondary
+            ),
             keyboardActions = KeyboardActions{
                 coroutineScope.launch {
                     viewModel.send()

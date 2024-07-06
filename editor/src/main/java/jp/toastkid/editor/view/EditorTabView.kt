@@ -44,6 +44,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -171,8 +172,6 @@ fun EditorTabView(path: String?) {
 
     val preferenceApplier = remember { PreferenceApplier(context) }
 
-    val menuActionInvoker = remember { MenuActionInvoker(viewModel, context, contentViewModel) }
-
     CompositionLocalProvider(
         LocalTextToolbar provides ContextMenuToolbar(
             LocalView.current,
@@ -198,7 +197,7 @@ fun EditorTabView(path: String?) {
                     menuInflater.inflate(R.menu.context_speech, menu)
                 }
             },
-            menuActionInvoker
+            MenuActionInvoker(viewModel, context, contentViewModel)
         )
     ) {
         BasicTextField(
@@ -213,7 +212,7 @@ fun EditorTabView(path: String?) {
                     Column(
                         modifier = Modifier
                             .verticalScroll(viewModel.lineNumberScrollState())
-                            .padding(horizontal = 8.dp)
+                            .padding(horizontal = 4.dp)
                             .wrapContentSize(unbounded = true)
                     ) {
                         viewModel.lineNumbers().forEach { (lineNumber, lineNumberText) ->
@@ -238,6 +237,7 @@ fun EditorTabView(path: String?) {
                             }
                         }
                     }
+                    VerticalDivider()
                     it()
                 }
             },
@@ -248,7 +248,6 @@ fun EditorTabView(path: String?) {
                 lineHeight = 1.55.em,
                 background = Color.Transparent
             ),
-            //scrollState = viewModel.verticalScrollState(),
             cursorBrush = SolidColor(Color(preferenceApplier.editorCursorColor(Color(0xDD81D4FA).toArgb()))),
             modifier = Modifier
                 .focusRequester(viewModel.focusRequester())
@@ -281,7 +280,8 @@ fun EditorTabView(path: String?) {
                     },
                     nestedScrollDispatcher
                 )
-                .padding(horizontal = 8.dp, vertical = 2.dp)
+                .padding(vertical = 2.dp)
+                .padding(start = 2.dp, end = 4.dp)
         )
     }
 
@@ -471,9 +471,7 @@ private fun EditorMenuItem(
         modifier = Modifier
             .width(60.dp)
             .fillMaxHeight()
-            .clickable {
-                onClick()
-            }
+            .clickable(onClick = onClick)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center

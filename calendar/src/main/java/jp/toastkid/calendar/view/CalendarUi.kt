@@ -82,8 +82,9 @@ fun CalendarUi() {
                     .flatMap { viewModel.calculateHolidays(calendar, it) },
                 viewModel.calculateHolidays(calendar, preferenceApplier.usingPrimaryHolidaysCalendar()),
                 { date, onBackground -> viewModel.openDateArticle(contentViewModel, pagerState.currentPage, date, onBackground) },
-                { viewModel.isToday(calendar, it) }
-            ) { viewModel.getDayOfWeekLabel(it) }
+                { viewModel.isToday(calendar, it) },
+                viewModel::getDayOfWeekLabel
+            )
         }
     }
 
@@ -197,7 +198,7 @@ fun CalendarUi() {
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun MonthCalendar(
-    week: Array<Int>,
+    week: IntArray,
     month: List<Week>,
     labels: List<Holiday>,
     holidays: List<Holiday>,
@@ -243,18 +244,12 @@ private fun MonthCalendar(
                             .combinedClickable(
                                 enabled = day.date != -1,
                                 onClick = {
-                                    if (day.date == -1) {
-                                        return@combinedClickable
-                                    }
                                     openDateArticle(
                                         day.date,
                                         false
                                     )
                                 },
                                 onLongClick = {
-                                    if (day.date == -1) {
-                                        return@combinedClickable
-                                    }
                                     openDateArticle(
                                         day.date,
                                         true

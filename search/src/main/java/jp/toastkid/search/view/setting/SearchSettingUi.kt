@@ -111,8 +111,9 @@ fun SearchSettingUi() {
                             .weight(1f)
                             .padding(start = 4.dp)
                     )
-                    SearchCategorySpinner(spinnerOpen, categoryName) {
+                    SearchCategorySpinner(spinnerOpen, categoryName.value) {
                         preferenceApplier.setDefaultSearchEngine(it.name)
+                        categoryName.value = it.name
                     }
                 }
             }

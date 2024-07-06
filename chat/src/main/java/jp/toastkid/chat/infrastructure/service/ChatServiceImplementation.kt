@@ -17,13 +17,13 @@ class ChatServiceImplementation(apiKey: String) : ChatService {
         val chat = chatHolder.get()
         chat.addUserText(text)
 
-        repository.request(chat.makeContent(), {
+        repository.request(chat.makeContent()) {
             if (it == null) {
                 return@request
             }
 
             chat.addModelText(it)
-        })
+        }
 
         return null
     }

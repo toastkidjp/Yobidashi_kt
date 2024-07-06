@@ -43,6 +43,7 @@ import jp.toastkid.web.archive.view.ArchiveListUi
 import jp.toastkid.web.bookmark.view.BookmarkListUi
 import jp.toastkid.web.history.view.ViewHistoryListUi
 import jp.toastkid.web.view.WebTabUi
+import jp.toastkid.world.presentation.WorldTimeView
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.settings.view.screen.SettingTopUi
 import jp.toastkid.yobidashi.tab.TabAdapter
@@ -147,6 +148,9 @@ internal fun NavigationalContent(
         }
         composable("tool/chat") {
             ChatTabView()
+        }
+        composable("tool/world_time") {
+            WorldTimeView()
         }
     }
 }

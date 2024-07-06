@@ -91,17 +91,14 @@ fun SearchInputUi(
 
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
-    val categoryName = remember {
-        mutableStateOf(
+    val viewModel = remember {
+        val vm = SearchUiViewModel(QueryingUseCase.make(context))
+        vm.copyFrom(preferenceApplier)
+        vm.setCategoryName(
             (SearchCategory.findByUrlOrNull(currentUrl)?.name
                 ?: PreferenceApplier(context).getDefaultSearchEngine())
                 ?: SearchCategory.getDefaultCategoryName()
         )
-    }
-
-    val viewModel = remember {
-        val vm = SearchUiViewModel(QueryingUseCase.make(context))
-        vm.copyFrom(preferenceApplier)
         vm
     }
 
@@ -139,7 +136,7 @@ fun SearchInputUi(
                         .fillMaxWidth()
                         .height(56.dp)
                 ) {
-                    SearchCategorySpinner(spinnerOpen, categoryName)
+                    SearchCategorySpinner(spinnerOpen, viewModel.categoryName(), viewModel::setCategory)
 
                     TextField(
                         value = viewModel.input.value,
@@ -179,7 +176,7 @@ fun SearchInputUi(
                         maxLines = 1,
                         keyboardActions = KeyboardActions {
                             keyboardController?.hide()
-                            search(context, contentViewModel, currentUrl, categoryName.value, viewModel.input.value.text)
+                            search(context, contentViewModel, currentUrl, viewModel.categoryName(), viewModel.input.value.text)
                         },
                         keyboardOptions = KeyboardOptions(
                             autoCorrect = true,
@@ -218,7 +215,7 @@ fun SearchInputUi(
                                         context,
                                         contentViewModel,
                                         currentUrl,
-                                        categoryName.value,
+                                        viewModel.categoryName(),
                                         viewModel.input.value.text
                                     )
                                 },
@@ -227,7 +224,7 @@ fun SearchInputUi(
                                         context,
                                         contentViewModel,
                                         currentUrl,
-                                        categoryName.value,
+                                        viewModel.categoryName(),
                                         viewModel.input.value.text,
                                         true
                                     )
@@ -291,8 +288,10 @@ fun SearchInputUi(
             OptionMenu(
                 titleId = R.string.title_context_editor_set_default_search_category,
                 action = {
-                    categoryName.value = preferenceApplier.getDefaultSearchEngine()
-                        ?: SearchCategory.getDefaultCategoryName()
+                    viewModel.setCategoryName(
+                        preferenceApplier.getDefaultSearchEngine()
+                            ?: SearchCategory.getDefaultCategoryName()
+                    )
                 }
             ),
             OptionMenu(
@@ -340,7 +339,7 @@ fun SearchInputUi(
                 context,
                 contentViewModel,
                 currentUrl,
-                it.category ?: categoryName.value,
+                it.category ?: viewModel.categoryName(),
                 it.query,
                 it.background
             )
