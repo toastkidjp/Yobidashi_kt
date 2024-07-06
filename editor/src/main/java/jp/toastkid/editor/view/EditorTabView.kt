@@ -450,10 +450,12 @@ private fun AppBarContent(
         )
     }
 
-    InputFileNameDialogUi(
-        openInputFileNameDialog,
-        onCommit = makeNewFile
-    )
+    if (openInputFileNameDialog.value) {
+        InputFileNameDialogUi(
+            onCommit = makeNewFile,
+            onDismissRequest = { openInputFileNameDialog.value = false }
+        )
+    }
 
     if (openConfirmDialog.value) {
         DestructiveChangeConfirmDialog(
