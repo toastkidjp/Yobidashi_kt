@@ -331,7 +331,7 @@ fun EditorTabView(path: String?) {
                 contentViewModel,
                 { fileActionUseCase.save(viewModel::openInputFileNameDialog) },
                 {
-                    fileActionUseCase.makeNewFileWithName(it, fileActionUseCase, viewModel::openInputFileNameDialog)
+                    fileActionUseCase.makeNewFileWithName(it, viewModel::openInputFileNameDialog)
                 },
                 fileActionUseCase
             )

@@ -144,14 +144,13 @@ class FileActionUseCase(
 
     fun makeNewFileWithName(
         fileName: String,
-        fileActionUseCase: FileActionUseCase,
         openInputFileNameDialog: () -> Unit
     ) {
         val appropriateName =
             if (fileName.endsWith(".md") || fileName.endsWith(".txt")) fileName
             else "$fileName.txt"
-        fileActionUseCase.assignNewFile(appropriateName)
-        fileActionUseCase.save(openInputFileNameDialog)
+        assignNewFile(appropriateName)
+        save(openInputFileNameDialog)
     }
 
     /**
