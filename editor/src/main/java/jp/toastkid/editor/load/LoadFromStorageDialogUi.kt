@@ -39,8 +39,7 @@ internal fun LoadFromStorageDialogUi(
     onSelect: (File) -> Unit
 ) {
     files ?: return
-    val fileItems = remember { mutableStateListOf<File>() }
-    fileItems.addAll(files)
+    val fileItems = remember { mutableStateListOf(*files) }
 
     Dialog(
         onDismissRequest = onDismissRequest
