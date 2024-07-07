@@ -88,9 +88,7 @@ internal fun DisplaySettingUi() {
             targets,
             activityContext,
             contentViewModel,
-            {
-                files.add(it)
-            },
+            files::add,
             BACKGROUND_DIR
         )
             .invoke()
