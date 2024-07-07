@@ -137,12 +137,6 @@ class EditorTabViewModel {
 
         val newContent = content
         applyStyle(newContent)
-
-        /*TODO CoroutineScope(dispatcher).launch {
-            mainViewModel.finderFlow().collect {
-                findOrderReceiver(it, content.value) { content.value = it }
-            }
-        }*/
     }
 
     fun currentLineOffset(): Offset {
