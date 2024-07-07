@@ -11,7 +11,7 @@ package jp.toastkid.ui.parts
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun InsetDivider() {
-    Divider(
+    HorizontalDivider(
         color = Color(0xDD9E9E9E),
         modifier = Modifier
             .fillMaxWidth()
