@@ -193,22 +193,26 @@ fun BookmarkListUi() {
             )
         }
 
-    InputFileNameDialogUi(openAddFolderDialogState, onCommit = { title ->
-        CoroutineScope(Dispatchers.Main).launch {
-            val currentFolderName =
-                if (viewModel.bookmarks().isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
-                else if (viewModel.bookmarks().isEmpty()) Bookmark.getRootFolderName()
-                else viewModel.bookmarks()[0].parent
-            BookmarkInsertion(
-                activityContext,
-                title,
-                parent = currentFolderName,
-                folder = true
-            ).insert()
+    if (openAddFolderDialogState.value) {
+        InputFileNameDialogUi(
+            onDismissRequest = { openAddFolderDialogState.value = false },
+            onCommit = { title ->
+            CoroutineScope(Dispatchers.Main).launch {
+                val currentFolderName =
+                    if (viewModel.bookmarks().isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
+                    else if (viewModel.bookmarks().isEmpty()) Bookmark.getRootFolderName()
+                    else viewModel.bookmarks()[0].parent
+                BookmarkInsertion(
+                    activityContext,
+                    title,
+                    parent = currentFolderName,
+                    folder = true
+                ).insert()
 
-            viewModel.query(bookmarkRepository)
-        }
-    })
+                viewModel.query(bookmarkRepository)
+            }
+        })
+    }
 
     if (openClearDialogState.value) {
         DestructiveChangeConfirmDialog(
