@@ -386,8 +386,6 @@ private fun AppBarContent(
     openLoadFromStorageDialog: () -> Unit,
     fileActionUseCase: FileActionUseCase
 ) {
-    val context = LocalContext.current as? ComponentActivity ?: return
-
     val loadAs: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode != Activity.RESULT_OK) {
@@ -450,7 +448,7 @@ private fun AppBarContent(
         }
 
         Text(
-            text = context.getString(R.string.last_saved) + DateFormat.format(" HH:mm:ss", fileActionUseCase.lastSaved.value),
+            text = stringResource(R.string.last_saved) + DateFormat.format(" HH:mm:ss", fileActionUseCase.lastSaved.value),
             color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 14.sp,
             maxLines = 2,
