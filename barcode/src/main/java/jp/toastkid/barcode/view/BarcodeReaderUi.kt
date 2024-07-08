@@ -19,7 +19,6 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +36,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -131,6 +131,7 @@ fun BarcodeReaderUi() {
     )
 
     if (result.value.isNotBlank()) {
+        val backgroundColor = MaterialTheme.colorScheme.primary
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize()
@@ -141,7 +142,7 @@ fun BarcodeReaderUi() {
             ) {
                 Column(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.primary)
+                        .drawBehind { drawRect(backgroundColor) }
                         .wrapContentWidth()
                         .padding(16.dp)
                 ) {
