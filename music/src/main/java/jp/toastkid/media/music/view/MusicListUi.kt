@@ -16,7 +16,6 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -192,12 +192,13 @@ internal fun MusicList(
     val coroutineScope = rememberCoroutineScope()
 
     Column {
+        val primaryColor = MaterialTheme.colorScheme.primary
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
-                .background(MaterialTheme.colorScheme.primary)
+                .drawBehind { drawRect(primaryColor) }
         ) {
             Icon(
                 painterResource(id = R.drawable.ic_stop),
