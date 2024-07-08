@@ -130,8 +130,7 @@ fun EditorTabView(path: String?) {
         )
     }
 
-    val localLifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(key1 = localLifecycleOwner, block = {
+    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         contentViewModel.event.collect {
             when (it) {
                 is ToTopEvent -> {
