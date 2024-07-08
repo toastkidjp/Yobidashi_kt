@@ -353,6 +353,15 @@ fun EditorTabView(path: String?) {
                 contentViewModel,
                 {
                     Text(
+                        text = stringResource(R.string.last_saved) + DateFormat.format(" HH:mm:ss", fileActionUseCase.lastSaved.value),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 14.sp,
+                        maxLines = 2,
+                        modifier = it
+                    )
+                },
+                {
+                    Text(
                         text = context.getString(R.string.message_character_count, viewModel.contentLength()),
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 14.sp,
@@ -374,6 +383,7 @@ fun EditorTabView(path: String?) {
 @Composable
 private fun AppBarContent(
     contentViewModel: ContentViewModel,
+    LastModified: @Composable (Modifier) -> Unit,
     ContentLength: @Composable (Modifier) -> Unit,
     saveFile: () -> Unit,
     openConfirmDialog: () -> Unit,
@@ -442,12 +452,8 @@ private fun AppBarContent(
             openLoadFromStorageDialog()
         }
 
-        Text(
-            text = stringResource(R.string.last_saved) + DateFormat.format(" HH:mm:ss", fileActionUseCase.lastSaved.value),
-            color = MaterialTheme.colorScheme.onPrimary,
-            fontSize = 14.sp,
-            maxLines = 2,
-            modifier = Modifier
+        LastModified(
+            Modifier
                 .padding(start = 4.dp, end = 4.dp)
                 .align(Alignment.CenterVertically)
         )
