@@ -283,8 +283,6 @@ private fun ComponentColorSettingDialog(
     onNewColor: (Color) -> Unit
 ) {
     if (openColorChooserDialog.value) {
-        val buttonColor = MaterialTheme.colorScheme.onSurface
-
         val choosingColor = remember { mutableStateOf(currentColor) }
 
         AlertDialog(
