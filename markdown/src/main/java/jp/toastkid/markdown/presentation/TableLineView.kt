@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.DisableSelection
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -71,7 +71,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
             }
         }
 
-        Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+        HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
         viewModel.tableData().forEach { itemRow ->
             val cursorOn = remember { mutableStateOf(false) }
@@ -114,6 +114,6 @@ private fun TableRow(itemRow: List<Any>, fontSize: TextUnit, textColor: Color, m
                 )
             }
         }
-        Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+        HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
     }
 }
