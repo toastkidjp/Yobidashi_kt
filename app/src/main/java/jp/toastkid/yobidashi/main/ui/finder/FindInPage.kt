@@ -9,7 +9,6 @@
 package jp.toastkid.yobidashi.main.ui.finder
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -27,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -107,7 +107,7 @@ internal fun FindInPage() {
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 4.dp)
-                .background(Color.Transparent)
+                .drawBehind { drawRect(Color.Transparent) }
                 .focusRequester(focusRequester)
         )
         Icon(
