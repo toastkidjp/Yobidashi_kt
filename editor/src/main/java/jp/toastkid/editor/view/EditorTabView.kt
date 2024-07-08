@@ -362,9 +362,6 @@ fun EditorTabView(path: String?) {
                     )
                 },
                 { fileActionUseCase.save(viewModel::openInputFileNameDialog) },
-                {
-                    fileActionUseCase.makeNewFileWithName(it, viewModel::openInputFileNameDialog)
-                },
                 viewModel::openConfirmDialog,
                 viewModel::openInputFileNameDialog,
                 viewModel::openLoadFromStorageDialog,
@@ -380,7 +377,6 @@ private fun AppBarContent(
     contentViewModel: ContentViewModel,
     ContentLength: @Composable (Modifier) -> Unit,
     saveFile: () -> Unit,
-    makeNewFile: (String) -> Unit,
     openConfirmDialog: () -> Unit,
     openInputFileNameDialog: () -> Unit,
     openLoadFromStorageDialog: () -> Unit,
