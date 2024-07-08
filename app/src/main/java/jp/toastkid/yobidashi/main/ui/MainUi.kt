@@ -19,7 +19,6 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
@@ -43,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -572,7 +572,7 @@ internal fun Content() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color(preferenceApplier.filterColor(Color.Transparent.toArgb())))
+                        .drawBehind { drawRect(Color(preferenceApplier.filterColor(Color.Transparent.toArgb()))) }
                 )
             }
         }
