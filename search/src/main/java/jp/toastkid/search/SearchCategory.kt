@@ -23,6 +23,11 @@ enum class SearchCategory(
             R.drawable.ic_google,
             "https://www.google.com/search?q="
     ),
+    GOOGLE_SIMPLE(
+        R.string.google_simple,
+        R.drawable.ic_google,
+        "https://www.google.com/search?udm=14&q="
+    ),
     YAHOO(
             R.string.search_category_yahoo,
             R.drawable.ic_yahoo,
