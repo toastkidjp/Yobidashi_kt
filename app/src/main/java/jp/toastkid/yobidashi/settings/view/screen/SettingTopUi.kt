@@ -9,7 +9,6 @@
 package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -28,6 +27,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -70,13 +70,14 @@ fun SettingTopUi() {
             edgePadding = 8.dp,
             containerColor = Color.Transparent,
             indicator = { tabPositions ->
+                val primaryColor = MaterialTheme.colorScheme.onPrimary
                 Box(
                     modifier = Modifier
                         .tabIndicatorOffset(tabPositions[pagerState.currentPage])
                         .height(2.dp)
                         .clip(RoundedCornerShape(8.dp)) // clip modifier not working
                         .padding(horizontal = 4.dp)
-                        .background(color = MaterialTheme.colorScheme.onPrimary)
+                        .drawBehind { drawRect(primaryColor) }
                 )
             },
             modifier = Modifier.fillMaxHeight()
