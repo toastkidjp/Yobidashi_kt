@@ -16,7 +16,6 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -50,6 +49,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
@@ -294,7 +294,7 @@ private fun TabItem(
                 .clickable {
                     onClick(tab)
                 }
-                .background(backgroundColor)
+                .drawBehind { drawRect(backgroundColor) }
                 .offset { IntOffset(0, swipeableState.requireOffset().roundToInt()) }
                 .anchoredDraggable(
                     state = swipeableState,
@@ -323,6 +323,8 @@ private fun TabItem(
                             .padding(top = 4.dp)
                             .align(Alignment.TopCenter)
                     )
+
+                    val primaryColor = MaterialTheme.colorScheme.primary
                     Text(
                         text = tab.title(),
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -332,7 +334,7 @@ private fun TabItem(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.primary)
+                            .drawBehind { drawRect(primaryColor) }
                             .padding(4.dp)
                     )
                 }
