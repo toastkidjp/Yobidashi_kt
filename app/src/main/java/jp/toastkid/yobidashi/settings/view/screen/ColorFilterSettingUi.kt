@@ -9,7 +9,6 @@
 package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.annotation.ColorRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
@@ -34,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -113,7 +113,7 @@ internal fun ColorFilterSettingUi() {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color(sample.value))
+                            .drawBehind { drawRect(Color(sample.value)) }
                     ) { }
                 }
 
@@ -185,9 +185,10 @@ internal fun ColorFilterSettingUi() {
 @Composable
 private fun ColorFilterItem(@ColorRes colorId: Int, onClick: () -> Unit) {
     Surface(shadowElevation = 4.dp) {
+        val color = colorResource(id = colorId)
         Box(
             modifier = Modifier
-                .background(colorResource(id = colorId))
+                .drawBehind { drawRect(color) }
                 .size(40.dp)
                 .clickable(onClick = onClick)
                 .padding(start = 8.dp)
