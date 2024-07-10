@@ -26,6 +26,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -192,12 +193,13 @@ fun LoanCalculatorUi() {
                     val scrollState = rememberLazyListState()
                     LazyColumn(state = scrollState) {
                         stickyHeader {
+                            val surfaceColor = MaterialTheme.colorScheme.surface
                             val backgroundColor =
-                                if (scrollState.firstVisibleItemIndex != 0) MaterialTheme.colorScheme.surface else Color.Transparent
+                                derivedStateOf { if (scrollState.firstVisibleItemIndex != 0) { surfaceColor } else Color.Transparent }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier.animateItemPlacement()
-                                    .drawBehind { drawRect(backgroundColor) }
+                                    .drawBehind { drawRect(backgroundColor.value) }
                             ) {
                                 Text(
                                     stringResource(R.string.title_column_loan_payment_count),
