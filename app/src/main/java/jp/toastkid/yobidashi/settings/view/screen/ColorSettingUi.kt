@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -174,7 +174,7 @@ internal fun ColorSettingUi() {
                     Box(
                         modifier = Modifier
                             .height(100.dp)
-                            .background(Color(savedColor.bgColor))
+                            .drawBehind { drawRect(Color(savedColor.bgColor)) }
                             .padding(8.dp)
                     ) {
                         Text(
