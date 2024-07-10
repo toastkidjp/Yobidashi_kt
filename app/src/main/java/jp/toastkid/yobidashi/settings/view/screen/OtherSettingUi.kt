@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.settings.view.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
@@ -32,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -304,9 +304,10 @@ private fun NewTabSettingItem(
 ) {
     val selectedColor = MaterialTheme.colorScheme.secondary
     Surface(shadowElevation = 4.dp, modifier = Modifier.clickable(onClick = onClick)) {
+        val backgroundColor = if (selected) selectedColor else Color.Transparent
         Column(
             modifier = Modifier
-                .background(if (selected) selectedColor else Color.Transparent)
+                .drawBehind { drawRect(backgroundColor) }
                 .padding(8.dp)
         ) {
             AsyncImage(
