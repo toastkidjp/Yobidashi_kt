@@ -38,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -135,7 +134,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             shadowElevation = 4.dp,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .alpha(0.75f)
+                .graphicsLayer { alpha = 0.75f }
         ) {
             Column {
                 Box(
