@@ -21,7 +21,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.scrollBy
@@ -248,8 +247,9 @@ fun EditorTabView(path: String?) {
             modifier = Modifier
                 .focusRequester(viewModel.focusRequester())
                 .fillMaxWidth()
-                .background(Color(preferenceApplier.editorBackgroundColor()))
                 .drawBehind {
+                    drawRect(Color(preferenceApplier.editorBackgroundColor()))
+
                     val currentLineOffset = viewModel.currentLineOffset()
                     if (currentLineOffset != Offset.Unspecified) {
                         drawRect(
