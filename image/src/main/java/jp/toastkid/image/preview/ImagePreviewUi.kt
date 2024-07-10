@@ -332,9 +332,9 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         }
 
         ConfirmDialog(
-            visibleState = viewModel.openDialog,
             title = viewModel.getCurrentImage(pagerState.currentPage).name,
-            message = message ?: "Not found"
+            message = message ?: "Not found",
+            onDismissRequest = { viewModel.openDialog.value = false }
         )
     }
 
