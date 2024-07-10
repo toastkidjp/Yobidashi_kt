@@ -44,10 +44,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -147,9 +147,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
                             )
                         )
                     }
-                    .alpha(
-                        browserViewModel.calculateSwipeRefreshIndicatorAlpha(refreshTriggerPx)
-                    )
+                    .graphicsLayer { alpha = browserViewModel.calculateSwipeRefreshIndicatorAlpha(refreshTriggerPx) }
                     .align(Alignment.TopCenter)
             ) {
                 CircularProgressIndicator(
@@ -541,7 +539,7 @@ private fun HeaderSubButton(
         modifier = Modifier
             .width(44.dp)
             .padding(4.dp)
-            .alpha(if (enable) 1f else 0.6f)
+            .graphicsLayer { alpha = if (enable) 1f else 0.6f }
             .clickable(enabled = enable, onClick = onClick)
     )
 }
