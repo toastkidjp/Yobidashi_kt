@@ -362,7 +362,7 @@ fun EditorTabView(path: String?) {
                 },
                 {
                     Text(
-                        text = context.getString(R.string.message_character_count, viewModel.contentLength()),
+                        text = stringResource(R.string.message_character_count, viewModel.contentLength()),
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 14.sp,
                         maxLines = 2,
