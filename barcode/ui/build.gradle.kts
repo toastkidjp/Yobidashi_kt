@@ -58,8 +58,6 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:${LibraryVersion.cameraX}")
     implementation("androidx.camera:camera-view:1.0.0-alpha24")
 
-    implementation("com.google.zxing:core:3.4.1")
-
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
