@@ -31,9 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -125,8 +123,6 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.view.TabListUi
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -264,7 +260,7 @@ internal fun Content() {
                 }
                 is SnackbarEvent -> {
                     val message = it.message ?: it.messageId?.let(activity::getString) ?: return@collect
-                    showSnackbar(message, contentViewModel, it)
+                    contentViewModel.showSnackbar(message, contentViewModel, it)
                 }
                 is OpenWebSearchEvent -> {
                     when (navigationHostController.currentDestination?.route) {
@@ -294,7 +290,7 @@ internal fun Content() {
                     if (onBackground) {
                         val message =
                             activity.getString(R.string.message_tab_open_background, title)
-                        showSnackbar(
+                        contentViewModel.showSnackbar(
                             message,
                             contentViewModel,
                             SnackbarEvent(
@@ -601,38 +597,6 @@ private fun navigate(navigationController: NavHostController?, route: String) {
 
     navigationController?.navigate(route) {
         launchSingleTop = true
-    }
-}
-
-private fun showSnackbar(
-    message: String,
-    contentViewModel: ContentViewModel,
-    snackbarEvent: SnackbarEvent
-) {
-    val snackbarHostState = contentViewModel.snackbarHostState()
-
-    if (snackbarEvent.actionLabel == null) {
-        CoroutineScope(Dispatchers.Main).launch {
-            snackbarHostState.currentSnackbarData?.dismiss()
-            snackbarHostState.showSnackbar(message)
-        }
-        return
-    }
-
-    CoroutineScope(Dispatchers.Main).launch {
-        snackbarHostState.currentSnackbarData?.dismiss()
-        val snackbarResult = snackbarHostState.showSnackbar(
-            message,
-            snackbarEvent.actionLabel ?: "",
-            false,
-            SnackbarDuration.Long
-        )
-        when (snackbarResult) {
-            SnackbarResult.Dismissed -> Unit
-            SnackbarResult.ActionPerformed -> {
-                snackbarEvent.action()
-            }
-        }
     }
 }
 

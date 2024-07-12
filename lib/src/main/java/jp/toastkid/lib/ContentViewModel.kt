@@ -12,7 +12,9 @@ import android.os.Message
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +57,7 @@ import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
 import jp.toastkid.lib.viewmodel.event.web.PreviewEvent
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -450,6 +453,38 @@ class ContentViewModel : ViewModel() {
 
     fun dismissSnackbar() {
         _snackbarHostState.currentSnackbarData?.dismiss()
+    }
+
+    fun showSnackbar(
+        message: String,
+        contentViewModel: ContentViewModel,
+        snackbarEvent: SnackbarEvent
+    ) {
+        val snackbarHostState = contentViewModel.snackbarHostState()
+
+        if (snackbarEvent.actionLabel == null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                snackbarHostState.currentSnackbarData?.dismiss()
+                snackbarHostState.showSnackbar(message)
+            }
+            return
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            snackbarHostState.currentSnackbarData?.dismiss()
+            val snackbarResult = snackbarHostState.showSnackbar(
+                message,
+                snackbarEvent.actionLabel ?: "",
+                false,
+                SnackbarDuration.Long
+            )
+            when (snackbarResult) {
+                SnackbarResult.Dismissed -> Unit
+                SnackbarResult.ActionPerformed -> {
+                    snackbarEvent.action()
+                }
+            }
+        }
     }
 
 }
