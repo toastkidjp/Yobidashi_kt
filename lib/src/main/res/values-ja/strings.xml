@@ -41,7 +41,7 @@
 
     <string name="message_requires_permission_storage">メモを使用するにはストレージの権限が必要です。</string>
     <string name="message_clip_to">%s をクリップボードにコピーしました。</string>
-    <string name="message_character_count">文字数:\n%d</string>
+    <string name="message_character_count">文字数:\n%,d</string>
 
     <string name="favorite_search_addition_dialog_empty_message">キーワードを入力してください。</string>
     <string name="done_addition">追加しました。</string>
