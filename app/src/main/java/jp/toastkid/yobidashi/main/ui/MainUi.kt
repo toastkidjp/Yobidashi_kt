@@ -260,7 +260,7 @@ internal fun Content() {
                 }
                 is SnackbarEvent -> {
                     val message = it.message ?: it.messageId?.let(activity::getString) ?: return@collect
-                    contentViewModel.showSnackbar(message, contentViewModel, it)
+                    contentViewModel.showSnackbar(message, it)
                 }
                 is OpenWebSearchEvent -> {
                     when (navigationHostController.currentDestination?.route) {
@@ -292,7 +292,6 @@ internal fun Content() {
                             activity.getString(R.string.message_tab_open_background, title)
                         contentViewModel.showSnackbar(
                             message,
-                            contentViewModel,
                             SnackbarEvent(
                                 message,
                                 actionLabel = activity.getString(R.string.open)

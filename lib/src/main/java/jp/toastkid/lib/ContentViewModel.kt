@@ -457,10 +457,9 @@ class ContentViewModel : ViewModel() {
 
     fun showSnackbar(
         message: String,
-        contentViewModel: ContentViewModel,
         snackbarEvent: SnackbarEvent
     ) {
-        val snackbarHostState = contentViewModel.snackbarHostState()
+        val snackbarHostState = snackbarHostState()
 
         if (snackbarEvent.actionLabel == null) {
             CoroutineScope(Dispatchers.Main).launch {
