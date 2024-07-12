@@ -108,8 +108,7 @@ fun BarcodeReaderUi() {
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build()
                         .also {
-                            it.setAnalyzer(executor, BarcodeAnalyzer { newResult ->
-                                val text = newResult.text
+                            it.setAnalyzer(executor, BarcodeAnalyzer { text ->
                                 if (text == result.value) {
                                     return@BarcodeAnalyzer
                                 }

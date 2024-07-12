@@ -33,7 +33,7 @@ internal class BarcodeAnalyzer(
             )
         )
     },
-    private val callback: (Result) -> Unit
+    private val callback: (String) -> Unit
 ) : ImageAnalysis.Analyzer {
 
     private val acceptableFormats =
@@ -68,7 +68,7 @@ internal class BarcodeAnalyzer(
             return
         }
 
-        callback(result)
+        callback(result.text)
     }
 
     private fun decode(data: ByteArray?, image: Image): Result? {
