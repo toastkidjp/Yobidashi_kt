@@ -83,24 +83,6 @@ class ContentViewModel : ViewModel() {
         this.colorPair.value = colorPair
     }
 
-    fun snackShort(message: String) {
-        viewModelScope.launch {
-            _event.emit(SnackbarEvent(message))
-        }
-    }
-
-    fun snackShort(@StringRes messageId: Int) {
-        viewModelScope.launch {
-            _event.emit(SnackbarEvent(messageId = messageId))
-        }
-    }
-
-    fun snackWithAction(message: String, actionLabel: String, action: () -> Unit) {
-        viewModelScope.launch {
-            _event.emit(SnackbarEvent(message, actionLabel = actionLabel, action = action))
-        }
-    }
-
     fun toTop() {
         viewModelScope.launch {
             _event.emit(ToTopEvent())
@@ -453,6 +435,24 @@ class ContentViewModel : ViewModel() {
 
     fun dismissSnackbar() {
         _snackbarHostState.currentSnackbarData?.dismiss()
+    }
+
+    fun snackShort(message: String) {
+        viewModelScope.launch {
+            _event.emit(SnackbarEvent(message))
+        }
+    }
+
+    fun snackShort(@StringRes messageId: Int) {
+        viewModelScope.launch {
+            _event.emit(SnackbarEvent(messageId = messageId))
+        }
+    }
+
+    fun snackWithAction(message: String, actionLabel: String, action: () -> Unit) {
+        viewModelScope.launch {
+            _event.emit(SnackbarEvent(message, actionLabel = actionLabel, action = action))
+        }
     }
 
     fun showSnackbar(
