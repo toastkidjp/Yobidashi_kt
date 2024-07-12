@@ -59,6 +59,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * @author toastkidjp
@@ -273,12 +274,10 @@ class ContentViewModel : ViewModel() {
         _appBarContent.value = composable
     }
 
-    private var bottomBarHeightPx = 0f
+    private val maxBottomBarHeightPx = AtomicReference(0f)
 
     fun setBottomBarHeightPx(float: Float) {
-        if (bottomBarHeightPx == 0f) {
-            bottomBarHeightPx = float
-        }
+        maxBottomBarHeightPx.set(float)
     }
 
     fun showAppBar(coroutineScope: CoroutineScope? = null) {
@@ -290,7 +289,7 @@ class ContentViewModel : ViewModel() {
     }
 
     fun hideAppBar() {
-        bottomBarOffsetHeightPx.value = -bottomBarHeightPx
+        bottomBarOffsetHeightPx.value = -maxBottomBarHeightPx.get()
     }
 
     val openFindInPageState = mutableStateOf(false)
