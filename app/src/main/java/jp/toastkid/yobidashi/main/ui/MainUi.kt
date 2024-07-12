@@ -170,9 +170,6 @@ internal fun Content() {
 
     val openMenu = remember { mutableStateOf(false) }
 
-    val bottomBarHeightPx = with(LocalDensity.current) { 72.dp.toPx() }
-    contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
-
     val coroutineScope = rememberCoroutineScope()
 
     val fabOffsetHeightPx = remember { mutableStateOf(0f) }
@@ -185,12 +182,12 @@ internal fun Content() {
                 }
                 val delta = available.y
                 val newOffset = contentViewModel.bottomBarOffsetHeightPx.value + delta
-                contentViewModel.bottomBarOffsetHeightPx.value = newOffset.coerceIn(-bottomBarHeightPx, 0f)
+                contentViewModel.bottomBarOffsetHeightPx.value = newOffset.coerceIn(-contentViewModel.bottomBarHeightPx(), 0f)
 
                 val newValue = fabOffsetHeightPx.value + (delta / 2)
                 fabOffsetHeightPx.value = when {
                     0f > newValue -> 0f
-                    newValue > bottomBarHeightPx -> bottomBarHeightPx
+                    newValue > contentViewModel.bottomBarHeightPx() -> contentViewModel.bottomBarHeightPx()
                     else -> newValue
                 }
 
@@ -225,6 +222,11 @@ internal fun Content() {
             DownloadAction(activity).invoke(downloadUrl.value)
             downloadUrl.value = ""
         }
+
+    val localDensity = LocalDensity.current
+    LaunchedEffect(localDensity) {
+        contentViewModel.setBottomBarHeightPx(with(localDensity) { 72.dp.toPx() })
+    }
 
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         val webViewClientFactory = WebViewClientFactory.forBackground(
