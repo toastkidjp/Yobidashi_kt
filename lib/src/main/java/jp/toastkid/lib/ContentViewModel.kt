@@ -450,9 +450,7 @@ class ContentViewModel : ViewModel() {
     }
 
     fun snackWithAction(message: String, actionLabel: String, action: () -> Unit) {
-        viewModelScope.launch {
-            _event.emit(SnackbarEvent(message, actionLabel = actionLabel, action = action))
-        }
+        showSnackbar(message, SnackbarEvent(message, actionLabel = actionLabel, action = action))
     }
 
     fun showSnackbar(
