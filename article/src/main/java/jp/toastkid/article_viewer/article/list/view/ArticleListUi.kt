@@ -277,7 +277,8 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     MaterialTheme.colorScheme.onPrimary,
                     BlendMode.SrcIn
                 ),
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier
+                    .align(Alignment.Center)
                     .fillMaxWidth()
                     .fillMaxHeight()
                     .padding(8.dp)
@@ -419,13 +420,14 @@ private fun ListItem(
                     maxLines = 1
                 )
                 Text(
-                    text = "Last updated: ${
+                    text = stringResource(
+                        R.string.label_last_modified,
                         DateFormat.format(
                             "yyyy/MM/dd(E) HH:mm:ss",
                             article.lastModified
-                        )
-                    }" +
-                            " / ${article.length}",
+                        ),
+                        article.length
+                    ),
                     maxLines = 1,
                     fontSize = 14.sp,
                     overflow = TextOverflow.Ellipsis,
