@@ -283,7 +283,7 @@ fun EditorTabView(path: String?) {
 
     if (viewModel.isOpenExitDialog()) {
         ConfirmDialog(
-            context.getString(R.string.confirmation),
+            stringResource(R.string.confirmation),
             context.getString(R.string.message_confirm_exit),
             onDismissRequest = viewModel::closeExitDialog
         ) {
