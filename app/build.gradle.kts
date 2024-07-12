@@ -111,7 +111,7 @@ dependencies {
     implementation(project(":image"))
     implementation(project(":loan"))
     implementation(project(":about"))
-    implementation(project(":barcode"))
+    implementation(project(":barcode:ui"))
     implementation(project(":ui"))
     implementation(project(":editor"))
     implementation(project(":number"))
