@@ -12,6 +12,7 @@ import property.LibraryVersion
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("jacoco.definition")
 }
 
 // TODO apply from: '../jacoco.gradle'
@@ -27,16 +28,21 @@ android {
         release {
         }
     }
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = LibraryVersion.composeCompiler
-    }
 }
 
 tasks.withType<GenerateBuildConfig> {
     isEnabled = false
+}
+
+dependencies {
+    implementation(project(":lib"))
+
+    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+
+    implementation("com.google.zxing:core:3.4.1")
+
+    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+
+    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
 }
