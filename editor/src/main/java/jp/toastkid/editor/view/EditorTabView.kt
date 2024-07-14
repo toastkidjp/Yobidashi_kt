@@ -283,8 +283,8 @@ fun EditorTabView(path: String?) {
 
     if (viewModel.isOpenExitDialog()) {
         ConfirmDialog(
-            stringResource(R.string.confirmation),
-            stringResource(R.string.message_confirm_exit),
+            stringResource(jp.toastkid.lib.R.string.confirmation),
+            stringResource(jp.toastkid.lib.R.string.message_confirm_exit),
             onDismissRequest = viewModel::closeExitDialog
         ) {
             context.finish()
@@ -362,7 +362,7 @@ fun EditorTabView(path: String?) {
                 },
                 {
                     Text(
-                        text = stringResource(R.string.message_character_count, viewModel.contentLength()),
+                        text = stringResource(jp.toastkid.lib.R.string.message_character_count, viewModel.contentLength()),
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 14.sp,
                         maxLines = 2,
@@ -412,11 +412,11 @@ private fun AppBarContent(
                 rememberScrollState()
             )
     ) {
-        EditorMenuItem(R.string.load, R.drawable.ic_load) {
+        EditorMenuItem(jp.toastkid.lib.R.string.load, R.drawable.ic_load) {
             loadAs.launch(GetContentIntentFactory()("text/plain"))
         }
 
-        EditorMenuItem(R.string.save, R.drawable.ic_save) { saveFile() }
+        EditorMenuItem(jp.toastkid.lib.R.string.save, R.drawable.ic_save) { saveFile() }
 
         EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog() }
 
@@ -432,8 +432,8 @@ private fun AppBarContent(
                 )
         ) {
             Image(
-                painterResource(R.drawable.ic_tab),
-                contentDescription = stringResource(id = R.string.tab_list),
+                painterResource(jp.toastkid.lib.R.drawable.ic_tab),
+                contentDescription = stringResource(id = jp.toastkid.lib.R.string.tab_list),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary, BlendMode.SrcIn),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -464,7 +464,7 @@ private fun AppBarContent(
                 .align(Alignment.CenterVertically)
         )
 
-        EditorMenuItem(R.string.clear_all, R.drawable.ic_clear_form) {
+        EditorMenuItem(jp.toastkid.lib.R.string.clear_all, jp.toastkid.lib.R.drawable.ic_clear_form) {
             openConfirmDialog()
         }
     }
