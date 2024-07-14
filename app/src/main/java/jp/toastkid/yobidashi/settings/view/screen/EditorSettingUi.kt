@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.settings.view.screen
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -32,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -263,7 +263,7 @@ private fun ColorChooserMenu(
 
         Box(
             modifier = Modifier
-                .background(colorState.value)
+                .drawBehind { drawRect(colorState.value) }
                 .size(44.dp)
         ) { }
     }

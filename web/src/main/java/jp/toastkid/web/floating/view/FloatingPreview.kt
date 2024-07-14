@@ -12,7 +12,6 @@ import android.net.Uri
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -68,10 +68,11 @@ fun FloatingPreviewUi(uri: Uri) {
     }
 
     Column(modifier = Modifier.height(400.dp)) {
+        val primaryColor = MaterialTheme.colorScheme.primary
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.primary)
+                .drawBehind { drawRect(primaryColor) }
                 .height(52.dp)
                 .padding(8.dp)
                 .clickable {

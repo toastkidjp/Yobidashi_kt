@@ -10,7 +10,6 @@ package jp.toastkid.search.view
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -34,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -203,6 +203,7 @@ internal fun SearchContentsUi(
                                 modifier = Modifier
                                     .wrapContentWidth()
                             )
+                            val onSurfaceColor = MaterialTheme.colorScheme.onSurface
                             Text(
                                 text = stringResource(id = R.string.plus),
                                 color = MaterialTheme.colorScheme.surface,
@@ -211,7 +212,7 @@ internal fun SearchContentsUi(
                                 modifier = Modifier
                                     .width(36.dp)
                                     .height(32.dp)
-                                    .background(MaterialTheme.colorScheme.onSurface)
+                                    .drawBehind { drawRect(onSurfaceColor) }
                                     .clickable { viewModel.putQuery("$it ") }
                             )
                         }
@@ -255,6 +256,8 @@ internal fun SearchContentsUi(
                                     .wrapContentWidth()
                                     .padding(start = 4.dp)
                             )
+
+                            val putQueryColor = colorResource(id = R.color.pre4_ripple)
                             Text(
                                 text = stringResource(id = R.string.plus),
                                 color = colorResource(id = R.color.white),
@@ -263,7 +266,7 @@ internal fun SearchContentsUi(
                                 modifier = Modifier
                                     .width(36.dp)
                                     .height(32.dp)
-                                    .background(colorResource(id = R.color.pre4_ripple))
+                                    .drawBehind { drawRect(putQueryColor) }
                                     .clickable { viewModel.putQuery("${it.title} ") }
                             )
                         }
