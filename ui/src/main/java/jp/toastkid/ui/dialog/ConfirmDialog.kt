@@ -62,7 +62,7 @@ fun ConfirmDialog(
         },
         confirmButton = {
             Text(
-                text = stringResource(id = R.string.ok),
+                text = stringResource(id = jp.toastkid.lib.R.string.ok),
                 color = color,
                 modifier = Modifier
                     .clickable {
@@ -74,7 +74,7 @@ fun ConfirmDialog(
         },
         dismissButton = {
             Text(
-                text = stringResource(id = R.string.cancel),
+                text = stringResource(id = jp.toastkid.lib.R.string.cancel),
                 color = color,
                 modifier = Modifier
                     .clickable(onClick = onDismissRequest)

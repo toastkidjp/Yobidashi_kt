@@ -70,7 +70,7 @@ fun InputFileNameDialogUi(
         },
         confirmButton = {
             Text(
-                text = stringResource(id = R.string.save),
+                text = stringResource(id = jp.toastkid.lib.R.string.save),
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .clickable {
@@ -84,7 +84,7 @@ fun InputFileNameDialogUi(
         },
         dismissButton = {
             Text(
-                text = stringResource(id = R.string.cancel),
+                text = stringResource(id = jp.toastkid.lib.R.string.cancel),
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .clickable(onClick = onDismissRequest)
