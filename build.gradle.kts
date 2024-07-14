@@ -14,7 +14,7 @@ buildscript {
         maven ( url = "https://plugins.gradle.org/m2/" ) // For Play publisher plugin
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.3.1")
+        classpath("com.android.tools.build:gradle:8.5.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
         classpath("com.github.triplet.gradle:play-publisher:3.7.0")
     }
@@ -33,6 +33,13 @@ allprojects {
         mavenCentral()
         maven(url = "https://jitpack.io") // For PhotoView
     }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
+        .configureEach {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_1_8.toString()
+            }
+        }
 }
 
 task("clean", Delete::class) {
