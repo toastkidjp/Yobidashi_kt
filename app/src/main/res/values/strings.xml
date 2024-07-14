@@ -265,6 +265,7 @@
     <string name="sample_text_color_filter">A</string>
     <string name="apply_dark_mode">Apply dark mode</string>
 
+    <string name="title_barcode_reader">Barcode reader</string>
     <string name="title_converter_tool">Converter tool</string>
     <string name="title_chat">Chat</string>
     <string name="title_world_time">World time</string>

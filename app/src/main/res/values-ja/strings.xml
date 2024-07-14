@@ -260,6 +260,7 @@
     <string name="sample_text_color_filter">あ</string>
     <string name="apply_dark_mode">ダークモードにする</string>
 
+    <string name="title_barcode_reader">バーコードリーダー</string>
     <string name="title_converter_tool">変換ツール</string>
     <string name="title_chat">Chat</string>
     <string name="title_world_time">世界の時間</string>
