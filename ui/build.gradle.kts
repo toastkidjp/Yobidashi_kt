@@ -14,6 +14,8 @@ plugins {
 }
 
 android {
+    namespace = "jp.toastkid.ui"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {

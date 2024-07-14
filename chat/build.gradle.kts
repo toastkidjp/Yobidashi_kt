@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+    namespace = "jp.toastkid.chat"
+
     compileSdkVersion(property.BuildTool.compileSdk)
 
     defaultConfig {

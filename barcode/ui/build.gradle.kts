@@ -18,6 +18,8 @@ plugins {
 // TODO apply from: '../jacoco.gradle'
 
 android {
+    namespace = "jp.toastkid.barcode.ui"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
@@ -56,7 +58,7 @@ dependencies {
 
     implementation("androidx.camera:camera-camera2:${LibraryVersion.cameraX}")
     implementation("androidx.camera:camera-lifecycle:${LibraryVersion.cameraX}")
-    implementation("androidx.camera:camera-view:1.0.0-alpha24")
+    implementation("androidx.camera:camera-view:1.3.4")
 
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
 

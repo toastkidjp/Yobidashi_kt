@@ -18,6 +18,8 @@ plugins {
 //TODO apply from: '../jacoco.gradle'
 
 android {
+    namespace = "jp.toastkid.data"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {

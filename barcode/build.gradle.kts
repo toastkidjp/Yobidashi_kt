@@ -17,6 +17,8 @@ plugins {
 // TODO apply from: '../jacoco.gradle'
 
 android {
+    namespace = "jp.toastkid.barcode"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {

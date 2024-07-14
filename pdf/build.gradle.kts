@@ -17,6 +17,8 @@ plugins {
 // TODO apply(from = "../jacoco.gradle.kts")
 
 android {
+    namespace = "jp.toastkid.pdf"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {

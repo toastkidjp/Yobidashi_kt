@@ -19,6 +19,8 @@ plugins {
 // TODO apply(from = "../detekt.gradle.kts")
 
 android {
+    namespace = "jp.toastkid.yobidashi"
+
     compileSdkVersion(BuildTool.compileSdk)
     buildToolsVersion(BuildTool.buildTools)
 
