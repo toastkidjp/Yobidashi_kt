@@ -46,8 +46,8 @@ class LinkFormInsertionUseCase(
 
             contentViewModel
                 .snackWithAction(
-                    context.getString(R.string.done_addition),
-                    context.getString(R.string.undo)
+                    context.getString(jp.toastkid.lib.R.string.done_addition),
+                    context.getString(jp.toastkid.lib.R.string.undo)
                 ) {
                     editText.setText(currentText)
                     editText.setSelection(currentCursor)
