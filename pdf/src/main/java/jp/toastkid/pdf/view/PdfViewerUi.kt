@@ -26,6 +26,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -58,9 +59,10 @@ fun PdfViewerUi(uri: Uri) {
 
     val listState = rememberLazyListState()
 
-    val viewModelProvider = ViewModelProvider(context)
-    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
-    contentViewModel.replaceAppBarContent { AppBarUi(listState) }
+    val contentViewModel = remember { ViewModelProvider(context).get(ContentViewModel::class.java) }
+    LaunchedEffect(Unit) {
+        contentViewModel.replaceAppBarContent { AppBarUi(listState) }
+    }
 
     ScrollerUseCase(
         contentViewModel,
@@ -98,7 +100,6 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
         }
     }
 
-    val max = images.size
     LazyColumn(state = listState) {
         itemsIndexed(images) { index, bitmap ->
             Surface(
@@ -131,6 +132,7 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
                         )
                         .transformable(state = state)
                 ) {
+                    val max = images.size
                     AsyncImage(
                         model = bitmap,
                         contentDescription = "${index + 1} / $max"
@@ -149,7 +151,8 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
 @Composable
 private fun AppBarUi(scrollState: LazyListState) {
     var sliderPosition by remember { mutableStateOf(0f) }
-    if (scrollState.layoutInfo.totalItemsCount == 0) {
+    val lazyListLayoutInfoState = remember { derivedStateOf { scrollState.layoutInfo } }
+    if (lazyListLayoutInfoState.value.totalItemsCount == 0) {
         return
     }
     Slider(
@@ -163,6 +166,6 @@ private fun AppBarUi(scrollState: LazyListState) {
                 )
             }
         },
-        steps = scrollState.layoutInfo.totalItemsCount - 1
+        steps = lazyListLayoutInfoState.value.totalItemsCount - 1
     )
 }
