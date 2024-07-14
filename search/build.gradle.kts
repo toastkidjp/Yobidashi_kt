@@ -73,7 +73,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")

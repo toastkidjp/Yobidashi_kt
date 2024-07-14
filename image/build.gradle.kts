@@ -50,7 +50,6 @@ tasks.withType<GenerateBuildConfig> {
 dependencies {
     implementation(project(":lib"))
     implementation(project(":ui"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
 
     // Compose dependencies.
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")

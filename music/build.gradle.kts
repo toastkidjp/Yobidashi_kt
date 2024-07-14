@@ -47,7 +47,6 @@ tasks.withType<GenerateBuildConfig> {
 
 dependencies {
     implementation(project(path = ":lib"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 

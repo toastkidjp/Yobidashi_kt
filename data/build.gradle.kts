@@ -55,7 +55,6 @@ tasks.withType<GenerateBuildConfig> {
 
 dependencies {
     implementation(project(":lib"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("androidx.room:room-runtime:${LibraryVersion.room}")
     implementation("androidx.room:room-paging:${LibraryVersion.room}")

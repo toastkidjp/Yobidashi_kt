@@ -137,7 +137,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
