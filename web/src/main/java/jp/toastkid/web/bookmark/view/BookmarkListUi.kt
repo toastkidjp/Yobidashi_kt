@@ -161,7 +161,7 @@ fun BookmarkListUi() {
     val importRequestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                contentViewModel.snackShort(R.string.message_requires_permission_storage)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 
@@ -184,7 +184,7 @@ fun BookmarkListUi() {
     val exportRequestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                contentViewModel.snackShort(R.string.message_requires_permission_storage)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 
@@ -222,7 +222,7 @@ fun BookmarkListUi() {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) { bookmarkRepository.clear() }
 
-                contentViewModel.snackShort(R.string.done_clear)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.done_clear)
                 viewModel.clearItems()
             }
         }
@@ -264,7 +264,7 @@ fun BookmarkListUi() {
             }),
             OptionMenu(titleId = R.string.title_add_default_bookmark, action = {
                 BookmarkInitializer.from(activityContext)() { viewModel.query(bookmarkRepository) }
-                contentViewModel.snackShort(R.string.done_addition)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.done_addition)
             }),
             OptionMenu(titleId = R.string.title_clear_bookmark, action = {
                 openClearDialogState.value = true
@@ -316,8 +316,8 @@ private fun BookmarkList(
                             bookmark.title,
                             contentScale = ContentScale.Fit,
                             alignment = Alignment.Center,
-                            placeholder = painterResource(id = if (bookmark.folder) R.drawable.ic_folder_black else R.drawable.ic_bookmark),
-                            error = painterResource(id = if (bookmark.folder) R.drawable.ic_folder_black else R.drawable.ic_bookmark),
+                            placeholder = painterResource(id = if (bookmark.folder) R.drawable.ic_folder_black else jp.toastkid.lib.R.drawable.ic_bookmark),
+                            error = painterResource(id = if (bookmark.folder) R.drawable.ic_folder_black else jp.toastkid.lib.R.drawable.ic_bookmark),
                             modifier = Modifier
                                 .width(44.dp)
                                 .padding(8.dp)
@@ -333,7 +333,7 @@ private fun BookmarkList(
                             if (bookmark.url.isNotBlank()) {
                                 Text(
                                     text = bookmark.url,
-                                    color = colorResource(id = R.color.link_blue),
+                                    color = colorResource(id = jp.toastkid.lib.R.color.link_blue),
                                     fontSize = 12.sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -343,10 +343,10 @@ private fun BookmarkList(
                             if (bookmark.lastViewed != 0L) {
                                 Text(
                                     text = DateFormat.format(
-                                        stringResource(R.string.date_format),
+                                        stringResource(jp.toastkid.lib.R.string.date_format),
                                         bookmark.lastViewed
                                     ).toString(),
-                                    color = colorResource(id = R.color.gray_500_dd),
+                                    color = colorResource(id = jp.toastkid.lib.R.color.gray_500_dd),
                                     fontSize = 12.sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -356,8 +356,8 @@ private fun BookmarkList(
 
                         if (bookmark.folder.not()) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_option_menu),
-                                contentDescription = stringResource(id = R.string.title_option_menu),
+                                painter = painterResource(id = jp.toastkid.lib.R.drawable.ic_option_menu),
+                                contentDescription = stringResource(id = jp.toastkid.lib.R.string.title_option_menu),
                                 tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.clickable {
                                     openEditor.value = true
@@ -404,7 +404,7 @@ private fun EditorDialog(
                     modifier = Modifier.align(Alignment.BottomEnd)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.cancel),
+                        text = stringResource(id = jp.toastkid.lib.R.string.cancel),
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .clickable {
@@ -414,7 +414,7 @@ private fun EditorDialog(
                     )
 
                     Text(
-                        text = stringResource(id = R.string.ok),
+                        text = stringResource(id = jp.toastkid.lib.R.string.ok),
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .clickable {
