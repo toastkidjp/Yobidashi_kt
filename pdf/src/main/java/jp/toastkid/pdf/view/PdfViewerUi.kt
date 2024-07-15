@@ -12,6 +12,7 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -105,13 +107,7 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
             Surface(
                 shadowElevation = 4.dp,
                 color = Color(0xFFF0F0F0),
-                modifier = Modifier
-                    .padding(
-                        start = 8.dp,
-                        end = 8.dp,
-                        top = 2.dp,
-                        bottom = 2.dp
-                    )
+                modifier = Modifier.padding(8.dp).padding(vertical = 4.dp)
             ) {
                 var scale by remember { mutableStateOf(1f) }
                 var offset by remember { mutableStateOf(Offset.Zero) }
@@ -122,20 +118,30 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
                 }
 
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .graphicsLayer(
-                            scaleX = scale,
-                            scaleY = scale,
-                            translationX = offset.x,
-                            translationY = offset.y
-                        )
-                        .transformable(state = state)
+                    modifier = Modifier.fillMaxWidth()
+                        .pointerInput(bitmap) {
+                            detectTapGestures(
+                                onPress = { /* Called when the gesture starts */ },
+                                onDoubleTap = {
+                                    scale = 1f
+                                    offset = Offset.Zero
+                                },
+                                onLongPress = {  },
+                                onTap = { /* Called on Tap */ }
+                            )
+                        }
                 ) {
                     val max = images.size
                     AsyncImage(
                         model = bitmap,
-                        contentDescription = "${index + 1} / $max"
+                        contentDescription = "${index + 1} / $max",
+                        modifier = Modifier.graphicsLayer(
+                            scaleX = scale,
+                            scaleY = scale,
+                            translationX = if (scale == 1f) 0f else offset.x,
+                            translationY = if (scale == 1f) 0f else offset.y
+                        )
+                            .transformable(state = state)
                     )
                     Text(
                         text = "${index + 1} / $max",
