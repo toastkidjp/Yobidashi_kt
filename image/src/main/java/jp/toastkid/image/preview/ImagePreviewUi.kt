@@ -146,7 +146,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 ) {
                     Icon(
                         painterResource(id = if (viewModel.openMenu.value) R.drawable.ic_down else R.drawable.ic_up),
-                        contentDescription = stringResource(id = R.string.open),
+                        contentDescription = stringResource(id = jp.toastkid.lib.R.string.open),
                         modifier = Modifier
                             .padding(8.dp)
                             .align(Alignment.Center)
