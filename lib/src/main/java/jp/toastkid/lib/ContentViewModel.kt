@@ -438,9 +438,7 @@ class ContentViewModel : ViewModel() {
     }
 
     fun snackShort(message: String) {
-        viewModelScope.launch {
-            _event.emit(SnackbarEvent(message))
-        }
+        showSnackbar(message, SnackbarEvent(message))
     }
 
     fun snackShort(@StringRes messageId: Int) {
