@@ -9,8 +9,6 @@
 package jp.toastkid.editor.usecase
 
 import android.widget.EditText
-import androidx.annotation.VisibleForTesting
-import jp.toastkid.editor.R
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.clip.Clipboard
@@ -24,8 +22,8 @@ class LinkFormInsertionUseCase(
     private val editText: EditText,
     private val contentViewModel: ContentViewModel,
     private val linkTitleFetcherUseCase: LinkTitleFetcherUseCase = LinkTitleFetcherUseCase(),
-    @VisibleForTesting private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    @VisibleForTesting private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     operator fun invoke() {
