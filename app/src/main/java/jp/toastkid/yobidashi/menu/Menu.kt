@@ -21,25 +21,25 @@ enum class Menu(
 
     BOTTOM(R.string.title_menu_to_bottom, R.drawable.ic_bottom),
 
-    WEB_SEARCH(R.string.title_search, R.drawable.ic_web_search),
+    WEB_SEARCH(jp.toastkid.lib.R.string.title_search, R.drawable.ic_web_search),
 
     SHARE(R.string.section_title_share, R.drawable.ic_share),
 
     VIEW_ARCHIVE(R.string.title_archives, R.drawable.ic_view_archive),
 
-    VIEW_HISTORY(R.string.title_view_history, R.drawable.ic_history),
+    VIEW_HISTORY(jp.toastkid.lib.R.string.title_view_history, jp.toastkid.web.R.drawable.ic_history),
 
-    BOOKMARK(R.string.title_bookmark, R.drawable.ic_bookmark),
+    BOOKMARK(jp.toastkid.web.R.string.title_bookmark, jp.toastkid.lib.R.drawable.ic_bookmark),
 
     CALENDAR(R.string.title_calendar, R.drawable.ic_calendar),
 
-    CODE_READER(R.string.title_code_reader, R.drawable.ic_barcode),
+    CODE_READER(R.string.title_barcode_reader, R.drawable.ic_barcode),
 
-    LOAN_CALCULATOR(R.string.title_loan_calculator, R.drawable.ic_loan_calculator),
+    LOAN_CALCULATOR(jp.toastkid.loan.R.string.title_loan_calculator, jp.toastkid.loan.R.drawable.ic_loan_calculator),
 
     CONVERTER_TOOL(R.string.title_converter_tool, R.drawable.ic_converter),
 
-    RSS_READER(R.string.title_rss_reader, R.drawable.ic_rss_feed),
+    RSS_READER(R.string.title_rss_reader, jp.toastkid.rss.R.drawable.ic_rss_feed),
 
     NUMBER_PLACE(R.string.title_number_place, R.drawable.ic_number_place),
 
@@ -47,15 +47,15 @@ enum class Menu(
 
     IMAGE_VIEWER(R.string.title_image_viewer, R.drawable.ic_photo),
 
-    ABOUT_THIS_APP(R.string.title_about_this_app, R.drawable.ic_yobidashi),
+    ABOUT_THIS_APP(jp.toastkid.about.R.string.title_about_this_app, R.drawable.ic_yobidashi),
 
     CHAT(R.string.title_chat, R.drawable.ic_chat),
 
     WORLD_TIME(R.string.title_world_time, R.drawable.ic_time),
 
-    TODO_TASKS_BOARD(R.string.title_todo_tasks_board, R.drawable.ic_board),
+    TODO_TASKS_BOARD(jp.toastkid.web.R.string.title_todo_tasks_board, R.drawable.ic_board),
 
-    TODO_TASKS(R.string.title_todo_tasks, R.drawable.ic_todo_task),
+    TODO_TASKS(jp.toastkid.web.R.string.title_todo_tasks, R.drawable.ic_todo_task),
     ;
 
 }
