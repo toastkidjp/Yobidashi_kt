@@ -109,7 +109,7 @@ import jp.toastkid.ui.menu.context.MenuInjector
 import kotlinx.coroutines.launch
 
 @Composable
-fun EditorTabView(path: String?) {
+fun EditorTabView(path: String?, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
 
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
@@ -244,7 +244,7 @@ fun EditorTabView(path: String?) {
                 background = Color.Transparent
             ),
             cursorBrush = SolidColor(Color(preferenceApplier.editorCursorColor(Color(0xDD81D4FA).toArgb()))),
-            modifier = Modifier
+            modifier = modifier
                 .focusRequester(viewModel.focusRequester())
                 .fillMaxWidth()
                 .drawBehind {
