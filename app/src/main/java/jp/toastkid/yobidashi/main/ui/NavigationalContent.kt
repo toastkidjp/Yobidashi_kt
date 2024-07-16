@@ -15,6 +15,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
 import androidx.navigation.NavGraphBuilder
@@ -69,8 +71,11 @@ internal fun NavigationalContent(
         }
         tabComposable("tab/pdf/current") {
             val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
-            PdfViewerUi(currentTab.getUrl().toUri())
-            takeScreenshot(tabs, LocalView.current)
+            val view = LocalView.current
+            PdfViewerUi(
+                currentTab.getUrl().toUri(),
+                Modifier.onPlaced { takeScreenshot(tabs, view) }
+            )
         }
         tabComposable("tab/article/list") {
             ArticleListUi()
@@ -83,10 +88,9 @@ internal fun NavigationalContent(
         }
         tabComposable("tab/editor/current") {
             val currentTab = tabs.currentTab() as? EditorTab ?: return@tabComposable
+            val view = LocalView.current
 
-            EditorTabView(currentTab.path)
-
-            takeScreenshot(tabs, LocalView.current)
+            EditorTabView(currentTab.path, Modifier.onPlaced { takeScreenshot(tabs, view) })
         }
         tabComposable("web/bookmark/list") {
             BookmarkListUi()
@@ -120,7 +124,6 @@ internal fun NavigationalContent(
         }
         composable("tab/calendar") {
             CalendarUi()
-            takeScreenshot(tabs, LocalView.current)
         }
         slideInComposable("setting/top") {
             SettingTopUi()
