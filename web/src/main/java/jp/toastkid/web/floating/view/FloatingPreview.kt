@@ -40,7 +40,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.web.R
 import jp.toastkid.web.floating.FloatingPreviewViewModel
 import jp.toastkid.web.floating.WebViewInitializer
 import jp.toastkid.web.view.TitleUrlBox
@@ -82,7 +81,7 @@ fun FloatingPreviewUi(uri: Uri) {
         ) {
             AsyncImage(
                 model = viewModel.icon.value,
-                contentDescription = stringResource(id = R.string.image),
+                contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                 modifier = Modifier
                     .size(36.dp)
                     .padding(end = 8.dp)
@@ -96,8 +95,8 @@ fun FloatingPreviewUi(uri: Uri) {
             )
 
             Icon(
-                painterResource(id = R.drawable.ic_close),
-                stringResource(id = R.string.close),
+                painterResource(id = jp.toastkid.lib.R.drawable.ic_close),
+                stringResource(id = jp.toastkid.lib.R.string.close),
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.clickable {
                     close(webView, coroutineScope, contentViewModel)
