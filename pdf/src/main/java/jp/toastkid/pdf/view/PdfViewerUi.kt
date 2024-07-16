@@ -56,7 +56,7 @@ import java.io.FileNotFoundException
 import kotlin.math.roundToInt
 
 @Composable
-fun PdfViewerUi(uri: Uri) {
+fun PdfViewerUi(uri: Uri, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
 
     val listState = rememberLazyListState()
@@ -71,11 +71,11 @@ fun PdfViewerUi(uri: Uri) {
         listState
     ).invoke(LocalLifecycleOwner.current)
 
-    PdfPageList(uri, listState)
+    PdfPageList(uri, listState, modifier)
 }
 
 @Composable
-private fun PdfPageList(uri: Uri, listState: LazyListState) {
+private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) {
     val context = LocalContext.current
 
     val pdfRenderer =
@@ -102,7 +102,7 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
         }
     }
 
-    LazyColumn(state = listState) {
+    LazyColumn(state = listState, modifier = modifier) {
         itemsIndexed(images) { index, bitmap ->
             Surface(
                 shadowElevation = 4.dp,
