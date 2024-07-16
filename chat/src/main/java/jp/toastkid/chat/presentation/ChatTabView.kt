@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import jp.toastkid.chat.R
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
@@ -90,8 +89,8 @@ fun ChatTabView() {
                         ) {
                             Column(modifier = Modifier.weight(0.2f)) {
                                 Icon(
-                                    painterResource(id = R.drawable.ic_clip),
-                                    contentDescription = stringResource(id = R.string.title_option_menu),
+                                    painterResource(id = jp.toastkid.lib.R.drawable.ic_clip),
+                                    contentDescription = stringResource(id = jp.toastkid.lib.R.string.title_option_menu),
                                     tint = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier
                                         .padding(8.dp)
@@ -101,7 +100,7 @@ fun ChatTabView() {
                                             Clipboard.clip(context, it.text)
                                             contentViewModel?.snackShort(
                                                 context.getString(
-                                                    R.string.message_clip_to,
+                                                    jp.toastkid.lib.R.string.message_clip_to,
                                                     "\"${it.text}\""
                                                 )
                                             )
