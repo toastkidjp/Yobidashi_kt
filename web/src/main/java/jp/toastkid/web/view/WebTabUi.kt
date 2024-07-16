@@ -220,7 +220,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val storagePermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it) {
-                contentViewModel.snackShort(R.string.message_requires_permission_storage)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 
@@ -369,8 +369,8 @@ private fun AppBarContent(
                     )
             ) {
                 Image(
-                    painterResource(R.drawable.ic_tab),
-                    contentDescription = stringResource(id = R.string.tab_list),
+                    painterResource(jp.toastkid.lib.R.drawable.ic_tab),
+                    contentDescription = stringResource(id = jp.toastkid.lib.R.string.tab_list),
                     colorFilter = ColorFilter.tint(
                         MaterialTheme.colorScheme.onPrimary,
                         BlendMode.SrcIn
@@ -388,14 +388,14 @@ private fun AppBarContent(
             }
 
             HeaderSubButton(
-                R.drawable.ic_bookmark,
+                jp.toastkid.lib.R.drawable.ic_bookmark,
                 R.string.title_bookmark,
                 MaterialTheme.colorScheme.onPrimary
             ) { contentViewModel.nextRoute("web/bookmark/list") }
 
             HeaderSubButton(
                 R.drawable.ic_history,
-                R.string.title_view_history,
+                jp.toastkid.lib.R.string.title_view_history,
                 MaterialTheme.colorScheme.onPrimary
             ) { contentViewModel.nextRoute("web/history/list") }
 
@@ -456,7 +456,7 @@ private fun AppBarContent(
         Box(modifier = Modifier.padding(start = 4.dp)) {
             AsyncImage(
                 model = R.drawable.url_box_background,
-                contentDescription = stringResource(id = R.string.search)
+                contentDescription = stringResource(id = jp.toastkid.lib.R.string.search)
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -469,7 +469,7 @@ private fun AppBarContent(
             ) {
                 AsyncImage(
                     model = viewModel.icon.value,
-                    contentDescription = stringResource(id = R.string.image),
+                    contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                     modifier = Modifier
                         .size(36.dp)
                         .padding(horizontal = 4.dp)
@@ -486,7 +486,7 @@ private fun AppBarContent(
 
                 val isNotLoading = 70 < viewModel.progress.value
                 val reloadIconId =
-                    if (isNotLoading) R.drawable.ic_reload else R.drawable.ic_close
+                    if (isNotLoading) R.drawable.ic_reload else jp.toastkid.lib.R.drawable.ic_close
                 Icon(
                     painterResource(id = reloadIconId),
                     contentDescription = stringResource(id = R.string.title_menu_reload),
