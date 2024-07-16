@@ -205,14 +205,14 @@ internal fun Content() {
         rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
             if (it.not()) {
                 contentViewModel
-                    .snackShort(R.string.message_requires_permission_storage)
+                    .snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
             if (downloadUrl.value.isEmpty()) {
                 return@rememberLauncherForActivityResult
             }
             if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(activity)) {
-                contentViewModel.snackShort(R.string.message_wifi_not_connecting)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
                 return@rememberLauncherForActivityResult
             }
             DownloadAction(activity).invoke(downloadUrl.value)
@@ -294,7 +294,7 @@ internal fun Content() {
                             message,
                             SnackbarEvent(
                                 message,
-                                actionLabel = activity.getString(R.string.open)
+                                actionLabel = activity.getString(jp.toastkid.lib.R.string.open)
                             ) {
                                 tabs.replace(tab)
                                 replaceToCurrentTab(tabs, navigationHostController)
@@ -360,7 +360,7 @@ internal fun Content() {
 
                         contentViewModel.snackWithAction(
                             activity.getString(R.string.message_tab_open_background, urlString),
-                            activity.getString(R.string.open)
+                            activity.getString(jp.toastkid.lib.R.string.open)
                         ) {
                             tabs.setIndexByTab(newTab)
                             contentViewModel.replaceToCurrentTab()
@@ -439,7 +439,7 @@ internal fun Content() {
     val mediaPermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             if (it.values.any { it.not() }) {
-                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 
@@ -515,7 +515,7 @@ internal fun Content() {
                 ) {
                     Icon(
                         painterResource(id = R.drawable.ic_menu),
-                        stringResource(id = R.string.menu),
+                        stringResource(id = jp.toastkid.todo.R.string.menu),
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
