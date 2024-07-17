@@ -284,8 +284,8 @@ internal fun MusicList(
             }
 
             Icon(
-                painterResource(id = R.drawable.ic_close),
-                contentDescription = stringResource(id = R.string.close),
+                painterResource(id = jp.toastkid.lib.R.drawable.ic_close),
+                contentDescription = stringResource(id = jp.toastkid.lib.R.string.close),
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .width(44.dp)
