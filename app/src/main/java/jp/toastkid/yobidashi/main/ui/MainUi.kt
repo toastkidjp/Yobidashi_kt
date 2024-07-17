@@ -131,7 +131,7 @@ import kotlinx.coroutines.launch
 internal fun Content() {
     val activity = LocalContext.current as? ComponentActivity ?: return
 
-    val preferenceApplier = PreferenceApplier(activity)
+    val preferenceApplier = remember { PreferenceApplier(activity) }
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
