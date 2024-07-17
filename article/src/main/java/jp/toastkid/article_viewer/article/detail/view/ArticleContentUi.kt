@@ -62,7 +62,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun ArticleContentUi(title: String) {
+fun ArticleContentUi(title: String, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val repository = remember { ArticleRepositoryFactory().invoke(context) }
     val viewModel = remember { ContentViewerFragmentViewModel() }
@@ -91,7 +91,8 @@ fun ArticleContentUi(title: String) {
 
     Surface(
         color = MaterialTheme.colorScheme.primary,
-        shadowElevation = 4.dp
+        shadowElevation = 4.dp,
+        modifier = modifier
     ) {
         MarkdownPreview(
             content = viewModel.content(),
