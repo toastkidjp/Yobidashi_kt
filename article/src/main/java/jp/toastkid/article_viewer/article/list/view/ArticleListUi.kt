@@ -228,7 +228,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     unfocusedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
-                    cursorColor = Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, R.color.editor_cursor)))
+                    cursorColor = Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, jp.toastkid.lib.R.color.editor_cursor)))
                 ),
                 trailingIcon = {
                     Icon(
