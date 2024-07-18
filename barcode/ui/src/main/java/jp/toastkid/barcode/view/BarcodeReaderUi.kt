@@ -147,7 +147,7 @@ fun BarcodeReaderUi() {
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            stringResource(id = R.string.clip),
+                            stringResource(id = jp.toastkid.lib.R.string.clip),
                             color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 16.sp,
                             modifier = Modifier
@@ -155,7 +155,7 @@ fun BarcodeReaderUi() {
                                 .clickable { clip(context, result.value) }
                         )
                         Text(
-                            stringResource(id = R.string.share),
+                            stringResource(id = jp.toastkid.lib.R.string.share),
                             color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 16.sp,
                             modifier = Modifier
@@ -165,7 +165,7 @@ fun BarcodeReaderUi() {
                                 }
                         )
                         Text(
-                            stringResource(id = R.string.open),
+                            stringResource(id = jp.toastkid.lib.R.string.open),
                             color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 16.sp,
                             modifier = Modifier
