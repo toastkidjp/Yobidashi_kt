@@ -145,7 +145,7 @@ fun SearchInputUi(
                         },
                         label = {
                             Text(
-                                stringResource(id = R.string.title_search),
+                                stringResource(id = jp.toastkid.lib.R.string.title_search),
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
                         },
@@ -189,7 +189,7 @@ fun SearchInputUi(
                     )
 
                     Icon(
-                        painterResource(id = if (useVoice.value) R.drawable.ic_mic else R.drawable.ic_search_white),
+                        painterResource(id = if (useVoice.value) jp.toastkid.lib.R.drawable.ic_mic else R.drawable.ic_search_white),
                         contentDescription = stringResource(id = R.string.title_search_action),
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
@@ -276,7 +276,7 @@ fun SearchInputUi(
     LaunchedEffect(key1 = localLifecycleOwner, block = {
         contentViewModel.optionMenus(
             OptionMenu(
-                titleId = R.string.title_context_editor_double_quote,
+                titleId = jp.toastkid.lib.R.string.title_context_editor_double_quote,
                 action = {
                     val queryOrEmpty = viewModel.input.value.text
                     if (queryOrEmpty.isNotBlank()) {
