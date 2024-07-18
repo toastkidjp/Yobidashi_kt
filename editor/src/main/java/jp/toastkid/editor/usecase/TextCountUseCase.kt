@@ -9,7 +9,6 @@
 package jp.toastkid.editor.usecase
 
 import android.widget.EditText
-import jp.toastkid.editor.R
 import jp.toastkid.lib.ContentViewModel
 
 class TextCountUseCase {
@@ -17,7 +16,7 @@ class TextCountUseCase {
     operator fun invoke(editText: EditText, contentViewModel: ContentViewModel?) {
         val count = editText.text.substring(editText.selectionStart, editText.selectionEnd).length
         contentViewModel?.snackShort(
-            editText.context.getString(R.string.message_character_count, count)
+            editText.context.getString(jp.toastkid.lib.R.string.message_character_count, count)
         )
     }
 
