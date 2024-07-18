@@ -35,7 +35,7 @@ class PasteAsQuotation(
         contentViewModel
             .snackWithAction(
                 context.getString(R.string.paste_as_quotation),
-                context.getString(R.string.undo)
+                context.getString(jp.toastkid.lib.R.string.undo)
             ) {
                 viewModel.onValueChange(currentText)
             }
