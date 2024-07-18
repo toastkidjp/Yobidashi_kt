@@ -10,7 +10,6 @@ package jp.toastkid.editor.view.menu.text
 
 import android.content.Context
 import androidx.compose.ui.text.input.getSelectedText
-import jp.toastkid.editor.R
 import jp.toastkid.editor.view.EditorTabViewModel
 import jp.toastkid.lib.ContentViewModel
 
@@ -23,7 +22,7 @@ class TextCounter {
     ) {
         val count = viewModel.content().getSelectedText().length
         contentViewModel.snackShort(
-            context.getString(R.string.message_character_count, count)
+            context.getString(jp.toastkid.lib.R.string.message_character_count, count)
         )
     }
 
