@@ -9,7 +9,6 @@
 package jp.toastkid.editor.view.menu.text
 
 import android.content.Context
-import jp.toastkid.editor.R
 import jp.toastkid.editor.usecase.LinkTitleFetcherUseCase
 import jp.toastkid.editor.view.EditorTabViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -46,8 +45,8 @@ class LinkFormInsertion(
 
             contentViewModel
                 .snackWithAction(
-                    context.getString(R.string.done_addition),
-                    context.getString(R.string.undo)
+                    context.getString(jp.toastkid.lib.R.string.done_addition),
+                    context.getString(jp.toastkid.lib.R.string.undo)
                 ) {
                     viewModel.onValueChange(currentText)
                 }
