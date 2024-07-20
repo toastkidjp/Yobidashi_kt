@@ -181,7 +181,7 @@ class WebViewContainer(
             return
         }
 
-        if (preferenceApplier.wifiOnly && networkChecker.isUnavailableWiFi(context)) {
+        if (preferenceApplier.wifiOnly && networkChecker.isUnavailableWiFi(context) && !url.startsWith("file://")) {
             contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
             return
         }
