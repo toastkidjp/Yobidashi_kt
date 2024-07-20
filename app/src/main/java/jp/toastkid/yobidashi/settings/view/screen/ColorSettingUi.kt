@@ -185,7 +185,7 @@ internal fun ColorSettingUi() {
                             )
                         )
                         Icon(
-                            painterResource(id = R.drawable.ic_remove_circle),
+                            painterResource(id = jp.toastkid.lib.R.drawable.ic_remove_circle),
                             contentDescription = stringResource(
                                 id = R.string.delete
                             ),
@@ -249,7 +249,7 @@ internal fun ColorSettingUi() {
 
                     (context as? ComponentActivity)?.let { activity ->
                         ViewModelProvider(activity).get(ContentViewModel::class.java)
-                            .snackShort(R.string.settings_color_delete)
+                            .snackShort(jp.toastkid.search.R.string.settings_color_delete)
                     }
                 }
             }
