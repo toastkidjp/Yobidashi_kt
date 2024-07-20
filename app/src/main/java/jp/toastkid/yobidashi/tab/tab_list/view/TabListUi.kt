@@ -102,9 +102,6 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
         listState = rememberLazyListState(max(0, tabAdapter.index() - 1))
     )
 
-    val sizePx = with(LocalDensity.current) { 160.dp.toPx() }
-    val anchors = mapOf(0f to 0, -sizePx to 1)
-
     val initialIndex = tabAdapter.currentTabId()
     val deletedTabIds = remember { mutableStateListOf<String>() }
 
