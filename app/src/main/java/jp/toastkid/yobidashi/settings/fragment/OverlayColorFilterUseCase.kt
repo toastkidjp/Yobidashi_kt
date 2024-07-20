@@ -23,19 +23,19 @@ class OverlayColorFilterUseCase(
         private val contentViewModel: ContentViewModel?
 ) {
 
-    private val blueBase = colorResolver(R.color.light_blue_200_dd)
+    private val blueBase = colorResolver(jp.toastkid.lib.R.color.light_blue_200_dd)
 
-    private val redBase = colorResolver(R.color.red_200_dd)
+    private val redBase = colorResolver(jp.toastkid.lib.R.color.red_200_dd)
 
     private val yellowBase = colorResolver(R.color.default_color_filter)
 
-    private val redYellowBase = colorResolver(R.color.red_yellow)
+    private val redYellowBase = colorResolver(jp.toastkid.lib.R.color.red_yellow)
 
-    private val orangeBase = colorResolver(R.color.deep_orange_500_dd)
+    private val orangeBase = colorResolver(jp.toastkid.lib.R.color.deep_orange_500_dd)
 
-    private val greenBase = colorResolver(R.color.lime_bg)
+    private val greenBase = colorResolver(jp.toastkid.lib.R.color.lime_bg)
 
-    private val darkBase = colorResolver(R.color.darkgray_scale)
+    private val darkBase = colorResolver(jp.toastkid.lib.R.color.darkgray_scale)
 
     fun setBlue() {
         setNewColor(currentAlpha(), blueBase)
