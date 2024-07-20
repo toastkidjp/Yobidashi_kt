@@ -190,7 +190,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     closeOnly(coroutineScope, contentViewModel)
                 }
                 TabActionFab(
-                    R.drawable.ic_article,
+                    jp.toastkid.lib.R.drawable.ic_article,
                     R.string.title_article_viewer,
                     tint,
                     backgroundColor,
@@ -212,7 +212,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                 }
                 TabActionFab(
                     R.drawable.ic_add_tab,
-                    R.string.open,
+                    jp.toastkid.lib.R.string.open,
                     tint,
                     backgroundColor,
                     Modifier.padding(4.dp)
