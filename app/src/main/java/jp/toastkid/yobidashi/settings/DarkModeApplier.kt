@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.R
 
 /**
  * @author toastkidjp
@@ -38,7 +37,7 @@ class DarkModeApplier {
 
         contentViewModel?.snackWithAction(
             "Apply dark mode.",
-            context.getString(R.string.undo),
+            context.getString(jp.toastkid.lib.R.string.undo),
             { currentTheme.apply(preferenceApplier) }
         )
     }
