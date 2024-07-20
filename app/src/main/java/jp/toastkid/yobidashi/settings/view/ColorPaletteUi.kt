@@ -68,7 +68,7 @@ internal fun ColorPaletteUi(
                     ),
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    Text(stringResource(id = R.string.commit), fontSize = 14.sp)
+                    Text(stringResource(id = jp.toastkid.lib.R.string.commit), fontSize = 14.sp)
                 }
             }
 
@@ -98,7 +98,7 @@ internal fun ColorPaletteUi(
                     ),
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    Text(stringResource(id = R.string.reset), fontSize = 14.sp)
+                    Text(stringResource(id = jp.toastkid.lib.R.string.reset), fontSize = 14.sp)
                 }
             }
         }
