@@ -57,7 +57,7 @@ fun SettingTopUi() {
         val pages = arrayOf(
             R.string.subhead_displaying,
             R.string.title_settings_color,
-            R.string.search,
+            jp.toastkid.lib.R.string.search,
             R.string.subhead_browser,
             R.string.subhead_editor,
             R.string.title_calendar,
