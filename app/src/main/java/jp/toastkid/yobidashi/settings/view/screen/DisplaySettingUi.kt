@@ -14,7 +14,6 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -127,9 +126,7 @@ internal fun DisplaySettingUi() {
                     displayEffectState.value = preferenceApplier.showDisplayEffect()
                     contentViewModel.setShowDisplayEffect(displayEffectState.value)
                 },
-                booleanState = displayEffectState,
-                iconTint = MaterialTheme.colorScheme.secondary,
-                iconId = R.drawable.ic_snow
+                booleanState = displayEffectState
             )
 
             InsetDivider()
@@ -145,7 +142,7 @@ internal fun DisplaySettingUi() {
                     }
             ) {
                 Icon(
-                    painterResource(id = R.drawable.ic_close_black),
+                    painterResource(id = jp.toastkid.lib.R.drawable.ic_close_black),
                     tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = stringResource(id = R.string.title_bg_reset)
                 )
@@ -160,11 +157,11 @@ internal fun DisplaySettingUi() {
             InsetDivider()
 
             WithIcon(
-                textId = R.string.title_delete_all,
+                textId = jp.toastkid.lib.R.string.title_delete_all,
                 clickable = {
                     openClearImagesDialog.value = true
                 },
-                iconId = R.drawable.ic_clear_form,
+                iconId = jp.toastkid.lib.R.drawable.ic_clear_form,
                 iconTint = MaterialTheme.colorScheme.secondary
             )
 
@@ -230,7 +227,7 @@ internal fun DisplaySettingUi() {
                                 )
                             }
                             Icon(
-                                painterResource(id = R.drawable.ic_remove_circle),
+                                painterResource(id = jp.toastkid.lib.R.drawable.ic_remove_circle),
                                 contentDescription = stringResource(id = R.string.delete),
                                 modifier = Modifier
                                     .size(40.dp)
@@ -262,7 +259,7 @@ internal fun DisplaySettingUi() {
 
     if (openClearImagesDialog.value) {
         DestructiveChangeConfirmDialog(
-            R.string.clear_all,
+            jp.toastkid.lib.R.string.clear_all,
             onDismissRequest = { openClearImagesDialog.value = false },
             onClickOk = {
                 filesDir.clean()
@@ -292,6 +289,3 @@ private fun makePickImage(): Intent {
  * Background image dir.
  */
 private const val BACKGROUND_DIR: String = "background_dir"
-
-@StringRes
-const val titleId: Int = R.string.title_settings_display
