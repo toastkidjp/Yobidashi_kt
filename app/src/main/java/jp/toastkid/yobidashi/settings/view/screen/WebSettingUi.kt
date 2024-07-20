@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -216,7 +215,7 @@ internal fun WebSettingUi() {
                     },
                     saveViewHistory,
                     MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_open_in_browser_black
+                    jp.toastkid.lib.R.drawable.ic_open_in_browser_black
                 )
             }
 
@@ -237,11 +236,11 @@ internal fun WebSettingUi() {
                     Icon(
                         painterResource(id = R.drawable.ic_user_agent_black),
                         tint = MaterialTheme.colorScheme.secondary,
-                        contentDescription = stringResource(id = R.string.title_user_agent)
+                        contentDescription = stringResource(id = jp.toastkid.web.R.string.title_user_agent)
                     )
 
                     Text(
-                        stringResource(id = R.string.title_user_agent),
+                        stringResource(id = jp.toastkid.web.R.string.title_user_agent),
                         modifier = Modifier
                             .weight(1f)
                             .padding(start = 4.dp)
@@ -360,7 +359,7 @@ internal fun WebSettingUi() {
             item {
                 TextMenu(R.string.title_clear_cache) {
                     WebView(activityContext).clearCache(true)
-                    contentViewModel?.snackShort(R.string.done_clear)
+                    contentViewModel?.snackShort(jp.toastkid.lib.R.string.done_clear)
                 }
             }
 
@@ -371,7 +370,7 @@ internal fun WebSettingUi() {
             item {
                 TextMenu(R.string.title_clear_form_data) {
                     WebView(activityContext).clearFormData()
-                    contentViewModel?.snackShort(R.string.done_clear)
+                    contentViewModel?.snackShort(jp.toastkid.lib.R.string.done_clear)
                 }
             }
 
@@ -382,7 +381,7 @@ internal fun WebSettingUi() {
             item {
                 TextMenu(R.string.title_clear_coolie) {
                     CookieManager.getInstance().removeAllCookies {
-                        contentViewModel?.snackShort(R.string.done_clear)
+                        contentViewModel?.snackShort(jp.toastkid.lib.R.string.done_clear)
                     }
                 }
             }
