@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -33,7 +33,7 @@ fun WorldTimeView(modifier: Modifier = Modifier) {
 
     Surface(
         color = MaterialTheme.colorScheme.surface,
-        modifier = modifier.alpha(0.75f)
+        modifier = modifier.graphicsLayer { alpha = 0.75f }
     ) {
         Box(Modifier.padding(8.dp)) {
             LazyColumn(state = viewModel.listState()) {
