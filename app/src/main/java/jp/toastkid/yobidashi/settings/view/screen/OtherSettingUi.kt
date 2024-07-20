@@ -146,7 +146,7 @@ internal fun OtherSettingUi() {
                 ) {
                     NewTabSettingItem(
                         StartUp.SEARCH == selected.value,
-                        R.string.title_search,
+                        jp.toastkid.lib.R.string.title_search,
                         R.mipmap.thumbnail_search
                     ) {
                         preferenceApplier.startUp = StartUp.SEARCH.name
@@ -164,7 +164,7 @@ internal fun OtherSettingUi() {
 
                     NewTabSettingItem(
                         StartUp.BOOKMARK == selected.value,
-                        R.string.title_bookmark,
+                        jp.toastkid.web.R.string.title_bookmark,
                         R.mipmap.thumbnail_bookmark
                     ) {
                         preferenceApplier.startUp = StartUp.BOOKMARK.name
@@ -251,7 +251,7 @@ internal fun OtherSettingUi() {
                     R.string.title_settings_all_apps,
                     { activityContext.startActivity(SettingsIntentFactory().allApps()) },
                     MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_android_developer
+                    jp.toastkid.search.R.drawable.ic_android_developer
                 )
             }
 
@@ -264,7 +264,7 @@ internal fun OtherSettingUi() {
                     R.string.title_clear_settings,
                     { openConfirmDialog.value = true },
                     MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_close_black
+                    jp.toastkid.lib.R.drawable.ic_close_black
                 )
             }
 
