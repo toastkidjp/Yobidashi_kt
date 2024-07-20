@@ -154,12 +154,12 @@ internal fun ColorFilterSettingUi() {
                     .padding(start = 16.dp, end = 16.dp, top = 4.dp)
             ) {
                 ColorFilterItem(R.color.default_color_filter) { useCase.setYellow() }
-                ColorFilterItem(R.color.red_yellow) { useCase.setRedYellow() }
-                ColorFilterItem(R.color.deep_orange_500_dd) { useCase.setOrange() }
-                ColorFilterItem(R.color.darkgray_scale) { useCase.setDark() }
-                ColorFilterItem(R.color.red_200_dd) { useCase.setRed() }
-                ColorFilterItem(R.color.lime_bg) { useCase.setGreen() }
-                ColorFilterItem(R.color.light_blue_200_dd) { useCase.setBlue() }
+                ColorFilterItem(jp.toastkid.lib.R.color.red_yellow) { useCase.setRedYellow() }
+                ColorFilterItem(jp.toastkid.lib.R.color.deep_orange_500_dd) { useCase.setOrange() }
+                ColorFilterItem(jp.toastkid.lib.R.color.darkgray_scale) { useCase.setDark() }
+                ColorFilterItem(jp.toastkid.lib.R.color.red_200_dd) { useCase.setRed() }
+                ColorFilterItem(jp.toastkid.lib.R.color.lime_bg) { useCase.setGreen() }
+                ColorFilterItem(jp.toastkid.lib.R.color.light_blue_200_dd) { useCase.setBlue() }
             }
 
             Slider(
