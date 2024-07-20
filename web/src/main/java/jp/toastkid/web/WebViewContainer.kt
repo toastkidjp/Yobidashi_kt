@@ -182,7 +182,7 @@ class WebViewContainer(
         }
 
         if (preferenceApplier.wifiOnly && networkChecker.isUnavailableWiFi(context)) {
-            contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
+            contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
             return
         }
 
@@ -202,7 +202,7 @@ class WebViewContainer(
      */
     fun reload() {
         if (preferenceApplier.wifiOnly && networkChecker.isUnavailableWiFi(context)) {
-            contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
+            contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
             return
         }
         currentView()?.reload()
@@ -337,7 +337,7 @@ class WebViewContainer(
 
     fun downloadAllImages() {
         if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(context)) {
-            contentViewModel?.snackShort(R.string.message_wifi_not_connecting)
+            contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
             return
         }
         AllImageDownloaderUseCase(DownloadAction(context)).invoke(currentView())
