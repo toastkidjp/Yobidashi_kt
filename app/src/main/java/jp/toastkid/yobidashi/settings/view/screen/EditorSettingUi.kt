@@ -70,7 +70,7 @@ internal fun EditorSettingUi() {
     val cursorColor =
         remember {
             val color = preferenceApplier.editorCursorColor(
-                ContextCompat.getColor(activityContext, R.color.editor_cursor)
+                ContextCompat.getColor(activityContext, jp.toastkid.lib.R.color.editor_cursor)
             )
             mutableStateOf(Color(color))
         }
@@ -133,7 +133,7 @@ internal fun EditorSettingUi() {
                         contentViewModel?.snackShort(R.string.settings_color_done_commit)
                     },
                     MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_clip
+                    jp.toastkid.lib.R.drawable.ic_clip
                 )
             }
 
@@ -301,7 +301,7 @@ private fun ComponentColorSettingDialog(
             },
             confirmButton = {
                 Text(
-                    text = stringResource(id = jp.toastkid.ui.R.string.ok),
+                    text = stringResource(id = jp.toastkid.lib.R.string.ok),
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .clickable {
@@ -314,7 +314,7 @@ private fun ComponentColorSettingDialog(
             },
             dismissButton = {
                 Text(
-                    text = stringResource(id = jp.toastkid.ui.R.string.cancel),
+                    text = stringResource(id = jp.toastkid.lib.R.string.cancel),
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .clickable {
