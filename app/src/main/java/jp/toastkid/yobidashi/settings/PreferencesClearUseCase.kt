@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.R
 
 /**
  * @author toastkidjp
@@ -24,7 +23,7 @@ class PreferencesClearUseCase(
 
     operator fun invoke() {
         PreferenceApplier(context).clear()
-        contentViewModel?.snackShort(R.string.done_clear)
+        contentViewModel?.snackShort(jp.toastkid.lib.R.string.done_clear)
     }
 
     companion object {
