@@ -123,8 +123,8 @@ dependencies {
     implementation(project(":web"))
     implementation(project(":chat"))
     implementation(project(":world"))
+    implementation(project(":setting"))
 
-    implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
     implementation("androidx.work:work-runtime:${LibraryVersion.workManager}")
 
     // Compose dependencies.
@@ -135,7 +135,6 @@ dependencies {
     implementation("androidx.navigation:navigation-runtime-ktx:${LibraryVersion.navigationCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
-    implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
