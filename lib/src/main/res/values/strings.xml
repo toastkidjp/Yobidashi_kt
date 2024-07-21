@@ -57,6 +57,8 @@
     <string name="title_view_history">Web History</string>
     <string name="title_context_editor_double_quote">Double quote</string>
     <string name="title_search">Web Search</string>
+    <string name="title_web">Web</string>
+    <string name="title_bookmark">Bookmark</string>
     <string name="title_option_menu">Option Menu</string>
 
     <string name="message_wifi_not_connecting">It cannot use Wi-Fi.</string>

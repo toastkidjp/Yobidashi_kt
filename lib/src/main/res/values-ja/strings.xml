@@ -55,6 +55,8 @@
     <string name="title_view_history">Web の履歴</string>
     <string name="title_context_editor_double_quote">ダブルクォート</string>
     <string name="title_search">Web 検索</string>
+    <string name="title_web">Web</string>
+    <string name="title_bookmark">ブックマーク</string>
     <string name="title_option_menu">オプションメニュー</string>
     <string name="message_wifi_not_connecting">Wi-Fi に接続していません。</string>
 
