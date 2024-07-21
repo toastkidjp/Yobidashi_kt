@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2024 toastkidjp.
+  ~ All rights reserved. This program and the accompanying materials
+  ~ are made available under the terms of the Eclipse Public License v1.0
+  ~ which accompany this distribution.
+  ~ The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+  -->
+
+<resources>
+    <string name="settings_color_background_title">背景色</string>
+    <string name="settings_color_font_title">文字色</string>
+    <string name="settings_color_saved_title">保存した色</string>
+    <string name="title_clear_saved_color">すべて削除</string>
+    <string name="settings_color_done_commit">色を変更しました。</string>
+    <string name="settings_color_done_reset">元に戻しました。</string>
+    <string name="message_check_retain_tabs">アプリ終了後もタブを保持します。</string>
+    <string name="message_check_doesnot_retain_tabs">アプリ終了時にタブをすべて削除します。</string>
+    <string name="title_retain_tabs">アプリ終了後もタブを保持</string>
+    <string name="title_enable_javascript">JavaScript を有効にする</string>
+    <string name="subhead_displaying">表示</string>
+    <string name="subhead_setting_browser">Web</string>
+    <string name="subhead_others">その他</string>
+    <string name="subhead_notification">通知</string>
+    <string name="title_clear_cache">キャッシュを消去</string>
+    <string name="clear_form_data">フォームデータを消去</string>
+    <string name="title_load_image">画像を表示</string>
+    <string name="title_save_form_data">フォームデータを保存</string>
+    <string name="message_js_enabled">JavaScript を有効にしました。</string>
+    <string name="message_js_disabled">JavaScript を無効にしました。</string>
+    <string name="message_invalid_url">URL が不正です。</string>
+    <string name="message_commit_home">\"%s\" をホームページに設定しました。</string>
+    <string name="title_save_view_history">Web の履歴を保存</string>
+    <string name="title_tab_retaining_size">タブを保持する枚数</string>
+    <string name="title_remove_ad">広告を消す</string>
+    <string name="title_dark_mode">ダークモードを使う</string>
+    <string name="title_clear_form_data">フォームデータを削除</string>
+    <string name="title_clear_coolie">Cookie を削除</string>
+    <string name="title_wifi_only">Wi-Fi 接続時だけ通信する</string>
+    <string name="title_home">ホーム</string>
+    <string name="subhead_search">検索</string>
+    <string name="subhead_browser">Web</string>
+    <string name="title_calendar">カレンダー</string>
+    <string name="title_color_filter">カラーフィルター</string>
+    <string name="subhead_editor">エディター</string>
+    <string name="title_settings">設定</string>
+    <string name="title_settings_color">色設定</string>
+    <string name="title_setting_new_tab">新しいタブ</string>
+    <string name="title_settings_device">端末の設定</string>
+    <string name="title_settings_wifi">Wi-Fi の設定</string>
+    <string name="title_settings_wireless">無線の設定</string>
+    <string name="title_settings_all_apps">アプリ設定</string>
+    <string name="title_section_settings_this_app">このアプリの設定</string>
+    <string name="title_section_device_settings">端末の設定</string>
+    <string name="title_settings_locale">言語設定</string>
+    <string name="title_background_image_setting">背景画像設定</string>
+    <string name="add_background_image">背景画像を追加</string>
+    <string name="message_change_background_image">背景画像を変更しました。</string>
+    <string name="message_reset_bg_image">背景画像を解除しました。</string>
+    <string name="title_add_recommended_colors">おすすめの色を追加</string>
+    <string name="message_add_recommended_colors">おすすめの色を追加します。</string>
+    <string name="title_add_random">ランダム</string>
+    <string name="section_title_about_this_app">このアプリの情報</string>
+    <string name="title_settings_date_and_time">日付・時刻の設定</string>
+    <string name="title_settings_display">ディスプレイの設定</string>
+    <string name="title_clear_settings">設定を初期化</string>
+    <string name="title_browser">Web</string>
+    <string name="title_dialog_color_chooser">色を選択</string>
+    <string name="current_color">現在の色:</string>
+    <string name="title_copy_colors">色設定をコピー</string>
+    <string name="title_cursor_color">カーソルの色</string>
+    <string name="title_highlight_color">テキスト選択の色</string>
+    <string name="title_font_size">文字の大きさ</string>
+    <string name="title_set_bg">背景画像を設定</string>
+    <string name="title_bg_reset">背景画像を解除</string>
+    <string name="title_display_effect">画面エフェクトを表示</string>
+    <string name="sample_text_color_filter">あ</string>
+    <string name="apply_dark_mode">ダークモードにする</string>
+    <string name="message_failed_read_image">画像の読み込みに失敗しました。</string>
+    <string name="message_success_image_removal">画像を削除しました。</string>
+    <string name="message_failed_image_removal">画像削除に失敗しました。</string>
+    <string name="message_cannot_found_image">画像が設定されていません。</string>
+    <string name="message_done_set_image">選択した画像を背景に設定しました。</string>
+    <string name="sample_a">あ</string>
+    <string name="title_filter_color">カラーフィルターの色</string>
+    <string name="title_default">デフォルト</string>
+</resources>

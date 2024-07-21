@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2024 toastkidjp.
+  ~ All rights reserved. This program and the accompanying materials
+  ~ are made available under the terms of the Eclipse Public License v1.0
+  ~ which accompany this distribution.
+  ~ The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+  -->
+
+<resources>
+    <string name="settings_color_background_title">Background</string>
+    <string name="settings_color_font_title">Font</string>
+    <string name="settings_color_saved_title">Saved Colors</string>
+    <string name="title_clear_saved_color">Delete All</string>
+    <string name="settings_color_done_commit">It has set selected color.</string>
+    <string name="settings_color_done_reset">It has reset color.</string>
+    <string name="message_check_retain_tabs">It will retain tabs when you exit this app.</string>
+    <string name="message_check_doesnot_retain_tabs">It will remove all tabs when you exit this app.</string>
+    <string name="title_retain_tabs">Retain tabs on exit this app</string>
+    <string name="title_enable_javascript">Enable to use JavaScript</string>
+    <string name="subhead_displaying">Displaying</string>
+    <string name="subhead_setting_browser">Web</string>
+    <string name="subhead_others">Others</string>
+    <string name="subhead_notification">Notifications</string>
+    <string name="title_clear_cache">Clear cache</string>
+    <string name="clear_form_data">Clear form data</string>
+    <string name="title_load_image">Show images</string>
+    <string name="title_save_form_data">Save form data</string>
+    <string name="message_js_enabled">It has changed to enable JavaScript.</string>
+    <string name="message_js_disabled">It has changed to disable JavaScript.</string>
+    <string name="message_invalid_url">Input URL is invalid.</string>
+    <string name="message_commit_home">It has set \"%s\" to home page.</string>
+    <string name="title_save_view_history">Save Web History</string>
+    <string name="title_tab_retaining_size">Tab retaining size</string>
+    <string name="title_remove_ad">Remove AD</string>
+    <string name="title_dark_mode">Use dark mode</string>
+    <string name="title_clear_form_data">Clear form data</string>
+    <string name="title_clear_coolie">Clear Cookie</string>
+    <string name="title_wifi_only">Wi-Fi Only Mode</string>
+    <string name="title_home">Home</string>
+    <string name="subhead_search">Search</string>
+    <string name="subhead_browser">Web</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_color_filter">Overlay Color Filter</string>
+    <string name="title_settings_color">Color Settings</string>
+    <string name="subhead_editor">Editor</string>
+    <string name="title_setting_new_tab">New tab</string>
+    <string name="title_settings_device">Device Settings</string>
+    <string name="title_section_settings_this_app">This apps Settings</string>
+    <string name="title_settings">App Settings</string>
+    <string name="title_settings_locale">Locale Settings</string>
+    <string name="title_section_device_settings">Device Settings</string>
+    <string name="title_settings_wifi">Wi-Fi Settings</string>
+    <string name="title_settings_wireless">Wireless Settings</string>
+    <string name="title_settings_all_apps">All Apps Settings</string>
+    <string name="add_background_image">Add Background Image</string>
+    <string name="message_change_background_image">It has changed background image.</string>
+    <string name="title_background_image_setting">Background Image Setting</string>
+    <string name="message_reset_bg_image">It has reset background image.</string>
+    <string name="title_add_recommended_colors">Add recommended colors</string>
+    <string name="message_add_recommended_colors">Would you like to add recommended colors?</string>
+    <string name="title_add_random">Random</string>
+    <string name="section_title_about_this_app">This app\'s information</string>
+    <string name="title_settings_date_and_time">Date and Time Settings</string>
+    <string name="title_settings_display">Display setting</string>
+    <string name="title_clear_settings">Clear Settings</string>
+    <string name="title_browser">Web</string>
+    <string name="title_dialog_color_chooser">Choose color</string>
+    <string name="current_color">Current color:</string>
+    <string name="title_copy_colors">Copy colors from main color</string>
+    <string name="title_cursor_color">Cursor color</string>
+    <string name="title_highlight_color">Selected text color</string>
+    <string name="title_font_size">Font size</string>
+    <string name="title_set_bg">Set Background Image</string>
+    <string name="title_bg_reset">Reset Background Image</string>
+    <string name="title_display_effect">Show display effect</string>
+    <string name="sample_text_color_filter">A</string>
+    <string name="apply_dark_mode">Apply dark mode</string>
+    <string name="message_failed_read_image">It failed loading image.</string>
+    <string name="message_success_image_removal">It has removed current image.</string>
+    <string name="message_failed_image_removal">It failed removal.</string>
+    <string name="message_cannot_found_image">It failed removal, because image had not been set.</string>
+    <string name="message_done_set_image">It has set selected image to backgrounds.</string>
+    <string name="sample_a">A</string>
+    <string name="title_filter_color">Filter\'s color</string>
+    <string name="title_default">Default</string>
+</resources>
