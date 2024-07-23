@@ -29,7 +29,7 @@ class RtsSuggestionUseCase(
             }
 
             val uri = input?.toUri() ?: return@withContext null
-            if (uri.host?.endsWith("twitter.com") == true) {
+            if (uri.host?.endsWith("www.x.com") == true) {
                 return@withContext uri.pathSegments[0]
             }
 
