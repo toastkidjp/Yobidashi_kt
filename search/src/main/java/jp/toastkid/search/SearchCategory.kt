@@ -235,10 +235,10 @@ enum class SearchCategory(
             R.drawable.ic_linked_in,
             "https://www.linkedin.com/jobs/search?keywords="
     ),
-    TWITTER(
+    X(
             R.string.search_category_twitter,
-            R.drawable.ic_twitter,
-            "https://mobile.twitter.com/search?src=typd&q="
+            R.drawable.ic_x,
+            "https://www.x.com/search?src=typd&q="
     ),
     REDDIT(
         R.string.search_category_reddit,
