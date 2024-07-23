@@ -178,7 +178,7 @@ fun SearchSettingUi() {
                     },
                     booleanState = useSuggestionCheck,
                     iconTint = MaterialTheme.colorScheme.secondary,
-                    iconId = R.drawable.ic_open_in_browser_black
+                    iconId = R.drawable.ic_search_black
                 )
             }
 
@@ -229,7 +229,7 @@ fun SearchSettingUi() {
                     },
                     booleanState = useViewHistoryCheck,
                     iconTint = MaterialTheme.colorScheme.secondary,
-                    iconId = R.drawable.ic_history_black
+                    iconId = jp.toastkid.lib.R.drawable.ic_history_black
                 )
             }
 
@@ -278,7 +278,7 @@ fun SearchSettingUi() {
                     modifier = Modifier.padding(horizontal = 16.dp)
                 ) {
                     Icon(
-                        painterResource(id = R.drawable.ic_search),
+                        painterResource(id = jp.toastkid.lib.R.drawable.ic_search),
                         contentDescription = stringResource(id = R.string.subhead_search_category_setting),
                         tint = MaterialTheme.colorScheme.secondary
                     )
