@@ -62,7 +62,7 @@ class BookmarkInitializer(
             ),
             "SNS" to mapOf(
                     "Instagram" to "https://www.instagram.com/",
-                    "Twitter" to "https://twitter.com/",
+                    "X" to "https://www.x.com/",
                     "Facebook" to "https://www.facebook.com/"
             )
     )
