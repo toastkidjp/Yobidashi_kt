@@ -10,13 +10,15 @@
 You can easy web search with this app. And this app is easy customizable.
 
 ## This app has many functions!
-        1. Web Search
-        2. Barcode Reader
-        3. Apps Launcher
-        4. Fake tab browser
-        5. Calendar
-        6. Planning Poker
-        7. Color screen filter
+1. Web Search
+2. Barcode Reader
+3. RSS Reader
+4. Simple Tab Browser
+5. Text Editor
+6. Music Player
+7. Image Viewer
+8. TODO List
+9. Calendar
  
 ## Features
 
