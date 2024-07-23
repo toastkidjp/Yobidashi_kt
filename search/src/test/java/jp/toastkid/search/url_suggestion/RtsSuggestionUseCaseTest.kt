@@ -52,7 +52,7 @@ class RtsSuggestionUseCaseTest {
         mockkStatic(Uri::class)
         coEvery { Uri.parse(any()) }.returns(uri)
 
-        coEvery { uri.host }.returns("www.twitter.com")
+        coEvery { uri.host }.returns("www.x.com")
         coEvery { uri.pathSegments }.returns(listOf("test"))
         coEvery { itemCallback.invoke(any()) }.just(Runs)
     }
@@ -65,7 +65,7 @@ class RtsSuggestionUseCaseTest {
     @Test
     fun testInvoke() {
         runBlocking {
-            rtsSuggestionUseCase.invoke("https://www.twitter.com/test", itemCallback)
+            rtsSuggestionUseCase.invoke("https://www.x.com/test", itemCallback)
             coVerify { itemCallback.invoke(any()) }
         }
     }
@@ -75,7 +75,7 @@ class RtsSuggestionUseCaseTest {
         coEvery { Urls.isInvalidUrl(any()) }.returns(true)
 
         runBlocking {
-            rtsSuggestionUseCase.invoke("https://www.twitter.com/test", itemCallback)
+            rtsSuggestionUseCase.invoke("https://www.x.com/test", itemCallback)
             coVerify(inverse = true) { itemCallback.invoke(any()) }
         }
     }
@@ -85,7 +85,7 @@ class RtsSuggestionUseCaseTest {
         coEvery { uri.host }.returns("www.yahoo.com")
 
         runBlocking {
-            rtsSuggestionUseCase.invoke("https://www.twitter.com/test", itemCallback)
+            rtsSuggestionUseCase.invoke("https://www.x.com/test", itemCallback)
             coVerify(inverse = true) { itemCallback.invoke(any()) }
         }
     }
@@ -95,7 +95,7 @@ class RtsSuggestionUseCaseTest {
         coEvery { uri.pathSegments }.returns(listOf(""))
 
         runBlocking {
-            rtsSuggestionUseCase.invoke("https://www.twitter.com/test", itemCallback)
+            rtsSuggestionUseCase.invoke("https://www.x.com/test", itemCallback)
             coVerify(inverse = true) { itemCallback.invoke(any()) }
         }
     }
