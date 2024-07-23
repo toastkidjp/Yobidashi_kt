@@ -33,7 +33,7 @@ fun WorldTimeView(modifier: Modifier = Modifier) {
 
     Surface(
         color = MaterialTheme.colorScheme.surface,
-        modifier = modifier.graphicsLayer { alpha = 0.75f }
+        modifier = modifier.graphicsLayer { alpha = 0.85f }
     ) {
         Box(Modifier.padding(8.dp)) {
             LazyColumn(state = viewModel.listState()) {
