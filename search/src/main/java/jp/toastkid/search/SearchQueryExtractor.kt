@@ -22,7 +22,7 @@ class SearchQueryExtractor {
                     or host.endsWith("scholar.google.com")
                     or host.endsWith("www.aolsearch.com")
                     or host.endsWith("www.ask.com")
-                    or host.endsWith("twitter.com")
+                    or host.endsWith("x.com")
                     or host.endsWith("stackoverflow.com")
                     or host.endsWith("github.com")
                     or host.endsWith("mvnrepository.com")
