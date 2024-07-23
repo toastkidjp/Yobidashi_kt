@@ -336,7 +336,7 @@ class WebViewContainer(
     }
 
     fun downloadAllImages() {
-        if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(context)) {
+        if (preferenceApplier.wifiOnly && networkChecker.isUnavailableWiFi(context)) {
             contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
             return
         }
