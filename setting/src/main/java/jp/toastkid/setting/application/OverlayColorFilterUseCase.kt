@@ -7,8 +7,9 @@
  */
 package jp.toastkid.setting.application
 
-import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.ColorUtils
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -22,19 +23,19 @@ class OverlayColorFilterUseCase(
         private val contentViewModel: ContentViewModel?
 ) {
 
-    private val blueBase = colorResolver(jp.toastkid.lib.R.color.light_blue_200_dd)
+    private val blueBase = Color(0xDD81D4FA).toArgb()
 
-    private val redBase = colorResolver(jp.toastkid.lib.R.color.red_200_dd)
+    private val redBase = Color(0xDDffcdd2).toArgb()
 
-    private val yellowBase = 0x22777700
+    private val yellowBase = Color(0x22777700).toArgb()
 
-    private val redYellowBase = colorResolver(jp.toastkid.lib.R.color.red_yellow)
+    private val redYellowBase = Color(0xFFFF9100).toArgb()
 
-    private val orangeBase = colorResolver(jp.toastkid.lib.R.color.deep_orange_500_dd)
+    private val orangeBase = Color(0xDDFF5722).toArgb()
 
-    private val greenBase = colorResolver(jp.toastkid.lib.R.color.lime_bg)
+    private val greenBase = Color(0xCCCDDC39).toArgb()
 
-    private val darkBase = colorResolver(jp.toastkid.lib.R.color.darkgray_scale)
+    private val darkBase = Color(0x66000000).toArgb()
 
     fun setBlue() {
         setNewColor(currentAlpha(), blueBase)
@@ -72,7 +73,7 @@ class OverlayColorFilterUseCase(
         setNewColor(DEFAULT_ALPHA, yellowBase)
     }
 
-    private fun currentAlpha(): Int = Color.alpha(preferenceApplier.filterColor(DEFAULT_COLOR))
+    private fun currentAlpha(): Int = android.graphics.Color.alpha(preferenceApplier.filterColor(DEFAULT_COLOR))
 
     private fun setNewColor(alpha: Int, @ColorInt newBaseColor: Int) {
         val newColor = ColorUtils.setAlphaComponent(newBaseColor, alpha)
@@ -82,7 +83,7 @@ class OverlayColorFilterUseCase(
 
     companion object {
 
-        private const val DEFAULT_COLOR = Color.TRANSPARENT
+        private val DEFAULT_COLOR = Color.Transparent.toArgb()
 
         private const val DEFAULT_ALPHA = 34
 
