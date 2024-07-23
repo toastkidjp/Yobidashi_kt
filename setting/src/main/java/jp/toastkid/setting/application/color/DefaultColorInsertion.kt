@@ -2,10 +2,9 @@ package jp.toastkid.setting.application.color
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.collection.ArraySet
-import androidx.core.content.ContextCompat
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.yobidashi.settings.color.SavedColor
 import kotlinx.coroutines.CoroutineScope
@@ -21,23 +20,23 @@ import kotlinx.coroutines.launch
 class DefaultColorInsertion {
 
     private val map = mapOf(
-        jp.toastkid.lib.R.color.colorPrimaryDark to jp.toastkid.lib.R.color.deep_yellow,
-        jp.toastkid.lib.R.color.crimson_bg to jp.toastkid.lib.R.color.crimson_font,
-        jp.toastkid.lib.R.color.dark_brown to jp.toastkid.lib.R.color.pink,
-        jp.toastkid.lib.R.color.cyan_bg to jp.toastkid.lib.R.color.white,
-        jp.toastkid.lib.R.color.red_200_dd to jp.toastkid.lib.R.color.black,
-        jp.toastkid.lib.R.color.yellow_200_dd to jp.toastkid.lib.R.color.black,
-        jp.toastkid.lib.R.color.black to jp.toastkid.lib.R.color.deep_yellow,
-        jp.toastkid.lib.R.color.indigo_200_dd to jp.toastkid.lib.R.color.black,
-        jp.toastkid.lib.R.color.white to jp.toastkid.lib.R.color.black,
-        jp.toastkid.lib.R.color.pinky to jp.toastkid.lib.R.color.white,
-        jp.toastkid.lib.R.color.lime_bg to jp.toastkid.lib.R.color.white,
-        jp.toastkid.lib.R.color.purple_bg to jp.toastkid.lib.R.color.white,
-        jp.toastkid.lib.R.color.wa_bg to jp.toastkid.lib.R.color.wa_font,
-        jp.toastkid.lib.R.color.light_blue_200_dd to jp.toastkid.lib.R.color.white,
-        jp.toastkid.lib.R.color.teal_500_dd to jp.toastkid.lib.R.color.white,
-        jp.toastkid.lib.R.color.gray_500_dd to jp.toastkid.lib.R.color.white,
-        jp.toastkid.lib.R.color.deep_orange_500_dd to jp.toastkid.lib.R.color.white
+        0xFF000044 to 0xDDFFC200,
+        0xAAD50000 to 0xEEFDD835,
+        0xDD4b1f12 to 0xDDf16971,
+        0xAA4DD0E1 to 0xFFFFFFFF,
+        0xDDffcdd2 to 0xFF000B00,
+        0xDDFFF59D to 0xFF000B00,
+        0xFF000B00 to 0xDDFFC200,
+        0xDD9FA8DA to 0xFF000B00,
+        0xFFFFFFFF to 0xFF000B00,
+        0xDDFF80AB to 0xFFFFFFFF,
+        0xCCCDDC39 to 0xFFFFFFFF,
+        0xCC9C27B0 to 0xFFFFFFFF,
+        0xBB388E3C to 0xCCFFFFFF,
+        0xDD81D4FA to 0xFFFFFFFF,
+        0xDD009688 to 0xFFFFFFFF,
+        0xDD9E9E9E to 0xFFFFFFFF,
+        0xDDFF5722 to 0xFFFFFFFF
     )
 
     /**
@@ -56,15 +55,11 @@ class DefaultColorInsertion {
         val models = ArraySet<SavedColor>()
         map.map {
             SavedColor.make(
-                    fromRes(context, it.key),
-                    fromRes(context, it.value)
+                Color(it.key).toArgb(),
+                Color(it.value).toArgb()
             )
         }.forEach { models.add(it) }
         return models
     }
-
-    @ColorInt
-    private fun fromRes(context: Context, @ColorRes colorId: Int): Int =
-            ContextCompat.getColor(context, colorId)
 
 }
