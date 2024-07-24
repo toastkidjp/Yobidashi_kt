@@ -68,7 +68,7 @@ internal fun AnchorLongTapDialog(
                             if (imageUrl != null && Urls.isValidUrl(imageUrl)) {
                                 AsyncImage(
                                     imageUrl,
-                                    stringResource(id = R.string.image),
+                                    stringResource(id = jp.toastkid.lib.R.string.image),
                                     modifier = Modifier
                                         .size(44.dp)
                                         .padding(end = 4.dp)
@@ -153,7 +153,7 @@ internal fun AnchorLongTapDialog(
                     ) {
 
                         Text(
-                            text = stringResource(id = R.string.close),
+                            text = stringResource(id = jp.toastkid.lib.R.string.close),
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable {
