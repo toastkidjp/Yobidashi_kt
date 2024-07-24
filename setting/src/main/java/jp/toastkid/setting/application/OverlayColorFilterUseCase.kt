@@ -19,7 +19,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
  */
 class OverlayColorFilterUseCase(
         private val preferenceApplier: PreferenceApplier,
-        colorResolver: (Int) -> Int,
         private val contentViewModel: ContentViewModel?
 ) {
 

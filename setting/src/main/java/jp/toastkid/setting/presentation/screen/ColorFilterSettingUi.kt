@@ -39,7 +39,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
@@ -68,7 +67,6 @@ internal fun ColorFilterSettingUi() {
     val useCase = remember {
         OverlayColorFilterUseCase(
             preferenceApplier,
-            { ContextCompat.getColor(activityContext, it) },
             contentViewModel
         )
     }
