@@ -144,7 +144,7 @@ fun FavoriteSearchListUi() {
                         disabledContentColor = Color.LightGray
                     )
                 ) {
-                    Text(text = stringResource(id = R.string.add))
+                    Text(text = stringResource(id = jp.toastkid.lib.R.string.add))
                 }
             }
         }
@@ -153,7 +153,7 @@ fun FavoriteSearchListUi() {
 
     val clearConfirmDialogState = remember { mutableStateOf(false) }
     contentViewModel.optionMenus(
-        OptionMenu(titleId = R.string.title_delete_all, action = {
+        OptionMenu(titleId = jp.toastkid.lib.R.string.title_delete_all, action = {
             clearConfirmDialogState.value = true
         })
     )
@@ -169,7 +169,7 @@ fun FavoriteSearchListUi() {
                 }
                 favoriteSearchItems.clear()
 
-                contentViewModel.snackShort(R.string.done_clear)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.done_clear)
             }
         }
     }
@@ -186,7 +186,7 @@ private fun addItem(
     val newWord = input.value.trim()
     if (newWord.isEmpty()) {
         contentViewModel.snackShort(
-            R.string.favorite_search_addition_dialog_empty_message
+            jp.toastkid.lib.R.string.favorite_search_addition_dialog_empty_message
         )
         return
     }
