@@ -52,6 +52,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -346,7 +347,7 @@ private fun BookmarkList(
                                         stringResource(jp.toastkid.lib.R.string.date_format),
                                         bookmark.lastViewed
                                     ).toString(),
-                                    color = colorResource(id = jp.toastkid.lib.R.color.gray_500_dd),
+                                    color = Color(0xDD9E9E9E),
                                     fontSize = 12.sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
