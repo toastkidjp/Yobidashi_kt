@@ -196,8 +196,8 @@ private fun OverflowMenu(
         .fillMaxHeight()
         .clickable { openOptionMenu.value = true }) {
         Icon(
-            painterResource(id = R.drawable.ic_option_menu),
-            contentDescription = stringResource(id = R.string.title_option_menu),
+            painterResource(id = jp.toastkid.lib.R.drawable.ic_option_menu),
+            contentDescription = stringResource(id = jp.toastkid.lib.R.string.title_option_menu),
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.align(Alignment.Center)
         )
@@ -213,7 +213,7 @@ private fun OverflowMenu(
                 if (PreferenceApplier(context).wifiOnly &&
                     NetworkChecker().isUnavailableWiFi(context)
                 ) {
-                    contentViewModel?.snackShort(jp.toastkid.web.R.string.message_wifi_not_connecting)
+                    contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
                     return@OptionMenu
                 }
 
@@ -232,7 +232,7 @@ private fun OverflowMenu(
                 titleId = R.string.title_tab_list,
                 action = switchTabList),
             OptionMenu(
-                titleId = R.string.title_settings,
+                titleId = R.string.action_settings,
                 action = { contentViewModel?.nextRoute("setting/top") }),
             OptionMenu(titleId = R.string.exit, action = finishApp)
         )
