@@ -144,7 +144,7 @@ internal fun PageInformationDialog(
                         )
 
                         Text(
-                            text = stringResource(id = R.string.close),
+                            text = stringResource(id = jp.toastkid.lib.R.string.close),
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable(onClick = onDismissRequest)
