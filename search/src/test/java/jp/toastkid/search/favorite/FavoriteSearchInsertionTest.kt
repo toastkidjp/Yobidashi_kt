@@ -18,6 +18,7 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.data.repository.factory.RepositoryFactory
+import jp.toastkid.yobidashi.search.favorite.FavoriteSearchRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
