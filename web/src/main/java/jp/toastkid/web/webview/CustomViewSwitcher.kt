@@ -19,7 +19,6 @@ import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.VideoView
 import androidx.core.content.ContextCompat
-import jp.toastkid.web.R
 import timber.log.Timber
 
 /**
@@ -82,7 +81,7 @@ class CustomViewSwitcher(
         activity.requestedOrientation = activity.requestedOrientation
 
         customViewContainer = FrameLayout(activity)
-        customViewContainer?.setBackgroundColor(ContextCompat.getColor(activity, R.color.filter_white_aa))
+        customViewContainer?.setBackgroundColor(ContextCompat.getColor(activity, jp.toastkid.lib.R.color.filter_white_aa))
         view?.keepScreenOn = true
 
         val listener = VideoCompletionListener()
