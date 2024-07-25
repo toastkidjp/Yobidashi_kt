@@ -8,6 +8,7 @@
 
 package jp.toastkid.search.favorite
 
+import jp.toastkid.yobidashi.search.favorite.FavoriteSearch
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
