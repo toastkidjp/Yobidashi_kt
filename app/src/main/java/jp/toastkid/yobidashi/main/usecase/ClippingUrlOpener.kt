@@ -59,7 +59,7 @@ class ClippingUrlOpener {
 
         contentViewModel?.snackWithAction(
             context.getString(R.string.message_clipping_url_open, clipboardContent),
-            context.getString(R.string.open),
+            context.getString(jp.toastkid.lib.R.string.open),
             { onClick(clipboardContent.toUri()) }
         )
     }
