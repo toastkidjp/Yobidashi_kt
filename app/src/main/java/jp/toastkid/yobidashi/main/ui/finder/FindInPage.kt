@@ -52,7 +52,7 @@ internal fun FindInPage() {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painterResource(id = R.drawable.ic_close),
-            contentDescription = stringResource(id = R.string.content_description_close_find_area),
+            contentDescription = stringResource(id = jp.toastkid.article_viewer.R.string.content_description_close_find_area),
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .clickable(onClick = contentViewModel::closeFindInPage)
@@ -86,7 +86,7 @@ internal fun FindInPage() {
             ),
             trailingIcon = {
                 Icon(
-                    painterResource(R.drawable.ic_clear_form),
+                    painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
                     contentDescription = "clear text",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
@@ -112,7 +112,7 @@ internal fun FindInPage() {
         )
         Icon(
             painterResource(id = R.drawable.ic_up),
-            contentDescription = stringResource(id = R.string.content_description_find_upward),
+            contentDescription = stringResource(id = jp.toastkid.article_viewer.R.string.content_description_find_upward),
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .clickable {
@@ -124,7 +124,7 @@ internal fun FindInPage() {
         )
         Icon(
             painterResource(id = R.drawable.ic_down),
-            contentDescription = stringResource(id = R.string.content_description_find_downward),
+            contentDescription = stringResource(id = jp.toastkid.article_viewer.R.string.content_description_find_downward),
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .clickable {
