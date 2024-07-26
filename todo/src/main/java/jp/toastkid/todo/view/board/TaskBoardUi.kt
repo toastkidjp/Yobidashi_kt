@@ -11,7 +11,6 @@ package jp.toastkid.todo.view.board
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
@@ -40,6 +39,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -241,7 +241,7 @@ private fun BoardItem(
                     .clickable {
                         expanded = true
                     }
-                    .background(color = Color(task.color))
+                    .drawBehind { drawRect(Color(task.color)) }
             )
             DropdownMenu(
                 expanded = expanded,
