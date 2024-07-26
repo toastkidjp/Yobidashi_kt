@@ -28,6 +28,8 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -55,9 +57,9 @@ internal fun ColorFilterSettingUi() {
     val preferenceApplier = PreferenceApplier(activityContext)
 
     val sample =
-        remember { mutableStateOf(preferenceApplier.filterColor(Color.Transparent.toArgb())) }
+        remember { mutableIntStateOf(preferenceApplier.filterColor(Color.Transparent.toArgb())) }
     val sliderValue =
-        remember { mutableStateOf(OverlayColorFilterUseCase.getDefaultAlpha().toFloat() / 255f) }
+        remember { mutableFloatStateOf(OverlayColorFilterUseCase.getDefaultAlpha().toFloat() / 255f) }
     val check = remember { mutableStateOf(preferenceApplier.useColorFilter()) }
 
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let{
