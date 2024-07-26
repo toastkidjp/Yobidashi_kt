@@ -8,7 +8,6 @@
 
 package jp.toastkid.todo.view.addition
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -157,7 +157,7 @@ internal fun TaskEditorUi(
                         modifier = Modifier
                             .width(44.dp)
                             .height(44.dp)
-                            .background(Color(color))
+                            .drawBehind { drawRect(Color(color)) }
                     )
                 }
             }
