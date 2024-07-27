@@ -89,7 +89,7 @@ internal fun SearchContentsUi(
             .padding(top = 8.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        if (viewModel.useUrlCard()) {
+        if (viewModel.useUrlCard() && !currentUrl.isNullOrBlank()) {
             UrlCard(currentTitle, currentUrl) { viewModel.putQuery(it) }
         }
 
@@ -279,11 +279,7 @@ internal fun SearchContentsUi(
 }
 
 @Composable
-private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (String) -> Unit) {
-    if (currentUrl.isNullOrBlank() && currentUrl.isNullOrBlank()) {
-        return
-    }
-
+private fun UrlCard(currentTitle: String?, currentUrl: String, setInput: (String) -> Unit) {
     val context = LocalContext.current
 
     Surface(
