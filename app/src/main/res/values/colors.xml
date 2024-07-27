@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="textPrimary">#FFE0E0E0</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000B00</color>
-    <color name="default_color_filter">#22777700</color>
 </resources>
