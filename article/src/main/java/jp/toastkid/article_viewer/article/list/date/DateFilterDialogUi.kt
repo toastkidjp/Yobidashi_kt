@@ -31,13 +31,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
-import jp.toastkid.lib.preference.ColorPair
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DateFilterDialogUi(
-    colorPair: ColorPair,
     openDialog: MutableState<Boolean>,
     dateSelectedActionUseCase: DateSelectedActionUseCase
 ) {

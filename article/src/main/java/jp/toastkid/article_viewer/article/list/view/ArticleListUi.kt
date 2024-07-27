@@ -129,7 +129,6 @@ fun ArticleListUi() {
 
             if (openDateDialog.value) {
                 DateFilterDialogUi(
-                    preferenceApplier.colorPair(),
                     openDateDialog,
                     DateSelectedActionUseCase(articleRepository, contentViewModel)
                 )
@@ -352,7 +351,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
 
     if (openDateDialog.value) {
         DateFilterDialogUi(
-            preferenceApplier.colorPair(),
             openDateDialog,
             DateSelectedActionUseCase(ArticleRepositoryFactory().invoke(activityContext), contentViewModel)
         )
