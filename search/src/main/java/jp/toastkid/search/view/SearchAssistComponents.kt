@@ -120,30 +120,6 @@ fun BindItemContent(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val title = when (urlItem) {
-        is Bookmark -> urlItem.title
-        is ViewHistory -> urlItem.title
-        else -> ""
-    }
-    val url = when (urlItem) {
-        is Bookmark -> urlItem.url
-        is ViewHistory -> urlItem.url
-        else -> ""
-    }
-    val time = dateFormat(
-        when (urlItem) {
-            is Bookmark -> urlItem.lastViewed
-            is ViewHistory -> urlItem.lastViewed
-            else -> 0L
-        }
-    )
-
-    val iconFile = when (urlItem) {
-        is Bookmark -> File(urlItem.favicon)
-        is ViewHistory -> File(urlItem.favicon)
-        else -> null
-    }
-
     SwipeToDismissItem(
         onClickDelete = {
             CoroutineScope(Dispatchers.IO).launch {
@@ -160,7 +136,11 @@ fun BindItemContent(
                 )
             ) {
                 AsyncImage(
-                    iconFile,
+                    when (urlItem) {
+                        is Bookmark -> File(urlItem.favicon)
+                        is ViewHistory -> File(urlItem.favicon)
+                        else -> null
+                    },
                     contentDescription = urlItem.urlString(),
                     placeholder = painterResource(id = jp.toastkid.lib.R.drawable.ic_history_black),
                     contentScale = ContentScale.Fit,
@@ -175,20 +155,34 @@ fun BindItemContent(
                         .weight(1f)
                 ) {
                     Text(
-                        text = title,
+                        text = when (urlItem) {
+                            is Bookmark -> urlItem.title
+                            is ViewHistory -> urlItem.title
+                            else -> ""
+                        },
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 18.sp
                     )
                     Text(
-                        text = url,
+                        text = when (urlItem) {
+                            is Bookmark -> urlItem.url
+                            is ViewHistory -> urlItem.url
+                            else -> ""
+                        },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 12.sp,
                         color = colorResource(id = jp.toastkid.lib.R.color.link_blue)
                     )
                     Text(
-                        text = time,
+                        text = dateFormat(
+                            when (urlItem) {
+                                is Bookmark -> urlItem.lastViewed
+                                is ViewHistory -> urlItem.lastViewed
+                                else -> 0L
+                            }
+                        ),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 12.sp,
