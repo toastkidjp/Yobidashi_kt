@@ -12,7 +12,6 @@ import android.net.Uri
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -40,7 +40,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.web.R
 import jp.toastkid.web.floating.FloatingPreviewViewModel
 import jp.toastkid.web.floating.WebViewInitializer
 import jp.toastkid.web.view.TitleUrlBox
@@ -68,10 +67,11 @@ fun FloatingPreviewUi(uri: Uri) {
     }
 
     Column(modifier = Modifier.height(400.dp)) {
+        val primaryColor = MaterialTheme.colorScheme.primary
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.primary)
+                .drawBehind { drawRect(primaryColor) }
                 .height(52.dp)
                 .padding(8.dp)
                 .clickable {
@@ -81,7 +81,7 @@ fun FloatingPreviewUi(uri: Uri) {
         ) {
             AsyncImage(
                 model = viewModel.icon.value,
-                contentDescription = stringResource(id = R.string.image),
+                contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                 modifier = Modifier
                     .size(36.dp)
                     .padding(end = 8.dp)
@@ -95,8 +95,8 @@ fun FloatingPreviewUi(uri: Uri) {
             )
 
             Icon(
-                painterResource(id = R.drawable.ic_close),
-                stringResource(id = R.string.close),
+                painterResource(id = jp.toastkid.lib.R.drawable.ic_close),
+                stringResource(id = jp.toastkid.lib.R.string.close),
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.clickable {
                     close(webView, coroutineScope, contentViewModel)

@@ -112,17 +112,19 @@ fun ViewHistoryListUi() {
             { item, word -> item.title.contains(word) || item.url.contains(word) }
         )
 
-    DestructiveChangeConfirmDialog(
-        clearConfirmDialogState,
-        R.string.title_clear_view_history
-    ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                viewHistoryRepository.deleteAll()
-            }
-            viewHistoryItems.clear()
+    if (clearConfirmDialogState.value) {
+        DestructiveChangeConfirmDialog(
+            R.string.title_clear_view_history,
+            onDismissRequest = { clearConfirmDialogState.value = false }
+        ) {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    viewHistoryRepository.deleteAll()
+                }
+                viewHistoryItems.clear()
 
-            contentViewModel.snackShort(R.string.done_clear)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.done_clear)
+            }
         }
     }
 }
@@ -207,7 +209,7 @@ private fun BindItemContent(
                 AsyncImage(
                     iconFile,
                     contentDescription = urlItem.urlString(),
-                    placeholder = painterResource(id = R.drawable.ic_history_black),
+                    placeholder = painterResource(id = jp.toastkid.lib.R.drawable.ic_history_black),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .width(32.dp)
@@ -230,14 +232,14 @@ private fun BindItemContent(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 12.sp,
-                        color = colorResource(id = R.color.link_blue)
+                        color = colorResource(id = jp.toastkid.lib.R.color.link_blue)
                     )
                     Text(
                         text = time,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 12.sp,
-                        color = colorResource(id = R.color.darkgray_scale)
+                        color = colorResource(id = jp.toastkid.lib.R.color.darkgray_scale)
                     )
                 }
             }
@@ -253,6 +255,6 @@ private fun BindItemContent(
 
 @Composable
 private fun dateFormat(timeInMillis: Long) = DateFormat.format(
-    stringResource(R.string.date_format),
+    stringResource(jp.toastkid.lib.R.string.date_format),
     timeInMillis
 ).toString()

@@ -16,6 +16,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.pdf.PdfImageFactory
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -39,7 +40,7 @@ class PdfImageFactoryTest {
 
         every { page.getWidth() }.returns(10)
         every { page.getHeight() }.returns(10)
-        every { page.render(bitmap, null, null, any()) }.answers { Unit }
+        every { page.render(bitmap, null, null, any<Int>()) }.answers { Unit }
         every { page.close() }.answers { Unit }
 
         pdfImageFactory = PdfImageFactory()
@@ -57,7 +58,7 @@ class PdfImageFactoryTest {
         verify(exactly = 1) { Bitmap.createBitmap(any(), any(), any()) }
         verify(exactly = 1) { page.getWidth() }
         verify(exactly = 1) { page.getHeight() }
-        verify(exactly = 1) { page.render(bitmap, null, null, any()) }
+        verify(exactly = 1) { page.render(bitmap, null, null, any<Int>()) }
         verify(exactly = 1) { page.close() }
     }
 

@@ -19,7 +19,6 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
@@ -32,9 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -125,8 +123,6 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.view.TabListUi
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -135,7 +131,7 @@ import kotlinx.coroutines.launch
 internal fun Content() {
     val activity = LocalContext.current as? ComponentActivity ?: return
 
-    val preferenceApplier = PreferenceApplier(activity)
+    val preferenceApplier = remember { PreferenceApplier(activity) }
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
@@ -170,9 +166,6 @@ internal fun Content() {
 
     val openMenu = remember { mutableStateOf(false) }
 
-    val bottomBarHeightPx = with(LocalDensity.current) { 72.dp.toPx() }
-    contentViewModel.setBottomBarHeightPx(bottomBarHeightPx)
-
     val coroutineScope = rememberCoroutineScope()
 
     val fabOffsetHeightPx = remember { mutableStateOf(0f) }
@@ -185,12 +178,12 @@ internal fun Content() {
                 }
                 val delta = available.y
                 val newOffset = contentViewModel.bottomBarOffsetHeightPx.value + delta
-                contentViewModel.bottomBarOffsetHeightPx.value = newOffset.coerceIn(-bottomBarHeightPx, 0f)
+                contentViewModel.bottomBarOffsetHeightPx.value = newOffset.coerceIn(-contentViewModel.bottomBarHeightPx(), 0f)
 
                 val newValue = fabOffsetHeightPx.value + (delta / 2)
                 fabOffsetHeightPx.value = when {
                     0f > newValue -> 0f
-                    newValue > bottomBarHeightPx -> bottomBarHeightPx
+                    newValue > contentViewModel.bottomBarHeightPx() -> contentViewModel.bottomBarHeightPx()
                     else -> newValue
                 }
 
@@ -212,19 +205,24 @@ internal fun Content() {
         rememberLauncherForActivityResult(DownloadPermissionRequestContract()) {
             if (it.not()) {
                 contentViewModel
-                    .snackShort(R.string.message_requires_permission_storage)
+                    .snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
             if (downloadUrl.value.isEmpty()) {
                 return@rememberLauncherForActivityResult
             }
             if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(activity)) {
-                contentViewModel.snackShort(R.string.message_wifi_not_connecting)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
                 return@rememberLauncherForActivityResult
             }
             DownloadAction(activity).invoke(downloadUrl.value)
             downloadUrl.value = ""
         }
+
+    val localDensity = LocalDensity.current
+    LaunchedEffect(localDensity) {
+        contentViewModel.setBottomBarHeightPx(with(localDensity) { 72.dp.toPx() })
+    }
 
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         val webViewClientFactory = WebViewClientFactory.forBackground(
@@ -262,7 +260,7 @@ internal fun Content() {
                 }
                 is SnackbarEvent -> {
                     val message = it.message ?: it.messageId?.let(activity::getString) ?: return@collect
-                    showSnackbar(message, contentViewModel, it)
+                    contentViewModel.showSnackbar(message, it)
                 }
                 is OpenWebSearchEvent -> {
                     when (navigationHostController.currentDestination?.route) {
@@ -292,12 +290,11 @@ internal fun Content() {
                     if (onBackground) {
                         val message =
                             activity.getString(R.string.message_tab_open_background, title)
-                        showSnackbar(
+                        contentViewModel.showSnackbar(
                             message,
-                            contentViewModel,
                             SnackbarEvent(
                                 message,
-                                actionLabel = activity.getString(R.string.open)
+                                actionLabel = activity.getString(jp.toastkid.lib.R.string.open)
                             ) {
                                 tabs.replace(tab)
                                 replaceToCurrentTab(tabs, navigationHostController)
@@ -363,7 +360,7 @@ internal fun Content() {
 
                         contentViewModel.snackWithAction(
                             activity.getString(R.string.message_tab_open_background, urlString),
-                            activity.getString(R.string.open)
+                            activity.getString(jp.toastkid.lib.R.string.open)
                         ) {
                             tabs.setIndexByTab(newTab)
                             contentViewModel.replaceToCurrentTab()
@@ -442,7 +439,7 @@ internal fun Content() {
     val mediaPermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             if (it.values.any { it.not() }) {
-                contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 
@@ -518,7 +515,7 @@ internal fun Content() {
                 ) {
                     Icon(
                         painterResource(id = R.drawable.ic_menu),
-                        stringResource(id = R.string.menu),
+                        stringResource(id = jp.toastkid.todo.R.string.menu),
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -572,7 +569,7 @@ internal fun Content() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color(preferenceApplier.filterColor(Color.Transparent.toArgb())))
+                        .drawBehind { drawRect(Color(preferenceApplier.filterColor(Color.Transparent.toArgb()))) }
                 )
             }
         }
@@ -599,38 +596,6 @@ private fun navigate(navigationController: NavHostController?, route: String) {
 
     navigationController?.navigate(route) {
         launchSingleTop = true
-    }
-}
-
-private fun showSnackbar(
-    message: String,
-    contentViewModel: ContentViewModel,
-    snackbarEvent: SnackbarEvent
-) {
-    val snackbarHostState = contentViewModel.snackbarHostState()
-
-    if (snackbarEvent.actionLabel == null) {
-        CoroutineScope(Dispatchers.Main).launch {
-            snackbarHostState.currentSnackbarData?.dismiss()
-            snackbarHostState.showSnackbar(message)
-        }
-        return
-    }
-
-    CoroutineScope(Dispatchers.Main).launch {
-        snackbarHostState.currentSnackbarData?.dismiss()
-        val snackbarResult = snackbarHostState.showSnackbar(
-            message,
-            snackbarEvent.actionLabel ?: "",
-            false,
-            SnackbarDuration.Long
-        )
-        when (snackbarResult) {
-            SnackbarResult.Dismissed -> Unit
-            SnackbarResult.ActionPerformed -> {
-                snackbarEvent.action()
-            }
-        }
     }
 }
 

@@ -7,7 +7,7 @@
     <string name="search_category_image">画像</string>
     <string name="search_category_map">地図</string>
     <string name="search_category_apps">アプリ</string>
-    <string name="search_category_twitter">Twitter</string>
+    <string name="search_category_twitter">X</string>
     <string name="search_category_facebook">Facebook</string>
     <string name="search_category_instagram">Instagram</string>
     <string name="search_category_youtube">動画</string>
@@ -27,6 +27,7 @@
     <string name="search_category_yahoo">Yahoo!</string>
     <string name="search_category_yahoo_japan">Yahoo! JAPAN</string>
     <string name="google">Google</string>
+    <string name="google_simple">Google (Simple)</string>
     <string name="google_news">Google News</string>
     <string name="bing">Bing</string>
     <string name="yelp">Yelp</string>

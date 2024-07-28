@@ -88,17 +88,19 @@ fun SearchHistoryListUi() {
         )
     })
 
-    DestructiveChangeConfirmDialog(
-        openConfirmDialog,
-        titleId = R.string.title_clear_search_history
-    ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                searchHistoryRepository.deleteAll()
-            }
+    if (openConfirmDialog.value) {
+        DestructiveChangeConfirmDialog(
+            titleId = R.string.title_clear_search_history,
+            onDismissRequest = { openConfirmDialog.value = false }
+        ) {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    searchHistoryRepository.deleteAll()
+                }
 
-            contentViewModel
+                contentViewModel
                     .snackShort(R.string.settings_color_delete)
+            }
         }
     }
 

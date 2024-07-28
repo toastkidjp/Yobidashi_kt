@@ -11,7 +11,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import jp.toastkid.image.R
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.image.ImageStoreUseCase
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -36,7 +35,7 @@ class AttachToThisAppBackgroundUseCase(
         val displaySize = windowRectCalculatorCompat.invoke(context as? Activity) ?: return
         imageStoreUseCaseFactory(context)(image, uri, displaySize)
         contentViewModel.refresh()
-        contentViewModel.snackShort(R.string.done_addition)
+        contentViewModel.snackShort(jp.toastkid.lib.R.string.done_addition)
     }
 
 }

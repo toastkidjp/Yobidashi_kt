@@ -7,7 +7,7 @@ object LibraryVersion {
     val room = "2.4.0"
     val paging = "3.1.0"
     val timber = "4.6.0"
-    val okhttp = "4.9.0"
+    val okhttp = "4.12.0"
     val jsoup = "1.14.3"
     val exifinterface = "1.3.3"
     val composeUi = "1.6.8"

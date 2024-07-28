@@ -9,7 +9,6 @@
 package jp.toastkid.markdown.presentation
 
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +42,7 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
         shadowElevation = 4.dp
     ) {
+        val surfaceColor = MaterialTheme.colorScheme.surface
         BasicTextField(
             value = viewModel.content(),
             onValueChange = viewModel::onValueChange,
@@ -57,7 +58,7 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .wrapContentSize(unbounded = true)
-                            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.75f))
+                            .drawBehind { drawRect(surfaceColor.copy(alpha = 0.75f)) }
                     ) {
                         viewModel.lineNumberTexts().forEach {
                             Box(
@@ -83,7 +84,7 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                 lineHeight = 1.55.em
             ),
             modifier = modifier
-                .background(MaterialTheme.colorScheme.surface)
+                .drawBehind { drawRect(surfaceColor) }
                 .height(viewModel.maxHeight(fontSize))
         )
 

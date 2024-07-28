@@ -12,7 +12,6 @@ import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -37,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
@@ -90,7 +90,7 @@ fun SwipeToDismissItem(
                         Modifier
                             .fillMaxHeight()
                             .width(60.dp)
-                            .background(Color(0xFFDD4444))
+                            .drawBehind { drawRect(Color(0xFFDD4444)) }
                             .padding(horizontal = 20.dp)
                             .clickable {
                                 coroutineScope.launch {
@@ -110,13 +110,14 @@ fun SwipeToDismissItem(
                 modifier = Modifier.matchParentSize()
             )
 
+            val surfaceColor = MaterialTheme.colorScheme.surface
             Row(
                 content = dismissContent,
                 modifier = Modifier
                     .offset {
                         IntOffset(min(anchoredDraggableState.requireOffset(), marginEnd).toInt(), 0)
                     }
-                    .background(MaterialTheme.colorScheme.surface)
+                    .drawBehind { drawRect(surfaceColor) }
             )
         }
 

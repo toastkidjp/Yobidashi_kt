@@ -14,6 +14,8 @@ plugins {
 }
 
 android {
+    namespace = "jp.toastkid.ui"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
@@ -22,7 +24,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
         }
     }
 
@@ -46,6 +48,7 @@ android {
 
 dependencies {
     implementation(project(path = ":lib"))
+    implementation("androidx.compose.ui:ui:${LibraryVersion.composeUi}")
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     testImplementation("junit:junit:4.12")

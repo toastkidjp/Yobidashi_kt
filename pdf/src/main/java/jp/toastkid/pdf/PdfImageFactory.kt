@@ -18,7 +18,7 @@ class PdfImageFactory {
      */
     operator fun invoke(currentPage: PdfRenderer.Page): Bitmap {
         val bitmap: Bitmap = Bitmap.createBitmap(
-                currentPage.width, currentPage.height, Bitmap.Config.ARGB_8888)
+                currentPage.width * 2, currentPage.height * 2, Bitmap.Config.ARGB_8888)
         currentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
         currentPage.close()
         return bitmap

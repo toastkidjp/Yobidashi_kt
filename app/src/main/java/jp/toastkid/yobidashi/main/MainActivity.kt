@@ -12,7 +12,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.theme.AppTheme
@@ -26,12 +26,12 @@ class MainActivity : ComponentActivity() {
 
         actionBar?.hide()
 
+        val preferenceApplier = PreferenceApplier(this)
+
+        val contentViewModel = ViewModelProvider(this).get(ContentViewModel::class.java)
+        contentViewModel.initializeWith(preferenceApplier)
+
         setContent {
-            val preferenceApplier = PreferenceApplier(this)
-
-            val contentViewModel = viewModel(ContentViewModel::class.java, this)
-            contentViewModel.initializeWith(preferenceApplier)
-
             AppTheme(
                 contentViewModel.colorPair(),
                 isSystemInDarkTheme() || preferenceApplier.useDarkMode()

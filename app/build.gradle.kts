@@ -19,6 +19,8 @@ plugins {
 // TODO apply(from = "../detekt.gradle.kts")
 
 android {
+    namespace = "jp.toastkid.yobidashi"
+
     compileSdkVersion(BuildTool.compileSdk)
     buildToolsVersion(BuildTool.buildTools)
 
@@ -65,6 +67,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility(JavaVersion.VERSION_1_8)
@@ -111,7 +114,7 @@ dependencies {
     implementation(project(":image"))
     implementation(project(":loan"))
     implementation(project(":about"))
-    implementation(project(":barcode"))
+    implementation(project(":barcode:ui"))
     implementation(project(":ui"))
     implementation(project(":editor"))
     implementation(project(":number"))
@@ -120,8 +123,8 @@ dependencies {
     implementation(project(":web"))
     implementation(project(":chat"))
     implementation(project(":world"))
+    implementation(project(":setting"))
 
-    implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
     implementation("androidx.work:work-runtime:${LibraryVersion.workManager}")
 
     // Compose dependencies.
@@ -132,9 +135,7 @@ dependencies {
     implementation("androidx.navigation:navigation-runtime-ktx:${LibraryVersion.navigationCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
-    implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")

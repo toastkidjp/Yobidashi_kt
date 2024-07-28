@@ -10,7 +10,6 @@ package jp.toastkid.search.view
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -34,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -94,7 +94,7 @@ internal fun SearchContentsUi(
         }
 
         if (viewModel.urlItems.isNotEmpty()) {
-            HeaderWithLink(R.string.title_view_history, R.string.link_open_history) {
+            HeaderWithLink(jp.toastkid.lib.R.string.title_view_history, R.string.link_open_history) {
                 contentViewModel.nextRoute("web/history/list")
             }
 
@@ -120,7 +120,7 @@ internal fun SearchContentsUi(
         if (viewModel.favoriteSearchItems.isNotEmpty()) {
             HeaderWithLink(
                 R.string.title_favorite_search,
-                R.string.open
+                jp.toastkid.lib.R.string.open
             ) {
                 viewModel.openFavoriteSearch()
             }
@@ -151,7 +151,7 @@ internal fun SearchContentsUi(
         if (viewModel.searchHistories.isNotEmpty()) {
             HeaderWithLink(
                 R.string.title_search_history,
-                R.string.open
+                jp.toastkid.lib.R.string.open
             ) {
                 viewModel.openSearchHistory()
             }
@@ -203,6 +203,7 @@ internal fun SearchContentsUi(
                                 modifier = Modifier
                                     .wrapContentWidth()
                             )
+                            val onSurfaceColor = MaterialTheme.colorScheme.onSurface
                             Text(
                                 text = stringResource(id = R.string.plus),
                                 color = MaterialTheme.colorScheme.surface,
@@ -211,7 +212,7 @@ internal fun SearchContentsUi(
                                 modifier = Modifier
                                     .width(36.dp)
                                     .height(32.dp)
-                                    .background(MaterialTheme.colorScheme.onSurface)
+                                    .drawBehind { drawRect(onSurfaceColor) }
                                     .clickable { viewModel.putQuery("$it ") }
                             )
                         }
@@ -221,7 +222,7 @@ internal fun SearchContentsUi(
         }
 
         if (viewModel.useTrend()) {
-            HeaderWithLink(R.string.hourly_trends, R.string.open) {
+            HeaderWithLink(R.string.hourly_trends, jp.toastkid.lib.R.string.open) {
                 viewModel.search("https://trends.google.co.jp/trends/trendingsearches/realtime")
             }
 
@@ -255,15 +256,17 @@ internal fun SearchContentsUi(
                                     .wrapContentWidth()
                                     .padding(start = 4.dp)
                             )
+
+                            val putQueryColor = colorResource(id = jp.toastkid.lib.R.color.pre4_ripple)
                             Text(
                                 text = stringResource(id = R.string.plus),
-                                color = colorResource(id = R.color.white),
+                                color = colorResource(id = jp.toastkid.lib.R.color.white),
                                 fontSize = 20.sp,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .width(36.dp)
                                     .height(32.dp)
-                                    .background(colorResource(id = R.color.pre4_ripple))
+                                    .drawBehind { drawRect(putQueryColor) }
                                     .clickable { viewModel.putQuery("${it.title} ") }
                             )
                         }
@@ -302,7 +305,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                 )
                 Text(
                     text = currentUrl,
-                    color = colorResource(id = R.color.link_blue),
+                    color = colorResource(id = jp.toastkid.lib.R.color.link_blue),
                     fontSize = 14.sp,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
@@ -311,7 +314,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
             }
             Icon(
                 painterResource(id = R.drawable.ic_share_black),
-                contentDescription = stringResource(id = R.string.share),
+                contentDescription = stringResource(id = jp.toastkid.lib.R.string.share),
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .width(32.dp)
@@ -325,8 +328,8 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                     }
             )
             Icon(
-                painterResource(id = R.drawable.ic_clip),
-                contentDescription = stringResource(id = R.string.clip),
+                painterResource(id = jp.toastkid.lib.R.drawable.ic_clip),
+                contentDescription = stringResource(id = jp.toastkid.lib.R.string.clip),
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .width(32.dp)
@@ -336,13 +339,13 @@ private fun UrlCard(currentTitle: String?, currentUrl: String?, setInput: (Strin
                         ViewModelProvider(activity)
                             .get(ContentViewModel::class.java)
                             .snackShort(
-                                context.getString(R.string.message_clip_to, currentUrl)
+                                context.getString(jp.toastkid.lib.R.string.message_clip_to, currentUrl)
                             )
                     }
             )
             Icon(
                 painterResource(id = R.drawable.ic_edit_black),
-                contentDescription = stringResource(id = R.string.edit),
+                contentDescription = stringResource(id = jp.toastkid.lib.R.string.edit),
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .width(32.dp)
@@ -389,7 +392,7 @@ private fun HeaderWithLink(headerTextId: Int, linkTextId: Int, onLinkClick: () -
             )
             Text(
                 stringResource(id = linkTextId),
-                color = colorResource(id = R.color.link_blue),
+                color = colorResource(id = jp.toastkid.lib.R.color.link_blue),
                 modifier = Modifier
                     .clickable(onClick = onLinkClick)
                     .align(Alignment.CenterEnd)

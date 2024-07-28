@@ -17,6 +17,8 @@ plugins {
 // TODO apply(from = "../jacoco.gradle.kts")
 
 android {
+    namespace = "jp.toastkid.pdf"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
@@ -44,7 +46,6 @@ tasks.withType<GenerateBuildConfig> {
 dependencies {
     implementation(project(path = ":lib"))
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")

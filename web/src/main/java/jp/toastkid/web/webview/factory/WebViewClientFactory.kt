@@ -245,7 +245,7 @@ class WebViewClientFactory(
         } catch (e: ActivityNotFoundException) {
             Timber.w(e)
 
-            contentViewModel?.snackShort(R.string.message_cannot_launch_app)
+            contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_cannot_launch_app)
         }
 
     companion object {

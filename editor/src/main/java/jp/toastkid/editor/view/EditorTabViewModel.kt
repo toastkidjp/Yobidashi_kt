@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -43,6 +44,10 @@ class EditorTabViewModel {
 
     private val darkMode = mutableStateOf(true)
 
+    private val openConfirmDialog = mutableStateOf(false)
+
+    private val nestedScrollDispatcher = NestedScrollDispatcher()
+
     fun content() = content.value
 
     fun onValueChange(it: TextFieldValue) {
@@ -52,6 +57,12 @@ class EditorTabViewModel {
 
         applyStyle(it)
     }
+
+    fun clearText() {
+        content.value = TextFieldValue()
+    }
+
+    fun contentLength() = content.value.text.length
 
     private fun applyStyle(it: TextFieldValue) {
         //val newContent = if (tab.editable()) it else it.copy(text = content.value.text)
@@ -126,12 +137,6 @@ class EditorTabViewModel {
 
         val newContent = content
         applyStyle(newContent)
-
-        /*TODO CoroutineScope(dispatcher).launch {
-            mainViewModel.finderFlow().collect {
-                findOrderReceiver(it, content.value) { content.value = it }
-            }
-        }*/
     }
 
     fun currentLineOffset(): Offset {
@@ -249,6 +254,62 @@ class EditorTabViewModel {
         val lineEnd = textLayoutResult.getLineEnd(currentLine)
         val targetEnd = min(currentContent.text.length, lineEnd + 1)
         onValueChange(currentContent.copy(selection = TextRange(lineStart, targetEnd)))
+    }
+
+    fun nestedScrollDispatcher() = nestedScrollDispatcher
+
+    private val openInputFileNameDialog = mutableStateOf(false)
+
+    fun openInputFileNameDialog() {
+        openInputFileNameDialog.value = true
+    }
+
+    fun isOpenInputFileNameDialog(): Boolean {
+        return openInputFileNameDialog.value
+    }
+
+    fun closeInputFileNameDialog() {
+        openInputFileNameDialog.value = false
+    }
+
+    fun isOpenConfirmDialog(): Boolean {
+        return openConfirmDialog.value
+    }
+
+    fun openConfirmDialog() {
+        openConfirmDialog.value = true
+    }
+
+    fun closeConfirmDialog() {
+        openConfirmDialog.value = false
+    }
+
+    private val exitDialogState = mutableStateOf(false)
+
+    fun isOpenExitDialog(): Boolean {
+        return exitDialogState.value
+    }
+
+    fun openExitDialog() {
+        exitDialogState.value = true
+    }
+
+    fun closeExitDialog() {
+        exitDialogState.value = false
+    }
+
+    private val openLoadFromStorageDialog = mutableStateOf(false)
+
+    fun isOpenLoadFromStorageDialog(): Boolean {
+        return openLoadFromStorageDialog.value
+    }
+
+    fun openLoadFromStorageDialog() {
+        openLoadFromStorageDialog.value = true
+    }
+
+    fun closeLoadFromStorageDialog() {
+        openLoadFromStorageDialog.value = false
     }
 
 }

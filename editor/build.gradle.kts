@@ -19,6 +19,8 @@ plugins {
 // TODO apply from: '../detekt.gradle'
 
 android {
+    namespace = "jp.toastkid.editor"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
@@ -27,7 +29,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
         }
     }
 

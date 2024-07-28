@@ -90,7 +90,7 @@ fun ArchiveListUi() {
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_archive),
-                            contentDescription = stringResource(id = R.string.image),
+                            contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                             tint = MaterialTheme.colorScheme.secondary,
                             modifier = Modifier
                                 .padding(4.dp)

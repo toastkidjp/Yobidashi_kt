@@ -14,14 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -31,17 +29,13 @@ import jp.toastkid.ui.R
 
 @Composable
 fun InputFileNameDialogUi(
-    openDialog: MutableState<Boolean>,
     defaultInput: String = "",
+    onDismissRequest: () -> Unit,
     onCommit: (String) -> Unit
 ) {
-    if (openDialog.value.not()) {
-        return
-    }
-
     val input = remember { mutableStateOf(defaultInput) }
     AlertDialog(
-        onDismissRequest = { openDialog.value = false },
+        onDismissRequest = onDismissRequest,
         title = {
             Text(
                 stringResource(id = R.string.title_dialog_input_file_name),
@@ -76,26 +70,24 @@ fun InputFileNameDialogUi(
         },
         confirmButton = {
             Text(
-                text = stringResource(id = R.string.save),
+                text = stringResource(id = jp.toastkid.lib.R.string.save),
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .clickable {
                         if (input.value.isNotBlank()) {
                             onCommit(input.value)
                         }
-                        openDialog.value = false
+                        onDismissRequest()
                     }
                     .padding(4.dp)
             )
         },
         dismissButton = {
             Text(
-                text = stringResource(id = R.string.cancel),
+                text = stringResource(id = jp.toastkid.lib.R.string.cancel),
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
-                    .clickable {
-                        openDialog.value = false
-                    }
+                    .clickable(onClick = onDismissRequest)
                     .padding(4.dp)
             )
         }

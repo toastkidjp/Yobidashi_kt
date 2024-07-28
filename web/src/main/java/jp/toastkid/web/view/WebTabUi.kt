@@ -44,10 +44,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -147,9 +146,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
                             )
                         )
                     }
-                    .alpha(
-                        browserViewModel.calculateSwipeRefreshIndicatorAlpha(refreshTriggerPx)
-                    )
+                    .graphicsLayer { alpha = browserViewModel.calculateSwipeRefreshIndicatorAlpha(refreshTriggerPx) }
                     .align(Alignment.TopCenter)
             ) {
                 CircularProgressIndicator(
@@ -168,9 +165,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
 
     if (browserViewModel.openErrorDialog.value) {
         ConfirmDialog(
-            browserViewModel.openErrorDialog,
             stringResource(id = R.string.title_ssl_connection_error),
-            browserViewModel.error.value
+            browserViewModel.error.value,
+            onDismissRequest = { browserViewModel.openErrorDialog.value = false }
         ) {
             browserViewModel.clearError()
         }
@@ -222,7 +219,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val storagePermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it) {
-                contentViewModel.snackShort(R.string.message_requires_permission_storage)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 
@@ -338,21 +335,18 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_back,
                 R.string.back,
-                MaterialTheme.colorScheme.onPrimary,
                 viewModel.enableBack.value
             ) { webViewContainer.back() }
 
             HeaderSubButton(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,
-                MaterialTheme.colorScheme.onPrimary,
                 viewModel.enableForward.value
             ) { webViewContainer.forward() }
 
             HeaderSubButton(
                 R.drawable.ic_reader_mode,
-                R.string.title_menu_reader_mode,
-                MaterialTheme.colorScheme.onPrimary
+                R.string.title_menu_reader_mode
             ) {
                 webViewContainer.invokeContentExtraction {
                     showReader(it, contentViewModel, resetReaderModeContent)
@@ -371,8 +365,8 @@ private fun AppBarContent(
                     )
             ) {
                 Image(
-                    painterResource(R.drawable.ic_tab),
-                    contentDescription = stringResource(id = R.string.tab_list),
+                    painterResource(jp.toastkid.lib.R.drawable.ic_tab),
+                    contentDescription = stringResource(id = jp.toastkid.lib.R.string.tab_list),
                     colorFilter = ColorFilter.tint(
                         MaterialTheme.colorScheme.onPrimary,
                         BlendMode.SrcIn
@@ -390,23 +384,20 @@ private fun AppBarContent(
             }
 
             HeaderSubButton(
-                R.drawable.ic_bookmark,
-                R.string.title_bookmark,
-                MaterialTheme.colorScheme.onPrimary
+                jp.toastkid.lib.R.drawable.ic_bookmark,
+                R.string.title_bookmark
             ) { contentViewModel.nextRoute("web/bookmark/list") }
 
             HeaderSubButton(
                 R.drawable.ic_history,
-                R.string.title_view_history,
-                MaterialTheme.colorScheme.onPrimary
+                jp.toastkid.lib.R.string.title_view_history
             ) { contentViewModel.nextRoute("web/history/list") }
 
             Box {
                 val open = remember { mutableStateOf(false) }
                 HeaderSubButton(
                     R.drawable.ic_user_agent,
-                    R.string.title_user_agent,
-                    MaterialTheme.colorScheme.onPrimary
+                    R.string.title_user_agent
                 ) { open.value = true }
                 UserAgentDropdown(open) {
                     PreferenceApplier(activity).setUserAgent(it.name)
@@ -422,8 +413,7 @@ private fun AppBarContent(
 
             HeaderSubButton(
                 R.drawable.ic_info,
-                R.string.title_menu_page_information,
-                MaterialTheme.colorScheme.onPrimary
+                R.string.title_menu_page_information
             ) {
                 openPageInformation.value = true
             }
@@ -431,22 +421,20 @@ private fun AppBarContent(
             if (openPageInformation.value) {
                 val pageInformation = webViewContainer.makeCurrentPageInformation()
                 if (pageInformation.isEmpty.not()) {
-                    PageInformationDialog(openPageInformation, pageInformation)
+                    PageInformationDialog(pageInformation, { openPageInformation.value = false })
                 }
             }
 
             HeaderSubButton(
                 R.drawable.ic_home,
-                R.string.title_load_home,
-                MaterialTheme.colorScheme.onPrimary
+                R.string.title_load_home
             ) {
                 contentViewModel.open(PreferenceApplier(activity).homeUrl.toUri())
             }
 
             HeaderSubButton(
                 R.drawable.ic_code,
-                R.string.title_menu_html_source,
-                MaterialTheme.colorScheme.onPrimary
+                R.string.title_menu_html_source
             ) {
                 webViewContainer.invokeHtmlSourceExtraction {
                     val replace = it.replace("\\u003C", "<")
@@ -458,7 +446,7 @@ private fun AppBarContent(
         Box(modifier = Modifier.padding(start = 4.dp)) {
             AsyncImage(
                 model = R.drawable.url_box_background,
-                contentDescription = stringResource(id = R.string.search)
+                contentDescription = stringResource(id = jp.toastkid.lib.R.string.search)
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -471,7 +459,7 @@ private fun AppBarContent(
             ) {
                 AsyncImage(
                     model = viewModel.icon.value,
-                    contentDescription = stringResource(id = R.string.image),
+                    contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                     modifier = Modifier
                         .size(36.dp)
                         .padding(horizontal = 4.dp)
@@ -488,7 +476,7 @@ private fun AppBarContent(
 
                 val isNotLoading = 70 < viewModel.progress.value
                 val reloadIconId =
-                    if (isNotLoading) R.drawable.ic_reload else R.drawable.ic_close
+                    if (isNotLoading) R.drawable.ic_reload else jp.toastkid.lib.R.drawable.ic_close
                 Icon(
                     painterResource(id = reloadIconId),
                     contentDescription = stringResource(id = R.string.title_menu_reload),
@@ -530,18 +518,17 @@ private fun showReader(
 private fun HeaderSubButton(
     iconId: Int,
     descriptionId: Int,
-    tint: Color,
     enable: Boolean = true,
     onClick: () -> Unit
 ) {
     Icon(
         painterResource(id = iconId),
         contentDescription = stringResource(id = descriptionId),
-        tint = tint,
+        tint = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
             .width(44.dp)
             .padding(4.dp)
-            .alpha(if (enable) 1f else 0.6f)
+            .graphicsLayer { alpha = if (enable) 1f else 0.6f }
             .clickable(enabled = enable, onClick = onClick)
     )
 }

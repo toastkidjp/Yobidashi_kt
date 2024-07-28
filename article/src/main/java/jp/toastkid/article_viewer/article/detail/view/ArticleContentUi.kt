@@ -33,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,8 +45,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.platform.LocalTextToolbar
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -55,18 +52,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
-import jp.toastkid.article_viewer.article.detail.LinkGenerator
-import jp.toastkid.article_viewer.article.detail.view.menu.ContextMenuToolbar
 import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.markdown.domain.service.LinkGenerator
 import jp.toastkid.markdown.presentation.MarkdownPreview
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun ArticleContentUi(title: String) {
+fun ArticleContentUi(title: String, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val repository = remember { ArticleRepositoryFactory().invoke(context) }
     val viewModel = remember { ContentViewerFragmentViewModel() }
@@ -93,19 +89,16 @@ fun ArticleContentUi(title: String) {
         AppBarContent(viewModel)
     }
 
-    CompositionLocalProvider(
-        LocalTextToolbar provides ContextMenuToolbar(LocalView.current)
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        shadowElevation = 4.dp,
+        modifier = modifier
     ) {
-        Surface(
-            color = MaterialTheme.colorScheme.primary,
-            shadowElevation = 4.dp
-        ) {
-            MarkdownPreview(
-                content = viewModel.content(),
-                scrollState = viewModel.scrollState(),
-                modifier = Modifier.padding(8.dp)
-            )
-        }
+        MarkdownPreview(
+            content = viewModel.content(),
+            scrollState = viewModel.scrollState(),
+            modifier = Modifier.padding(8.dp)
+        )
     }
 
     ScrollerUseCase(contentViewModel, viewModel.scrollState()).invoke(LocalLifecycleOwner.current)

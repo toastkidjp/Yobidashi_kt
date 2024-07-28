@@ -3,7 +3,7 @@ package property
 object Version {
     private val major  = 2
     private val middle = 0
-    private val minor  = 64
+    private val minor  = 65
 
     init {
         if (middle >= 100 || minor >= 10_000) {

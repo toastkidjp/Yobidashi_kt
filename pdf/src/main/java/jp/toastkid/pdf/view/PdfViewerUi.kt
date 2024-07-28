@@ -12,6 +12,7 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -53,25 +56,26 @@ import java.io.FileNotFoundException
 import kotlin.math.roundToInt
 
 @Composable
-fun PdfViewerUi(uri: Uri) {
+fun PdfViewerUi(uri: Uri, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
 
     val listState = rememberLazyListState()
 
-    val viewModelProvider = ViewModelProvider(context)
-    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
-    contentViewModel.replaceAppBarContent { AppBarUi(listState) }
+    val contentViewModel = remember { ViewModelProvider(context).get(ContentViewModel::class.java) }
+    LaunchedEffect(Unit) {
+        contentViewModel.replaceAppBarContent { AppBarUi(listState) }
+    }
 
     ScrollerUseCase(
         contentViewModel,
         listState
     ).invoke(LocalLifecycleOwner.current)
 
-    PdfPageList(uri, listState)
+    PdfPageList(uri, listState, modifier)
 }
 
 @Composable
-private fun PdfPageList(uri: Uri, listState: LazyListState) {
+private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) {
     val context = LocalContext.current
 
     val pdfRenderer =
@@ -98,19 +102,12 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
         }
     }
 
-    val max = images.size
-    LazyColumn(state = listState) {
+    LazyColumn(state = listState, modifier = modifier) {
         itemsIndexed(images) { index, bitmap ->
             Surface(
                 shadowElevation = 4.dp,
                 color = Color(0xFFF0F0F0),
-                modifier = Modifier
-                    .padding(
-                        start = 8.dp,
-                        end = 8.dp,
-                        top = 2.dp,
-                        bottom = 2.dp
-                    )
+                modifier = Modifier.padding(8.dp).padding(vertical = 4.dp)
             ) {
                 var scale by remember { mutableStateOf(1f) }
                 var offset by remember { mutableStateOf(Offset.Zero) }
@@ -121,19 +118,30 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
                 }
 
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .graphicsLayer(
-                            scaleX = scale,
-                            scaleY = scale,
-                            translationX = offset.x,
-                            translationY = offset.y
-                        )
-                        .transformable(state = state)
+                    modifier = Modifier.fillMaxWidth()
+                        .pointerInput(bitmap) {
+                            detectTapGestures(
+                                onPress = { /* Called when the gesture starts */ },
+                                onDoubleTap = {
+                                    scale = 1f
+                                    offset = Offset.Zero
+                                },
+                                onLongPress = {  },
+                                onTap = { /* Called on Tap */ }
+                            )
+                        }
                 ) {
+                    val max = images.size
                     AsyncImage(
                         model = bitmap,
-                        contentDescription = "${index + 1} / $max"
+                        contentDescription = "${index + 1} / $max",
+                        modifier = Modifier.graphicsLayer(
+                            scaleX = scale,
+                            scaleY = scale,
+                            translationX = if (scale == 1f) 0f else offset.x,
+                            translationY = if (scale == 1f) 0f else offset.y
+                        )
+                            .transformable(state = state)
                     )
                     Text(
                         text = "${index + 1} / $max",
@@ -149,7 +157,8 @@ private fun PdfPageList(uri: Uri, listState: LazyListState) {
 @Composable
 private fun AppBarUi(scrollState: LazyListState) {
     var sliderPosition by remember { mutableStateOf(0f) }
-    if (scrollState.layoutInfo.totalItemsCount == 0) {
+    val lazyListLayoutInfoState = remember { derivedStateOf { scrollState.layoutInfo } }
+    if (lazyListLayoutInfoState.value.totalItemsCount == 0) {
         return
     }
     Slider(
@@ -163,6 +172,6 @@ private fun AppBarUi(scrollState: LazyListState) {
                 )
             }
         },
-        steps = scrollState.layoutInfo.totalItemsCount - 1
+        steps = lazyListLayoutInfoState.value.totalItemsCount - 1
     )
 }

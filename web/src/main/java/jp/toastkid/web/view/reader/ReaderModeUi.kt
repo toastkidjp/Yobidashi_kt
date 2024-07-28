@@ -8,7 +8,6 @@
 
 package jp.toastkid.web.view.reader
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -34,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.web.R
 
 @Composable
 internal fun ReaderModeUi(title: String, text: MutableState<String>) {
@@ -46,7 +45,7 @@ internal fun ReaderModeUi(title: String, text: MutableState<String>) {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color(preferenceApplier.editorBackgroundColor()))
+            .drawBehind { drawRect(Color(preferenceApplier.editorBackgroundColor())) }
             .padding(16.dp)
     ) {
         Column {
@@ -64,8 +63,8 @@ internal fun ReaderModeUi(title: String, text: MutableState<String>) {
                     )
                 }
                 Icon(
-                    painterResource(R.drawable.ic_close_black),
-                    contentDescription = stringResource(id = R.string.close),
+                    painterResource(jp.toastkid.lib.R.drawable.ic_close_black),
+                    contentDescription = stringResource(id = jp.toastkid.lib.R.string.close),
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .size(44.dp)

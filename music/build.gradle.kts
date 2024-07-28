@@ -17,6 +17,8 @@ plugins {
 //TODO apply(from = "../jacoco.gradle.kts")
 
 android {
+    namespace = "jp.toastkid.media"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
@@ -30,7 +32,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
         }
     }
 
@@ -45,7 +47,6 @@ tasks.withType<GenerateBuildConfig> {
 
 dependencies {
     implementation(project(path = ":lib"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 

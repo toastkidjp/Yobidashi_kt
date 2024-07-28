@@ -18,6 +18,8 @@ plugins {
 // TODO apply from: '../jacoco.gradle'
 
 android {
+    namespace = "jp.toastkid.rss"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
@@ -46,7 +48,6 @@ dependencies {
     implementation(project(path = ":api"))
     implementation(project(path = ":lib"))
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")

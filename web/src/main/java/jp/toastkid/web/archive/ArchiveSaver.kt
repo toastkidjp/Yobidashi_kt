@@ -5,7 +5,6 @@ import android.webkit.WebView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.web.R
 import java.io.File
 
 /**
@@ -43,11 +42,11 @@ class ArchiveSaver {
         }
 
         if (value == null) {
-            contentViewModel?.snackShort(R.string.message_save_failed)
+            contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_save_failed)
             return
         }
 
-        val message = context.getString(R.string.message_done_save) + value.substring(value.lastIndexOf("/"))
+        val message = context.getString(jp.toastkid.lib.R.string.message_done_save) + value.substring(value.lastIndexOf("/"))
         contentViewModel?.snackShort(message)
     }
 

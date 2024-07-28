@@ -34,9 +34,9 @@ class FileActionUseCase(
     /**
      * Save current content to file.
      */
-    fun save(openInputFileNameDialog: MutableState<Boolean>, showSnack: Boolean = true) {
+    fun save(openDialog: () -> Unit, showSnack: Boolean = true) {
         if (path.value.isBlank()) {
-            openInputFileNameDialog.value = true
+            openDialog()
             return
         }
         saveToFile(path.value, showSnack)
@@ -128,7 +128,7 @@ class FileActionUseCase(
      *
      * @param fileName
      */
-    fun assignNewFile(fileName: String) {
+    private fun assignNewFile(fileName: String) {
         val context = context
         var newFile = externalFileAssignment(context, fileName)
         while (newFile.exists()) {
@@ -144,14 +144,13 @@ class FileActionUseCase(
 
     fun makeNewFileWithName(
         fileName: String,
-        fileActionUseCase: FileActionUseCase,
-        openInputFileNameDialog: MutableState<Boolean>
+        openInputFileNameDialog: () -> Unit
     ) {
         val appropriateName =
             if (fileName.endsWith(".md") || fileName.endsWith(".txt")) fileName
             else "$fileName.txt"
-        fileActionUseCase.assignNewFile(appropriateName)
-        fileActionUseCase.save(openInputFileNameDialog)
+        assignNewFile(appropriateName)
+        save(openInputFileNameDialog)
     }
 
     /**
@@ -171,9 +170,5 @@ class FileActionUseCase(
     private fun snackText(message: String) {
         contentViewModel.snackShort(message)
     }
-
-    fun getText() = textGetter()
-
-    fun setText(newText: String) = textSetter(newText)
 
 }

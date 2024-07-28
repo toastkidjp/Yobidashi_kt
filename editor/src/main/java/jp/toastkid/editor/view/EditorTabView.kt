@@ -21,7 +21,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.scrollBy
@@ -64,7 +63,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -111,7 +109,7 @@ import jp.toastkid.ui.menu.context.MenuInjector
 import kotlinx.coroutines.launch
 
 @Composable
-fun EditorTabView(path: String?) {
+fun EditorTabView(path: String?, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
 
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
@@ -131,8 +129,7 @@ fun EditorTabView(path: String?) {
         )
     }
 
-    val localLifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(key1 = localLifecycleOwner, block = {
+    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         contentViewModel.event.collect {
             when (it) {
                 is ToTopEvent -> {
@@ -149,7 +146,7 @@ fun EditorTabView(path: String?) {
                     val title =
                         if (path?.contains("/") == true) path.substring(path.lastIndexOf("/") + 1)
                         else path
-                    val content = fileActionUseCase.getText()
+                    val content = viewModel.content().text
                     if (content.isEmpty()) {
                         contentViewModel.snackShort(R.string.error_content_is_empty)
                         return@collect
@@ -167,8 +164,6 @@ fun EditorTabView(path: String?) {
             }
         }
     })
-
-    val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
 
     val preferenceApplier = remember { PreferenceApplier(context) }
 
@@ -249,11 +244,12 @@ fun EditorTabView(path: String?) {
                 background = Color.Transparent
             ),
             cursorBrush = SolidColor(Color(preferenceApplier.editorCursorColor(Color(0xDD81D4FA).toArgb()))),
-            modifier = Modifier
+            modifier = modifier
                 .focusRequester(viewModel.focusRequester())
                 .fillMaxWidth()
-                .background(Color(preferenceApplier.editorBackgroundColor()))
                 .drawBehind {
+                    drawRect(Color(preferenceApplier.editorBackgroundColor()))
+
                     val currentLineOffset = viewModel.currentLineOffset()
                     if (currentLineOffset != Offset.Unspecified) {
                         drawRect(
@@ -278,33 +274,32 @@ fun EditorTabView(path: String?) {
                             return super.onPreScroll(available, source)
                         }
                     },
-                    nestedScrollDispatcher
+                    viewModel.nestedScrollDispatcher()
                 )
                 .padding(vertical = 2.dp)
                 .padding(start = 2.dp, end = 4.dp)
         )
     }
 
-    val dialogState = remember { mutableStateOf(false) }
-
-    ConfirmDialog(
-        dialogState,
-        context.getString(R.string.confirmation),
-        context.getString(R.string.message_confirm_exit)
-    ) {
-        context.finish()
+    if (viewModel.isOpenExitDialog()) {
+        ConfirmDialog(
+            stringResource(jp.toastkid.lib.R.string.confirmation),
+            stringResource(jp.toastkid.lib.R.string.message_confirm_exit),
+            onDismissRequest = viewModel::closeExitDialog
+        ) {
+            context.finish()
+        }
     }
 
     BackHandler {
-        dialogState.value = true
+        viewModel.openExitDialog()
     }
 
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
-    val openInputFileNameDialog = remember { mutableStateOf(false) }
     val observer = LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_PAUSE) {
-            fileActionUseCase.save(openInputFileNameDialog, false)
+            fileActionUseCase.save(viewModel::openInputFileNameDialog, false)
         }
     }
 
@@ -318,11 +313,34 @@ fun EditorTabView(path: String?) {
         localLifecycle.addObserver(observer)
 
         onDispose {
-            fileActionUseCase.save(openInputFileNameDialog, false)
+            fileActionUseCase.save(viewModel::openInputFileNameDialog, false)
             localLifecycle.removeObserver(observer)
             viewModel.dispose()
         }
 
+    }
+
+    if (viewModel.isOpenConfirmDialog()) {
+        DestructiveChangeConfirmDialog(
+            titleId = R.string.title_clear_text,
+            onDismissRequest = viewModel::closeConfirmDialog,
+            onClickOk = viewModel::clearText
+        )
+    }
+
+    if (viewModel.isOpenLoadFromStorageDialog()) {
+        LoadFromStorageDialogUi(
+            files = StorageFilesFinder().invoke(context),
+            onDismissRequest = viewModel::closeLoadFromStorageDialog,
+            onSelect = { fileActionUseCase.readFromFileUri(Uri.fromFile(it)) }
+        )
+    }
+
+    if (viewModel.isOpenInputFileNameDialog()) {
+        InputFileNameDialogUi(
+            onCommit = { fileActionUseCase.makeNewFileWithName(it, viewModel::openInputFileNameDialog) },
+            onDismissRequest = viewModel::closeInputFileNameDialog
+        )
     }
 
     contentViewModel.clearOptionMenus()
@@ -333,6 +351,28 @@ fun EditorTabView(path: String?) {
         contentViewModel.replaceAppBarContent {
             AppBarContent(
                 contentViewModel,
+                {
+                    Text(
+                        text = stringResource(R.string.last_saved) + DateFormat.format(" HH:mm:ss", fileActionUseCase.lastSaved.value),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 14.sp,
+                        maxLines = 2,
+                        modifier = it
+                    )
+                },
+                {
+                    Text(
+                        text = stringResource(jp.toastkid.lib.R.string.message_character_count, viewModel.contentLength()),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 14.sp,
+                        maxLines = 2,
+                        modifier = it
+                    )
+                },
+                { fileActionUseCase.save(viewModel::openInputFileNameDialog) },
+                viewModel::openConfirmDialog,
+                viewModel::openInputFileNameDialog,
+                viewModel::openLoadFromStorageDialog,
                 fileActionUseCase
             )
         }
@@ -343,13 +383,14 @@ fun EditorTabView(path: String?) {
 @Composable
 private fun AppBarContent(
     contentViewModel: ContentViewModel,
+    LastModified: @Composable (Modifier) -> Unit,
+    ContentLength: @Composable (Modifier) -> Unit,
+    saveFile: () -> Unit,
+    openConfirmDialog: () -> Unit,
+    openInputFileNameDialog: () -> Unit,
+    openLoadFromStorageDialog: () -> Unit,
     fileActionUseCase: FileActionUseCase
 ) {
-    val context = LocalContext.current as? ComponentActivity ?: return
-
-    val openLoadFromStorageDialog = remember { mutableStateOf(false) }
-    val openInputFileNameDialog = remember { mutableStateOf(false) }
-
     val loadAs: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode != Activity.RESULT_OK) {
@@ -358,11 +399,9 @@ private fun AppBarContent(
 
             it.data?.data?.let { uri ->
                 fileActionUseCase.readFromFileUri(uri)
-                openInputFileNameDialog.value = true
+                openInputFileNameDialog()
             }
         }
-
-    val openConfirmDialog = remember { mutableStateOf(false) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -373,13 +412,13 @@ private fun AppBarContent(
                 rememberScrollState()
             )
     ) {
-        EditorMenuItem(R.string.load, R.drawable.ic_load) {
+        EditorMenuItem(jp.toastkid.lib.R.string.load, R.drawable.ic_load) {
             loadAs.launch(GetContentIntentFactory()("text/plain"))
         }
 
-        EditorMenuItem(R.string.save, R.drawable.ic_save) { fileActionUseCase.save(openInputFileNameDialog) }
+        EditorMenuItem(jp.toastkid.lib.R.string.save, R.drawable.ic_save) { saveFile() }
 
-        EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog.value = true }
+        EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog() }
 
         Box(
             contentAlignment = Alignment.Center,
@@ -393,8 +432,8 @@ private fun AppBarContent(
                 )
         ) {
             Image(
-                painterResource(R.drawable.ic_tab),
-                contentDescription = stringResource(id = R.string.tab_list),
+                painterResource(jp.toastkid.lib.R.drawable.ic_tab),
+                contentDescription = stringResource(id = jp.toastkid.lib.R.string.tab_list),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary, BlendMode.SrcIn),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -410,54 +449,24 @@ private fun AppBarContent(
         }
 
         EditorMenuItem(R.string.load_from_storage, R.drawable.ic_load) {
-            openLoadFromStorageDialog.value = true
+            openLoadFromStorageDialog()
         }
 
-        Text(
-            text = context.getString(R.string.last_saved) + DateFormat.format(" HH:mm:ss", fileActionUseCase.lastSaved.value),
-            color = MaterialTheme.colorScheme.onPrimary,
-            fontSize = 14.sp,
-            maxLines = 2,
-            modifier = Modifier
+        LastModified(
+            Modifier
                 .padding(start = 4.dp, end = 4.dp)
                 .align(Alignment.CenterVertically)
         )
 
-        Text(
-            text = context.getString(R.string.message_character_count, fileActionUseCase.getText().length),
-            color = MaterialTheme.colorScheme.onPrimary,
-            fontSize = 14.sp,
-            maxLines = 2,
-            modifier = Modifier
+        ContentLength(
+            Modifier
                 .padding(start = 4.dp, end = 4.dp)
                 .align(Alignment.CenterVertically)
         )
 
-        EditorMenuItem(R.string.clear_all, R.drawable.ic_clear_form) {
-            openConfirmDialog.value = true
+        EditorMenuItem(jp.toastkid.lib.R.string.clear_all, jp.toastkid.lib.R.drawable.ic_clear_form) {
+            openConfirmDialog()
         }
-    }
-
-    if (openLoadFromStorageDialog.value) {
-        LoadFromStorageDialogUi(
-            openDialog = openLoadFromStorageDialog,
-            files = StorageFilesFinder().invoke(context),
-            onSelect = { fileActionUseCase.readFromFileUri(Uri.fromFile(it)) }
-        )
-    }
-
-    InputFileNameDialogUi(
-        openInputFileNameDialog,
-        onCommit = {
-            fileActionUseCase.makeNewFileWithName(it, fileActionUseCase, openInputFileNameDialog)
-        }
-    )
-
-    DestructiveChangeConfirmDialog(
-        visibleState = openConfirmDialog,
-        titleId = R.string.title_clear_text
-    ) {
-        fileActionUseCase.setText("")
     }
 }
 

@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.lib.preference.ColorPair
 import java.util.Calendar
@@ -81,7 +80,7 @@ internal fun DateFilterDialogUi(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = stringResource(id = R.string.open)
+                        text = stringResource(id = jp.toastkid.lib.R.string.open)
                     )
                 }
             }

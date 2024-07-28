@@ -8,28 +8,14 @@
 
     <string name="action_settings">設定</string>
     <string name="title_calendar">カレンダー</string>
-    <string name="title_settings_color">色設定</string>
-    <string name="title_settings_device">端末の設定</string>
-    <string name="title_settings">設定</string>
     <string name="title_menu">メニュー</string>
     <string name="title_tools">ツール</string>
-    <string name="title_set_bg">背景画像を設定</string>
-    <string name="title_bg_reset">背景画像を解除</string>
-    <string name="title_display_effect">画面エフェクトを表示</string>
     <string name="section_title_share">シェア</string>
     <string name="title_share">このアプリをシェア</string>
-    <string name="title_share_twitter">Twitter でシェア</string>
+    <string name="title_share_twitter">X でシェア</string>
 
-    <string name="title_clear_settings">設定を初期化</string>
     <string name="title_advertisement_1">広</string>
     <string name="title_advertisement_2">告</string>
-
-    <string name="settings_color_background_title">背景色</string>
-    <string name="settings_color_font_title">文字色</string>
-    <string name="settings_color_saved_title">保存した色</string>
-    <string name="title_clear_saved_color">すべて削除</string>
-    <string name="settings_color_done_commit">色を変更しました。</string>
-    <string name="settings_color_done_reset">元に戻しました。</string>
 
     <string name="confirm_clear_all_settings">
         <![CDATA[<font color=\"red\">注意：この操作は取り消せません。</font>]]></string>
@@ -38,12 +24,6 @@
         Android 用 Web 検索アプリ「{0}」\nhttps://play.google.com/store/apps/details?id=jp.toastkid.yobidashi
     </string>
 
-    <string name="message_failed_read_image">画像の読み込みに失敗しました。</string>
-    <string name="message_success_image_removal">画像を削除しました。</string>
-    <string name="message_failed_image_removal">画像削除に失敗しました。</string>
-    <string name="message_cannot_found_image">画像が設定されていません。</string>
-    <string name="message_done_set_image">選択した画像を背景に設定しました。</string>
-
     <string name="format_date_title">{0}月{1}日</string>
     <string name="format_date_link">https://ja.wikipedia.org/wiki/{0}月{1}日</string>
 
@@ -51,21 +31,6 @@
     <string name="unit_id_interstitial">ca-app-pub-5751262573448755/4657576229</string>
     <string name="unit_id_banner_ad">ca-app-pub-5751262573448755/3489764085</string>
 
-    <string name="title_background_image_setting">背景画像設定</string>
-    <string name="add_background_image">背景画像を追加</string>
-    <string name="message_change_background_image">背景画像を変更しました。</string>
-    <string name="message_reset_bg_image">背景画像を解除しました。</string>
-    <string name="title_settings_wifi">Wi-Fi の設定</string>
-    <string name="title_settings_wireless">無線の設定</string>
-    <string name="title_settings_all_apps">アプリ設定</string>
-    <string name="title_section_settings_this_app">このアプリの設定</string>
-    <string name="title_section_device_settings">端末の設定</string>
-    <string name="title_settings_locale">言語設定</string>
-    <string name="title_add_recommended_colors">おすすめの色を追加</string>
-    <string name="done_addition">追加しました。</string>
-    <string name="message_add_recommended_colors">おすすめの色を追加します。</string>
-    <string name="title_add_random">ランダム</string>
-    <string name="section_title_about_this_app">このアプリの情報</string>
     <string name="link_privacy_policy">https://toastkidjp.tumblr.com/post/162665491938</string>
     <string name="app_widget_name_search">Web 検索ウィジェット</string>
     <string name="app_widget_search">検索</string>
@@ -73,7 +38,6 @@
     <string name="subtext_notification">その日何があった？</string>
     <string name="message_set_daily_alarm">毎朝8時の通知をセットしました。</string>
     <string name="message_clear_daily_alarm">通知設定を解除しました。</string>
-    <string name="title_settings_date_and_time">日付・時刻の設定</string>
     <string name="title_package_name_filter">パッケージ名でフィルタ</string>
     <string name="top_mark">↑</string>
     <string name="bottom_mark">↓</string>
@@ -93,30 +57,16 @@
     <string name="title_menu_to_top">上に戻る</string>
     <string name="title_menu_to_bottom">下に進む</string>
     <string name="title_menu_back">戻る</string>
-    <string name="message_js_enabled">JavaScript を有効にしました。</string>
-    <string name="message_js_disabled">JavaScript を無効にしました。</string>
     <string name="title_menu_position">メニューの位置</string>
     <string name="left">左</string>
     <string name="center">中央</string>
     <string name="right">右</string>
-    <string name="title_enable_javascript">JavaScript を有効にする</string>
-    <string name="subhead_displaying">表示</string>
-    <string name="subhead_setting_browser">Web</string>
-    <string name="subhead_others">その他</string>
-    <string name="subhead_notification">通知</string>
-    <string name="title_clear_cache">キャッシュを消去</string>
-    <string name="clear_form_data">フォームデータを消去</string>
-    <string name="title_load_image">画像を表示</string>
-    <string name="title_save_form_data">フォームデータを保存</string>
     <string name="title_share_by_code">コードでシェア</string>
     <string name="title_screenshot">スクリーンショット</string>
     <string name="title_screenshots">スクリーンショット一覧</string>
     <string name="message_empty_screenshots">スクリーンショットが保存されていません。</string>
 
-    <string name="title_home">ホーム</string>
     <string name="title_open_url">URL を開く</string>
-    <string name="message_invalid_url">URL が不正です。</string>
-    <string name="message_commit_home">\"%s\" をホームページに設定しました。</string>
     <string name="title_open_chrome">Chrome で開く</string>
     <string name="title_archives">保存したページ一覧</string>
     <string name="all">すべて</string>
@@ -127,8 +77,6 @@
     <string name="message_enable_color_filter">カラーフィルターを有効にしました。</string>
     <string name="message_stop_color_filter">カラーフィルターをオフにしました。</string>
     <string name="content_description_alpha">カラーフィルターの透明度を変更します。</string>
-    <string name="title_color_filter">カラーフィルター</string>
-    <string name="title_clear_form_data">フォームデータを削除</string>
     <string name="title_voice_search">音声検索</string>
     <string name="delete">削除</string>
     <string name="title_tab_list">タブ一覧</string>
@@ -137,11 +85,6 @@
 
     <string name="message_clip_search">「%s」で検索しますか？</string>
     <string name="title_find_in_page">ページ内検索</string>
-    <string name="message_check_retain_tabs">アプリ終了後もタブを保持します。</string>
-    <string name="message_check_doesnot_retain_tabs">アプリ終了時にタブをすべて削除します。</string>
-    <string name="title_retain_tabs">アプリ終了後もタブを保持</string>
-    <string name="subhead_search">検索</string>
-    <string name="subhead_browser">Web</string>
 
     <string name="message_add_favorite_search" formatted="false" >
         種別: %s\nキーワード: %s\nをお気に入り検索に追加しますか？</string>
@@ -149,18 +92,12 @@
     <string name="title_download_image">画像をダウンロード</string>
     <string name="message_confirm_downloading_image">この画像をダウンロードしますか？</string>
     <string name="title_startup_start">スタート</string>
-    <string name="title_setting_new_tab">新しいタブ</string>
-    <string name="title_save_view_history">Web の履歴を保存</string>
-    <string name="title_clear_all_tabs">タブをすべて削除</string>
     <string name="name_default_bookmark_folder">デフォルト</string>
     <string name="message_none_bookmarks">ブックマークがありません。</string>
     <string name="hint_find_in_page">キーワードを入力</string>
     <string name="title_tab_histories">タブの履歴一覧</string>
-    <string name="title_settings_display">ディスプレイの設定</string>
     <string name="message_empty_histories">履歴はありません。</string>
 
-    <string name="title_filter_color">カラーフィルターの色</string>
-    <string name="title_default">デフォルト</string>
     <string name="title_screen_mode_full">フルスクリーン</string>
     <string name="title_screen_mode_expandable">スクロールで隠す</string>
     <string name="title_screen_mode_fixed">固定</string>
@@ -198,24 +135,17 @@
     <string name="message_failed_tab_read">タブの読み込みに失敗しました。</string>
     <string name="ad">広告</string>
     <string name="invert_content_coloring">コンテンツの色を反転させる</string>
-    <string name="title_clear_coolie">Cookie を削除</string>
-    <string name="title_wifi_only">Wi-Fi 接続時だけ通信する</string>
     <string name="wikipedia">Wikipedia</string>
     <string name="add_schedule">スケジュールに追加</string>
     <string name="minus">-</string>
     <string name="use_app_search">アプリ検索を使う</string>
-    <string name="sample_a">あ</string>
-    <string name="title_remove_ad">広告を消す</string>
     <string name="run">実行</string>
-    <string name="title_tab_retaining_size">タブを保持する枚数</string>
 
     <string name="message_tab_open_new">新しいタブで開きました: \n%s</string>
     <string name="message_tab_open_background">別タブで開きました: \n%s</string>
     <string name="thumbnail">サムネイル</string>
     <string name="message_unabled_voice_search">音声検索を利用できません。設定を見直してください。</string>
 
-    <string name="title_font_size">文字の大きさ</string>
-    <string name="subhead_editor">エディター</string>
     <string name="retry">やり直す</string>
     <string name="message_preview_failed">エラーが発生しました。やり直してください</string>
     <string name="message_paste_as_dialog">クリップボードに保持している内容を貼り付けますか？</string>
@@ -224,11 +154,6 @@
     <string name="content_description_background">背景画像</string>
     <string name="is_center">center</string>
     <string name="reset_button_position">ボタンの位置をリセット</string>
-    <string name="title_dialog_color_chooser">色を選択</string>
-    <string name="current_color">現在の色:</string>
-    <string name="title_copy_colors">色設定をコピー</string>
-    <string name="title_cursor_color">カーソルの色</string>
-    <string name="title_highlight_color">テキスト選択の色</string>
     <string name="menu_random_wikipedia">ランダム Wikipedia</string>
     <string name="message_open_random_wikipedia">Wikipedia の「%s」を開きました。</string>
     <string name="launcher">アプリ起動</string>
@@ -247,8 +172,6 @@
     <string name="message_stay_tuned">お楽しみに！</string>
     <string name="title_image_viewer">画像ビューアー</string>
 
-    <string name="title_dark_mode">ダークモードを使う</string>
-
     <string name="search_category">検索種別</string>
 
     <string name="title_gesture_memo">ジェスチャーメモ</string>
@@ -257,9 +180,9 @@
 
 
     <string name="message_clipping_url_open">この URL を開きますか？ "%s"</string>
-    <string name="sample_text_color_filter">あ</string>
-    <string name="apply_dark_mode">ダークモードにする</string>
 
+
+    <string name="title_barcode_reader">バーコードリーダー</string>
     <string name="title_converter_tool">変換ツール</string>
     <string name="title_chat">Chat</string>
     <string name="title_world_time">世界の時間</string>

@@ -44,7 +44,7 @@ class WorldTimeViewModel {
         "IST"
     )
 
-    private val availableIDs = pickupTimeZone.plus(TimeZone.getAvailableIDs())
+    private val availableIDs = pickupTimeZone.plus(TimeZone.getAvailableIDs()).distinct()
 
     fun start() {
         items.clear()

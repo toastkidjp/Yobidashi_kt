@@ -17,7 +17,6 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
@@ -41,8 +40,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -77,7 +76,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class
+@OptIn(ExperimentalFoundationApi::class
 )
 @Composable
 fun SearchInputUi(
@@ -146,7 +145,7 @@ fun SearchInputUi(
                         },
                         label = {
                             Text(
-                                stringResource(id = R.string.title_search),
+                                stringResource(id = jp.toastkid.lib.R.string.title_search),
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
                         },
@@ -185,12 +184,12 @@ fun SearchInputUi(
                         modifier = Modifier
                             .weight(1f)
                             .padding(end = 4.dp)
-                            .background(Color.Transparent)
+                            .drawBehind { drawRect(Color.Transparent) }
                             .focusRequester(focusRequester)
                     )
 
                     Icon(
-                        painterResource(id = if (useVoice.value) R.drawable.ic_mic else R.drawable.ic_search_white),
+                        painterResource(id = if (useVoice.value) jp.toastkid.lib.R.drawable.ic_mic else R.drawable.ic_search_white),
                         contentDescription = stringResource(id = R.string.title_search_action),
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
@@ -277,7 +276,7 @@ fun SearchInputUi(
     LaunchedEffect(key1 = localLifecycleOwner, block = {
         contentViewModel.optionMenus(
             OptionMenu(
-                titleId = R.string.title_context_editor_double_quote,
+                titleId = jp.toastkid.lib.R.string.title_context_editor_double_quote,
                 action = {
                     val queryOrEmpty = viewModel.input.value.text
                     if (queryOrEmpty.isNotBlank()) {

@@ -43,7 +43,7 @@
     <string name="message_requires_permission_storage">
         If you want to use this function, you should permit using storage to this app.</string>
     <string name="message_clip_to">Clip \'%s\'.</string>
-    <string name="message_character_count">Characters:\n%d</string>
+    <string name="message_character_count">Characters:\n%,d</string>
 
     <string name="favorite_search_addition_dialog_empty_message">Please could you input any keyword?</string>
     <string name="done_addition">It has done addition!</string>
@@ -57,6 +57,8 @@
     <string name="title_view_history">Web History</string>
     <string name="title_context_editor_double_quote">Double quote</string>
     <string name="title_search">Web Search</string>
+    <string name="title_web">Web</string>
+    <string name="title_bookmark">Bookmark</string>
     <string name="title_option_menu">Option Menu</string>
 
     <string name="message_wifi_not_connecting">It cannot use Wi-Fi.</string>

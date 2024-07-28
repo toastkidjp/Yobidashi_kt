@@ -15,6 +15,8 @@ plugins {
 }
 
 android {
+    namespace = "jp.toastkid.calendar"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {

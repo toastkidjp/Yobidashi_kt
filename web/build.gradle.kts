@@ -15,6 +15,8 @@ plugins {
 }
 
 android {
+    namespace = "jp.toastkid.web"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
@@ -23,7 +25,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
         }
     }
 
@@ -50,7 +52,7 @@ dependencies {
     implementation(project(path = ":lib"))
     implementation(project(path = ":ui"))
     implementation(project(path = ":api"))
-    implementation(project(path = ":barcode"))
+    implementation(project(path = ":barcode:library"))
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
     implementation("androidx.webkit:webkit:1.6.0")

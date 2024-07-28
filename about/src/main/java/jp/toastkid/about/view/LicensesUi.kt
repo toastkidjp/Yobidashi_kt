@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.licence.model.License
+import jp.toastkid.ui.parts.InsetDivider
 
 @Composable
 internal fun LicensesUi(licenses: List<License>) {
@@ -54,12 +54,12 @@ internal fun LicensesUi(licenses: List<License>) {
                     maxLines = maxLines.value,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
-                    .padding(8.dp)
-                    .padding(bottom = 8.dp)
-                    .clickable {
-                        lineCount.value = if (lineCount.value == 3) 1000 else 3
-                    })
-                Divider(modifier = Modifier.padding(start = 16.dp))
+                        .padding(8.dp)
+                        .padding(bottom = 8.dp)
+                        .clickable {
+                            lineCount.value = if (lineCount.value == 3) 1000 else 3
+                        })
+                InsetDivider()
             }
         }
     }

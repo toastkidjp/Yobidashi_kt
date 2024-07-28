@@ -228,7 +228,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     unfocusedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
-                    cursorColor = Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, R.color.editor_cursor)))
+                    cursorColor = Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, jp.toastkid.lib.R.color.editor_cursor)))
                 ),
                 trailingIcon = {
                     Icon(
@@ -277,7 +277,8 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                     MaterialTheme.colorScheme.onPrimary,
                     BlendMode.SrcIn
                 ),
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier
+                    .align(Alignment.Center)
                     .fillMaxWidth()
                     .fillMaxHeight()
                     .padding(8.dp)
@@ -419,13 +420,14 @@ private fun ListItem(
                     maxLines = 1
                 )
                 Text(
-                    text = "Last updated: ${
+                    text = stringResource(
+                        R.string.label_last_modified,
                         DateFormat.format(
                             "yyyy/MM/dd(E) HH:mm:ss",
                             article.lastModified
-                        )
-                    }" +
-                            " / ${article.length}",
+                        ),
+                        article.length
+                    ),
                     maxLines = 1,
                     fontSize = 14.sp,
                     overflow = TextOverflow.Ellipsis,

@@ -38,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -135,7 +134,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             shadowElevation = 4.dp,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .alpha(0.75f)
+                .graphicsLayer { alpha = 0.75f }
         ) {
             Column {
                 Box(
@@ -147,7 +146,7 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
                 ) {
                     Icon(
                         painterResource(id = if (viewModel.openMenu.value) R.drawable.ic_down else R.drawable.ic_up),
-                        contentDescription = stringResource(id = R.string.open),
+                        contentDescription = stringResource(id = jp.toastkid.lib.R.string.open),
                         modifier = Modifier
                             .padding(8.dp)
                             .align(Alignment.Center)
@@ -332,9 +331,9 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
         }
 
         ConfirmDialog(
-            visibleState = viewModel.openDialog,
             title = viewModel.getCurrentImage(pagerState.currentPage).name,
-            message = message ?: "Not found"
+            message = message ?: "Not found",
+            onDismissRequest = { viewModel.openDialog.value = false }
         )
     }
 

@@ -15,7 +15,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -24,35 +23,31 @@ import jp.toastkid.ui.R
 
 @Composable
 fun DestructiveChangeConfirmDialog(
-    visibleState: MutableState<Boolean>,
     @StringRes titleId: Int,
+    onDismissRequest: () -> Unit,
     onClickOk: () -> Unit
 ) {
     ConfirmDialog(
-        visibleState,
         stringResource(id = titleId),
         stringResource(id = R.string.message_confirmation),
         Color.Red,
+        onDismissRequest,
         onClickOk
     )
 }
 
 @Composable
 fun ConfirmDialog(
-    visibleState: MutableState<Boolean>,
     title: String,
     message: String,
     messageColor: Color = MaterialTheme.colorScheme.onSurface,
-    onClickOk: () -> Unit = {}
+    onDismissRequest: () -> Unit,
+    onClickOk: () -> Unit = {},
 ) {
     val color = MaterialTheme.colorScheme.onSurface
 
-    if (visibleState.value.not()) {
-        return
-    }
-
     AlertDialog(
-        onDismissRequest = { visibleState.value = false },
+        onDismissRequest = onDismissRequest,
         title = {
             Text(
                 title,
@@ -67,24 +62,22 @@ fun ConfirmDialog(
         },
         confirmButton = {
             Text(
-                text = stringResource(id = R.string.ok),
+                text = stringResource(id = jp.toastkid.lib.R.string.ok),
                 color = color,
                 modifier = Modifier
                     .clickable {
                         onClickOk()
-                        visibleState.value = false
+                        onDismissRequest()
                     }
                     .padding(8.dp)
             )
         },
         dismissButton = {
             Text(
-                text = stringResource(id = R.string.cancel),
+                text = stringResource(id = jp.toastkid.lib.R.string.cancel),
                 color = color,
                 modifier = Modifier
-                    .clickable {
-                        visibleState.value = false
-                    }
+                    .clickable(onClick = onDismissRequest)
                     .padding(8.dp)
             )
         }

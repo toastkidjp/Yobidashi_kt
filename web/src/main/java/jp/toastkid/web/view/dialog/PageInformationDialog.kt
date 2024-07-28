@@ -27,7 +27,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -52,8 +51,8 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun PageInformationDialog(
-    openState: MutableState<Boolean>,
-    pageInformationBundle: Bundle
+    pageInformationBundle: Bundle,
+    onDismissRequest: () -> Unit
 ) {
     val favicon = pageInformationBundle.getParcelableCompat<Bitmap>("favicon")
     val title = pageInformationBundle.getString("title") ?: return
@@ -70,7 +69,7 @@ internal fun PageInformationDialog(
     val context = LocalContext.current
 
     Dialog(
-        onDismissRequest = { openState.value = false },
+        onDismissRequest = onDismissRequest,
         content = {
             Surface(
                 shadowElevation = 4.dp
@@ -138,19 +137,17 @@ internal fun PageInformationDialog(
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable {
-                                    openState.value = false
+                                    onDismissRequest()
                                     clipText(context, cookie)
                                 }
                                 .padding(16.dp)
                         )
 
                         Text(
-                            text = stringResource(id = R.string.close),
+                            text = stringResource(id = jp.toastkid.lib.R.string.close),
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
-                                .clickable {
-                                    openState.value = false
-                                }
+                                .clickable(onClick = onDismissRequest)
                                 .padding(16.dp)
                         )
                     }

@@ -12,7 +12,9 @@ import android.os.Message
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -55,10 +57,12 @@ import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
 import jp.toastkid.lib.viewmodel.event.web.PreviewEvent
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * @author toastkidjp
@@ -77,24 +81,6 @@ class ContentViewModel : ViewModel() {
 
     fun setColorPair(colorPair: ColorPair) {
         this.colorPair.value = colorPair
-    }
-
-    fun snackShort(message: String) {
-        viewModelScope.launch {
-            _event.emit(SnackbarEvent(message))
-        }
-    }
-
-    fun snackShort(@StringRes messageId: Int) {
-        viewModelScope.launch {
-            _event.emit(SnackbarEvent(messageId = messageId))
-        }
-    }
-
-    fun snackWithAction(message: String, actionLabel: String, action: () -> Unit) {
-        viewModelScope.launch {
-            _event.emit(SnackbarEvent(message, actionLabel = actionLabel, action = action))
-        }
     }
 
     fun toTop() {
@@ -273,13 +259,13 @@ class ContentViewModel : ViewModel() {
         _appBarContent.value = composable
     }
 
-    private var bottomBarHeightPx = 0f
+    private val maxBottomBarHeightPx = AtomicReference(0f)
 
     fun setBottomBarHeightPx(float: Float) {
-        if (bottomBarHeightPx == 0f) {
-            bottomBarHeightPx = float
-        }
+        maxBottomBarHeightPx.set(float)
     }
+
+    fun bottomBarHeightPx() = maxBottomBarHeightPx.get()
 
     fun showAppBar(coroutineScope: CoroutineScope? = null) {
         bottomBarOffsetHeightPx.value = 0f
@@ -290,7 +276,7 @@ class ContentViewModel : ViewModel() {
     }
 
     fun hideAppBar() {
-        bottomBarOffsetHeightPx.value = -bottomBarHeightPx
+        bottomBarOffsetHeightPx.value = -maxBottomBarHeightPx.get()
     }
 
     val openFindInPageState = mutableStateOf(false)
@@ -449,6 +435,51 @@ class ContentViewModel : ViewModel() {
 
     fun dismissSnackbar() {
         _snackbarHostState.currentSnackbarData?.dismiss()
+    }
+
+    fun snackShort(message: String) {
+        showSnackbar(message, SnackbarEvent(message))
+    }
+
+    fun snackShort(@StringRes messageId: Int) {
+        viewModelScope.launch {
+            _event.emit(SnackbarEvent(messageId = messageId))
+        }
+    }
+
+    fun snackWithAction(message: String, actionLabel: String, action: () -> Unit) {
+        showSnackbar(message, SnackbarEvent(message, actionLabel = actionLabel, action = action))
+    }
+
+    fun showSnackbar(
+        message: String,
+        snackbarEvent: SnackbarEvent
+    ) {
+        val snackbarHostState = snackbarHostState()
+
+        if (snackbarEvent.actionLabel == null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                snackbarHostState.currentSnackbarData?.dismiss()
+                snackbarHostState.showSnackbar(message)
+            }
+            return
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            snackbarHostState.currentSnackbarData?.dismiss()
+            val snackbarResult = snackbarHostState.showSnackbar(
+                message,
+                snackbarEvent.actionLabel ?: "",
+                false,
+                SnackbarDuration.Long
+            )
+            when (snackbarResult) {
+                SnackbarResult.Dismissed -> Unit
+                SnackbarResult.ActionPerformed -> {
+                    snackbarEvent.action()
+                }
+            }
+        }
     }
 
 }

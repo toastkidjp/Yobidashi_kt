@@ -111,7 +111,7 @@ private fun RssReaderList(fullItems: List<Item>) {
                     Row {
                         Icon(
                             painterResource(id = R.drawable.ic_rss_feed),
-                            contentDescription = stringResource(id = R.string.image),
+                            contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(end = 4.dp)
                         )
@@ -125,7 +125,7 @@ private fun RssReaderList(fullItems: List<Item>) {
                     }
                     Text(
                         text = it.link,
-                        color = colorResource(R.color.link_blue),
+                        color = colorResource(jp.toastkid.lib.R.color.link_blue),
                         fontSize = 12.sp,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1
@@ -144,7 +144,7 @@ private fun RssReaderList(fullItems: List<Item>) {
                     )
                     Text(
                         text = it.date,
-                        color = colorResource(R.color.darkgray_scale),
+                        color = colorResource(jp.toastkid.lib.R.color.darkgray_scale),
                         fontSize = 12.sp,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,

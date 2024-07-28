@@ -20,6 +20,8 @@ plugins {
 // TODO apply(from = "../detekt.gradle.kts")
 
 android {
+    namespace = "jp.toastkid.number"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {

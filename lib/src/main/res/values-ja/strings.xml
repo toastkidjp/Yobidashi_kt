@@ -41,7 +41,7 @@
 
     <string name="message_requires_permission_storage">メモを使用するにはストレージの権限が必要です。</string>
     <string name="message_clip_to">%s をクリップボードにコピーしました。</string>
-    <string name="message_character_count">文字数:\n%d</string>
+    <string name="message_character_count">文字数:\n%,d</string>
 
     <string name="favorite_search_addition_dialog_empty_message">キーワードを入力してください。</string>
     <string name="done_addition">追加しました。</string>
@@ -55,6 +55,8 @@
     <string name="title_view_history">Web の履歴</string>
     <string name="title_context_editor_double_quote">ダブルクォート</string>
     <string name="title_search">Web 検索</string>
+    <string name="title_web">Web</string>
+    <string name="title_bookmark">ブックマーク</string>
     <string name="title_option_menu">オプションメニュー</string>
     <string name="message_wifi_not_connecting">Wi-Fi に接続していません。</string>
 

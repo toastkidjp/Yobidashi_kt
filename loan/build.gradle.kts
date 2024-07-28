@@ -17,6 +17,8 @@ plugins {
 // TODO apply(from = "../jacoco.gradle.kts")
 
 android {
+    namespace = "jp.toastkid.loan"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
@@ -25,7 +27,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }

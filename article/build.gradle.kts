@@ -18,6 +18,8 @@ plugins {
 //TODO apply from: '../jacoco.gradle'
 
 android {
+    namespace = "jp.toastkid.article_viewer"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
@@ -29,7 +31,7 @@ android {
     }
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
         }
     }
     compileOptions {

@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+    namespace = "jp.toastkid.markdown"
+
     compileSdkVersion(property.BuildTool.compileSdk)
 
     defaultConfig {

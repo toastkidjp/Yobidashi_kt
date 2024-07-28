@@ -10,7 +10,6 @@ package jp.toastkid.markdown.presentation
 
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.DisableSelection
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -44,7 +43,10 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 
     Column(modifier = modifier) {
         DisableSelection {
-            Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface)) {
+            val surfaceColor = MaterialTheme.colorScheme.surface
+            Row(modifier = Modifier.fillMaxWidth()
+                .drawBehind { drawRect(surfaceColor) }
+            ) {
                 line.header.forEachIndexed { index, item ->
                     if (index != 0) {
                         VerticalDivider(modifier = Modifier.height(24.dp).padding(vertical = 1.dp))
@@ -52,7 +54,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 
                     val headerColumnBackgroundColor = animateColorAsState(
                         if (viewModel.onCursorOnHeader()) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.surface
+                        else surfaceColor
                     )
 
                     Text(
@@ -71,7 +73,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
             }
         }
 
-        Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+        HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
         viewModel.tableData().forEach { itemRow ->
             val cursorOn = remember { mutableStateOf(false) }
@@ -114,6 +116,6 @@ private fun TableRow(itemRow: List<Any>, fontSize: TextUnit, textColor: Color, m
                 )
             }
         }
-        Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+        HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
     }
 }

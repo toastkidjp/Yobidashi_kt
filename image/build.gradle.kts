@@ -18,6 +18,8 @@ plugins {
 // TODO apply from: '../jacoco.gradle'
 
 android {
+    namespace = "jp.toastkid.image"
+
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
@@ -31,7 +33,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -48,7 +50,6 @@ tasks.withType<GenerateBuildConfig> {
 dependencies {
     implementation(project(":lib"))
     implementation(project(":ui"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildTool.kotlinVersion}")
 
     // Compose dependencies.
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")

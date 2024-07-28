@@ -12,7 +12,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.web.R
 
 class SelectedTextUseCase(
         private val stringResolver: (Int, Any) -> String,
@@ -21,7 +20,7 @@ class SelectedTextUseCase(
 
     fun countCharacters(word: String) {
         val codePointCount = word.codePointCount(1, word.length - 1)
-        val message = stringResolver(R.string.message_character_count, codePointCount)
+        val message = stringResolver(jp.toastkid.lib.R.string.message_character_count, codePointCount)
         contentViewModel.snackShort(message)
     }
 

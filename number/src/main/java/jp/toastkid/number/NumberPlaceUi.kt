@@ -184,7 +184,7 @@ fun NumberPlaceUi() {
                 viewModel.setCorrect()
             }),
         OptionMenu(
-            titleId = R.string.clear_all,
+            titleId = jp.toastkid.lib.R.string.clear_all,
             action = {
                 viewModel.initializeSolving()
                 numberStates.forEach { it.value = "_" }
