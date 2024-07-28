@@ -19,7 +19,6 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,13 +31,11 @@ import jp.toastkid.lib.preference.PreferenceApplier
 @Composable
 internal fun SortSettingDialogUi(
     preferenceApplier: PreferenceApplier,
-    openSortDialog: MutableState<Boolean>,
+    onDismissRequest: () -> Unit,
     onSelect: (Sort) -> Unit
 ) {
     Dialog(
-        onDismissRequest = {
-            openSortDialog.value = false
-        }
+        onDismissRequest = onDismissRequest
     ) {
         Surface(shadowElevation = 4.dp) {
             Column(modifier = Modifier.padding(8.dp)) {
@@ -58,7 +55,7 @@ internal fun SortSettingDialogUi(
                             .clickable {
                                 preferenceApplier.setArticleSort(sort.name)
                                 onSelect(sort)
-                                openSortDialog.value = false
+                                onDismissRequest()
                             }
                     ) {
                         RadioButton(
@@ -68,7 +65,7 @@ internal fun SortSettingDialogUi(
                             onClick = {
                                 preferenceApplier.setArticleSort(sort.name)
                                 onSelect(sort)
-                                openSortDialog.value = false
+                                onDismissRequest()
                             }
                         )
                         Text(sort.name)
