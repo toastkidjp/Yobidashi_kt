@@ -22,7 +22,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -39,7 +38,9 @@ import jp.toastkid.search.SearchCategory
 
 @Composable
 internal fun SearchCategorySpinner(
-    spinnerOpen: MutableState<Boolean>,
+    expand: Boolean,
+    openSpinner: () -> Unit,
+    closeSpinner: () -> Unit,
     currentCategory: String,
     onSelect: (SearchCategory) -> Unit = {}
 ) {
@@ -48,9 +49,7 @@ internal fun SearchCategorySpinner(
 
     Box(
         modifier = Modifier
-            .clickable {
-                spinnerOpen.value = true
-            }
+            .clickable(onClick = openSpinner)
             .width(44.dp)
             .height(56.dp)
             .drawBehind { drawRect(Color(0xDDFFFFFF)) }
@@ -68,8 +67,8 @@ internal fun SearchCategorySpinner(
         )
 
         DropdownMenu(
-            expanded = spinnerOpen.value,
-            onDismissRequest = { spinnerOpen.value = false }
+            expanded = expand,
+            onDismissRequest = closeSpinner
         ) {
             val searchCategories = SearchCategory.values()
                 .filterNot { initialDisables?.contains(it.name) ?: false }
@@ -93,7 +92,7 @@ internal fun SearchCategorySpinner(
                         },
                         onClick = {
                             onSelect(searchCategory)
-                            spinnerOpen.value = false
+                            closeSpinner()
                         }
                     )
                 }
