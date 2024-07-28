@@ -20,7 +20,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +35,7 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DateFilterDialogUi(
-    openDialog: MutableState<Boolean>,
+    onDismissRequest: () -> Unit,
     dateSelectedActionUseCase: DateSelectedActionUseCase
 ) {
     var year by remember { mutableStateOf(0) }
@@ -44,9 +43,7 @@ internal fun DateFilterDialogUi(
     var dayOfMonth by remember { mutableStateOf(0) }
     val datePickerState = rememberDatePickerState()
     Dialog(
-        onDismissRequest = {
-            openDialog.value = false
-        }
+        onDismissRequest = onDismissRequest
     ) {
         Surface(shadowElevation = 4.dp) {
             Column {
@@ -59,7 +56,7 @@ internal fun DateFilterDialogUi(
 
                 Button(
                     onClick = {
-                        openDialog.value = false
+                        onDismissRequest()
                         val selectedDateMillis = datePickerState.selectedDateMillis ?: return@Button
                         val calendar = Calendar.getInstance().also {
                             it.timeInMillis = selectedDateMillis
