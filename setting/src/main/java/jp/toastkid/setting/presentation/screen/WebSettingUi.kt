@@ -251,8 +251,9 @@ internal fun WebSettingUi() {
                         modifier = Modifier.wrapContentWidth()
                     )
 
-                    UserAgentDropdown(open) {
+                    UserAgentDropdown(open.value, { open.value = false }) {
                         preferenceApplier.setUserAgent(it.name)
+                        userAgent.value = preferenceApplier.userAgent()
                     }
                 }
             }
