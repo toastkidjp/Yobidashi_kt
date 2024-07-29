@@ -89,7 +89,13 @@ fun FavoriteSearchListUi() {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.height(56.dp)
             ) {
-                SearchCategorySpinner(spinnerOpen, categoryName.value, { categoryName.value = it.name })
+                SearchCategorySpinner(
+                    spinnerOpen.value,
+                    { spinnerOpen.value = true },
+                    { spinnerOpen.value = false },
+                    categoryName.value,
+                    { categoryName.value = it.name }
+                )
 
                 TextField(
                     value = input.value,
