@@ -20,7 +20,6 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -30,12 +29,10 @@ import jp.toastkid.lib.view.WindowOptionColorApplier
 
 @Composable
 fun AppTheme(
-    colorState: State<ColorPair>,
+    colorPair: ColorPair,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorPair = colorState.value
-
     val primary = Color(colorPair.bgColor())
     val onPrimary = Color(colorPair.fontColor())
 
@@ -80,7 +77,7 @@ fun AppTheme(
         }
 
         val window = (LocalContext.current as? Activity)?.window
-        LaunchedEffect(key1 = colorState, block = {
+        LaunchedEffect(key1 = colorPair, block = {
             window?.let {
                 WindowOptionColorApplier()(it, colorPair.bgColor())
             }

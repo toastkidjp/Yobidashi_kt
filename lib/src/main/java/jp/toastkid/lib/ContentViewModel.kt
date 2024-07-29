@@ -75,8 +75,8 @@ class ContentViewModel : ViewModel() {
 
     private val colorPair = mutableStateOf(ColorPair(Color.White.toArgb(), Color.Black.toArgb()))
 
-    fun colorPair(): State<ColorPair> {
-        return colorPair
+    fun colorPair(): ColorPair {
+        return colorPair.value
     }
 
     fun setColorPair(colorPair: ColorPair) {
