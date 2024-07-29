@@ -135,7 +135,13 @@ fun SearchInputUi(
                         .fillMaxWidth()
                         .height(56.dp)
                 ) {
-                    SearchCategorySpinner(spinnerOpen, viewModel.categoryName(), viewModel::setCategory)
+                    SearchCategorySpinner(
+                        spinnerOpen.value,
+                        { spinnerOpen.value = true },
+                        { spinnerOpen.value = false },
+                        viewModel.categoryName(),
+                        viewModel::setCategory
+                    )
 
                     TextField(
                         value = viewModel.input.value,
