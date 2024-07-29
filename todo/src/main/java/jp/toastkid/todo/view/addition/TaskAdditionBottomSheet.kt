@@ -56,7 +56,7 @@ internal fun TaskEditorUi(
     taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel?,
     onTapAdd: (TodoTask) -> Unit
 ) {
-    val task = taskAdditionDialogFragmentViewModel?.task?.value
+    val task = taskAdditionDialogFragmentViewModel?.task()
     var descriptionInput by remember { mutableStateOf(task?.description ?: "") }
     var chosenColor by remember { mutableStateOf(Color.Transparent.value.toInt()) }
     task?.let {
@@ -72,7 +72,7 @@ internal fun TaskEditorUi(
 
     screenContent()
 
-    if (taskAdditionDialogFragmentViewModel?.bottomSheetScaffoldState?.value != true) {
+    if (taskAdditionDialogFragmentViewModel?.bottomSheetScaffoldState() != true) {
         return
     }
 
