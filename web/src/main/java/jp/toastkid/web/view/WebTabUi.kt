@@ -160,7 +160,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
 
     val readerModeText = remember { mutableStateOf("") }
     if (readerModeText.value.isNotBlank()) {
-        ReaderModeUi(webViewContainer.currentTitle(), readerModeText)
+        ReaderModeUi(webViewContainer.currentTitle(), readerModeText.value, { readerModeText.value = "" })
     }
 
     if (browserViewModel.openErrorDialog.value) {
@@ -399,7 +399,7 @@ private fun AppBarContent(
                     R.drawable.ic_user_agent,
                     R.string.title_user_agent
                 ) { open.value = true }
-                UserAgentDropdown(open) {
+                UserAgentDropdown(open.value, { open.value = false }) {
                     PreferenceApplier(activity).setUserAgent(it.name)
                     webViewContainer.resetUserAgent(it.text())
                     contentViewModel.snackShort(
