@@ -22,6 +22,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -44,7 +45,7 @@ internal fun SearchCategorySpinner(
     currentCategory: String,
     onSelect: (SearchCategory) -> Unit = {}
 ) {
-    val initialDisables = PreferenceApplier(LocalContext.current).readDisableSearchCategory()
+    val context = LocalContext.current
     val popupWindowHeight = (LocalConfiguration.current.screenHeightDp / 2).dp
 
     Box(
@@ -70,8 +71,11 @@ internal fun SearchCategorySpinner(
             expanded = expand,
             onDismissRequest = closeSpinner
         ) {
-            val searchCategories = SearchCategory.values()
-                .filterNot { initialDisables?.contains(it.name) ?: false }
+            val searchCategories = remember {
+                val initialDisables = PreferenceApplier(context).readDisableSearchCategory()
+                SearchCategory.values()
+                    .filterNot { initialDisables?.contains(it.name) ?: false }
+            }
 
             LazyColumn(modifier = Modifier.size(popupWindowHeight)) {
                 items(searchCategories, { it.id }) { searchCategory ->
