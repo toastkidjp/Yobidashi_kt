@@ -95,7 +95,7 @@ internal fun TaskEditorUi(
                         datePickerState.selectedDateMillis?.let {
                             task?.dueDate = it
                         }
-                        save(task, onTapAdd)
+                        taskAdditionDialogFragmentViewModel.save(task, onTapAdd)
                         coroutineScope.launch {
                             taskAdditionDialogFragmentViewModel.hide()
                         }
@@ -124,7 +124,7 @@ internal fun TaskEditorUi(
                         datePickerState.selectedDateMillis?.let {
                             task?.dueDate = it
                         }
-                        save(task, onTapAdd)
+                        taskAdditionDialogFragmentViewModel.save(task, onTapAdd)
                         taskAdditionDialogFragmentViewModel.hide()
                     },
                     colors = ButtonDefaults.textButtonColors(
@@ -177,21 +177,4 @@ internal fun TaskEditorUi(
             )
         }
     }
-}
-
-private fun save(
-    task: TodoTask?,
-    onTapAdd: (TodoTask) -> Unit
-) {
-    task?.let {
-        updateTask(it)
-        onTapAdd(it)
-    }
-}
-
-private fun updateTask(task: TodoTask?) {
-    if (task?.created == 0L) {
-        task.created = System.currentTimeMillis()
-    }
-    task?.lastModified = System.currentTimeMillis()
 }

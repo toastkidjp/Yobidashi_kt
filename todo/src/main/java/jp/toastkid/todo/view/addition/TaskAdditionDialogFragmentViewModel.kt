@@ -28,6 +28,23 @@ class TaskAdditionDialogFragmentViewModel : Serializable {
         _task.value = task ?: TodoTask(0).also { it.dueDate = System.currentTimeMillis() }
     }
 
+    fun save(
+        task: TodoTask?,
+        onTapAdd: (TodoTask) -> Unit
+    ) {
+        task?.let {
+            updateTask(it)
+            onTapAdd(it)
+        }
+    }
+
+    fun updateTask(task: TodoTask?) {
+        if (task?.created == 0L) {
+            task.created = System.currentTimeMillis()
+        }
+        task?.lastModified = System.currentTimeMillis()
+    }
+
     fun show() {
         _bottomSheetScaffoldState.value = true
     }
