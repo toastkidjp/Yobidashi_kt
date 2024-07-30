@@ -10,14 +10,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.image.BitmapCompressor
-import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.thumbnail.ThumbnailGenerator
-import jp.toastkid.yobidashi.R
 import jp.toastkid.web.archive.IdGenerator
 import jp.toastkid.web.archive.auto.AutoArchive
 import jp.toastkid.web.webview.GlobalWebViewPool
 import jp.toastkid.web.webview.WebViewStateUseCase
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab
@@ -41,8 +40,6 @@ class TabAdapter(
 
     private val tabList: TabList = TabList.loadOrInit(contextSupplier())
 
-    private val colorPair: ColorPair
-
     private val tabThumbnails: TabThumbnails
 
     private val preferenceApplier: PreferenceApplier
@@ -59,7 +56,6 @@ class TabAdapter(
         val viewContext = contextSupplier()
         tabThumbnails = TabThumbnails.with(contextSupplier())
         preferenceApplier = PreferenceApplier(viewContext)
-        colorPair = preferenceApplier.colorPair()
 
         if (viewContext is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
