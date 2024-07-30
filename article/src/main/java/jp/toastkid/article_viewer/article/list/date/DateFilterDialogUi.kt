@@ -20,10 +20,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -38,9 +34,6 @@ internal fun DateFilterDialogUi(
     onDismissRequest: () -> Unit,
     dateSelectedActionUseCase: DateSelectedActionUseCase
 ) {
-    var year by remember { mutableStateOf(0) }
-    var monthOfYear by remember { mutableStateOf(0) }
-    var dayOfMonth by remember { mutableStateOf(0) }
     val datePickerState = rememberDatePickerState()
     Dialog(
         onDismissRequest = onDismissRequest
