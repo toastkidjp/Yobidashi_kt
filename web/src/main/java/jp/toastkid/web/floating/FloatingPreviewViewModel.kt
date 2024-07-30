@@ -8,7 +8,6 @@
 package jp.toastkid.web.floating
 
 import android.graphics.Bitmap
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 
 /**
@@ -18,7 +17,7 @@ class FloatingPreviewViewModel {
 
     private val _title = mutableStateOf("")
 
-    val title: State<String> = _title
+    fun title() = _title.value
 
     fun newTitle(title: String?) {
         _title.value = title ?: ""
@@ -26,7 +25,7 @@ class FloatingPreviewViewModel {
 
     private val _icon = mutableStateOf<Bitmap?>(null)
 
-    val icon: State<Bitmap?> = _icon
+    fun icon() = _icon.value
 
     fun newIcon(bitmap: Bitmap?) {
         _icon.value = bitmap
@@ -34,7 +33,7 @@ class FloatingPreviewViewModel {
 
     private val _url = mutableStateOf("")
 
-    val url: State<String> = _url
+    fun url() = _url.value
 
     fun newUrl(url: String?) {
         _url.value = url ?: ""
@@ -42,7 +41,7 @@ class FloatingPreviewViewModel {
 
     private val _progress = mutableStateOf(0)
 
-    val progress: State<Int> = _progress
+    fun progress() = _progress.value
 
     fun newProgress(progress: Int) {
         _progress.value = progress

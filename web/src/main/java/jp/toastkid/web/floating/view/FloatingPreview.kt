@@ -75,12 +75,12 @@ fun FloatingPreviewUi(uri: Uri) {
                 .height(52.dp)
                 .padding(8.dp)
                 .clickable {
-                    val currentUri = viewModel.url.value.toUri()
+                    val currentUri = viewModel.url().toUri()
                     contentViewModel.open(currentUri)
                 }
         ) {
             AsyncImage(
-                model = viewModel.icon.value,
+                model = viewModel.icon(),
                 contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                 modifier = Modifier
                     .size(36.dp)
@@ -88,9 +88,9 @@ fun FloatingPreviewUi(uri: Uri) {
             )
 
             TitleUrlBox(
-                viewModel.title.value,
-                viewModel.url.value,
-                viewModel.progress.value,
+                viewModel.title(),
+                viewModel.url(),
+                viewModel.progress(),
                 Modifier.weight(1f)
             )
 
@@ -104,7 +104,7 @@ fun FloatingPreviewUi(uri: Uri) {
             )
         }
 
-        val progress = viewModel.progress.value.toFloat()
+        val progress = viewModel.progress().toFloat()
         if (progress < 75) {
             LinearProgressIndicator(
                 progress = { progress / 100f },
