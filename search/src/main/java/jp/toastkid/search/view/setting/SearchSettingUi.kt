@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchSettingUi() {
     val activityContext = LocalContext.current
-    val preferenceApplier = PreferenceApplier(activityContext)
+    val preferenceApplier = remember { PreferenceApplier(activityContext) }
 
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, activityContext)
