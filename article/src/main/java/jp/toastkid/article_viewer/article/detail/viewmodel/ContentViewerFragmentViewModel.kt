@@ -9,7 +9,6 @@
 package jp.toastkid.article_viewer.article.detail.viewmodel
 
 import androidx.compose.foundation.ScrollState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.markdown.domain.model.entity.Markdown
 import jp.toastkid.markdown.domain.service.MarkdownParser
@@ -21,7 +20,7 @@ class ContentViewerFragmentViewModel {
 
     private val _title = mutableStateOf("")
 
-    val title: State<String> = _title
+    fun title() = _title.value
 
     fun setTitle(newTitle: String) {
         _title.value = newTitle
@@ -35,7 +34,7 @@ class ContentViewerFragmentViewModel {
 
     fun setContent(newContent: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            _content.value = markdownParser.invoke(newContent, title.value)
+            _content.value = markdownParser.invoke(newContent, _title.value)
         }
     }
 
