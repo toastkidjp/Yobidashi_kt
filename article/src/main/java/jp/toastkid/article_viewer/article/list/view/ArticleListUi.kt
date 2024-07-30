@@ -98,19 +98,13 @@ import kotlinx.coroutines.launch
 fun ArticleListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
 
-    val articleRepository = remember { ArticleRepositoryFactory().invoke(context) }
-
-    val preferenceApplier = remember { PreferenceApplier(context) }
-
-    val bookmarkRepository = remember { BookmarkRepositoryFactory().invoke(context) }
-
-    val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
+    val contentViewModel = remember { ViewModelProvider(context).get(ContentViewModel::class.java) }
 
     val viewModel = remember {
         ArticleListFragmentViewModel(
-            articleRepository,
-            bookmarkRepository,
-            preferenceApplier
+            ArticleRepositoryFactory().invoke(context),
+            BookmarkRepositoryFactory().invoke(context),
+            PreferenceApplier(context)
         )
     }
 
@@ -120,7 +114,7 @@ fun ArticleListUi() {
             val openSortDialog = remember { mutableStateOf(false) }
 
             if (openSortDialog.value) {
-                SortSettingDialogUi(preferenceApplier, { openSortDialog.value = false }, onSelect = {
+                SortSettingDialogUi(PreferenceApplier(context), { openSortDialog.value = false }, onSelect = {
                     viewModel.sort(it)
                 })
             }
@@ -130,23 +124,23 @@ fun ArticleListUi() {
             if (openDateDialog.value) {
                 DateFilterDialogUi(
                     { openDateDialog.value = false },
-                    DateSelectedActionUseCase(articleRepository, contentViewModel)
+                    DateSelectedActionUseCase(ArticleRepositoryFactory().invoke(context), contentViewModel)
                 )
             }
         }
     })
 
     val itemFlowState = remember { mutableStateOf<Flow<PagingData<SearchResult>>?>(null) }
-    itemFlowState.value = viewModel.dataSource.value?.flow
+    itemFlowState.value = viewModel.dataSource()?.flow
 
     val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
-        articleRepository,
-        bookmarkRepository,
+        ArticleRepositoryFactory().invoke(context),
+        BookmarkRepositoryFactory().invoke(context),
         {
             contentViewModel.snackWithAction(
                 "Deleted: \"${it.title}\".",
                 "UNDO"
-            ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
+            ) { CoroutineScope(Dispatchers.IO).launch { ArticleRepositoryFactory().invoke(context).insert(it) } }
         }
     )
 
@@ -161,7 +155,7 @@ fun ArticleListUi() {
             menuPopupUseCase
         )
 
-        if (viewModel.progressVisibility.value) {
+        if (viewModel.progressVisibility()) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
     }
@@ -201,9 +195,10 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     Row {
         Column(Modifier.weight(1f)) {
             TextField(
-                value = viewModel.searchInput.value,
+                value = viewModel.searchInput(),
                 onValueChange = {
-                    viewModel.searchInput.value = it
+                    viewModel.setSearchInput(it)
+
                     if (preferenceApplier.useTitleFilter()) {
                         CoroutineScope(Dispatchers.IO).launch {
                             viewModel.filter("%$it%")
@@ -218,7 +213,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 },
                 singleLine = true,
                 keyboardActions = KeyboardActions{
-                    viewModel.search(viewModel.searchInput.value)
+                    viewModel.search(viewModel.searchInput())
                 },
                 keyboardOptions = KeyboardOptions(
                     autoCorrect = true,
@@ -237,14 +232,14 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                         modifier = Modifier
                             .offset(x = 8.dp)
                             .clickable {
-                                viewModel.searchInput.value = ""
+                                viewModel.setSearchInput("")
                             }
                     )
                 },
                 modifier = Modifier.weight(0.7f)
             )
             Text(
-                text = viewModel.searchResult.value,
+                text = viewModel.searchResult(),
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 12.sp,
                 modifier = Modifier
