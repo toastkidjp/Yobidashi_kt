@@ -64,9 +64,7 @@ internal fun DisplaySettingUi() {
     val preferenceApplier = PreferenceApplier(activityContext)
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
-    val filesDir = FilesDir(activityContext, BACKGROUND_DIR)
-
-    val files = remember { mutableStateListOf<File>().also { it.addAll(loadFileChunk(filesDir)) } }
+    val files = remember { mutableStateListOf<File>().also { it.addAll(loadFileChunk(FilesDir(activityContext, BACKGROUND_DIR))) } }
 
     val displayEffectState = remember { mutableStateOf(preferenceApplier.showDisplayEffect()) }
 
@@ -262,7 +260,7 @@ internal fun DisplaySettingUi() {
             jp.toastkid.lib.R.string.clear_all,
             onDismissRequest = { openClearImagesDialog.value = false },
             onClickOk = {
-                filesDir.clean()
+                FilesDir(activityContext, BACKGROUND_DIR).clean()
                 files.clear()
                 contentViewModel.snackShort(R.string.message_success_image_removal)
             }
