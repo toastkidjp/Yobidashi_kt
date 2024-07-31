@@ -233,7 +233,7 @@ internal fun DisplaySettingUi() {
                                     .clickable {
                                         if (!imageFile.exists()) {
                                             contentViewModel
-                                                ?.snackShort(R.string.message_cannot_found_image)
+                                                .snackShort(R.string.message_cannot_found_image)
                                             return@clickable
                                         }
                                         val successRemove = imageFile.delete()
