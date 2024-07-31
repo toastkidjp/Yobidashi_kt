@@ -45,6 +45,8 @@ class TaskAdditionDialogFragmentViewModel : Serializable {
         task?.lastModified = System.currentTimeMillis()
     }
 
+    fun colors() = colors
+
     fun show() {
         _bottomSheetScaffoldState.value = true
     }
@@ -54,3 +56,7 @@ class TaskAdditionDialogFragmentViewModel : Serializable {
     }
 
 }
+
+private val colors = setOf(
+    0xffe53935, 0xfff8bbd0, 0xff2196f3, 0xff4caf50, 0xffffeb3b, 0xff3e2723, 0xffffffff
+)

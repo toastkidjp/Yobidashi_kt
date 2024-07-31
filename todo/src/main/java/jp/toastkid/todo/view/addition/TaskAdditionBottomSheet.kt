@@ -66,10 +66,6 @@ internal fun TaskEditorUi(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val colors = setOf(
-        0xffe53935, 0xfff8bbd0, 0xff2196f3, 0xff4caf50, 0xffffeb3b, 0xff3e2723, 0xffffffff
-    )
-
     screenContent()
 
     if (taskAdditionDialogFragmentViewModel?.bottomSheetScaffoldState() != true) {
@@ -145,7 +141,7 @@ internal fun TaskEditorUi(
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)) {
-                colors.forEach { color ->
+                taskAdditionDialogFragmentViewModel.colors().forEach { color ->
                     RadioButton(
                         selected = chosenColor == color.toInt(),
                         colors = RadioButtonDefaults
