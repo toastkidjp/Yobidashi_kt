@@ -172,6 +172,7 @@ private fun BoardItem(
 
     Surface(
         shadowElevation = 4.dp,
+        color = Color(color),
         modifier = modifier
             .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 2.dp)
             .width(140.dp)
