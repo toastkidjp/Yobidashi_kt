@@ -72,7 +72,7 @@ internal fun TaskEditorUi(
         return
     }
 
-    Dialog(onDismissRequest = { taskAdditionDialogFragmentViewModel.hide() }) {
+    Dialog(onDismissRequest = taskAdditionDialogFragmentViewModel::hide) {
         Column {
             val datePickerState = rememberDatePickerState(
                 initialDisplayedMonthMillis = System.currentTimeMillis()
