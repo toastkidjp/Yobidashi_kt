@@ -69,7 +69,7 @@ internal fun CalendarSettingUi() {
                         )
                         holidayCalendars.keys.forEach {
                             DropdownMenuItem(
-                                text = { Text("${it.flag}") },
+                                text = { Text(it.flag) },
                                 onClick = {
                                     open.value = false
                                     preferenceApplier.setUsingPrimaryHolidaysCalendar(it.name)
