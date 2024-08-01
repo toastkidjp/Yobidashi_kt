@@ -33,6 +33,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -58,7 +59,7 @@ internal fun TaskEditorUi(
 ) {
     val task = taskAdditionDialogFragmentViewModel?.task()
     var descriptionInput by remember { mutableStateOf(task?.description ?: "") }
-    var chosenColor by remember { mutableStateOf(Color.Transparent.value.toInt()) }
+    var chosenColor by remember { mutableIntStateOf(Color.Transparent.value.toInt()) }
     task?.let {
         descriptionInput = it.description
         chosenColor = it.color
