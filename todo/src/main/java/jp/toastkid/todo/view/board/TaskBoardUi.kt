@@ -73,7 +73,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskBoardUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
