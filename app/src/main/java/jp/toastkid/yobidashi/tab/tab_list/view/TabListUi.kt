@@ -84,7 +84,6 @@ import kotlin.math.roundToInt
 @Composable
 internal fun TabListUi(tabAdapter: TabAdapter) {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = PreferenceApplier(context)
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val coroutineScope = rememberCoroutineScope()
 
@@ -107,7 +106,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
 
     Box {
         AsyncImage(
-            model = preferenceApplier.backgroundImagePath,
+            model = PreferenceApplier(context).backgroundImagePath,
             contentDescription = stringResource(id = R.string.content_description_background),
             alignment = Alignment.Center,
             contentScale = ContentScale.Crop,
@@ -204,7 +203,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     backgroundColor,
                     Modifier.padding(4.dp)
                 ) {
-                    contentViewModel.open(preferenceApplier.homeUrl.toUri())
+                    contentViewModel.open(PreferenceApplier(context).homeUrl.toUri())
                     closeOnly(coroutineScope, contentViewModel)
                 }
                 TabActionFab(
