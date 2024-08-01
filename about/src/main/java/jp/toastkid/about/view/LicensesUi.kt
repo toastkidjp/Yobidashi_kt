@@ -48,7 +48,7 @@ internal fun LicensesUi(licenses: List<License>) {
                     modifier = Modifier.clickable { viewModel?.open(license.url.toUri()) }
                 )
                 val lineCount = remember { mutableStateOf(3) }
-                val maxLines = animateIntAsState(targetValue = lineCount.value)
+                val maxLines = animateIntAsState(targetValue = lineCount.value, label = "10")
                 Text(
                     license.text,
                     maxLines = maxLines.value,
