@@ -163,26 +163,25 @@ fun WebTabUi(uri: Uri, tabId: String) {
         ReaderModeUi(webViewContainer.currentTitle(), readerModeText.value, { readerModeText.value = "" })
     }
 
-    if (browserViewModel.openErrorDialog.value) {
+    if (browserViewModel.openErrorDialog()) {
         ConfirmDialog(
             stringResource(id = R.string.title_ssl_connection_error),
-            browserViewModel.error.value,
-            onDismissRequest = { browserViewModel.openErrorDialog.value = false }
+            browserViewModel.error(),
+            onDismissRequest = browserViewModel::closeErrorDialog
         ) {
             browserViewModel.clearError()
         }
     }
 
-    if (browserViewModel.openLongTapDialog.value) {
+    if (browserViewModel.isOpenLongTapDialog()) {
         val value = browserViewModel.longTapActionParameters.value
-        browserViewModel.openLongTapDialog.value = true
+        browserViewModel.openLongTapDialog()
 
         AnchorLongTapDialog(
             value.first,
             value.second,
             value.third
         ) {
-            browserViewModel.openLongTapDialog.value = false
             browserViewModel.clearLongTapParameters()
         }
     }
@@ -312,16 +311,16 @@ private fun AppBarContent(
             .height(76.dp)
             .fillMaxWidth()
     ) {
-        if (viewModel.progress.value < 70) {
+        if (viewModel.shouldShowProgressIndicator()) {
             LinearProgressIndicator(
-                progress = { viewModel.progress.value.toFloat() / 100f },
+                progress = { viewModel.progress().toFloat() / 100f },
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .height(1.dp)
                     .fillMaxWidth()
             )
         } else {
-            LaunchedEffect(key1 = viewModel.progress.value) {
+            LaunchedEffect(key1 = viewModel.progress()) {
                 coroutineScope.launch {
                     viewModel.swipeRefreshState.value?.resetOffset()
                 }
@@ -335,13 +334,13 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_back,
                 R.string.back,
-                viewModel.enableBack.value
+                viewModel.enableBack()
             ) { webViewContainer.back() }
 
             HeaderSubButton(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,
-                viewModel.enableForward.value
+                viewModel.enableForward()
             ) { webViewContainer.forward() }
 
             HeaderSubButton(
@@ -458,7 +457,7 @@ private fun AppBarContent(
                     }
             ) {
                 AsyncImage(
-                    model = viewModel.icon.value,
+                    model = viewModel.icon(),
                     contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                     modifier = Modifier
                         .size(36.dp)
@@ -466,15 +465,15 @@ private fun AppBarContent(
                         .clickable { openPageInformation.value = true }
                 )
                 TitleUrlBox(
-                    viewModel.title.value,
-                    viewModel.url.value,
-                    viewModel.progress.value,
+                    viewModel.title(),
+                    viewModel.url(),
+                    viewModel.progress(),
                     Modifier
                         .weight(1f)
                         .padding(end = 4.dp)
                 )
 
-                val isNotLoading = 70 < viewModel.progress.value
+                val isNotLoading = !viewModel.shouldShowProgressIndicator()
                 val reloadIconId =
                     if (isNotLoading) R.drawable.ic_reload else jp.toastkid.lib.R.drawable.ic_close
                 Icon(

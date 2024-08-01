@@ -24,7 +24,7 @@ class WebTabUiViewModel {
 
     private val _icon = mutableStateOf<Bitmap?>(null)
 
-    val icon: State<Bitmap?> = _icon
+    fun icon() = _icon.value
 
     fun newIcon(bitmap: Bitmap) {
         _icon.value = bitmap
@@ -35,7 +35,8 @@ class WebTabUiViewModel {
     }
 
     private val _title = mutableStateOf("")
-    val title: State<String> = _title
+
+    fun title() = _title.value
 
     fun nextTitle(nextTitle: String?) {
         if (nextTitle.isNullOrBlank()) {
@@ -45,7 +46,8 @@ class WebTabUiViewModel {
     }
 
     private val _url = mutableStateOf("")
-    val url: State<String> = _url
+
+    fun url() = _url.value
 
     fun nextUrl(nextUrl: String?) {
         if (nextUrl.isNullOrBlank()) {
@@ -56,7 +58,7 @@ class WebTabUiViewModel {
 
     private val _enableForward = mutableStateOf(false)
 
-    val enableForward: State<Boolean> = _enableForward
+    fun enableForward() = _enableForward.value
 
     fun setForwardButtonIsEnabled(newState: Boolean) {
         _enableForward.value = newState
@@ -64,7 +66,7 @@ class WebTabUiViewModel {
 
     private val _enableBack = mutableStateOf(false)
 
-    val enableBack: State<Boolean> = _enableBack
+    fun enableBack() = _enableBack.value
 
     fun setBackButtonIsEnabled(newState: Boolean) {
         _enableBack.value = newState
@@ -72,16 +74,27 @@ class WebTabUiViewModel {
 
     private val _progress = mutableStateOf(100)
 
-    val progress: State<Int> = _progress
+    fun progress() = _progress.value
 
     fun updateProgress(newProgress: Int) {
         _progress.value = newProgress
     }
 
-    private val _error = mutableStateOf("")
-    val openErrorDialog = mutableStateOf(false)
+    fun shouldShowProgressIndicator(): Boolean {
+        return _progress.value < 70
+    }
 
-    val error: State<String> = _error
+    private val _error = mutableStateOf("")
+
+    private val openErrorDialog = mutableStateOf(false)
+
+    fun openErrorDialog() = openErrorDialog.value
+
+    fun closeErrorDialog() {
+        openErrorDialog.value = false
+    }
+
+    fun error() = _error.value
 
     fun setError(text: String) {
         _error.value = text
@@ -111,9 +124,15 @@ class WebTabUiViewModel {
                 ((swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx)
                     .coerceIn(0f, 1f)
         else
-            progress.value.toFloat() / 100f
+            _progress.value.toFloat() / 100f
 
-    val openLongTapDialog = mutableStateOf(false)
+    private val openLongTapDialog = mutableStateOf(false)
+
+    fun openLongTapDialog() {
+        openLongTapDialog.value = true
+    }
+
+    fun isOpenLongTapDialog() = openLongTapDialog.value
 
     private val _longTapActionParameters =
         mutableStateOf(Triple<String?, String?, String?>(null, null, null))
@@ -126,6 +145,7 @@ class WebTabUiViewModel {
 
     fun clearLongTapParameters() {
         _longTapActionParameters.value = Triple(null, null, null)
+        openLongTapDialog.value = false
     }
 
 }
