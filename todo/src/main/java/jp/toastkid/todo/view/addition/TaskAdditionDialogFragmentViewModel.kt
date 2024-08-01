@@ -38,7 +38,7 @@ class TaskAdditionDialogFragmentViewModel : Serializable {
         }
     }
 
-    fun updateTask(task: TodoTask?) {
+    private fun updateTask(task: TodoTask?) {
         if (task?.created == 0L) {
             task.created = System.currentTimeMillis()
         }
