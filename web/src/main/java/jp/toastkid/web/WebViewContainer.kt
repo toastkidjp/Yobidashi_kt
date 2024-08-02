@@ -89,7 +89,7 @@ class WebViewContainer(
 
     private val longTapListener = WebViewLongTapListenerFactory().invoke { title, url, imageUrl ->
         browserViewModel.setLongTapParameters(title, url, imageUrl)
-        browserViewModel.openLongTapDialog.value = true
+        browserViewModel.openLongTapDialog()
     }
 
     private val nestedScrollDispatcher = NestedScrollDispatcher()
