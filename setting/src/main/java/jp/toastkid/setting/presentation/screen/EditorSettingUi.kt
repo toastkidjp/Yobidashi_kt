@@ -39,7 +39,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.godaddy.android.colorpicker.ClassicColorPicker
@@ -69,9 +68,7 @@ internal fun EditorSettingUi() {
 
     val cursorColor =
         remember {
-            val color = preferenceApplier.editorCursorColor(
-                ContextCompat.getColor(activityContext, jp.toastkid.lib.R.color.editor_cursor)
-            )
+            val color = preferenceApplier.editorCursorColor(Color(0xFFE0E0E0).toArgb())
             mutableStateOf(Color(color))
         }
 
