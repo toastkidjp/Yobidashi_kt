@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -257,7 +258,6 @@ internal fun SearchContentsUi(
                                     .padding(start = 4.dp)
                             )
 
-                            val putQueryColor = colorResource(id = jp.toastkid.lib.R.color.pre4_ripple)
                             Text(
                                 text = stringResource(id = R.string.plus),
                                 color = colorResource(id = jp.toastkid.lib.R.color.white),
@@ -266,7 +266,7 @@ internal fun SearchContentsUi(
                                 modifier = Modifier
                                     .width(36.dp)
                                     .height(32.dp)
-                                    .drawBehind { drawRect(putQueryColor) }
+                                    .drawBehind { drawRect(Color(0xFFAAAAAA)) }
                                     .clickable { viewModel.putQuery("${it.title} ") }
                             )
                         }
