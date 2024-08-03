@@ -15,10 +15,10 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.web.FaviconApplier
+import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.web.webview.CustomViewSwitcher
 import java.util.concurrent.TimeUnit
 

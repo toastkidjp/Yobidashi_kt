@@ -16,7 +16,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
-import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.network.DownloadAction
 import jp.toastkid.lib.network.NetworkChecker
@@ -38,6 +37,7 @@ import jp.toastkid.web.reader.ReaderModeUseCase
 import jp.toastkid.web.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.web.usecase.HtmlSourceExtractionUseCase
 import jp.toastkid.web.usecase.WebViewReplacementUseCase
+import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.web.webview.AlphaConverter
 import jp.toastkid.web.webview.CustomViewSwitcher
 import jp.toastkid.web.webview.CustomWebView

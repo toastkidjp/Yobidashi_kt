@@ -26,11 +26,10 @@ import androidx.core.app.ComponentActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewFeature
-import jp.toastkid.lib.WebTabUiViewModel
+import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.FaviconApplier
-import jp.toastkid.web.R
 import jp.toastkid.web.block.AdRemover
 import jp.toastkid.web.block.SiteNameChecker
 import jp.toastkid.web.history.ViewHistoryInsertion
