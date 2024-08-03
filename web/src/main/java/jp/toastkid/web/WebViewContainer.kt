@@ -190,7 +190,7 @@ class WebViewContainer(
     }
 
     private fun updateBackButtonState(newState: Boolean) {
-        browserViewModel?.setBackButtonIsEnabled(newState)
+        browserViewModel.setBackButtonIsEnabled(newState)
     }
 
     private fun updateForwardButtonState(newState: Boolean) {
