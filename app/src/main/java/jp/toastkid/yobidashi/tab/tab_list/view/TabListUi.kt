@@ -46,7 +46,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -88,7 +87,13 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
     val coroutineScope = rememberCoroutineScope()
 
     val tabs = remember { mutableStateListOf<Tab>() }
-    refresh(tabAdapter, tabs)
+
+    LaunchedEffect(key1 = context) {
+        (0 until tabAdapter.size()).forEach {
+            val tab = tabAdapter.getTabByIndex(it) ?: return@forEach
+            tabs.add(tab)
+        }
+    }
 
     val state =  rememberReorderableLazyListState(
         onMove = { from, to ->
@@ -101,7 +106,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
         listState = rememberLazyListState(max(0, tabAdapter.index() - 1))
     )
 
-    val initialIndex = tabAdapter.currentTabId()
+    val initialIndex = remember { tabAdapter.currentTabId() }
     val deletedTabIds = remember { mutableStateListOf<String>() }
 
     Box {
@@ -150,6 +155,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                             onClose = {
                                 deletedTabIds.add(tab.id())
                                 tabAdapter.closeTab(tabAdapter.indexOf(tab))
+                                tabs.remove(tab)
                             }
                         )
                     }
@@ -291,7 +297,14 @@ private fun TabItem(
                     onClick(tab)
                 }
                 .drawBehind { drawRect(backgroundColor) }
-                .offset { IntOffset(0, swipeableState.requireOffset().roundToInt()) }
+                .offset {
+                    IntOffset(
+                        0,
+                        swipeableState
+                            .requireOffset()
+                            .roundToInt()
+                    )
+                }
                 .anchoredDraggable(
                     state = swipeableState,
                     orientation = Orientation.Vertical
@@ -358,14 +371,5 @@ private fun TabActionFab(
             stringResource(id = contentDescriptionId),
             tint = iconColor
         )
-    }
-}
-
-private fun refresh(callback: TabAdapter, tabs: SnapshotStateList<Tab>) {
-    tabs.clear()
-
-    (0 until callback.size()).forEach {
-        val tab = callback.getTabByIndex(it) ?: return@forEach
-        tabs.add(tab)
     }
 }
