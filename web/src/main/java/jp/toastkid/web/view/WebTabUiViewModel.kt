@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 toastkidjp.
+ * Copyright (c) 2024 toastkidjp.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompany this distribution.
@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
 
 /**
@@ -147,6 +148,31 @@ class WebTabUiViewModel {
     fun clearLongTapParameters() {
         _longTapActionParameters.value = Triple(null, null, null)
         openLongTapDialog.value = false
+    }
+
+    private val readerModeText = mutableStateOf("")
+
+    fun showReader(
+        content: String,
+        contentViewModel: ContentViewModel
+    ) {
+        val cleaned = content.replace("^\"|\"$".toRegex(), "")
+        if (cleaned.isBlank()) {
+            contentViewModel.snackShort("This page can't show reader mode.")
+            return
+        }
+
+        val lineSeparator = System.lineSeparator()
+        readerModeText.value = cleaned.replace("\\n", lineSeparator)
+    }
+
+    fun readerModeText() = readerModeText.value
+
+    fun isOpenReaderMode() =
+        readerModeText.value.isNotBlank()
+
+    fun closeReaderMode() {
+        readerModeText.value = ""
     }
 
 }

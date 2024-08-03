@@ -157,9 +157,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
         }
     }
 
-    val readerModeText = remember { mutableStateOf("") }
-    if (readerModeText.value.isNotBlank()) {
-        ReaderModeUi(webViewContainer.currentTitle(), readerModeText.value, { readerModeText.value = "" })
+    if (browserViewModel.isOpenReaderMode()) {
+        ReaderModeUi(webViewContainer.currentTitle(), browserViewModel.readerModeText(), browserViewModel::closeReaderMode)
     }
 
     if (browserViewModel.openErrorDialog()) {
@@ -185,10 +184,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
         }
     }
 
-    BackHandler(readerModeText.value.isNotBlank()) {
-        if (readerModeText.value.isNotBlank()) {
-            readerModeText.value = ""
-        }
+    BackHandler(browserViewModel.isOpenReaderMode()) {
+        browserViewModel.closeReaderMode()
     }
 
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
@@ -209,7 +206,12 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserViewModel,
                 webViewContainer
             ) {
-                readerModeText.value = if (readerModeText.value.isNotEmpty()) "" else it
+                if (browserViewModel.isOpenReaderMode()) {
+                    browserViewModel.closeReaderMode()
+                    return@AppBarContent
+                }
+
+                browserViewModel.showReader(it, contentViewModel)
             }
         }
     })
@@ -295,7 +297,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
 private fun AppBarContent(
     viewModel: WebTabUiViewModel,
     webViewContainer: WebViewContainer,
-    resetReaderModeContent: (String) -> Unit
+    openReaderMode: (String) -> Unit
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
 
@@ -346,9 +348,7 @@ private fun AppBarContent(
                 R.drawable.ic_reader_mode,
                 R.string.title_menu_reader_mode
             ) {
-                webViewContainer.invokeContentExtraction {
-                    showReader(it, contentViewModel, resetReaderModeContent)
-                }
+                webViewContainer.invokeContentExtraction(openReaderMode)
             }
 
             Box(
@@ -436,7 +436,7 @@ private fun AppBarContent(
             ) {
                 webViewContainer.invokeHtmlSourceExtraction {
                     val replace = it.replace("\\u003C", "<")
-                    showReader(replace, contentViewModel, resetReaderModeContent)
+                    openReaderMode(replace)
                 }
             }
         }
@@ -495,21 +495,6 @@ private fun AppBarContent(
             }
         }
     }
-}
-
-private fun showReader(
-    content: String,
-    contentViewModel: ContentViewModel,
-    resetReaderModeContent: (String) -> Unit
-) {
-    val cleaned = content.replace("^\"|\"$".toRegex(), "")
-    if (cleaned.isBlank()) {
-        contentViewModel.snackShort("This page can't show reader mode.")
-        return
-    }
-
-    val lineSeparator = System.lineSeparator()
-    resetReaderModeContent(cleaned.replace("\\n", lineSeparator))
 }
 
 @Composable
