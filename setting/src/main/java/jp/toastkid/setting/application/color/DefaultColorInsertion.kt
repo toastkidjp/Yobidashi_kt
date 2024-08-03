@@ -48,10 +48,10 @@ class DefaultColorInsertion {
     fun insert(context: Context): Job =
             CoroutineScope(Dispatchers.IO).launch {
                 val repository = RepositoryFactory().savedColorRepository(context)
-                make(context).forEach { repository.add(it) }
+                make().forEach { repository.add(it) }
             }
 
-    private fun make(context: Context): ArraySet<SavedColor> {
+    private fun make(): ArraySet<SavedColor> {
         val models = ArraySet<SavedColor>()
         map.map {
             SavedColor.make(
