@@ -9,6 +9,7 @@ package jp.toastkid.lib
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
 
@@ -72,16 +73,16 @@ class WebTabUiViewModel {
         _enableBack.value = newState
     }
 
-    private val _progress = mutableStateOf(100)
+    private val _progress = mutableIntStateOf(100)
 
-    fun progress() = _progress.value
+    fun progress() = _progress.intValue
 
     fun updateProgress(newProgress: Int) {
-        _progress.value = newProgress
+        _progress.intValue = newProgress
     }
 
     fun shouldShowProgressIndicator(): Boolean {
-        return _progress.value < 70
+        return _progress.intValue < 70
     }
 
     private val _error = mutableStateOf("")
@@ -124,7 +125,7 @@ class WebTabUiViewModel {
                 ((swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx)
                     .coerceIn(0f, 1f)
         else
-            _progress.value.toFloat() / 100f
+            _progress.intValue.toFloat() / 100f
 
     private val openLongTapDialog = mutableStateOf(false)
 
