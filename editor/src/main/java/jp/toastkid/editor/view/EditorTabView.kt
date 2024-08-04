@@ -11,7 +11,6 @@ package jp.toastkid.editor.view
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.text.format.DateFormat
 import android.view.Menu
 import android.view.MenuInflater
 import androidx.activity.ComponentActivity
@@ -125,7 +124,8 @@ fun EditorTabView(path: String?, modifier: Modifier) {
             mutableStateOf(path ?: ""),
             { viewModel.content().text },
             { viewModel.onValueChange(viewModel.content().copy(text = it)) },
-            { contentViewModel.saveEditorTab(it) }
+            { contentViewModel.saveEditorTab(it) },
+            viewModel::setLastSaved
         )
     }
 
@@ -353,7 +353,7 @@ fun EditorTabView(path: String?, modifier: Modifier) {
                 contentViewModel,
                 {
                     Text(
-                        text = stringResource(R.string.last_saved) + DateFormat.format(" HH:mm:ss", fileActionUseCase.lastSaved.value),
+                        text = stringResource(R.string.last_saved) + viewModel.lastSaved(),
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 14.sp,
                         maxLines = 2,

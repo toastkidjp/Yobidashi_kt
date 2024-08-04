@@ -13,7 +13,6 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.editor.R
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
@@ -27,7 +26,7 @@ class FileActionUseCase(
     private val textGetter: () -> String,
     private val textSetter: (String) -> Unit,
     private val updateTab: (File) -> Unit,
-    val lastSaved: MutableState<Long> = mutableStateOf(0L),
+    private val updateLastSaved: (Long) -> Unit,
     private val externalFileAssignment: ExternalFileAssignment = ExternalFileAssignment()
 ) {
 
@@ -71,7 +70,7 @@ class FileActionUseCase(
         //val fileName = file.nameWithoutExtension + "_backup.txt"
         //saveToFile(ExternalFileAssignment()(context, fileName).absolutePath)
 
-        lastSaved.value = file.lastModified()
+        updateLastSaved(file.lastModified())
     }
 
     /**
@@ -112,7 +111,7 @@ class FileActionUseCase(
         path.value = file.absolutePath
         updateTab(file)
 
-        lastSaved.value = file.lastModified()
+        updateLastSaved(file.lastModified())
     }
 
     fun readCurrentFile() {
