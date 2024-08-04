@@ -20,6 +20,7 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.data.repository.factory.RepositoryFactory
+import jp.toastkid.yobidashi.search.history.SearchHistoryRepository
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
