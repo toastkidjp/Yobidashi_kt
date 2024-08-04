@@ -61,11 +61,7 @@ class BarcodeAnalyzerImplementation {
         } catch (e: NotFoundException) {
             Timber.d(e)
             null
-        }
-
-        if (result == null) {
-            return null
-        }
+        } ?: return null
 
         return result.text
     }
