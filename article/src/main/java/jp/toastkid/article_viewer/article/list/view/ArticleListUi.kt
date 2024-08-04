@@ -58,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -66,7 +67,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.paging.PagingData
@@ -98,19 +98,13 @@ import kotlinx.coroutines.launch
 fun ArticleListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
 
-    val articleRepository = remember { ArticleRepositoryFactory().invoke(context) }
-
-    val preferenceApplier = remember { PreferenceApplier(context) }
-
-    val bookmarkRepository = remember { BookmarkRepositoryFactory().invoke(context) }
-
-    val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
+    val contentViewModel = remember { ViewModelProvider(context).get(ContentViewModel::class.java) }
 
     val viewModel = remember {
         ArticleListFragmentViewModel(
-            articleRepository,
-            bookmarkRepository,
-            preferenceApplier
+            ArticleRepositoryFactory().invoke(context),
+            BookmarkRepositoryFactory().invoke(context),
+            PreferenceApplier(context)
         )
     }
 
@@ -120,7 +114,7 @@ fun ArticleListUi() {
             val openSortDialog = remember { mutableStateOf(false) }
 
             if (openSortDialog.value) {
-                SortSettingDialogUi(preferenceApplier, openSortDialog, onSelect = {
+                SortSettingDialogUi(PreferenceApplier(context), { openSortDialog.value = false }, onSelect = {
                     viewModel.sort(it)
                 })
             }
@@ -129,25 +123,24 @@ fun ArticleListUi() {
 
             if (openDateDialog.value) {
                 DateFilterDialogUi(
-                    preferenceApplier.colorPair(),
-                    openDateDialog,
-                    DateSelectedActionUseCase(articleRepository, contentViewModel)
+                    { openDateDialog.value = false },
+                    DateSelectedActionUseCase(ArticleRepositoryFactory().invoke(context), contentViewModel)
                 )
             }
         }
     })
 
     val itemFlowState = remember { mutableStateOf<Flow<PagingData<SearchResult>>?>(null) }
-    itemFlowState.value = viewModel.dataSource.value?.flow
+    itemFlowState.value = viewModel.dataSource()?.flow
 
     val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
-        articleRepository,
-        bookmarkRepository,
+        ArticleRepositoryFactory().invoke(context),
+        BookmarkRepositoryFactory().invoke(context),
         {
             contentViewModel.snackWithAction(
                 "Deleted: \"${it.title}\".",
                 "UNDO"
-            ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
+            ) { CoroutineScope(Dispatchers.IO).launch { ArticleRepositoryFactory().invoke(context).insert(it) } }
         }
     )
 
@@ -162,7 +155,7 @@ fun ArticleListUi() {
             menuPopupUseCase
         )
 
-        if (viewModel.progressVisibility.value) {
+        if (viewModel.progressVisibility()) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
     }
@@ -202,9 +195,10 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     Row {
         Column(Modifier.weight(1f)) {
             TextField(
-                value = viewModel.searchInput.value,
+                value = viewModel.searchInput(),
                 onValueChange = {
-                    viewModel.searchInput.value = it
+                    viewModel.setSearchInput(it)
+
                     if (preferenceApplier.useTitleFilter()) {
                         CoroutineScope(Dispatchers.IO).launch {
                             viewModel.filter("%$it%")
@@ -219,7 +213,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 },
                 singleLine = true,
                 keyboardActions = KeyboardActions{
-                    viewModel.search(viewModel.searchInput.value)
+                    viewModel.search(viewModel.searchInput())
                 },
                 keyboardOptions = KeyboardOptions(
                     autoCorrect = true,
@@ -228,7 +222,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     unfocusedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
-                    cursorColor = Color(preferenceApplier.editorCursorColor(ContextCompat.getColor(activityContext, jp.toastkid.lib.R.color.editor_cursor)))
+                    cursorColor = Color(preferenceApplier.editorCursorColor(Color(0xFFE0E0E0).toArgb()))
                 ),
                 trailingIcon = {
                     Icon(
@@ -238,14 +232,14 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                         modifier = Modifier
                             .offset(x = 8.dp)
                             .clickable {
-                                viewModel.searchInput.value = ""
+                                viewModel.setSearchInput("")
                             }
                     )
                 },
                 modifier = Modifier.weight(0.7f)
             )
             Text(
-                text = viewModel.searchResult.value,
+                text = viewModel.searchResult(),
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 12.sp,
                 modifier = Modifier
@@ -344,7 +338,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     })
 
     if (openSortDialog.value) {
-        SortSettingDialogUi(preferenceApplier, openSortDialog, onSelect = {
+        SortSettingDialogUi(preferenceApplier, { openSortDialog.value = false }, onSelect = {
             viewModel.sort(it)
         })
     }
@@ -352,8 +346,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
 
     if (openDateDialog.value) {
         DateFilterDialogUi(
-            preferenceApplier.colorPair(),
-            openDateDialog,
+            { openDateDialog.value = false },
             DateSelectedActionUseCase(ArticleRepositoryFactory().invoke(activityContext), contentViewModel)
         )
     }

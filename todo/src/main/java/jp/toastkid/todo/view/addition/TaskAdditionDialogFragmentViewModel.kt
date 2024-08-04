@@ -7,7 +7,6 @@
  */
 package jp.toastkid.todo.view.addition
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.todo.model.TodoTask
 import java.io.Serializable
@@ -19,15 +18,34 @@ class TaskAdditionDialogFragmentViewModel : Serializable {
 
     private val _bottomSheetScaffoldState = mutableStateOf(false)
 
-    val bottomSheetScaffoldState: State<Boolean> = _bottomSheetScaffoldState
+    fun bottomSheetScaffoldState() = _bottomSheetScaffoldState.value
 
     private val _task = mutableStateOf<TodoTask?>(null)
 
-    val task: State<TodoTask?> = _task
+    fun task() = _task.value
 
     fun setTask(task: TodoTask?) {
         _task.value = task ?: TodoTask(0).also { it.dueDate = System.currentTimeMillis() }
     }
+
+    fun save(
+        task: TodoTask?,
+        onTapAdd: (TodoTask) -> Unit
+    ) {
+        task?.let {
+            updateTask(it)
+            onTapAdd(it)
+        }
+    }
+
+    private fun updateTask(task: TodoTask?) {
+        if (task?.created == 0L) {
+            task.created = System.currentTimeMillis()
+        }
+        task?.lastModified = System.currentTimeMillis()
+    }
+
+    fun colors() = colors
 
     fun show() {
         _bottomSheetScaffoldState.value = true
@@ -38,3 +56,7 @@ class TaskAdditionDialogFragmentViewModel : Serializable {
     }
 
 }
+
+private val colors = setOf(
+    0xffe53935, 0xfff8bbd0, 0xff2196f3, 0xff4caf50, 0xffffeb3b, 0xff3e2723, 0xffffffff
+)

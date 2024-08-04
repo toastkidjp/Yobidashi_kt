@@ -21,9 +21,9 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.ScreenMode
+import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.web.webview.DarkModeApplier
 import jp.toastkid.web.webview.GlobalWebViewPool
 import jp.toastkid.web.webview.WebSettingApplier

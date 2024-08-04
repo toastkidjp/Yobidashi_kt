@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchSettingUi() {
     val activityContext = LocalContext.current
-    val preferenceApplier = PreferenceApplier(activityContext)
+    val preferenceApplier = remember { PreferenceApplier(activityContext) }
 
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, activityContext)
@@ -111,7 +111,12 @@ fun SearchSettingUi() {
                             .weight(1f)
                             .padding(start = 4.dp)
                     )
-                    SearchCategorySpinner(spinnerOpen, categoryName.value) {
+                    SearchCategorySpinner(
+                        spinnerOpen.value,
+                        { spinnerOpen.value = true },
+                        { spinnerOpen.value = false },
+                        categoryName.value
+                    ) {
                         preferenceApplier.setDefaultSearchEngine(it.name)
                         categoryName.value = it.name
                     }

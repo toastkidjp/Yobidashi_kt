@@ -33,6 +33,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -56,9 +57,9 @@ internal fun TaskEditorUi(
     taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel?,
     onTapAdd: (TodoTask) -> Unit
 ) {
-    val task = taskAdditionDialogFragmentViewModel?.task?.value
+    val task = taskAdditionDialogFragmentViewModel?.task()
     var descriptionInput by remember { mutableStateOf(task?.description ?: "") }
-    var chosenColor by remember { mutableStateOf(Color.Transparent.value.toInt()) }
+    var chosenColor by remember { mutableIntStateOf(Color.Transparent.value.toInt()) }
     task?.let {
         descriptionInput = it.description
         chosenColor = it.color
@@ -66,17 +67,13 @@ internal fun TaskEditorUi(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val colors = setOf(
-        0xffe53935, 0xfff8bbd0, 0xff2196f3, 0xff4caf50, 0xffffeb3b, 0xff3e2723, 0xffffffff
-    )
-
     screenContent()
 
-    if (taskAdditionDialogFragmentViewModel?.bottomSheetScaffoldState?.value != true) {
+    if (taskAdditionDialogFragmentViewModel?.bottomSheetScaffoldState() != true) {
         return
     }
 
-    Dialog(onDismissRequest = { taskAdditionDialogFragmentViewModel.hide() }) {
+    Dialog(onDismissRequest = taskAdditionDialogFragmentViewModel::hide) {
         Column {
             val datePickerState = rememberDatePickerState(
                 initialDisplayedMonthMillis = System.currentTimeMillis()
@@ -95,7 +92,7 @@ internal fun TaskEditorUi(
                         datePickerState.selectedDateMillis?.let {
                             task?.dueDate = it
                         }
-                        save(task, onTapAdd)
+                        taskAdditionDialogFragmentViewModel.save(task, onTapAdd)
                         coroutineScope.launch {
                             taskAdditionDialogFragmentViewModel.hide()
                         }
@@ -124,7 +121,7 @@ internal fun TaskEditorUi(
                         datePickerState.selectedDateMillis?.let {
                             task?.dueDate = it
                         }
-                        save(task, onTapAdd)
+                        taskAdditionDialogFragmentViewModel.save(task, onTapAdd)
                         taskAdditionDialogFragmentViewModel.hide()
                     },
                     colors = ButtonDefaults.textButtonColors(
@@ -145,7 +142,7 @@ internal fun TaskEditorUi(
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)) {
-                colors.forEach { color ->
+                taskAdditionDialogFragmentViewModel.colors().forEach { color ->
                     RadioButton(
                         selected = chosenColor == color.toInt(),
                         colors = RadioButtonDefaults
@@ -177,21 +174,4 @@ internal fun TaskEditorUi(
             )
         }
     }
-}
-
-private fun save(
-    task: TodoTask?,
-    onTapAdd: (TodoTask) -> Unit
-) {
-    task?.let {
-        updateTask(it)
-        onTapAdd(it)
-    }
-}
-
-private fun updateTask(task: TodoTask?) {
-    if (task?.created == 0L) {
-        task.created = System.currentTimeMillis()
-    }
-    task?.lastModified = System.currentTimeMillis()
 }

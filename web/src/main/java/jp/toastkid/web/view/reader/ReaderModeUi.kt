@@ -23,7 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -36,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.lib.preference.PreferenceApplier
 
 @Composable
-internal fun ReaderModeUi(title: String, text: MutableState<String>) {
+internal fun ReaderModeUi(title: String, text: String, onClose: () -> Unit) {
     val preferenceApplier = PreferenceApplier(LocalContext.current)
 
     val scrollState = rememberScrollState()
@@ -69,14 +68,12 @@ internal fun ReaderModeUi(title: String, text: MutableState<String>) {
                     modifier = Modifier
                         .size(44.dp)
                         .padding(8.dp)
-                        .clickable {
-                            text.value = ""
-                        }
+                        .clickable(onClick = onClose)
                 )
             }
             SelectionContainer {
                 Text(
-                    text = text.value,
+                    text = text,
                     color = Color(preferenceApplier.editorFontColor()),
                     fontSize = 16.sp,
                     modifier = Modifier

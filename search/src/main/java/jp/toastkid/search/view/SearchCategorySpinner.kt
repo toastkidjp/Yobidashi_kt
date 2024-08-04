@@ -22,7 +22,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -39,18 +39,18 @@ import jp.toastkid.search.SearchCategory
 
 @Composable
 internal fun SearchCategorySpinner(
-    spinnerOpen: MutableState<Boolean>,
+    expand: Boolean,
+    openSpinner: () -> Unit,
+    closeSpinner: () -> Unit,
     currentCategory: String,
     onSelect: (SearchCategory) -> Unit = {}
 ) {
-    val initialDisables = PreferenceApplier(LocalContext.current).readDisableSearchCategory()
+    val context = LocalContext.current
     val popupWindowHeight = (LocalConfiguration.current.screenHeightDp / 2).dp
 
     Box(
         modifier = Modifier
-            .clickable {
-                spinnerOpen.value = true
-            }
+            .clickable(onClick = openSpinner)
             .width(44.dp)
             .height(56.dp)
             .drawBehind { drawRect(Color(0xDDFFFFFF)) }
@@ -68,11 +68,14 @@ internal fun SearchCategorySpinner(
         )
 
         DropdownMenu(
-            expanded = spinnerOpen.value,
-            onDismissRequest = { spinnerOpen.value = false }
+            expanded = expand,
+            onDismissRequest = closeSpinner
         ) {
-            val searchCategories = SearchCategory.values()
-                .filterNot { initialDisables?.contains(it.name) ?: false }
+            val searchCategories = remember {
+                val initialDisables = PreferenceApplier(context).readDisableSearchCategory()
+                SearchCategory.values()
+                    .filterNot { initialDisables?.contains(it.name) ?: false }
+            }
 
             LazyColumn(modifier = Modifier.size(popupWindowHeight)) {
                 items(searchCategories, { it.id }) { searchCategory ->
@@ -93,7 +96,7 @@ internal fun SearchCategorySpinner(
                         },
                         onClick = {
                             onSelect(searchCategory)
-                            spinnerOpen.value = false
+                            closeSpinner()
                         }
                     )
                 }

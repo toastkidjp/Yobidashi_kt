@@ -13,13 +13,13 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
-import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.FaviconApplier
 import jp.toastkid.web.block.AdRemover
 import jp.toastkid.web.block.SiteNameChecker
 import jp.toastkid.web.rss.suggestion.RssAddingSuggestion
+import jp.toastkid.web.view.WebTabUiViewModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

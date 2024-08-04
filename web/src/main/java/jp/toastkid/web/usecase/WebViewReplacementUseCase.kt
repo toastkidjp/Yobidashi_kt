@@ -16,9 +16,9 @@ import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.ScreenMode
+import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.web.webview.DarkModeApplier
 import jp.toastkid.web.webview.GlobalWebViewPool
 import jp.toastkid.web.webview.WebSettingApplier

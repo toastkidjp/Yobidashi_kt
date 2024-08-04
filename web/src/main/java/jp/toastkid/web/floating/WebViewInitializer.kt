@@ -69,7 +69,7 @@ class WebViewInitializer(
 
             override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
                 val urlStr = view?.url
-                if (viewModel.icon.value != null) {
+                if (viewModel.icon() != null) {
                     return
                 }
 

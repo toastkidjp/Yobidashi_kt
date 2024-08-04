@@ -64,23 +64,20 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ArticleContentUi(title: String, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val repository = remember { ArticleRepositoryFactory().invoke(context) }
     val viewModel = remember { ContentViewerFragmentViewModel() }
-
-    viewModel.setTitle(title)
-
-    val linkGenerator = remember { LinkGenerator() }
 
     LaunchedEffect(key1 = title, block = {
         val content = withContext(Dispatchers.IO) {
-            repository.findContentByTitle(title)
+            ArticleRepositoryFactory().invoke(context).findContentByTitle(title)
         }
 
         if (content.isNullOrBlank()) {
             return@LaunchedEffect
         }
 
-        val converted = linkGenerator.invoke(content)
+        viewModel.setTitle(title)
+
+        val converted = LinkGenerator().invoke(content)
         viewModel.setContent(converted)
     })
 
@@ -128,7 +125,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 },
                 label = {
                     Text(
-                        viewModel.title.value,
+                        viewModel.title(),
                         color = Color(preferenceApplier.editorFontColor())
                     )
                 },

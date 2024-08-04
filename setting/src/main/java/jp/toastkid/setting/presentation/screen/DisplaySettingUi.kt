@@ -61,14 +61,11 @@ import java.io.File
 @Composable
 internal fun DisplaySettingUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = PreferenceApplier(activityContext)
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
-    val filesDir = FilesDir(activityContext, BACKGROUND_DIR)
+    val files = remember { mutableStateListOf<File>().also { it.addAll(loadFileChunk(FilesDir(activityContext, BACKGROUND_DIR))) } }
 
-    val files = remember { mutableStateListOf<File>().also { it.addAll(loadFileChunk(filesDir)) } }
-
-    val displayEffectState = remember { mutableStateOf(preferenceApplier.showDisplayEffect()) }
+    val displayEffectState = remember { mutableStateOf(PreferenceApplier(activityContext).showDisplayEffect()) }
 
     val addingLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -102,7 +99,7 @@ internal fun DisplaySettingUi() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .clickable { DarkModeApplier().invoke(preferenceApplier, activityContext) }
+                    .clickable { DarkModeApplier().invoke(PreferenceApplier(activityContext), activityContext) }
             ) {
                 Icon(
                     painterResource(id = R.drawable.ic_dark_mode_black),
@@ -122,6 +119,7 @@ internal fun DisplaySettingUi() {
             SwitchRow(
                 textId = R.string.title_display_effect,
                 clickable = {
+                    val preferenceApplier = PreferenceApplier(activityContext)
                     preferenceApplier.switchShowDisplayEffect()
                     displayEffectState.value = preferenceApplier.showDisplayEffect()
                     contentViewModel.setShowDisplayEffect(displayEffectState.value)
@@ -137,7 +135,7 @@ internal fun DisplaySettingUi() {
                     .fillMaxWidth()
                     .padding(16.dp)
                     .clickable {
-                        preferenceApplier.removeBackgroundImagePath()
+                        PreferenceApplier(activityContext).removeBackgroundImagePath()
                         contentViewModel.snackShort(R.string.message_reset_bg_image)
                     }
             ) {
@@ -205,7 +203,7 @@ internal fun DisplaySettingUi() {
                         .animateItemPlacement()
                     ) {
                         Box(Modifier.clickable {
-                            preferenceApplier.backgroundImagePath = imageFile.path
+                            PreferenceApplier(activityContext).backgroundImagePath = imageFile.path
                             contentViewModel
                                 .snackShort(R.string.message_change_background_image)
                         }) {
@@ -235,7 +233,7 @@ internal fun DisplaySettingUi() {
                                     .clickable {
                                         if (!imageFile.exists()) {
                                             contentViewModel
-                                                ?.snackShort(R.string.message_cannot_found_image)
+                                                .snackShort(R.string.message_cannot_found_image)
                                             return@clickable
                                         }
                                         val successRemove = imageFile.delete()
@@ -262,7 +260,7 @@ internal fun DisplaySettingUi() {
             jp.toastkid.lib.R.string.clear_all,
             onDismissRequest = { openClearImagesDialog.value = false },
             onClickOk = {
-                filesDir.clean()
+                FilesDir(activityContext, BACKGROUND_DIR).clean()
                 files.clear()
                 contentViewModel.snackShort(R.string.message_success_image_removal)
             }

@@ -44,7 +44,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -371,7 +370,7 @@ private fun BookmarkList(
             )
 
             if (openEditor.value) {
-                EditorDialog(openEditor, bookmark, query)
+                EditorDialog({ openEditor.value = false }, bookmark, query)
             }
         }
     }
@@ -380,7 +379,7 @@ private fun BookmarkList(
 
 @Composable
 private fun EditorDialog(
-    openEditor: MutableState<Boolean>,
+    onDismissRequest: () -> Unit,
     currentItem: Bookmark,
     query: (String) -> Unit
 ) {
@@ -396,7 +395,7 @@ private fun EditorDialog(
         }
     }
 
-    Dialog(onDismissRequest = { openEditor.value = false }) {
+    Dialog(onDismissRequest = onDismissRequest) {
         Surface(shadowElevation = 4.dp) {
             Box(modifier = Modifier.padding(16.dp)) {
                 Row(
@@ -408,9 +407,7 @@ private fun EditorDialog(
                         text = stringResource(id = jp.toastkid.lib.R.string.cancel),
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
-                            .clickable {
-                                openEditor.value = false
-                            }
+                            .clickable(onClick = onDismissRequest)
                             .padding(16.dp)
                     )
 
@@ -419,7 +416,8 @@ private fun EditorDialog(
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .clickable {
-                                openEditor.value = false
+                                onDismissRequest()
+
                                 if (currentItem.parent != moveTo.value) {
                                     moveFolder(
                                         currentItem,

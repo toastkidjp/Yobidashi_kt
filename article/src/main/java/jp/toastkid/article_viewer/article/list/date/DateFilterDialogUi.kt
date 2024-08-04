@@ -20,35 +20,23 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
-import jp.toastkid.lib.preference.ColorPair
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DateFilterDialogUi(
-    colorPair: ColorPair,
-    openDialog: MutableState<Boolean>,
+    onDismissRequest: () -> Unit,
     dateSelectedActionUseCase: DateSelectedActionUseCase
 ) {
-    var year by remember { mutableStateOf(0) }
-    var monthOfYear by remember { mutableStateOf(0) }
-    var dayOfMonth by remember { mutableStateOf(0) }
     val datePickerState = rememberDatePickerState()
     Dialog(
-        onDismissRequest = {
-            openDialog.value = false
-        }
+        onDismissRequest = onDismissRequest
     ) {
         Surface(shadowElevation = 4.dp) {
             Column {
@@ -61,7 +49,7 @@ internal fun DateFilterDialogUi(
 
                 Button(
                     onClick = {
-                        openDialog.value = false
+                        onDismissRequest()
                         val selectedDateMillis = datePickerState.selectedDateMillis ?: return@Button
                         val calendar = Calendar.getInstance().also {
                             it.timeInMillis = selectedDateMillis

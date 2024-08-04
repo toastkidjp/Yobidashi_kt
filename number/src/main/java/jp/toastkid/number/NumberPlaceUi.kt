@@ -58,9 +58,9 @@ fun NumberPlaceUi() {
 
     val context = LocalContext.current
 
-    val preferenceApplier = PreferenceApplier(LocalContext.current)
     val viewModel = remember { NumberPlaceViewModel() }
     LaunchedEffect(key1 = viewModel, block = {
+        val preferenceApplier = PreferenceApplier(context)
         val file = GameFileProvider().invoke(context.filesDir, preferenceApplier)
         if (file != null) {
             val game = GameRepositoryImplementation().load(file)
@@ -192,7 +192,7 @@ fun NumberPlaceUi() {
     )
 
     contentViewModel?.replaceAppBarContent {
-        AppBarContent(preferenceApplier, fontSize, contentViewModel)
+        AppBarContent(fontSize, contentViewModel)
     }
 
     DisposableEffect(key1 = viewModel, effect = {
@@ -231,7 +231,6 @@ private fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.d
 
 @Composable
 private fun AppBarContent(
-    preferenceApplier: PreferenceApplier,
     fontSize: TextUnit,
     contentViewModel: ContentViewModel?
 ) {
@@ -239,7 +238,7 @@ private fun AppBarContent(
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         val openMaskingCount = remember { mutableStateOf(false) }
-        val maskingCount = remember { mutableStateOf("${preferenceApplier.getMaskingCount()}") }
+        val maskingCount = remember { mutableStateOf("${PreferenceApplier(context).getMaskingCount()}") }
 
         Text(
             "Masking count: ",
@@ -274,7 +273,7 @@ private fun AppBarContent(
                         onClick = {
                         maskingCount.value = "$it"
                         openMaskingCount.value = false
-                        preferenceApplier.setMaskingCount(it)
+                            PreferenceApplier(context).setMaskingCount(it)
                         deleteCurrentGame(context)
                         contentViewModel?.nextRoute("tool/number/place")
                     })

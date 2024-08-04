@@ -73,7 +73,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskBoardUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
@@ -81,7 +80,6 @@ fun TaskBoardUi() {
         remember { TaskAdditionDialogFragmentViewModel() }
 
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
-    val preferenceApplier = PreferenceApplier(context)
 
     val menuUseCase = ItemMenuPopupActionUseCase(
         {
@@ -173,6 +171,7 @@ private fun BoardItem(
 
     Surface(
         shadowElevation = 4.dp,
+        color = Color(color),
         modifier = modifier
             .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 2.dp)
             .width(140.dp)

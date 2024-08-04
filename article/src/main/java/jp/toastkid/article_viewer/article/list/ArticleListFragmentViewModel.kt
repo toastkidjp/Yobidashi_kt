@@ -7,7 +7,6 @@
  */
 package jp.toastkid.article_viewer.article.list
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -30,7 +29,8 @@ class ArticleListFragmentViewModel(
     private val tokenizer = NgramTokenizer()
 
     private val _progressVisibility = mutableStateOf(false)
-    val progressVisibility : State<Boolean> = _progressVisibility
+
+    fun progressVisibility() = _progressVisibility.value
 
     fun showProgress() {
         _progressVisibility.value = true
@@ -45,7 +45,8 @@ class ArticleListFragmentViewModel(
     }
 
     private val _dataSource = mutableStateOf<Pager<Int, SearchResult>?>(null)
-    val dataSource: State<Pager<Int, SearchResult>?> = _dataSource
+
+    fun dataSource() = _dataSource.value
 
     fun search(keyword: String?) {
         setNextPager {
@@ -85,8 +86,20 @@ class ArticleListFragmentViewModel(
         )
     }
 
-    val searchInput = mutableStateOf("")
+    private val searchInput = mutableStateOf("")
 
-    val searchResult = mutableStateOf("")
+    fun searchInput() = searchInput.value
+
+    fun setSearchInput(newInput: String) {
+        searchInput.value = newInput
+    }
+
+    private val searchResult = mutableStateOf("")
+
+    fun searchResult() = searchResult.value
+
+    fun setSearchResult(newResult: String) {
+        searchResult.value = newResult
+    }
 
 }

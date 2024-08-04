@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,57 +54,57 @@ fun SettingTopUi() {
         SwitchContentWithTabIndex(page)
     }
 
-    contentViewModel?.replaceAppBarContent {
-        val pages = arrayOf(
-            R.string.subhead_displaying,
-            R.string.title_settings_color,
-            jp.toastkid.lib.R.string.search,
-            R.string.subhead_browser,
-            R.string.subhead_editor,
-            R.string.title_calendar,
-            R.string.title_color_filter,
-            R.string.subhead_others
-        )
+    DisposableEffect(key1 = LocalLifecycleOwner.current) {
+        contentViewModel?.replaceAppBarContent {
+            val pages = arrayOf(
+                R.string.subhead_displaying,
+                R.string.title_settings_color,
+                jp.toastkid.lib.R.string.search,
+                R.string.subhead_browser,
+                R.string.subhead_editor,
+                R.string.title_calendar,
+                R.string.title_color_filter,
+                R.string.subhead_others
+            )
 
-        ScrollableTabRow(
-            selectedTabIndex = pagerState.currentPage,
-            edgePadding = 8.dp,
-            containerColor = Color.Transparent,
-            indicator = { tabPositions ->
-                val primaryColor = MaterialTheme.colorScheme.onPrimary
-                Box(
-                    modifier = Modifier
-                        .tabIndicatorOffset(tabPositions[pagerState.currentPage])
-                        .height(2.dp)
-                        .clip(RoundedCornerShape(8.dp)) // clip modifier not working
-                        .padding(horizontal = 4.dp)
-                        .drawBehind { drawRect(primaryColor) }
-                )
-            },
-            modifier = Modifier.fillMaxHeight()
-        ) {
-            pages.forEachIndexed { index, page ->
-                val coroutineScope = rememberCoroutineScope()
-                Tab(
-                    selected = pagerState.currentPage == index,
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
-                    },
-                    modifier = Modifier.padding(start = 4.dp, end = 4.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = page),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 16.sp
+            ScrollableTabRow(
+                selectedTabIndex = pagerState.currentPage,
+                edgePadding = 8.dp,
+                containerColor = Color.Transparent,
+                indicator = { tabPositions ->
+                    val primaryColor = MaterialTheme.colorScheme.onPrimary
+                    Box(
+                        modifier = Modifier
+                            .tabIndicatorOffset(tabPositions[pagerState.currentPage])
+                            .height(2.dp)
+                            .clip(RoundedCornerShape(8.dp)) // clip modifier not working
+                            .padding(horizontal = 4.dp)
+                            .drawBehind { drawRect(primaryColor) }
                     )
+                },
+                modifier = Modifier.fillMaxHeight()
+            ) {
+                pages.forEachIndexed { index, page ->
+                    val coroutineScope = rememberCoroutineScope()
+                    Tab(
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        },
+                        modifier = Modifier.padding(start = 4.dp, end = 4.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = page),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 16.sp
+                        )
+                    }
                 }
             }
         }
-    }
 
-    DisposableEffect(key1 = "refresh") {
         onDispose {
             contentViewModel?.refresh()
         }

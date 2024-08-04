@@ -64,7 +64,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
-import jp.toastkid.lib.WebTabUiViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.swiperefresh.SwipeRefreshNestedScrollConnection
@@ -158,39 +157,35 @@ fun WebTabUi(uri: Uri, tabId: String) {
         }
     }
 
-    val readerModeText = remember { mutableStateOf("") }
-    if (readerModeText.value.isNotBlank()) {
-        ReaderModeUi(webViewContainer.currentTitle(), readerModeText)
+    if (browserViewModel.isOpenReaderMode()) {
+        ReaderModeUi(webViewContainer.currentTitle(), browserViewModel.readerModeText(), browserViewModel::closeReaderMode)
     }
 
-    if (browserViewModel.openErrorDialog.value) {
+    if (browserViewModel.openErrorDialog()) {
         ConfirmDialog(
             stringResource(id = R.string.title_ssl_connection_error),
-            browserViewModel.error.value,
-            onDismissRequest = { browserViewModel.openErrorDialog.value = false }
+            browserViewModel.error(),
+            onDismissRequest = browserViewModel::closeErrorDialog
         ) {
             browserViewModel.clearError()
         }
     }
 
-    if (browserViewModel.openLongTapDialog.value) {
+    if (browserViewModel.isOpenLongTapDialog()) {
         val value = browserViewModel.longTapActionParameters.value
-        browserViewModel.openLongTapDialog.value = true
+        browserViewModel.openLongTapDialog()
 
         AnchorLongTapDialog(
             value.first,
             value.second,
             value.third
         ) {
-            browserViewModel.openLongTapDialog.value = false
             browserViewModel.clearLongTapParameters()
         }
     }
 
-    BackHandler(readerModeText.value.isNotBlank()) {
-        if (readerModeText.value.isNotBlank()) {
-            readerModeText.value = ""
-        }
+    BackHandler(browserViewModel.isOpenReaderMode()) {
+        browserViewModel.closeReaderMode()
     }
 
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
@@ -211,7 +206,12 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserViewModel,
                 webViewContainer
             ) {
-                readerModeText.value = if (readerModeText.value.isNotEmpty()) "" else it
+                if (browserViewModel.isOpenReaderMode()) {
+                    browserViewModel.closeReaderMode()
+                    return@AppBarContent
+                }
+
+                browserViewModel.showReader(it, contentViewModel)
             }
         }
     })
@@ -297,7 +297,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
 private fun AppBarContent(
     viewModel: WebTabUiViewModel,
     webViewContainer: WebViewContainer,
-    resetReaderModeContent: (String) -> Unit
+    openReaderMode: (String) -> Unit
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
 
@@ -312,16 +312,16 @@ private fun AppBarContent(
             .height(76.dp)
             .fillMaxWidth()
     ) {
-        if (viewModel.progress.value < 70) {
+        if (viewModel.shouldShowProgressIndicator()) {
             LinearProgressIndicator(
-                progress = { viewModel.progress.value.toFloat() / 100f },
+                progress = { viewModel.progress().toFloat() / 100f },
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .height(1.dp)
                     .fillMaxWidth()
             )
         } else {
-            LaunchedEffect(key1 = viewModel.progress.value) {
+            LaunchedEffect(key1 = viewModel.progress()) {
                 coroutineScope.launch {
                     viewModel.swipeRefreshState.value?.resetOffset()
                 }
@@ -335,22 +335,20 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_back,
                 R.string.back,
-                viewModel.enableBack.value
+                viewModel.enableBack()
             ) { webViewContainer.back() }
 
             HeaderSubButton(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,
-                viewModel.enableForward.value
+                viewModel.enableForward()
             ) { webViewContainer.forward() }
 
             HeaderSubButton(
                 R.drawable.ic_reader_mode,
                 R.string.title_menu_reader_mode
             ) {
-                webViewContainer.invokeContentExtraction {
-                    showReader(it, contentViewModel, resetReaderModeContent)
-                }
+                webViewContainer.invokeContentExtraction(openReaderMode)
             }
 
             Box(
@@ -399,7 +397,7 @@ private fun AppBarContent(
                     R.drawable.ic_user_agent,
                     R.string.title_user_agent
                 ) { open.value = true }
-                UserAgentDropdown(open) {
+                UserAgentDropdown(open.value, { open.value = false }) {
                     PreferenceApplier(activity).setUserAgent(it.name)
                     webViewContainer.resetUserAgent(it.text())
                     contentViewModel.snackShort(
@@ -438,7 +436,7 @@ private fun AppBarContent(
             ) {
                 webViewContainer.invokeHtmlSourceExtraction {
                     val replace = it.replace("\\u003C", "<")
-                    showReader(replace, contentViewModel, resetReaderModeContent)
+                    openReaderMode(replace)
                 }
             }
         }
@@ -458,7 +456,7 @@ private fun AppBarContent(
                     }
             ) {
                 AsyncImage(
-                    model = viewModel.icon.value,
+                    model = viewModel.icon(),
                     contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                     modifier = Modifier
                         .size(36.dp)
@@ -466,15 +464,15 @@ private fun AppBarContent(
                         .clickable { openPageInformation.value = true }
                 )
                 TitleUrlBox(
-                    viewModel.title.value,
-                    viewModel.url.value,
-                    viewModel.progress.value,
+                    viewModel.title(),
+                    viewModel.url(),
+                    viewModel.progress(),
                     Modifier
                         .weight(1f)
                         .padding(end = 4.dp)
                 )
 
-                val isNotLoading = 70 < viewModel.progress.value
+                val isNotLoading = !viewModel.shouldShowProgressIndicator()
                 val reloadIconId =
                     if (isNotLoading) R.drawable.ic_reload else jp.toastkid.lib.R.drawable.ic_close
                 Icon(
@@ -497,21 +495,6 @@ private fun AppBarContent(
             }
         }
     }
-}
-
-private fun showReader(
-    content: String,
-    contentViewModel: ContentViewModel,
-    resetReaderModeContent: (String) -> Unit
-) {
-    val cleaned = content.replace("^\"|\"$".toRegex(), "")
-    if (cleaned.isBlank()) {
-        contentViewModel.snackShort("This page can't show reader mode.")
-        return
-    }
-
-    val lineSeparator = System.lineSeparator()
-    resetReaderModeContent(cleaned.replace("\\n", lineSeparator))
 }
 
 @Composable

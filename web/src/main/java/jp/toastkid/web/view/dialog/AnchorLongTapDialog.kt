@@ -54,9 +54,7 @@ internal fun AnchorLongTapDialog(
     }
 
     Dialog(
-        onDismissRequest = {
-            close()
-        },
+        onDismissRequest = close,
         content = {
             Surface(shadowElevation = 4.dp) {
                 Box {
