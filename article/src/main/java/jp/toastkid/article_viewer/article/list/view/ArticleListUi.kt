@@ -69,7 +69,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import jp.toastkid.article_viewer.R
@@ -91,7 +91,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -130,14 +129,12 @@ fun ArticleListUi() {
         }
     })
 
-    val itemFlowState = remember { mutableStateOf<Flow<PagingData<SearchResult>>?>(null) }
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
         ArticleListUi(
-            itemFlowState.value,
+            viewModel.dataSource().collectAsLazyPagingItems(),
             rememberLazyListState(),
             contentViewModel,
             ArticleListMenuPopupActionUseCase(
@@ -159,7 +156,6 @@ fun ArticleListUi() {
 
     LaunchedEffect(key1 = "first_launch", block = {
         viewModel.search("")
-        itemFlowState.value = viewModel.dataSource()?.flow
     })
 
     DisposableEffect(key1 = "unregisterReceiver", effect = {
@@ -354,13 +350,11 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ArticleListUi(
-    flow: Flow<PagingData<SearchResult>>?,
+    articles: LazyPagingItems<SearchResult>,
     listState: LazyListState,
     contentViewModel: ContentViewModel?,
     menuPopupUseCase: MenuPopupActionUseCase
 ) {
-    val articles = flow?.collectAsLazyPagingItems() ?: return
-
     LazyColumn(state = listState) {
         items(articles, { it.id }) {
             it ?: return@items
