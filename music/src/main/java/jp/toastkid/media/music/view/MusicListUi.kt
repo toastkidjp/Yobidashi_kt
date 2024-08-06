@@ -12,7 +12,6 @@ import android.content.ComponentName
 import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
-import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
@@ -34,6 +33,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,81 +62,83 @@ import jp.toastkid.media.music.MediaPlayerService
 import jp.toastkid.media.music.popup.MediaPlayerPopupViewModel
 import jp.toastkid.media.music.popup.playback.speed.PlayingSpeed
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicReference
 
 @Composable
 fun MusicListUi() {
     val activity = LocalContext.current as? ComponentActivity ?: return
-    val viewModelProvider = ViewModelProvider(activity)
-    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
+
     val mediaPlayerPopupViewModel = remember { MediaPlayerPopupViewModel() }
 
-    var mediaBrowser: MediaBrowserCompat? = null
+    val lastSubscriber = remember { AtomicReference<() -> Unit>() }
 
-    val controllerCallback = object : MediaControllerCompat.Callback() {
-
-        override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-            when (state?.state) {
-                PlaybackStateCompat.STATE_SKIPPING_TO_PREVIOUS -> {
-                    mediaPlayerPopupViewModel.previous()?.let {
-                        play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
-                    }
-                }
-                PlaybackStateCompat.STATE_SKIPPING_TO_NEXT -> {
-                    mediaPlayerPopupViewModel.next()?.let {
-                        play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
-                    }
-                }
-                PlaybackStateCompat.STATE_PLAYING -> mediaPlayerPopupViewModel.playing = true
-                PlaybackStateCompat.STATE_PAUSED,
-                PlaybackStateCompat.STATE_STOPPED -> mediaPlayerPopupViewModel.playing = false
-                else -> Unit
-            }
-        }
-    }
-
-    val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
-
-        override fun onChildrenLoaded(
-            parentId: String,
-            children: MutableList<MediaBrowserCompat.MediaItem>
-        ) {
-            if (children.isEmpty()) {
-                //hide()
-                return
-            }
-
-            attemptToGetMediaController(activity)?.also {
-                it.transportControls?.prepare()
-            }
-
-            mediaPlayerPopupViewModel.nextMusics(children)
-        }
-    }
-
-    val connectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
-
-        override fun onConnected() {
-            val mediaBrowserNonNull = mediaBrowser ?: return
-            val sessionToken: MediaSessionCompat.Token = mediaBrowserNonNull.sessionToken
-            val mediaControllerCompat =
-                MediaControllerCompat(activity, sessionToken)
-            mediaControllerCompat.registerCallback(controllerCallback)
-            MediaControllerCompat.setMediaController(activity, mediaControllerCompat)
-
-            mediaBrowserNonNull.subscribe(mediaBrowserNonNull.root, subscriptionCallback)
-        }
-    }
-    mediaBrowser = remember {
+    val mediaBrowser = remember {
         MediaBrowserCompat(
             activity,
             ComponentName(activity, MediaPlayerService::class.java),
-            connectionCallback,
+            object : MediaBrowserCompat.ConnectionCallback() {
+                override fun onConnected() {
+                    lastSubscriber.get().invoke()
+                }
+            },
             null
         )
     }
 
-    if (mediaBrowser.isConnected.not()) {
-        mediaBrowser.connect()
+    LaunchedEffect(key1 = mediaBrowser.isConnected) {
+        lastSubscriber.set {
+            val mediaControllerCompat =
+                MediaControllerCompat(activity, mediaBrowser.sessionToken)
+            mediaControllerCompat.registerCallback(
+                object : MediaControllerCompat.Callback() {
+
+                    override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
+                        when (state?.state) {
+                            PlaybackStateCompat.STATE_SKIPPING_TO_PREVIOUS -> {
+                                mediaPlayerPopupViewModel.previous()?.let {
+                                    play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                                }
+                            }
+                            PlaybackStateCompat.STATE_SKIPPING_TO_NEXT -> {
+                                mediaPlayerPopupViewModel.next()?.let {
+                                    play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                                }
+                            }
+                            PlaybackStateCompat.STATE_PLAYING -> mediaPlayerPopupViewModel.playing = true
+                            PlaybackStateCompat.STATE_PAUSED,
+                            PlaybackStateCompat.STATE_STOPPED -> mediaPlayerPopupViewModel.playing = false
+                            else -> Unit
+                        }
+                    }
+                }
+            )
+            MediaControllerCompat.setMediaController(activity, mediaControllerCompat)
+            mediaBrowser.subscribe(
+                mediaBrowser.root,
+                object : MediaBrowserCompat.SubscriptionCallback() {
+
+                    override fun onChildrenLoaded(
+                        parentId: String,
+                        children: MutableList<MediaBrowserCompat.MediaItem>
+                    ) {
+                        if (children.isEmpty()) {
+                            //hide()
+                            return
+                        }
+
+                        attemptToGetMediaController(activity)?.also {
+                            it.transportControls?.prepare()
+                        }
+
+                        mediaPlayerPopupViewModel.nextMusics(children)
+                    }
+                }
+            )
+        }
+
+        if (mediaBrowser.isConnected.not()) {
+            mediaBrowser.connect()
+        }
     }
 
     MusicList(
@@ -144,7 +146,9 @@ fun MusicListUi() {
             play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
         },
         {
-            contentViewModel.open("https://www.google.com/search?q=$it Lyrics".toUri())
+            ViewModelProvider(activity)
+                .get(ContentViewModel::class.java)
+                .open("https://www.google.com/search?q=$it Lyrics".toUri())
         },
         {
             mediaPlayerPopupViewModel.previous()?.let {
@@ -180,14 +184,8 @@ internal fun MusicList(
     playing: Boolean
 ) {
     val context = LocalContext.current
-    val contentViewModel = (context as? ComponentActivity)?.let {
-        ViewModelProvider(it).get(ContentViewModel::class.java)
-    }
     var expanded by remember { mutableStateOf(false) }
     @StringRes var currentSpeed by remember { mutableStateOf(PlayingSpeed.getDefault().textId) }
-    val sendSpeedBroadcast: (Float) -> Unit = { speed ->
-        context.sendBroadcast(MediaPlayerService.makeSpeedIntent(speed))
-    }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -275,9 +273,9 @@ internal fun MusicList(
                                 )
                             },
                             onClick = {
-                            currentSpeed = values[index].textId
-                            sendSpeedBroadcast(values[index].speed)
-                            expanded = false
+                                currentSpeed = values[index].textId
+                                context.sendBroadcast(MediaPlayerService.makeSpeedIntent(values[index].speed))
+                                expanded = false
                         })
                     }
                 }
@@ -292,7 +290,11 @@ internal fun MusicList(
                     .fillMaxHeight()
                     .clickable {
                         coroutineScope.launch {
-                            contentViewModel?.hideBottomSheet()
+                            (context as? ComponentActivity)
+                                ?.let {
+                                    ViewModelProvider(it).get(ContentViewModel::class.java)
+                                }
+                                ?.hideBottomSheet()
                         }
                     }
             )
