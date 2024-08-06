@@ -1,7 +1,7 @@
 package jp.toastkid.web.user_agent
 
 /**
- * Browser's user agent.
+ * WebView's user agent.
  *
  * @author toastkidjp
  */
