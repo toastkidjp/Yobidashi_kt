@@ -110,7 +110,7 @@ fun ArchiveListUi() {
                             )
 
                             val time =
-                                DateFormat.format("yyyyMMdd HH:mm:ss", archiveFile.lastModified())
+                                DateFormat.format("yyyy/MM/dd HH:mm:ss", archiveFile.lastModified())
                             val fileSize =
                                 NumberFormat.getIntegerInstance(
                                     Locale.getDefault()).format(archiveFile.length() / 1024
