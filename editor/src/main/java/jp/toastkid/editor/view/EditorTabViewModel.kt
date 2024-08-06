@@ -11,6 +11,7 @@ package jp.toastkid.editor.view
 import android.text.format.DateFormat
 import androidx.compose.foundation.ScrollState
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
@@ -38,7 +39,7 @@ class EditorTabViewModel {
 
     private var altPressed = false
 
-    private val lineCount = mutableStateOf(0)
+    private val lineCount = mutableIntStateOf(0)
 
     private val lineNumberScrollState = ScrollState(0)
 
