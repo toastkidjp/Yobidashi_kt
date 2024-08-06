@@ -343,9 +343,8 @@ fun EditorTabView(path: String?, modifier: Modifier) {
         )
     }
 
-    contentViewModel.clearOptionMenus()
-
     LaunchedEffect(key1 = Unit, block = {
+        contentViewModel.clearOptionMenus()
         contentViewModel.showAppBar(coroutineScope)
 
         contentViewModel.replaceAppBarContent {
