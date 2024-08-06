@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -36,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.list.ListActionAttachment
 import jp.toastkid.lib.view.list.SwipeToDismissItem
 import jp.toastkid.web.R
@@ -51,22 +51,22 @@ import java.util.Locale
 @Composable
 fun ArchiveListUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
-    val makeNew = Archive.makeNew(LocalContext.current)
-    val fullItems = makeNew.listFiles()
+    val fullItems = remember { Archive.makeNew(activityContext).listFiles() }
 
-    val viewModelProvider = ViewModelProvider(activityContext)
-    val contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
     if (fullItems.isEmpty()) {
-        contentViewModel.snackShort(R.string.message_empty_archives)
+        ViewModelProvider(activityContext)
+            .get(ContentViewModel::class.java)
+            .snackShort(R.string.message_empty_archives)
         return
     }
 
-    val preferenceApplier = PreferenceApplier(activityContext)
-
     val listState = rememberLazyListState()
 
-    val items = remember { mutableStateListOf<File>() }
-    items.addAll(fullItems)
+    val items = remember {
+        val items = mutableStateListOf<File>()
+        items.addAll(fullItems)
+        items
+    }
 
     LazyColumn(state = listState) {
         items(items) { archiveFile ->
@@ -84,7 +84,9 @@ fun ArchiveListUi() {
                         Modifier
                             .padding(start = 16.dp, end = 16.dp)
                             .clickable {
-                                contentViewModel.open(Uri.fromFile(archiveFile))
+                                ViewModelProvider(activityContext)
+                                    .get(ContentViewModel::class.java)
+                                    .open(Uri.fromFile(archiveFile))
                             }
                             .animateItemPlacement()
                     ) {
@@ -134,4 +136,10 @@ fun ArchiveListUi() {
             items,
             fullItems.toList()
         ) { item, word -> item.name.contains(word) }
+
+    LaunchedEffect(key1 = Unit) {
+        ViewModelProvider(activityContext)
+            .get(ContentViewModel::class.java)
+            .clearOptionMenus()
+    }
 }
