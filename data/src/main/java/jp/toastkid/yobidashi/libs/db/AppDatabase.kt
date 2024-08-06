@@ -26,7 +26,7 @@ import jp.toastkid.yobidashi.settings.color.SavedColorRepository
         version = 1,
         exportSchema = false
 )
-abstract class AppDatabase : RoomDatabase() {
+internal abstract class AppDatabase : RoomDatabase() {
 
     abstract fun favoriteSearchRepository(): FavoriteSearchRepository
 
