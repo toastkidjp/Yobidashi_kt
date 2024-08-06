@@ -131,18 +131,6 @@ fun ArticleListUi() {
     })
 
     val itemFlowState = remember { mutableStateOf<Flow<PagingData<SearchResult>>?>(null) }
-    itemFlowState.value = viewModel.dataSource()?.flow
-
-    val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
-        ArticleRepositoryFactory().invoke(context),
-        BookmarkRepositoryFactory().invoke(context),
-        {
-            contentViewModel.snackWithAction(
-                "Deleted: \"${it.title}\".",
-                "UNDO"
-            ) { CoroutineScope(Dispatchers.IO).launch { ArticleRepositoryFactory().invoke(context).insert(it) } }
-        }
-    )
 
     Box(
         contentAlignment = Alignment.Center,
@@ -152,7 +140,16 @@ fun ArticleListUi() {
             itemFlowState.value,
             rememberLazyListState(),
             contentViewModel,
-            menuPopupUseCase
+            ArticleListMenuPopupActionUseCase(
+                ArticleRepositoryFactory().invoke(context),
+                BookmarkRepositoryFactory().invoke(context),
+                {
+                    contentViewModel.snackWithAction(
+                        "Deleted: \"${it.title}\".",
+                        "UNDO"
+                    ) { CoroutineScope(Dispatchers.IO).launch { ArticleRepositoryFactory().invoke(context).insert(it) } }
+                }
+            )
         )
 
         if (viewModel.progressVisibility()) {
@@ -162,6 +159,7 @@ fun ArticleListUi() {
 
     LaunchedEffect(key1 = "first_launch", block = {
         viewModel.search("")
+        itemFlowState.value = viewModel.dataSource()?.flow
     })
 
     DisposableEffect(key1 = "unregisterReceiver", effect = {
@@ -191,6 +189,7 @@ fun ArticleListUi() {
 private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = remember { PreferenceApplier(activityContext) }
+    val contentViewModel = remember { ViewModelProvider(activityContext).get<ContentViewModel>() }
 
     Row {
         Column(Modifier.weight(1f)) {
@@ -248,8 +247,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             )
         }
 
-        val contentViewModel = ViewModelProvider(activityContext).get<ContentViewModel>()
-
         Box(
             Modifier
                 .width(40.dp)
@@ -300,9 +297,8 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val openSortDialog = remember { mutableStateOf(false) }
     val openDateDialog = remember { mutableStateOf(false) }
 
-    val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
     LaunchedEffect(key1 = "add_option_menu", block = {
-        contentViewModel.optionMenus(
+        ViewModelProvider(activityContext).get(ContentViewModel::class.java).optionMenus(
             OptionMenu(
                 titleId = R.string.action_all_article,
                 action = {
@@ -347,7 +343,10 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     if (openDateDialog.value) {
         DateFilterDialogUi(
             { openDateDialog.value = false },
-            DateSelectedActionUseCase(ArticleRepositoryFactory().invoke(activityContext), contentViewModel)
+            DateSelectedActionUseCase(
+                ArticleRepositoryFactory().invoke(activityContext),
+                ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+            )
         )
     }
 }
