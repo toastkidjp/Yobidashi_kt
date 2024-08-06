@@ -13,7 +13,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.room.Room
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 
-class DatabaseFinder {
+internal class DatabaseFinder {
 
     fun invoke(context: Context): AppDatabase {
         synchronized(DatabaseFinder) {
