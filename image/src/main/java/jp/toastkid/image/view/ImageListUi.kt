@@ -165,7 +165,7 @@ internal fun ImageListUi(
     listState: LazyGridState,
     showPreview: (Int) -> Unit
 ) {
-    val preferenceApplier = PreferenceApplier(LocalContext.current)
+    val context = LocalContext.current
 
     LazyVerticalGrid(
         state = listState,
@@ -193,14 +193,15 @@ internal fun ImageListUi(
                                 }
                             },
                             onLongClick = {
-                                preferenceApplier.addExcludeItem(image.path)
+                                PreferenceApplier(context)
+                                    .addExcludeItem(image.path)
                                 imageLoaderUseCase()
                             }
                         )
                         .padding(4.dp)
                 ) {
                     AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
+                        model = ImageRequest.Builder(context)
                             .data(image.path)
                             .crossfade(true)
                             .placeholder(R.drawable.ic_image)
@@ -221,7 +222,7 @@ internal fun ImageListUi(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
+    val contentViewModel = (context as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
 
