@@ -26,7 +26,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.converter.domain.model.TwoStringConverter
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverter) {
     Surface(
