@@ -28,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -130,26 +131,26 @@ fun ImageListUi() {
         }
     }
 
-    val index = remember { mutableStateOf(-1) }
+    val index = remember { mutableIntStateOf(-1) }
     val listState = rememberLazyGridState()
 
     if (preview.value) {
-        ImagePreviewUi(images, index.value)
+        ImagePreviewUi(images, index.intValue)
     } else {
         ImageListUi(
             imageLoaderUseCase,
             images,
             listState
         ) {
-            index.value = it
+            index.intValue = it
             preview.value = true
             backHandlerState.value = true
         }
     }
 
     BackHandler(backHandlerState.value) {
-        if (index.value != -1) {
-            index.value = -1
+        if (index.intValue != -1) {
+            index.intValue = -1
             preview.value = false
         } else {
             imageLoaderUseCase.back {}
