@@ -20,6 +20,12 @@ class HtmlApi {
 
     private val httpClient = HttpClientFactory().withTimeout(3)
 
+    /**
+     * This return value([Response]) must be closed.
+     * <pre>
+     *     htmlApi.invoke("https://www.yahoo.com").use { /* Something of usage. */ }
+     * </pre>
+     */
     operator fun invoke(url: String?): Response? {
         if (url.isNullOrBlank() || (!URLUtil.isNetworkUrl(url))) {
             return null
