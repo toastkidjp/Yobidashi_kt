@@ -297,12 +297,6 @@ fun EditorTabView(path: String?, modifier: Modifier) {
 
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
-    val observer = LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_PAUSE) {
-            fileActionUseCase.save(viewModel::openInputFileNameDialog, false)
-        }
-    }
-
     DisposableEffect(key1 = path) {
         viewModel.launchTab(
             TextFieldValue(),
@@ -310,6 +304,13 @@ fun EditorTabView(path: String?, modifier: Modifier) {
         )
         fileActionUseCase.readCurrentFile()
         viewModel.initialScroll(coroutineScope)
+
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                fileActionUseCase.save(viewModel::openInputFileNameDialog, false)
+            }
+        }
+
         localLifecycle.addObserver(observer)
 
         onDispose {
