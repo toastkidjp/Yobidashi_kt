@@ -271,11 +271,11 @@ private fun AppBarContent(
                             )
                         },
                         onClick = {
-                        maskingCount.value = "$it"
-                        openMaskingCount.value = false
+                            maskingCount.value = "$it"
+                            openMaskingCount.value = false
                             PreferenceApplier(context).setMaskingCount(it)
-                        deleteCurrentGame(context)
-                        contentViewModel?.nextRoute("tool/number/place")
+                            deleteCurrentGame(context)
+                            contentViewModel?.nextRoute("tool/number/place")
                     })
                 }
             }
