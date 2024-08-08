@@ -26,10 +26,10 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
-import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
-import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
-import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
+import jp.toastkid.web.FaviconFolderProviderService
+import jp.toastkid.web.bookmark.BookmarkInitializer
+import jp.toastkid.setting.application.background.DefaultBackgroundImagePreparation
+import jp.toastkid.setting.application.color.DefaultColorInsertion
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -79,9 +79,8 @@ class FirstLaunchInitializerTest {
         every { defaultBackgroundImagePreparation.invoke(any(), any()) }.returns(mockk())
         every { preferenceApplier.setDefaultSearchEngine(any()) }.just(Runs)
 
-        mockkStatic(ContextCompat::class)
+        mockkStatic(ContextCompat::class, Uri::class)
         every { ContextCompat.getColor(any(), any()) }.returns(Color.CYAN)
-        mockkStatic(Uri::class)
         val returnValue = mockk<Uri>()
         every { returnValue.host }.returns("yahoo.co.jp")
         every { Uri.parse(any()) }.returns(returnValue)
