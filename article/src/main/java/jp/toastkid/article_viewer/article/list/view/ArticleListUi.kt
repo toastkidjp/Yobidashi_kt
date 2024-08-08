@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -135,7 +134,6 @@ fun ArticleListUi() {
     ) {
         ArticleListUi(
             viewModel.dataSource().collectAsLazyPagingItems(),
-            rememberLazyListState(),
             contentViewModel,
             ArticleListMenuPopupActionUseCase(
                 ArticleRepositoryFactory().invoke(context),
@@ -351,11 +349,11 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
 @Composable
 internal fun ArticleListUi(
     articles: LazyPagingItems<SearchResult>,
-    listState: LazyListState,
     contentViewModel: ContentViewModel?,
     menuPopupUseCase: MenuPopupActionUseCase
 ) {
-    LazyColumn(state = listState) {
+    val lazyListState = rememberLazyListState()
+    LazyColumn(state = lazyListState) {
         items(articles, { it.id }) {
             it ?: return@items
             ListItem(it, contentViewModel, menuPopupUseCase,
@@ -365,7 +363,7 @@ internal fun ArticleListUi(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    ScrollerUseCase(contentViewModel, listState).invoke(lifecycleOwner)
+    ScrollerUseCase(contentViewModel, lazyListState).invoke(lifecycleOwner)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
