@@ -21,6 +21,7 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import jp.toastkid.editor.view.style.TextEditorVisualTransformation
@@ -323,6 +324,10 @@ class EditorTabViewModel {
 
     fun setLastSaved(lastSaved: Long) {
         this.lastSaved.value = lastSaved
+    }
+
+    fun selectedText(): String {
+        return content.value.getSelectedText().text
     }
 
 }
