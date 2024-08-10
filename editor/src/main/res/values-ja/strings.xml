@@ -40,5 +40,6 @@
     <string name="title_context_editor_code_block">コードブロック</string>
     <string name="title_context_editor_task_list">タスクリスト</string>
     <string name="context_editor_translate">Translate</string>
+    <string name="title_context_editor_select_to_end">ここから下を選択</string>
 
 </resources>

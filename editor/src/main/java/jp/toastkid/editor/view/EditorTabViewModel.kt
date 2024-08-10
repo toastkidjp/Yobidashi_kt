@@ -336,4 +336,8 @@ class EditorTabViewModel {
         return content.value.getSelectedText().text
     }
 
+    fun selectToEnd() {
+        content.value = content.value.copy(selection = TextRange(content.value.selection.start, content.value.text.length))
+    }
+
 }

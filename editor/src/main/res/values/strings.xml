@@ -42,5 +42,6 @@
     <string name="title_context_editor_code_block">Code block</string>
     <string name="title_context_editor_insert_thousand_separator">Insert thousand separator</string>
     <string name="context_editor_translate">Translate</string>
+    <string name="title_context_editor_select_to_end">select from this to end</string>
 
 </resources>
