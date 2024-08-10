@@ -258,10 +258,9 @@ fun EditorTabView(path: String?, modifier: Modifier) {
         ConfirmDialog(
             stringResource(jp.toastkid.lib.R.string.confirmation),
             stringResource(jp.toastkid.lib.R.string.message_confirm_exit),
-            onDismissRequest = viewModel::closeExitDialog
-        ) {
-            context.finish()
-        }
+            onDismissRequest = viewModel::closeExitDialog,
+            onClickOk = context::finish
+        )
     }
 
     BackHandler {
