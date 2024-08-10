@@ -170,10 +170,6 @@ class EditorTabViewModel {
         return visualTransformation
     }
 
-    fun makeCharacterCountMessage(count: Int): String {
-        return "Character: $count"
-    }
-
     fun dispose() {
         lastParagraph = null
         content.value = TextFieldValue()
