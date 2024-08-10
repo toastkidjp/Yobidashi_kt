@@ -98,16 +98,16 @@ class EditorTabViewModel {
             }
 
             lineNumbers.value = list
-
-            val lastLineHeights = (0 until lineCount.value).map { it to multiParagraph.getLineHeight(it) }.toMap()
-            val maxHeight = lastLineHeights.values.distinct().max()
-            lineHeights.clear()
-            lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / maxHeight).em) }
         }
+
+        val lastLineHeights = (0 until lineCount.value).map { it to multiParagraph.getLineHeight(it) }.toMap()
+        val maxHeight = lastLineHeights.values.distinct().max()
+        lineHeights.clear()
+        lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / maxHeight).em) }
     }
 
     fun getLineHeight(lineNumber: Int): TextUnit {
-        return 1.55.em//lineHeights.getOrElse(lineNumber, { 1.55.em })
+        return lineHeights.getOrElse(lineNumber, { 1.55.em })
     }
 
     fun lineNumberScrollState() = lineNumberScrollState
