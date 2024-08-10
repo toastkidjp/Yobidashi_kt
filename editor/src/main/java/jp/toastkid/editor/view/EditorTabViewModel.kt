@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
@@ -24,12 +25,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import jp.toastkid.editor.view.style.TextEditorVisualTransformation
+import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.min
 
 class EditorTabViewModel {
@@ -140,11 +144,8 @@ class EditorTabViewModel {
 
     fun launchTab(
         content: TextFieldValue,
-        useDarkMode: Boolean,
         dispatcher: CoroutineDispatcher = Dispatchers.IO
     ) {
-        darkMode.value = useDarkMode
-
         val newContent = content
         applyStyle(newContent)
     }
@@ -338,6 +339,30 @@ class EditorTabViewModel {
 
     fun selectToEnd() {
         content.value = content.value.copy(selection = TextRange(content.value.selection.start, content.value.text.length))
+    }
+
+    private val fontColor = AtomicReference(Color.Transparent)
+
+    fun fontColor(): Color = fontColor.get()
+
+    private val fontSize = AtomicReference(14.sp)
+
+    fun fontSize(): TextUnit = fontSize.get()
+
+    private val backgroundColor = AtomicReference(Color.Transparent)
+
+    fun backgroundColor(): Color = backgroundColor.get()
+
+    private val cursorColor = AtomicReference(Color.Transparent)
+
+    fun cursorColor(): Color = cursorColor.get()
+
+    fun setPreference(preferenceApplier: PreferenceApplier) {
+        fontColor.set(Color(preferenceApplier.editorFontColor()))
+        fontSize.set(preferenceApplier.editorFontSize().sp)
+        backgroundColor.set(Color(preferenceApplier.editorBackgroundColor()))
+        cursorColor.set(Color(preferenceApplier.editorCursorColor(Color.Cyan.toArgb())))
+        darkMode.value = preferenceApplier.useDarkMode()
     }
 
 }
