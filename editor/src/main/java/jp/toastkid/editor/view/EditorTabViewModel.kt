@@ -42,8 +42,6 @@ class EditorTabViewModel {
 
     private var lastParagraph: MultiParagraph? = null
 
-    private var altPressed = false
-
     private val lineCount = mutableIntStateOf(0)
 
     private val lineNumberScrollState = ScrollState(0)
@@ -59,10 +57,6 @@ class EditorTabViewModel {
     fun content() = content.value
 
     fun onValueChange(it: TextFieldValue) {
-        if (altPressed) {
-            return
-        }
-
         applyStyle(it)
     }
 
