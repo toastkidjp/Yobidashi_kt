@@ -323,7 +323,6 @@ fun EditorTabView(path: String?, modifier: Modifier) {
 
         contentViewModel.replaceAppBarContent {
             AppBarContent(
-                contentViewModel,
                 {
                     Text(
                         text = stringResource(R.string.last_saved) + viewModel.lastSaved(),
@@ -346,7 +345,10 @@ fun EditorTabView(path: String?, modifier: Modifier) {
                 viewModel::openConfirmDialog,
                 viewModel::openInputFileNameDialog,
                 viewModel::openLoadFromStorageDialog,
-                fileActionUseCase
+                fileActionUseCase,
+                contentViewModel.tabCount.value,
+                contentViewModel::switchTabList,
+                contentViewModel::openNewTab
             )
         }
     })
@@ -355,14 +357,16 @@ fun EditorTabView(path: String?, modifier: Modifier) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(
-    contentViewModel: ContentViewModel,
     LastModified: @Composable (Modifier) -> Unit,
     ContentLength: @Composable (Modifier) -> Unit,
     saveFile: () -> Unit,
     openConfirmDialog: () -> Unit,
     openInputFileNameDialog: () -> Unit,
     openLoadFromStorageDialog: () -> Unit,
-    fileActionUseCase: FileActionUseCase
+    fileActionUseCase: FileActionUseCase,
+    tabCount: Int,
+    switchTabList: () -> Unit,
+    openNewTab: () -> Unit
 ) {
     val loadAs: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -400,8 +404,8 @@ private fun AppBarContent(
                 .fillMaxHeight()
                 .combinedClickable(
                     true,
-                    onClick = { contentViewModel.switchTabList() },
-                    onLongClick = { contentViewModel.openNewTab() }
+                    onClick = switchTabList,
+                    onLongClick = openNewTab
                 )
         ) {
             Image(
@@ -414,7 +418,7 @@ private fun AppBarContent(
                     .padding(12.dp)
             )
             Text(
-                text = contentViewModel.tabCount.value.toString(),
+                text = "$tabCount",
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
