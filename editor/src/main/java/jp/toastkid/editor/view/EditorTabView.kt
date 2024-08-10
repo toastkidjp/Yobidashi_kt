@@ -441,9 +441,7 @@ private fun AppBarContent(
                 .align(Alignment.CenterVertically)
         )
 
-        EditorMenuItem(jp.toastkid.lib.R.string.clear_all, jp.toastkid.lib.R.drawable.ic_clear_form) {
-            openConfirmDialog()
-        }
+        EditorMenuItem(jp.toastkid.lib.R.string.clear_all, jp.toastkid.lib.R.drawable.ic_clear_form, openConfirmDialog)
     }
 }
 
