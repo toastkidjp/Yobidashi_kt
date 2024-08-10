@@ -159,7 +159,7 @@ class EditorTabViewModel {
         val currentLine = paragraph.getLineForOffset(content.value.selection.start)
         return Offset(
             paragraph.getLineLeft(currentLine),
-            paragraph.getLineTop(currentLine) //TODO - verticalScrollState.offset
+            paragraph.getLineTop(currentLine) - lineNumberScrollState.value
         )
     }
 
