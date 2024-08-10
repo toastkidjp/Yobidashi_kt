@@ -118,7 +118,7 @@ fun EditorTabView(path: String?, modifier: Modifier) {
             mutableStateOf(path ?: ""),
             { viewModel.content().text },
             { viewModel.onValueChange(viewModel.content().copy(text = it)) },
-            { contentViewModel.saveEditorTab(it) },
+            contentViewModel::saveEditorTab,
             viewModel::setLastSaved
         )
     }
