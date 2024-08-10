@@ -10,8 +10,8 @@ package jp.toastkid.editor.view
 
 import android.text.format.DateFormat
 import androidx.compose.foundation.ScrollState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
@@ -317,14 +317,14 @@ class EditorTabViewModel {
         openLoadFromStorageDialog.value = false
     }
 
-    private val lastSaved: MutableState<Long> = mutableStateOf(0L)
+    private val lastSaved = mutableLongStateOf(0L)
 
     fun lastSaved(): CharSequence {
-        return DateFormat.format(" HH:mm:ss", lastSaved.value)
+        return DateFormat.format(" HH:mm:ss", lastSaved.longValue)
     }
 
     fun setLastSaved(lastSaved: Long) {
-        this.lastSaved.value = lastSaved
+        this.lastSaved.longValue = lastSaved
     }
 
     fun selectedText(): String {
