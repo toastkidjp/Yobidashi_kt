@@ -90,13 +90,26 @@ class EditorTabViewModel {
         lastParagraph = multiParagraph
         if (lineCount.value != multiParagraph.lineCount) {
             lineCount.value = multiParagraph.lineCount
-        }
+            val max = lineCount.value
+            val length = max.toString().length
+            val list = (1..max).map {
+                val lineNumberCount = it
+                val fillCount = length - lineNumberCount.toString().length
+                return@map (it - 1 to with(StringBuilder()) {
+                    repeat(fillCount) {
+                        append(" ")
+                    }
+                    append(lineNumberCount)
+                }.toString())
+            }
 
-        val lastLineHeights = (0 until lineCount.value).map { it to multiParagraph.getLineHeight(it) }.toMap()
-        val distinct = lastLineHeights.values.distinct()
-        val max = distinct.max()
-        lineHeights.clear()
-        lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / max).em) }
+            lineNumbers.value = list
+
+            val lastLineHeights = (0 until lineCount.value).map { it to multiParagraph.getLineHeight(it) }.toMap()
+            val maxHeight = lastLineHeights.values.distinct().max()
+            lineHeights.clear()
+            lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / maxHeight).em) }
+        }
     }
 
     fun getLineHeight(lineNumber: Int): TextUnit {
@@ -127,19 +140,10 @@ class EditorTabViewModel {
         }
     }
 
+    private val lineNumbers = mutableStateOf(listOf<Pair<Int, String>>())
+
     fun lineNumbers(): List<Pair<Int, String>> {
-        val max = lineCount.value
-        val length = max.toString().length
-        return (1 .. max).map {
-            val lineNumberCount = it
-            val fillCount = length - lineNumberCount.toString().length
-            return@map (it - 1 to with(StringBuilder()) {
-                repeat(fillCount) {
-                    append(" ")
-                }
-                append(lineNumberCount)
-            }.toString())
-        }
+        return lineNumbers.value
     }
 
     fun launchTab(
