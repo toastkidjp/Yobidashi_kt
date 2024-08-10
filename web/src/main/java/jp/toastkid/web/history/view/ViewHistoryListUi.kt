@@ -87,7 +87,7 @@ fun ViewHistoryListUi() {
         }
     })
 
-    val onClick: (ViewHistory, Boolean) -> Unit = { viewHistory, isLongClick ->
+    List(viewHistoryItems, listState, { viewHistory, isLongClick ->
         when (isLongClick) {
             true -> {
                 contentViewModel.openBackground(viewHistory.title, Uri.parse(viewHistory.url))
@@ -96,9 +96,7 @@ fun ViewHistoryListUi() {
                 contentViewModel.open(Uri.parse(viewHistory.url))
             }
         }
-    }
-
-    List(viewHistoryItems, listState, onClick) {
+    }) {
         viewHistoryRepository.delete(it)
         viewHistoryItems.remove(it)
     }

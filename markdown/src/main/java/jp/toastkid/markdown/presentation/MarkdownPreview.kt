@@ -34,11 +34,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.markdown.domain.model.data.CodeBlockLine
 import jp.toastkid.markdown.domain.model.data.HorizontalRule
 import jp.toastkid.markdown.domain.model.data.ImageLine
@@ -55,9 +52,6 @@ fun MarkdownPreview(
     modifier: Modifier
 ) {
     val viewModel = remember { MarkdownPreviewViewModel(scrollState) }
-    val context = LocalContext.current
-    val viewModelStoreOwner = context as ViewModelStoreOwner
-    val contentViewModel = ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
 
     CompositionLocalProvider(
         LocalTextToolbar provides CommonContextMenuToolbarFactory().invoke(LocalView.current)

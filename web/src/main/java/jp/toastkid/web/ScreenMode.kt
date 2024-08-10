@@ -3,7 +3,7 @@ package jp.toastkid.web
 import androidx.annotation.IdRes
 
 /**
- * Browser screen mode.
+ * WebTab UI screen mode.
  *
  * @author toastkidjp
  */

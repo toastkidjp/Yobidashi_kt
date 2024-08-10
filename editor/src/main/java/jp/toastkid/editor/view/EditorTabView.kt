@@ -11,9 +11,6 @@ package jp.toastkid.editor.view
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.text.format.DateFormat
-import android.view.Menu
-import android.view.MenuInflater
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -77,12 +74,10 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -90,10 +85,9 @@ import jp.toastkid.editor.R
 import jp.toastkid.editor.load.LoadFromStorageDialogUi
 import jp.toastkid.editor.load.StorageFilesFinder
 import jp.toastkid.editor.usecase.FileActionUseCase
+import jp.toastkid.editor.view.menu.EditorMenuInjector
 import jp.toastkid.editor.view.menu.MenuActionInvoker
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.Urls
-import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -105,7 +99,6 @@ import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
 import jp.toastkid.ui.menu.context.ContextMenuToolbar
-import jp.toastkid.ui.menu.context.MenuInjector
 import kotlinx.coroutines.launch
 
 @Composable
@@ -125,7 +118,8 @@ fun EditorTabView(path: String?, modifier: Modifier) {
             mutableStateOf(path ?: ""),
             { viewModel.content().text },
             { viewModel.onValueChange(viewModel.content().copy(text = it)) },
-            { contentViewModel.saveEditorTab(it) }
+            contentViewModel::saveEditorTab,
+            viewModel::setLastSaved
         )
     }
 
@@ -170,28 +164,7 @@ fun EditorTabView(path: String?, modifier: Modifier) {
     CompositionLocalProvider(
         LocalTextToolbar provides ContextMenuToolbar(
             LocalView.current,
-            object : MenuInjector {
-                override fun invoke(menu: Menu?) {
-                    val menuInflater = MenuInflater(context)
-
-                    if (Urls.isValidUrl(Clipboard.getPrimary(context)?.toString())) {
-                        menuInflater.inflate(R.menu.context_editor_clipping_url, menu)
-                    }
-                    val textFieldValue = viewModel.content()
-                    val text = textFieldValue.getSelectedText().text
-                    if (Urls.isValidUrl(text)) {
-                        menuInflater.inflate(R.menu.context_editor_url, menu)
-                    }
-                    if (text.isNotBlank() && text.isDigitsOnly()) {
-                        menuInflater.inflate(R.menu.context_editor_digit, menu)
-                    }
-                    if (textFieldValue.getSelectedText().isNotEmpty()) {
-                        menuInflater.inflate(R.menu.context_editor_selected, menu)
-                    }
-                    menuInflater.inflate(R.menu.context_editor, menu)
-                    menuInflater.inflate(R.menu.context_speech, menu)
-                }
-            },
+            EditorMenuInjector(context, viewModel::selectedText),
             MenuActionInvoker(viewModel, context, contentViewModel)
         )
     ) {
@@ -285,10 +258,9 @@ fun EditorTabView(path: String?, modifier: Modifier) {
         ConfirmDialog(
             stringResource(jp.toastkid.lib.R.string.confirmation),
             stringResource(jp.toastkid.lib.R.string.message_confirm_exit),
-            onDismissRequest = viewModel::closeExitDialog
-        ) {
-            context.finish()
-        }
+            onDismissRequest = viewModel::closeExitDialog,
+            onClickOk = context::finish
+        )
     }
 
     BackHandler {
@@ -297,12 +269,6 @@ fun EditorTabView(path: String?, modifier: Modifier) {
 
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
-    val observer = LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_PAUSE) {
-            fileActionUseCase.save(viewModel::openInputFileNameDialog, false)
-        }
-    }
-
     DisposableEffect(key1 = path) {
         viewModel.launchTab(
             TextFieldValue(),
@@ -310,6 +276,13 @@ fun EditorTabView(path: String?, modifier: Modifier) {
         )
         fileActionUseCase.readCurrentFile()
         viewModel.initialScroll(coroutineScope)
+
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                fileActionUseCase.save(viewModel::openInputFileNameDialog, false)
+            }
+        }
+
         localLifecycle.addObserver(observer)
 
         onDispose {
@@ -343,17 +316,15 @@ fun EditorTabView(path: String?, modifier: Modifier) {
         )
     }
 
-    contentViewModel.clearOptionMenus()
-
     LaunchedEffect(key1 = Unit, block = {
+        contentViewModel.clearOptionMenus()
         contentViewModel.showAppBar(coroutineScope)
 
         contentViewModel.replaceAppBarContent {
             AppBarContent(
-                contentViewModel,
                 {
                     Text(
-                        text = stringResource(R.string.last_saved) + DateFormat.format(" HH:mm:ss", fileActionUseCase.lastSaved.value),
+                        text = stringResource(R.string.last_saved) + viewModel.lastSaved(),
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 14.sp,
                         maxLines = 2,
@@ -373,7 +344,10 @@ fun EditorTabView(path: String?, modifier: Modifier) {
                 viewModel::openConfirmDialog,
                 viewModel::openInputFileNameDialog,
                 viewModel::openLoadFromStorageDialog,
-                fileActionUseCase
+                fileActionUseCase,
+                contentViewModel.tabCount.value,
+                contentViewModel::switchTabList,
+                contentViewModel::openNewTab
             )
         }
     })
@@ -382,14 +356,16 @@ fun EditorTabView(path: String?, modifier: Modifier) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(
-    contentViewModel: ContentViewModel,
     LastModified: @Composable (Modifier) -> Unit,
     ContentLength: @Composable (Modifier) -> Unit,
     saveFile: () -> Unit,
     openConfirmDialog: () -> Unit,
     openInputFileNameDialog: () -> Unit,
     openLoadFromStorageDialog: () -> Unit,
-    fileActionUseCase: FileActionUseCase
+    fileActionUseCase: FileActionUseCase,
+    tabCount: Int,
+    switchTabList: () -> Unit,
+    openNewTab: () -> Unit
 ) {
     val loadAs: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -427,8 +403,8 @@ private fun AppBarContent(
                 .fillMaxHeight()
                 .combinedClickable(
                     true,
-                    onClick = { contentViewModel.switchTabList() },
-                    onLongClick = { contentViewModel.openNewTab() }
+                    onClick = switchTabList,
+                    onLongClick = openNewTab
                 )
         ) {
             Image(
@@ -441,7 +417,7 @@ private fun AppBarContent(
                     .padding(12.dp)
             )
             Text(
-                text = contentViewModel.tabCount.value.toString(),
+                text = "$tabCount",
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
@@ -464,9 +440,7 @@ private fun AppBarContent(
                 .align(Alignment.CenterVertically)
         )
 
-        EditorMenuItem(jp.toastkid.lib.R.string.clear_all, jp.toastkid.lib.R.drawable.ic_clear_form) {
-            openConfirmDialog()
-        }
+        EditorMenuItem(jp.toastkid.lib.R.string.clear_all, jp.toastkid.lib.R.drawable.ic_clear_form, openConfirmDialog)
     }
 }
 

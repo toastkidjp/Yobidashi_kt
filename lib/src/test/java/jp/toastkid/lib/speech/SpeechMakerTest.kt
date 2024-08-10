@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.libs.speech
+package jp.toastkid.lib.speech
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
@@ -18,6 +18,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.libs.speech.SpeechMaker
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

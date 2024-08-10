@@ -57,7 +57,7 @@ class GifImageLoaderFactoryTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         gifImageLoaderFactory.invoke(context)
 
         verify { builder.build() }

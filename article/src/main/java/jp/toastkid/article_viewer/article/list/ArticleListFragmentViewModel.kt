@@ -10,12 +10,15 @@ package jp.toastkid.article_viewer.article.list
 import androidx.compose.runtime.mutableStateOf
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.lib.preference.PreferenceApplier
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 /**
  * @author toastkidjp
@@ -46,7 +49,7 @@ class ArticleListFragmentViewModel(
 
     private val _dataSource = mutableStateOf<Pager<Int, SearchResult>?>(null)
 
-    fun dataSource() = _dataSource.value
+    fun dataSource(): Flow<PagingData<SearchResult>> = (_dataSource.value?.flow ?: emptyFlow())
 
     fun search(keyword: String?) {
         setNextPager {

@@ -18,7 +18,7 @@ import okhttp3.HttpUrl
  *
  * @author toastkidjp
  */
-class WebViewCookieHandler : CookieJar {
+internal class WebViewCookieHandler : CookieJar {
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         val urlString = url.toString()

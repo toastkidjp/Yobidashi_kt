@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -69,7 +68,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import jp.toastkid.article_viewer.R
@@ -91,7 +90,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -130,29 +128,23 @@ fun ArticleListUi() {
         }
     })
 
-    val itemFlowState = remember { mutableStateOf<Flow<PagingData<SearchResult>>?>(null) }
-    itemFlowState.value = viewModel.dataSource()?.flow
-
-    val menuPopupUseCase = ArticleListMenuPopupActionUseCase(
-        ArticleRepositoryFactory().invoke(context),
-        BookmarkRepositoryFactory().invoke(context),
-        {
-            contentViewModel.snackWithAction(
-                "Deleted: \"${it.title}\".",
-                "UNDO"
-            ) { CoroutineScope(Dispatchers.IO).launch { ArticleRepositoryFactory().invoke(context).insert(it) } }
-        }
-    )
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
         ArticleListUi(
-            itemFlowState.value,
-            rememberLazyListState(),
+            viewModel.dataSource().collectAsLazyPagingItems(),
             contentViewModel,
-            menuPopupUseCase
+            ArticleListMenuPopupActionUseCase(
+                ArticleRepositoryFactory().invoke(context),
+                BookmarkRepositoryFactory().invoke(context),
+                {
+                    contentViewModel.snackWithAction(
+                        "Deleted: \"${it.title}\".",
+                        "UNDO"
+                    ) { CoroutineScope(Dispatchers.IO).launch { ArticleRepositoryFactory().invoke(context).insert(it) } }
+                }
+            )
         )
 
         if (viewModel.progressVisibility()) {
@@ -191,6 +183,7 @@ fun ArticleListUi() {
 private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val preferenceApplier = remember { PreferenceApplier(activityContext) }
+    val contentViewModel = remember { ViewModelProvider(activityContext).get<ContentViewModel>() }
 
     Row {
         Column(Modifier.weight(1f)) {
@@ -248,8 +241,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             )
         }
 
-        val contentViewModel = ViewModelProvider(activityContext).get<ContentViewModel>()
-
         Box(
             Modifier
                 .width(40.dp)
@@ -300,9 +291,8 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val openSortDialog = remember { mutableStateOf(false) }
     val openDateDialog = remember { mutableStateOf(false) }
 
-    val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
     LaunchedEffect(key1 = "add_option_menu", block = {
-        contentViewModel.optionMenus(
+        ViewModelProvider(activityContext).get(ContentViewModel::class.java).optionMenus(
             OptionMenu(
                 titleId = R.string.action_all_article,
                 action = {
@@ -347,7 +337,10 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     if (openDateDialog.value) {
         DateFilterDialogUi(
             { openDateDialog.value = false },
-            DateSelectedActionUseCase(ArticleRepositoryFactory().invoke(activityContext), contentViewModel)
+            DateSelectedActionUseCase(
+                ArticleRepositoryFactory().invoke(activityContext),
+                ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+            )
         )
     }
 }
@@ -355,14 +348,12 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ArticleListUi(
-    flow: Flow<PagingData<SearchResult>>?,
-    listState: LazyListState,
+    articles: LazyPagingItems<SearchResult>,
     contentViewModel: ContentViewModel?,
     menuPopupUseCase: MenuPopupActionUseCase
 ) {
-    val articles = flow?.collectAsLazyPagingItems() ?: return
-
-    LazyColumn(state = listState) {
+    val lazyListState = rememberLazyListState()
+    LazyColumn(state = lazyListState) {
         items(articles, { it.id }) {
             it ?: return@items
             ListItem(it, contentViewModel, menuPopupUseCase,
@@ -372,7 +363,7 @@ internal fun ArticleListUi(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    ScrollerUseCase(contentViewModel, listState).invoke(lifecycleOwner)
+    ScrollerUseCase(contentViewModel, lazyListState).invoke(lifecycleOwner)
 }
 
 @OptIn(ExperimentalFoundationApi::class)

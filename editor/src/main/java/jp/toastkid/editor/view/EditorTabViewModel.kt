@@ -8,7 +8,10 @@
 
 package jp.toastkid.editor.view
 
+import android.text.format.DateFormat
 import androidx.compose.foundation.ScrollState
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
@@ -18,6 +21,7 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import jp.toastkid.editor.view.style.TextEditorVisualTransformation
@@ -36,7 +40,7 @@ class EditorTabViewModel {
 
     private var altPressed = false
 
-    private val lineCount = mutableStateOf(0)
+    private val lineCount = mutableIntStateOf(0)
 
     private val lineNumberScrollState = ScrollState(0)
 
@@ -62,12 +66,18 @@ class EditorTabViewModel {
         content.value = TextFieldValue()
     }
 
-    fun contentLength() = content.value.text.length
+    private val contentLength = mutableStateOf(0)
+
+    fun contentLength() = contentLength.value
 
     private fun applyStyle(it: TextFieldValue) {
         //val newContent = if (tab.editable()) it else it.copy(text = content.value.text)
 
         content.value = it
+
+        if (contentLength.value != content.value.text.length) {
+            contentLength.value = content.value.text.length
+        }
     }
 
     private val lineHeights = mutableMapOf<Int, TextUnit>()
@@ -310,6 +320,20 @@ class EditorTabViewModel {
 
     fun closeLoadFromStorageDialog() {
         openLoadFromStorageDialog.value = false
+    }
+
+    private val lastSaved: MutableState<Long> = mutableStateOf(0L)
+
+    fun lastSaved(): CharSequence {
+        return DateFormat.format(" HH:mm:ss", lastSaved.value)
+    }
+
+    fun setLastSaved(lastSaved: Long) {
+        this.lastSaved.value = lastSaved
+    }
+
+    fun selectedText(): String {
+        return content.value.getSelectedText().text
     }
 
 }

@@ -49,39 +49,17 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 
-@Composable
-fun RssReaderListUi() {
-    val context = LocalContext.current
-    val items = remember { mutableStateListOf<Item>() }
-
-    LaunchedEffect(LocalLifecycleOwner.current, block = {
-        withContext(Dispatchers.IO) {
-            items.clear()
-
-            val readRssReaderTargets = PreferenceApplier(context).readRssReaderTargets()
-            readRssReaderTargets.asFlow()
-                .mapNotNull { RssReaderApi().invoke(it) }
-                .collect {
-                    items.addAll(it.items)
-                }
-        }
-    })
-
-    RssReaderList(items)
-}
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun RssReaderList(fullItems: List<Item>) {
+fun RssReaderListUi() {
+    val items = remember { mutableStateListOf<Item>() }
+
     val activity = LocalContext.current as? ComponentActivity ?: return
-    val contentViewModel = ViewModelProvider(activity).get(ContentViewModel::class.java)
 
     val listState = rememberLazyListState()
 
-    val items = remember { mutableStateListOf<Item>() }
-    items.addAll(fullItems)
-
     LazyColumn(state = listState) {
+        println("items ${items.size}")
         items(items, { it.title + it.link + it.source }) {
             Surface(
                 modifier = Modifier
@@ -94,10 +72,14 @@ private fun RssReaderList(fullItems: List<Item>) {
                     .combinedClickable(
                         enabled = true,
                         onClick = {
-                            contentViewModel.open(it.link.toUri())
+                            ViewModelProvider(activity)
+                                .get(ContentViewModel::class.java)
+                                .open(it.link.toUri())
                         },
                         onLongClick = {
-                            contentViewModel.openBackground(it.link.toUri())
+                            ViewModelProvider(activity)
+                                .get(ContentViewModel::class.java)
+                                .openBackground(it.link.toUri())
                         }
                     )
                     .animateItemPlacement(),
@@ -159,6 +141,20 @@ private fun RssReaderList(fullItems: List<Item>) {
             listState,
             LocalLifecycleOwner.current,
             items,
-            fullItems
+            items.toList()
         ) { item, word -> item.title.contains(word) || item.description.contains(word) }
+
+    LaunchedEffect(LocalLifecycleOwner.current, block = {
+        withContext(Dispatchers.IO) {
+            items.clear()
+
+            val rssReaderApi = RssReaderApi()
+            PreferenceApplier(activity).readRssReaderTargets()
+                .asFlow()
+                .mapNotNull(rssReaderApi::invoke)
+                .collect {
+                    items.addAll(it.items)
+                }
+        }
+    })
 }

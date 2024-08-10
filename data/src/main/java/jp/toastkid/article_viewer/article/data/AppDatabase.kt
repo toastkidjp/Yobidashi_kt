@@ -26,7 +26,7 @@ import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
     version = 3,
     exportSchema = false
 )
-abstract class AppDatabase : RoomDatabase() {
+internal abstract class AppDatabase : RoomDatabase() {
 
     abstract fun articleRepository(): ArticleRepository
 

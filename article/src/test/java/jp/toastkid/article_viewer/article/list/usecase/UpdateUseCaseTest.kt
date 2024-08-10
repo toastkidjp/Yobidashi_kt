@@ -21,7 +21,7 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
-import jp.toastkid.article_viewer.zip.ZipLoaderService
+import jp.toastkid.article_viewer.zip.ZipLoaderWorker
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -46,8 +46,8 @@ class UpdateUseCaseTest {
         every { viewModel.showProgress() }.just(Runs)
         every { contextProvider.invoke() }.returns(mockk())
 
-        mockkObject(ZipLoaderService)
-        every { ZipLoaderService.start(any(), any()) }.just(Runs)
+        mockkObject(ZipLoaderWorker)
+        every { ZipLoaderWorker.start(any(), any()) }.just(Runs)
     }
 
     @After
@@ -61,7 +61,7 @@ class UpdateUseCaseTest {
 
         verify(exactly = 1) { viewModel.showProgress() }
         verify(exactly = 1) { contextProvider.invoke() }
-        verify(exactly = 1) { ZipLoaderService.start(any(), any()) }
+        verify(exactly = 1) { ZipLoaderWorker.start(any(), any()) }
     }
 
     @Test
@@ -70,7 +70,7 @@ class UpdateUseCaseTest {
 
         verify(exactly = 0) { viewModel.showProgress() }
         verify(exactly = 0) { contextProvider.invoke() }
-        verify(exactly = 0) { ZipLoaderService.start(any(), any()) }
+        verify(exactly = 0) { ZipLoaderWorker.start(any(), any()) }
     }
 
     @Test
@@ -81,7 +81,7 @@ class UpdateUseCaseTest {
 
         verify(exactly = 1) { viewModel.showProgress() }
         verify(exactly = 1) { contextProvider.invoke() }
-        verify(exactly = 0) { ZipLoaderService.start(any(), any()) }
+        verify(exactly = 0) { ZipLoaderWorker.start(any(), any()) }
     }
 
 }

@@ -24,7 +24,7 @@ import jp.toastkid.todo.model.TodoTaskFts
         exportSchema = false,
         version = 1
 )
-abstract class TodoTaskDatabase : RoomDatabase() {
+internal abstract class TodoTaskDatabase : RoomDatabase() {
 
     abstract fun repository(): TodoTaskDataAccessor
 

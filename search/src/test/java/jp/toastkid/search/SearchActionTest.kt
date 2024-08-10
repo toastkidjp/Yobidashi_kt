@@ -24,8 +24,7 @@ import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.search.UrlFactory
-import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
+import jp.toastkid.search.history.SearchHistoryInsertion
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

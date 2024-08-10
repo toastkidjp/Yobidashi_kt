@@ -25,8 +25,8 @@ import jp.toastkid.media.music.AlbumArtFinder
  * @author toastkidjp
  */
 class NotificationFactory(
-        private val context: Context,
-        private val mediaSessionSupplier: () -> MediaSessionCompat
+    private val context: Context,
+    private val mediaSessionSupplier: () -> MediaSessionCompat
 ) {
 
     private val preferenceApplier = PreferenceApplier(context)
