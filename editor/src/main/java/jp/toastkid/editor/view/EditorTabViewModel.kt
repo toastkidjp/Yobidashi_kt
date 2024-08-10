@@ -82,9 +82,9 @@ class EditorTabViewModel {
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
         lastParagraph = multiParagraph
-        if (lineCount.value != multiParagraph.lineCount) {
-            lineCount.value = multiParagraph.lineCount
-            val max = lineCount.value
+        if (lineCount.intValue != multiParagraph.lineCount) {
+            lineCount.intValue = multiParagraph.lineCount
+            val max = lineCount.intValue
             val length = max.toString().length
             val list = (1..max).map {
                 val lineNumberCount = it
@@ -100,7 +100,7 @@ class EditorTabViewModel {
             lineNumbers.value = list
         }
 
-        val lastLineHeights = (0 until lineCount.value).map { it to multiParagraph.getLineHeight(it) }.toMap()
+        val lastLineHeights = (0 until lineCount.intValue).map { it to multiParagraph.getLineHeight(it) }.toMap()
         val maxHeight = lastLineHeights.values.distinct().max()
         lineHeights.clear()
         lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / maxHeight).em) }
