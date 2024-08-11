@@ -13,6 +13,7 @@ import jp.toastkid.calendar.model.holiday.HolidayCalendar
 import jp.toastkid.lib.ContentViewModel
 import java.util.Calendar
 import java.util.GregorianCalendar
+import java.util.concurrent.atomic.AtomicReference
 
 class CalendarViewModel {
 
@@ -106,6 +107,20 @@ class CalendarViewModel {
 
     fun toPage(calendar: Calendar): Int {
         return ((calendar.get(Calendar.YEAR) - 1) * 12) + (calendar.get(Calendar.MONTH))
+    }
+
+    private val usingHolidaysCalendar = mutableListOf<String>()
+
+    fun usingHolidaysCalendar() = usingHolidaysCalendar
+
+    private val usingPrimaryHolidaysCalendar = AtomicReference("")
+
+    fun usingPrimaryHolidaysCalendar(): String = usingPrimaryHolidaysCalendar.get()
+
+    fun setPreference(usingHolidaysCalendar: List<String>, usingPrimaryHolidaysCalendar: String?) {
+        this.usingHolidaysCalendar.clear()
+        this.usingHolidaysCalendar.addAll(usingHolidaysCalendar)
+        this.usingPrimaryHolidaysCalendar.set(usingPrimaryHolidaysCalendar ?: "")
     }
 
 }
