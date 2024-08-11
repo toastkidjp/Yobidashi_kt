@@ -335,6 +335,19 @@ class EditorTabViewModel {
         content.value = content.value.copy(selection = TextRange(content.value.selection.start, content.value.text.length))
     }
 
+    suspend fun scrollToTop() {
+        onValueChange(content.value.copy(selection = TextRange.Zero))
+
+        lineNumberScrollState.scrollTo(0)
+    }
+
+    suspend fun scrollToBottom() {
+        val textFieldValue = content.value
+        onValueChange(textFieldValue.copy(selection = TextRange(textFieldValue.text.length)))
+
+        lineNumberScrollState.scrollTo(lineNumberScrollState.maxValue)
+    }
+
     private val fontColor = AtomicReference(Color.Transparent)
 
     fun fontColor(): Color = fontColor.get()
