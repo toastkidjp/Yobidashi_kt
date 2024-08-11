@@ -111,7 +111,7 @@ import jp.toastkid.web.webview.factory.WebViewClientFactory
 import jp.toastkid.web.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
-import jp.toastkid.yobidashi.main.StartUp
+import jp.toastkid.lib.model.tab.StartUp
 import jp.toastkid.yobidashi.main.usecase.ClippingUrlOpener
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
 import jp.toastkid.yobidashi.tab.History
