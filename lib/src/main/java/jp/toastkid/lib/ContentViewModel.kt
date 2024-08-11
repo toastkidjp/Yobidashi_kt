@@ -308,6 +308,7 @@ class ContentViewModel : ViewModel() {
 
     fun initializeWith(preferenceApplier: PreferenceApplier) {
         setColorPair(preferenceApplier.colorPair())
+        setColorFilterColor(Color(preferenceApplier.filterColor(Color.Transparent.toArgb())))
         setShowDisplayEffect(preferenceApplier.showDisplayEffect())
         preferenceApplier.menuFabPosition()?.let {
             setMenuFabPosition(it.first, it.second)
@@ -480,6 +481,14 @@ class ContentViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    private val colorFilterColor = mutableStateOf(Color.Transparent)
+
+    fun colorFilterColor() = colorFilterColor.value
+
+    fun setColorFilterColor(color: Color) {
+        colorFilterColor.value = color
     }
 
 }
