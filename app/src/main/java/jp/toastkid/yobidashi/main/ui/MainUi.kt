@@ -131,8 +131,6 @@ import kotlinx.coroutines.launch
 internal fun Content() {
     val activity = LocalContext.current as? ComponentActivity ?: return
 
-    val preferenceApplier = remember { PreferenceApplier(activity) }
-
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     val tabs = remember {
@@ -211,7 +209,7 @@ internal fun Content() {
             if (downloadUrl.value.isEmpty()) {
                 return@rememberLauncherForActivityResult
             }
-            if (preferenceApplier.wifiOnly && NetworkChecker().isUnavailableWiFi(activity)) {
+            if (PreferenceApplier(activity).wifiOnly && NetworkChecker().isUnavailableWiFi(activity)) {
                 contentViewModel.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
                 return@rememberLauncherForActivityResult
             }
@@ -228,7 +226,7 @@ internal fun Content() {
         val webViewClientFactory = WebViewClientFactory.forBackground(
             activity,
             contentViewModel,
-            preferenceApplier
+            PreferenceApplier(activity)
         )
         val webViewFactory = WebViewFactory()
         contentViewModel.event.collect {
@@ -326,6 +324,7 @@ internal fun Content() {
                     replaceToCurrentTab(tabs, navigationHostController)
                 }
                 is RefreshContentEvent -> {
+                    val preferenceApplier = PreferenceApplier(activity)
                     val colorPair = preferenceApplier.colorPair()
 
                     RecentAppColoringUseCase(
@@ -336,12 +335,15 @@ internal fun Content() {
                     ).invoke(preferenceApplier.color)
 
                     contentViewModel.setColorPair(colorPair)
+                    contentViewModel.setColorFilterColor(
+                        Color(preferenceApplier.filterColor(Color.Transparent.toArgb()))
+                    )
 
                     contentViewModel.setScreenFilterColor(preferenceApplier.useColorFilter())
                     contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
                 }
                 is OpenNewTabEvent -> {
-                    openNewTab(preferenceApplier, tabs, navigationHostController)
+                    openNewTab(PreferenceApplier(activity), tabs, navigationHostController)
                 }
                 is SaveEditorTabEvent -> {
                     val currentTab = tabs.currentTab() as? EditorTab ?: return@collect
@@ -411,7 +413,7 @@ internal fun Content() {
                 }
                 is WebSearchEvent -> {
                     WebSearchResultTabOpenerUseCase(
-                        preferenceApplier,
+                        PreferenceApplier(activity),
                         {
                             tabs.openNewWebTab(it.toString())
                             contentViewModel.replaceToCurrentTab()
@@ -499,7 +501,7 @@ internal fun Content() {
                         .pointerInput(Unit) {
                             detectDragGestures(
                                 onDragEnd = {
-                                    preferenceApplier
+                                    PreferenceApplier(activity)
                                         .setNewMenuFabPosition(
                                             contentViewModel.menuFabOffsetX.value,
                                             contentViewModel.menuFabOffsetY.value
@@ -569,7 +571,7 @@ internal fun Content() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .drawBehind { drawRect(Color(preferenceApplier.filterColor(Color.Transparent.toArgb()))) }
+                        .drawBehind { drawRect(contentViewModel.colorFilterColor()) }
                 )
             }
         }
