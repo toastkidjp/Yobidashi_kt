@@ -182,8 +182,8 @@ fun ArticleListUi() {
 @Composable
 private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = remember { PreferenceApplier(activityContext) }
     val contentViewModel = remember { ViewModelProvider(activityContext).get<ContentViewModel>() }
+    val cursorColor = remember { Color(PreferenceApplier(activityContext).editorCursorColor(Color(0xFFE0E0E0).toArgb())) }
 
     Row {
         Column(Modifier.weight(1f)) {
@@ -192,7 +192,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 onValueChange = {
                     viewModel.setSearchInput(it)
 
-                    if (preferenceApplier.useTitleFilter()) {
+                    if (PreferenceApplier(activityContext).useTitleFilter()) {
                         CoroutineScope(Dispatchers.IO).launch {
                             viewModel.filter("%$it%")
                         }
@@ -215,7 +215,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     unfocusedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
-                    cursorColor = Color(preferenceApplier.editorCursorColor(Color(0xFFE0E0E0).toArgb()))
+                    cursorColor = cursorColor
                 ),
                 trailingIcon = {
                     Icon(
@@ -320,15 +320,15 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             OptionMenu(
                 titleId = R.string.action_switch_title_filter,
                 action = {
-                    preferenceApplier.switchUseTitleFilter()
+                    PreferenceApplier(activityContext).switchUseTitleFilter()
                 },
-                check = { preferenceApplier.useTitleFilter() }
+                check = { PreferenceApplier(activityContext).useTitleFilter() }
             )
         )
     })
 
     if (openSortDialog.value) {
-        SortSettingDialogUi(preferenceApplier, { openSortDialog.value = false }, onSelect = {
+        SortSettingDialogUi(PreferenceApplier(activityContext), { openSortDialog.value = false }, onSelect = {
             viewModel.sort(it)
         })
     }
