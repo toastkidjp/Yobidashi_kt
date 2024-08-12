@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -96,7 +97,7 @@ import kotlinx.coroutines.launch
 fun ArticleListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
 
-    val contentViewModel = remember { ViewModelProvider(context).get(ContentViewModel::class.java) }
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     val viewModel = remember {
         ArticleListFragmentViewModel(
@@ -332,7 +333,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             viewModel.sort(it)
         })
     }
-
 
     if (openDateDialog.value) {
         DateFilterDialogUi(
