@@ -89,12 +89,13 @@ fun RssReaderListUi() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
+                        .padding(4.dp)
                 ) {
                     Row {
                         Icon(
                             painterResource(id = R.drawable.ic_rss_feed),
                             contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier.padding(end = 4.dp)
                         )
 
