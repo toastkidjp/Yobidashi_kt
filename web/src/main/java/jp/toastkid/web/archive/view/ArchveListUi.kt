@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.list.ListActionAttachment
 import jp.toastkid.lib.view.list.SwipeToDismissItem
@@ -53,9 +54,10 @@ fun ArchiveListUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val fullItems = remember { Archive.makeNew(activityContext).listFiles() }
 
+    val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
+
     if (fullItems.isEmpty()) {
-        ViewModelProvider(activityContext)
-            .get(ContentViewModel::class.java)
+        contentViewModel
             .snackShort(R.string.message_empty_archives)
         return
     }
@@ -138,8 +140,6 @@ fun ArchiveListUi() {
         ) { item, word -> item.name.contains(word) }
 
     LaunchedEffect(key1 = Unit) {
-        ViewModelProvider(activityContext)
-            .get(ContentViewModel::class.java)
-            .clearOptionMenus()
+        contentViewModel.clearOptionMenus()
     }
 }
