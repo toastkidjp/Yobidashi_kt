@@ -8,12 +8,12 @@
 
 package jp.toastkid.calendar.view
 
+import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.calendar.model.Week
 import jp.toastkid.calendar.model.holiday.HolidayCalendar
 import jp.toastkid.lib.ContentViewModel
 import java.util.Calendar
 import java.util.GregorianCalendar
-import java.util.concurrent.atomic.AtomicReference
 
 class CalendarViewModel {
 
@@ -113,14 +113,14 @@ class CalendarViewModel {
 
     fun usingHolidaysCalendar() = usingHolidaysCalendar
 
-    private val usingPrimaryHolidaysCalendar = AtomicReference("")
+    private val usingPrimaryHolidaysCalendar = mutableStateOf("")
 
-    fun usingPrimaryHolidaysCalendar(): String = usingPrimaryHolidaysCalendar.get()
+    fun usingPrimaryHolidaysCalendar(): String = usingPrimaryHolidaysCalendar.value
 
     fun setPreference(usingHolidaysCalendar: List<String>, usingPrimaryHolidaysCalendar: String?) {
         this.usingHolidaysCalendar.clear()
         this.usingHolidaysCalendar.addAll(usingHolidaysCalendar)
-        this.usingPrimaryHolidaysCalendar.set(usingPrimaryHolidaysCalendar ?: "")
+        this.usingPrimaryHolidaysCalendar.value = (usingPrimaryHolidaysCalendar ?: "")
     }
 
 }
