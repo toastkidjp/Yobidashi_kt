@@ -124,12 +124,8 @@ fun EditorTabView(path: String?, modifier: Modifier) {
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         contentViewModel.event.collect {
             when (it) {
-                is ToTopEvent -> {
-                    viewModel.scrollToTop()
-                }
-                is ToBottomEvent -> {
-                    viewModel.scrollToBottom()
-                }
+                is ToTopEvent -> viewModel.scrollToTop()
+                is ToBottomEvent -> viewModel.scrollToBottom()
                 is ShareEvent -> {
                     val title =
                         if (path?.contains("/") == true) path.substring(path.lastIndexOf("/") + 1)
