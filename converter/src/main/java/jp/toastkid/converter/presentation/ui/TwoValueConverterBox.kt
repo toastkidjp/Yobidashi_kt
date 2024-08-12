@@ -60,8 +60,8 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverter) {
                     onValueChange = {
                         secondInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
-                        unixTimeConverterService.secondInputAction(secondInput.value.text)?.let {
-                            firstInput.value = TextFieldValue(it)
+                        unixTimeConverterService.secondInputAction(secondInput.value.text)?.let { newInput ->
+                            firstInput.value = TextFieldValue(newInput)
                         }
                     }
                 )
