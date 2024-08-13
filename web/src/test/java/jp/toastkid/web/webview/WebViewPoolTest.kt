@@ -76,4 +76,13 @@ class WebViewPoolTest {
         verify(exactly = 1) { anyConstructed<LruCache<String, WebView>>().remove(any()) }
     }
 
+    @Test
+    fun test6() {
+        every { anyConstructed<LruCache<String, WebView>>().remove(any()) }.returns(mockk())
+
+        webViewPool.remove(null)
+
+        verify(exactly = 0) { anyConstructed<LruCache<String, WebView>>().remove(any()) }
+    }
+
 }
