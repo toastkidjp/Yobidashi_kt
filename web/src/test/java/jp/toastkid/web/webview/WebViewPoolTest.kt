@@ -16,6 +16,7 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -83,6 +84,11 @@ class WebViewPoolTest {
         webViewPool.remove(null)
 
         verify(exactly = 0) { anyConstructed<LruCache<String, WebView>>().remove(any()) }
+    }
+
+    @Test
+    fun test7() {
+        assertFalse(webViewPool.containsKey(null))
     }
 
 }
