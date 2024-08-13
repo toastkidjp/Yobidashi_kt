@@ -50,4 +50,11 @@ class WebViewPoolTest {
         assertNotNull(webViewPool.get("test"))
     }
 
+    @Test
+    fun test3() {
+        assertNull(webViewPool.getLatest())
+        assertNotNull(webViewPool.get("test"))
+        assertNotNull(webViewPool.getLatest())
+    }
+
 }
