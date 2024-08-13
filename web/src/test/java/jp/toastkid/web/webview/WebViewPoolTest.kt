@@ -15,6 +15,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import org.junit.After
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
@@ -42,6 +43,11 @@ class WebViewPoolTest {
     @Test
     fun test() {
         assertNull(webViewPool.get(null))
+    }
+
+    @Test
+    fun test2() {
+        assertNotNull(webViewPool.get("test"))
     }
 
 }
