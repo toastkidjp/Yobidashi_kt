@@ -14,6 +14,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -55,6 +56,15 @@ class WebViewPoolTest {
         assertNull(webViewPool.getLatest())
         assertNotNull(webViewPool.get("test"))
         assertNotNull(webViewPool.getLatest())
+    }
+
+    @Test
+    fun test4() {
+        every { anyConstructed<LruCache<String, WebView>>().put(any(), any()) }.returns(mockk())
+
+        webViewPool.put("test", mockk())
+
+        verify(exactly = 1) { anyConstructed<LruCache<String, WebView>>().put(any(), any()) }
     }
 
 }
