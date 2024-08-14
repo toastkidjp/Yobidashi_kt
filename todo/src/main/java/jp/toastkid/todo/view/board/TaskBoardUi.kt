@@ -134,7 +134,7 @@ fun TaskBoardUi() {
 fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActionUseCase) {
     val context = LocalContext.current
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
-    val color = PreferenceApplier(context).color
+    val color = remember { PreferenceApplier(context).color }
 
     val tasks = flow?.collectAsLazyPagingItems() ?: return
 
