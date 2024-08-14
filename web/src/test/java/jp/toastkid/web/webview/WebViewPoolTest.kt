@@ -91,4 +91,12 @@ class WebViewPoolTest {
         assertFalse(webViewPool.containsKey(null))
     }
 
+    @Test
+    fun test8() {
+        val snapshot = mockk<MutableMap<String, WebView>>()
+        every { snapshot.containsKey(any()) }.returns(false)
+        every { anyConstructed<LruCache<String, WebView>>().snapshot() }.returns(snapshot)
+        assertFalse(webViewPool.containsKey(null))
+    }
+
 }
