@@ -100,6 +100,14 @@ fun TaskBoardUi() {
     val tasks = remember { mutableStateOf<Flow<PagingData<TodoTask>>?>(null) }
 
     LaunchedEffect(key1 = "init", block = {
+        ViewModelProvider(context).get(ContentViewModel::class.java)
+            .replaceAppBarContent {
+                AppBarUi {
+                    taskAdditionDialogFragmentViewModel?.setTask(null)
+                    taskAdditionDialogFragmentViewModel.show()
+                }
+            }
+
         val flow = withContext(Dispatchers.IO) {
             Pager(
                 PagingConfig(pageSize = 10, enablePlaceholders = true),
@@ -110,14 +118,6 @@ fun TaskBoardUi() {
         }
         tasks.value = flow
     })
-
-    ViewModelProvider(context).get(ContentViewModel::class.java)
-        .replaceAppBarContent {
-            AppBarUi {
-                taskAdditionDialogFragmentViewModel?.setTask(null)
-                taskAdditionDialogFragmentViewModel.show()
-            }
-        }
 
     TaskEditorUi(
         { TaskBoard(tasks.value, menuUseCase) },
