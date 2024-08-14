@@ -126,7 +126,8 @@ fun ArchiveListUi() {
                             )
                         }
                     }
-                }
+                },
+                modifier = Modifier.animateItemPlacement()
             )
         }
     }
