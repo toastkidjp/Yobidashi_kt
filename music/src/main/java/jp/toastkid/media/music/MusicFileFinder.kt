@@ -36,35 +36,35 @@ class MusicFileFinder(private val contentResolver: ContentResolver) {
 
         while (cursor?.moveToNext() == true) {
             val meta = MediaMetadataCompat.Builder()
-                    .putString(
-                            MediaMetadataCompat.METADATA_KEY_MEDIA_ID,
-                            cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)).toString()
-                    )
-                    .putString(
-                            MediaMetadataCompat.METADATA_KEY_TITLE,
-                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
-                    )
-                    .putString(
-                            MediaMetadataCompat.METADATA_KEY_ARTIST,
-                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST))
-                    )
-                    .putString(
-                            MediaMetadataCompat.METADATA_KEY_ALBUM,
-                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM))
-                    )
-                    .putString(
-                            MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
-                            "content://media/external/audio/albumart".toUri().buildUpon().appendEncodedPath(cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)).toString()).build().toString()
-                    )
-                    .putString(
-                            MediaMetadataCompat.METADATA_KEY_MEDIA_URI,
-                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))
-                    )
-                    .putLong(
-                        MediaMetadataCompat.METADATA_KEY_DURATION,
-                        cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION))
-                    )
-                    .build()
+                .putString(
+                    MediaMetadataCompat.METADATA_KEY_MEDIA_ID,
+                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)).toString()
+                )
+                .putString(
+                    MediaMetadataCompat.METADATA_KEY_TITLE,
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
+                )
+                .putString(
+                    MediaMetadataCompat.METADATA_KEY_ARTIST,
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST))
+                )
+                .putString(
+                    MediaMetadataCompat.METADATA_KEY_ALBUM,
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM))
+                )
+                .putString(
+                    MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
+                    "content://media/external/audio/albumart".toUri().buildUpon().appendEncodedPath(cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)).toString()).build().toString()
+                )
+                .putString(
+                    MediaMetadataCompat.METADATA_KEY_MEDIA_URI,
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))
+                )
+                .putLong(
+                    MediaMetadataCompat.METADATA_KEY_DURATION,
+                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION))
+                )
+                .build()
 
             result.add(meta)
         }
