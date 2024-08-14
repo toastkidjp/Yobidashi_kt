@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -166,7 +167,7 @@ private fun BoardItem(
         stringResource(id = R.string.delete)
     )
 
-    var offsetX by remember { mutableStateOf(task.x) }
+    var offsetX by remember { mutableFloatStateOf(task.x) }
     var offsetY by remember { mutableStateOf(task.y) }
 
     Surface(
