@@ -111,7 +111,7 @@ class CalendarViewModel {
 
     private val usingHolidaysCalendar = mutableListOf<String>()
 
-    fun usingHolidaysCalendar() = usingHolidaysCalendar
+    fun usingHolidaysCalendar(): List<String> = usingHolidaysCalendar
 
     private val usingPrimaryHolidaysCalendar = mutableStateOf("")
 
