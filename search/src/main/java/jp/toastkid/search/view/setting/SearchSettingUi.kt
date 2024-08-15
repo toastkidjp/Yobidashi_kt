@@ -23,7 +23,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -136,7 +135,7 @@ fun SearchSettingUi() {
                         enableSearchQueryExtractCheck.value =
                             preferenceApplier.enableSearchQueryExtract
                     },
-                    booleanState = enableSearchQueryExtractCheck,
+                    booleanState = enableSearchQueryExtractCheck.value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_extract
                 )
@@ -163,7 +162,7 @@ fun SearchSettingUi() {
                         enableSearchWithClipCheck.value =
                             preferenceApplier.enableSearchWithClip
                     },
-                    booleanState = enableSearchWithClipCheck,
+                    booleanState = enableSearchWithClipCheck.value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_clipboard_black
                 )
@@ -181,7 +180,7 @@ fun SearchSettingUi() {
                         useSuggestionCheck.value =
                             preferenceApplier.isEnableSuggestion
                     },
-                    booleanState = useSuggestionCheck,
+                    booleanState = useSuggestionCheck.value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_search_black
                 )
@@ -198,7 +197,7 @@ fun SearchSettingUi() {
                         preferenceApplier.switchEnableSearchHistory()
                         useHistoryCheck.value = preferenceApplier.isEnableSearchHistory
                     },
-                    booleanState = useHistoryCheck,
+                    booleanState = useHistoryCheck.value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_search_history_black
                 )
@@ -215,7 +214,7 @@ fun SearchSettingUi() {
                         preferenceApplier.switchEnableFavoriteSearch()
                         useFavoriteCheck.value = preferenceApplier.isEnableFavoriteSearch
                     },
-                    booleanState = useFavoriteCheck,
+                    booleanState = useFavoriteCheck.value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_favorite
                 )
@@ -232,7 +231,7 @@ fun SearchSettingUi() {
                         preferenceApplier.switchEnableViewHistory()
                         useViewHistoryCheck.value = preferenceApplier.isEnableViewHistory
                     },
-                    booleanState = useViewHistoryCheck,
+                    booleanState = useViewHistoryCheck.value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = jp.toastkid.lib.R.drawable.ic_history_black
                 )
@@ -249,7 +248,7 @@ fun SearchSettingUi() {
                         preferenceApplier.switchEnableUrlModule()
                         useUrlModuleCheck.value = preferenceApplier.isEnableUrlModule()
                     },
-                    booleanState = useUrlModuleCheck,
+                    booleanState = useUrlModuleCheck.value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_web_black
                 )
@@ -266,7 +265,7 @@ fun SearchSettingUi() {
                         preferenceApplier.switchEnableTrendModule()
                         useTrendCheck.value = preferenceApplier.isEnableUrlModule()
                     },
-                    booleanState = useTrendCheck,
+                    booleanState = useTrendCheck.value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_trend_black
                 )
@@ -353,7 +352,7 @@ fun SearchSettingUi() {
 internal fun CheckableRow(
     textId: Int,
     clickable: () -> Unit,
-    booleanState: MutableState<Boolean>,
+    booleanState: Boolean,
     iconTint: Color? = null,
     iconId: Int? = null
 ) {
@@ -378,7 +377,7 @@ internal fun CheckableRow(
                 .weight(1f)
         )
         Checkbox(
-            checked = booleanState.value, onCheckedChange = { clickable() },
+            checked = booleanState, onCheckedChange = { clickable() },
             modifier = Modifier.width(44.dp)
         )
     }
