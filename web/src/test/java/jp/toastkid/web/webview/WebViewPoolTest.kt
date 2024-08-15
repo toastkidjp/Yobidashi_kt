@@ -19,6 +19,7 @@ import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -97,6 +98,14 @@ class WebViewPoolTest {
         every { snapshot.containsKey(any()) }.returns(false)
         every { anyConstructed<LruCache<String, WebView>>().snapshot() }.returns(snapshot)
         assertFalse(webViewPool.containsKey(null))
+    }
+
+    @Test
+    fun test9() {
+        val snapshot = mockk<MutableMap<String, WebView>>()
+        every { snapshot.containsKey(any()) }.returns(true)
+        every { anyConstructed<LruCache<String, WebView>>().snapshot() }.returns(snapshot)
+        assertTrue(webViewPool.containsKey("test"))
     }
 
 }
