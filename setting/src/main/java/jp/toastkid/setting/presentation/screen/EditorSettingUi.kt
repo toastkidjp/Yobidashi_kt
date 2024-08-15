@@ -140,7 +140,7 @@ internal fun EditorSettingUi() {
 
             item {
                 ColorChooserMenu(
-                    cursorColor,
+                    cursorColor.value,
                     R.drawable.ic_cursor_black,
                     R.string.title_cursor_color
                 ) {
@@ -155,7 +155,7 @@ internal fun EditorSettingUi() {
 
             item {
                 ColorChooserMenu(
-                    highlightColor,
+                    highlightColor.value,
                     R.drawable.ic_highlight_black,
                     R.string.title_highlight_color
                 ) {
@@ -229,7 +229,7 @@ internal fun EditorSettingUi() {
 
 @Composable
 private fun ColorChooserMenu(
-    colorState: MutableState<Color>,
+    colorState: Color,
     @DrawableRes iconId: Int,
     @StringRes textId: Int,
     onNewColor: (Color) -> Unit
@@ -260,14 +260,14 @@ private fun ColorChooserMenu(
 
         Box(
             modifier = Modifier
-                .drawBehind { drawRect(colorState.value) }
+                .drawBehind { drawRect(colorState) }
                 .size(44.dp)
         ) { }
     }
 
     ComponentColorSettingDialog(
         openColorChooserDialog,
-        colorState.value
+        colorState
     ) {
         onNewColor(it)
     }
