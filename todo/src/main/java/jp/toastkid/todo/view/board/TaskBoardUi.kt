@@ -168,7 +168,7 @@ private fun BoardItem(
     )
 
     var offsetX by remember { mutableFloatStateOf(task.x) }
-    var offsetY by remember { mutableStateOf(task.y) }
+    var offsetY by remember { mutableFloatStateOf(task.y) }
 
     Surface(
         shadowElevation = 4.dp,
