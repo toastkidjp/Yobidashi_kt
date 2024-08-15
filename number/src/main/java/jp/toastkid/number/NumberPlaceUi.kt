@@ -112,7 +112,8 @@ fun NumberPlaceUi() {
                                 }
 
                                 MaskedCell(
-                                    open,
+                                    open.value,
+                                    { open.value = false },
                                     number.value,
                                     {
                                         number.value = viewModel.numberLabel(it)
@@ -285,7 +286,8 @@ private fun AppBarContent(
 
 @Composable
 private fun MaskedCell(
-    openState: MutableState<Boolean>,
+    openState: Boolean,
+    close: () -> Unit,
     numberLabel: String,
     onMenuItemClick: (Int) -> Unit,
     fontSize: TextUnit,
@@ -301,7 +303,7 @@ private fun MaskedCell(
             fontSize = fontSize,
             textAlign = TextAlign.Center
         )
-        DropdownMenu(openState.value, onDismissRequest = { openState.value = false }) {
+        DropdownMenu(openState, onDismissRequest = close) {
             DropdownMenuItem(
                 text = {
                     Text(
