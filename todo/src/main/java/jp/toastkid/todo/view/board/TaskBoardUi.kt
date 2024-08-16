@@ -143,7 +143,7 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActio
             task ?: return@items
             BoardItem(
                 task,
-                { repository.insert(it) },
+                repository::insert,
                 color,
                 menuUseCase,
                 Modifier.animateItemPlacement()
