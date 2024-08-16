@@ -171,31 +171,31 @@ fun NumberPlaceUi() {
         }
     }
 
-    contentViewModel?.optionMenus(
-        OptionMenu(
-            titleId = R.string.menu_other_board,
-            action = {
-                deleteCurrentGame(context)
-                contentViewModel.nextRoute("tool/number/place")
-            }),
-        OptionMenu(
-            titleId = R.string.menu_set_correct_answer,
-            action = {
-                viewModel.setCorrect()
-            }),
-        OptionMenu(
-            titleId = jp.toastkid.lib.R.string.clear_all,
-            action = {
-                viewModel.initializeSolving()
-                numberStates.forEach { it.value = "_" }
-            })
-    )
-
-    contentViewModel?.replaceAppBarContent {
-        AppBarContent(fontSize, contentViewModel)
-    }
-
     DisposableEffect(key1 = viewModel, effect = {
+        contentViewModel?.optionMenus(
+            OptionMenu(
+                titleId = R.string.menu_other_board,
+                action = {
+                    deleteCurrentGame(context)
+                    contentViewModel.nextRoute("tool/number/place")
+                }),
+            OptionMenu(
+                titleId = R.string.menu_set_correct_answer,
+                action = {
+                    viewModel.setCorrect()
+                }),
+            OptionMenu(
+                titleId = jp.toastkid.lib.R.string.clear_all,
+                action = {
+                    viewModel.initializeSolving()
+                    numberStates.forEach { it.value = "_" }
+                })
+        )
+
+        contentViewModel?.replaceAppBarContent {
+            AppBarContent(fontSize, contentViewModel)
+        }
+
         onDispose {
             viewModel.saveCurrentGame(context)
         }
