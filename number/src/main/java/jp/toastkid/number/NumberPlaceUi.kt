@@ -166,8 +166,7 @@ fun NumberPlaceUi() {
             }
 
             if (viewModel.loading().value) {
-                CircularProgressIndicator(
-                )
+                CircularProgressIndicator()
             }
         }
     }
