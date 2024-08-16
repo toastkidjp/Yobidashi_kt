@@ -81,19 +81,21 @@ fun TaskBoardUi() {
 
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
 
-    val menuUseCase = ItemMenuPopupActionUseCase(
-        {
-            taskAdditionDialogFragmentViewModel?.setTask(it)
-            taskAdditionDialogFragmentViewModel.show()
-        },
-        {
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    repository.delete(it)
+    val menuUseCase = remember {
+        ItemMenuPopupActionUseCase(
+            {
+                taskAdditionDialogFragmentViewModel?.setTask(it)
+                taskAdditionDialogFragmentViewModel.show()
+            },
+            {
+                CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.IO) {
+                        repository.delete(it)
+                    }
                 }
             }
-        }
-    )
+        )
+    }
 
     val coroutineScope = rememberCoroutineScope()
 
