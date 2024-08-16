@@ -60,7 +60,6 @@ import androidx.paging.compose.items
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
-import jp.toastkid.todo.data.TodoTaskDataAccessor
 import jp.toastkid.todo.data.TodoTaskDataAccessorFactory
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
@@ -144,7 +143,7 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActio
             task ?: return@items
             BoardItem(
                 task,
-                repository,
+                { repository.insert(it) },
                 color,
                 menuUseCase,
                 Modifier.animateItemPlacement()
@@ -156,7 +155,7 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActio
 @Composable
 private fun BoardItem(
     task: TodoTask,
-    repository: TodoTaskDataAccessor,
+    insert: (TodoTask) -> Unit,
     color: Int,
     menuUseCase: ItemMenuPopupActionUseCase,
     modifier: Modifier = Modifier
@@ -184,7 +183,7 @@ private fun BoardItem(
                         task.x = offsetX
                         task.y = offsetY
                         CoroutineScope(Dispatchers.IO).launch {
-                            repository.insert(task)
+                            insert(task)
                         }
                     },
                     onDrag = { change, dragAmount ->
@@ -206,7 +205,7 @@ private fun BoardItem(
                 onCheckedChange = {
                     task.done = task.done.not()
                     CoroutineScope(Dispatchers.IO).launch {
-                        repository.insert(task)
+                        insert(task)
                     }
                 },
                 modifier = Modifier
