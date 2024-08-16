@@ -9,13 +9,14 @@
 package jp.toastkid.number
 
 import android.content.Context
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.number.factory.GameFileProvider
 import jp.toastkid.number.model.NumberBoard
 import jp.toastkid.number.model.NumberPlaceGame
+import jp.toastkid.number.presentation.state.CellState
 import jp.toastkid.number.repository.GameRepositoryImplementation
 
 class NumberPlaceViewModel {
@@ -26,10 +27,13 @@ class NumberPlaceViewModel {
 
     private val _loading = mutableStateOf(false)
 
+    private val numberStates = mutableStateMapOf<String, CellState>()
+
     fun initialize(maskingCount: Int) {
         _loading.value = true
         _game.value.initialize(maskingCount)
         _mask.value = _game.value.masked()
+        walkMatrix(_game.value.masked().rows(), { rowIndex, columnIndex -> numberStates.put("${rowIndex}-${columnIndex}", CellState()) })
         _loading.value = false
     }
 
@@ -37,6 +41,7 @@ class NumberPlaceViewModel {
         _loading.value = true
         _game.value.initializeSolving()
         _mask.value = _game.value.masked()
+        numberStates.keys.forEach { numberStates.put(it, CellState()) }
         _loading.value = false
     }
 
@@ -44,6 +49,7 @@ class NumberPlaceViewModel {
         _loading.value = true
         _game.value = game
         _mask.value = _game.value.masked()
+        walkMatrix(_game.value.masked().rows(), ::setSolving)
         _loading.value = false
     }
 
@@ -51,26 +57,39 @@ class NumberPlaceViewModel {
         _loading.value = true
         _game.value.setCorrect()
         _mask.value = _game.value.masked()
+        walkMatrix(_game.value.masked().rows(), ::setSolving)
         _loading.value = false
+    }
+
+    private fun walkMatrix(matrix: List<List<Int>>, biConsumer: (Int, Int) -> Unit) {
+        matrix.forEachIndexed { rowIndex, row ->
+            row.forEachIndexed { columnIndex, i ->
+                biConsumer(rowIndex, columnIndex)
+            }
+        }
     }
 
     fun masked() = _mask.value
 
     fun loading(): State<Boolean> = _loading
 
+    private fun setSolving(rowIndex: Int, columnIndex: Int) {
+        val solving = _game.value.pickSolving(rowIndex, columnIndex)
+        numberStates.put("${rowIndex}-${columnIndex}", CellState(solving))
+    }
+
     fun place(rowIndex: Int, columnIndex: Int, it: Int, onSolved: (Boolean) -> Unit) {
         _game.value.place(rowIndex, columnIndex, it, onSolved)
+        numberStates.put("${rowIndex}-${columnIndex}", CellState(it))
     }
 
     fun useHint(
         rowIndex: Int,
         columnIndex: Int,
-        numberState: MutableState<String>,
         onSolved: (Boolean) -> Unit
     ) {
         val it = _game.value.pickCorrect(rowIndex, columnIndex)
-        numberState.value = "$it"
-        _game.value.place(rowIndex, columnIndex, it, onSolved)
+        place(rowIndex, columnIndex, it, onSolved)
     }
 
     fun saveCurrentGame(context: Context) {
@@ -79,12 +98,28 @@ class NumberPlaceViewModel {
         GameRepositoryImplementation().save(file, _game.value)
     }
 
-    fun pickSolving(rowIndex: Int, columnIndex: Int): Int {
-        return _game.value.pickSolving(rowIndex, columnIndex)
-    }
-
     fun numberLabel(number: Int): String {
         return if (number == -1) "_" else "$number"
+    }
+
+    fun openingCellOption(rowIndex: Int, columnIndex: Int): Boolean {
+        val state = numberStates.get("${rowIndex}-${columnIndex}") ?: return false
+        return state.open
+    }
+
+    fun openCellOption(rowIndex: Int, columnIndex: Int) {
+        val state = numberStates.get("${rowIndex}-${columnIndex}") ?: return
+        numberStates.put("${rowIndex}-${columnIndex}", state.copy(open = true))
+    }
+
+    fun closeCellOption(rowIndex: Int, columnIndex: Int) {
+        val state = numberStates.get("${rowIndex}-${columnIndex}") ?: return
+        numberStates.put("${rowIndex}-${columnIndex}", state.copy(open = false))
+    }
+
+    fun numberLabel(rowIndex: Int, columnIndex: Int): String {
+        val state = numberStates.get("${rowIndex}-${columnIndex}") ?: return ""
+        return state.text()
     }
 
 }
