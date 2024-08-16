@@ -65,7 +65,6 @@ import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskEditorUi
 import jp.toastkid.todo.view.appbar.AppBarUi
-import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -80,22 +79,6 @@ fun TaskBoardUi() {
         remember { TaskAdditionDialogFragmentViewModel() }
 
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
-
-    val menuUseCase = remember {
-        ItemMenuPopupActionUseCase(
-            {
-                taskAdditionDialogFragmentViewModel?.setTask(it)
-                taskAdditionDialogFragmentViewModel.show()
-            },
-            {
-                CoroutineScope(Dispatchers.Main).launch {
-                    withContext(Dispatchers.IO) {
-                        repository.delete(it)
-                    }
-                }
-            }
-        )
-    }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -122,7 +105,10 @@ fun TaskBoardUi() {
     })
 
     TaskEditorUi(
-        { TaskBoard(tasks.value, menuUseCase) },
+        { TaskBoard(tasks.value, {
+            taskAdditionDialogFragmentViewModel?.setTask(it)
+            taskAdditionDialogFragmentViewModel.show()
+        }) },
         taskAdditionDialogFragmentViewModel
     ) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -133,7 +119,7 @@ fun TaskBoardUi() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActionUseCase) {
+fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, modify: (TodoTask) -> Unit) {
     val context = LocalContext.current
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
     val color = remember { PreferenceApplier(context).color }
@@ -145,9 +131,10 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActio
             task ?: return@items
             BoardItem(
                 task,
-                repository::insert,
                 color,
-                menuUseCase,
+                repository::insert,
+                modify,
+                { repository.delete(it) },
                 Modifier.animateItemPlacement()
             )
         }
@@ -157,9 +144,10 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActio
 @Composable
 private fun BoardItem(
     task: TodoTask,
-    insert: (TodoTask) -> Unit,
     color: Int,
-    menuUseCase: ItemMenuPopupActionUseCase,
+    insert: (TodoTask) -> Unit,
+    modify: (TodoTask) -> Unit,
+    delete: (TodoTask) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -256,8 +244,8 @@ private fun BoardItem(
                         },
                         onClick = {
                         when (index) {
-                            0 -> menuUseCase.modify(task)
-                            1 -> menuUseCase.delete(task)
+                            0 -> modify(task)
+                            1 -> delete(task)
                         }
                         expanded = false
                     })
