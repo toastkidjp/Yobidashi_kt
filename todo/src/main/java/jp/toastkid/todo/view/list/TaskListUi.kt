@@ -45,7 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -73,20 +73,20 @@ fun TaskListUi() {
     val taskAdditionDialogFragmentViewModel =
         remember { TaskAdditionDialogFragmentViewModel() }
 
-    viewModel(ContentViewModel::class.java, context)
-        .replaceAppBarContent {
-            AppBarUi {
-                taskAdditionDialogFragmentViewModel?.setTask(null)
-                taskAdditionDialogFragmentViewModel.show()
-            }
-        }
-
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
 
     val tasks = remember { mutableStateOf<Flow<PagingData<TodoTask>>?>(null) }
 
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(key1 = "load", block = {
+        ViewModelProvider(context).get(ContentViewModel::class.java)
+            .replaceAppBarContent {
+                AppBarUi {
+                    taskAdditionDialogFragmentViewModel?.setTask(null)
+                    taskAdditionDialogFragmentViewModel.show()
+                }
+            }
+
         withContext(Dispatchers.IO) {
             if (repository.count() == 0) {
                 InitialTaskPreparation(repository).invoke()
