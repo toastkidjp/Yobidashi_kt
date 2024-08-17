@@ -96,7 +96,7 @@ fun TaskBoardUi() {
         val flow = withContext(Dispatchers.IO) {
             Pager(
                 PagingConfig(pageSize = 10, enablePlaceholders = true),
-                pagingSourceFactory = { repository.allTasks() }
+                pagingSourceFactory = repository::allTasks
             )
                 .flow
                 .cachedIn(coroutineScope)
