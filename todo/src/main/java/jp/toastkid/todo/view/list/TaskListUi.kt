@@ -111,7 +111,7 @@ fun TaskListUi() {
                     taskAdditionDialogFragmentViewModel.setTask(it)
                     taskAdditionDialogFragmentViewModel.show()
                 },
-                { repository.delete(it) }
+                repository::delete
             )
         },
         taskAdditionDialogFragmentViewModel
