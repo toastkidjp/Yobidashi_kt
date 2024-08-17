@@ -134,7 +134,7 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, modify: (TodoTask) -> Unit) {
                 color,
                 repository::insert,
                 modify,
-                { repository.delete(it) },
+                repository::delete,
                 Modifier.animateItemPlacement()
             )
         }
