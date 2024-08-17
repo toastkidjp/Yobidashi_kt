@@ -76,8 +76,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
 
-@OptIn(ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchInputUi(
     inputQuery: String? = null,
@@ -86,13 +85,11 @@ fun SearchInputUi(
 ) {
     val context = LocalContext.current as? ComponentActivity ?: return
 
-    val preferenceApplier = remember { PreferenceApplier(context) }
-
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     val viewModel = remember {
         val vm = SearchUiViewModel(QueryingUseCase.make(context))
-        vm.copyFrom(preferenceApplier)
+        vm.copyFrom(PreferenceApplier(context))
         vm.setCategoryName(
             (SearchCategory.findByUrlOrNull(currentUrl)?.name
                 ?: PreferenceApplier(context).getDefaultSearchEngine())
@@ -294,7 +291,7 @@ fun SearchInputUi(
                 titleId = R.string.title_context_editor_set_default_search_category,
                 action = {
                     viewModel.setCategoryName(
-                        preferenceApplier.getDefaultSearchEngine()
+                        PreferenceApplier(context).getDefaultSearchEngine()
                             ?: SearchCategory.getDefaultCategoryName()
                     )
                 }
@@ -302,6 +299,7 @@ fun SearchInputUi(
             OptionMenu(
                 titleId = R.string.title_enable_suggestion,
                 action = {
+                    val preferenceApplier = PreferenceApplier(context)
                     preferenceApplier.switchEnableSuggestion()
                     viewModel.copyFrom(preferenceApplier)
                     if (preferenceApplier.isEnableSuggestion.not()) {
@@ -313,6 +311,7 @@ fun SearchInputUi(
             OptionMenu(
                 titleId = R.string.title_use_search_history,
                 action = {
+                    val preferenceApplier = PreferenceApplier(context)
                     preferenceApplier.switchEnableSearchHistory()
                     viewModel.copyFrom(preferenceApplier)
                     if (preferenceApplier.isEnableSearchHistory.not()) {

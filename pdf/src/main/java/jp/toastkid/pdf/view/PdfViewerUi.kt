@@ -12,6 +12,7 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -74,6 +75,7 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
     PdfPageList(uri, listState, modifier)
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) {
     val context = LocalContext.current
@@ -107,7 +109,10 @@ private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) 
             Surface(
                 shadowElevation = 4.dp,
                 color = Color(0xFFF0F0F0),
-                modifier = Modifier.padding(8.dp).padding(vertical = 4.dp)
+                modifier = Modifier
+                    .padding(8.dp)
+                    .padding(vertical = 4.dp)
+                    .animateItemPlacement()
             ) {
                 var scale by remember { mutableStateOf(1f) }
                 var offset by remember { mutableStateOf(Offset.Zero) }

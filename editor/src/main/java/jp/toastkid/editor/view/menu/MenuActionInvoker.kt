@@ -48,6 +48,10 @@ class MenuActionInvoker(
                 onSelectAllRequested?.invoke()
                 return true
             }
+            R.id.context_edit_select_to_end -> {
+                viewModel.selectToEnd()
+                return true
+            }
             R.id.context_edit_paste -> {
                 onPasteRequested?.invoke()
                 return true

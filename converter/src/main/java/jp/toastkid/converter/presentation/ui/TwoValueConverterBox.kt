@@ -11,7 +11,6 @@ package jp.toastkid.converter.presentation.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,7 +33,7 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverter) {
     ) {
         val firstInput = remember { mutableStateOf(TextFieldValue(unixTimeConverterService.defaultFirstInputValue())) }
         val secondInput = remember { mutableStateOf(TextFieldValue(unixTimeConverterService.defaultSecondInputValue())) }
-        val result = remember { mutableStateOf("") }
+
         Row {
             Column {
                 TextField(
@@ -61,8 +60,8 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverter) {
                     onValueChange = {
                         secondInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
-                        unixTimeConverterService.secondInputAction(secondInput.value.text)?.let {
-                            firstInput.value = TextFieldValue(it)
+                        unixTimeConverterService.secondInputAction(secondInput.value.text)?.let { newInput ->
+                            firstInput.value = TextFieldValue(newInput)
                         }
                     }
                 )

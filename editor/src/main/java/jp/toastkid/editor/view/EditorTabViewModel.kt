@@ -10,12 +10,13 @@ package jp.toastkid.editor.view
 
 import android.text.format.DateFormat
 import androidx.compose.foundation.ScrollState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
@@ -24,12 +25,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import jp.toastkid.editor.view.style.TextEditorVisualTransformation
+import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.min
 
 class EditorTabViewModel {
@@ -37,8 +41,6 @@ class EditorTabViewModel {
     private val content = mutableStateOf(TextFieldValue())
 
     private var lastParagraph: MultiParagraph? = null
-
-    private var altPressed = false
 
     private val lineCount = mutableIntStateOf(0)
 
@@ -55,10 +57,6 @@ class EditorTabViewModel {
     fun content() = content.value
 
     fun onValueChange(it: TextFieldValue) {
-        if (altPressed) {
-            return
-        }
-
         applyStyle(it)
     }
 
@@ -84,19 +82,32 @@ class EditorTabViewModel {
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
         lastParagraph = multiParagraph
-        if (lineCount.value != multiParagraph.lineCount) {
-            lineCount.value = multiParagraph.lineCount
+        if (lineCount.intValue != multiParagraph.lineCount) {
+            lineCount.intValue = multiParagraph.lineCount
+            val max = lineCount.intValue
+            val length = max.toString().length
+            val list = (1..max).map {
+                val lineNumberCount = it
+                val fillCount = length - lineNumberCount.toString().length
+                return@map (it - 1 to with(StringBuilder()) {
+                    repeat(fillCount) {
+                        append(" ")
+                    }
+                    append(lineNumberCount)
+                }.toString())
+            }
+
+            lineNumbers.value = list
         }
 
-        val lastLineHeights = (0 until lineCount.value).map { it to multiParagraph.getLineHeight(it) }.toMap()
-        val distinct = lastLineHeights.values.distinct()
-        val max = distinct.max()
+        val lastLineHeights = (0 until lineCount.intValue).map { it to multiParagraph.getLineHeight(it) }.toMap()
+        val maxHeight = lastLineHeights.values.distinct().max()
         lineHeights.clear()
-        lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / max).em) }
+        lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / maxHeight).em) }
     }
 
     fun getLineHeight(lineNumber: Int): TextUnit {
-        return 1.55.em//lineHeights.getOrElse(lineNumber, { 1.55.em })
+        return lineHeights.getOrElse(lineNumber, { 1.55.em })
     }
 
     fun lineNumberScrollState() = lineNumberScrollState
@@ -123,28 +134,16 @@ class EditorTabViewModel {
         }
     }
 
+    private val lineNumbers = mutableStateOf(listOf<Pair<Int, String>>())
+
     fun lineNumbers(): List<Pair<Int, String>> {
-        val max = lineCount.value
-        val length = max.toString().length
-        return (1 .. max).map {
-            val lineNumberCount = it
-            val fillCount = length - lineNumberCount.toString().length
-            return@map (it - 1 to with(StringBuilder()) {
-                repeat(fillCount) {
-                    append(" ")
-                }
-                append(lineNumberCount)
-            }.toString())
-        }
+        return lineNumbers.value
     }
 
     fun launchTab(
         content: TextFieldValue,
-        useDarkMode: Boolean,
         dispatcher: CoroutineDispatcher = Dispatchers.IO
     ) {
-        darkMode.value = useDarkMode
-
         val newContent = content
         applyStyle(newContent)
     }
@@ -154,7 +153,7 @@ class EditorTabViewModel {
         val currentLine = paragraph.getLineForOffset(content.value.selection.start)
         return Offset(
             paragraph.getLineLeft(currentLine),
-            paragraph.getLineTop(currentLine) //TODO - verticalScrollState.offset
+            paragraph.getLineTop(currentLine) - lineNumberScrollState.value
         )
     }
 
@@ -169,10 +168,6 @@ class EditorTabViewModel {
 
     fun visualTransformation(): VisualTransformation {
         return visualTransformation
-    }
-
-    fun makeCharacterCountMessage(count: Int): String {
-        return "Character: $count"
     }
 
     fun dispose() {
@@ -322,10 +317,10 @@ class EditorTabViewModel {
         openLoadFromStorageDialog.value = false
     }
 
-    private val lastSaved: MutableState<Long> = mutableStateOf(0L)
+    private val lastSaved = mutableLongStateOf(0L)
 
     fun lastSaved(): CharSequence {
-        return DateFormat.format(" HH:mm:ss", lastSaved.value)
+        return DateFormat.format(" HH:mm:ss", lastSaved.longValue)
     }
 
     fun setLastSaved(lastSaved: Long) {
@@ -334,6 +329,47 @@ class EditorTabViewModel {
 
     fun selectedText(): String {
         return content.value.getSelectedText().text
+    }
+
+    fun selectToEnd() {
+        content.value = content.value.copy(selection = TextRange(content.value.selection.start, content.value.text.length))
+    }
+
+    suspend fun scrollToTop() {
+        onValueChange(content.value.copy(selection = TextRange.Zero))
+
+        lineNumberScrollState.scrollTo(0)
+    }
+
+    suspend fun scrollToBottom() {
+        val textFieldValue = content.value
+        onValueChange(textFieldValue.copy(selection = TextRange(textFieldValue.text.length)))
+
+        lineNumberScrollState.scrollTo(lineNumberScrollState.maxValue)
+    }
+
+    private val fontColor = AtomicReference(Color.Transparent)
+
+    fun fontColor(): Color = fontColor.get()
+
+    private val fontSize = AtomicReference(14.sp)
+
+    fun fontSize(): TextUnit = fontSize.get()
+
+    private val backgroundColor = AtomicReference(Color.Transparent)
+
+    fun backgroundColor(): Color = backgroundColor.get()
+
+    private val cursorColor = AtomicReference(Color.Transparent)
+
+    fun cursorColor(): Color = cursorColor.get()
+
+    fun setPreference(preferenceApplier: PreferenceApplier) {
+        fontColor.set(Color(preferenceApplier.editorFontColor()))
+        fontSize.set(preferenceApplier.editorFontSize().sp)
+        backgroundColor.set(Color(preferenceApplier.editorBackgroundColor()))
+        cursorColor.set(Color(preferenceApplier.editorCursorColor(Color.Cyan.toArgb())))
+        darkMode.value = preferenceApplier.useDarkMode()
     }
 
 }

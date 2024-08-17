@@ -30,7 +30,6 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -79,8 +78,6 @@ fun NumberPlaceUi() {
         viewModel(ContentViewModel::class.java, it)
     }
 
-    val numberStates = mutableListOf<MutableState<String>>()
-
     Surface(
         shadowElevation = 4.dp
     ) {
@@ -102,21 +99,11 @@ fun NumberPlaceUi() {
 
                         row.forEachIndexed { columnIndex, cellValue ->
                             if (cellValue == -1) {
-                                val open = remember { mutableStateOf(false) }
-                                val number = remember { mutableStateOf("_") }
-                                numberStates.add(number)
-
-                                val solving = viewModel.pickSolving(rowIndex, columnIndex)
-                                if (solving != -1) {
-                                    number.value = "$solving"
-                                }
-
                                 MaskedCell(
-                                    open,
-                                    number.value,
+                                    viewModel.openingCellOption(rowIndex, columnIndex),
+                                    { viewModel.closeCellOption(rowIndex, columnIndex) },
+                                    viewModel.numberLabel(rowIndex, columnIndex),
                                     {
-                                        number.value = viewModel.numberLabel(it)
-                                        open.value = false
                                         viewModel.place(rowIndex, columnIndex, it) { done ->
                                             showMessageSnackbar(context, contentViewModel, done)
                                         }
@@ -126,7 +113,7 @@ fun NumberPlaceUi() {
                                         .weight(1f)
                                         .combinedClickable(
                                             onClick = {
-                                                open.value = true
+                                                viewModel.openCellOption(rowIndex, columnIndex)
                                             },
                                             onLongClick = {
                                                 contentViewModel?.snackWithAction(
@@ -135,8 +122,7 @@ fun NumberPlaceUi() {
                                                 ) {
                                                     viewModel.useHint(
                                                         rowIndex,
-                                                        columnIndex,
-                                                        number
+                                                        columnIndex
                                                     ) { done ->
                                                         showMessageSnackbar(
                                                             context,
@@ -165,37 +151,35 @@ fun NumberPlaceUi() {
             }
 
             if (viewModel.loading().value) {
-                CircularProgressIndicator(
-                )
+                CircularProgressIndicator()
             }
         }
     }
 
-    contentViewModel?.optionMenus(
-        OptionMenu(
-            titleId = R.string.menu_other_board,
-            action = {
-                deleteCurrentGame(context)
-                contentViewModel.nextRoute("tool/number/place")
-            }),
-        OptionMenu(
-            titleId = R.string.menu_set_correct_answer,
-            action = {
-                viewModel.setCorrect()
-            }),
-        OptionMenu(
-            titleId = jp.toastkid.lib.R.string.clear_all,
-            action = {
-                viewModel.initializeSolving()
-                numberStates.forEach { it.value = "_" }
-            })
-    )
-
-    contentViewModel?.replaceAppBarContent {
-        AppBarContent(fontSize, contentViewModel)
-    }
-
     DisposableEffect(key1 = viewModel, effect = {
+        contentViewModel?.optionMenus(
+            OptionMenu(
+                titleId = R.string.menu_other_board,
+                action = {
+                    deleteCurrentGame(context)
+                    contentViewModel.nextRoute("tool/number/place")
+                }),
+            OptionMenu(
+                titleId = R.string.menu_set_correct_answer,
+                action = {
+                    viewModel.setCorrect()
+                }),
+            OptionMenu(
+                titleId = jp.toastkid.lib.R.string.clear_all,
+                action = {
+                    viewModel.initializeSolving()
+                })
+        )
+
+        contentViewModel?.replaceAppBarContent {
+            AppBarContent(fontSize, contentViewModel)
+        }
+
         onDispose {
             viewModel.saveCurrentGame(context)
         }
@@ -285,7 +269,8 @@ private fun AppBarContent(
 
 @Composable
 private fun MaskedCell(
-    openState: MutableState<Boolean>,
+    openState: Boolean,
+    close: () -> Unit,
     numberLabel: String,
     onMenuItemClick: (Int) -> Unit,
     fontSize: TextUnit,
@@ -301,7 +286,7 @@ private fun MaskedCell(
             fontSize = fontSize,
             textAlign = TextAlign.Center
         )
-        DropdownMenu(openState.value, onDismissRequest = { openState.value = false }) {
+        DropdownMenu(openState, onDismissRequest = close) {
             DropdownMenuItem(
                 text = {
                     Text(

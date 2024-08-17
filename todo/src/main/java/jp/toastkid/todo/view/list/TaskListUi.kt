@@ -45,7 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -59,7 +59,6 @@ import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskEditorUi
 import jp.toastkid.todo.view.appbar.AppBarUi
-import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
 import jp.toastkid.todo.view.list.initial.InitialTaskPreparation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,20 +73,20 @@ fun TaskListUi() {
     val taskAdditionDialogFragmentViewModel =
         remember { TaskAdditionDialogFragmentViewModel() }
 
-    viewModel(ContentViewModel::class.java, context)
-        .replaceAppBarContent {
-            AppBarUi {
-                taskAdditionDialogFragmentViewModel?.setTask(null)
-                taskAdditionDialogFragmentViewModel.show()
-            }
-        }
-
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
 
     val tasks = remember { mutableStateOf<Flow<PagingData<TodoTask>>?>(null) }
 
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(key1 = "load", block = {
+        ViewModelProvider(context).get(ContentViewModel::class.java)
+            .replaceAppBarContent {
+                AppBarUi {
+                    taskAdditionDialogFragmentViewModel?.setTask(null)
+                    taskAdditionDialogFragmentViewModel.show()
+                }
+            }
+
         withContext(Dispatchers.IO) {
             if (repository.count() == 0) {
                 InitialTaskPreparation(repository).invoke()
@@ -103,22 +102,18 @@ fun TaskListUi() {
         }
     })
 
-    val menuUseCase = ItemMenuPopupActionUseCase(
-        {
-            taskAdditionDialogFragmentViewModel.setTask(it)
-            taskAdditionDialogFragmentViewModel.show()
-        },
-        {
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    repository.delete(it)
-                }
-            }
-        }
-    )
-
     TaskEditorUi(
-        { TaskList(tasks.value, menuUseCase) },
+        {
+            TaskList(
+                tasks.value,
+                repository::insert,
+                {
+                    taskAdditionDialogFragmentViewModel.setTask(it)
+                    taskAdditionDialogFragmentViewModel.show()
+                },
+                { repository.delete(it) }
+            )
+        },
         taskAdditionDialogFragmentViewModel
     ) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -131,14 +126,16 @@ fun TaskListUi() {
 @Composable
 private fun TaskList(
     flow: Flow<PagingData<TodoTask>>?,
-    menuUseCase: ItemMenuPopupActionUseCase
+    insert: (TodoTask) -> Unit,
+    modify: (TodoTask) -> Unit,
+    delete: (TodoTask) -> Unit,
 ) {
     val tasks = flow?.collectAsLazyPagingItems() ?: return
 
     LazyColumn(state = rememberLazyListState()) {
         items(tasks, { it.id }) { task ->
             task ?: return@items
-            TaskListItem(task, menuUseCase, Modifier.animateItemPlacement())
+            TaskListItem(task, insert, modify, delete, Modifier.animateItemPlacement())
         }
     }
 }
@@ -146,7 +143,9 @@ private fun TaskList(
 @Composable
 private fun TaskListItem(
     task: TodoTask,
-    menuUseCase: ItemMenuPopupActionUseCase,
+    insert: (TodoTask) -> Unit,
+    modify: (TodoTask) -> Unit,
+    delete: (TodoTask) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -154,8 +153,6 @@ private fun TaskListItem(
         stringResource(id = R.string.modify),
         stringResource(id = R.string.delete)
     )
-
-    val repository = TodoTaskDataAccessorFactory().invoke(LocalContext.current)
 
     Surface(
         shadowElevation = 4.dp,
@@ -173,7 +170,7 @@ private fun TaskListItem(
                 onCheckedChange = {
                     task.done = task.done.not()
                     CoroutineScope(Dispatchers.IO).launch {
-                        repository.insert(task)
+                        insert(task)
                     }
                 },
                 modifier = Modifier
@@ -222,8 +219,12 @@ private fun TaskListItem(
                             },
                             onClick = {
                             when (index) {
-                                0 -> menuUseCase.modify(task)
-                                1 -> menuUseCase.delete(task)
+                                0 -> modify(task)
+                                1 -> {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        delete(task)
+                                    }
+                                }
                             }
                             expanded = false
                         })

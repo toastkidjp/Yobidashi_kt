@@ -58,7 +58,6 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -70,7 +69,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
@@ -126,16 +124,8 @@ fun EditorTabView(path: String?, modifier: Modifier) {
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         contentViewModel.event.collect {
             when (it) {
-                is ToTopEvent -> {
-                    viewModel.onValueChange(
-                        viewModel.content().copy(selection = TextRange.Zero)
-                    )
-                }
-                is ToBottomEvent -> {
-                    viewModel.onValueChange(
-                        viewModel.content().copy(selection = TextRange(viewModel.content().text.length))
-                    )
-                }
+                is ToTopEvent -> viewModel.scrollToTop()
+                is ToBottomEvent -> viewModel.scrollToBottom()
                 is ShareEvent -> {
                     val title =
                         if (path?.contains("/") == true) path.substring(path.lastIndexOf("/") + 1)
@@ -158,8 +148,6 @@ fun EditorTabView(path: String?, modifier: Modifier) {
             }
         }
     })
-
-    val preferenceApplier = remember { PreferenceApplier(context) }
 
     CompositionLocalProvider(
         LocalTextToolbar provides ContextMenuToolbar(
@@ -196,8 +184,8 @@ fun EditorTabView(path: String?, modifier: Modifier) {
                             ) {
                                 Text(
                                     lineNumberText,
-                                    color = Color(preferenceApplier.editorFontColor()),
-                                    fontSize = preferenceApplier.editorFontSize().sp,
+                                    color = viewModel.fontColor(),
+                                    fontSize = viewModel.fontSize(),
                                     fontFamily = FontFamily.Monospace,
                                     textAlign = TextAlign.End,
                                     lineHeight = viewModel.getLineHeight(lineNumber)
@@ -210,18 +198,18 @@ fun EditorTabView(path: String?, modifier: Modifier) {
                 }
             },
             textStyle = TextStyle(
-                color = Color(preferenceApplier.editorFontColor()),
-                fontSize = preferenceApplier.editorFontSize().sp,
+                color = viewModel.fontColor(),
+                fontSize = viewModel.fontSize(),
                 fontFamily = FontFamily.Monospace,
                 lineHeight = 1.55.em,
                 background = Color.Transparent
             ),
-            cursorBrush = SolidColor(Color(preferenceApplier.editorCursorColor(Color(0xDD81D4FA).toArgb()))),
+            cursorBrush = SolidColor(viewModel.cursorColor()),
             modifier = modifier
                 .focusRequester(viewModel.focusRequester())
                 .fillMaxWidth()
                 .drawBehind {
-                    drawRect(Color(preferenceApplier.editorBackgroundColor()))
+                    drawRect(viewModel.backgroundColor())
 
                     val currentLineOffset = viewModel.currentLineOffset()
                     if (currentLineOffset != Offset.Unspecified) {
@@ -271,8 +259,7 @@ fun EditorTabView(path: String?, modifier: Modifier) {
 
     DisposableEffect(key1 = path) {
         viewModel.launchTab(
-            TextFieldValue(),
-            preferenceApplier.useDarkMode()
+            TextFieldValue()
         )
         fileActionUseCase.readCurrentFile()
         viewModel.initialScroll(coroutineScope)
@@ -317,6 +304,8 @@ fun EditorTabView(path: String?, modifier: Modifier) {
     }
 
     LaunchedEffect(key1 = Unit, block = {
+        viewModel.setPreference(PreferenceApplier(context))
+
         contentViewModel.clearOptionMenus()
         contentViewModel.showAppBar(coroutineScope)
 

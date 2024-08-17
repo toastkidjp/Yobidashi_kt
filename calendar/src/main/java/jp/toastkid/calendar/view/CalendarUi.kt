@@ -63,7 +63,6 @@ fun CalendarUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val viewModel = remember { CalendarViewModel() }
-    val preferenceApplier = remember { PreferenceApplier(context) }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -75,12 +74,13 @@ fun CalendarUi() {
     ) {
         HorizontalPager(state = pagerState) {
             val calendar = viewModel.fromPage(pagerState.currentPage)
+            val labels = viewModel.usingHolidaysCalendar()
+                .flatMap { viewModel.calculateHolidays(calendar, it) }
             MonthCalendar(
                 viewModel.week(),
                 viewModel.makeMonth(calendar),
-                preferenceApplier.usingHolidaysCalendar()
-                    .flatMap { viewModel.calculateHolidays(calendar, it) },
-                viewModel.calculateHolidays(calendar, preferenceApplier.usingPrimaryHolidaysCalendar()),
+                labels,
+                viewModel.calculateHolidays(calendar, viewModel.usingPrimaryHolidaysCalendar()),
                 { date, onBackground -> viewModel.openDateArticle(contentViewModel, pagerState.currentPage, date, onBackground) },
                 { viewModel.isToday(calendar, it) },
                 viewModel::getDayOfWeekLabel
@@ -89,6 +89,11 @@ fun CalendarUi() {
     }
 
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
+        val preferenceApplier = PreferenceApplier(context)
+        viewModel.setPreference(
+            preferenceApplier.usingHolidaysCalendar(),
+            preferenceApplier.usingPrimaryHolidaysCalendar()
+        )
         contentViewModel.replaceAppBarContent {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

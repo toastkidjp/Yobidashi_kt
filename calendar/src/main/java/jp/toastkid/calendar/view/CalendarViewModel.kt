@@ -8,6 +8,7 @@
 
 package jp.toastkid.calendar.view
 
+import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.calendar.model.Week
 import jp.toastkid.calendar.model.holiday.HolidayCalendar
 import jp.toastkid.lib.ContentViewModel
@@ -106,6 +107,20 @@ class CalendarViewModel {
 
     fun toPage(calendar: Calendar): Int {
         return ((calendar.get(Calendar.YEAR) - 1) * 12) + (calendar.get(Calendar.MONTH))
+    }
+
+    private val usingHolidaysCalendar = mutableListOf<String>()
+
+    fun usingHolidaysCalendar(): List<String> = usingHolidaysCalendar
+
+    private val usingPrimaryHolidaysCalendar = mutableStateOf("")
+
+    fun usingPrimaryHolidaysCalendar(): String = usingPrimaryHolidaysCalendar.value
+
+    fun setPreference(usingHolidaysCalendar: List<String>, usingPrimaryHolidaysCalendar: String?) {
+        this.usingHolidaysCalendar.clear()
+        this.usingHolidaysCalendar.addAll(usingHolidaysCalendar)
+        this.usingPrimaryHolidaysCalendar.value = (usingPrimaryHolidaysCalendar ?: "")
     }
 
 }

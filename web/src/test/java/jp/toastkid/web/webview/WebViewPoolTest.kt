@@ -14,8 +14,12 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import org.junit.After
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -42,6 +46,66 @@ class WebViewPoolTest {
     @Test
     fun test() {
         assertNull(webViewPool.get(null))
+    }
+
+    @Test
+    fun test2() {
+        assertNotNull(webViewPool.get("test"))
+    }
+
+    @Test
+    fun test3() {
+        assertNull(webViewPool.getLatest())
+        assertNotNull(webViewPool.get("test"))
+        assertNotNull(webViewPool.getLatest())
+    }
+
+    @Test
+    fun test4() {
+        every { anyConstructed<LruCache<String, WebView>>().put(any(), any()) }.returns(mockk())
+
+        webViewPool.put("test", mockk())
+
+        verify(exactly = 1) { anyConstructed<LruCache<String, WebView>>().put(any(), any()) }
+    }
+
+    @Test
+    fun test5() {
+        every { anyConstructed<LruCache<String, WebView>>().remove(any()) }.returns(mockk())
+
+        webViewPool.remove("test")
+
+        verify(exactly = 1) { anyConstructed<LruCache<String, WebView>>().remove(any()) }
+    }
+
+    @Test
+    fun test6() {
+        every { anyConstructed<LruCache<String, WebView>>().remove(any()) }.returns(mockk())
+
+        webViewPool.remove(null)
+
+        verify(exactly = 0) { anyConstructed<LruCache<String, WebView>>().remove(any()) }
+    }
+
+    @Test
+    fun test7() {
+        assertFalse(webViewPool.containsKey(null))
+    }
+
+    @Test
+    fun test8() {
+        val snapshot = mockk<MutableMap<String, WebView>>()
+        every { snapshot.containsKey(any()) }.returns(false)
+        every { anyConstructed<LruCache<String, WebView>>().snapshot() }.returns(snapshot)
+        assertFalse(webViewPool.containsKey(null))
+    }
+
+    @Test
+    fun test9() {
+        val snapshot = mockk<MutableMap<String, WebView>>()
+        every { snapshot.containsKey(any()) }.returns(true)
+        every { anyConstructed<LruCache<String, WebView>>().snapshot() }.returns(snapshot)
+        assertTrue(webViewPool.containsKey("test"))
     }
 
 }

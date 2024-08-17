@@ -26,7 +26,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -140,7 +139,7 @@ internal fun EditorSettingUi() {
 
             item {
                 ColorChooserMenu(
-                    cursorColor,
+                    cursorColor.value,
                     R.drawable.ic_cursor_black,
                     R.string.title_cursor_color
                 ) {
@@ -155,7 +154,7 @@ internal fun EditorSettingUi() {
 
             item {
                 ColorChooserMenu(
-                    highlightColor,
+                    highlightColor.value,
                     R.drawable.ic_highlight_black,
                     R.string.title_highlight_color
                 ) {
@@ -229,7 +228,7 @@ internal fun EditorSettingUi() {
 
 @Composable
 private fun ColorChooserMenu(
-    colorState: MutableState<Color>,
+    colorState: Color,
     @DrawableRes iconId: Int,
     @StringRes textId: Int,
     onNewColor: (Color) -> Unit
@@ -260,66 +259,64 @@ private fun ColorChooserMenu(
 
         Box(
             modifier = Modifier
-                .drawBehind { drawRect(colorState.value) }
+                .drawBehind { drawRect(colorState) }
                 .size(44.dp)
         ) { }
     }
 
-    ComponentColorSettingDialog(
-        openColorChooserDialog,
-        colorState.value
-    ) {
-        onNewColor(it)
+    if (openColorChooserDialog.value) {
+        ComponentColorSettingDialog(
+            colorState,
+            { openColorChooserDialog.value = false }
+        ) {
+            onNewColor(it)
+        }
     }
 }
 
 @Composable
 private fun ComponentColorSettingDialog(
-    openColorChooserDialog: MutableState<Boolean>,
     currentColor: Color,
+    onClose: () -> Unit,
     onNewColor: (Color) -> Unit
 ) {
-    if (openColorChooserDialog.value) {
-        val choosingColor = remember { mutableStateOf(currentColor) }
+    val choosingColor = remember { mutableStateOf(currentColor) }
 
-        AlertDialog(
-            onDismissRequest = { openColorChooserDialog.value = false },
-            title = {
-                Text(stringResource(id = R.string.title_dialog_color_chooser))
-            },
-            text = {
-                ClassicColorPicker(
-                    color = choosingColor.value,
-                    onColorChanged = { hsvColor ->
-                        choosingColor.value = hsvColor.toColor()
-                    },
-                    modifier = Modifier.height(200.dp)
-                )
-            },
-            confirmButton = {
-                Text(
-                    text = stringResource(id = jp.toastkid.lib.R.string.ok),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier
-                        .clickable {
-                            val newColor = choosingColor.value
-                            onNewColor(newColor)
-                            openColorChooserDialog.value = false
-                        }
-                        .padding(4.dp)
-                )
-            },
-            dismissButton = {
-                Text(
-                    text = stringResource(id = jp.toastkid.lib.R.string.cancel),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier
-                        .clickable {
-                            openColorChooserDialog.value = false
-                        }
-                        .padding(4.dp)
-                )
-            }
-        )
-    }
+    AlertDialog(
+        onDismissRequest = onClose,
+        title = {
+            Text(stringResource(id = R.string.title_dialog_color_chooser))
+        },
+        text = {
+            ClassicColorPicker(
+                color = choosingColor.value,
+                onColorChanged = { hsvColor ->
+                    choosingColor.value = hsvColor.toColor()
+                },
+                modifier = Modifier.height(200.dp)
+            )
+        },
+        confirmButton = {
+            Text(
+                text = stringResource(id = jp.toastkid.lib.R.string.ok),
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .clickable {
+                        val newColor = choosingColor.value
+                        onNewColor(newColor)
+                        onClose()
+                    }
+                    .padding(4.dp)
+            )
+        },
+        dismissButton = {
+            Text(
+                text = stringResource(id = jp.toastkid.lib.R.string.cancel),
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .clickable(onClick = onClose)
+                    .padding(4.dp)
+            )
+        }
+    )
 }

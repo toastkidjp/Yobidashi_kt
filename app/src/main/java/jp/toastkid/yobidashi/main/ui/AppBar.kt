@@ -195,6 +195,7 @@ private fun OverflowMenu(
         .width(32.dp)
         .fillMaxHeight()
         .clickable { openOptionMenu.value = true }) {
+
         Icon(
             painterResource(id = jp.toastkid.lib.R.drawable.ic_option_menu),
             contentDescription = stringResource(id = jp.toastkid.lib.R.string.title_option_menu),
@@ -202,48 +203,46 @@ private fun OverflowMenu(
             modifier = Modifier.align(Alignment.Center)
         )
 
-        val commonOptionMenuItems = listOf(
-            OptionMenu(
-                titleId = R.string.reset_button_position,
-                action = {
-                    PreferenceApplier(context).clearMenuFabPosition()
-                    contentViewModel?.resetMenuFabPosition()
-                }),
-            OptionMenu(titleId = R.string.menu_random_wikipedia, action = {
-                if (PreferenceApplier(context).wifiOnly &&
-                    NetworkChecker().isUnavailableWiFi(context)
-                ) {
-                    contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
-                    return@OptionMenu
-                }
-
-                RandomWikipedia()
-                    .fetchWithAction { title, link ->
-                        contentViewModel?.open(link)
-                        contentViewModel?.snackShort(
-                            context.getString(
-                                R.string.message_open_random_wikipedia,
-                                title
-                            )
-                        )
-                    }
-            }),
-            OptionMenu(
-                titleId = R.string.title_tab_list,
-                action = switchTabList),
-            OptionMenu(
-                titleId = R.string.action_settings,
-                action = { contentViewModel?.nextRoute("setting/top") }),
-            OptionMenu(titleId = R.string.exit, action = finishApp)
-        )
-        val optionMenuItems =
-            menus.union(commonOptionMenuItems).distinct()
-
         DropdownMenu(
             expanded = openOptionMenu.value,
             onDismissRequest = { openOptionMenu.value = false }
         ) {
-            optionMenuItems.forEach {
+            menus.union(
+                listOf(
+                    OptionMenu(
+                        titleId = R.string.reset_button_position,
+                        action = {
+                            PreferenceApplier(context).clearMenuFabPosition()
+                            contentViewModel?.resetMenuFabPosition()
+                        }),
+                    OptionMenu(titleId = R.string.menu_random_wikipedia, action = {
+                        if (PreferenceApplier(context).wifiOnly &&
+                            NetworkChecker().isUnavailableWiFi(context)
+                        ) {
+                            contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_wifi_not_connecting)
+                            return@OptionMenu
+                        }
+
+                        RandomWikipedia()
+                            .fetchWithAction { title, link ->
+                                contentViewModel?.open(link)
+                                contentViewModel?.snackShort(
+                                    context.getString(
+                                        R.string.message_open_random_wikipedia,
+                                        title
+                                    )
+                                )
+                            }
+                    }),
+                    OptionMenu(
+                        titleId = R.string.title_tab_list,
+                        action = switchTabList),
+                    OptionMenu(
+                        titleId = R.string.action_settings,
+                        action = { contentViewModel?.nextRoute("setting/top") }),
+                    OptionMenu(titleId = R.string.exit, action = finishApp)
+                )
+            ).distinct().forEach {
                 DropdownMenuItem(
                     text = {
                         OptionMenuItem(it)

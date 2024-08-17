@@ -16,6 +16,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -32,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -58,13 +60,11 @@ import androidx.paging.compose.items
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
-import jp.toastkid.todo.data.TodoTaskDataAccessor
 import jp.toastkid.todo.data.TodoTaskDataAccessorFactory
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskEditorUi
 import jp.toastkid.todo.view.appbar.AppBarUi
-import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -80,29 +80,23 @@ fun TaskBoardUi() {
 
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
 
-    val menuUseCase = ItemMenuPopupActionUseCase(
-        {
-            taskAdditionDialogFragmentViewModel?.setTask(it)
-            taskAdditionDialogFragmentViewModel.show()
-        },
-        {
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    repository.delete(it)
-                }
-            }
-        }
-    )
-
     val coroutineScope = rememberCoroutineScope()
 
     val tasks = remember { mutableStateOf<Flow<PagingData<TodoTask>>?>(null) }
 
     LaunchedEffect(key1 = "init", block = {
+        ViewModelProvider(context).get(ContentViewModel::class.java)
+            .replaceAppBarContent {
+                AppBarUi {
+                    taskAdditionDialogFragmentViewModel?.setTask(null)
+                    taskAdditionDialogFragmentViewModel.show()
+                }
+            }
+
         val flow = withContext(Dispatchers.IO) {
             Pager(
                 PagingConfig(pageSize = 10, enablePlaceholders = true),
-                pagingSourceFactory = { repository.allTasks() }
+                pagingSourceFactory = repository::allTasks
             )
                 .flow
                 .cachedIn(coroutineScope)
@@ -110,16 +104,11 @@ fun TaskBoardUi() {
         tasks.value = flow
     })
 
-    ViewModelProvider(context).get(ContentViewModel::class.java)
-        .replaceAppBarContent {
-            AppBarUi {
-                taskAdditionDialogFragmentViewModel?.setTask(null)
-                taskAdditionDialogFragmentViewModel.show()
-            }
-        }
-
     TaskEditorUi(
-        { TaskBoard(tasks.value, menuUseCase) },
+        { TaskBoard(tasks.value, {
+            taskAdditionDialogFragmentViewModel?.setTask(it)
+            taskAdditionDialogFragmentViewModel.show()
+        }) },
         taskAdditionDialogFragmentViewModel
     ) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -130,21 +119,22 @@ fun TaskBoardUi() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActionUseCase) {
+fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, modify: (TodoTask) -> Unit) {
     val context = LocalContext.current
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
-    val color = PreferenceApplier(context).color
+    val color = remember { PreferenceApplier(context).color }
 
     val tasks = flow?.collectAsLazyPagingItems() ?: return
 
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(tasks, { it.id }) { task ->
             task ?: return@items
             BoardItem(
                 task,
-                repository,
                 color,
-                menuUseCase,
+                repository::insert,
+                modify,
+                repository::delete,
                 Modifier.animateItemPlacement()
             )
         }
@@ -154,9 +144,10 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, menuUseCase: ItemMenuPopupActio
 @Composable
 private fun BoardItem(
     task: TodoTask,
-    repository: TodoTaskDataAccessor,
     color: Int,
-    menuUseCase: ItemMenuPopupActionUseCase,
+    insert: (TodoTask) -> Unit,
+    modify: (TodoTask) -> Unit,
+    delete: (TodoTask) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -165,8 +156,8 @@ private fun BoardItem(
         stringResource(id = R.string.delete)
     )
 
-    var offsetX by remember { mutableStateOf(task.x) }
-    var offsetY by remember { mutableStateOf(task.y) }
+    var offsetX by remember { mutableFloatStateOf(task.x) }
+    var offsetY by remember { mutableFloatStateOf(task.y) }
 
     Surface(
         shadowElevation = 4.dp,
@@ -182,7 +173,7 @@ private fun BoardItem(
                         task.x = offsetX
                         task.y = offsetY
                         CoroutineScope(Dispatchers.IO).launch {
-                            repository.insert(task)
+                            insert(task)
                         }
                     },
                     onDrag = { change, dragAmount ->
@@ -204,7 +195,7 @@ private fun BoardItem(
                 onCheckedChange = {
                     task.done = task.done.not()
                     CoroutineScope(Dispatchers.IO).launch {
-                        repository.insert(task)
+                        insert(task)
                     }
                 },
                 modifier = Modifier
@@ -253,8 +244,12 @@ private fun BoardItem(
                         },
                         onClick = {
                         when (index) {
-                            0 -> menuUseCase.modify(task)
-                            1 -> menuUseCase.delete(task)
+                            0 -> modify(task)
+                            1 -> {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    delete(task)
+                                }
+                            }
                         }
                         expanded = false
                     })
