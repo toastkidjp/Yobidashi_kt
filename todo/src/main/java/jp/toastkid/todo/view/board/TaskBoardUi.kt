@@ -245,7 +245,11 @@ private fun BoardItem(
                         onClick = {
                         when (index) {
                             0 -> modify(task)
-                            1 -> delete(task)
+                            1 -> {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    delete(task)
+                                }
+                            }
                         }
                         expanded = false
                     })
