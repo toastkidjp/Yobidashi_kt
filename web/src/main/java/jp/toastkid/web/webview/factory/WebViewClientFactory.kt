@@ -26,7 +26,6 @@ import androidx.core.app.ComponentActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewFeature
-import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.FaviconApplier
@@ -35,6 +34,7 @@ import jp.toastkid.web.block.SiteNameChecker
 import jp.toastkid.web.history.ViewHistoryInsertion
 import jp.toastkid.web.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.web.tls.TlsErrorMessageGenerator
+import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.web.webview.CustomWebView
 import jp.toastkid.web.webview.GlobalWebViewPool
 import jp.toastkid.web.webview.usecase.ApproachFallbackUrlExtractor
