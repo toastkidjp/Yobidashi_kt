@@ -8,6 +8,7 @@
 
 package jp.toastkid.web.webview.factory
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -22,7 +23,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.core.app.ComponentActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewFeature
@@ -143,7 +143,7 @@ class WebViewClientFactory(
             handler?.cancel()
 
             val context = view?.context ?: return
-            if (context !is ComponentActivity
+            if (context !is Activity
                 || context !is ViewModelStoreOwner
                 || context.isFinishing) {
                 return
