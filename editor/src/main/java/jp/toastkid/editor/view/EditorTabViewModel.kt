@@ -34,6 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.max
 import kotlin.math.min
 
 class EditorTabViewModel {
@@ -194,12 +195,14 @@ class EditorTabViewModel {
 
     fun replaceText(primary: CharSequence) {
         val content = content()
+        val start = min(content.selection.start, content.selection.end)
+        val end = max(content.selection.start, content.selection.end)
         onValueChange(
             content.copy(
                 text = StringBuilder(content.text)
                     .replace(
-                        content.selection.start,
-                        content.selection.end,
+                        start,
+                        end,
                         primary.toString()
                     )
                     .toString()
