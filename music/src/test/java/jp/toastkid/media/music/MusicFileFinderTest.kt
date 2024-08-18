@@ -18,6 +18,9 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 class MusicFileFinderTest {
 
@@ -30,7 +33,7 @@ class MusicFileFinderTest {
     @MockK
     private lateinit var cursor: Cursor
 
-    @org.junit.Before
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { contentResolver.query(any(), any(), any(), any(), any()) }.returns(cursor)
@@ -38,12 +41,12 @@ class MusicFileFinderTest {
         every { cursor.close() }.just(Runs)
     }
 
-    @org.junit.After
+    @After
     fun tearDown() {
         unmockkAll()
     }
 
-    @org.junit.Test
+    @Test
     fun invoke() {
         musicFileFinder.invoke()
 
