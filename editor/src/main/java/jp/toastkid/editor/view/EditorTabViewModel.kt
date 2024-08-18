@@ -67,7 +67,7 @@ class EditorTabViewModel {
 
     private val contentLength = mutableIntStateOf(0)
 
-    fun contentLength() = contentLength.intValue
+    fun contentLength(): Int = contentLength.intValue
 
     private fun applyStyle(it: TextFieldValue) {
         //val newContent = if (tab.editable()) it else it.copy(text = content.value.text)
