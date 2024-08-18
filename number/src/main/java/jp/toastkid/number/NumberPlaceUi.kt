@@ -171,9 +171,8 @@ fun NumberPlaceUi() {
                 }),
             OptionMenu(
                 titleId = jp.toastkid.lib.R.string.clear_all,
-                action = {
-                    viewModel.initializeSolving()
-                })
+                action = viewModel::initializeSolving
+            )
         )
 
         contentViewModel?.replaceAppBarContent {
