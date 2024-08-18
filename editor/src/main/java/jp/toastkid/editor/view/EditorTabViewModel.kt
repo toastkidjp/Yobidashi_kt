@@ -65,7 +65,7 @@ class EditorTabViewModel {
         content.value = TextFieldValue()
     }
 
-    private val contentLength = mutableStateOf(0)
+    private val contentLength = mutableIntStateOf(0)
 
     fun contentLength() = contentLength.value
 
