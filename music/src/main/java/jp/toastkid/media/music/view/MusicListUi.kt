@@ -35,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -185,7 +186,7 @@ internal fun MusicList(
 ) {
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
-    @StringRes var currentSpeed by remember { mutableStateOf(PlayingSpeed.getDefault().textId) }
+    @StringRes var currentSpeed by remember { mutableIntStateOf(PlayingSpeed.getDefault().textId) }
 
     val coroutineScope = rememberCoroutineScope()
 
