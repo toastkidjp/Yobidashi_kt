@@ -88,7 +88,7 @@ fun TaskBoardUi() {
         ViewModelProvider(context).get(ContentViewModel::class.java)
             .replaceAppBarContent {
                 AppBarUi {
-                    taskAdditionDialogFragmentViewModel?.setTask(null)
+                    taskAdditionDialogFragmentViewModel.setTask(null)
                     taskAdditionDialogFragmentViewModel.show()
                 }
             }
