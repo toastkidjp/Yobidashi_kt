@@ -106,7 +106,7 @@ fun TaskBoardUi() {
 
     TaskEditorUi(
         { TaskBoard(tasks.value, {
-            taskAdditionDialogFragmentViewModel?.setTask(it)
+            taskAdditionDialogFragmentViewModel.setTask(it)
             taskAdditionDialogFragmentViewModel.show()
         }) },
         taskAdditionDialogFragmentViewModel
