@@ -101,7 +101,8 @@ class EditorTabViewModel {
             lineNumbers.value = list
         }
 
-        val lastLineHeights = (0 until lineCount.intValue).map { it to multiParagraph.getLineHeight(it) }.toMap()
+        val lastLineHeights =
+            (0 until lineCount.intValue).associateWith { multiParagraph.getLineHeight(it) }
         val maxHeight = lastLineHeights.values.distinct().max()
         lineHeights.clear()
         lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / maxHeight).em) }
