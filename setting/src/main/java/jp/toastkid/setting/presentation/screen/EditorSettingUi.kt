@@ -267,10 +267,9 @@ private fun ColorChooserMenu(
     if (openColorChooserDialog.value) {
         ComponentColorSettingDialog(
             colorState,
-            { openColorChooserDialog.value = false }
-        ) {
-            onNewColor(it)
-        }
+            { openColorChooserDialog.value = false },
+            onNewColor
+        )
     }
 }
 
