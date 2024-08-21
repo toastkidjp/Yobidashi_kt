@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -65,7 +66,7 @@ internal fun WebSettingUi() {
     val saveFormData = remember { mutableStateOf(preferenceApplier.doesSaveForm()) }
     val saveViewHistory = remember { mutableStateOf(preferenceApplier.saveViewHistory) }
     val userAgent = remember { mutableStateOf(preferenceApplier.userAgent()) }
-    val poolSize = remember { mutableStateOf(preferenceApplier.poolSize.toFloat() / 30f) }
+    val poolSize = remember { mutableFloatStateOf(preferenceApplier.poolSize.toFloat() / 30f) }
     val backgroundAlpha = remember { mutableStateOf(preferenceApplier.getWebViewBackgroundAlpha()) }
     val useDarkMode = remember { mutableStateOf(preferenceApplier.useDarkMode()) }
     val useAdRemover = remember { mutableStateOf(preferenceApplier.adRemove) }
