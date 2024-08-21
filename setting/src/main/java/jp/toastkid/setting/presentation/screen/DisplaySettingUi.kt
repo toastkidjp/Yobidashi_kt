@@ -77,7 +77,7 @@ internal fun DisplaySettingUi() {
         val targets = mutableListOf<Uri>()
         val clipData = it.data?.clipData
         val itemCount = clipData?.itemCount ?: 0
-        (0 until itemCount).mapNotNull { clipData?.getItemAt(it)?.uri }.forEach { targets.add(it) }
+        (0 until itemCount).mapNotNull { clipData?.getItemAt(it)?.uri }.forEach(targets::add)
         it.data?.data?.let(targets::add)
 
         LoadedAction(
