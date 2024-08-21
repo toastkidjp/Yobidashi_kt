@@ -239,7 +239,7 @@ internal fun DisplaySettingUi() {
                                         val successRemove = imageFile.delete()
                                         if (!successRemove) {
                                             contentViewModel
-                                                ?.snackShort(R.string.message_failed_image_removal)
+                                                .snackShort(R.string.message_failed_image_removal)
                                             return@clickable
                                         }
                                         files.remove(imageFile)
