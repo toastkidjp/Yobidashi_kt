@@ -161,7 +161,7 @@ internal fun ColorFilterSettingUi() {
             }
 
             Slider(
-                value = sliderValue.value,
+                value = sliderValue.floatValue,
                 onValueChange = {
                     sliderValue.value = it
                     useCase.setAlpha(((255) * it).roundToInt())
