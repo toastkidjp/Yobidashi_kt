@@ -244,7 +244,7 @@ internal fun DisplaySettingUi() {
                                         }
                                         files.remove(imageFile)
                                         contentViewModel
-                                            ?.snackShort(R.string.message_success_image_removal)
+                                            .snackShort(R.string.message_success_image_removal)
                                     }
                             )
                         }
