@@ -8,6 +8,7 @@
 
 package jp.toastkid.web.webview.factory
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -22,11 +23,9 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.core.app.ComponentActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.webkit.WebViewFeature
-import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.FaviconApplier
@@ -35,6 +34,7 @@ import jp.toastkid.web.block.SiteNameChecker
 import jp.toastkid.web.history.ViewHistoryInsertion
 import jp.toastkid.web.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.web.tls.TlsErrorMessageGenerator
+import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.web.webview.CustomWebView
 import jp.toastkid.web.webview.GlobalWebViewPool
 import jp.toastkid.web.webview.usecase.ApproachFallbackUrlExtractor
@@ -143,7 +143,7 @@ class WebViewClientFactory(
             handler?.cancel()
 
             val context = view?.context ?: return
-            if (context !is ComponentActivity
+            if (context !is Activity
                 || context !is ViewModelStoreOwner
                 || context.isFinishing) {
                 return
