@@ -67,7 +67,7 @@ internal fun WebSettingUi() {
     val saveViewHistory = remember { mutableStateOf(preferenceApplier.saveViewHistory) }
     val userAgent = remember { mutableStateOf(preferenceApplier.userAgent()) }
     val poolSize = remember { mutableFloatStateOf(preferenceApplier.poolSize.toFloat() / 30f) }
-    val backgroundAlpha = remember { mutableStateOf(preferenceApplier.getWebViewBackgroundAlpha()) }
+    val backgroundAlpha = remember { mutableFloatStateOf(preferenceApplier.getWebViewBackgroundAlpha()) }
     val useDarkMode = remember { mutableStateOf(preferenceApplier.useDarkMode()) }
     val useAdRemover = remember { mutableStateOf(preferenceApplier.adRemove) }
 
