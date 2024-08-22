@@ -277,7 +277,7 @@ internal fun WebSettingUi() {
                         )
                     }
                     Slider(
-                        value = poolSize.value,
+                        value = poolSize.floatValue,
                         onValueChange = {
                             val newValue = ((30) * it).roundToInt()
                             poolSize.floatValue = it
