@@ -280,7 +280,7 @@ internal fun WebSettingUi() {
                         value = poolSize.value,
                         onValueChange = {
                             val newValue = ((30) * it).roundToInt()
-                            poolSize.value = it
+                            poolSize.floatValue = it
                             preferenceApplier.poolSize = newValue
                         },
                         steps = 30,
