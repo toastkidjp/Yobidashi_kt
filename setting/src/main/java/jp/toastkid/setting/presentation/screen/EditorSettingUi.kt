@@ -195,7 +195,7 @@ internal fun EditorSettingUi() {
                             .size(44.dp)
                             .padding(end = 16.dp)
                     ) {
-                        Text("${fontSize.value}")
+                        Text("${fontSize.intValue}")
                         DropdownMenu(
                             expanded = fontSizeOpen.value,
                             onDismissRequest = { fontSizeOpen.value = false }
