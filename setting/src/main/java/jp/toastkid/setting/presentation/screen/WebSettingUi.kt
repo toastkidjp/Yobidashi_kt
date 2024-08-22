@@ -309,7 +309,7 @@ internal fun WebSettingUi() {
                     Slider(
                         value = backgroundAlpha.floatValue,
                         onValueChange = {
-                            backgroundAlpha.value = it
+                            backgroundAlpha.floatValue = it
                             preferenceApplier.setWebViewBackgroundAlpha(it)
                         },
                         steps = 100,
