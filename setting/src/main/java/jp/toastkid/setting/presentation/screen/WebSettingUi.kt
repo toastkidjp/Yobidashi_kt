@@ -302,7 +302,7 @@ internal fun WebSettingUi() {
                     Row {
                         Text("Background alpha")
                         Text(
-                            "${backgroundAlpha.value}",
+                            "${backgroundAlpha.floatValue}",
                             modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                         )
                     }
