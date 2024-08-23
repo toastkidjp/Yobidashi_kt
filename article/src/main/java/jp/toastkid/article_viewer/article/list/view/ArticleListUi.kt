@@ -281,8 +281,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             UpdateUseCase(viewModel) { activityContext }.invokeIfNeed(it.data?.data)
         }
 
-    val openDateDialog = remember { mutableStateOf(false) }
-
     LaunchedEffect(key1 = "add_option_menu", block = {
         ViewModelProvider(activityContext).get(ContentViewModel::class.java).optionMenus(
             OptionMenu(
@@ -304,7 +302,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             OptionMenu(
                 titleId = R.string.action_date_filter,
                 action = {
-                    openDateDialog.value = true
+                    viewModel.openDataDialog()
                 }
             ),
             OptionMenu(
@@ -329,9 +327,9 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
         )
     }
 
-    if (openDateDialog.value) {
+    if (viewModel.isOpenDateDialog()) {
         DateFilterDialogUi(
-            { openDateDialog.value = false },
+            { viewModel.closeDataDialog() },
             DateSelectedActionUseCase(
                 ArticleRepositoryFactory().invoke(activityContext),
                 ViewModelProvider(activityContext).get(ContentViewModel::class.java)

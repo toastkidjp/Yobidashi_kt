@@ -113,4 +113,16 @@ class ArticleListFragmentViewModel(
         openSortDialog.value = false
     }
 
+    private val openDateDialog = mutableStateOf(false)
+
+    fun isOpenDateDialog() = openDateDialog.value
+
+    fun openDataDialog() {
+        openDateDialog.value = true
+    }
+
+    fun closeDataDialog() {
+        openDateDialog.value = false
+    }
+
 }
