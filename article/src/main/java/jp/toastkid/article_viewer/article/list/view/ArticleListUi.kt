@@ -299,9 +299,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             ),
             OptionMenu(
                 titleId = R.string.action_sort,
-                action = {
-                    viewModel.openSortDialog()
-                }
+                action = viewModel::openSortDialog
             ),
             OptionMenu(
                 titleId = R.string.action_date_filter,
