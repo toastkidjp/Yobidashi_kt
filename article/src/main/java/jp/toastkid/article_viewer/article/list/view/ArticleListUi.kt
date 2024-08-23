@@ -351,7 +351,10 @@ internal fun ArticleListUi(
     LazyColumn(state = lazyListState) {
         items(articles, { it.id }) {
             it ?: return@items
-            ListItem(it, contentViewModel, menuPopupUseCase,
+            ListItem(
+                it,
+                contentViewModel,
+                menuPopupUseCase,
                 Modifier.animateItemPlacement()
             )
         }
