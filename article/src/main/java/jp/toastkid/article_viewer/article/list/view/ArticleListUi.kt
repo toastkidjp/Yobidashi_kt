@@ -111,18 +111,6 @@ fun ArticleListUi() {
         contentViewModel.replaceAppBarContent {
             AppBarContent(viewModel)
 
-            if (viewModel.isOpenSortDialog()) {
-                val preferenceApplier = PreferenceApplier(context)
-                SortSettingDialogUi(
-                    { viewModel.closeSortDialog() },
-                    onSelect = {
-                        viewModel.sort(it)
-                        preferenceApplier.setArticleSort(it.name)
-                    },
-                    preferenceApplier.articleSort()
-                )
-            }
-
             val openDateDialog = remember { mutableStateOf(false) }
 
             if (openDateDialog.value) {
