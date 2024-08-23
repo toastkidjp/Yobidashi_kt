@@ -26,11 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import jp.toastkid.article_viewer.R
-import jp.toastkid.lib.preference.PreferenceApplier
 
 @Composable
 internal fun SortSettingDialogUi(
-    preferenceApplier: PreferenceApplier,
     onDismissRequest: () -> Unit,
     onSelect: (Sort) -> Unit,
     currentSortName: String,

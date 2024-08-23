@@ -115,7 +115,6 @@ fun ArticleListUi() {
             if (openSortDialog.value) {
                 val preferenceApplier = PreferenceApplier(context)
                 SortSettingDialogUi(
-                    PreferenceApplier(context),
                     { openSortDialog.value = false },
                     onSelect = {
                         viewModel.sort(it)
@@ -338,7 +337,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     if (openSortDialog.value) {
         val preferenceApplier = PreferenceApplier(activityContext)
         SortSettingDialogUi(
-            PreferenceApplier(activityContext),
             { openSortDialog.value = false },
             onSelect = {
                 viewModel.sort(it)
