@@ -107,7 +107,7 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
 @Composable
 private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = PreferenceApplier(activityContext)
+    val fontColor = remember { Color(PreferenceApplier(activityContext).editorFontColor()) }
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
     var searchInput by remember { mutableStateOf("") }
@@ -126,7 +126,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 label = {
                     Text(
                         viewModel.title(),
-                        color = Color(preferenceApplier.editorFontColor())
+                        color = fontColor
                     )
                 },
                 singleLine = true,
