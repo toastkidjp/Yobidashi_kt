@@ -81,6 +81,8 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
         val converted = LinkGenerator().invoke(content)
         viewModel.setContent(converted)
 
+        contentViewModel.clearOptionMenus()
+
         contentViewModel.replaceAppBarContent {
             AppBarContent(viewModel)
         }
@@ -99,8 +101,6 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
     }
 
     ScrollerUseCase(contentViewModel, viewModel.scrollState()).invoke(LocalLifecycleOwner.current)
-
-    contentViewModel.clearOptionMenus()
 }
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
