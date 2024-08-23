@@ -101,10 +101,6 @@ class ArticleListFragmentViewModel(
 
     fun searchResult() = searchResult.value
 
-    fun setSearchResult(newResult: String) {
-        searchResult.value = newResult
-    }
-
     private val openSortDialog = mutableStateOf(false)
 
     fun isOpenSortDialog() = openSortDialog.value
