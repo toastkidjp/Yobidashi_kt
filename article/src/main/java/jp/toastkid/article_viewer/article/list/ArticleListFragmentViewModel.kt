@@ -105,4 +105,16 @@ class ArticleListFragmentViewModel(
         searchResult.value = newResult
     }
 
+    private val openSortDialog = mutableStateOf(false)
+
+    fun isOpenSortDialog() = openSortDialog.value
+
+    fun openSortDialog() {
+        openSortDialog.value = true
+    }
+
+    fun closeSortDialog() {
+        openSortDialog.value = false
+    }
+
 }

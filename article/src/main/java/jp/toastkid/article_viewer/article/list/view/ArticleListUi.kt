@@ -110,12 +110,11 @@ fun ArticleListUi() {
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         contentViewModel.replaceAppBarContent {
             AppBarContent(viewModel)
-            val openSortDialog = remember { mutableStateOf(false) }
 
-            if (openSortDialog.value) {
+            if (viewModel.isOpenSortDialog()) {
                 val preferenceApplier = PreferenceApplier(context)
                 SortSettingDialogUi(
-                    { openSortDialog.value = false },
+                    { viewModel.closeSortDialog() },
                     onSelect = {
                         viewModel.sort(it)
                         preferenceApplier.setArticleSort(it.name)
@@ -295,7 +294,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             UpdateUseCase(viewModel) { activityContext }.invokeIfNeed(it.data?.data)
         }
 
-    val openSortDialog = remember { mutableStateOf(false) }
     val openDateDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = "add_option_menu", block = {
@@ -315,7 +313,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             OptionMenu(
                 titleId = R.string.action_sort,
                 action = {
-                    openSortDialog.value = true
+                    viewModel.openSortDialog()
                 }
             ),
             OptionMenu(
@@ -334,12 +332,13 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
         )
     })
 
-    if (openSortDialog.value) {
+    if (viewModel.isOpenSortDialog()) {
         val preferenceApplier = PreferenceApplier(activityContext)
         SortSettingDialogUi(
-            { openSortDialog.value = false },
+            { viewModel.closeSortDialog() },
             onSelect = {
                 viewModel.sort(it)
+                preferenceApplier.setArticleSort(it.name)
             },
             preferenceApplier.articleSort()
         )
