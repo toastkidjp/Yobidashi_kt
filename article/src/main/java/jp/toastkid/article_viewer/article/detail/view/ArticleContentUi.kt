@@ -161,9 +161,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 .combinedClickable(
                     true,
                     onClick = contentViewModel::switchTabList,
-                    onLongClick = {
-                        contentViewModel.openNewTab()
-                    }
+                    onLongClick = contentViewModel::openNewTab
                 )
         ) {
             Image(
