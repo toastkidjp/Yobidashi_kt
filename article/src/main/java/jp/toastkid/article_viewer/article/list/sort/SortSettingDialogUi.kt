@@ -32,7 +32,8 @@ import jp.toastkid.lib.preference.PreferenceApplier
 internal fun SortSettingDialogUi(
     preferenceApplier: PreferenceApplier,
     onDismissRequest: () -> Unit,
-    onSelect: (Sort) -> Unit
+    onSelect: (Sort) -> Unit,
+    currentSortName: String
 ) {
     Dialog(
         onDismissRequest = onDismissRequest
@@ -45,7 +46,7 @@ internal fun SortSettingDialogUi(
                     modifier = Modifier.padding(8.dp)
                 )
 
-                val currentSort = Sort.findByName(preferenceApplier.articleSort())
+                val currentSort = Sort.findByName(currentSortName)
                 Sort.values().forEach { sort ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,

@@ -113,9 +113,15 @@ fun ArticleListUi() {
             val openSortDialog = remember { mutableStateOf(false) }
 
             if (openSortDialog.value) {
-                SortSettingDialogUi(PreferenceApplier(context), { openSortDialog.value = false }, onSelect = {
-                    viewModel.sort(it)
-                })
+                val preferenceApplier = PreferenceApplier(context)
+                SortSettingDialogUi(
+                    PreferenceApplier(context),
+                    { openSortDialog.value = false },
+                    onSelect = {
+                        viewModel.sort(it)
+                    },
+                    preferenceApplier.articleSort()
+                )
             }
 
             val openDateDialog = remember { mutableStateOf(false) }
@@ -329,9 +335,15 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     })
 
     if (openSortDialog.value) {
-        SortSettingDialogUi(PreferenceApplier(activityContext), { openSortDialog.value = false }, onSelect = {
-            viewModel.sort(it)
-        })
+        val preferenceApplier = PreferenceApplier(activityContext)
+        SortSettingDialogUi(
+            PreferenceApplier(activityContext),
+            { openSortDialog.value = false },
+            onSelect = {
+                viewModel.sort(it)
+            },
+            preferenceApplier.articleSort()
+        )
     }
 
     if (openDateDialog.value) {
