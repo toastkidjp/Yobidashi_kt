@@ -65,6 +65,7 @@ import kotlinx.coroutines.withContext
 fun ArticleContentUi(title: String, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val viewModel = remember { ContentViewerFragmentViewModel() }
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     LaunchedEffect(key1 = title, block = {
         val content = withContext(Dispatchers.IO) {
@@ -79,12 +80,11 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
 
         val converted = LinkGenerator().invoke(content)
         viewModel.setContent(converted)
-    })
 
-    val contentViewModel = viewModel(ContentViewModel::class.java, context)
-    contentViewModel.replaceAppBarContent {
-        AppBarContent(viewModel)
-    }
+        contentViewModel.replaceAppBarContent {
+            AppBarContent(viewModel)
+        }
+    })
 
     Surface(
         color = MaterialTheme.colorScheme.primary,
