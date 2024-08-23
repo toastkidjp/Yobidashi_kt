@@ -119,6 +119,7 @@ fun ArticleListUi() {
                     { openSortDialog.value = false },
                     onSelect = {
                         viewModel.sort(it)
+                        preferenceApplier.setArticleSort(it.name)
                     },
                     preferenceApplier.articleSort()
                 )

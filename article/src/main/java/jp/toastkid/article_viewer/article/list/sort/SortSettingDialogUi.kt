@@ -33,7 +33,7 @@ internal fun SortSettingDialogUi(
     preferenceApplier: PreferenceApplier,
     onDismissRequest: () -> Unit,
     onSelect: (Sort) -> Unit,
-    currentSortName: String
+    currentSortName: String,
 ) {
     Dialog(
         onDismissRequest = onDismissRequest
@@ -54,7 +54,6 @@ internal fun SortSettingDialogUi(
                             .padding(8.dp)
                             .fillMaxWidth()
                             .clickable {
-                                preferenceApplier.setArticleSort(sort.name)
                                 onSelect(sort)
                                 onDismissRequest()
                             }
@@ -64,7 +63,6 @@ internal fun SortSettingDialogUi(
                             colors = RadioButtonDefaults
                                 .colors(selectedColor = MaterialTheme.colorScheme.secondary),
                             onClick = {
-                                preferenceApplier.setArticleSort(sort.name)
                                 onSelect(sort)
                                 onDismissRequest()
                             }
