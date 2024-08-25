@@ -38,7 +38,6 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -110,13 +109,6 @@ fun ArticleListUi() {
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         contentViewModel.replaceAppBarContent {
             AppBarContent(viewModel)
-            val openSortDialog = remember { mutableStateOf(false) }
-
-            if (openSortDialog.value) {
-                SortSettingDialogUi(PreferenceApplier(context), { openSortDialog.value = false }, onSelect = {
-                    viewModel.sort(it)
-                })
-            }
 
             val openDateDialog = remember { mutableStateOf(false) }
 
@@ -179,7 +171,7 @@ fun ArticleListUi() {
     })
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
@@ -289,9 +281,6 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             UpdateUseCase(viewModel) { activityContext }.invokeIfNeed(it.data?.data)
         }
 
-    val openSortDialog = remember { mutableStateOf(false) }
-    val openDateDialog = remember { mutableStateOf(false) }
-
     LaunchedEffect(key1 = "add_option_menu", block = {
         ViewModelProvider(activityContext).get(ContentViewModel::class.java).optionMenus(
             OptionMenu(
@@ -308,14 +297,12 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             ),
             OptionMenu(
                 titleId = R.string.action_sort,
-                action = {
-                    openSortDialog.value = true
-                }
+                action = viewModel::openSortDialog
             ),
             OptionMenu(
                 titleId = R.string.action_date_filter,
                 action = {
-                    openDateDialog.value = true
+                    viewModel.openDataDialog()
                 }
             ),
             OptionMenu(
@@ -328,15 +315,21 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
         )
     })
 
-    if (openSortDialog.value) {
-        SortSettingDialogUi(PreferenceApplier(activityContext), { openSortDialog.value = false }, onSelect = {
-            viewModel.sort(it)
-        })
+    if (viewModel.isOpenSortDialog()) {
+        val preferenceApplier = PreferenceApplier(activityContext)
+        SortSettingDialogUi(
+            viewModel::closeSortDialog,
+            onSelect = {
+                viewModel.sort(it)
+                preferenceApplier.setArticleSort(it.name)
+            },
+            preferenceApplier.articleSort()
+        )
     }
 
-    if (openDateDialog.value) {
+    if (viewModel.isOpenDateDialog()) {
         DateFilterDialogUi(
-            { openDateDialog.value = false },
+            { viewModel.closeDataDialog() },
             DateSelectedActionUseCase(
                 ArticleRepositoryFactory().invoke(activityContext),
                 ViewModelProvider(activityContext).get(ContentViewModel::class.java)
@@ -356,7 +349,10 @@ internal fun ArticleListUi(
     LazyColumn(state = lazyListState) {
         items(articles, { it.id }) {
             it ?: return@items
-            ListItem(it, contentViewModel, menuPopupUseCase,
+            ListItem(
+                it,
+                contentViewModel,
+                menuPopupUseCase,
                 Modifier.animateItemPlacement()
             )
         }

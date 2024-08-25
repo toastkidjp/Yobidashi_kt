@@ -77,8 +77,8 @@ internal fun DisplaySettingUi() {
         val targets = mutableListOf<Uri>()
         val clipData = it.data?.clipData
         val itemCount = clipData?.itemCount ?: 0
-        (0 until itemCount).mapNotNull { clipData?.getItemAt(it)?.uri }.forEach { targets.add(it) }
-        it.data?.data?.let { targets.add(it) }
+        (0 until itemCount).mapNotNull { clipData?.getItemAt(it)?.uri }.forEach(targets::add)
+        it.data?.data?.let(targets::add)
 
         LoadedAction(
             targets,
@@ -239,12 +239,12 @@ internal fun DisplaySettingUi() {
                                         val successRemove = imageFile.delete()
                                         if (!successRemove) {
                                             contentViewModel
-                                                ?.snackShort(R.string.message_failed_image_removal)
+                                                .snackShort(R.string.message_failed_image_removal)
                                             return@clickable
                                         }
                                         files.remove(imageFile)
                                         contentViewModel
-                                            ?.snackShort(R.string.message_success_image_removal)
+                                            .snackShort(R.string.message_success_image_removal)
                                     }
                             )
                         }

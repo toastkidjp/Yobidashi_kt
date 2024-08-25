@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -65,8 +66,8 @@ internal fun WebSettingUi() {
     val saveFormData = remember { mutableStateOf(preferenceApplier.doesSaveForm()) }
     val saveViewHistory = remember { mutableStateOf(preferenceApplier.saveViewHistory) }
     val userAgent = remember { mutableStateOf(preferenceApplier.userAgent()) }
-    val poolSize = remember { mutableStateOf(preferenceApplier.poolSize.toFloat() / 30f) }
-    val backgroundAlpha = remember { mutableStateOf(preferenceApplier.getWebViewBackgroundAlpha()) }
+    val poolSize = remember { mutableFloatStateOf(preferenceApplier.poolSize.toFloat() / 30f) }
+    val backgroundAlpha = remember { mutableFloatStateOf(preferenceApplier.getWebViewBackgroundAlpha()) }
     val useDarkMode = remember { mutableStateOf(preferenceApplier.useDarkMode()) }
     val useAdRemover = remember { mutableStateOf(preferenceApplier.adRemove) }
 
@@ -271,15 +272,15 @@ internal fun WebSettingUi() {
                     Row() {
                         Text(stringResource(id = R.string.title_tab_retaining_size))
                         Text(
-                            "${((30) * poolSize.value).roundToInt()}",
+                            "${((30) * poolSize.floatValue).roundToInt()}",
                             modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                         )
                     }
                     Slider(
-                        value = poolSize.value,
+                        value = poolSize.floatValue,
                         onValueChange = {
                             val newValue = ((30) * it).roundToInt()
-                            poolSize.value = it
+                            poolSize.floatValue = it
                             preferenceApplier.poolSize = newValue
                         },
                         steps = 30,
@@ -301,14 +302,14 @@ internal fun WebSettingUi() {
                     Row {
                         Text("Background alpha")
                         Text(
-                            "${backgroundAlpha.value}",
+                            "${backgroundAlpha.floatValue}",
                             modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                         )
                     }
                     Slider(
-                        value = backgroundAlpha.value,
+                        value = backgroundAlpha.floatValue,
                         onValueChange = {
-                            backgroundAlpha.value = it
+                            backgroundAlpha.floatValue = it
                             preferenceApplier.setWebViewBackgroundAlpha(it)
                         },
                         steps = 100,

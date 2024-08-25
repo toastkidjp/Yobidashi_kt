@@ -7,10 +7,12 @@
  */
 package jp.toastkid.media.music
 
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.PlaybackParams
@@ -20,6 +22,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.media.MediaBrowserServiceCompat
 import jp.toastkid.lib.compat.getParcelableCompat
@@ -72,6 +75,23 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             setNewState(PlaybackStateCompat.STATE_PLAYING)
             startService(Intent(baseContext, MediaPlayerService::class.java))
             val notification = notificationFactory() ?: return
+
+            /*
+             * ActivityCompat#requestPermissions
+             * here to request the missing permissions, and then overriding
+             * public void onRequestPermissionsResult(int requestCode, String[] permissions,
+             *                                          int[] grantResults)
+             * to handle the case where the user grants the permission. See the documentation
+             * for ActivityCompat#requestPermissions for more details.
+             */
+            if (ActivityCompat.checkSelfPermission(
+                    this@MediaPlayerService,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+
             notificationManager.notify(NOTIFICATION_ID, notification)
             startForeground(NOTIFICATION_ID, notificationFactory())
         }
@@ -87,6 +107,23 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaPlayer.start()
             setNewState(PlaybackStateCompat.STATE_PLAYING)
             val notification = notificationFactory() ?: return
+
+            /*
+             * ActivityCompat#requestPermissions
+             * here to request the missing permissions, and then overriding
+             * public void onRequestPermissionsResult(int requestCode, String[] permissions,
+             *                                          int[] grantResults)
+             * to handle the case where the user grants the permission. See the documentation
+             * for ActivityCompat#requestPermissions for more details.
+             */
+            if (ActivityCompat.checkSelfPermission(
+                    this@MediaPlayerService,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+
             notificationManager.notify(NOTIFICATION_ID, notification)
             startForeground(NOTIFICATION_ID, notificationFactory())
         }
@@ -98,6 +135,23 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaPlayer.pause()
             setNewState(PlaybackStateCompat.STATE_PAUSED)
             val notification = notificationFactory() ?: return
+
+            /*
+             * ActivityCompat#requestPermissions
+             * here to request the missing permissions, and then overriding
+             * public void onRequestPermissionsResult(int requestCode, String[] permissions,
+             *                                          int[] grantResults)
+             * to handle the case where the user grants the permission. See the documentation
+             * for ActivityCompat#requestPermissions for more details.
+             */
+            if (ActivityCompat.checkSelfPermission(
+                    this@MediaPlayerService,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+
             notificationManager.notify(NOTIFICATION_ID, notification)
             stopForeground(STOP_FOREGROUND_DETACH)
         }

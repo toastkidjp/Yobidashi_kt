@@ -65,6 +65,7 @@ import kotlinx.coroutines.withContext
 fun ArticleContentUi(title: String, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val viewModel = remember { ContentViewerFragmentViewModel() }
+    val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     LaunchedEffect(key1 = title, block = {
         val content = withContext(Dispatchers.IO) {
@@ -79,12 +80,13 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
 
         val converted = LinkGenerator().invoke(content)
         viewModel.setContent(converted)
-    })
 
-    val contentViewModel = viewModel(ContentViewModel::class.java, context)
-    contentViewModel.replaceAppBarContent {
-        AppBarContent(viewModel)
-    }
+        contentViewModel.clearOptionMenus()
+
+        contentViewModel.replaceAppBarContent {
+            AppBarContent(viewModel)
+        }
+    })
 
     Surface(
         color = MaterialTheme.colorScheme.primary,
@@ -99,15 +101,13 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
     }
 
     ScrollerUseCase(contentViewModel, viewModel.scrollState()).invoke(LocalLifecycleOwner.current)
-
-    contentViewModel.clearOptionMenus()
 }
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
-    val preferenceApplier = PreferenceApplier(activityContext)
+    val fontColor = remember { Color(PreferenceApplier(activityContext).editorFontColor()) }
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
     var searchInput by remember { mutableStateOf("") }
@@ -126,7 +126,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 label = {
                     Text(
                         viewModel.title(),
-                        color = Color(preferenceApplier.editorFontColor())
+                        color = fontColor
                     )
                 },
                 singleLine = true,
@@ -160,12 +160,8 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 .fillMaxHeight()
                 .combinedClickable(
                     true,
-                    onClick = {
-                        contentViewModel.switchTabList()
-                    },
-                    onLongClick = {
-                        contentViewModel.openNewTab()
-                    }
+                    onClick = contentViewModel::switchTabList,
+                    onLongClick = contentViewModel::openNewTab
                 )
         ) {
             Image(

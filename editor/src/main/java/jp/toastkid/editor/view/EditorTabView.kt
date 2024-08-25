@@ -381,7 +381,7 @@ private fun AppBarContent(
             loadAs.launch(GetContentIntentFactory()("text/plain"))
         }
 
-        EditorMenuItem(jp.toastkid.lib.R.string.save, R.drawable.ic_save) { saveFile() }
+        EditorMenuItem(jp.toastkid.lib.R.string.save, R.drawable.ic_save, saveFile)
 
         EditorMenuItem(R.string.save_as, R.drawable.ic_save_as) { openInputFileNameDialog() }
 

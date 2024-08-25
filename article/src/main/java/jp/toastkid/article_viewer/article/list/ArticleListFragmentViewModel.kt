@@ -47,6 +47,10 @@ class ArticleListFragmentViewModel(
         setNextPager { sort.invoke(articleRepository) }
     }
 
+    private val searchResult = mutableStateOf("")
+
+    fun searchResult() = searchResult.value
+
     private val _dataSource = mutableStateOf<Pager<Int, SearchResult>?>(null)
 
     fun dataSource(): Flow<PagingData<SearchResult>> = (_dataSource.value?.flow ?: emptyFlow())
@@ -97,12 +101,28 @@ class ArticleListFragmentViewModel(
         searchInput.value = newInput
     }
 
-    private val searchResult = mutableStateOf("")
+    private val openSortDialog = mutableStateOf(false)
 
-    fun searchResult() = searchResult.value
+    fun isOpenSortDialog() = openSortDialog.value
 
-    fun setSearchResult(newResult: String) {
-        searchResult.value = newResult
+    fun openSortDialog() {
+        openSortDialog.value = true
+    }
+
+    fun closeSortDialog() {
+        openSortDialog.value = false
+    }
+
+    private val openDateDialog = mutableStateOf(false)
+
+    fun isOpenDateDialog() = openDateDialog.value
+
+    fun openDataDialog() {
+        openDateDialog.value = true
+    }
+
+    fun closeDataDialog() {
+        openDateDialog.value = false
     }
 
 }

@@ -63,6 +63,7 @@ import jp.toastkid.todo.view.list.initial.InitialTaskPreparation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -75,7 +76,7 @@ fun TaskListUi() {
 
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
 
-    val tasks = remember { mutableStateOf<Flow<PagingData<TodoTask>>?>(null) }
+    val tasks = remember { mutableStateOf<Flow<PagingData<TodoTask>>>(emptyFlow()) }
 
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(key1 = "load", block = {
@@ -125,12 +126,12 @@ fun TaskListUi() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TaskList(
-    flow: Flow<PagingData<TodoTask>>?,
+    flow: Flow<PagingData<TodoTask>>,
     insert: (TodoTask) -> Unit,
     modify: (TodoTask) -> Unit,
     delete: (TodoTask) -> Unit,
 ) {
-    val tasks = flow?.collectAsLazyPagingItems() ?: return
+    val tasks = flow.collectAsLazyPagingItems()
 
     LazyColumn(state = rememberLazyListState()) {
         items(tasks, { it.id }) { task ->

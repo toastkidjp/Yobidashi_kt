@@ -33,7 +33,12 @@ class NumberPlaceViewModel {
         _loading.value = true
         _game.value.initialize(maskingCount)
         _mask.value = _game.value.masked()
-        walkMatrix(_game.value.masked().rows(), { rowIndex, columnIndex -> numberStates.put("${rowIndex}-${columnIndex}", CellState()) })
+        walkMatrix(_game.value.masked().rows()) { rowIndex, columnIndex ->
+            numberStates.put(
+                "${rowIndex}-${columnIndex}",
+                CellState()
+            )
+        }
         _loading.value = false
     }
 

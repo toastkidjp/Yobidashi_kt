@@ -55,6 +55,7 @@ fun SettingTopUi() {
     }
 
     DisposableEffect(key1 = LocalLifecycleOwner.current) {
+        contentViewModel?.clearOptionMenus()
         contentViewModel?.replaceAppBarContent {
             val pages = arrayOf(
                 R.string.subhead_displaying,
@@ -109,8 +110,6 @@ fun SettingTopUi() {
             contentViewModel?.refresh()
         }
     }
-
-    contentViewModel?.clearOptionMenus()
 }
 
 

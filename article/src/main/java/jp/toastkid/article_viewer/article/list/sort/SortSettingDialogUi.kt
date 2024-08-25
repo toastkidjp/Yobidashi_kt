@@ -26,13 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import jp.toastkid.article_viewer.R
-import jp.toastkid.lib.preference.PreferenceApplier
 
 @Composable
 internal fun SortSettingDialogUi(
-    preferenceApplier: PreferenceApplier,
     onDismissRequest: () -> Unit,
-    onSelect: (Sort) -> Unit
+    onSelect: (Sort) -> Unit,
+    currentSortName: String,
 ) {
     Dialog(
         onDismissRequest = onDismissRequest
@@ -45,7 +44,7 @@ internal fun SortSettingDialogUi(
                     modifier = Modifier.padding(8.dp)
                 )
 
-                val currentSort = Sort.findByName(preferenceApplier.articleSort())
+                val currentSort = Sort.findByName(currentSortName)
                 Sort.values().forEach { sort ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -53,7 +52,6 @@ internal fun SortSettingDialogUi(
                             .padding(8.dp)
                             .fillMaxWidth()
                             .clickable {
-                                preferenceApplier.setArticleSort(sort.name)
                                 onSelect(sort)
                                 onDismissRequest()
                             }
@@ -63,7 +61,6 @@ internal fun SortSettingDialogUi(
                             colors = RadioButtonDefaults
                                 .colors(selectedColor = MaterialTheme.colorScheme.secondary),
                             onClick = {
-                                preferenceApplier.setArticleSort(sort.name)
                                 onSelect(sort)
                                 onDismissRequest()
                             }

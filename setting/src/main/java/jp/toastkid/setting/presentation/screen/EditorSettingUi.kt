@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -78,7 +79,7 @@ internal fun EditorSettingUi() {
         }
 
     val fontSize =
-        remember { mutableStateOf(preferenceApplier.editorFontSize()) }
+        remember { mutableIntStateOf(preferenceApplier.editorFontSize()) }
 
     val fontSizeOpen =
         remember { mutableStateOf(false) }
@@ -194,7 +195,7 @@ internal fun EditorSettingUi() {
                             .size(44.dp)
                             .padding(end = 16.dp)
                     ) {
-                        Text("${fontSize.value}")
+                        Text("${fontSize.intValue}")
                         DropdownMenu(
                             expanded = fontSizeOpen.value,
                             onDismissRequest = { fontSizeOpen.value = false }
@@ -267,10 +268,9 @@ private fun ColorChooserMenu(
     if (openColorChooserDialog.value) {
         ComponentColorSettingDialog(
             colorState,
-            { openColorChooserDialog.value = false }
-        ) {
-            onNewColor(it)
-        }
+            { openColorChooserDialog.value = false },
+            onNewColor
+        )
     }
 }
 

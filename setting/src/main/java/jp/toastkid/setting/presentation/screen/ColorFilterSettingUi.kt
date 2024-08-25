@@ -124,7 +124,7 @@ internal fun ColorFilterSettingUi() {
                 Button(
                     onClick = {
                         useCase.setDefault()
-                        sliderValue.value = OverlayColorFilterUseCase
+                        sliderValue.floatValue = OverlayColorFilterUseCase
                             .getDefaultAlpha()
                             .toFloat()
                     },
@@ -161,9 +161,9 @@ internal fun ColorFilterSettingUi() {
             }
 
             Slider(
-                value = sliderValue.value,
+                value = sliderValue.floatValue,
                 onValueChange = {
-                    sliderValue.value = it
+                    sliderValue.floatValue = it
                     useCase.setAlpha(((255) * it).roundToInt())
                 },
                 steps = 256,
