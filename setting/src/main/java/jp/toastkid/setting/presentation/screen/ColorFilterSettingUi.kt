@@ -111,7 +111,7 @@ internal fun ColorFilterSettingUi() {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .drawBehind { drawRect(Color(sample.value)) }
+                            .drawBehind { drawRect(Color(sample.intValue)) }
                     ) { }
                 }
 
