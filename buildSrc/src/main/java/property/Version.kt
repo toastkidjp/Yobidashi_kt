@@ -1,7 +1,7 @@
 package property
 
 object Version {
-    private val major  = 2
+    private const val major  = 2
     private val middle = 0
     private val minor  = 72
 
