@@ -329,7 +329,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
 
     if (viewModel.isOpenDateDialog()) {
         DateFilterDialogUi(
-            { viewModel.closeDataDialog() },
+            viewModel::closeDataDialog,
             DateSelectedActionUseCase(
                 ArticleRepositoryFactory().invoke(activityContext),
                 ViewModelProvider(activityContext).get(ContentViewModel::class.java)
