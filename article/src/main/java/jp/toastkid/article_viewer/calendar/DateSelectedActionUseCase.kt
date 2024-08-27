@@ -7,7 +7,11 @@
  */
 package jp.toastkid.article_viewer.calendar
 
+import android.content.Context
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.article_viewer.article.ArticleRepository
+import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -44,5 +48,17 @@ class DateSelectedActionUseCase(
 
     fun dispose() {
         disposables.cancel()
+    }
+
+    companion object {
+
+        fun withContext(activityContext: Context): DateSelectedActionUseCase? {
+            val viewModelStoreOwner = activityContext as? ViewModelStoreOwner ?: return null
+            return DateSelectedActionUseCase(
+                ArticleRepositoryFactory().invoke(activityContext),
+                ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
+            )
+        }
+
     }
 }
