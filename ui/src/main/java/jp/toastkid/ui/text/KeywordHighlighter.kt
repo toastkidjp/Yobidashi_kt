@@ -24,7 +24,7 @@ class KeywordHighlighter {
         var lastIndex = 0
         val matcher = internalLinkPattern.matcher(text)
         while (matcher.find()) {
-            val title = matcher.group(1)
+            val title = matcher.group(1) ?: ""
             val url = matcher.group(2)
             val startIndex = matcher.start()
             val endIndex = matcher.end()
