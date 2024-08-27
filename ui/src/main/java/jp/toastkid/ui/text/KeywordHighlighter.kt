@@ -27,7 +27,6 @@ class KeywordHighlighter {
             val title = matcher.group(1) ?: ""
             val url = matcher.group(2) ?: ""
             val startIndex = matcher.start()
-            val endIndex = matcher.end()
 
             val extracted = text.substring(lastIndex, startIndex)
             if (extracted.isNotEmpty()) {
