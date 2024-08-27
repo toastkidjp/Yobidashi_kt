@@ -109,12 +109,14 @@ class KeywordHighlighter {
         val m = pattern.matcher(text)
         append(text.substring(lastIndex).replace(replacementTarget, ""))
         val offset = replacementTarget.length * 2
-        m.results().toList().forEachIndexed { index, matchResult ->
+        var index = 0;
+        while (m.find()) {
             addStyle(
                 spanStyle,
-                matchResult.start() - (offset * index),
-                matchResult.end() - (offset * (index + 1))
+                m.start() - (offset * index),
+                m.end() - (offset * (index + 1))
             )
+            index++
         }
     }
 }
