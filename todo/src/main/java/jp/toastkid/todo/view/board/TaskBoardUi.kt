@@ -105,10 +105,11 @@ fun TaskBoardUi() {
     })
 
     TaskEditorUi(
-        { TaskBoard(tasks.value, {
+        { TaskBoard(tasks.value) {
             taskAdditionDialogFragmentViewModel.setTask(it)
             taskAdditionDialogFragmentViewModel.show()
-        }) },
+        }
+        },
         taskAdditionDialogFragmentViewModel
     ) {
         CoroutineScope(Dispatchers.IO).launch {
