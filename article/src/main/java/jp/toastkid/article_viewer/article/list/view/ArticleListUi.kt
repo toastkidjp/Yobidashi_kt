@@ -115,7 +115,7 @@ fun ArticleListUi() {
             if (openDateDialog.value) {
                 DateFilterDialogUi(
                     { openDateDialog.value = false },
-                    DateSelectedActionUseCase(ArticleRepositoryFactory().invoke(context), contentViewModel)
+                    { year, month, date ->DateSelectedActionUseCase.withContext(context)?.invoke(year, month, date) }
                 )
             }
         }
@@ -333,7 +333,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
             DateSelectedActionUseCase(
                 ArticleRepositoryFactory().invoke(activityContext),
                 ViewModelProvider(activityContext).get(ContentViewModel::class.java)
-            )
+            )::invoke
         )
     }
 }
