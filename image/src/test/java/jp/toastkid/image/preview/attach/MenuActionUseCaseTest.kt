@@ -11,7 +11,6 @@ package jp.toastkid.image.preview.attach
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.View
-import androidx.fragment.app.DialogFragment
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -43,9 +42,6 @@ class MenuActionUseCaseTest {
     private lateinit var bitmapSupplier: () -> Bitmap
 
     @MockK
-    private lateinit var showDialog: (DialogFragment) -> Unit
-
-    @MockK
     private lateinit var view: View
 
     @Before
@@ -56,7 +52,6 @@ class MenuActionUseCaseTest {
         every { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }.just(Runs)
         every { uriSupplier.invoke() }.returns(mockk())
         every { bitmapSupplier.invoke() }.returns(mockk())
-        every { showDialog.invoke(any()) }.just(Runs)
         every { view.context }.returns(mockk())
     }
 
@@ -74,7 +69,6 @@ class MenuActionUseCaseTest {
         verify (exactly = 1) { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }
         verify (exactly = 1) { uriSupplier.invoke() }
         verify (exactly = 1) { bitmapSupplier.invoke() }
-        verify (exactly = 0) { showDialog.invoke(any()) }
     }
 
     @Test
@@ -86,7 +80,6 @@ class MenuActionUseCaseTest {
         verify (exactly = 0) { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }
         verify (exactly = 0) { uriSupplier.invoke() }
         verify (exactly = 1) { bitmapSupplier.invoke() }
-        verify (exactly = 0) { showDialog.invoke(any()) }
     }
 
     @Test
@@ -97,7 +90,6 @@ class MenuActionUseCaseTest {
         verify (exactly = 0) { attachToAnyAppUseCase.invoke(any(), any()) }
         verify (exactly = 1) { uriSupplier.invoke() }
         verify (exactly = 0) { bitmapSupplier.invoke() }
-        verify (exactly = 1) { showDialog.invoke(any()) }
     }
 
 }
