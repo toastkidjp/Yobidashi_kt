@@ -109,15 +109,6 @@ fun ArticleListUi() {
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         contentViewModel.replaceAppBarContent {
             AppBarContent(viewModel)
-
-            val openDateDialog = remember { mutableStateOf(false) }
-
-            if (openDateDialog.value) {
-                DateFilterDialogUi(
-                    { openDateDialog.value = false },
-                    { year, month, date ->DateSelectedActionUseCase.withContext(context)?.invoke(year, month, date) }
-                )
-            }
         }
     })
 
