@@ -29,7 +29,15 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableStateListOf
             {
                 "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
                 "threshold": "BLOCK_ONLY_HIGH"
-            }
+            },
+                        {
+                            "category": "HARM_CATEGORY_HARASSMENT",
+                            "threshold": "BLOCK_ONLY_HIGH"
+                        },
+                        {
+                            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                            "threshold": "BLOCK_ONLY_HIGH"
+                        }
         ]
       }
     """.trimIndent()
