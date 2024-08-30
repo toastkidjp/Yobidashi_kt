@@ -83,7 +83,7 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
         contentViewModel.clearOptionMenus()
 
         contentViewModel.replaceAppBarContent {
-            AppBarContent(viewModel)
+            AppBarContent(viewModel.title())
         }
     })
 
@@ -104,7 +104,7 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
+private fun AppBarContent(title: String) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val fontColor = remember { Color(PreferenceApplier(activityContext).editorFontColor()) }
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
@@ -124,7 +124,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 },
                 label = {
                     Text(
-                        viewModel.title(),
+                        title,
                         color = fontColor
                     )
                 },
