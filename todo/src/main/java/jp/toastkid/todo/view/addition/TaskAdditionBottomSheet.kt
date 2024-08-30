@@ -54,10 +54,10 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun TaskEditorUi(
     screenContent: @Composable () -> Unit,
-    taskAdditionDialogFragmentViewModel: TaskAdditionDialogFragmentViewModel?,
+    taskEditorViewModel: TaskEditorViewModel?,
     onTapAdd: (TodoTask) -> Unit
 ) {
-    val task = taskAdditionDialogFragmentViewModel?.task()
+    val task = taskEditorViewModel?.task()
     var descriptionInput by remember { mutableStateOf(task?.description ?: "") }
     var chosenColor by remember { mutableIntStateOf(Color.Transparent.value.toInt()) }
     task?.let {
@@ -69,11 +69,11 @@ internal fun TaskEditorUi(
 
     screenContent()
 
-    if (taskAdditionDialogFragmentViewModel?.bottomSheetScaffoldState() != true) {
+    if (taskEditorViewModel?.bottomSheetScaffoldState() != true) {
         return
     }
 
-    Dialog(onDismissRequest = taskAdditionDialogFragmentViewModel::hide) {
+    Dialog(onDismissRequest = taskEditorViewModel::hide) {
         Column {
             val datePickerState = rememberDatePickerState(
                 initialDisplayedMonthMillis = System.currentTimeMillis()
@@ -92,9 +92,9 @@ internal fun TaskEditorUi(
                         datePickerState.selectedDateMillis?.let {
                             task?.dueDate = it
                         }
-                        taskAdditionDialogFragmentViewModel.save(task, onTapAdd)
+                        taskEditorViewModel.save(task, onTapAdd)
                         coroutineScope.launch {
-                            taskAdditionDialogFragmentViewModel.hide()
+                            taskEditorViewModel.hide()
                         }
                     },
                     colors = TextFieldDefaults.colors(
@@ -121,8 +121,8 @@ internal fun TaskEditorUi(
                         datePickerState.selectedDateMillis?.let {
                             task?.dueDate = it
                         }
-                        taskAdditionDialogFragmentViewModel.save(task, onTapAdd)
-                        taskAdditionDialogFragmentViewModel.hide()
+                        taskEditorViewModel.save(task, onTapAdd)
+                        taskEditorViewModel.hide()
                     },
                     colors = ButtonDefaults.textButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
@@ -142,7 +142,7 @@ internal fun TaskEditorUi(
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)) {
-                taskAdditionDialogFragmentViewModel.colors().forEach { color ->
+                taskEditorViewModel.colors().forEach { color ->
                     RadioButton(
                         selected = chosenColor == color.toInt(),
                         colors = RadioButtonDefaults

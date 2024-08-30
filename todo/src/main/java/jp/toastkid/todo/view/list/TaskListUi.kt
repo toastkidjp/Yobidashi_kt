@@ -56,7 +56,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDataAccessorFactory
 import jp.toastkid.todo.model.TodoTask
-import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
+import jp.toastkid.todo.view.addition.TaskEditorViewModel
 import jp.toastkid.todo.view.addition.TaskEditorUi
 import jp.toastkid.todo.view.appbar.AppBarUi
 import jp.toastkid.todo.view.list.initial.InitialTaskPreparation
@@ -71,8 +71,8 @@ import kotlinx.coroutines.withContext
 fun TaskListUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
 
-    val taskAdditionDialogFragmentViewModel =
-        remember { TaskAdditionDialogFragmentViewModel() }
+    val taskEditorViewModel =
+        remember { TaskEditorViewModel() }
 
     val repository = remember { TodoTaskDataAccessorFactory().invoke(context) }
 
@@ -83,8 +83,8 @@ fun TaskListUi() {
         ViewModelProvider(context).get(ContentViewModel::class.java)
             .replaceAppBarContent {
                 AppBarUi {
-                    taskAdditionDialogFragmentViewModel.setTask(null)
-                    taskAdditionDialogFragmentViewModel.show()
+                    taskEditorViewModel.setTask(null)
+                    taskEditorViewModel.show()
                 }
             }
 
@@ -109,13 +109,13 @@ fun TaskListUi() {
                 tasks.value,
                 repository::insert,
                 {
-                    taskAdditionDialogFragmentViewModel.setTask(it)
-                    taskAdditionDialogFragmentViewModel.show()
+                    taskEditorViewModel.setTask(it)
+                    taskEditorViewModel.show()
                 },
                 repository::delete
             )
         },
-        taskAdditionDialogFragmentViewModel
+        taskEditorViewModel
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             repository.insert(it)
