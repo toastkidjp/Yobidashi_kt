@@ -62,6 +62,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -489,6 +490,14 @@ class ContentViewModel : ViewModel() {
 
     fun setColorFilterColor(color: Color) {
         colorFilterColor.value = color
+    }
+
+    private val lastCalendarPage = AtomicInteger(-1)
+
+    fun lastCalendarPage() = lastCalendarPage.get()
+
+    fun setLastCalendarPage(page: Int) {
+        lastCalendarPage.set(page)
     }
 
 }
