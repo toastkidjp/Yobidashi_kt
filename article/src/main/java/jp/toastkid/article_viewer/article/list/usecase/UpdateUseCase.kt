@@ -10,11 +10,10 @@ package jp.toastkid.article_viewer.article.list.usecase
 
 import android.content.Context
 import android.net.Uri
-import jp.toastkid.article_viewer.article.list.ArticleListViewModel
 import jp.toastkid.article_viewer.zip.ZipLoaderWorker
 
 class UpdateUseCase(
-    private val viewModel: ArticleListViewModel?,
+    private val showProgress: () -> Unit,
     private val contextProvider: () -> Context?
 ) {
 
@@ -23,7 +22,7 @@ class UpdateUseCase(
             return
         }
 
-        viewModel?.showProgress()
+        showProgress()
 
         contextProvider.invoke()?.let {
             ZipLoaderWorker.start(it, target)

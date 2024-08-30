@@ -269,7 +269,7 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
                 return@rememberLauncherForActivityResult
             }
 
-            UpdateUseCase(viewModel) { activityContext }.invokeIfNeed(it.data?.data)
+            UpdateUseCase({ viewModel?.showProgress() }, { activityContext }).invokeIfNeed(it.data?.data)
         }
 
     LaunchedEffect(key1 = "add_option_menu", block = {
