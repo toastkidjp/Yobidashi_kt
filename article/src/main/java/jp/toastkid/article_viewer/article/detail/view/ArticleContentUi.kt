@@ -51,7 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
-import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
+import jp.toastkid.article_viewer.article.detail.viewmodel.ArticleContentViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
@@ -63,7 +63,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ArticleContentUi(title: String, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val viewModel = remember { ContentViewerFragmentViewModel() }
+    val viewModel = remember { ArticleContentViewModel() }
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     LaunchedEffect(key1 = title, block = {
