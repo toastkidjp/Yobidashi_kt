@@ -10,11 +10,11 @@ package jp.toastkid.article_viewer.article.list.usecase
 
 import android.content.Context
 import android.net.Uri
-import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
+import jp.toastkid.article_viewer.article.list.ArticleListViewModel
 import jp.toastkid.article_viewer.zip.ZipLoaderWorker
 
 class UpdateUseCase(
-    private val viewModel: ArticleListFragmentViewModel?,
+    private val viewModel: ArticleListViewModel?,
     private val contextProvider: () -> Context?
 ) {
 

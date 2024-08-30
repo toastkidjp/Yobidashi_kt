@@ -74,7 +74,7 @@ import androidx.paging.compose.items
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.article.data.BookmarkRepositoryFactory
-import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
+import jp.toastkid.article_viewer.article.list.ArticleListViewModel
 import jp.toastkid.article_viewer.article.list.SearchResult
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogUi
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
@@ -99,7 +99,7 @@ fun ArticleListUi() {
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     val viewModel = remember {
-        ArticleListFragmentViewModel(
+        ArticleListViewModel(
             ArticleRepositoryFactory().invoke(context),
             BookmarkRepositoryFactory().invoke(context),
             PreferenceApplier(context)
@@ -164,7 +164,7 @@ fun ArticleListUi() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
+private fun AppBarContent(viewModel: ArticleListViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = remember { ViewModelProvider(activityContext).get<ContentViewModel>() }
     val cursorColor = remember { Color(PreferenceApplier(activityContext).editorCursorColor(Color(0xFFE0E0E0).toArgb())) }

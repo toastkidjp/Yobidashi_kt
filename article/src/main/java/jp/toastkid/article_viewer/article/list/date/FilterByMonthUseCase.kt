@@ -8,16 +8,16 @@
 
 package jp.toastkid.article_viewer.article.list.date
 
-import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
+import jp.toastkid.article_viewer.article.list.ArticleListViewModel
 
 class FilterByMonthUseCase(
-        private val articleListFragmentViewModel: ArticleListFragmentViewModel,
-        private val monthFormatterUseCase: MonthFormatterUseCase = MonthFormatterUseCase()
+    private val articleListViewModel: ArticleListViewModel,
+    private val monthFormatterUseCase: MonthFormatterUseCase = MonthFormatterUseCase()
 ) {
 
     operator fun invoke(year: Int, month: Int) {
         val formattedMonth = monthFormatterUseCase.invoke(month)
-        articleListFragmentViewModel.filter("$year-$formattedMonth")
+        articleListViewModel.filter("$year-$formattedMonth")
     }
 
 }

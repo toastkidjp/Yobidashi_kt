@@ -20,7 +20,7 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
+import jp.toastkid.article_viewer.article.list.ArticleListViewModel
 import jp.toastkid.article_viewer.zip.ZipLoaderWorker
 import org.junit.After
 import org.junit.Before
@@ -32,7 +32,7 @@ class UpdateUseCaseTest {
     private lateinit var updateUseCase: UpdateUseCase
 
     @MockK
-    private lateinit var viewModel: ArticleListFragmentViewModel
+    private lateinit var viewModel: ArticleListViewModel
 
     @MockK
     private lateinit var contextProvider: () -> Context?

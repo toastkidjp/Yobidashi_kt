@@ -14,7 +14,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
+import jp.toastkid.article_viewer.article.list.ArticleListViewModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -25,7 +25,7 @@ class FilterByMonthUseCaseTest {
     private lateinit var filterByMonthUseCase: FilterByMonthUseCase
 
     @MockK
-    private lateinit var articleListFragmentViewModel: ArticleListFragmentViewModel
+    private lateinit var articleListViewModel: ArticleListViewModel
 
     @MockK
     private lateinit var monthFormatterUseCase: MonthFormatterUseCase
@@ -33,7 +33,7 @@ class FilterByMonthUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { articleListFragmentViewModel.filter(any()) }.answers { Unit }
+        every { articleListViewModel.filter(any()) }.answers { Unit }
         every { monthFormatterUseCase.invoke(any()) }.returns("02")
     }
 
@@ -46,7 +46,7 @@ class FilterByMonthUseCaseTest {
     fun testInvoke() {
         filterByMonthUseCase.invoke(2021, 1)
 
-        verify(exactly = 1) { articleListFragmentViewModel.filter(any()) }
+        verify(exactly = 1) { articleListViewModel.filter(any()) }
         verify(exactly = 1) { monthFormatterUseCase.invoke(any()) }
     }
 
