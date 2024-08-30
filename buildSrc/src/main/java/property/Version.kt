@@ -1,7 +1,7 @@
 package property
 
 object Version {
-    private const val major  = 2
+    private const val MAJOR  = 2
     private const val middle = 0
     private const val minor  = 72
 
@@ -11,8 +11,8 @@ object Version {
         }
     }
 
-    val code = ((major * 1_000_000) + (middle * 10_000) + minor) 
+    val code = ((MAJOR * 1_000_000) + (middle * 10_000) + minor)
 
-    val name = "${major}.${middle}.${minor}" 
+    val name = "${MAJOR}.${middle}.${minor}"
 
 }
