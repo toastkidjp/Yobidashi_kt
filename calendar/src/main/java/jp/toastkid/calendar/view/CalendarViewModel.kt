@@ -98,7 +98,13 @@ class CalendarViewModel {
 
     fun week() = weekArray
 
-    fun calculateInitialPage() = toPage(Calendar.getInstance())
+    fun calculateInitialPage(savedPage: Int = -1): Int {
+        if (savedPage == -1) {
+            return toPage(Calendar.getInstance())
+        }
+
+        return savedPage
+    }
 
     fun fromPage(currentPage: Int): Calendar {
         val year = (currentPage / 12) + 1
