@@ -371,7 +371,7 @@ private fun BookmarkList(
                         }
                     }
                 },
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier.animateItem()
             )
 
             if (openEditor.value) {
