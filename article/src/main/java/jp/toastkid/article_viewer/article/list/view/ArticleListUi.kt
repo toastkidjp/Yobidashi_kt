@@ -344,7 +344,7 @@ internal fun ArticleListUi(
                 it,
                 contentViewModel,
                 menuPopupUseCase,
-                Modifier.animateItemPlacement()
+                Modifier.animateItem()
             )
         }
     }
