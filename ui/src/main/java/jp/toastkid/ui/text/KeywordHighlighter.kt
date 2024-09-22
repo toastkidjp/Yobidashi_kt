@@ -24,10 +24,9 @@ class KeywordHighlighter {
         var lastIndex = 0
         val matcher = internalLinkPattern.matcher(text)
         while (matcher.find()) {
-            val title = matcher.group(1)
-            val url = matcher.group(2)
+            val title = matcher.group(1) ?: ""
+            val url = matcher.group(2) ?: ""
             val startIndex = matcher.start()
-            val endIndex = matcher.end()
 
             val extracted = text.substring(lastIndex, startIndex)
             if (extracted.isNotEmpty()) {
@@ -50,7 +49,7 @@ class KeywordHighlighter {
                 start = annotateStart,
                 end = annotateStart + title.length
             )
-            lastIndex = if (matcher.find()) annotateStart else endIndex
+            lastIndex = matcher.end()
         }
 
         if (lastIndex >= text.length) {
@@ -109,12 +108,14 @@ class KeywordHighlighter {
         val m = pattern.matcher(text)
         append(text.substring(lastIndex).replace(replacementTarget, ""))
         val offset = replacementTarget.length * 2
-        m.results().toList().forEachIndexed { index, matchResult ->
+        var index = 0
+        while (m.find()) {
             addStyle(
                 spanStyle,
-                matchResult.start() - (offset * index),
-                matchResult.end() - (offset * (index + 1))
+                m.start() - (offset * index),
+                m.end() - (offset * (index + 1))
             )
+            index++
         }
     }
 }

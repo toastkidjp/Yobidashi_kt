@@ -16,7 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ContentViewerFragmentViewModel {
+class ArticleContentViewModel {
 
     private val _title = mutableStateOf("")
 

@@ -35,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,7 +67,7 @@ fun CalendarUi() {
 
     val coroutineScope = rememberCoroutineScope()
 
-    val pagerState = rememberPagerState(viewModel.calculateInitialPage()) { 4000 * 12 }
+    val pagerState = rememberPagerState(viewModel.calculateInitialPage(contentViewModel.lastCalendarPage())) { 4000 * 12 }
 
     Surface(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
@@ -198,6 +199,12 @@ fun CalendarUi() {
 
         contentViewModel.showAppBar()
     })
+
+    DisposableEffect(key1 = Unit) {
+        onDispose {
+            contentViewModel.setLastCalendarPage(pagerState.currentPage)
+        }
+    }
 }
 
 @Composable

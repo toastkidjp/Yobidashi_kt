@@ -269,7 +269,7 @@ internal fun WebSettingUi() {
                         .height(56.dp)
                         .padding(start = 16.dp, end = 16.dp)
                 ) {
-                    Row() {
+                    Row {
                         Text(stringResource(id = R.string.title_tab_retaining_size))
                         Text(
                             "${((30) * poolSize.floatValue).roundToInt()}",

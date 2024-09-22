@@ -14,7 +14,7 @@ import java.io.Serializable
 /**
  * @author toastkidjp
  */
-class TaskAdditionDialogFragmentViewModel : Serializable {
+class TaskEditorViewModel : Serializable {
 
     private val _bottomSheetScaffoldState = mutableStateOf(false)
 

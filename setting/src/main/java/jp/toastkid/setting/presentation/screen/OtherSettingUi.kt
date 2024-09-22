@@ -111,7 +111,7 @@ internal fun OtherSettingUi() {
                         .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
                 ) {
                     Icon(
-                        painterResource(id = jp.toastkid.setting.R.drawable.ic_tab_black),
+                        painterResource(id = R.drawable.ic_tab_black),
                         contentDescription = stringResource(id = R.string.title_setting_new_tab),
                         tint = MaterialTheme.colorScheme.secondary
                     )

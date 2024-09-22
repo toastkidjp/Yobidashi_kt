@@ -58,7 +58,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -66,6 +65,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.get
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
@@ -74,7 +74,7 @@ import androidx.paging.compose.items
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.article.data.BookmarkRepositoryFactory
-import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
+import jp.toastkid.article_viewer.article.list.ArticleListViewModel
 import jp.toastkid.article_viewer.article.list.SearchResult
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogUi
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
@@ -99,7 +99,7 @@ fun ArticleListUi() {
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     val viewModel = remember {
-        ArticleListFragmentViewModel(
+        ArticleListViewModel(
             ArticleRepositoryFactory().invoke(context),
             BookmarkRepositoryFactory().invoke(context),
             PreferenceApplier(context)
@@ -109,15 +109,6 @@ fun ArticleListUi() {
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         contentViewModel.replaceAppBarContent {
             AppBarContent(viewModel)
-
-            val openDateDialog = remember { mutableStateOf(false) }
-
-            if (openDateDialog.value) {
-                DateFilterDialogUi(
-                    { openDateDialog.value = false },
-                    DateSelectedActionUseCase(ArticleRepositoryFactory().invoke(context), contentViewModel)
-                )
-            }
         }
     })
 
@@ -173,7 +164,7 @@ fun ArticleListUi() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
+private fun AppBarContent(viewModel: ArticleListViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = remember { ViewModelProvider(activityContext).get<ContentViewModel>() }
     val cursorColor = remember { Color(PreferenceApplier(activityContext).editorCursorColor(Color(0xFFE0E0E0).toArgb())) }
@@ -278,7 +269,7 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
                 return@rememberLauncherForActivityResult
             }
 
-            UpdateUseCase(viewModel) { activityContext }.invokeIfNeed(it.data?.data)
+            UpdateUseCase({ viewModel.showProgress() }, { activityContext }).invokeIfNeed(it.data?.data)
         }
 
     LaunchedEffect(key1 = "add_option_menu", block = {
@@ -329,11 +320,11 @@ private fun AppBarContent(viewModel: ArticleListFragmentViewModel) {
 
     if (viewModel.isOpenDateDialog()) {
         DateFilterDialogUi(
-            { viewModel.closeDataDialog() },
+            viewModel::closeDataDialog,
             DateSelectedActionUseCase(
                 ArticleRepositoryFactory().invoke(activityContext),
                 ViewModelProvider(activityContext).get(ContentViewModel::class.java)
-            )
+            )::invoke
         )
     }
 }
@@ -353,7 +344,7 @@ internal fun ArticleListUi(
                 it,
                 contentViewModel,
                 menuPopupUseCase,
-                Modifier.animateItemPlacement()
+                Modifier.animateItem()
             )
         }
     }

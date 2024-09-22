@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -52,7 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
-import jp.toastkid.article_viewer.article.detail.viewmodel.ContentViewerFragmentViewModel
+import jp.toastkid.article_viewer.article.detail.viewmodel.ArticleContentViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
@@ -64,7 +63,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ArticleContentUi(title: String, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
-    val viewModel = remember { ContentViewerFragmentViewModel() }
+    val viewModel = remember { ArticleContentViewModel() }
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     LaunchedEffect(key1 = title, block = {
@@ -84,7 +83,7 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
         contentViewModel.clearOptionMenus()
 
         contentViewModel.replaceAppBarContent {
-            AppBarContent(viewModel)
+            AppBarContent(viewModel.title())
         }
     })
 
@@ -103,9 +102,9 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
     ScrollerUseCase(contentViewModel, viewModel.scrollState()).invoke(LocalLifecycleOwner.current)
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
+private fun AppBarContent(title: String) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val fontColor = remember { Color(PreferenceApplier(activityContext).editorFontColor()) }
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
@@ -125,7 +124,7 @@ private fun AppBarContent(viewModel: ContentViewerFragmentViewModel) {
                 },
                 label = {
                     Text(
-                        viewModel.title(),
+                        title,
                         color = fontColor
                     )
                 },

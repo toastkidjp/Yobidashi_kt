@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.emptyFlow
 /**
  * @author toastkidjp
  */
-class ArticleListFragmentViewModel(
+class ArticleListViewModel(
     private val articleRepository: ArticleRepository,
     private val bookmarkRepository: BookmarkRepository,
     private val preferencesWrapper: PreferenceApplier

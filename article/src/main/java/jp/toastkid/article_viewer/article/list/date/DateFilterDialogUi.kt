@@ -25,14 +25,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DateFilterDialogUi(
     onDismissRequest: () -> Unit,
-    dateSelectedActionUseCase: DateSelectedActionUseCase
+    onDateSelected: (Int, Int, Int) -> Unit
 ) {
     val datePickerState = rememberDatePickerState()
     Dialog(
@@ -54,7 +53,7 @@ internal fun DateFilterDialogUi(
                         val calendar = Calendar.getInstance().also {
                             it.timeInMillis = selectedDateMillis
                         }
-                        dateSelectedActionUseCase.invoke(
+                        onDateSelected(
                             calendar.get(Calendar.YEAR),
                             calendar.get(Calendar.MONTH) + 1,
                             calendar.get(Calendar.DAY_OF_MONTH)

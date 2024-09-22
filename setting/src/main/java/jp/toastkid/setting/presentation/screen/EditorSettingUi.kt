@@ -214,7 +214,7 @@ internal fun EditorSettingUi() {
                                     },
                                     onClick = {
                                         preferenceApplier.setEditorFontSize(it.size)
-                                        fontSize.value = it.size
+                                        fontSize.intValue = it.size
                                         fontSizeOpen.value = false
                                     }
                                 )

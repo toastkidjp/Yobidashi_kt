@@ -57,6 +57,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
     implementation("androidx.webkit:webkit:1.6.0")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
     implementation("org.jsoup:jsoup:${LibraryVersion.jsoup}")

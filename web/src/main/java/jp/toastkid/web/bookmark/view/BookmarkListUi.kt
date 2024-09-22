@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -288,6 +289,10 @@ private fun BookmarkList(
         state = listState,
         modifier = Modifier.padding(start = 8.dp, end = 8.dp)
     ) {
+        item {
+            Spacer(modifier = Modifier.padding(vertical = 2.dp))
+        }
+
         items(bookmarks, { it._id }) { bookmark ->
             val openEditor = remember { mutableStateOf(false) }
 
@@ -366,7 +371,7 @@ private fun BookmarkList(
                         }
                     }
                 },
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier.animateItem()
             )
 
             if (openEditor.value) {
