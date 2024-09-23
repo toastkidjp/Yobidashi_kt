@@ -67,6 +67,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
 
+    implementation("androidx.compose.ui:ui:${LibraryVersion.composeUi}")
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
 
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
