@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInVertically
@@ -274,7 +275,8 @@ private fun TabItem(
         anchors = anchors,
         positionalThreshold = { dismissSnackbarDistance * 0.75f },
         velocityThreshold = { 3000000.dp.value },
-        animationSpec = spring(),
+        snapAnimationSpec = spring(),
+        decayAnimationSpec = exponentialDecay(),
         confirmValueChange = {
             if (it == End) {
                 onClose(tab)
