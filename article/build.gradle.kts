@@ -76,6 +76,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
     implementation("androidx.paging:paging-compose:${LibraryVersion.pagingCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
 
     implementation("androidx.paging:paging-common:${LibraryVersion.paging}")
