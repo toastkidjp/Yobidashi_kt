@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.main.ui
 
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -77,7 +78,8 @@ internal fun AppBar() {
             anchors = anchors,
             positionalThreshold = { sizePx * 0.5f },
             velocityThreshold = { 120.dp.value },
-            animationSpec = spring(),
+            snapAnimationSpec = spring(),
+            decayAnimationSpec = exponentialDecay(),
             confirmValueChange = {
                 true
             }
@@ -96,7 +98,8 @@ internal fun AppBar() {
             anchors = horizontalAnchors,
             positionalThreshold = { widthPx * 0.75f },
             velocityThreshold = { 300.dp.value },
-            animationSpec = spring(),
+            snapAnimationSpec = spring(),
+            decayAnimationSpec = exponentialDecay(),
             confirmValueChange = {
                 true
             }
