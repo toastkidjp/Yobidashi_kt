@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.main.ui
 
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -45,7 +46,8 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
         anchors = anchors,
         positionalThreshold = { dismissSnackbarDistance * 0.75f },
         velocityThreshold = { 3000.dp.value },
-        animationSpec = spring(),
+        snapAnimationSpec = spring(),
+        decayAnimationSpec = exponentialDecay(),
         confirmValueChange = {
             if (it == "Right" || it == "Left") {
                 onDismiss()
