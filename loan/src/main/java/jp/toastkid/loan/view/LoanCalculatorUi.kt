@@ -198,7 +198,7 @@ fun LoanCalculatorUi() {
                                 derivedStateOf { if (scrollState.firstVisibleItemIndex != 0) { surfaceColor } else Color.Transparent }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.animateItemPlacement()
+                                modifier = Modifier.animateItem()
                                     .drawBehind { drawRect(backgroundColor.value) }
                             ) {
                                 Text(
