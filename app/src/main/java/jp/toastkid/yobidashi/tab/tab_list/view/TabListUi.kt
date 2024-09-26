@@ -270,20 +270,22 @@ private fun TabItem(
         Start at 0f
         End at dismissSnackbarDistance
     }
-    val swipeableState = AnchoredDraggableState(
-        initialValue = Start,
-        anchors = anchors,
-        positionalThreshold = { dismissSnackbarDistance * 0.75f },
-        velocityThreshold = { 3000000.dp.value },
-        snapAnimationSpec = spring(),
-        decayAnimationSpec = exponentialDecay(),
-        confirmValueChange = {
-            if (it == End) {
-                onClose(tab)
+    val swipeableState = remember {
+        AnchoredDraggableState(
+            initialValue = Start,
+            anchors = anchors,
+            positionalThreshold = { dismissSnackbarDistance * 0.75f },
+            velocityThreshold = { 3000000.dp.value },
+            snapAnimationSpec = spring(),
+            decayAnimationSpec = exponentialDecay(),
+            confirmValueChange = {
+                if (it == End) {
+                    onClose(tab)
+                }
+                true
             }
-            true
-        }
-    )
+        )
+    }
 
     AnimatedVisibility(
         visibility(tab),
@@ -303,7 +305,7 @@ private fun TabItem(
                     IntOffset(
                         0,
                         swipeableState
-                            .requireOffset()
+                            .offset
                             .roundToInt()
                     )
                 }
