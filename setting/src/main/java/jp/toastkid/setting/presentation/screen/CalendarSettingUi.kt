@@ -28,8 +28,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import jp.toastkid.calendar.model.holiday.HolidayCalendar
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.setting.presentation.CheckableRow
