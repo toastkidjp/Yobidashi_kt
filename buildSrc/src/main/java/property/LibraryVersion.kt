@@ -4,7 +4,7 @@ object LibraryVersion {
     val coroutines = "1.5.1"
     val ktx = "1.1.0"
     val lifecycle = "2.8.5"
-    val room = "2.4.0"
+    val room = "2.5.0"
     val paging = "3.1.0"
     val timber = "4.6.0"
     val okhttp = "4.12.0"
