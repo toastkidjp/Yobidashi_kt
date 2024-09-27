@@ -178,7 +178,7 @@ internal fun ImageListUi(
                 shadowElevation = 4.dp,
                 modifier = Modifier
                     .padding(4.dp)
-                    .animateItemPlacement()
+                    .animateItem()
             ) {
                 Column(
                     modifier = Modifier
