@@ -193,8 +193,8 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
                     viewModel.search(viewModel.searchInput())
                 },
                 keyboardOptions = KeyboardOptions(
-                    autoCorrect = true,
-                    imeAction = ImeAction.Search
+                    autoCorrectEnabled = true,
+                    imeAction = ImeAction.Search,
                 ),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = MaterialTheme.colorScheme.onPrimary,
