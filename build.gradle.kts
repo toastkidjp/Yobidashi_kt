@@ -23,6 +23,7 @@ buildscript {
 
 plugins {
     //id("io.gitlab.arturbosch.detekt").version("1.19.0")
+    id("com.google.devtools.ksp").version("1.8.20-1.0.11").apply(false)
     id("com.cookpad.android.plugin.license-tools").version("1.2.8")
     id("jacoco")
 }
