@@ -241,7 +241,7 @@ private fun FavoriteSearchItemList(
                     repository.delete(favoriteSearch)
                     favoriteSearchItems.remove(favoriteSearch)
                 },
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier.animateItem()
             )
         }
     }
