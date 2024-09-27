@@ -148,7 +148,7 @@ private fun List(
                 onDelete = {
                     onDelete(viewHistory)
                 },
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier.animateItem()
             )
         }
     }
