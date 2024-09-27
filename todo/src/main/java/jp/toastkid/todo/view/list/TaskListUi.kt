@@ -56,8 +56,8 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDataAccessorFactory
 import jp.toastkid.todo.model.TodoTask
-import jp.toastkid.todo.view.addition.TaskEditorViewModel
 import jp.toastkid.todo.view.addition.TaskEditorUi
+import jp.toastkid.todo.view.addition.TaskEditorViewModel
 import jp.toastkid.todo.view.appbar.AppBarUi
 import jp.toastkid.todo.view.list.initial.InitialTaskPreparation
 import kotlinx.coroutines.CoroutineScope
@@ -136,7 +136,7 @@ private fun TaskList(
     LazyColumn(state = rememberLazyListState()) {
         items(tasks, { it.id }) { task ->
             task ?: return@items
-            TaskListItem(task, insert, modify, delete, Modifier.animateItemPlacement())
+            TaskListItem(task, insert, modify, delete, Modifier.animateItem())
         }
     }
 }
