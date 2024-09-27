@@ -90,7 +90,7 @@ fun ArchiveListUi() {
                                     .get(ContentViewModel::class.java)
                                     .open(Uri.fromFile(archiveFile))
                             }
-                            .animateItemPlacement()
+                            .animateItem()
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_archive),
