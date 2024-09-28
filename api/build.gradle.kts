@@ -9,7 +9,7 @@ import property.BuildTool
 import property.LibraryVersion
 
 plugins {
-    id("org.jetbrains.kotlin.plugin.serialization") version("1.6.21")
+    id("org.jetbrains.kotlin.plugin.serialization") version(libraries.versions.kotlin.get())
     id("com.android.library")
     id("kotlin-android")
     id("jacoco.definition")
@@ -45,7 +45,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("org.jsoup:jsoup:${LibraryVersion.jsoup}")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation(libraries.kotlinSerialization)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
