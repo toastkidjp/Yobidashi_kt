@@ -5,6 +5,15 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libraries") {
+            version("kotlin", "1.8.20")
+            library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.6.0")
+        }
+    }
+}
+
 include(":todo")
 include(":search")
 include(":lib")
