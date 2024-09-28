@@ -265,7 +265,7 @@ private fun TabItem(
     onClick: (Tab) -> Unit,
     onClose: (Tab) -> Unit
 ) {
-    val dismissSnackbarDistance = with(LocalDensity.current) { -160.dp.toPx() }
+    val dismissSnackbarDistance = with(LocalDensity.current) { -320.dp.toPx() }
     val anchors = DraggableAnchors {
         Start at 0f
         End at dismissSnackbarDistance
@@ -274,7 +274,7 @@ private fun TabItem(
         AnchoredDraggableState(
             initialValue = Start,
             anchors = anchors,
-            positionalThreshold = { dismissSnackbarDistance * 0.75f },
+            positionalThreshold = { dismissSnackbarDistance },
             velocityThreshold = { 3000000.dp.value },
             snapAnimationSpec = spring(),
             decayAnimationSpec = exponentialDecay(),
