@@ -71,7 +71,7 @@ import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
-import jp.toastkid.lib.view.list.SwipeToDismissItem
+import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog

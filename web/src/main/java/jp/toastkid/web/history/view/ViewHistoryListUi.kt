@@ -46,7 +46,7 @@ import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.view.list.ListActionAttachment
-import jp.toastkid.lib.view.list.SwipeToDismissItem
+import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.web.R
 import jp.toastkid.yobidashi.browser.UrlItem

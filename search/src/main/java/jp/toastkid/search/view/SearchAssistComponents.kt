@@ -29,7 +29,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import jp.toastkid.lib.view.list.SwipeToDismissItem
+import jp.toastkid.lib.R
+import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
@@ -76,7 +77,7 @@ internal fun SearchItemContent(
                 AsyncImage(
                     SearchCategory.findByCategory(category).iconId,
                     contentDescription = category,
-                    placeholder = painterResource(id = jp.toastkid.lib.R.drawable.ic_history_black),
+                    placeholder = painterResource(id = R.drawable.ic_history_black),
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.Center,
                     modifier = Modifier
@@ -101,7 +102,7 @@ internal fun SearchItemContent(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontSize = 12.sp,
-                            color = colorResource(id = jp.toastkid.lib.R.color.darkgray_scale)
+                            color = colorResource(id = R.color.darkgray_scale)
                         )
                     }
                 }
@@ -142,7 +143,7 @@ fun BindItemContent(
                         else -> null
                     },
                     contentDescription = urlItem.urlString(),
-                    placeholder = painterResource(id = jp.toastkid.lib.R.drawable.ic_history_black),
+                    placeholder = painterResource(id = R.drawable.ic_history_black),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .width(32.dp)
@@ -173,7 +174,7 @@ fun BindItemContent(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 12.sp,
-                        color = colorResource(id = jp.toastkid.lib.R.color.link_blue)
+                        color = colorResource(id = R.color.link_blue)
                     )
                     Text(
                         text = dateFormat(
@@ -186,7 +187,7 @@ fun BindItemContent(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 12.sp,
-                        color = colorResource(id = jp.toastkid.lib.R.color.darkgray_scale)
+                        color = colorResource(id = R.color.darkgray_scale)
                     )
                 }
             }

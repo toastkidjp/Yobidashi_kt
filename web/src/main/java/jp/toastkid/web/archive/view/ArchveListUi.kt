@@ -39,7 +39,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.list.ListActionAttachment
-import jp.toastkid.lib.view.list.SwipeToDismissItem
+import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.web.R
 import jp.toastkid.web.archive.Archive
 import timber.log.Timber
