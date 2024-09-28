@@ -314,7 +314,7 @@ private fun BookmarkList(
                             )
                             .fillMaxWidth()
                             .wrapContentHeight()
-                            .animateItemPlacement()
+                            .animateItem()
                     ) {
                         AsyncImage(
                             bookmark.favicon,
