@@ -66,7 +66,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.swiperefresh.SwipeRefreshNestedScrollConnection
+import jp.toastkid.web.view.refresh.SwipeRefreshNestedScrollConnection
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.web.FaviconApplier
 import jp.toastkid.web.R
