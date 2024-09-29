@@ -38,10 +38,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.view.list.ListActionAttachment
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.web.R
 import jp.toastkid.web.archive.Archive
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -132,13 +134,18 @@ fun ArchiveListUi() {
         }
     }
 
-    ListActionAttachment.make(activityContext)
-        .invoke(
-            listState,
-            LocalLifecycleOwner.current,
-            items,
-            fullItems.toList()
-        ) { item, word -> item.name.contains(word) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        withContext(Dispatchers.IO) {
+            contentViewModel
+                .receiveEvent(
+                    StateScrollerFactory().invoke(listState),
+                    items,
+                    fullItems.toList(),
+                    { item, word -> item.name.contains(word) }
+                )
+        }
+    }
 
     LaunchedEffect(key1 = Unit) {
         contentViewModel.clearOptionMenus()
