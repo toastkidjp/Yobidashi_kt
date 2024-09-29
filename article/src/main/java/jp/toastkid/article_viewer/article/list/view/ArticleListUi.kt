@@ -231,9 +231,7 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
                 .fillMaxHeight()
                 .combinedClickable(
                     true,
-                    onClick = {
-                        contentViewModel.switchTabList()
-                    },
+                    onClick = contentViewModel::switchTabList,
                     onLongClick = {
                         contentViewModel.openNewTab()
                     }
