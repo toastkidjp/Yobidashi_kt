@@ -42,7 +42,7 @@ import jp.toastkid.api.rss.RssReaderApi
 import jp.toastkid.api.rss.model.Item
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.list.ListActionAttachment
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.rss.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asFlow
@@ -82,7 +82,7 @@ fun RssReaderListUi() {
                                 .openBackground(it.link.toUri())
                         }
                     )
-                    .animateItemPlacement(),
+                    .animateItem(),
                 shadowElevation = 4.dp
             ) {
                 Column(
@@ -137,15 +137,16 @@ fun RssReaderListUi() {
         }
     }
 
-    ListActionAttachment.make(activity)
-        .invoke(
-            listState,
-            LocalLifecycleOwner.current,
-            items,
-            items.toList()
-        ) { item, word -> item.title.contains(word) || item.description.contains(word) }
-
     LaunchedEffect(LocalLifecycleOwner.current, block = {
+        withContext(Dispatchers.IO) {
+            ViewModelProvider(activity).get(ContentViewModel::class)
+                .receiveEvent(
+                    StateScrollerFactory().invoke(listState),
+                    items,
+                    items.toList(),
+                    { item, word -> item.title.contains(word) || item.description.contains(word) }
+                )
+        }
         withContext(Dispatchers.IO) {
             items.clear()
 
