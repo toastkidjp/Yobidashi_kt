@@ -45,9 +45,9 @@ import coil.compose.AsyncImage
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
-import jp.toastkid.lib.view.list.ListActionAttachment
-import jp.toastkid.ui.parts.SwipeToDismissItem
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
+import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.web.R
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
@@ -101,14 +101,18 @@ fun ViewHistoryListUi() {
         viewHistoryItems.remove(it)
     }
 
-    ListActionAttachment.make(context)
-        .invoke(
-            listState,
-            LocalLifecycleOwner.current,
-            viewHistoryItems,
-            fullItems,
-            { item, word -> item.title.contains(word) || item.url.contains(word) }
-        )
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        withContext(Dispatchers.IO) {
+            contentViewModel
+                .receiveEvent(
+                    StateScrollerFactory().invoke(listState),
+                    viewHistoryItems,
+                    fullItems.toList(),
+                    { item, word -> item.title.contains(word) || item.url.contains(word) }
+                )
+        }
+    }
 
     if (clearConfirmDialogState.value) {
         DestructiveChangeConfirmDialog(
