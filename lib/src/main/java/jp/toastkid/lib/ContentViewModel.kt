@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
@@ -76,11 +77,25 @@ class ContentViewModel : ViewModel() {
 
     val event = _event.asSharedFlow()
 
+    suspend fun receiveEvent(scroller: StateScroller) {
+        event.collect {
+            when (it) {
+                is ToTopEvent -> {
+                    scroller.toTop()
+                }
+
+                is ToBottomEvent -> {
+                    scroller.toBottom()
+                }
+            }
+        }
+    }
+
     suspend fun <T> receiveEvent(
         scroller: StateScroller,
-        listItemState: SnapshotStateList<T>? = null,
-        fullItems: Collection<T>? = null,
-        predicate: ((T, String) -> Boolean)? = null
+        listItemState: SnapshotStateList<T>,
+        fullItems: Collection<T>,
+        predicate: ((T, String) -> Boolean)
     ) {
         event.collect {
             when (it) {
@@ -91,10 +106,6 @@ class ContentViewModel : ViewModel() {
                     scroller.toBottom()
                 }
                 is FindInPageEvent -> {
-                    if (listItemState == null || fullItems == null || predicate == null) {
-                        return@collect
-                    }
-
                     listItemState.clear()
                     if (it.word.isBlank()) {
                         listItemState.addAll(fullItems)
