@@ -112,7 +112,7 @@ private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) 
                 modifier = Modifier
                     .padding(8.dp)
                     .padding(vertical = 4.dp)
-                    .animateItemPlacement()
+                    .animateItem()
             ) {
                 var scale by remember { mutableStateOf(1f) }
                 var offset by remember { mutableStateOf(Offset.Zero) }
