@@ -18,6 +18,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.IntOffset
@@ -27,6 +28,7 @@ import jp.toastkid.lib.model.LoadInformation
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.scroll.StateScroller
 import jp.toastkid.lib.viewmodel.event.Event
 import jp.toastkid.lib.viewmodel.event.content.NavigationEvent
 import jp.toastkid.lib.viewmodel.event.content.RefreshContentEvent
@@ -73,6 +75,40 @@ class ContentViewModel : ViewModel() {
     private val _event = MutableSharedFlow<Event>()
 
     val event = _event.asSharedFlow()
+
+    suspend fun <T> receiveEvent(
+        scroller: StateScroller,
+        listItemState: SnapshotStateList<T>? = null,
+        fullItems: Collection<T>? = null,
+        predicate: ((T, String) -> Boolean)? = null
+    ) {
+        event.collect {
+            when (it) {
+                is ToTopEvent -> {
+                    scroller.toTop()
+                }
+                is ToBottomEvent -> {
+                    scroller.toBottom()
+                }
+                is FindInPageEvent -> {
+                    if (listItemState == null || fullItems == null || predicate == null) {
+                        return@collect
+                    }
+
+                    listItemState.clear()
+                    if (it.word.isBlank()) {
+                        listItemState.addAll(fullItems)
+                        return@collect
+                    }
+
+                    listItemState.addAll(
+                        fullItems.filter { item -> predicate(item, it.word) }
+                    )
+                }
+                else -> Unit
+            }
+        }
+    }
 
     private val colorPair = mutableStateOf(ColorPair(Color.White.toArgb(), Color.Black.toArgb()))
 
