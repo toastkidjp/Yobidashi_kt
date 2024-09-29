@@ -47,7 +47,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.pdf.PdfImageFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,10 +67,12 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
         contentViewModel.replaceAppBarContent { AppBarUi(listState) }
     }
 
-    ScrollerUseCase(
-        contentViewModel,
-        listState
-    ).invoke(LocalLifecycleOwner.current)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        withContext(Dispatchers.IO) {
+            contentViewModel?.receiveEvent(StateScrollerFactory().invoke(listState))
+        }
+    }
 
     PdfPageList(uri, listState, modifier)
 }
