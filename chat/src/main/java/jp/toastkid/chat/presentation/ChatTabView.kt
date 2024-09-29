@@ -153,7 +153,7 @@ fun ChatTabView() {
                 }
             },
             keyboardOptions = KeyboardOptions(
-                autoCorrect = true,
+                autoCorrectEnabled = true,
                 imeAction = ImeAction.Send
             ),
             modifier = Modifier
