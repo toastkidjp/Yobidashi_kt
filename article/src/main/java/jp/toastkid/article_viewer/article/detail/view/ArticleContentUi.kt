@@ -47,6 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.article_viewer.R
@@ -54,7 +55,7 @@ import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.article.detail.viewmodel.ArticleContentViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.markdown.domain.service.LinkGenerator
 import jp.toastkid.markdown.presentation.MarkdownPreview
 import kotlinx.coroutines.Dispatchers
@@ -99,7 +100,14 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
         )
     }
 
-    ScrollerUseCase(contentViewModel, viewModel.scrollState()).invoke(LocalLifecycleOwner.current)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        withContext(Dispatchers.IO) {
+            ViewModelProvider(context)
+                .get(ContentViewModel::class.java)
+                .receiveEvent(StateScrollerFactory().invoke(viewModel.scrollState()))
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
