@@ -51,11 +51,12 @@ import jp.toastkid.image.list.ImageLoaderUseCase
 import jp.toastkid.image.preview.ImagePreviewUi
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun ImageListUi() {
@@ -223,9 +224,12 @@ internal fun ImageListUi(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val contentViewModel = (context as? ViewModelStoreOwner)?.let {
-        ViewModelProvider(it).get(ContentViewModel::class.java)
+    LaunchedEffect(lifecycleOwner) {
+        withContext(Dispatchers.IO) {
+            val contentViewModel = (context as? ViewModelStoreOwner)?.let {
+                ViewModelProvider(it).get(ContentViewModel::class.java)
+            }
+            contentViewModel?.receiveEvent(StateScrollerFactory().invoke(listState))
+        }
     }
-
-    ScrollerUseCase(contentViewModel, listState).invoke(lifecycleOwner)
 }
