@@ -71,11 +71,11 @@ import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
-import jp.toastkid.ui.parts.SwipeToDismissItem
-import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
+import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.web.FaviconApplier
 import jp.toastkid.web.R
 import jp.toastkid.web.bookmark.BookmarkInitializer
@@ -142,7 +142,6 @@ fun BookmarkListUi() {
             viewModel.query(bookmarkRepository, it)
         }
     )
-    ScrollerUseCase(contentViewModel, listState).invoke(LocalLifecycleOwner.current)
 
     val openClearDialogState = remember { mutableStateOf(false) }
     val openAddFolderDialogState = remember { mutableStateOf(false) }
@@ -235,6 +234,10 @@ fun BookmarkListUi() {
 
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
+        withContext(Dispatchers.IO) {
+            contentViewModel
+                .receiveEvent(StateScrollerFactory().invoke(listState))
+        }
         contentViewModel.event.collect {
             if (it is ShareEvent) {
                 val items = withContext(Dispatchers.IO) {
