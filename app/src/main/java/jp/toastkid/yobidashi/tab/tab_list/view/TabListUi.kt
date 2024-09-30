@@ -141,7 +141,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     else
                         Color.Transparent
 
-                    ReorderableItem(state, key = tab.id(), defaultDraggingModifier = Modifier) { _ ->
+                    ReorderableItem(state, key = tab.id(), defaultDraggingModifier = Modifier.animateItem()) { _ ->
                         TabItem(
                             tab,
                             tabThumbnails.assignNewFile(tab.thumbnailPath()),
@@ -153,7 +153,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                                 tabAdapter.replace(tab)
                                 closeOnly(coroutineScope, contentViewModel)
                             },
-                            onClose = {
+                            onDelete = {
                                 deletedTabIds.add(tab.id())
                                 tabAdapter.closeTab(tabAdapter.indexOf(tab))
                                 tabs.remove(tab)
@@ -263,9 +263,9 @@ private fun TabItem(
     backgroundColor: Color,
     visibility: (Tab) -> Boolean,
     onClick: (Tab) -> Unit,
-    onClose: (Tab) -> Unit
+    onDelete: (Tab) -> Unit
 ) {
-    val dismissSnackbarDistance = with(LocalDensity.current) { -320.dp.toPx() }
+    val dismissSnackbarDistance = with(LocalDensity.current) { -360.dp.toPx() }
     val anchors = DraggableAnchors {
         Start at 0f
         End at dismissSnackbarDistance
@@ -280,7 +280,7 @@ private fun TabItem(
             decayAnimationSpec = exponentialDecay(),
             confirmValueChange = {
                 if (it == End) {
-                    onClose(tab)
+                    onDelete(tab)
                 }
                 true
             }
