@@ -12,7 +12,6 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -77,7 +76,6 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
     PdfPageList(uri, listState, modifier)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) {
     val context = LocalContext.current
