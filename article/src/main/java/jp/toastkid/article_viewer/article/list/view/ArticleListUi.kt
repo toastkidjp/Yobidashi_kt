@@ -87,10 +87,11 @@ import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun ArticleListUi() {
@@ -348,7 +349,11 @@ internal fun ArticleListUi(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    ScrollerUseCase(contentViewModel, lazyListState).invoke(lifecycleOwner)
+    LaunchedEffect(lifecycleOwner) {
+        withContext(Dispatchers.IO) {
+            contentViewModel?.receiveEvent(StateScrollerFactory().invoke(lazyListState))
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
