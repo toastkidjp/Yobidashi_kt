@@ -32,7 +32,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven(url = "https://jitpack.io") // For PhotoView
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
