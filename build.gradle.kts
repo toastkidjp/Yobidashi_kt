@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 /*
  * Copyright (c) 2021 toastkidjp.
  * All rights reserved. This program and the accompanying materials
@@ -35,8 +37,8 @@ allprojects {
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
         .configureEach {
-            kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_1_8.toString()
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_1_8)
             }
         }
 }
