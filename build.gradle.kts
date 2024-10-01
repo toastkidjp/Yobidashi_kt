@@ -9,7 +9,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        maven ( url = "https://jcenter.bintray.com/" )
         maven ( url = "https://maven.google.com" )
         maven ( url = "https://plugins.gradle.org/m2/" ) // For Play publisher plugin
     }
