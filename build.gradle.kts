@@ -15,7 +15,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.6.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.20")
         classpath("com.github.triplet.gradle:play-publisher:3.10.1")
     }
 
@@ -23,7 +23,7 @@ buildscript {
 
 plugins {
     //id("io.gitlab.arturbosch.detekt").version("1.19.0")
-    id("com.google.devtools.ksp").version("1.8.20-1.0.11").apply(false)
+    id("com.google.devtools.ksp").version("2.0.20-1.0.25").apply(false)
     id("com.cookpad.android.plugin.license-tools").version("1.2.8")
     id("jacoco")
 }
