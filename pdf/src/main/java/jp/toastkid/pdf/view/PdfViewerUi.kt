@@ -62,12 +62,10 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
     val listState = rememberLazyListState()
 
     val contentViewModel = remember { ViewModelProvider(context).get(ContentViewModel::class.java) }
-    LaunchedEffect(Unit) {
-        contentViewModel.replaceAppBarContent { AppBarUi(listState) }
-    }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(lifecycleOwner) {
+        contentViewModel.replaceAppBarContent { AppBarUi(listState) }
         withContext(Dispatchers.IO) {
             contentViewModel?.receiveEvent(StateScrollerFactory().invoke(listState))
         }
