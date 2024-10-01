@@ -291,9 +291,7 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
             ),
             OptionMenu(
                 titleId = R.string.action_date_filter,
-                action = {
-                    viewModel.openDataDialog()
-                }
+                action = viewModel::openDataDialog
             ),
             OptionMenu(
                 titleId = R.string.action_switch_title_filter,
