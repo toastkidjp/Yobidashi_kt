@@ -7,7 +7,6 @@
  */
 import com.android.build.gradle.tasks.GenerateBuildConfig
 import property.BuildTool
-import property.LibraryVersion
 
 plugins {
     id("com.android.library")
@@ -28,14 +27,6 @@ android {
     buildTypes {
         release {
         }
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = LibraryVersion.composeCompiler
     }
 }
 
