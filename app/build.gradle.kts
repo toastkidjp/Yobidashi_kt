@@ -13,6 +13,7 @@ plugins {
     id("com.github.triplet.play")
     id("com.cookpad.android.plugin.license-tools")
     id("jacoco.definition")
+    alias(libraries.plugins.composeCompiler)
 }
 
 // TODO apply(from = "../jacoco.gradle.kts")
