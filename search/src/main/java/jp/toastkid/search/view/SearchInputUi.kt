@@ -181,7 +181,7 @@ fun SearchInputUi(
                             search(context, contentViewModel, currentUrl, viewModel.categoryName(), viewModel.input.value.text)
                         },
                         keyboardOptions = KeyboardOptions(
-                            autoCorrect = true,
+                            autoCorrectEnabled = true,
                             imeAction = ImeAction.Search
                         ),
                         modifier = Modifier
