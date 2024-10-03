@@ -200,7 +200,7 @@ internal fun DisplaySettingUi() {
                         .height(200.dp)
                         .weight(1f)
                         .padding(4.dp)
-                        .animateItemPlacement()
+                        .animateItem()
                     ) {
                         Box(Modifier.clickable {
                             PreferenceApplier(activityContext).backgroundImagePath = imageFile.path
