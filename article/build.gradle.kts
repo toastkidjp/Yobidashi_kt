@@ -14,6 +14,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("jacoco.definition")
+    alias(libraries.plugins.composeCompiler)
 }
 //TODO apply from: '../jacoco.gradle'
 
