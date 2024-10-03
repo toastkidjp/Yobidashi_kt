@@ -78,9 +78,7 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
                 Text(
                     snackbarData.visuals.actionLabel ?: "",
                     modifier = Modifier
-                        .clickable {
-                            snackbarData.performAction()
-                        }
+                        .clickable(onClick = snackbarData::performAction)
                         .wrapContentWidth()
                         .padding(start = 4.dp)
                 )
