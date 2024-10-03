@@ -44,7 +44,7 @@ allprojects {
 }
 
 task("clean", Delete::class) {
-    delete = setOf(rootProject.buildDir)
+    delete = setOf(rootProject.layout.buildDirectory)
 }
 
 jacoco {
@@ -55,10 +55,10 @@ tasks.create("jacocoMergeReport", JacocoReport::class) {
     group = "verification"
     gradle.afterProject { 
         if (rootProject != project && plugins.hasPlugin("jacoco.definition")) {
-            executionData.from += "${project.buildDir}/jacoco/testDebugUnitTest.exec"
+            executionData.from += "${project.layout.buildDirectory}/jacoco/testDebugUnitTest.exec"
             sourceDirectories.from += "${project.projectDir}/src/main/java"
             classDirectories.from.addAll(
-                project.fileTree("${project.buildDir}/tmp/kotlin-classes/debug") { 
+                project.fileTree("${project.layout.buildDirectory}/tmp/kotlin-classes/debug") {
                     exclude("**/view/**", "**/ui/**", "**/material3/**", "**/*UiKt*", "**/*serializer**") 
                 }
             )
