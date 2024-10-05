@@ -14,6 +14,7 @@ plugins {
     id("kotlin-android")
     id("org.jetbrains.kotlin.plugin.serialization") version(libraries.versions.kotlin.get())
     id("jacoco.definition")
+    alias(libraries.plugins.composeCompiler)
 }
 
 // TODO apply(from = "../jacoco.gradle.kts")
