@@ -44,7 +44,7 @@ allprojects {
 }
 
 task("clean", Delete::class) {
-    delete = setOf(rootProject.layout.buildDirectory)
+    delete = setOf(rootProject.layout.buildDirectory.get())
 }
 
 jacoco {
@@ -55,11 +55,11 @@ tasks.create("jacocoMergeReport", JacocoReport::class) {
     group = "verification"
     gradle.afterProject { 
         if (rootProject != project && plugins.hasPlugin("jacoco.definition")) {
-            executionData.from += "${project.layout.buildDirectory}/jacoco/testDebugUnitTest.exec"
+            executionData.from += "${project.layout.buildDirectory.get()}/jacoco/testDebugUnitTest.exec"
             sourceDirectories.from += "${project.projectDir}/src/main/java"
             classDirectories.from.addAll(
-                project.fileTree("${project.layout.buildDirectory}/tmp/kotlin-classes/debug") {
-                    exclude("**/view/**", "**/ui/**", "**/material3/**", "**/*UiKt*", "**/*serializer**") 
+                project.fileTree("${project.layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
+                    exclude("**/view/**", "**/ui/**", "**/material3/**", "**/*UiKt*", "**/*serializer**")
                 }
             )
         }
@@ -72,7 +72,7 @@ tasks.create("jacocoMergeReport", JacocoReport::class) {
 
 /*TODO
 task("mergeDetektReport", io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
-    output = project.layout.buildDirectory.file("reports/detekt/merge.xml")
+    output = project.buildDir.file("reports/detekt/merge.xml")
 }
 
 subprojects {
