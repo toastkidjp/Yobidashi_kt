@@ -21,7 +21,7 @@ internal enum class ScreenMode(@IdRes private val id: Int) {
                 return EXPANDABLE
             }
 
-            return values().find { it.name == name } ?: EXPANDABLE
+            return entries.find { it.name == name } ?: EXPANDABLE
         }
     }
 }
