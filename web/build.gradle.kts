@@ -12,6 +12,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("org.jetbrains.kotlin.plugin.serialization") version(libraries.versions.kotlin.get())
+    alias(libraries.plugins.composeCompiler)
 }
 
 android {
