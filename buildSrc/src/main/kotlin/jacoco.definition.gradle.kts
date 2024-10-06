@@ -22,13 +22,13 @@ tasks.register("jacocoTestReport", JacocoReport::class.java) {
     reports {
         xml.required.set(false)
         html.required.set(true)
-        html.outputLocation.set(file("${layout.buildDirectory}/reports/code-coverage"))
+        html.outputLocation.set(file("${layout.buildDirectory.get()}/reports/code-coverage"))
     }
     sourceDirectories.setFrom("${projectDir}/src/main/java")
     classDirectories.setFrom(
-        fileTree("${layout.buildDirectory}/tmp/kotlin-classes/debug") {
+        fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
             exclude("**/view/**", "**/ui/**") 
         }
     )
-    executionData.setFrom("${layout.buildDirectory}/jacoco/testDebugUnitTest.exec")
+    executionData.setFrom("${layout.buildDirectory.get()}/jacoco/testDebugUnitTest.exec")
 }
