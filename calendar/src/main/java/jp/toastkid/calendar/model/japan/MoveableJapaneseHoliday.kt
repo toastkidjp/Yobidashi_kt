@@ -24,10 +24,6 @@ enum class MoveableJapaneseHoliday(val title: String, private val month: Int, va
     companion object {
         private val months = entries.map { it.month }.distinct()
 
-        fun isTargetMonth(month: Int): Boolean {
-            return months.contains(month)
-        }
-
         fun find(year: Int, month: Int): List<Holiday> {
             if (months.contains(month).not()) {
                 return emptyList()
