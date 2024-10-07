@@ -32,7 +32,7 @@ fun UserAgentDropdown(expanded: Boolean, onDismissRequest: () -> Unit, onSelect:
         expanded = expanded,
         onDismissRequest = onDismissRequest
     ) {
-        UserAgent.values().forEach { userAgent ->
+        UserAgent.entries.forEach { userAgent ->
             DropdownMenuItem(
                 text = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
