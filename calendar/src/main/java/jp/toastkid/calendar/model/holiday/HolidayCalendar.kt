@@ -34,7 +34,7 @@ enum class HolidayCalendar(
     }
 
     companion object {
-        fun findByName(name: String?) = values().firstOrNull { it.name == name }
+        fun findByName(name: String?) = entries.firstOrNull { it.name == name }
     }
 
 }
