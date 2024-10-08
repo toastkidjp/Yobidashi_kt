@@ -10,6 +10,9 @@ package jp.toastkid.image.preview
 
 import android.graphics.BitmapFactory
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
@@ -67,9 +70,14 @@ import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
-internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
+internal fun ImagePreviewUi(
+    images: List<Image>,
+    initialIndex: Int,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
+) {
     val viewModel = remember { ImagePreviewViewModel(initialIndex) }
     LaunchedEffect(key1 = Unit, block = {
         viewModel.replaceImages(images)
@@ -93,41 +101,47 @@ internal fun ImagePreviewUi(images: List<Image>, initialIndex: Int) {
             pageSpacing = 100.dp,
             state = pagerState
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(viewModel.getCurrentImage(pagerState.currentPage).path)
-                    .memoryCacheKey(viewModel.getCurrentImage(pagerState.currentPage).path)
-                    .crossfade(true).build(),
-                imageLoader = GifImageLoaderFactory().invoke(LocalContext.current),
-                contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
-                colorFilter = viewModel.colorFilterState.value,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer(
-                        scaleX = viewModel.scale.value,
-                        scaleY = viewModel.scale.value,
-                        rotationY = viewModel.rotationY.value,
-                        rotationZ = viewModel.rotationZ.value
-                    )
-                    .offset {
-                        IntOffset(
-                            viewModel.offset.value.x.toInt(),
-                            viewModel.offset.value.y.toInt()
+            with(sharedTransitionScope) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(viewModel.getCurrentImage(pagerState.currentPage).path)
+                        .memoryCacheKey(viewModel.getCurrentImage(pagerState.currentPage).path)
+                        .crossfade(true).build(),
+                    imageLoader = GifImageLoaderFactory().invoke(LocalContext.current),
+                    contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
+                    colorFilter = viewModel.colorFilterState.value,
+                    modifier = Modifier
+                        .sharedElement(
+                            rememberSharedContentState("image_${viewModel.getCurrentImage(pagerState.currentPage).path}"),
+                            animatedVisibilityScope
                         )
-                    }
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onPress = { /* Called when the gesture starts */ },
-                            onDoubleTap = { viewModel.resetStates() },
-                            onLongPress = { viewModel.setTransformable() },
-                            onTap = { /* Called on Tap */ }
+                        .fillMaxSize()
+                        .graphicsLayer(
+                            scaleX = viewModel.scale.value,
+                            scaleY = viewModel.scale.value,
+                            rotationY = viewModel.rotationY.value,
+                            rotationZ = viewModel.rotationZ.value
                         )
-                    }
-                    .transformable(
-                        state = viewModel.state,
-                        enabled = viewModel.transformable()
-                    )
-            )
+                        .offset {
+                            IntOffset(
+                                viewModel.offset.value.x.toInt(),
+                                viewModel.offset.value.y.toInt()
+                            )
+                        }
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onPress = { /* Called when the gesture starts */ },
+                                onDoubleTap = { viewModel.resetStates() },
+                                onLongPress = { viewModel.setTransformable() },
+                                onTap = { /* Called on Tap */ }
+                            )
+                        }
+                        .transformable(
+                            state = viewModel.state,
+                            enabled = viewModel.transformable()
+                        )
+                )
+            }
         }
 
         Surface(
