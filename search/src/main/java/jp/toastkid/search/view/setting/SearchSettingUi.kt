@@ -76,7 +76,7 @@ fun SearchSettingUi() {
     val useTrendCheck = remember { mutableStateOf(preferenceApplier.isEnableTrendModule()) }
 
     val selections = remember {
-        SearchCategory.values()
+        SearchCategory.entries
             .map {
                 SearchCategorySelection(
                     it,
