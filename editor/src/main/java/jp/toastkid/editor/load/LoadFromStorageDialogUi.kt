@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import jp.toastkid.editor.R
-import jp.toastkid.lib.view.list.SwipeToDismissItem
+import jp.toastkid.ui.parts.SwipeToDismissItem
 import timber.log.Timber
 import java.io.File
 import java.io.IOException

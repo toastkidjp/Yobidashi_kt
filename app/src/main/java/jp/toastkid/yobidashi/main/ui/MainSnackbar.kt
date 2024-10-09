@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.main.ui
 
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -40,19 +42,22 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
         "Right" at dismissSnackbarDistance
     }
 
-    val anchoredDraggableState = AnchoredDraggableState(
-        initialValue = "Start",
-        anchors = anchors,
-        positionalThreshold = { dismissSnackbarDistance * 0.75f },
-        velocityThreshold = { 3000.dp.value },
-        animationSpec = spring(),
-        confirmValueChange = {
-            if (it == "Right" || it == "Left") {
-                onDismiss()
+    val anchoredDraggableState = remember {
+        AnchoredDraggableState(
+            initialValue = "Start",
+            anchors = anchors,
+            positionalThreshold = { dismissSnackbarDistance * 0.75f },
+            velocityThreshold = { 3000.dp.value },
+            snapAnimationSpec = spring(),
+            decayAnimationSpec = exponentialDecay(),
+            confirmValueChange = {
+                if (it == "Right" || it == "Left") {
+                    onDismiss()
+                }
+                true
             }
-            true
-        }
-    )
+        )
+    }
 
     Snackbar(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -73,9 +78,7 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
                 Text(
                     snackbarData.visuals.actionLabel ?: "",
                     modifier = Modifier
-                        .clickable {
-                            snackbarData.performAction()
-                        }
+                        .clickable(onClick = snackbarData::performAction)
                         .wrapContentWidth()
                         .padding(start = 4.dp)
                 )

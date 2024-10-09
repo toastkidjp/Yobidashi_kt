@@ -127,7 +127,7 @@ fun FavoriteSearchListUi() {
                         addItem(input, contentViewModel, activityContext, categoryName, repository, favoriteSearchItems)
                     },
                     keyboardOptions = KeyboardOptions(
-                        autoCorrect = true,
+                        autoCorrectEnabled = true,
                         imeAction = ImeAction.Done
                     ),
                     modifier = Modifier.weight(1f)
@@ -241,7 +241,7 @@ private fun FavoriteSearchItemList(
                     repository.delete(favoriteSearch)
                     favoriteSearchItems.remove(favoriteSearch)
                 },
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier.animateItem()
             )
         }
     }

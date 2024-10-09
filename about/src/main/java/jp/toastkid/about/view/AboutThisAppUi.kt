@@ -24,12 +24,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,12 +37,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import jp.toastkid.about.R
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.GooglePlayIntentFactory
-import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.licence.usecase.LoadLicenseUseCase
 import jp.toastkid.ui.parts.InsetDivider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun AboutThisAppUi(versionName: String) {
@@ -189,8 +192,12 @@ fun AboutThisAppUi(versionName: String) {
         }
     }
 
-    ScrollerUseCase(
-        ViewModelProvider(context).get(ContentViewModel::class.java),
-        scrollState
-    ).invoke(LocalLifecycleOwner.current)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        withContext(Dispatchers.IO) {
+            ViewModelProvider(context)
+                .get(ContentViewModel::class.java)
+                .receiveEvent(StateScrollerFactory().invoke(scrollState))
+        }
+    }
 }

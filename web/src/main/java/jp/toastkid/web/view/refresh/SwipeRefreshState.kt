@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.lib.view.swiperefresh
+package jp.toastkid.web.view.refresh
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.MutatePriority

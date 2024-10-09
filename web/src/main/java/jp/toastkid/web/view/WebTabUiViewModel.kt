@@ -12,7 +12,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.view.swiperefresh.SwipeRefreshState
+import jp.toastkid.web.view.refresh.SwipeRefreshState
 
 /**
  * @author toastkidjp

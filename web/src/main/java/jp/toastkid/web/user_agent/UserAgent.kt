@@ -44,11 +44,11 @@ enum class UserAgent constructor(private val title: String, private val text: St
     companion object {
 
         fun titles(): Array<String> {
-            return values().map { it.title }.toTypedArray()
+            return entries.map { it.title }.toTypedArray()
         }
 
         fun findCurrentIndex(name: String): Int {
-            values().forEachIndexed { index, userAgent ->
+            entries.forEachIndexed { index, userAgent ->
                 if (userAgent.name == name) {
                     return index
                 }
@@ -57,6 +57,6 @@ enum class UserAgent constructor(private val title: String, private val text: St
         }
 
         fun findByName(userAgentName: String) =
-                values().find { it.name == userAgentName } ?: DEFAULT
+            entries.find { it.name == userAgentName } ?: DEFAULT
     }
 }

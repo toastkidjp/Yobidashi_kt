@@ -22,7 +22,7 @@ enum class MoveableUKHoliday(private val month: Int, val week: Int, val title: S
 
         private val dateCalculator = DateCalculator()
 
-        fun find(year: Int, month: Int): List<Holiday> = values().filter { it.month == month }.map {
+        fun find(year: Int, month: Int): List<Holiday> = entries.filter { it.month == month }.map {
             Holiday(
                 it.title,
                 month,

@@ -40,7 +40,7 @@ fun WorldTimeView(modifier: Modifier = Modifier) {
                 items(viewModel.items(), { it.timeZoneId }) {
                     Column(
                         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
-                            .animateItemPlacement()
+                            .animateItem()
                     ) {
                         Text(
                             viewModel.label(it.timeZone()),

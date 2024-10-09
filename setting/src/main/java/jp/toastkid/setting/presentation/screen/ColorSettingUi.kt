@@ -169,7 +169,7 @@ internal fun ColorSettingUi() {
                         }
                         .weight(1f)
                         .padding(8.dp)
-                        .animateItemPlacement()
+                        .animateItem()
                 ) {
                     Box(
                         modifier = Modifier

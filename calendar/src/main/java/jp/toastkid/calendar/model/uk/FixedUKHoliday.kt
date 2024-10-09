@@ -18,7 +18,7 @@ enum class FixedUKHoliday(val month: Int, val date: Int, val title: String) {
     ;
 
     companion object {
-        fun find(month: Int) = values().filter { it.month == month }
+        fun find(month: Int) = entries.filter { it.month == month }
             .map { Holiday(it.title, month, it.date, HolidayCalendar.UK.flag) }
     }
 }

@@ -12,7 +12,6 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -41,13 +40,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.pdf.PdfImageFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,20 +61,18 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
 
     val listState = rememberLazyListState()
 
-    val contentViewModel = remember { ViewModelProvider(context).get(ContentViewModel::class.java) }
-    LaunchedEffect(Unit) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
         contentViewModel.replaceAppBarContent { AppBarUi(listState) }
+        withContext(Dispatchers.IO) {
+            contentViewModel?.receiveEvent(StateScrollerFactory().invoke(listState))
+        }
     }
-
-    ScrollerUseCase(
-        contentViewModel,
-        listState
-    ).invoke(LocalLifecycleOwner.current)
 
     PdfPageList(uri, listState, modifier)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) {
     val context = LocalContext.current
@@ -112,7 +109,7 @@ private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) 
                 modifier = Modifier
                     .padding(8.dp)
                     .padding(vertical = 4.dp)
-                    .animateItemPlacement()
+                    .animateItem()
             ) {
                 var scale by remember { mutableStateOf(1f) }
                 var offset by remember { mutableStateOf(Offset.Zero) }

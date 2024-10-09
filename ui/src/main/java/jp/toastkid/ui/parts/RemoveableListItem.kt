@@ -6,10 +6,11 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.lib.view.list
+package jp.toastkid.ui.parts
 
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -65,7 +66,8 @@ fun SwipeToDismissItem(
             anchors = anchors,
             positionalThreshold = { 120.dp.value },
             velocityThreshold = { 120.dp.value },
-            animationSpec = spring(),
+            snapAnimationSpec = spring(),
+            decayAnimationSpec = exponentialDecay(),
             confirmValueChange = { true }
         )
     }

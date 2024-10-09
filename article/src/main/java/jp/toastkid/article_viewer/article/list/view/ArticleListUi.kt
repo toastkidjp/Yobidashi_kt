@@ -87,10 +87,11 @@ import jp.toastkid.article_viewer.zip.ZipLoadProgressBroadcastIntentFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun ArticleListUi() {
@@ -193,8 +194,8 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
                     viewModel.search(viewModel.searchInput())
                 },
                 keyboardOptions = KeyboardOptions(
-                    autoCorrect = true,
-                    imeAction = ImeAction.Search
+                    autoCorrectEnabled = true,
+                    imeAction = ImeAction.Search,
                 ),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -231,9 +232,7 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
                 .fillMaxHeight()
                 .combinedClickable(
                     true,
-                    onClick = {
-                        contentViewModel.switchTabList()
-                    },
+                    onClick = contentViewModel::switchTabList,
                     onLongClick = {
                         contentViewModel.openNewTab()
                     }
@@ -292,9 +291,7 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
             ),
             OptionMenu(
                 titleId = R.string.action_date_filter,
-                action = {
-                    viewModel.openDataDialog()
-                }
+                action = viewModel::openDataDialog
             ),
             OptionMenu(
                 titleId = R.string.action_switch_title_filter,
@@ -350,7 +347,11 @@ internal fun ArticleListUi(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    ScrollerUseCase(contentViewModel, lazyListState).invoke(lifecycleOwner)
+    LaunchedEffect(lifecycleOwner) {
+        withContext(Dispatchers.IO) {
+            contentViewModel?.receiveEvent(StateScrollerFactory().invoke(lazyListState))
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)

@@ -46,7 +46,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -56,6 +55,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.api.trend.TrendApi
 import jp.toastkid.lib.ContentViewModel
@@ -181,7 +181,7 @@ fun SearchInputUi(
                             search(context, contentViewModel, currentUrl, viewModel.categoryName(), viewModel.input.value.text)
                         },
                         keyboardOptions = KeyboardOptions(
-                            autoCorrect = true,
+                            autoCorrectEnabled = true,
                             imeAction = ImeAction.Search
                         ),
                         modifier = Modifier

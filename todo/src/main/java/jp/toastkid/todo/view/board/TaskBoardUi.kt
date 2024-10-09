@@ -62,8 +62,8 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDataAccessorFactory
 import jp.toastkid.todo.model.TodoTask
-import jp.toastkid.todo.view.addition.TaskEditorViewModel
 import jp.toastkid.todo.view.addition.TaskEditorUi
+import jp.toastkid.todo.view.addition.TaskEditorViewModel
 import jp.toastkid.todo.view.appbar.AppBarUi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -136,7 +136,7 @@ fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, modify: (TodoTask) -> Unit) {
                 repository::insert,
                 modify,
                 repository::delete,
-                Modifier.animateItemPlacement()
+                Modifier.animateItem()
             )
         }
     }

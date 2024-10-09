@@ -28,13 +28,9 @@ enum class PlayingSpeed(@StringRes val textId: Int, val speed: Float) {
     S_3(R.string.title_playing_speed_3, 3f),
     S_5(R.string.title_playing_speed_5, 5f);
 
-    fun findIndex(): Int {
-        return ordinal
-    }
-
     companion object {
         fun findById(id: Long): PlayingSpeed =
-                values().firstOrNull { it.textId.toLong() == id } ?: NORMAL
+                entries.firstOrNull { it.textId.toLong() == id } ?: NORMAL
 
         fun getDefault() = NORMAL
     }

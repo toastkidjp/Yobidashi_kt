@@ -73,7 +73,7 @@ internal fun SearchCategorySpinner(
         ) {
             val searchCategories = remember {
                 val initialDisables = PreferenceApplier(context).readDisableSearchCategory()
-                SearchCategory.values()
+                SearchCategory.entries
                     .filterNot { initialDisables?.contains(it.name) ?: false }
             }
 
