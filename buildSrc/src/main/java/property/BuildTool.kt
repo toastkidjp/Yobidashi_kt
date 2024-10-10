@@ -5,5 +5,4 @@ object BuildTool {
     val compileSdk =  35
     val targetSdk =  35
     val buildTools =  "35.0.0"
-    val kotlinVersion =  "1.8.20"
 }

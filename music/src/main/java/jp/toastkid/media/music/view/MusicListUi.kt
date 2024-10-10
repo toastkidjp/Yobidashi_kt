@@ -264,7 +264,7 @@ internal fun MusicList(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
-                    val values = PlayingSpeed.values()
+                    val values = PlayingSpeed.entries
                     values.forEachIndexed { index, _ ->
                         DropdownMenuItem(
                             text = {

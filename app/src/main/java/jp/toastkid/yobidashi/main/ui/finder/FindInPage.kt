@@ -101,7 +101,7 @@ internal fun FindInPage() {
                 contentViewModel.findDown(pageSearcherInput.value)
             },
             keyboardOptions = KeyboardOptions(
-                autoCorrect = true,
+                autoCorrectEnabled = true,
                 imeAction = ImeAction.Search
             ),
             modifier = Modifier

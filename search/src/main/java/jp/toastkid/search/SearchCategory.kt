@@ -510,7 +510,7 @@ enum class SearchCategory(
     companion object {
 
         private val hostAndCategories =
-            values()
+            entries
                 .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }.associateBy {
                     val key =
                         if (it == YAHOO_JAPAN_REALTIME_SEARCH) "search.yahoo.co.jp/realtime" else it.host.toUri().host
@@ -546,7 +546,7 @@ enum class SearchCategory(
         fun findByCategory(category: String?): SearchCategory {
             val locale = Locale.getDefault()
             val target = category?.uppercase(locale) ?: ""
-            return values().find { it.name == target } ?: getDefault()
+            return entries.find { it.name == target } ?: getDefault()
         }
 
         /**
@@ -558,7 +558,7 @@ enum class SearchCategory(
          */
         fun findIndex(category: String): Int {
             val locale = Locale.getDefault()
-            return values().find { it.name == category.uppercase(locale) } ?.ordinal
+            return entries.find { it.name == category.uppercase(locale) } ?.ordinal
                     ?: getDefault().ordinal
         }
 

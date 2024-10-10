@@ -7,12 +7,13 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("org.jetbrains.kotlin.plugin.serialization") version("1.6.21")
+    id("org.jetbrains.kotlin.plugin.serialization") version(libraries.versions.kotlin.get())
     id("com.android.application")
     id("kotlin-android")
     id("com.github.triplet.play")
     id("com.cookpad.android.plugin.license-tools")
     id("jacoco.definition")
+    alias(libraries.plugins.composeCompiler)
 }
 
 // TODO apply(from = "../jacoco.gradle.kts")
@@ -138,7 +139,7 @@ dependencies {
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation(libraries.kotlinSerialization)
 
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.2")
 

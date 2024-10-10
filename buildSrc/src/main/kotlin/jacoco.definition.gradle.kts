@@ -1,6 +1,3 @@
-import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import org.gradle.testing.jacoco.tasks.JacocoReport
-
 plugins {
   id("jacoco")
 }
@@ -25,13 +22,13 @@ tasks.register("jacocoTestReport", JacocoReport::class.java) {
     reports {
         xml.required.set(false)
         html.required.set(true)
-        html.outputLocation.set(file("${buildDir}/reports/code-coverage"))
+        html.outputLocation.set(file("${layout.buildDirectory.get()}/reports/code-coverage"))
     }
     sourceDirectories.setFrom("${projectDir}/src/main/java")
     classDirectories.setFrom(
-        fileTree("${buildDir}/tmp/kotlin-classes/debug") { 
+        fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
             exclude("**/view/**", "**/ui/**") 
         }
     )
-    executionData.setFrom("${buildDir}/jacoco/testDebugUnitTest.exec")
+    executionData.setFrom("${layout.buildDirectory.get()}/jacoco/testDebugUnitTest.exec")
 }

@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -42,15 +41,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.menu.context.common.CommonContextMenuToolbarFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 @Composable
@@ -153,7 +155,7 @@ fun ChatTabView() {
                 }
             },
             keyboardOptions = KeyboardOptions(
-                autoCorrect = true,
+                autoCorrectEnabled = true,
                 imeAction = ImeAction.Send
             ),
             modifier = Modifier
@@ -169,10 +171,11 @@ fun ChatTabView() {
         })
     }
 
-    ScrollerUseCase(contentViewModel, viewModel.scrollState()).invoke(viewLifecycleOwner = LocalLifecycleOwner.current)
-
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
+        withContext(Dispatchers.IO) {
+            contentViewModel?.receiveEvent(StateScrollerFactory().invoke(viewModel.scrollState()))
+        }
         contentViewModel?.event?.collect {
             if (it is ShareEvent) {
                 context.startActivity(

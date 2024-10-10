@@ -55,7 +55,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -63,6 +62,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.data.repository.factory.RepositoryFactory
@@ -71,11 +71,11 @@ import jp.toastkid.lib.intent.CreateDocumentIntentFactory
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
-import jp.toastkid.lib.view.list.SwipeToDismissItem
-import jp.toastkid.lib.view.scroll.usecase.ScrollerUseCase
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
+import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.web.FaviconApplier
 import jp.toastkid.web.R
 import jp.toastkid.web.bookmark.BookmarkInitializer
@@ -142,7 +142,6 @@ fun BookmarkListUi() {
             viewModel.query(bookmarkRepository, it)
         }
     )
-    ScrollerUseCase(contentViewModel, listState).invoke(LocalLifecycleOwner.current)
 
     val openClearDialogState = remember { mutableStateOf(false) }
     val openAddFolderDialogState = remember { mutableStateOf(false) }
@@ -235,6 +234,10 @@ fun BookmarkListUi() {
 
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = lifecycleOwner, block = {
+        withContext(Dispatchers.IO) {
+            contentViewModel
+                .receiveEvent(StateScrollerFactory().invoke(listState))
+        }
         contentViewModel.event.collect {
             if (it is ShareEvent) {
                 val items = withContext(Dispatchers.IO) {
@@ -314,7 +317,7 @@ private fun BookmarkList(
                             )
                             .fillMaxWidth()
                             .wrapContentHeight()
-                            .animateItemPlacement()
+                            .animateItem()
                     ) {
                         AsyncImage(
                             bookmark.favicon,

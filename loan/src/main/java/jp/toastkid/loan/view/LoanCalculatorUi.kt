@@ -198,7 +198,7 @@ fun LoanCalculatorUi() {
                                 derivedStateOf { if (scrollState.firstVisibleItemIndex != 0) { surfaceColor } else Color.Transparent }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.animateItemPlacement()
+                                modifier = Modifier.animateItem()
                                     .drawBehind { drawRect(backgroundColor.value) }
                             ) {
                                 Text(
@@ -211,7 +211,7 @@ fun LoanCalculatorUi() {
                             }
                         }
                         itemsIndexed(scheduleState) { index, it ->
-                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
+                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItem()) {
                                 Text(
                                     "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
                                     modifier = Modifier.weight(0.4f)

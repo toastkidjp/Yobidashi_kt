@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInVertically
@@ -140,7 +141,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                     else
                         Color.Transparent
 
-                    ReorderableItem(state, key = tab.id(), defaultDraggingModifier = Modifier) { _ ->
+                    ReorderableItem(state, key = tab.id(), defaultDraggingModifier = Modifier.animateItem()) { _ ->
                         TabItem(
                             tab,
                             tabThumbnails.assignNewFile(tab.thumbnailPath()),
@@ -152,7 +153,7 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
                                 tabAdapter.replace(tab)
                                 closeOnly(coroutineScope, contentViewModel)
                             },
-                            onClose = {
+                            onDelete = {
                                 deletedTabIds.add(tab.id())
                                 tabAdapter.closeTab(tabAdapter.indexOf(tab))
                                 tabs.remove(tab)
@@ -262,26 +263,29 @@ private fun TabItem(
     backgroundColor: Color,
     visibility: (Tab) -> Boolean,
     onClick: (Tab) -> Unit,
-    onClose: (Tab) -> Unit
+    onDelete: (Tab) -> Unit
 ) {
-    val dismissSnackbarDistance = with(LocalDensity.current) { -160.dp.toPx() }
+    val dismissSnackbarDistance = with(LocalDensity.current) { -360.dp.toPx() }
     val anchors = DraggableAnchors {
         Start at 0f
         End at dismissSnackbarDistance
     }
-    val swipeableState = AnchoredDraggableState(
-        initialValue = Start,
-        anchors = anchors,
-        positionalThreshold = { dismissSnackbarDistance * 0.75f },
-        velocityThreshold = { 3000000.dp.value },
-        animationSpec = spring(),
-        confirmValueChange = {
-            if (it == End) {
-                onClose(tab)
+    val swipeableState = remember {
+        AnchoredDraggableState(
+            initialValue = Start,
+            anchors = anchors,
+            positionalThreshold = { dismissSnackbarDistance },
+            velocityThreshold = { 3000000.dp.value },
+            snapAnimationSpec = spring(),
+            decayAnimationSpec = exponentialDecay(),
+            confirmValueChange = {
+                if (it == End) {
+                    onDelete(tab)
+                }
+                true
             }
-            true
-        }
-    )
+        )
+    }
 
     AnimatedVisibility(
         visibility(tab),
@@ -301,7 +305,7 @@ private fun TabItem(
                     IntOffset(
                         0,
                         swipeableState
-                            .requireOffset()
+                            .offset
                             .roundToInt()
                     )
                 }

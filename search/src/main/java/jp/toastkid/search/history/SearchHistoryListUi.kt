@@ -17,13 +17,14 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
-import jp.toastkid.lib.view.list.ListActionAttachment
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.search.R
 import jp.toastkid.search.SearchAction
 import jp.toastkid.search.view.SearchItemContent
@@ -107,13 +108,16 @@ fun SearchHistoryListUi() {
     val viewLifecycleOwner = LocalLifecycleOwner.current
     val viewModelStoreOwner = context as? ViewModelStoreOwner
     if (viewModelStoreOwner != null) {
-        ListActionAttachment.make(viewModelStoreOwner)
-            .invoke(
-                listState,
-                viewLifecycleOwner,
-                searchHistoryItems,
-                fullItems,
-                { item, word -> item.query?.contains(word) == true }
-            )
+        LaunchedEffect(viewLifecycleOwner) {
+            withContext(Dispatchers.IO) {
+                ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class)
+                    .receiveEvent(
+                        StateScrollerFactory().invoke(listState),
+                        searchHistoryItems,
+                        fullItems.toList(),
+                        { item, word -> item.query?.contains(word) == true }
+                    )
+            }
+        }
     }
 }
