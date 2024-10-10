@@ -16,8 +16,8 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
-import jp.toastkid.loan.Calculator
 import jp.toastkid.loan.model.Factor
+import jp.toastkid.loan.model.LoanPayment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,13 +39,13 @@ class DebouncedCalculatorUseCaseTest {
     private lateinit var currentFactorProvider: () -> Factor
 
     @MockK
-    private lateinit var onResult: (Int) -> Unit
+    private lateinit var onResult: (LoanPayment) -> Unit
 
     @Suppress("unused")
     private val debounceMillis = 0L
 
     @MockK
-    private lateinit var calculator: Calculator
+    private lateinit var calculator: LoanCalculator
 
     @Suppress("unused")
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
@@ -59,7 +59,7 @@ class DebouncedCalculatorUseCaseTest {
 
         coEvery { currentFactorProvider() }
             .returns(Factor(10000000, 35, 1.0, 100000, 10000, 10000))
-        coEvery { calculator.invoke(any()) }.returns(100)
+        coEvery { calculator.invoke(any()) }.returns(LoanPayment(10000, emptyList()))
         coEvery { onResult(any()) }.just(Runs)
     }
 
@@ -81,4 +81,5 @@ class DebouncedCalculatorUseCaseTest {
             coVerify { onResult(any()) }
         }
     }
+
 }
