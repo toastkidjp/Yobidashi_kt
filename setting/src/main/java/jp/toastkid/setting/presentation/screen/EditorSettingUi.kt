@@ -200,7 +200,7 @@ internal fun EditorSettingUi() {
                             expanded = fontSizeOpen.value,
                             onDismissRequest = { fontSizeOpen.value = false }
                         ) {
-                            EditorFontSize.values().forEach {
+                            EditorFontSize.entries.forEach {
                                 DropdownMenuItem(
                                     text = {
                                         Text(
