@@ -100,10 +100,6 @@ fun ImageListUi() {
         )
     }
 
-    val contentViewModel = (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
-        ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
-    }
-
     val requestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
@@ -111,12 +107,16 @@ fun ImageListUi() {
                 return@rememberLauncherForActivityResult
             }
 
-            contentViewModel?.snackShort(R.string.message_audio_file_is_not_found)
+            (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
+                ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
+            }?.snackShort(R.string.message_audio_file_is_not_found)
         }
 
     val localLifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = localLifecycleOwner, block = {
-        contentViewModel?.event?.collect {
+        (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
+            ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
+        }?.event?.collect {
             when (it) {
                 is FindInPageEvent -> {
                     if (it.word.isBlank()) {
