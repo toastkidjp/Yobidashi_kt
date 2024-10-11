@@ -79,7 +79,6 @@ import jp.toastkid.lib.viewmodel.event.content.NavigationEvent
 import jp.toastkid.lib.viewmodel.event.content.RefreshContentEvent
 import jp.toastkid.lib.viewmodel.event.content.ReplaceToCurrentTabContentEvent
 import jp.toastkid.lib.viewmodel.event.content.SnackbarEvent
-import jp.toastkid.lib.viewmodel.event.content.SwitchTabListEvent
 import jp.toastkid.lib.viewmodel.event.finder.CloseFinderEvent
 import jp.toastkid.lib.viewmodel.event.tab.MoveTabEvent
 import jp.toastkid.lib.viewmodel.event.tab.OpenArticleEvent
