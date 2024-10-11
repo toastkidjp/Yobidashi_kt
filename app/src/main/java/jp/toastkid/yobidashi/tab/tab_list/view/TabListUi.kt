@@ -234,7 +234,6 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
                         Modifier.padding(4.dp)
                     ) {
                         // For suppressing replace screen.
-                        contentViewModel.setHideBottomSheetAction {  }
                         contentViewModel.openNewTab()
                         closeOnly(coroutineScope, contentViewModel)
                     }
@@ -251,18 +250,11 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
         }
     }
 
-    LaunchedEffect(initialIndex, block = {
-        contentViewModel.setHideBottomSheetAction {
+    DisposableEffect(tabAdapter) {
+        onDispose {
             if (initialIndex != tabAdapter.currentTabId()) {
                 contentViewModel.replaceToCurrentTab()
             }
-
-            contentViewModel.setHideBottomSheetAction {  }
-        }
-    })
-
-    DisposableEffect(tabAdapter) {
-        onDispose {
             tabAdapter.saveTabList()
         }
     }
