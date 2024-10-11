@@ -15,42 +15,20 @@ import android.net.Uri
 import android.os.Build
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.safeContent
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.systemGestures
-import androidx.compose.foundation.layout.tappableElement
-import androidx.compose.foundation.layout.waterfall
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -79,7 +57,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -94,6 +71,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.intent.OpenDocumentIntentFactory
+import jp.toastkid.lib.model.tab.StartUp
 import jp.toastkid.lib.network.DownloadAction
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -131,7 +109,6 @@ import jp.toastkid.web.webview.factory.WebViewClientFactory
 import jp.toastkid.web.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.RecentAppColoringUseCase
-import jp.toastkid.lib.model.tab.StartUp
 import jp.toastkid.yobidashi.main.usecase.ClippingUrlOpener
 import jp.toastkid.yobidashi.main.usecase.WebSearchResultTabOpenerUseCase
 import jp.toastkid.yobidashi.tab.History
@@ -483,19 +460,7 @@ internal fun Content() {
         )
 
         if (contentViewModel.showModalBottomSheet()) {
-            ModalBottomSheet(
-                onDismissRequest = { contentViewModel.hideBottomSheet() }
-            ) {
-                Box(modifier = Modifier.defaultMinSize(1.dp, 1.dp)) {
-                    Inputs().hideKeyboard(localView)
-
-                    contentViewModel.bottomSheetContent.value.invoke()
-                }
-
-                BackHandler(contentViewModel.showModalBottomSheet()) {
-                    contentViewModel.hideBottomSheet()
-                }
-            }
+            TabListUi(tabs)
         }
 
         Scaffold(

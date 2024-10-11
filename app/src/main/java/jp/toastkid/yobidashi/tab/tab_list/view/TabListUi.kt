@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.tab.tab_list.view
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
 import androidx.compose.animation.AnimatedVisibility
@@ -36,9 +37,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,6 +58,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -66,6 +70,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.TabAdapter
@@ -81,8 +86,9 @@ import java.io.File
 import kotlin.math.max
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TabListUi(tabAdapter: TabAdapter) {
+internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val coroutineScope = rememberCoroutineScope()
@@ -110,122 +116,138 @@ internal fun TabListUi(tabAdapter: TabAdapter) {
     val initialIndex = remember { tabAdapter.currentTabId() }
     val deletedTabIds = remember { mutableStateListOf<String>() }
 
-    Box {
-        AsyncImage(
-            model = PreferenceApplier(context).backgroundImagePath,
-            contentDescription = stringResource(id = R.string.content_description_background),
-            alignment = Alignment.Center,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.matchParentSize()
-        )
+    val localView = LocalView.current
 
-        Column {
-            LazyRow(
-                state = state.listState,
-                contentPadding = PaddingValues(horizontal = 4.dp),
-                modifier = Modifier
-                    .reorderable(state)
-                    .detectReorderAfterLongPress(state)
-            ) {
-                val currentIndex = tabAdapter.index()
-                val tabThumbnails = TabThumbnails.with(context)
+    ModalBottomSheet(
+        onDismissRequest = { contentViewModel.hideBottomSheet() },
+        tonalElevation = 1.dp,
+        containerColor = MaterialTheme.colorScheme.primary,
+    ) {
+        Box(modifier) {
+            AsyncImage(
+                model = PreferenceApplier(context).backgroundImagePath,
+                contentDescription = stringResource(id = R.string.content_description_background),
+                alignment = Alignment.Center,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.matchParentSize()
+            )
 
-                itemsIndexed(tabs, { _, tab -> tab.id() }) { position, tab ->
-                    val backgroundColor = if (currentIndex == position)
-                        Color(
-                            ColorUtils.setAlphaComponent(
-                                MaterialTheme.colorScheme.secondary.toArgb(),
-                                128
+            Column {
+                LazyRow(
+                    state = state.listState,
+                    contentPadding = PaddingValues(horizontal = 4.dp),
+                    modifier = Modifier
+                        .reorderable(state)
+                        .detectReorderAfterLongPress(state)
+                ) {
+                    val currentIndex = tabAdapter.index()
+                    val tabThumbnails = TabThumbnails.with(context)
+
+                    itemsIndexed(tabs, { _, tab -> tab.id() }) { position, tab ->
+                        val backgroundColor = if (currentIndex == position)
+                            Color(
+                                ColorUtils.setAlphaComponent(
+                                    MaterialTheme.colorScheme.secondary.toArgb(),
+                                    128
+                                )
                             )
-                        )
-                    else
-                        Color.Transparent
+                        else
+                            Color.Transparent
 
-                    ReorderableItem(state, key = tab.id(), defaultDraggingModifier = Modifier.animateItem()) { _ ->
-                        TabItem(
-                            tab,
-                            tabThumbnails.assignNewFile(tab.thumbnailPath()),
-                            backgroundColor,
-                            visibility = {
-                                deletedTabIds.contains(it.id()).not()
-                            },
-                            onClick = {
-                                tabAdapter.replace(tab)
-                                closeOnly(coroutineScope, contentViewModel)
-                            },
-                            onDelete = {
-                                deletedTabIds.add(tab.id())
-                                tabAdapter.closeTab(tabAdapter.indexOf(tab))
-                                tabs.remove(tab)
-                            }
-                        )
+                        ReorderableItem(state, key = tab.id(), defaultDraggingModifier = Modifier.animateItem()) { _ ->
+                            TabItem(
+                                tab,
+                                tabThumbnails.assignNewFile(tab.thumbnailPath()),
+                                backgroundColor,
+                                visibility = {
+                                    deletedTabIds.contains(it.id()).not()
+                                },
+                                onClick = {
+                                    tabAdapter.replace(tab)
+                                    closeOnly(coroutineScope, contentViewModel)
+                                },
+                                onDelete = {
+                                    deletedTabIds.add(tab.id())
+                                    tabAdapter.closeTab(tabAdapter.indexOf(tab))
+                                    tabs.remove(tab)
+                                }
+                            )
+                        }
+                    }
+                }
+
+                val tint = MaterialTheme.colorScheme.onPrimary
+                val backgroundColor = MaterialTheme.colorScheme.primary
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                ) {
+                    TabActionFab(
+                        R.drawable.ic_edit,
+                        R.string.title_editor,
+                        tint,
+                        backgroundColor,
+                        Modifier.padding(4.dp)
+                    ) {
+                        contentViewModel.openEditorTab()
+                        closeOnly(coroutineScope, contentViewModel)
+                    }
+                    TabActionFab(
+                        R.drawable.ic_pdf,
+                        R.string.title_open_pdf,
+                        tint,
+                        backgroundColor,
+                        Modifier.padding(4.dp)
+                    ) {
+                        contentViewModel.openPdf()
+                        closeOnly(coroutineScope, contentViewModel)
+                    }
+                    TabActionFab(
+                        jp.toastkid.lib.R.drawable.ic_article,
+                        R.string.title_article_viewer,
+                        tint,
+                        backgroundColor,
+                        Modifier.padding(4.dp)
+                    ) {
+                        contentViewModel.openArticleList()
+                        closeOnly(coroutineScope, contentViewModel)
+                    }
+
+                    TabActionFab(
+                        R.drawable.ic_web,
+                        R.string.title_browser,
+                        tint,
+                        backgroundColor,
+                        Modifier.padding(4.dp)
+                    ) {
+                        contentViewModel.open(PreferenceApplier(context).homeUrl.toUri())
+                        closeOnly(coroutineScope, contentViewModel)
+                    }
+                    TabActionFab(
+                        R.drawable.ic_add_tab,
+                        jp.toastkid.lib.R.string.open,
+                        tint,
+                        backgroundColor,
+                        Modifier.padding(4.dp)
+                    ) {
+                        // For suppressing replace screen.
+                        contentViewModel.setHideBottomSheetAction {  }
+                        contentViewModel.openNewTab()
+                        closeOnly(coroutineScope, contentViewModel)
                     }
                 }
             }
+        }
 
-            val tint = MaterialTheme.colorScheme.onPrimary
-            val backgroundColor = MaterialTheme.colorScheme.primary
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()
-            ) {
-                TabActionFab(
-                    R.drawable.ic_edit,
-                    R.string.title_editor,
-                    tint,
-                    backgroundColor,
-                    Modifier.padding(4.dp)
-                ) {
-                    contentViewModel.openEditorTab()
-                    closeOnly(coroutineScope, contentViewModel)
-                }
-                TabActionFab(
-                    R.drawable.ic_pdf,
-                    R.string.title_open_pdf,
-                    tint,
-                    backgroundColor,
-                    Modifier.padding(4.dp)
-                ) {
-                    contentViewModel.openPdf()
-                    closeOnly(coroutineScope, contentViewModel)
-                }
-                TabActionFab(
-                    jp.toastkid.lib.R.drawable.ic_article,
-                    R.string.title_article_viewer,
-                    tint,
-                    backgroundColor,
-                    Modifier.padding(4.dp)
-                ) {
-                    contentViewModel.openArticleList()
-                    closeOnly(coroutineScope, contentViewModel)
-                }
+        BackHandler(contentViewModel.showModalBottomSheet()) {
+            contentViewModel.hideBottomSheet()
+        }
 
-                TabActionFab(
-                    R.drawable.ic_web,
-                    R.string.title_browser,
-                    tint,
-                    backgroundColor,
-                    Modifier.padding(4.dp)
-                ) {
-                    contentViewModel.open(PreferenceApplier(context).homeUrl.toUri())
-                    closeOnly(coroutineScope, contentViewModel)
-                }
-                TabActionFab(
-                    R.drawable.ic_add_tab,
-                    jp.toastkid.lib.R.string.open,
-                    tint,
-                    backgroundColor,
-                    Modifier.padding(4.dp)
-                ) {
-                    // For suppressing replace screen.
-                    contentViewModel.setHideBottomSheetAction {  }
-                    contentViewModel.openNewTab()
-                    closeOnly(coroutineScope, contentViewModel)
-                }
-            }
+        LaunchedEffect(contentViewModel.showModalBottomSheet()) {
+            Inputs().hideKeyboard(localView)
         }
     }
 
