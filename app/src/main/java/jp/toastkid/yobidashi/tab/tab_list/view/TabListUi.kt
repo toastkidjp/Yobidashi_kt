@@ -119,7 +119,7 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
     val localView = LocalView.current
 
     ModalBottomSheet(
-        onDismissRequest = { contentViewModel.hideBottomSheet() },
+        onDismissRequest = { contentViewModel.switchTabList() },
         tonalElevation = 1.dp,
         containerColor = MaterialTheme.colorScheme.primary,
     ) {
@@ -242,11 +242,11 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
             }
         }
 
-        BackHandler(contentViewModel.showModalBottomSheet()) {
-            contentViewModel.hideBottomSheet()
+        BackHandler(contentViewModel.showTabList()) {
+            contentViewModel.switchTabList()
         }
 
-        LaunchedEffect(contentViewModel.showModalBottomSheet()) {
+        LaunchedEffect(contentViewModel.showTabList()) {
             Inputs().hideKeyboard(localView)
         }
     }
@@ -273,7 +273,7 @@ private fun closeOnly(
     contentViewModel: ContentViewModel
 ) {
     coroutineScope.launch {
-        contentViewModel.hideBottomSheet()
+        contentViewModel.switchTabList()
     }
 }
 

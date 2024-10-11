@@ -459,7 +459,7 @@ internal fun Content() {
             modifier = Modifier.fillMaxSize()
         )
 
-        if (contentViewModel.showModalBottomSheet()) {
+        if (contentViewModel.showTabList()) {
             TabListUi(tabs)
         }
 
