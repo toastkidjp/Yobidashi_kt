@@ -232,12 +232,6 @@ internal fun Content() {
                     keyboardController?.hide()
                     focusManager.clearFocus(true)
                 }
-                is SwitchTabListEvent -> {
-                    contentViewModel.setBottomSheetContent { TabListUi(tabs) }
-                    coroutineScope?.launch {
-                        contentViewModel?.switchBottomSheet()
-                    }
-                }
                 is MoveTabEvent -> {
                     if (it.movingStep == -1) {
                         tabs.movePreviousTab()
