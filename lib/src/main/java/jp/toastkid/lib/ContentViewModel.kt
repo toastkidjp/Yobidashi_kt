@@ -173,12 +173,6 @@ class ContentViewModel : ViewModel() {
         _bottomSheetContent.value = content
     }
 
-    private val _hideBottomSheetAction = mutableStateOf({})
-
-    fun setHideBottomSheetAction(action: () -> Unit) {
-        _hideBottomSheetAction.value = action
-    }
-
     private val _showModalBottomSheet = mutableStateOf(false)
 
     fun showModalBottomSheet() = _showModalBottomSheet.value
@@ -188,7 +182,6 @@ class ContentViewModel : ViewModel() {
     }
 
     fun hideBottomSheet() {
-        _hideBottomSheetAction.value()
         _showModalBottomSheet.value = false
     }
 
