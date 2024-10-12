@@ -201,6 +201,16 @@ class ContentViewModel : ViewModel() {
         showMusicListUi.value = showMusicListUi.value.not()
     }
 
+    private val floatingPreviewUrl = mutableStateOf<String?>(null)
+
+    fun showFloatingPreviewUi() = floatingPreviewUrl.value != null
+
+    fun floatingPreviewUri() = floatingPreviewUrl.value
+
+    fun switchFloatingPreviewUi(url: String? = null) {
+        floatingPreviewUrl.value = url
+    }
+
     fun nextRoute(route: String) {
         viewModelScope.launch {
             _event.emit(NavigationEvent(route))
