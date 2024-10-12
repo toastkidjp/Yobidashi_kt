@@ -100,7 +100,6 @@ class WebViewContainer(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
             )
-            browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
         }
 
     init {

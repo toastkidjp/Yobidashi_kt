@@ -12,7 +12,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.web.view.refresh.SwipeRefreshState
 
 /**
  * @author toastkidjp
@@ -20,8 +19,6 @@ import jp.toastkid.web.view.refresh.SwipeRefreshState
 class WebTabUiViewModel {
 
     suspend fun stopProgress() {
-        swipeRefreshState.value?.resetOffset()
-        swipeRefreshState.value?.isRefreshing = false
         resetRefreshing()
     }
 
@@ -112,26 +109,6 @@ class WebTabUiViewModel {
         _error.value = ""
         openErrorDialog.value = false
     }
-
-    val swipeRefreshState = mutableStateOf<SwipeRefreshState?>(null)
-
-    fun initializeSwipeRefreshState(refreshTriggerPx: Float) {
-        swipeRefreshState.value = SwipeRefreshState(false, refreshTriggerPx)
-    }
-
-    fun showSwipeRefreshIndicator() =
-        swipeRefreshState.value?.isSwipeInProgress == true
-                || swipeRefreshState.value?.isRefreshing == true
-
-    fun calculateSwipeRefreshIndicatorAlpha(refreshTriggerPx: Float) =
-        ((swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx).coerceIn(0f, 1f)
-
-    fun calculateSwipingProgress(refreshTriggerPx: Float) =
-        if (swipeRefreshState.value?.isRefreshing == false)
-                ((swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx)
-                    .coerceIn(0f, 1f)
-        else
-            _progress.intValue.toFloat() / 100f
 
     private val openLongTapDialog = mutableStateOf(false)
 

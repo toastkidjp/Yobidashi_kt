@@ -186,7 +186,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         webViewContainer.refresh()
-        browserViewModel.initializeSwipeRefreshState(refreshTriggerPx)
 
         focusManager.clearFocus(true)
 
@@ -309,12 +308,6 @@ private fun AppBarContent(
                     .height(1.dp)
                     .fillMaxWidth()
             )
-        } else {
-            LaunchedEffect(key1 = viewModel.progress()) {
-                coroutineScope.launch {
-                    viewModel.swipeRefreshState.value?.resetOffset()
-                }
-            }
         }
 
         Row(
