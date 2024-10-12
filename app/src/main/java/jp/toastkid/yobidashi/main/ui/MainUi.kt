@@ -119,7 +119,6 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.view.TabListUi
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -369,12 +368,7 @@ internal fun Content() {
                                 ?: SearchCategory.getDefaultCategoryName(),
                             it.text
                         )
-                    contentViewModel?.setBottomSheetContent {
-                        FloatingPreviewUi(uri)
-                    }
-                    coroutineScope?.launch {
-                        contentViewModel?.switchBottomSheet()
-                    }
+                    contentViewModel.switchFloatingPreviewUi(uri.toString())
                 }
                 is OnLoadCompletedEvent -> {
                     if (it.loadInformation.expired()) {
@@ -455,6 +449,10 @@ internal fun Content() {
 
         if (contentViewModel.showMusicListUi()) {
             MusicListUi()
+        }
+
+        contentViewModel.floatingPreviewUri()?.let {
+            FloatingPreviewUi(it.toUri())
         }
 
         Scaffold(
