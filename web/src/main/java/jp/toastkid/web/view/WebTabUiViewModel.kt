@@ -22,6 +22,7 @@ class WebTabUiViewModel {
     suspend fun stopProgress() {
         swipeRefreshState.value?.resetOffset()
         swipeRefreshState.value?.isRefreshing = false
+        resetRefreshing()
     }
 
     private val _icon = mutableStateOf<Bitmap?>(null)
@@ -80,6 +81,10 @@ class WebTabUiViewModel {
 
     fun updateProgress(newProgress: Int) {
         _progress.intValue = newProgress
+
+        if (newProgress > 70) {
+            resetRefreshing()
+        }
     }
 
     fun shouldShowProgressIndicator(): Boolean {
@@ -173,6 +178,18 @@ class WebTabUiViewModel {
 
     fun closeReaderMode() {
         readerModeText.value = ""
+    }
+
+    private val refreshing = mutableStateOf(false)
+
+    fun isRefreshing() = refreshing.value
+
+    fun setRefreshing() {
+        refreshing.value = true
+    }
+
+    private fun resetRefreshing() {
+        refreshing.value = false
     }
 
 }
