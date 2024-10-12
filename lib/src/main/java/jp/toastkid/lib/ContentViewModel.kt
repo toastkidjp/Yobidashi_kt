@@ -193,6 +193,14 @@ class ContentViewModel : ViewModel() {
         showTabList.value = showTabList.value.not()
     }
 
+    private val showMusicListUi = mutableStateOf(false)
+
+    fun showMusicListUi() = showMusicListUi.value
+
+    fun switchMusicListUi() {
+        showMusicListUi.value = showMusicListUi.value.not()
+    }
+
     fun nextRoute(route: String) {
         viewModelScope.launch {
             _event.emit(NavigationEvent(route))

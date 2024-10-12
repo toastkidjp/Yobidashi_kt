@@ -435,10 +435,7 @@ internal fun Content() {
                 return@rememberLauncherForActivityResult
             }
 
-            contentViewModel?.setBottomSheetContent { MusicListUi() }
-            coroutineScope?.launch {
-                contentViewModel?.switchBottomSheet()
-            }
+            contentViewModel.switchMusicListUi()
         }
 
     Box(
@@ -454,6 +451,10 @@ internal fun Content() {
 
         if (contentViewModel.showTabList()) {
             TabListUi(tabs)
+        }
+
+        if (contentViewModel.showMusicListUi()) {
+            MusicListUi()
         }
 
         Scaffold(
