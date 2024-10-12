@@ -25,18 +25,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -54,7 +54,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -66,7 +65,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.web.view.refresh.SwipeRefreshNestedScrollConnection
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.web.FaviconApplier
 import jp.toastkid.web.R
@@ -79,11 +77,12 @@ import jp.toastkid.web.user_agent.UserAgentDropdown
 import jp.toastkid.web.view.dialog.AnchorLongTapDialog
 import jp.toastkid.web.view.dialog.PageInformationDialog
 import jp.toastkid.web.view.reader.ReaderModeUi
+import jp.toastkid.web.view.refresh.SwipeRefreshNestedScrollConnection
 import jp.toastkid.web.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import kotlinx.coroutines.launch
-import kotlin.math.min
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WebTabUi(uri: Uri, tabId: String) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
@@ -98,25 +97,41 @@ fun WebTabUi(uri: Uri, tabId: String) {
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
     val refreshTriggerPx = with(LocalDensity.current) { 96.dp.toPx() }
-    val verticalIndicatorOffsetPx = with(LocalDensity.current) { -24.dp.toPx() }.toInt()
 
-    val nestedScrollConnection = SwipeRefreshNestedScrollConnection(
-        browserViewModel.swipeRefreshState.value,
-        coroutineScope
-    ) {
-        if (browserViewModel.swipeRefreshState.value?.isRefreshing == false) {
-            contentViewModel.showAppBar(coroutineScope)
-            webViewContainer.reload()
-            browserViewModel.swipeRefreshState.value?.isRefreshing = true
-        }
-        browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
-    }.also {
-        it.refreshTrigger = refreshTriggerPx
-        it.enabled = true
-    }
+    val refreshState = rememberPullToRefreshState()
 
-    Box(
-        modifier = Modifier.nestedScroll(nestedScrollConnection)
+    PullToRefreshBox(
+        isRefreshing = browserViewModel.isRefreshing(),
+        state = refreshState,
+        onRefresh = coroutineScope::class.java::getComponentType,
+        indicator = {
+            Indicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                isRefreshing = browserViewModel.isRefreshing(),
+                state = refreshState,
+                containerColor = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onPrimary,
+                threshold = 60.dp
+            )
+        },
+        modifier = Modifier.nestedScroll(
+            SwipeRefreshNestedScrollConnection(
+                refreshState,
+                coroutineScope,
+                refreshTriggerPx,
+                {
+                    if (browserViewModel.isRefreshing()) {
+                        return@SwipeRefreshNestedScrollConnection
+                    }
+
+                    coroutineScope.launch {
+                        browserViewModel.setRefreshing()
+                        contentViewModel.showAppBar(coroutineScope)
+                        webViewContainer.reload()
+                    }
+                }
+            )
+        )
     ) {
         AndroidView(
             factory = {
@@ -129,32 +144,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
                     dispatcher = webViewContainer.nestedScrollDispatcher()
                 )
         )
-
-        if (browserViewModel.showSwipeRefreshIndicator()) {
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .offset {
-                        IntOffset(
-                            0,
-                            min(
-                                verticalIndicatorOffsetPx + (browserViewModel.swipeRefreshState.value?.indicatorOffset?.toInt()
-                                    ?: 0),
-                                nestedScrollConnection.refreshTrigger.toInt()
-                            )
-                        )
-                    }
-                    .graphicsLayer { alpha = browserViewModel.calculateSwipeRefreshIndicatorAlpha(refreshTriggerPx) }
-                    .align(Alignment.TopCenter)
-            ) {
-                CircularProgressIndicator(
-                    progress = { browserViewModel.calculateSwipingProgress(refreshTriggerPx) },
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.padding(4.dp)
-                )
-            }
-        }
     }
 
     if (browserViewModel.isOpenReaderMode()) {
