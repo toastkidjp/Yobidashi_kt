@@ -6,8 +6,6 @@ import android.content.res.Configuration
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.content.ContextCompat
-import jp.toastkid.lib.R
 import jp.toastkid.lib.Urls
 import java.io.File
 import java.util.Locale
@@ -43,7 +41,7 @@ class PreferenceApplier(private val context: Context) {
         IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE, USE_TITLE_FILTER,
         ARTICLE_LIST_SORT_TYPE, LAST_CLIPPED_WORD,
         NUMBER_PLACE_MASKING_COUNT, NUMBER_PLACE_LAST_GAME_PATH, HOLIDAY_CALENDARS, PRIMARY_HOLIDAY_CALENDARS,
-        CHAT_API_KEY,
+        CHAT_API_KEY, AUTO_ARCHIVE
     }
 
     private val preferences: SharedPreferences =
@@ -509,6 +507,14 @@ class PreferenceApplier(private val context: Context) {
 
     fun setChatApiKey(newValue: String) {
         preferences.edit().putString(Key.CHAT_API_KEY.name, newValue).apply()
+    }
+
+    fun useAutoArchive(): Boolean {
+        return preferences.getBoolean(Key.AUTO_ARCHIVE.name, false)
+    }
+
+    fun setUseAutoArchive(newState: Boolean) {
+        preferences.edit().putBoolean(Key.AUTO_ARCHIVE.name, newState).apply()
     }
 
 }
