@@ -11,8 +11,6 @@ package jp.toastkid.web.webview.factory
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
 import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.compose.ui.graphics.Color
@@ -35,14 +33,6 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class WebViewFactory {
-
-    /**
-     * Use for only extract anchor URL.
-     */
-    private val handler = Handler(Looper.getMainLooper()) {
-        it.data?.let(longTapItemHolder::extract)
-        true
-    }
 
     private val longTapItemHolder = LongTapItemHolder()
 
