@@ -122,6 +122,7 @@ class WebViewContainer(
             AdRemover.make(context.assets),
             faviconApplier,
             preferenceApplier,
+            AutoArchive.make(context),
             browserViewModel,
             RssAddingSuggestion(preferenceApplier),
             { GlobalWebViewPool.getLatest() }
