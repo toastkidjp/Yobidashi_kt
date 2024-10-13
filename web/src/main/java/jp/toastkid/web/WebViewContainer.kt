@@ -176,7 +176,7 @@ class WebViewContainer(
                 && networkChecker.isNotAvailable(context)
         ) {
             autoArchive.load(currentView, idGenerator.from(url)) {
-                contentViewModel?.snackShort("Load archive.")
+                contentViewModel?.snackShort(it)
             }
             return
         }
