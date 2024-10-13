@@ -14,6 +14,16 @@
 360.yahoo.com
 4.mcnt.jp
 4107269.ranking.fc2.com
+0.html-load.com
+1.html-load.com
+2.html-load.com
+3.html-load.com
+4.html-load.com
+5.html-load.com
+6.html-load.com
+7.html-load.com
+8.html-load.com
+9.html-load.com
 a-mobile.genieesspv.jp
 a.adimg.net
 a.adjust-sp.jp
@@ -1196,6 +1206,7 @@ streamjs.investing.com
 suo.lp.mydas.mobi
 switch-app.net
 syaseigangan.club
+sync.search.spotxchange.com
 sync-dsp.ad-m.asia
 sync-tapi.admatrix.jp
 sync.1rx.io
@@ -1336,6 +1347,7 @@ www.trackword.biz
 www.ucchari.com
 www.uncumlzowtkn.com
 www.vuysooqimdbt.com
+www.58371150.xyz
 www10.a8.net
 www11.a8.net
 www12.a8.net
@@ -1390,3 +1402,8 @@ yj-a.p.adnxs.com
 yjaxc.yahoo.co.jp
 yourbest.exclusiveoffer.today
 z.moatads.com
+stags.bluekai.com
+pixel.rubiconproject.com
+as.uncn.jp
+uncn.jp
+report.error-report.com
