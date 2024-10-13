@@ -16,6 +16,7 @@
     <string name="message_check_retain_tabs">アプリ終了後もタブを保持します。</string>
     <string name="message_check_doesnot_retain_tabs">アプリ終了時にタブをすべて削除します。</string>
     <string name="title_retain_tabs">アプリ終了後もタブを保持</string>
+    <string name="title_use_auto_archive">自動アーカイブを使う</string>
     <string name="title_enable_javascript">JavaScript を有効にする</string>
     <string name="subhead_displaying">表示</string>
     <string name="subhead_setting_browser">Web</string>
