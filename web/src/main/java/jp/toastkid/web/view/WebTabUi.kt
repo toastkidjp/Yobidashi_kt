@@ -255,9 +255,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
             OptionMenu(titleId = R.string.title_print_page, action = {
                 PrintCurrentPageUseCase().invoke(GlobalWebViewPool.getLatest())
             }),
-            OptionMenu(titleId = R.string.title_archive, action = {
-                webViewContainer.saveArchive()
-            }),
+            OptionMenu(titleId = R.string.title_archive, action = webViewContainer::saveArchive),
             OptionMenu(titleId = R.string.title_add_to_rss_reader, action = {
                 RssUrlFinder(
                     PreferenceApplier(activityContext),
