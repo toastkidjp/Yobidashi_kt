@@ -34,8 +34,6 @@ import timber.log.Timber
  */
 class WebViewFactory {
 
-    private val longTapItemHolder = LongTapItemHolder()
-
     /**
      * Color alpha converter.
      */
