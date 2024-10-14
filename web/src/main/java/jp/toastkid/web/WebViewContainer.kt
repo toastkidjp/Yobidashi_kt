@@ -259,14 +259,6 @@ class WebViewContainer(
         Archive.save(currentView)
     }
 
-    /**
-     * Save archive file.
-     */
-    fun saveArchiveForAutoArchive() {
-        val webView = currentView()
-        autoArchive.save(webView, idGenerator.from(webView?.url))
-    }
-
     fun resetUserAgent(userAgentText: String) {
         try {
             currentView()?.settings?.userAgentString = userAgentText
