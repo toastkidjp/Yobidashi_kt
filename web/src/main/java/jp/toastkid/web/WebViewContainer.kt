@@ -98,7 +98,7 @@ class WebViewContainer(
         View.OnScrollChangeListener { _, scrollX, scrollY, oldScrollX, oldScrollY ->
             nestedScrollDispatcher.dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
-                NestedScrollSource.Fling
+                NestedScrollSource.SideEffect
             )
         }
 
