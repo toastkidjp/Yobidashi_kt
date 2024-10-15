@@ -194,7 +194,7 @@ class WebViewContainer(
     }
 
     private fun updateForwardButtonState(newState: Boolean) {
-        browserViewModel?.setForwardButtonIsEnabled(newState)
+        browserViewModel.setForwardButtonIsEnabled(newState)
     }
 
     /**
