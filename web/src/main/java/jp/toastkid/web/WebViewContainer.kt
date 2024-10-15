@@ -108,7 +108,7 @@ class WebViewContainer(
             FrameLayout.LayoutParams.MATCH_PARENT
         )
 
-        customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
+        customViewSwitcher = CustomViewSwitcher({ context }, ::currentView)
 
         if (context is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(context)
