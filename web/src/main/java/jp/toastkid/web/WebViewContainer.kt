@@ -317,7 +317,7 @@ class WebViewContainer(
         GlobalWebViewPool.applyNewAlpha(alphaConverter.readBackground(context))
     }
 
-    fun makeShareMessage() = "${currentTitle()}${System.lineSeparator()}${currentUrl()}"
+    private fun makeShareMessage() = "${currentTitle()}${System.lineSeparator()}${currentUrl()}"
 
     fun invokeContentExtraction(callback: ValueCallback<String>) {
         readerModeUseCase(currentView(), callback)
