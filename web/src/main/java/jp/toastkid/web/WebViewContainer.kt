@@ -125,7 +125,7 @@ class WebViewContainer(
             AutoArchive.make(context),
             browserViewModel,
             RssAddingSuggestion(preferenceApplier),
-            { GlobalWebViewPool.getLatest() }
+            GlobalWebViewPool::getLatest
         ).invoke()
 
         webChromeClient = WebChromeClientFactory(
