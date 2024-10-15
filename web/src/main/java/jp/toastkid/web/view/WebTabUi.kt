@@ -167,10 +167,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
         AnchorLongTapDialog(
             value.first,
             value.second,
-            value.third
-        ) {
-            browserViewModel.clearLongTapParameters()
-        }
+            value.third,
+            browserViewModel::clearLongTapParameters
+        )
     }
 
     BackHandler(browserViewModel.isOpenReaderMode()) {
