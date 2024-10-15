@@ -166,7 +166,7 @@ internal fun Content() {
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                if (source != NestedScrollSource.Fling) {
+                if (source != NestedScrollSource.SideEffect) {
                     return Offset.Zero
                 }
                 val delta = available.y
