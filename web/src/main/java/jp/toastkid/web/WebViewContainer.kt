@@ -131,7 +131,7 @@ class WebViewContainer(
         webChromeClient = WebChromeClientFactory(
             browserViewModel,
             faviconApplier,
-            CustomViewSwitcher({ context }, { GlobalWebViewPool.getLatest() })
+            CustomViewSwitcher({ context }, GlobalWebViewPool::getLatest)
         ).invoke()
 
         webViewReplacementUseCase = WebViewReplacementUseCase(
