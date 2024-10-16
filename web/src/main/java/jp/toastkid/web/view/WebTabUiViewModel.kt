@@ -119,7 +119,7 @@ class WebTabUiViewModel {
     fun isOpenLongTapDialog() = openLongTapDialog.value
 
     private val _longTapActionParameters =
-        mutableStateOf(Triple<String?, String?, String?>(null, null, null))
+        mutableStateOf(EMPTY_LONG_TAP_ACTION_PARAMETERS)
 
     val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
 
@@ -128,7 +128,7 @@ class WebTabUiViewModel {
     }
 
     fun clearLongTapParameters() {
-        _longTapActionParameters.value = Triple(null, null, null)
+        _longTapActionParameters.value = EMPTY_LONG_TAP_ACTION_PARAMETERS
         openLongTapDialog.value = false
     }
 
@@ -170,3 +170,5 @@ class WebTabUiViewModel {
     }
 
 }
+
+private val EMPTY_LONG_TAP_ACTION_PARAMETERS = Triple<String?, String?, String?>(null, null, null)
