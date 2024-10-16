@@ -162,7 +162,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
 
     if (browserViewModel.isOpenLongTapDialog()) {
         val value = browserViewModel.longTapActionParameters.value
-        browserViewModel.openLongTapDialog()
 
         AnchorLongTapDialog(
             value.first,
