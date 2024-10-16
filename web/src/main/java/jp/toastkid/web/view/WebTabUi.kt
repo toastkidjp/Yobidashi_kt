@@ -176,9 +176,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
     }
 
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
-        contentViewModel.event.collect {
-            webViewContainer.useEvent(it)
-        }
+        contentViewModel.event.collect(webViewContainer::useEvent)
     })
 
     val focusManager = LocalFocusManager.current
