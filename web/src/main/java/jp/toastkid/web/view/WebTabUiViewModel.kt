@@ -116,8 +116,6 @@ class WebTabUiViewModel {
         openLongTapDialog.value = true
     }
 
-    fun isOpenLongTapDialog() = openLongTapDialog.value
-
     private val _longTapActionParameters =
         mutableStateOf(EMPTY_LONG_TAP_ACTION_PARAMETERS)
 
@@ -126,6 +124,8 @@ class WebTabUiViewModel {
     fun setLongTapParameters(title: String?, anchor: String?, imageUrl: String?) {
         _longTapActionParameters.value = Triple(title, anchor, imageUrl)
     }
+
+    fun isOpenLongTapDialog() = longTapActionParameters.value !== EMPTY_LONG_TAP_ACTION_PARAMETERS
 
     fun clearLongTapParameters() {
         _longTapActionParameters.value = EMPTY_LONG_TAP_ACTION_PARAMETERS
