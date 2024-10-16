@@ -18,7 +18,7 @@ import jp.toastkid.lib.ContentViewModel
  */
 class WebTabUiViewModel {
 
-    suspend fun stopProgress() {
+    fun stopProgress() {
         resetRefreshing()
     }
 
