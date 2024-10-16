@@ -110,12 +110,6 @@ class WebTabUiViewModel {
         openErrorDialog.value = false
     }
 
-    private val openLongTapDialog = mutableStateOf(false)
-
-    fun openLongTapDialog() {
-        openLongTapDialog.value = true
-    }
-
     private val _longTapActionParameters =
         mutableStateOf(EMPTY_LONG_TAP_ACTION_PARAMETERS)
 
@@ -129,7 +123,6 @@ class WebTabUiViewModel {
 
     fun clearLongTapParameters() {
         _longTapActionParameters.value = EMPTY_LONG_TAP_ACTION_PARAMETERS
-        openLongTapDialog.value = false
     }
 
     private val readerModeText = mutableStateOf("")
