@@ -95,17 +95,19 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
     }
 
     fun storeStates(bundle: Bundle) {
-        pool.snapshot().entries.forEach {
-            val useCase = WebViewStateUseCase.make(it.value.context)
-            useCase.store(it.value, it.key)
-            it.value.saveState(bundle)
-        }
+        val latest = getLatest() ?: return
+        val tabId = getTabId(latest) ?: return
+        val useCase = WebViewStateUseCase.make(latest.context)
+        useCase.store(latest, tabId)
+        latest.saveState(bundle)
     }
 
     fun restoreStates(bundle: Bundle) {
-        pool.snapshot().entries.forEach {
-            it.value.restoreState(bundle)
-        }
+        val latest = getLatest() ?: return
+        val tabId = getTabId(latest) ?: return
+        val useCase = WebViewStateUseCase.make(latest.context)
+        useCase.restore(latest, tabId)
+        latest.restoreState(bundle)
     }
 
     /**
