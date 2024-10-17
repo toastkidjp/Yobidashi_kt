@@ -45,7 +45,7 @@ internal fun SortSettingDialogUi(
                 )
 
                 val currentSort = Sort.findByName(currentSortName)
-                Sort.values().forEach { sort ->
+                Sort.entries.forEach { sort ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier

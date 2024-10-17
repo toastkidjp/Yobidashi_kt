@@ -36,7 +36,11 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
                         continue
                     }
 
-                    extract(zipInputStream, nextEntry)
+                    try {
+                        extract(zipInputStream, nextEntry)
+                    } finally {
+                        zipInputStream.closeEntry()
+                    }
 
                     nextEntry = try {
                         zipInputStream.nextEntry
@@ -46,7 +50,6 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
                         return
                     }
                 }
-                zipInputStream.closeEntry()
             }
         flush()
     }

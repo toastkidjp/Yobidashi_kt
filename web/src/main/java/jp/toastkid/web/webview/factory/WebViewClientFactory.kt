@@ -29,6 +29,8 @@ import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.FaviconApplier
+import jp.toastkid.web.archive.IdGenerator
+import jp.toastkid.web.archive.auto.AutoArchive
 import jp.toastkid.web.block.AdRemover
 import jp.toastkid.web.block.SiteNameChecker
 import jp.toastkid.web.history.ViewHistoryInsertion
@@ -49,10 +51,12 @@ class WebViewClientFactory(
     private val adRemover: AdRemover,
     private val faviconApplier: FaviconApplier,
     private val preferenceApplier: PreferenceApplier,
+    private val autoArchive: AutoArchive,
     private val browserViewModel: WebTabUiViewModel? = null,
     private val rssAddingSuggestion: RssAddingSuggestion? = null,
     private val currentView: () -> WebView? = { null },
-    private val siteNameChecker: SiteNameChecker = SiteNameChecker()
+    private val siteNameChecker: SiteNameChecker = SiteNameChecker(),
+    private val idGenerator: IdGenerator = IdGenerator()
 ) {
 
     /**
@@ -127,6 +131,10 @@ class WebViewClientFactory(
                                 faviconApplier.makePath(urlStr)
                         )
                         .invoke()
+            }
+
+            if (preferenceApplier.useAutoArchive()) {
+                autoArchive.save(view, idGenerator.from(view.url))
             }
         }
 
@@ -256,7 +264,8 @@ class WebViewClientFactory(
             contentViewModel,
             AdRemover.make(context.assets),
             FaviconApplier(context),
-            preferenceApplier
+            preferenceApplier,
+            AutoArchive.make(context)
         )
     }
 }

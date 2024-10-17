@@ -100,7 +100,6 @@ class WebViewContainer(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
                 NestedScrollSource.Fling
             )
-            browserViewModel.swipeRefreshState.value?.isSwipeInProgress = false
         }
 
     init {
@@ -123,6 +122,7 @@ class WebViewContainer(
             AdRemover.make(context.assets),
             faviconApplier,
             preferenceApplier,
+            AutoArchive.make(context),
             browserViewModel,
             RssAddingSuggestion(preferenceApplier),
             { GlobalWebViewPool.getLatest() }
@@ -176,7 +176,7 @@ class WebViewContainer(
                 && networkChecker.isNotAvailable(context)
         ) {
             autoArchive.load(currentView, idGenerator.from(url)) {
-                contentViewModel?.snackShort("Load archive.")
+                contentViewModel?.snackShort(it)
             }
             return
         }

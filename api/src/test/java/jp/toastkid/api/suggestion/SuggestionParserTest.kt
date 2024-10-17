@@ -23,7 +23,7 @@ import java.io.File
 class SuggestionParserTest {
 
     /**
-     * Check of [SuggestionParser.parse].
+     * Check of [SuggestionParser.invoke].
      */
     @Test
     fun test_parse() {

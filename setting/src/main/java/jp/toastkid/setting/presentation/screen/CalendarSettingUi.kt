@@ -41,7 +41,7 @@ internal fun CalendarSettingUi() {
     val holidayCalendars = remember {
         val map = mutableStateMapOf<HolidayCalendar, MutableState<Boolean>>()
         val usingHolidaysCalendar = preferenceApplier.usingHolidaysCalendar()
-        HolidayCalendar.values().forEach {
+        HolidayCalendar.entries.forEach {
             map.put(it, mutableStateOf(usingHolidaysCalendar.contains(it.name)))
         }
         map

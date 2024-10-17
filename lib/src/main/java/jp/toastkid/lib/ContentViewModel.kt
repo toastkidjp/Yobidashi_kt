@@ -17,7 +17,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
@@ -36,7 +35,6 @@ import jp.toastkid.lib.viewmodel.event.content.RefreshContentEvent
 import jp.toastkid.lib.viewmodel.event.content.ReplaceToCurrentTabContentEvent
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.lib.viewmodel.event.content.SnackbarEvent
-import jp.toastkid.lib.viewmodel.event.content.SwitchTabListEvent
 import jp.toastkid.lib.viewmodel.event.content.ToBottomEvent
 import jp.toastkid.lib.viewmodel.event.content.ToTopEvent
 import jp.toastkid.lib.viewmodel.event.finder.ClearFinderInputEvent
@@ -175,12 +173,6 @@ class ContentViewModel : ViewModel() {
         _bottomSheetContent.value = content
     }
 
-    private val _hideBottomSheetAction = mutableStateOf({})
-
-    fun setHideBottomSheetAction(action: () -> Unit) {
-        _hideBottomSheetAction.value = action
-    }
-
     private val _showModalBottomSheet = mutableStateOf(false)
 
     fun showModalBottomSheet() = _showModalBottomSheet.value
@@ -190,19 +182,38 @@ class ContentViewModel : ViewModel() {
     }
 
     fun hideBottomSheet() {
-        _hideBottomSheetAction.value()
         _showModalBottomSheet.value = false
+    }
+
+    private val showTabList = mutableStateOf(false)
+
+    fun showTabList() = showTabList.value
+
+    fun switchTabList() {
+        showTabList.value = showTabList.value.not()
+    }
+
+    private val showMusicListUi = mutableStateOf(false)
+
+    fun showMusicListUi() = showMusicListUi.value
+
+    fun switchMusicListUi() {
+        showMusicListUi.value = showMusicListUi.value.not()
+    }
+
+    private val floatingPreviewUrl = mutableStateOf<String?>(null)
+
+    fun showFloatingPreviewUi() = floatingPreviewUrl.value != null
+
+    fun floatingPreviewUri() = floatingPreviewUrl.value
+
+    fun switchFloatingPreviewUi(url: String? = null) {
+        floatingPreviewUrl.value = url
     }
 
     fun nextRoute(route: String) {
         viewModelScope.launch {
             _event.emit(NavigationEvent(route))
-        }
-    }
-
-    fun switchTabList() {
-        viewModelScope.launch {
-            _event.emit(SwitchTabListEvent())
         }
     }
 

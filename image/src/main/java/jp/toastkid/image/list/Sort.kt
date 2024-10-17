@@ -32,6 +32,6 @@ enum class Sort(val bucketSort: String, val imageSort: String) {
 
         fun findByName(name: String?) =
                 if (name.isNullOrBlank()) default()
-                else values().firstOrNull { it.name == name } ?: default()
+                else entries.firstOrNull { it.name == name } ?: default()
     }
 }
