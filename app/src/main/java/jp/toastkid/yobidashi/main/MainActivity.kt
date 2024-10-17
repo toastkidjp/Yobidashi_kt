@@ -41,6 +41,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        GlobalWebViewPool.storeStates(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        GlobalWebViewPool.restoreStates(savedInstanceState)
+    }
+
     override fun onResume() {
         super.onResume()
         GlobalWebViewPool.onResume()
