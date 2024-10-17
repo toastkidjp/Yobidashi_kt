@@ -167,7 +167,7 @@ internal fun Content() {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 if (source != NestedScrollSource.SideEffect) {
-                    return Offset.Zero
+                    return Offset.Unspecified
                 }
                 val delta = available.y
                 val newOffset = contentViewModel.bottomBarOffsetHeightPx.value + delta
