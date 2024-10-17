@@ -131,7 +131,6 @@ fun ViewHistoryListUi() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun List(
     viewHistoryItems: SnapshotStateList<ViewHistory>,
