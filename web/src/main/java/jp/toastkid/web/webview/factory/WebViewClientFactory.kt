@@ -183,7 +183,7 @@ class WebViewClientFactory(
                 if (approachFallbackUrlExtractor.isTarget(uri.host)) {
                     approachFallbackUrlExtractor.invoke(uri) {
                         view?.stopLoading()
-                        view?.loadUrl(it)
+                        view?.loadUrl(it, request.requestHeaders)
                     }
                     return@let false
                 }
