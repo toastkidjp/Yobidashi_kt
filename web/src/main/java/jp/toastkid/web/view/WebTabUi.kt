@@ -154,10 +154,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
         ConfirmDialog(
             stringResource(id = R.string.title_ssl_connection_error),
             browserViewModel.error(),
-            onDismissRequest = browserViewModel::closeErrorDialog
-        ) {
-            browserViewModel.clearError()
-        }
+            onDismissRequest = browserViewModel::closeErrorDialog,
+            onClickOk = browserViewModel::clearError
+        )
     }
 
     if (browserViewModel.isOpenLongTapDialog()) {
