@@ -311,8 +311,9 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_back,
                 R.string.back,
-                viewModel.enableBack()
-            ) { webViewContainer.back() }
+                viewModel.enableBack(),
+                webViewContainer::back
+            )
 
             HeaderSubButton(
                 R.drawable.ic_forward,
