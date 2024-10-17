@@ -174,10 +174,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
         browserViewModel.closeReaderMode()
     }
 
-    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
-        contentViewModel.event.collect(webViewContainer::useEvent)
-    })
-
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         webViewContainer.refresh()
@@ -197,6 +193,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserViewModel.showReader(it, contentViewModel)
             }
         }
+
+        contentViewModel.event.collect(webViewContainer::useEvent)
     })
 
     val storagePermissionRequestLauncher =
