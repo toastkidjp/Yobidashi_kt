@@ -120,7 +120,7 @@ class CustomWebView(context: Context) : WebView(context) {
                 nestedScrollDispatcher?.dispatchPostScroll(
                     Offset.Zero,
                     Offset.Zero,
-                    NestedScrollSource.Drag
+                    NestedScrollSource.UserInput
                 )
                 // end NestedScroll
                 stopNestedScroll()
