@@ -96,6 +96,8 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
 
     fun storeStates(bundle: Bundle) {
         pool.snapshot().entries.forEach {
+            val useCase = WebViewStateUseCase.make(it.value.context)
+            useCase.store(it.value, it.key)
             it.value.saveState(bundle)
         }
     }
