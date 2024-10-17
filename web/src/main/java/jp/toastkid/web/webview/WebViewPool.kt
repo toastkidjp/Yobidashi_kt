@@ -1,6 +1,7 @@
 package jp.toastkid.web.webview
 
 import android.content.Context
+import android.os.Bundle
 import android.webkit.WebView
 import androidx.annotation.ColorInt
 import androidx.collection.LruCache
@@ -98,6 +99,18 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
         val useCase = WebViewStateUseCase.make(context)
         pool.snapshot().entries.forEach {
             useCase.store(it.value, it.key)
+        }
+    }
+
+    fun storeStates(bundle: Bundle) {
+        pool.snapshot().entries.forEach {
+            it.value.saveState(bundle)
+        }
+    }
+
+    fun restoreStates(bundle: Bundle) {
+        pool.snapshot().entries.forEach {
+            it.value.restoreState(bundle)
         }
     }
 
