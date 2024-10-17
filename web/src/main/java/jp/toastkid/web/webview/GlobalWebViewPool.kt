@@ -7,7 +7,6 @@
  */
 package jp.toastkid.web.webview
 
-import android.content.Context
 import android.os.Bundle
 import android.webkit.WebView
 import androidx.annotation.ColorInt
@@ -40,8 +39,6 @@ object GlobalWebViewPool {
     fun onResume() = pool.onResume()
 
     fun onPause() = pool.onPause()
-
-    fun storeStates(context: Context) = pool.storeStates(context)
 
     fun storeStates(bundle: Bundle) = pool.storeStates(bundle)
 
