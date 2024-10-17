@@ -13,6 +13,11 @@ import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
@@ -58,6 +63,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun ImageListUi() {
     val context = LocalContext.current
@@ -93,10 +100,6 @@ fun ImageListUi() {
         )
     }
 
-    val contentViewModel = (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
-        ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
-    }
-
     val requestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
@@ -104,12 +107,16 @@ fun ImageListUi() {
                 return@rememberLauncherForActivityResult
             }
 
-            contentViewModel?.snackShort(R.string.message_audio_file_is_not_found)
+            (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
+                ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
+            }?.snackShort(R.string.message_audio_file_is_not_found)
         }
 
     val localLifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = localLifecycleOwner, block = {
-        contentViewModel?.event?.collect {
+        (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
+            ViewModelProvider(viewModelStoreOwner).get(ContentViewModel::class.java)
+        }?.event?.collect {
             when (it) {
                 is FindInPageEvent -> {
                     if (it.word.isBlank()) {
@@ -135,17 +142,32 @@ fun ImageListUi() {
     val index = remember { mutableIntStateOf(-1) }
     val listState = rememberLazyGridState()
 
-    if (preview.value) {
-        ImagePreviewUi(images, index.intValue)
-    } else {
-        ImageListUi(
-            imageLoaderUseCase,
-            images,
-            listState
-        ) {
-            index.intValue = it
-            preview.value = true
-            backHandlerState.value = true
+    SharedTransitionLayout {
+        AnimatedContent(
+            preview.value,
+            label = "basic_transition"
+        ) { targetState ->
+            if (targetState) {
+                ImagePreviewUi(
+                    images,
+                    index.intValue,
+                    this@SharedTransitionLayout,
+                    this@AnimatedContent
+                )
+            } else {
+                ImageListUi(
+                    imageLoaderUseCase,
+                    images,
+                    listState,
+                    {
+                        index.intValue = it
+                        preview.value = true
+                        backHandlerState.value = true
+                    },
+                    this@SharedTransitionLayout,
+                    this@AnimatedContent
+                )
+            }
         }
     }
 
@@ -159,13 +181,15 @@ fun ImageListUi() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun ImageListUi(
     imageLoaderUseCase: ImageLoaderUseCase,
     images: List<Image>,
     listState: LazyGridState,
-    showPreview: (Int) -> Unit
+    showPreview: (Int) -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val context = LocalContext.current
 
@@ -202,16 +226,24 @@ internal fun ImageListUi(
                         )
                         .padding(4.dp)
                 ) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(context)
-                            .data(image.path)
-                            .crossfade(true)
-                            .placeholder(R.drawable.ic_image)
-                            .build(),
-                        contentDescription = image.name,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.height(152.dp)
-                    )
+                    with(sharedTransitionScope) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data(image.path)
+                                .crossfade(true)
+                                .placeholder(R.drawable.ic_image)
+                                .build(),
+                            contentDescription = image.name,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .sharedElement(
+                                    rememberSharedContentState("image_${image.path}"),
+                                    animatedVisibilityScope
+                                )
+                                .height(152.dp)
+                        )
+                    }
+
                     Text(
                         text = image.makeDisplayName(),
                         fontSize = 14.sp,

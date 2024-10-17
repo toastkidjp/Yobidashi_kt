@@ -28,10 +28,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -65,6 +68,7 @@ import jp.toastkid.media.music.popup.playback.speed.PlayingSpeed
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MusicListUi() {
     val activity = LocalContext.current as? ComponentActivity ?: return
@@ -142,34 +146,50 @@ fun MusicListUi() {
         }
     }
 
-    MusicList(
-        {
-            play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
-        },
-        {
-            ViewModelProvider(activity)
-                .get(ContentViewModel::class.java)
-                .open("https://www.google.com/search?q=$it Lyrics".toUri())
-        },
-        {
-            mediaPlayerPopupViewModel.previous()?.let {
+    val coroutineScope = rememberCoroutineScope()
+    val state = rememberModalBottomSheetState()
+
+    ModalBottomSheet(
+        sheetState = state,
+        onDismissRequest = { ViewModelProvider(activity).get(ContentViewModel::class).switchMusicListUi() },
+        tonalElevation = 1.dp,
+        containerColor = MaterialTheme.colorScheme.primary,
+    ) {
+        MusicList(
+            {
                 play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
-            }
-        },
-        {
-            mediaPlayerPopupViewModel.next()?.let {
-                play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
-            }
-        },
-        { stop(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
-        { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
-        {
-            val random = mediaPlayerPopupViewModel.musics.random()
-            play(random, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
-        },
-        mediaPlayerPopupViewModel.musics,
-        mediaPlayerPopupViewModel.playing
-    )
+            },
+            {
+                ViewModelProvider(activity)
+                    .get(ContentViewModel::class.java)
+                    .open("https://www.google.com/search?q=$it Lyrics".toUri())
+            },
+            {
+                mediaPlayerPopupViewModel.previous()?.let {
+                    play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                }
+            },
+            {
+                mediaPlayerPopupViewModel.next()?.let {
+                    play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                }
+            },
+            { stop(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
+            { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
+            {
+                val random = mediaPlayerPopupViewModel.musics.random()
+                play(random, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+            },
+            {
+                coroutineScope.launch {
+                    state.hide()
+                    ViewModelProvider(activity).get(ContentViewModel::class).switchMusicListUi()
+                }
+            },
+            mediaPlayerPopupViewModel.musics,
+            mediaPlayerPopupViewModel.playing
+        )
+    }
 }
 
 @Composable
@@ -181,6 +201,7 @@ internal fun MusicList(
     stop: () -> Unit,
     switchState: () -> Unit,
     shuffle: () -> Unit,
+    close: () -> Unit,
     mediaItems: SnapshotStateList<MediaBrowserCompat.MediaItem>,
     playing: Boolean
 ) {
@@ -289,15 +310,7 @@ internal fun MusicList(
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
-                    .clickable {
-                        coroutineScope.launch {
-                            (context as? ComponentActivity)
-                                ?.let {
-                                    ViewModelProvider(it).get(ContentViewModel::class.java)
-                                }
-                                ?.hideBottomSheet()
-                        }
-                    }
+                    .clickable(onClick = close)
             )
         }
         LazyColumn {

@@ -30,7 +30,7 @@ enum class VietnameseLunarDateHoliday(val month: Int, val date: Int, val title: 
                 return emptyList()
             }
 
-            return values()
+            return entries
                 .map {
                     val lunarDateToSolar =
                         lunarDateConverter.lunarDateToSolar(year, it.month, it.date)

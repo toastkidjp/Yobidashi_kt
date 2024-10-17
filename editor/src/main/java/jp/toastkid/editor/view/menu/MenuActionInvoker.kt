@@ -52,10 +52,6 @@ class MenuActionInvoker(
                 viewModel.selectToEnd()
                 return true
             }
-            R.id.context_edit_paste -> {
-                onPasteRequested?.invoke()
-                return true
-            }
             R.id.context_edit_cut -> {
                 onCutRequested?.invoke()
                 return true

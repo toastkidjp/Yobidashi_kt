@@ -35,18 +35,20 @@ class AutoArchive(private val filesDir: StorageWrapper) {
                 .forEach { it.delete() }
     }
 
-    fun load(webView: WebView?, id: String?, callback: () -> Unit) {
+    fun load(webView: WebView?, id: String?, showSnackbar: (String) -> Unit) {
         if (id == null) {
+            showSnackbar("Archive file is not found.")
             return
         }
 
         val file = filesDir.findByName("$id$EXTENSION") ?: return
         if (file.exists().not()) {
+            showSnackbar("Archive file is not found.")
             return
         }
         webView?.let {
             it.loadUrl(Uri.fromFile(file).toString())
-            callback()
+            showSnackbar("Load archive.")
         }
     }
 

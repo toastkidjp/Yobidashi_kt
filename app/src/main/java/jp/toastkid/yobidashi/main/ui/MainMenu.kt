@@ -46,8 +46,8 @@ internal fun MainMenu(
 ) {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
-    val menuCount = remember { Menu.values().size }
-    val tooBigCount = remember { Menu.values().size * 10 }
+    val menuCount = remember { Menu.entries.size }
+    val tooBigCount = remember { Menu.entries.size * 10 }
     val enableChat = remember { PreferenceApplier(activity).chatApiKey()?.isNotBlank() ?: false }
 
     Box(
@@ -61,7 +61,7 @@ internal fun MainMenu(
                 .fillMaxWidth()
         ) {
             items(tooBigCount) { longIndex ->
-                val menu = Menu.values()[longIndex % menuCount]
+                val menu = Menu.entries[longIndex % menuCount]
                 if (!enableChat && menu == Menu.CHAT) {
                     return@items
                 }

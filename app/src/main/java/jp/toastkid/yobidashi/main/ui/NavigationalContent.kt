@@ -46,7 +46,7 @@ import jp.toastkid.web.history.view.ViewHistoryListUi
 import jp.toastkid.web.view.WebTabUi
 import jp.toastkid.world.presentation.WorldTimeView
 import jp.toastkid.yobidashi.BuildConfig
-import jp.toastkid.yobidashi.settings.view.screen.SettingTopUi
+import jp.toastkid.setting.presentation.screen.SettingTopUi
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab

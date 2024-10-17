@@ -72,7 +72,7 @@ class CustomWebView(context: Context) : WebView(context) {
                 if (enablePullToRefresh && (deltaY < 0)) {
                     nestedScrollDispatcher?.dispatchPreScroll(
                         Offset(0f, deltaY),
-                        NestedScrollSource.Drag
+                        NestedScrollSource.UserInput
                     )
                     return true
                 }
@@ -120,7 +120,7 @@ class CustomWebView(context: Context) : WebView(context) {
                 nestedScrollDispatcher?.dispatchPostScroll(
                     Offset.Zero,
                     Offset.Zero,
-                    NestedScrollSource.Drag
+                    NestedScrollSource.UserInput
                 )
                 // end NestedScroll
                 stopNestedScroll()

@@ -25,11 +25,11 @@ enum class Sort(private val sort: (ArticleRepository) -> PagingSource<Int, Searc
     companion object {
 
         fun titles(): Array<String> {
-            return values().map { it.name }.toTypedArray()
+            return entries.map { it.name }.toTypedArray()
         }
 
         fun findCurrentIndex(name: String): Int {
-            values().forEachIndexed { index, userAgent ->
+            entries.forEachIndexed { index, userAgent ->
                 if (userAgent.name == name) {
                     return index
                 }
@@ -38,7 +38,7 @@ enum class Sort(private val sort: (ArticleRepository) -> PagingSource<Int, Searc
         }
 
         fun findByName(name: String?): Sort {
-            return values().firstOrNull { it.name.equals(name, true) } ?: LAST_MODIFIED
+            return entries.firstOrNull { it.name.equals(name, true) } ?: LAST_MODIFIED
         }
 
     }

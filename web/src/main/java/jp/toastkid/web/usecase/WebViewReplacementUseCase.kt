@@ -55,6 +55,11 @@ class WebViewReplacementUseCase(
                 previousView.webViewClient = noopWebViewClient
                 previousView.webChromeClient = null
                 previousView.setOnLongClickListener(null)
+
+                val previousTabId = GlobalWebViewPool.getTabId(previousView)
+                if (previousTabId != null) {
+                    webViewStateUseCase.store(previousView, previousTabId)
+                }
             }
         }
 

@@ -20,7 +20,7 @@ enum class FixedVietnamHoliday(val month: Int, val date: Int, val title: String)
 
     companion object {
         fun find(month: Int): Holiday? {
-            return values()
+            return entries
                 .firstOrNull { month == it.month }
                 ?.let { Holiday(it.title, it.month, it.date, HolidayCalendar.VIETNAM.flag) }
         }

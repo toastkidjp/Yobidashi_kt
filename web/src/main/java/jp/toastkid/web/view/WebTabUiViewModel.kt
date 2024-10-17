@@ -12,16 +12,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.web.view.refresh.SwipeRefreshState
 
 /**
  * @author toastkidjp
  */
 class WebTabUiViewModel {
 
-    suspend fun stopProgress() {
-        swipeRefreshState.value?.resetOffset()
-        swipeRefreshState.value?.isRefreshing = false
+    fun stopProgress() {
+        resetRefreshing()
     }
 
     private val _icon = mutableStateOf<Bitmap?>(null)
@@ -80,6 +78,10 @@ class WebTabUiViewModel {
 
     fun updateProgress(newProgress: Int) {
         _progress.intValue = newProgress
+
+        if (newProgress > 70) {
+            resetRefreshing()
+        }
     }
 
     fun shouldShowProgressIndicator(): Boolean {
@@ -108,36 +110,8 @@ class WebTabUiViewModel {
         openErrorDialog.value = false
     }
 
-    val swipeRefreshState = mutableStateOf<SwipeRefreshState?>(null)
-
-    fun initializeSwipeRefreshState(refreshTriggerPx: Float) {
-        swipeRefreshState.value = SwipeRefreshState(false, refreshTriggerPx)
-    }
-
-    fun showSwipeRefreshIndicator() =
-        swipeRefreshState.value?.isSwipeInProgress == true
-                || swipeRefreshState.value?.isRefreshing == true
-
-    fun calculateSwipeRefreshIndicatorAlpha(refreshTriggerPx: Float) =
-        ((swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx).coerceIn(0f, 1f)
-
-    fun calculateSwipingProgress(refreshTriggerPx: Float) =
-        if (swipeRefreshState.value?.isRefreshing == false)
-                ((swipeRefreshState.value?.indicatorOffset ?: 0f) / refreshTriggerPx)
-                    .coerceIn(0f, 1f)
-        else
-            _progress.intValue.toFloat() / 100f
-
-    private val openLongTapDialog = mutableStateOf(false)
-
-    fun openLongTapDialog() {
-        openLongTapDialog.value = true
-    }
-
-    fun isOpenLongTapDialog() = openLongTapDialog.value
-
     private val _longTapActionParameters =
-        mutableStateOf(Triple<String?, String?, String?>(null, null, null))
+        mutableStateOf(EMPTY_LONG_TAP_ACTION_PARAMETERS)
 
     val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
 
@@ -145,9 +119,10 @@ class WebTabUiViewModel {
         _longTapActionParameters.value = Triple(title, anchor, imageUrl)
     }
 
+    fun isOpenLongTapDialog() = longTapActionParameters.value !== EMPTY_LONG_TAP_ACTION_PARAMETERS
+
     fun clearLongTapParameters() {
-        _longTapActionParameters.value = Triple(null, null, null)
-        openLongTapDialog.value = false
+        _longTapActionParameters.value = EMPTY_LONG_TAP_ACTION_PARAMETERS
     }
 
     private val readerModeText = mutableStateOf("")
@@ -175,4 +150,18 @@ class WebTabUiViewModel {
         readerModeText.value = ""
     }
 
+    private val refreshing = mutableStateOf(false)
+
+    fun isRefreshing() = refreshing.value
+
+    fun setRefreshing() {
+        refreshing.value = true
+    }
+
+    private fun resetRefreshing() {
+        refreshing.value = false
+    }
+
 }
+
+private val EMPTY_LONG_TAP_ACTION_PARAMETERS = Triple<String?, String?, String?>(null, null, null)

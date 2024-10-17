@@ -23,7 +23,7 @@ enum class FixedAmericanHoliday(val month: Int, val date: Int, val title: String
                 return null
             }
 
-            return values()
+            return entries
                 .firstOrNull { month == it.month }
                 ?.let { Holiday(it.title, it.month, it.date) }
         }

@@ -65,6 +65,7 @@ internal fun WebSettingUi() {
     val useImage = remember { mutableStateOf(preferenceApplier.doesLoadImage()) }
     val saveFormData = remember { mutableStateOf(preferenceApplier.doesSaveForm()) }
     val saveViewHistory = remember { mutableStateOf(preferenceApplier.saveViewHistory) }
+    val useAutoArchive = remember { mutableStateOf(preferenceApplier.useAutoArchive()) }
     val userAgent = remember { mutableStateOf(preferenceApplier.userAgent()) }
     val poolSize = remember { mutableFloatStateOf(preferenceApplier.poolSize.toFloat() / 30f) }
     val backgroundAlpha = remember { mutableFloatStateOf(preferenceApplier.getWebViewBackgroundAlpha()) }
@@ -89,6 +90,23 @@ internal fun WebSettingUi() {
                     retainTabs,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_tab_black
+                )
+            }
+
+            item {
+                InsetDivider()
+            }
+
+            item {
+                CheckableRow(
+                    R.string.title_use_auto_archive,
+                    clickable = {
+                        useAutoArchive.value = useAutoArchive.value.not()
+                        preferenceApplier.setUseAutoArchive(useAutoArchive.value)
+                    },
+                    useAutoArchive,
+                    MaterialTheme.colorScheme.secondary,
+                    jp.toastkid.web.R.drawable.ic_archive
                 )
             }
 

@@ -58,7 +58,7 @@ class SortTest {
 
     @Test
     fun testTitles() {
-        val values = Sort.values()
+        val values = Sort.entries
         Sort.titles().forEachIndexed { index, s -> assertEquals(values[index].name, s) }
     }
 

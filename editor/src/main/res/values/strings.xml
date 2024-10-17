@@ -23,9 +23,6 @@
     <string name="last_saved">"Last saved:\n"</string>
     <string name="editor_date_format">HH:mm:ss</string>
     <string name="title_clear_text">Clear text</string>
-
-    <string name="insert_as_plain">Insert as plain</string>
-
     <string name="horizontal_rule">Horizontal rule</string>
     <string name="duplicate_current_line">Duplicate current line</string>
     <string name="select_current_line">Select current line</string>

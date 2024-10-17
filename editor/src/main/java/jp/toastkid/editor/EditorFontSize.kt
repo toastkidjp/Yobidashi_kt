@@ -32,6 +32,6 @@ enum class EditorFontSize(val size: Int) {
          *
          * @param size size
          */
-        fun findIndex(size: Int) = values().find { it.size == size }?.ordinal ?: 6
+        fun findIndex(size: Int) = entries.find { it.size == size }?.ordinal ?: 6
     }
 }

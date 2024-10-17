@@ -16,6 +16,7 @@
     <string name="message_check_retain_tabs">It will retain tabs when you exit this app.</string>
     <string name="message_check_doesnot_retain_tabs">It will remove all tabs when you exit this app.</string>
     <string name="title_retain_tabs">Retain tabs on exit this app</string>
+    <string name="title_use_auto_archive">Use auto-archive</string>
     <string name="title_enable_javascript">Enable to use JavaScript</string>
     <string name="subhead_displaying">Displaying</string>
     <string name="subhead_setting_browser">Web</string>
