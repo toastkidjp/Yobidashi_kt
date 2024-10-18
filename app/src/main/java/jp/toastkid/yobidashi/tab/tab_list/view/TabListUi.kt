@@ -9,7 +9,6 @@
 package jp.toastkid.yobidashi.tab.tab_list.view
 
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
 import androidx.compose.animation.AnimatedVisibility
@@ -239,10 +238,6 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
                     }
                 }
             }
-        }
-
-        BackHandler(contentViewModel.showTabList()) {
-            contentViewModel.switchTabList()
         }
 
         LaunchedEffect(contentViewModel.showTabList()) {

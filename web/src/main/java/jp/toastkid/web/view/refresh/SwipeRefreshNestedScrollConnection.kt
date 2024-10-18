@@ -18,7 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
-class SwipeRefreshNestedScrollConnection constructor(
+class SwipeRefreshNestedScrollConnection(
     private val state: PullToRefreshState,
     private val coroutineScope: CoroutineScope,
     private val refreshTrigger: Float,

@@ -9,7 +9,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libraries") {
             version("kotlin", "2.0.20")
-            plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").version("2.0.0")
+            plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").version("2.0.21")
             library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.6.0")
         }
     }

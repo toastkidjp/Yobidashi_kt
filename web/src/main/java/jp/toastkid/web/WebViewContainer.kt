@@ -89,7 +89,6 @@ class WebViewContainer(
 
     private val longTapListener = WebViewLongTapListenerFactory().invoke { title, url, imageUrl ->
         browserViewModel.setLongTapParameters(title, url, imageUrl)
-        browserViewModel.openLongTapDialog()
     }
 
     private val nestedScrollDispatcher = NestedScrollDispatcher()
@@ -98,7 +97,7 @@ class WebViewContainer(
         View.OnScrollChangeListener { _, scrollX, scrollY, oldScrollX, oldScrollY ->
             nestedScrollDispatcher.dispatchPreScroll(
                 Offset((oldScrollX - scrollX).toFloat(), (oldScrollY - scrollY).toFloat()),
-                NestedScrollSource.Fling
+                NestedScrollSource.SideEffect
             )
         }
 
@@ -108,7 +107,7 @@ class WebViewContainer(
             FrameLayout.LayoutParams.MATCH_PARENT
         )
 
-        customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
+        customViewSwitcher = CustomViewSwitcher({ context }, ::currentView)
 
         if (context is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(context)
@@ -125,13 +124,13 @@ class WebViewContainer(
             AutoArchive.make(context),
             browserViewModel,
             RssAddingSuggestion(preferenceApplier),
-            { GlobalWebViewPool.getLatest() }
+            GlobalWebViewPool::getLatest
         ).invoke()
 
         webChromeClient = WebChromeClientFactory(
             browserViewModel,
             faviconApplier,
-            CustomViewSwitcher({ context }, { GlobalWebViewPool.getLatest() })
+            CustomViewSwitcher({ context }, GlobalWebViewPool::getLatest)
         ).invoke()
 
         webViewReplacementUseCase = WebViewReplacementUseCase(
@@ -194,7 +193,7 @@ class WebViewContainer(
     }
 
     private fun updateForwardButtonState(newState: Boolean) {
-        browserViewModel?.setForwardButtonIsEnabled(newState)
+        browserViewModel.setForwardButtonIsEnabled(newState)
     }
 
     /**
@@ -259,14 +258,6 @@ class WebViewContainer(
         Archive.save(currentView)
     }
 
-    /**
-     * Save archive file.
-     */
-    fun saveArchiveForAutoArchive() {
-        val webView = currentView()
-        autoArchive.save(webView, idGenerator.from(webView?.url))
-    }
-
     fun resetUserAgent(userAgentText: String) {
         try {
             currentView()?.settings?.userAgentString = userAgentText
@@ -325,7 +316,7 @@ class WebViewContainer(
         GlobalWebViewPool.applyNewAlpha(alphaConverter.readBackground(context))
     }
 
-    fun makeShareMessage() = "${currentTitle()}${System.lineSeparator()}${currentUrl()}"
+    private fun makeShareMessage() = "${currentTitle()}${System.lineSeparator()}${currentUrl()}"
 
     fun invokeContentExtraction(callback: ValueCallback<String>) {
         readerModeUseCase(currentView(), callback)

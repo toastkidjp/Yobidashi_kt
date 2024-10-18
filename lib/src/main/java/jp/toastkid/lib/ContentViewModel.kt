@@ -165,26 +165,6 @@ class ContentViewModel : ViewModel() {
         }
     }
 
-    private val _bottomSheetContent = mutableStateOf<@Composable () -> Unit>({})
-
-    val bottomSheetContent: State<@Composable () -> Unit> = _bottomSheetContent
-
-    fun setBottomSheetContent(content: @Composable () -> Unit) {
-        _bottomSheetContent.value = content
-    }
-
-    private val _showModalBottomSheet = mutableStateOf(false)
-
-    fun showModalBottomSheet() = _showModalBottomSheet.value
-
-    fun switchBottomSheet() {
-        _showModalBottomSheet.value = _showModalBottomSheet.value.not()
-    }
-
-    fun hideBottomSheet() {
-        _showModalBottomSheet.value = false
-    }
-
     private val showTabList = mutableStateOf(false)
 
     fun showTabList() = showTabList.value

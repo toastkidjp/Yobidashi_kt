@@ -147,41 +147,36 @@ fun WebTabUi(uri: Uri, tabId: String) {
     }
 
     if (browserViewModel.isOpenReaderMode()) {
-        ReaderModeUi(webViewContainer.currentTitle(), browserViewModel.readerModeText(), browserViewModel::closeReaderMode)
+        ReaderModeUi(
+            webViewContainer.currentTitle(),
+            browserViewModel.readerModeText(),
+            browserViewModel::closeReaderMode
+        )
     }
 
     if (browserViewModel.openErrorDialog()) {
         ConfirmDialog(
             stringResource(id = R.string.title_ssl_connection_error),
             browserViewModel.error(),
-            onDismissRequest = browserViewModel::closeErrorDialog
-        ) {
-            browserViewModel.clearError()
-        }
+            onDismissRequest = browserViewModel::closeErrorDialog,
+            onClickOk = browserViewModel::clearError
+        )
     }
 
     if (browserViewModel.isOpenLongTapDialog()) {
         val value = browserViewModel.longTapActionParameters.value
-        browserViewModel.openLongTapDialog()
 
         AnchorLongTapDialog(
             value.first,
             value.second,
-            value.third
-        ) {
-            browserViewModel.clearLongTapParameters()
-        }
+            value.third,
+            browserViewModel::clearLongTapParameters
+        )
     }
 
     BackHandler(browserViewModel.isOpenReaderMode()) {
         browserViewModel.closeReaderMode()
     }
-
-    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
-        contentViewModel.event.collect {
-            webViewContainer.useEvent(it)
-        }
-    })
 
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
@@ -202,6 +197,8 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserViewModel.showReader(it, contentViewModel)
             }
         }
+
+        contentViewModel.event.collect(webViewContainer::useEvent)
     })
 
     val storagePermissionRequestLauncher =
@@ -255,9 +252,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
             OptionMenu(titleId = R.string.title_print_page, action = {
                 PrintCurrentPageUseCase().invoke(GlobalWebViewPool.getLatest())
             }),
-            OptionMenu(titleId = R.string.title_archive, action = {
-                webViewContainer.saveArchive()
-            }),
+            OptionMenu(titleId = R.string.title_archive, action = webViewContainer::saveArchive),
             OptionMenu(titleId = R.string.title_add_to_rss_reader, action = {
                 RssUrlFinder(
                     PreferenceApplier(activityContext),
@@ -317,8 +312,9 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_back,
                 R.string.back,
-                viewModel.enableBack()
-            ) { webViewContainer.back() }
+                viewModel.enableBack(),
+                webViewContainer::back
+            )
 
             HeaderSubButton(
                 R.drawable.ic_forward,

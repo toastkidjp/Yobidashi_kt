@@ -18,7 +18,7 @@ import jp.toastkid.lib.ContentViewModel
  */
 class WebTabUiViewModel {
 
-    suspend fun stopProgress() {
+    fun stopProgress() {
         resetRefreshing()
     }
 
@@ -110,16 +110,8 @@ class WebTabUiViewModel {
         openErrorDialog.value = false
     }
 
-    private val openLongTapDialog = mutableStateOf(false)
-
-    fun openLongTapDialog() {
-        openLongTapDialog.value = true
-    }
-
-    fun isOpenLongTapDialog() = openLongTapDialog.value
-
     private val _longTapActionParameters =
-        mutableStateOf(Triple<String?, String?, String?>(null, null, null))
+        mutableStateOf(EMPTY_LONG_TAP_ACTION_PARAMETERS)
 
     val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
 
@@ -127,9 +119,10 @@ class WebTabUiViewModel {
         _longTapActionParameters.value = Triple(title, anchor, imageUrl)
     }
 
+    fun isOpenLongTapDialog() = longTapActionParameters.value !== EMPTY_LONG_TAP_ACTION_PARAMETERS
+
     fun clearLongTapParameters() {
-        _longTapActionParameters.value = Triple(null, null, null)
-        openLongTapDialog.value = false
+        _longTapActionParameters.value = EMPTY_LONG_TAP_ACTION_PARAMETERS
     }
 
     private val readerModeText = mutableStateOf("")
@@ -170,3 +163,5 @@ class WebTabUiViewModel {
     }
 
 }
+
+private val EMPTY_LONG_TAP_ACTION_PARAMETERS = Triple<String?, String?, String?>(null, null, null)
