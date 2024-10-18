@@ -185,7 +185,7 @@ internal fun Content() {
                 } else if (delta > 20f) {
                     contentViewModel.showFab(coroutineScope)
                 }
-                return Offset.Unspecified
+                return Offset.Zero
             }
         }
     }
