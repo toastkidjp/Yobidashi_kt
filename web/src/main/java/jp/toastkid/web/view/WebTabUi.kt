@@ -147,7 +147,11 @@ fun WebTabUi(uri: Uri, tabId: String) {
     }
 
     if (browserViewModel.isOpenReaderMode()) {
-        ReaderModeUi(webViewContainer.currentTitle(), browserViewModel.readerModeText(), browserViewModel::closeReaderMode)
+        ReaderModeUi(
+            webViewContainer.currentTitle(),
+            browserViewModel.readerModeText(),
+            browserViewModel::closeReaderMode
+        )
     }
 
     if (browserViewModel.openErrorDialog()) {
