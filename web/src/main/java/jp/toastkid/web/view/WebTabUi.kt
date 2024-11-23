@@ -319,8 +319,9 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,
-                viewModel.enableForward()
-            ) { webViewContainer.forward() }
+                viewModel.enableForward(),
+                webViewContainer::forward
+            )
 
             HeaderSubButton(
                 R.drawable.ic_reader_mode,
