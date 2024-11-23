@@ -7,7 +7,9 @@
  */
 package jp.toastkid.article_viewer.article.list.menu
 
+import android.content.Context
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
+import jp.toastkid.lib.clip.Clipboard
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +25,16 @@ class BookmarkListMenuPopupActionUseCase(
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MenuPopupActionUseCase {
+
+    override fun copySource(context: Context, id: Int) {
+        CoroutineScope(ioDispatcher).launch {
+            val article = withContext(ioDispatcher) {
+                val article = bookmarkRepository.findArticleById(id)
+                return@withContext article
+            }
+            Clipboard.clip(context, article.contentText)
+        }
+    }
 
     override fun addToBookmark(id: Int) = Unit
 
