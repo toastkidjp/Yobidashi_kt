@@ -78,7 +78,6 @@ import jp.toastkid.article_viewer.article.list.ArticleListViewModel
 import jp.toastkid.article_viewer.article.list.SearchResult
 import jp.toastkid.article_viewer.article.list.date.DateFilterDialogUi
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
-import jp.toastkid.article_viewer.article.list.menu.MenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogUi
 import jp.toastkid.article_viewer.article.list.usecase.UpdateUseCase
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
@@ -119,17 +118,7 @@ fun ArticleListUi() {
     ) {
         ArticleListUi(
             viewModel.dataSource().collectAsLazyPagingItems(),
-            contentViewModel,
-            ArticleListMenuPopupActionUseCase(
-                ArticleRepositoryFactory().invoke(context),
-                BookmarkRepositoryFactory().invoke(context),
-                {
-                    contentViewModel.snackWithAction(
-                        "Deleted: \"${it.title}\".",
-                        "UNDO"
-                    ) { CoroutineScope(Dispatchers.IO).launch { ArticleRepositoryFactory().invoke(context).insert(it) } }
-                }
-            )
+            contentViewModel
         )
 
         if (viewModel.progressVisibility()) {
@@ -331,7 +320,6 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
 internal fun ArticleListUi(
     articles: LazyPagingItems<SearchResult>,
     contentViewModel: ContentViewModel?,
-    menuPopupUseCase: MenuPopupActionUseCase
 ) {
     val lazyListState = rememberLazyListState()
     LazyColumn(state = lazyListState) {
@@ -340,7 +328,6 @@ internal fun ArticleListUi(
             ListItem(
                 it,
                 contentViewModel,
-                menuPopupUseCase,
                 Modifier.animateItem()
             )
         }
@@ -359,7 +346,6 @@ internal fun ArticleListUi(
 private fun ListItem(
     article: SearchResult,
     contentViewModel: ContentViewModel?,
-    menuPopupUseCase: MenuPopupActionUseCase,
     modifier: Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -367,6 +353,12 @@ private fun ListItem(
         stringResource(id = R.string.action_add_to_bookmark),
         stringResource(id = R.string.delete)
     )
+
+    val context = LocalContext.current
+
+    val menuPopupUseCase = remember {
+        ArticleListMenuPopupActionUseCase.withContext(context)
+    }
 
     Surface(
         shadowElevation = 4.dp,
