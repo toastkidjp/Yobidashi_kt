@@ -11,6 +11,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.bookmark.Bookmark
 
 /**
@@ -24,6 +25,9 @@ interface BookmarkRepository {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(articleId: Bookmark)
+
+    @Query("SELECT * FROM bookmark WHERE id = :articleId")
+    fun findArticleById(articleId: Int): Article
 
     @Query("SELECT COUNT(id) FROM bookmark")
     fun count(): Int
