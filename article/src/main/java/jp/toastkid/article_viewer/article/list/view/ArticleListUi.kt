@@ -350,6 +350,7 @@ private fun ListItem(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(
+        stringResource(id = R.string.action_copy_source),
         stringResource(id = R.string.action_add_to_bookmark),
         stringResource(id = R.string.delete)
     )
@@ -422,8 +423,9 @@ private fun ListItem(
                             text = { Text(text = s) },
                             onClick = {
                             when (index) {
-                                0 -> menuPopupUseCase.addToBookmark(article.id)
-                                1 -> menuPopupUseCase.delete(article.id)
+                                0 -> menuPopupUseCase.copySource(context, article.id)
+                                1 -> menuPopupUseCase.addToBookmark(article.id)
+                                2 -> menuPopupUseCase.delete(article.id)
                             }
                             expanded = false
                         })
