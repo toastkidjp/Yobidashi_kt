@@ -12,6 +12,7 @@ import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.unit.sp
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.number.factory.GameFileProvider
 import jp.toastkid.number.model.NumberBoard
@@ -28,6 +29,8 @@ class NumberPlaceViewModel {
     private val _loading = mutableStateOf(false)
 
     private val numberStates = mutableStateMapOf<String, CellState>()
+
+    private val fontSize = 32.sp
 
     fun initialize(maskingCount: Int) {
         _loading.value = true
@@ -126,5 +129,7 @@ class NumberPlaceViewModel {
         val state = numberStates.get("${rowIndex}-${columnIndex}") ?: return ""
         return state.text()
     }
+
+    fun fontSize() = fontSize
 
 }
