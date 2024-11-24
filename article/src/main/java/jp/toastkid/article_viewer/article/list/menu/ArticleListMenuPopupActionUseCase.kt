@@ -39,7 +39,6 @@ class ArticleListMenuPopupActionUseCase(
         CoroutineScope(ioDispatcher).launch {
             val article = withContext(ioDispatcher) {
                 val article = articleRepository.findArticleById(id)
-                articleRepository.delete(id)
                 return@withContext article
             }
             Clipboard.clip(context, article.contentText)
