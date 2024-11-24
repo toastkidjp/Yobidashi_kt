@@ -337,7 +337,7 @@ private fun AppBarContent(
                     .padding(8.dp)
                     .combinedClickable(
                         true,
-                        onClick = { contentViewModel.switchTabList() },
+                        onClick = contentViewModel::switchTabList,
                         onLongClick = { contentViewModel.openNewTab() }
                     )
             ) {
