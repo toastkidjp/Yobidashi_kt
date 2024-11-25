@@ -71,7 +71,7 @@ class NumberPlaceViewModel {
 
     private fun walkMatrix(matrix: List<List<Int>>, biConsumer: (Int, Int) -> Unit) {
         matrix.forEachIndexed { rowIndex, row ->
-            row.forEachIndexed { columnIndex, i ->
+            row.forEachIndexed { columnIndex, _ ->
                 biConsumer(rowIndex, columnIndex)
             }
         }
