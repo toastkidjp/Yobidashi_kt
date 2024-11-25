@@ -10,6 +10,7 @@ package jp.toastkid.web.view
 
 import android.Manifest
 import android.net.Uri
+import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -224,7 +225,10 @@ fun WebTabUi(uri: Uri, tabId: String) {
             }),
             OptionMenu(titleId = R.string.download_all_images, action = {
                 storagePermissionRequestLauncher
-                    .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .launch(
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        else Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
             }),
             OptionMenu(titleId = R.string.add_to_home_screen, action = {
                 val shortcutUri = webViewContainer.currentUrl()?.toUri() ?: return@OptionMenu
