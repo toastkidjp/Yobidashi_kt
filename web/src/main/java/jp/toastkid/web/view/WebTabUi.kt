@@ -319,8 +319,9 @@ private fun AppBarContent(
             HeaderSubButton(
                 R.drawable.ic_forward,
                 R.string.title_menu_forward,
-                viewModel.enableForward()
-            ) { webViewContainer.forward() }
+                viewModel.enableForward(),
+                webViewContainer::forward
+            )
 
             HeaderSubButton(
                 R.drawable.ic_reader_mode,
@@ -336,7 +337,7 @@ private fun AppBarContent(
                     .padding(8.dp)
                     .combinedClickable(
                         true,
-                        onClick = { contentViewModel.switchTabList() },
+                        onClick = contentViewModel::switchTabList,
                         onLongClick = { contentViewModel.openNewTab() }
                     )
             ) {

@@ -7,10 +7,14 @@
  */
 package jp.toastkid.article_viewer.article.list.menu
 
+import android.content.Context
+
 /**
  * @author toastkidjp
  */
 interface MenuPopupActionUseCase {
+
+    fun copySource(context: Context, id: Int)
 
     fun addToBookmark(id: Int)
 

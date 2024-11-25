@@ -20,6 +20,7 @@
     <string name="tab">Tab</string>
     <string name="message_done_import">Completed import.</string>
     <string name="reload">Reload</string>
+    <string name="action_copy_source">Copy source</string>
     <string name="action_add_to_bookmark">Add to bookmark</string>
     <string name="action_sort">Sort</string>
     <string name="hint_input_content">Please would you input any text...</string>

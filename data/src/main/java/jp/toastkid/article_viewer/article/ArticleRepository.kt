@@ -39,6 +39,9 @@ interface ArticleRepository {
     @Query("SELECT contentText FROM article WHERE title = :title LIMIT 1")
     fun findContentByTitle(title: String): String?
 
+    @Query("SELECT contentText FROM article WHERE id = :articleId LIMIT 1")
+    fun findContentById(articleId: Int): String?
+
     @Query("SELECT * FROM article WHERE title LIKE :title LIMIT 1")
     fun findFirst(title: String): Article?
 

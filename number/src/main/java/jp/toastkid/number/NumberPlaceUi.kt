@@ -39,7 +39,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
@@ -53,8 +52,6 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NumberPlaceUi() {
-    val fontSize = 32.sp
-
     val context = LocalContext.current
 
     val viewModel = remember { NumberPlaceViewModel() }
@@ -108,7 +105,7 @@ fun NumberPlaceUi() {
                                             showMessageSnackbar(context, contentViewModel, done)
                                         }
                                     },
-                                    fontSize,
+                                    viewModel.fontSize(),
                                     modifier = Modifier
                                         .weight(1f)
                                         .combinedClickable(
@@ -137,7 +134,7 @@ fun NumberPlaceUi() {
                             } else {
                                 Text(
                                     cellValue.toString(),
-                                    fontSize = fontSize,
+                                    fontSize = viewModel.fontSize(),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.weight(1f)
                                 )
@@ -174,7 +171,7 @@ fun NumberPlaceUi() {
         )
 
         contentViewModel?.replaceAppBarContent {
-            AppBarContent(fontSize, contentViewModel)
+            AppBarContent(viewModel.fontSize(), contentViewModel)
         }
 
         onDispose {
