@@ -31,8 +31,7 @@ class BookmarkListMenuPopupActionUseCase(
     override fun copySource(context: Context, id: Int) {
         CoroutineScope(ioDispatcher).launch {
             val article = withContext(ioDispatcher) {
-                val article = articleRepository.findContentById(id)
-                return@withContext article
+                return@withContext articleRepository.findContentById(id)
             } ?: return@launch
             Clipboard.clip(context, article)
         }
