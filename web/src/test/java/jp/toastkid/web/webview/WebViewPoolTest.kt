@@ -49,7 +49,7 @@ class WebViewPoolTest {
     }
 
     @Test
-    fun test2() {
+    fun testGetWithIdString() {
         assertNotNull(webViewPool.get("test"))
     }
 
