@@ -126,7 +126,7 @@ dependencies {
     implementation(project(":world"))
     implementation(project(":setting"))
 
-    implementation("androidx.work:work-runtime:${LibraryVersion.workManager}")
+    implementation(libraries.workManager)
 
     // Compose dependencies.
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
