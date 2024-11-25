@@ -44,7 +44,7 @@ class WebViewPoolTest {
     }
 
     @Test
-    fun test() {
+    fun testGetWithNull() {
         assertNull(webViewPool.get(null))
     }
 
