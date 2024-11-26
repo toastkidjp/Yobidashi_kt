@@ -12,6 +12,7 @@ import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.number.factory.GameFileProvider
@@ -131,5 +132,7 @@ class NumberPlaceViewModel {
     }
 
     fun fontSize() = fontSize
+
+    fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.dp else 1.dp
 
 }
