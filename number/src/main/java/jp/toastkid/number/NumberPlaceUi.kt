@@ -86,13 +86,13 @@ fun NumberPlaceUi() {
                     .verticalScroll(rememberScrollState())
                     .padding(8.dp)
             ) {
-                HorizontalDivider(thickness = calculateThickness(0))
+                HorizontalDivider(thickness = viewModel.calculateThickness(0))
 
                 viewModel.masked().rows().forEachIndexed { rowIndex, row ->
                     Row(
                         modifier = Modifier.height(IntrinsicSize.Min)
                     ) {
-                        VerticalDivider(thickness = calculateThickness(0))
+                        VerticalDivider(thickness = viewModel.calculateThickness(0))
 
                         row.forEachIndexed { columnIndex, cellValue ->
                             if (cellValue == -1) {
@@ -140,10 +140,10 @@ fun NumberPlaceUi() {
                                 )
                             }
 
-                            VerticalDivider(thickness = calculateThickness(columnIndex))
+                            VerticalDivider(thickness = viewModel.calculateThickness(columnIndex))
                         }
                     }
-                    HorizontalDivider(thickness = calculateThickness(rowIndex))
+                    HorizontalDivider(thickness = viewModel.calculateThickness(rowIndex))
                 }
             }
 
@@ -204,8 +204,6 @@ private fun showMessageSnackbar(
         }
     }
 }
-
-private fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.dp else 1.dp
 
 @Composable
 private fun AppBarContent(
