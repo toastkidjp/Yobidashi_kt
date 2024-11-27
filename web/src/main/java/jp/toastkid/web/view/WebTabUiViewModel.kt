@@ -130,6 +130,11 @@ class WebTabUiViewModel {
         content: String,
         contentViewModel: ContentViewModel
     ) {
+        if (isOpenReaderMode()) {
+            closeReaderMode()
+            return
+        }
+
         val cleaned = content.replace("^\"|\"$".toRegex(), "")
         if (cleaned.isBlank()) {
             contentViewModel.snackShort("This page can't show reader mode.")

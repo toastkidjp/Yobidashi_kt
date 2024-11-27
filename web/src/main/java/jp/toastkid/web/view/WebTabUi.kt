@@ -190,11 +190,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserViewModel,
                 webViewContainer
             ) {
-                if (browserViewModel.isOpenReaderMode()) {
-                    browserViewModel.closeReaderMode()
-                    return@AppBarContent
-                }
-
                 browserViewModel.showReader(it, contentViewModel)
             }
         }
