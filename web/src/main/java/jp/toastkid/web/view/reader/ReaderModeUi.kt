@@ -65,7 +65,7 @@ internal fun ReaderModeUi(title: String, text: String, onClose: () -> Unit) {
                 Icon(
                     painterResource(jp.toastkid.lib.R.drawable.ic_close_black),
                     contentDescription = stringResource(id = jp.toastkid.lib.R.string.close),
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier
                         .size(44.dp)
                         .padding(8.dp)
