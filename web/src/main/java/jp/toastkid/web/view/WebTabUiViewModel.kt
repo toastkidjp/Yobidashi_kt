@@ -110,8 +110,7 @@ class WebTabUiViewModel {
         openErrorDialog.value = false
     }
 
-    private val _longTapActionParameters =
-        mutableStateOf(EMPTY_LONG_TAP_ACTION_PARAMETERS)
+    private val _longTapActionParameters = mutableStateOf(EMPTY_LONG_TAP_ACTION_PARAMETERS)
 
     val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
 
