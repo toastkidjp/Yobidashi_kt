@@ -49,17 +49,18 @@ internal fun ReaderModeUi(title: String, text: String, onClose: () -> Unit) {
     ) {
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                SelectionContainer(
+                Box(
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(
-                        text = title,
-                        color = Color(preferenceApplier.editorFontColor()),
-                        fontSize = 24.sp,
-                        lineHeight = 32.sp,
-                        maxLines = 3,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    SelectionContainer {
+                        Text(
+                            text = title,
+                            color = Color(preferenceApplier.editorFontColor()),
+                            fontSize = 24.sp,
+                            lineHeight = 32.sp,
+                            maxLines = 3
+                        )
+                    }
                 }
                 Icon(
                     painterResource(jp.toastkid.lib.R.drawable.ic_close_black),
