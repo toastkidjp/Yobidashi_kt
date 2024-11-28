@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AtomicReference
 import jp.toastkid.lib.ContentViewModel
 
 /**
@@ -124,7 +125,7 @@ class WebTabUiViewModel {
         _longTapActionParameters.value = EMPTY_LONG_TAP_ACTION_PARAMETERS
     }
 
-    private val readerModeText = mutableStateOf("")
+    private val readerModeText = AtomicReference<String>("")
 
     fun showReader(
         content: String,
@@ -142,16 +143,20 @@ class WebTabUiViewModel {
         }
 
         val lineSeparator = System.lineSeparator()
-        readerModeText.value = cleaned.replace("\\n", lineSeparator)
+        readerModeText.set(cleaned.replace("\\n", lineSeparator))
+        openReaderMode.value = true
     }
 
-    fun readerModeText() = readerModeText.value
+    fun readerModeText() = readerModeText.get()
+
+    private val openReaderMode = mutableStateOf(false)
 
     fun isOpenReaderMode() =
-        readerModeText.value.isNotBlank()
+        openReaderMode.value
 
     fun closeReaderMode() {
-        readerModeText.value = ""
+        readerModeText.set("")
+        openReaderMode.value = false
     }
 
     private val refreshing = mutableStateOf(false)
