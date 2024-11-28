@@ -147,7 +147,7 @@ class WebTabUiViewModel {
         openReaderMode.value = true
     }
 
-    fun readerModeText() = readerModeText.get()
+    fun readerModeText(): String = readerModeText.get()
 
     private val openReaderMode = mutableStateOf(false)
 
