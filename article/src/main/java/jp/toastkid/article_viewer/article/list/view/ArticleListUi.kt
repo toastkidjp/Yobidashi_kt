@@ -422,13 +422,14 @@ private fun ListItem(
                         DropdownMenuItem(
                             text = { Text(text = s) },
                             onClick = {
-                            when (index) {
-                                0 -> menuPopupUseCase.copySource(context, article.id)
-                                1 -> menuPopupUseCase.addToBookmark(article.id)
-                                2 -> menuPopupUseCase.delete(article.id)
+                                when (index) {
+                                    0 -> menuPopupUseCase.copySource(context, article.id)
+                                    1 -> menuPopupUseCase.addToBookmark(article.id)
+                                    2 -> menuPopupUseCase.delete(article.id)
+                                }
+                                expanded = false
                             }
-                            expanded = false
-                        })
+                        )
                     }
                 }
             }
