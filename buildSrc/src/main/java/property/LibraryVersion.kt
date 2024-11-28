@@ -13,7 +13,6 @@ object LibraryVersion {
     val composeCompiler = "1.4.6"
     val composeMaterial3 = "1.3.0"
     val navigationCompose = "2.7.7"
-    val workManager = "2.9.0"
     val coilCompose = "2.0.0-rc01"
     val pagingCompose = "1.0.0-alpha14"
     val activityCompose = "1.9.0"
