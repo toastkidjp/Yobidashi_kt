@@ -7,10 +7,8 @@
  */
 package jp.toastkid.web.reader
 
-import android.os.Build
 import android.webkit.ValueCallback
 import android.webkit.WebView
-import androidx.annotation.RequiresApi
 import androidx.annotation.UiThread
 
 /**
@@ -28,7 +26,6 @@ class ReaderModeUseCase {
     """.trimIndent()
 
     @UiThread
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
     operator fun invoke(webView: WebView?, callback: ValueCallback<String>) {
         webView?.evaluateJavascript(script, callback)
     }
