@@ -39,10 +39,11 @@ fun DayLabelView(
             Text(if (date == -1) "" else "$date",
                 fontSize = if (labels.isEmpty()) 16.sp else 14.sp,
                 textAlign = TextAlign.Start,
-                color = when (dayOfWeek) {
-                    Calendar.SUNDAY -> OFF_DAY_FG
-                    Calendar.SATURDAY -> SATURDAY_FG
-                    else -> if (offDay) OFF_DAY_FG else if (today) Color.White else MaterialTheme.colorScheme.onSurface
+                color = when {
+                    offDay -> OFF_DAY_FG
+                    dayOfWeek == Calendar.SUNDAY -> OFF_DAY_FG
+                    dayOfWeek == Calendar.SATURDAY -> SATURDAY_FG
+                    else -> if (today) Color.White else MaterialTheme.colorScheme.onSurface
                 },
                 modifier = Modifier.padding(4.dp)
             )
