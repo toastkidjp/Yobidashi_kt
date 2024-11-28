@@ -20,7 +20,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -65,7 +64,7 @@ internal fun ReaderModeUi(title: String, text: String, onClose: () -> Unit) {
                 Icon(
                     painterResource(jp.toastkid.lib.R.drawable.ic_close_black),
                     contentDescription = stringResource(id = jp.toastkid.lib.R.string.close),
-                    tint = MaterialTheme.colorScheme.secondary,
+                    tint = Color(preferenceApplier.editorFontColor()),
                     modifier = Modifier
                         .size(44.dp)
                         .padding(8.dp)
