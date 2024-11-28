@@ -153,6 +153,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
             browserViewModel.readerModeText(),
             browserViewModel::closeReaderMode
         )
+        BackHandler(true) {
+            browserViewModel.closeReaderMode()
+        }
     }
 
     if (browserViewModel.openErrorDialog()) {
@@ -173,10 +176,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
             value.third,
             browserViewModel::clearLongTapParameters
         )
-    }
-
-    BackHandler(browserViewModel.isOpenReaderMode()) {
-        browserViewModel.closeReaderMode()
     }
 
     val focusManager = LocalFocusManager.current
