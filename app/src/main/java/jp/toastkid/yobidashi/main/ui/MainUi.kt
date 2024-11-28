@@ -426,7 +426,7 @@ internal fun Content() {
     val mediaPermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             if (it.values.any { it.not() }) {
-                contentViewModel?.snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
+                contentViewModel.snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
 
