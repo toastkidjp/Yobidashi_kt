@@ -143,4 +143,4 @@ private val week = mapOf(
 
 private val weekArray = week.keys.toIntArray()
 
-private val COUNT_OF_MONTH_IN_YEAR = 12
+private const val COUNT_OF_MONTH_IN_YEAR = 12
