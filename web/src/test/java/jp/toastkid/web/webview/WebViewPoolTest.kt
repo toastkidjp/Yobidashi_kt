@@ -61,7 +61,7 @@ class WebViewPoolTest {
     }
 
     @Test
-    fun test4() {
+    fun testPut() {
         every { anyConstructed<LruCache<String, WebView>>().put(any(), any()) }.returns(mockk())
 
         webViewPool.put("test", mockk())
