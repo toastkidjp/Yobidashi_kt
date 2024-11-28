@@ -54,7 +54,7 @@ class WebViewPoolTest {
     }
 
     @Test
-    fun test3() {
+    fun testGetLatest() {
         assertNull(webViewPool.getLatest())
         assertNotNull(webViewPool.get("test"))
         assertNotNull(webViewPool.getLatest())
