@@ -67,4 +67,5 @@ dependencies {
     testImplementation("junit:junit:4.12")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")
+    testImplementation("net.bytebuddy:byte-buddy:1.11.22")
 }
