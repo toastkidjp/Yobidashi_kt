@@ -61,7 +61,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
-    implementation("org.jsoup:jsoup:${LibraryVersion.jsoup}")
+    implementation(libraries.jsoup)
     implementation(libraries.kotlinSerialization)
 
     testImplementation("junit:junit:4.12")
