@@ -43,7 +43,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:${LibraryVersion.okhttp}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("org.jsoup:jsoup:${LibraryVersion.jsoup}")
+    implementation(libraries.jsoup)
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation(libraries.kotlinSerialization)
 
