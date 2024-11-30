@@ -56,7 +56,7 @@ dependencies {
     implementation(project(path = ":barcode:library"))
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
-    implementation("androidx.webkit:webkit:1.6.0")
+    implementation("androidx.webkit:webkit:1.12.1")
     implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
