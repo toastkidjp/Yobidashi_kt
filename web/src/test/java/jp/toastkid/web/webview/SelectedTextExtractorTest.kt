@@ -2,7 +2,9 @@ package jp.toastkid.web.webview
 
 import android.webkit.ValueCallback
 import android.webkit.WebView
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -33,7 +35,7 @@ class SelectedTextExtractorTest {
 
         mockkConstructor(ViewModelProvider::class)
         every { anyConstructed<ViewModelProvider>().get(ContentViewModel::class.java) }.returns(contentViewModel)
-        every { contentViewModel.snackWithAction(any(), any(), any()) }.just(Runs)
+        every { contentViewModel.snackShort(any<Int>()) }.just(Runs)
     }
 
     @After
@@ -47,12 +49,24 @@ class SelectedTextExtractorTest {
         val webView = mockk<WebView>()
         val slot = slot<ValueCallback<String>>()
         every { webView.evaluateJavascript(any(), capture(slot)) }.answers {  }
+        val componentActivity = mockk<ComponentActivity>()
+        every { webView.context } returns componentActivity
+        val viewModelStore = mockk<ViewModelStore>()
+        every { componentActivity.viewModelStore } returns viewModelStore
+        every { componentActivity.defaultViewModelProviderFactory } returns mockk()
+        every { componentActivity.defaultViewModelCreationExtras } returns mockk()
+        every { viewModelStore.get(any()) } returns contentViewModel
 
         selectedTextExtractor.withAction(webView, {})
 
         slot.captured.onReceiveValue("test")
         verify(atMost = 1) { webView.evaluateJavascript(any(), any()) }
         verify { contentViewModel wasNot called }
+
+        slot.captured.onReceiveValue("")
+        verify(atMost = 1) { webView.evaluateJavascript(any(), any()) }
+        verify { webView.context }
+        verify { contentViewModel.snackShort(any<Int>()) }
     }
 
 }
