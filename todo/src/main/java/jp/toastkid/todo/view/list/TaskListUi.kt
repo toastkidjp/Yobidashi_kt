@@ -51,7 +51,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDataAccessorFactory
@@ -134,8 +133,8 @@ private fun TaskList(
     val tasks = flow.collectAsLazyPagingItems()
 
     LazyColumn(state = rememberLazyListState()) {
-        items(tasks, { it.id }) { task ->
-            task ?: return@items
+        items(tasks.itemCount, { tasks[it]?.id ?: -1 }) {
+            val task = tasks[it] ?: return@items
             TaskListItem(task, insert, modify, delete, Modifier.animateItem())
         }
     }
