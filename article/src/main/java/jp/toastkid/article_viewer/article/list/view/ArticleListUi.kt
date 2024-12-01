@@ -70,7 +70,6 @@ import androidx.lifecycle.get
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.article.data.BookmarkRepositoryFactory
@@ -323,10 +322,10 @@ internal fun ArticleListUi(
 ) {
     val lazyListState = rememberLazyListState()
     LazyColumn(state = lazyListState) {
-        items(articles, { it.id }) {
-            it ?: return@items
+        items(articles.itemCount, { articles[it]?.id ?: -1 }) {
+            val article = articles[it] ?: return@items
             ListItem(
-                it,
+                article,
                 contentViewModel,
                 Modifier.animateItem()
             )
