@@ -12,7 +12,7 @@ object LibraryVersion {
     val composeCompiler = "1.4.6"
     val composeMaterial3 = "1.3.0"
     val navigationCompose = "2.7.7"
-    val coilCompose = "2.7.0"
+    val coilCompose = "3.0.4"
     val activityCompose = "1.9.0"
     val junit = "4.12"
     val robolectric = "4.8.1"
