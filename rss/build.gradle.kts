@@ -54,7 +54,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
 
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
-    implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
+    implementation("io.coil-kt.coil3:coil-compose:${LibraryVersion.coilCompose}")
     implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
