@@ -20,9 +20,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -36,7 +36,8 @@ import jp.toastkid.lib.preference.PreferenceApplier
 
 @Composable
 internal fun ReaderModeUi(title: String, text: String, onClose: () -> Unit) {
-    val preferenceApplier = PreferenceApplier(LocalContext.current)
+    val context = LocalContext.current
+    val preferenceApplier = remember { PreferenceApplier(context) }
 
     val scrollState = rememberScrollState()
 
@@ -49,22 +50,23 @@ internal fun ReaderModeUi(title: String, text: String, onClose: () -> Unit) {
     ) {
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                SelectionContainer(
+                Box(
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(
-                        text = title,
-                        color = Color(preferenceApplier.editorFontColor()),
-                        fontSize = 24.sp,
-                        lineHeight = 32.sp,
-                        maxLines = 3,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    SelectionContainer {
+                        Text(
+                            text = title,
+                            color = Color(preferenceApplier.editorFontColor()),
+                            fontSize = 24.sp,
+                            lineHeight = 32.sp,
+                            maxLines = 3
+                        )
+                    }
                 }
                 Icon(
                     painterResource(jp.toastkid.lib.R.drawable.ic_close_black),
                     contentDescription = stringResource(id = jp.toastkid.lib.R.string.close),
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = Color(preferenceApplier.editorFontColor()),
                     modifier = Modifier
                         .size(44.dp)
                         .padding(8.dp)

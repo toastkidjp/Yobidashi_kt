@@ -44,24 +44,24 @@ class WebViewPoolTest {
     }
 
     @Test
-    fun test() {
+    fun testGetWithNull() {
         assertNull(webViewPool.get(null))
     }
 
     @Test
-    fun test2() {
+    fun testGetWithIdString() {
         assertNotNull(webViewPool.get("test"))
     }
 
     @Test
-    fun test3() {
+    fun testGetLatest() {
         assertNull(webViewPool.getLatest())
         assertNotNull(webViewPool.get("test"))
         assertNotNull(webViewPool.getLatest())
     }
 
     @Test
-    fun test4() {
+    fun testPut() {
         every { anyConstructed<LruCache<String, WebView>>().put(any(), any()) }.returns(mockk())
 
         webViewPool.put("test", mockk())

@@ -10,6 +10,7 @@ package jp.toastkid.web.view
 
 import android.Manifest
 import android.net.Uri
+import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -152,6 +153,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
             browserViewModel.readerModeText(),
             browserViewModel::closeReaderMode
         )
+        BackHandler(true) {
+            browserViewModel.closeReaderMode()
+        }
     }
 
     if (browserViewModel.openErrorDialog()) {
@@ -174,10 +178,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
         )
     }
 
-    BackHandler(browserViewModel.isOpenReaderMode()) {
-        browserViewModel.closeReaderMode()
-    }
-
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
         webViewContainer.refresh()
@@ -189,11 +189,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 browserViewModel,
                 webViewContainer
             ) {
-                if (browserViewModel.isOpenReaderMode()) {
-                    browserViewModel.closeReaderMode()
-                    return@AppBarContent
-                }
-
                 browserViewModel.showReader(it, contentViewModel)
             }
         }
@@ -224,7 +219,10 @@ fun WebTabUi(uri: Uri, tabId: String) {
             }),
             OptionMenu(titleId = R.string.download_all_images, action = {
                 storagePermissionRequestLauncher
-                    .launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .launch(
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        else Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
             }),
             OptionMenu(titleId = R.string.add_to_home_screen, action = {
                 val shortcutUri = webViewContainer.currentUrl()?.toUri() ?: return@OptionMenu
@@ -338,7 +336,7 @@ private fun AppBarContent(
                     .combinedClickable(
                         true,
                         onClick = contentViewModel::switchTabList,
-                        onLongClick = { contentViewModel.openNewTab() }
+                        onLongClick = contentViewModel::openNewTab
                     )
             ) {
                 Image(

@@ -20,6 +20,7 @@ gradlew.bat
 app/src/main/res/raw/
 app/release/
 app/licenses.yml
+.kotlin/
 
 .idea/*
 !.idea/icon.png

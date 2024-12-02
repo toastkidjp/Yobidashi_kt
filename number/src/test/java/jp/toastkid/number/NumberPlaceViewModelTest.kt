@@ -8,6 +8,8 @@
 
 package jp.toastkid.number
 
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.mockk
@@ -53,6 +55,19 @@ class NumberPlaceViewModelTest {
     fun numberLabel() {
         assertEquals("_", numberPlaceViewModel.numberLabel(-1))
         assertEquals("1", numberPlaceViewModel.numberLabel(1))
+    }
+
+    @Test
+    fun fontSize() {
+        assertEquals(32.sp, numberPlaceViewModel.fontSize())
+    }
+
+    @Test
+    fun calculateThickness() {
+        assertEquals(1.dp, numberPlaceViewModel.calculateThickness(0))
+        assertEquals(1.dp, numberPlaceViewModel.calculateThickness(1))
+        assertEquals(2.dp, numberPlaceViewModel.calculateThickness(2))
+        assertEquals(1.dp, numberPlaceViewModel.calculateThickness(3))
     }
 
 }

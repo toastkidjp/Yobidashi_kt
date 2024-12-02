@@ -82,7 +82,7 @@ dependencies {
 
     implementation("androidx.paging:paging-common:${LibraryVersion.paging}")
     implementation("androidx.paging:paging-common-ktx:${LibraryVersion.paging}")
-    implementation("androidx.work:work-runtime:${LibraryVersion.workManager}")
+    implementation(libraries.workManager)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")

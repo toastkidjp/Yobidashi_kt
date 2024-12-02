@@ -107,12 +107,12 @@ class CalendarViewModel {
     }
 
     fun fromPage(currentPage: Int): Calendar {
-        val year = (currentPage / 12) + 1
-        return GregorianCalendar(year, currentPage % 12, 1)
+        val year = (currentPage / COUNT_OF_MONTH_IN_YEAR) + 1
+        return GregorianCalendar(year, currentPage % COUNT_OF_MONTH_IN_YEAR, 1)
     }
 
     fun toPage(calendar: Calendar): Int {
-        return ((calendar.get(Calendar.YEAR) - 1) * 12) + (calendar.get(Calendar.MONTH))
+        return ((calendar.get(Calendar.YEAR) - 1) * COUNT_OF_MONTH_IN_YEAR) + (calendar.get(Calendar.MONTH))
     }
 
     private val usingHolidaysCalendar = mutableListOf<String>()
@@ -142,3 +142,5 @@ private val week = mapOf(
 )
 
 private val weekArray = week.keys.toIntArray()
+
+private const val COUNT_OF_MONTH_IN_YEAR = 12

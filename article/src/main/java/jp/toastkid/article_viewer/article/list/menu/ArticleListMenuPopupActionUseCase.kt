@@ -38,8 +38,7 @@ class ArticleListMenuPopupActionUseCase(
     override fun copySource(context: Context, id: Int) {
         CoroutineScope(ioDispatcher).launch {
             val article = withContext(ioDispatcher) {
-                val article = articleRepository.findArticleById(id)
-                return@withContext article
+                return@withContext articleRepository.findArticleById(id)
             }
             Clipboard.clip(context, article.contentText)
         }

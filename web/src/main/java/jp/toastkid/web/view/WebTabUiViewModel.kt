@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AtomicReference
 import jp.toastkid.lib.ContentViewModel
 
 /**
@@ -110,8 +111,7 @@ class WebTabUiViewModel {
         openErrorDialog.value = false
     }
 
-    private val _longTapActionParameters =
-        mutableStateOf(EMPTY_LONG_TAP_ACTION_PARAMETERS)
+    private val _longTapActionParameters = mutableStateOf(EMPTY_LONG_TAP_ACTION_PARAMETERS)
 
     val longTapActionParameters: State<Triple<String?, String?, String?>> = _longTapActionParameters
 
@@ -125,12 +125,17 @@ class WebTabUiViewModel {
         _longTapActionParameters.value = EMPTY_LONG_TAP_ACTION_PARAMETERS
     }
 
-    private val readerModeText = mutableStateOf("")
+    private val readerModeText = AtomicReference<String>("")
 
     fun showReader(
         content: String,
         contentViewModel: ContentViewModel
     ) {
+        if (isOpenReaderMode()) {
+            closeReaderMode()
+            return
+        }
+
         val cleaned = content.replace("^\"|\"$".toRegex(), "")
         if (cleaned.isBlank()) {
             contentViewModel.snackShort("This page can't show reader mode.")
@@ -138,16 +143,19 @@ class WebTabUiViewModel {
         }
 
         val lineSeparator = System.lineSeparator()
-        readerModeText.value = cleaned.replace("\\n", lineSeparator)
+        readerModeText.set(cleaned.replace("\\n", lineSeparator))
+        openReaderMode.value = true
     }
 
-    fun readerModeText() = readerModeText.value
+    fun readerModeText(): String = readerModeText.get()
 
-    fun isOpenReaderMode() =
-        readerModeText.value.isNotBlank()
+    private val openReaderMode = mutableStateOf(false)
+
+    fun isOpenReaderMode() = openReaderMode.value
 
     fun closeReaderMode() {
-        readerModeText.value = ""
+        readerModeText.set("")
+        openReaderMode.value = false
     }
 
     private val refreshing = mutableStateOf(false)

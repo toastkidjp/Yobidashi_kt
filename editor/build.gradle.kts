@@ -60,7 +60,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
 
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
-    implementation("org.jsoup:jsoup:${LibraryVersion.jsoup}")
+    implementation(libraries.jsoup)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
