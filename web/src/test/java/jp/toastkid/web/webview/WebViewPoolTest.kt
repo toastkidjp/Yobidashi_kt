@@ -70,7 +70,7 @@ class WebViewPoolTest {
     }
 
     @Test
-    fun test5() {
+    fun testRemove() {
         every { anyConstructed<LruCache<String, WebView>>().remove(any()) }.returns(mockk())
 
         webViewPool.remove("test")
