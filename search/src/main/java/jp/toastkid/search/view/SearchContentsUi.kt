@@ -335,7 +335,10 @@ private fun UrlCard(currentTitle: String?, currentUrl: String, setInput: (String
                         ViewModelProvider(activity)
                             .get(ContentViewModel::class.java)
                             .snackShort(
-                                context.getString(jp.toastkid.lib.R.string.message_clip_to, currentUrl)
+                                context.getString(
+                                    jp.toastkid.lib.R.string.message_clip_to,
+                                    currentUrl
+                                )
                             )
                     }
             )
