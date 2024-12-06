@@ -46,12 +46,9 @@ class RssUrlFinder(
 
         CoroutineScope(mainDispatcher).launch {
             val rssItems = withContext(ioDispatcher) {
-                val response = htmlApi.invoke(currentUrl)
+                val response = htmlApi(currentUrl)
                         ?: return@withContext emptyList<String>()
-                if (!response.isSuccessful) {
-                    return@withContext emptyList<String>()
-                }
-                rssUrlExtractor(response.body?.use { it.string() })
+                rssUrlExtractor(response)
             }
             storeToPreferences(rssItems)
         }
