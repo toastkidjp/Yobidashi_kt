@@ -55,7 +55,7 @@ dependencies {
     // Compose dependencies.
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation(libraries.coilCompose)
-    implementation("io.coil-kt.coil3:coil-gif:${LibraryVersion.coilCompose}")
+    implementation(libraries.coilGif)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
 
