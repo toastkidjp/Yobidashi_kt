@@ -16,6 +16,7 @@ dependencyResolutionManagement {
             library("jsoup", "org.jsoup", "jsoup").version("1.18.2")
             library("pagingCompose", "androidx.paging", "paging-compose").version("3.3.4")
             library("coilCompose", "io.coil-kt.coil3", "coil-compose").version("3.0.4")
+            library("coilGif", "io.coil-kt.coil3", "coil-gif").version("3.0.4")
         }
     }
 }
