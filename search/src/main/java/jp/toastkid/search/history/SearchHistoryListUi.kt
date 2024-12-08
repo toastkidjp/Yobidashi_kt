@@ -114,9 +114,8 @@ fun SearchHistoryListUi() {
                     .receiveEvent(
                         StateScrollerFactory().invoke(listState),
                         searchHistoryItems,
-                        fullItems.toList(),
-                        { item, word -> item.query?.contains(word) == true }
-                    )
+                        fullItems.toList()
+                    ) { item, word -> item.query?.contains(word) == true }
             }
         }
     }

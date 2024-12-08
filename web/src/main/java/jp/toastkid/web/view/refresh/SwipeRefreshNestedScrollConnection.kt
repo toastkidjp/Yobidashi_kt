@@ -46,7 +46,7 @@ class SwipeRefreshNestedScrollConnection(
         }
         return when {
             // If we're refreshing, return zero
-            state.isAnimating == true -> Offset.Zero
+            state.isAnimating -> Offset.Zero
             // If the user is swiping down and there's y remaining, handle it
             source == NestedScrollSource.UserInput -> onScroll(available)
             else -> Offset.Zero

@@ -9,21 +9,16 @@
 package jp.toastkid.image.factory
 
 import android.content.Context
-import android.os.Build
-import coil.ComponentRegistry
-import coil.ImageLoader
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
+import coil3.ComponentRegistry
+import coil3.ImageLoader
+import coil3.gif.GifDecoder
 
 class GifImageLoaderFactory {
 
     operator fun invoke(context: Context) = ImageLoader.Builder(context)
         .components(
             ComponentRegistry.Builder()
-                .add(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) ImageDecoderDecoder.Factory()
-                    else GifDecoder.Factory()
-                )
+                .add(GifDecoder.Factory())
                 .build()
         )
         .build()

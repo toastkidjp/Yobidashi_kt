@@ -13,7 +13,8 @@ dependencyResolutionManagement {
             library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.6.0")
             library("composeUi", "androidx.compose.ui", "ui").version("1.7.4")
             library("workManager", "androidx.work", "work-runtime").version("2.10.0")
-            library("jsoup", "org.jsoup", "jsoup").version("1.14.3")
+            library("jsoup", "org.jsoup", "jsoup").version("1.18.2")
+            library("coilCompose", "io.coil-kt.coil3", "coil-compose").version("3.0.4")
         }
     }
 }

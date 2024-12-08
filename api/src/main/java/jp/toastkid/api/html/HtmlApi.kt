@@ -26,14 +26,19 @@ class HtmlApi {
      *     htmlApi.invoke("https://www.yahoo.com").use { /* Something of usage. */ }
      * </pre>
      */
-    operator fun invoke(url: String?): Response? {
+    operator fun invoke(url: String?): String? {
         if (url.isNullOrBlank() || (!URLUtil.isNetworkUrl(url))) {
             return null
         }
 
-        return httpClient
+        val response = httpClient
                 .newCall(makeRequest(url))
                 .execute()
+        if (response.isSuccessful.not()) {
+            return null
+        }
+
+        return response.body?.string()
     }
 
     private fun makeRequest(url: String): Request =

@@ -9,9 +9,9 @@
 package jp.toastkid.image.factory
 
 import android.content.Context
-import coil.ComponentRegistry
-import coil.ImageLoader
-import coil.decode.Decoder
+import coil3.ComponentRegistry
+import coil3.ImageLoader
+import coil3.decode.Decoder
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs

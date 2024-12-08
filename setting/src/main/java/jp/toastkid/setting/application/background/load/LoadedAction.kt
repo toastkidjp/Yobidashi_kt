@@ -3,9 +3,9 @@ package jp.toastkid.setting.application.background.load
 import android.app.Activity
 import android.content.Context
 import android.net.Uri
-import androidx.core.graphics.drawable.toBitmap
-import coil.imageLoader
-import coil.request.ImageRequest
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.toBitmap
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.image.ImageStoreUseCase
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -58,7 +58,7 @@ internal class LoadedAction (
                     withContext(Dispatchers.IO) {
                         val image = context.imageLoader
                             .execute(ImageRequest.Builder(context).data(uri).build())
-                            .drawable
+                            .image
                             ?.toBitmap()
 
                         val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)

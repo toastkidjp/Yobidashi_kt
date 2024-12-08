@@ -53,7 +53,7 @@ dependencies {
 
     // Compose dependencies.
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
-    implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
+    implementation(libraries.coilCompose)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
 
