@@ -130,7 +130,7 @@ dependencies {
 
     // Compose dependencies.
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
-    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
+    implementation(libraries.activityCompose)
     implementation("androidx.navigation:navigation-compose:${LibraryVersion.navigationCompose}")
     implementation("androidx.navigation:navigation-runtime-ktx:${LibraryVersion.navigationCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
