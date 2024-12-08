@@ -80,8 +80,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
 
-    implementation("androidx.paging:paging-common:${LibraryVersion.paging}")
-    implementation("androidx.paging:paging-common-ktx:${LibraryVersion.paging}")
     implementation(libraries.workManager)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
