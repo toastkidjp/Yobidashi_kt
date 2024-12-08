@@ -82,6 +82,7 @@ import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -93,6 +94,7 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
 
     val tabs = remember { mutableStateListOf<Tab>() }
+    val runOpenTab = remember { AtomicBoolean(false) }
 
     LaunchedEffect(key1 = context) {
         (0 until tabAdapter.size()).forEach {
@@ -233,8 +235,8 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
                         Modifier.padding(4.dp)
                     ) {
                         // For suppressing replace screen.
-                        contentViewModel.openNewTab()
                         closeOnly(coroutineScope, contentViewModel)
+                        runOpenTab.set(true)
                     }
                 }
             }
@@ -250,6 +252,11 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
             if (initialIndex != tabAdapter.currentTabId()) {
                 contentViewModel.replaceToCurrentTab()
             }
+
+            if (runOpenTab.get()) {
+                contentViewModel.openNewTab()
+            }
+
             tabAdapter.saveTabList()
         }
     }
