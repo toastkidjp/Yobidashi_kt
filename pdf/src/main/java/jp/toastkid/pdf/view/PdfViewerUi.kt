@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.pdf.PdfImageFactory

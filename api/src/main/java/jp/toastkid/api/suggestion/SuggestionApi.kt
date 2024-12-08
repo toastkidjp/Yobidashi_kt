@@ -30,10 +30,11 @@ import java.util.Locale
  * @author toastkidjp
  */
 class SuggestionApi(
-    private val httpClient: OkHttpClient = HttpClientFactory().withTimeout(3L),
     private val suggestionParser: SuggestionParser = SuggestionParser(),
     private val multiByteCharacterInspector: MultiByteCharacterInspector = MultiByteCharacterInspector()
 ) {
+
+    private val httpClient: OkHttpClient = HttpClientFactory().withTimeout(3L)
 
     /**
      * Fetch Web API result asynchronously.

@@ -63,7 +63,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.display.effect.SnowRendererView

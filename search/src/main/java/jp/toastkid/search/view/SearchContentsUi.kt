@@ -31,7 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
@@ -47,7 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
@@ -57,7 +56,6 @@ import jp.toastkid.search.url_suggestion.ItemDeletionUseCase
 import jp.toastkid.search.viewmodel.SearchUiViewModel
 
 @OptIn(
-    ExperimentalComposeUiApi::class,
     ExperimentalFoundationApi::class,
     ExperimentalLayoutApi::class
 )
@@ -335,7 +333,10 @@ private fun UrlCard(currentTitle: String?, currentUrl: String, setInput: (String
                         ViewModelProvider(activity)
                             .get(ContentViewModel::class.java)
                             .snackShort(
-                                context.getString(jp.toastkid.lib.R.string.message_clip_to, currentUrl)
+                                context.getString(
+                                    jp.toastkid.lib.R.string.message_clip_to,
+                                    currentUrl
+                                )
                             )
                     }
             )

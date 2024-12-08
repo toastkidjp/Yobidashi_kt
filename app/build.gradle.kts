@@ -134,7 +134,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:${LibraryVersion.navigationCompose}")
     implementation("androidx.navigation:navigation-runtime-ktx:${LibraryVersion.navigationCompose}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
-    implementation("io.coil-kt:coil-compose:${LibraryVersion.coilCompose}")
+    implementation(libraries.coilCompose)
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
