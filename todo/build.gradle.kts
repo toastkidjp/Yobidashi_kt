@@ -51,8 +51,6 @@ dependencies {
     implementation(project(path = ":lib"))
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
-    implementation("androidx.paging:paging-common:${LibraryVersion.paging}")
-    implementation("androidx.paging:paging-common-ktx:${LibraryVersion.paging}")
 
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation(libraries.pagingCompose)
