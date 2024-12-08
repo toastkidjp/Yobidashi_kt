@@ -5,7 +5,6 @@ object LibraryVersion {
     val ktx = "1.1.0"
     val lifecycle = "2.8.5"
     val room = "2.5.0"
-    val paging = "3.3.4"
     val timber = "4.6.0"
     val okhttp = "4.12.0"
     val exifinterface = "1.3.3"
