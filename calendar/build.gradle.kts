@@ -50,7 +50,7 @@ dependencies {
     implementation(project(":lib"))
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
-    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
+    implementation(libraries.activityCompose)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
 
