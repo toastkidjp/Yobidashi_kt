@@ -183,8 +183,6 @@ class ContentViewModel : ViewModel() {
 
     private val floatingPreviewUrl = mutableStateOf<String?>(null)
 
-    fun showFloatingPreviewUi() = floatingPreviewUrl.value != null
-
     fun floatingPreviewUri() = floatingPreviewUrl.value
 
     fun switchFloatingPreviewUi(url: String? = null) {
