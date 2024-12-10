@@ -63,7 +63,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
-    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
+    implementation(libraries.activityCompose)
     implementation(libraries.kotlinSerialization)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
