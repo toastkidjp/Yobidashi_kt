@@ -43,7 +43,7 @@ dependencies {
 
     implementation("androidx.compose.material3:material3:${property.LibraryVersion.composeMaterial3}")
     implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
+    implementation(libraries.activityCompose)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
