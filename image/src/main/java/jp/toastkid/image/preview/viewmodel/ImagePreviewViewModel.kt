@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.ColorMatrix
 import jp.toastkid.image.Image
 import kotlin.math.max
 
-@OptIn(ExperimentalFoundationApi::class)
 class ImagePreviewViewModel(initialPage: Int) {
 
     private val images = mutableStateListOf<Image>()
