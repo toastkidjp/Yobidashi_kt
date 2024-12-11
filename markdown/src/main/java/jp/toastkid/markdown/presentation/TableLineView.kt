@@ -93,7 +93,6 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TableRow(itemRow: List<Any>, fontSize: TextUnit, textColor: Color, modifier: Modifier) {
     Column {
