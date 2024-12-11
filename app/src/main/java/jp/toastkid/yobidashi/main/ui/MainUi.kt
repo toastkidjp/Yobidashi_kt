@@ -121,7 +121,6 @@ import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.view.TabListUi
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun Content() {
     val activity = LocalContext.current as? ComponentActivity ?: return
