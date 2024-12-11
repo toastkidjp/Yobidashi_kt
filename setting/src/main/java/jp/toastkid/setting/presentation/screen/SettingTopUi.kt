@@ -42,7 +42,6 @@ import jp.toastkid.search.view.setting.SearchSettingUi
 import jp.toastkid.setting.R
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingTopUi() {
     val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
