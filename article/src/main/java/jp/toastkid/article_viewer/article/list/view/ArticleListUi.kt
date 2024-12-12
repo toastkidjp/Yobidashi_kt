@@ -314,7 +314,6 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ArticleListUi(
     articles: LazyPagingItems<SearchResult>,
