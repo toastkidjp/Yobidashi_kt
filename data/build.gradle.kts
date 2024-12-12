@@ -56,9 +56,9 @@ tasks.withType<GenerateBuildConfig> {
 dependencies {
     implementation(project(":lib"))
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
-    implementation("androidx.room:room-runtime:${LibraryVersion.room}")
-    implementation("androidx.room:room-paging:${LibraryVersion.room}")
-    ksp("androidx.room:room-compiler:${LibraryVersion.room}")
+    implementation("androidx.room:room-runtime:${libraries.versions.room.get()}")
+    implementation("androidx.room:room-paging:${libraries.versions.room.get()}")
+    ksp("androidx.room:room-compiler:${libraries.versions.room.get()}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")
