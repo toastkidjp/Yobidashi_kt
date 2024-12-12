@@ -11,7 +11,6 @@ package jp.toastkid.yobidashi.main.ui
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.runtime.Composable
@@ -178,7 +177,6 @@ private fun NavGraphBuilder.slideInComposable(route: String, content: @Composabl
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 private fun NavGraphBuilder.tabComposable(route: String, content: @Composable (Bundle?) -> Unit) {
     composable(
         route,
