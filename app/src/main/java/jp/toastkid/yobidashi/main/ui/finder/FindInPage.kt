@@ -42,7 +42,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FindInPage() {
     val activity = LocalContext.current as? ViewModelStoreOwner ?: return
