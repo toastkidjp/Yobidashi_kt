@@ -67,10 +67,10 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.TabThumbnails
@@ -125,7 +125,7 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
         containerColor = MaterialTheme.colorScheme.primary,
     ) {
         Box(modifier) {
-            AsyncImage(
+            EfficientImage(
                 model = PreferenceApplier(context).backgroundImagePath,
                 contentDescription = stringResource(id = R.string.content_description_background),
                 alignment = Alignment.Center,
@@ -343,7 +343,7 @@ private fun TabItem(
                         .padding(4.dp)
                         .align(Alignment.BottomCenter)
                 ) {
-                    AsyncImage(
+                    EfficientImage(
                         model = thumbnail,
                         contentDescription = tab.title(),
                         contentScale = ContentScale.FillHeight,
