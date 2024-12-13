@@ -63,7 +63,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil3.compose.AsyncImage
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.display.effect.SnowRendererView
@@ -101,6 +100,7 @@ import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.search.UrlFactory
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.web.floating.view.FloatingPreviewUi
 import jp.toastkid.web.permission.DownloadPermissionRequestContract
 import jp.toastkid.web.webview.GlobalWebViewPool
@@ -435,7 +435,7 @@ internal fun Content() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        AsyncImage(
+        EfficientImage(
             contentViewModel.backgroundImagePath.value,
             contentDescription = stringResource(R.string.content_description_background),
             alignment = Alignment.Center,
