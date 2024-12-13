@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.pdf
+package jp.toastkid.pdf
 
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
@@ -16,7 +16,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.pdf.PdfImageFactory
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
