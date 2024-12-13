@@ -13,12 +13,8 @@ import jp.toastkid.yobidashi.tab.model.WebTab
 import kotlinx.serialization.Required
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import okio.buffer
-import okio.sink
-import okio.source
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -80,11 +76,9 @@ class TabList {
     internal fun save() {
         val json = jsonSerializer.encodeToString(this)
         tabsFile?.let {
-            it.sink().use {  sink ->
-                sink.buffer().use { buffered ->
-                    buffered.writeUtf8(json)
-                    buffered.flush()
-                }
+            it.bufferedWriter(Charsets.UTF_8).use {  sink ->
+                sink.write(json)
+                sink.flush()
             }
         }
         savingLock.withLock {
@@ -103,11 +97,7 @@ class TabList {
                     else -> ByteArray(0)
                 }
                 source?.let {
-                    File(itemsDir, "${tab.id()}.json").sink().use {  sink ->
-                        sink.buffer().use {  bufferedSink ->
-                            bufferedSink.write(source)
-                        }
-                    }
+                    File(itemsDir, "${tab.id()}.json").writeBytes(source)
                 }
             }
         }
@@ -186,11 +176,7 @@ class TabList {
                 val file = tabsFile
                 val fromJson: TabList =
                         if (file == null) TabList() 
-                        else file.source().use {  source ->
-                            source.buffer().use { bufferedSource ->
-                                jsonSerializer.decodeFromString(bufferedSource.readUtf8())
-                            }
-                        } ?: TabList()
+                        else jsonSerializer.decodeFromString(file.readText(Charsets.UTF_8)) ?: TabList()
 
                 loadTabsFromDir()
                         ?.forEach { it?.let { fromJson.add(it) } }
@@ -208,11 +194,7 @@ class TabList {
         private fun loadTabsFromDir(): List<Tab?>? {
             return itemsDir?.list()
                     ?.map {
-                        val json: String = File(itemsDir, it).source().use { source ->
-                            source.buffer().use { bufferedSource ->
-                                bufferedSource.readUtf8()
-                            }
-                        }
+                        val json: String = File(itemsDir, it).readText(Charsets.UTF_8)
 
                         when {
                             json.contains("editorTab") -> jsonSerializer.decodeFromString<EditorTab>(json)
