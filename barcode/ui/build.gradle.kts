@@ -57,8 +57,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation(libraries.activityCompose)
 
-    implementation("androidx.camera:camera-camera2:${LibraryVersion.cameraX}")
-    implementation("androidx.camera:camera-lifecycle:${LibraryVersion.cameraX}")
+    implementation("androidx.camera:camera-camera2:1.0.2")
+    implementation("androidx.camera:camera-lifecycle:1.0.2")
     implementation("androidx.camera:camera-view:1.3.4")
 
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
