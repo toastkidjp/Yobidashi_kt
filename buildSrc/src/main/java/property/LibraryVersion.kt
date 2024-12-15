@@ -13,5 +13,4 @@ object LibraryVersion {
     val robolectric = "4.8.1"
     val mockk = "1.10.6"
     val coroutinesTest = "1.5.1"
-    val cameraX = "1.0.2"
 }
