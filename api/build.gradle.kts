@@ -40,7 +40,7 @@ android {
 
 dependencies {
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
-    implementation("com.squareup.okhttp3:okhttp:${LibraryVersion.okhttp}")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation(libraries.jsoup)
