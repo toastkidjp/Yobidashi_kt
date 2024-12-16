@@ -59,7 +59,7 @@ dependencies {
 
     implementation("androidx.media:media:1.3.0")
 
-    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation(libraries.timber)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
