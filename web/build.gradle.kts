@@ -60,7 +60,7 @@ dependencies {
     implementation(libraries.coilCompose)
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
-    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation(libraries.timber)
     implementation(libraries.jsoup)
     implementation(libraries.kotlinSerialization)
 
