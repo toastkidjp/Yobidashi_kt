@@ -67,10 +67,10 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.TabThumbnails
@@ -82,6 +82,7 @@ import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -93,6 +94,7 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
 
     val tabs = remember { mutableStateListOf<Tab>() }
+    val runOpenTab = remember { AtomicBoolean(false) }
 
     LaunchedEffect(key1 = context) {
         (0 until tabAdapter.size()).forEach {
@@ -123,7 +125,7 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
         containerColor = MaterialTheme.colorScheme.primary,
     ) {
         Box(modifier) {
-            AsyncImage(
+            EfficientImage(
                 model = PreferenceApplier(context).backgroundImagePath,
                 contentDescription = stringResource(id = R.string.content_description_background),
                 alignment = Alignment.Center,
@@ -233,8 +235,8 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
                         Modifier.padding(4.dp)
                     ) {
                         // For suppressing replace screen.
-                        contentViewModel.openNewTab()
                         closeOnly(coroutineScope, contentViewModel)
+                        runOpenTab.set(true)
                     }
                 }
             }
@@ -250,6 +252,11 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
             if (initialIndex != tabAdapter.currentTabId()) {
                 contentViewModel.replaceToCurrentTab()
             }
+
+            if (runOpenTab.get()) {
+                contentViewModel.openNewTab()
+            }
+
             tabAdapter.saveTabList()
         }
     }
@@ -336,7 +343,7 @@ private fun TabItem(
                         .padding(4.dp)
                         .align(Alignment.BottomCenter)
                 ) {
-                    AsyncImage(
+                    EfficientImage(
                         model = thumbnail,
                         contentDescription = tab.title(),
                         contentScale = ContentScale.FillHeight,

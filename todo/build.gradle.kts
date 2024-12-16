@@ -51,14 +51,12 @@ dependencies {
     implementation(project(path = ":lib"))
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
-    implementation("androidx.paging:paging-common:${LibraryVersion.paging}")
-    implementation("androidx.paging:paging-common-ktx:${LibraryVersion.paging}")
 
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
-    implementation("androidx.paging:paging-compose:${LibraryVersion.paging}")
+    implementation(libraries.pagingCompose)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
-    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
+    implementation(libraries.activityCompose)
 
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")

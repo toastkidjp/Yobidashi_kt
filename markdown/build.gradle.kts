@@ -37,7 +37,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.7.0")
     implementation(libraries.coilCompose)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${property.LibraryVersion.lifecycle}")
-    implementation("androidx.activity:activity-compose:${property.LibraryVersion.activityCompose}")
+    implementation(libraries.activityCompose)
 
     testImplementation("junit:junit:${property.LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${property.LibraryVersion.mockk}")

@@ -57,7 +57,6 @@ import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.parts.InsetDivider
 import java.io.File
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun DisplaySettingUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return

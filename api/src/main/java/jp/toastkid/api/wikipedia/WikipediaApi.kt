@@ -10,7 +10,6 @@ package jp.toastkid.api.wikipedia
 import androidx.annotation.WorkerThread
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import jp.toastkid.api.wikipedia.model.Article
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
@@ -32,7 +31,6 @@ class WikipediaApi(
     /**
      * You should call this method on worker-thread.
      */
-    @OptIn(ExperimentalSerializationApi::class)
     @WorkerThread
     operator fun invoke(): Array<Article>? {
         val retrofit = Retrofit.Builder()

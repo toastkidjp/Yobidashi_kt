@@ -17,7 +17,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
@@ -27,8 +26,6 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import okhttp3.Response
-import okhttp3.ResponseBody
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -59,12 +56,6 @@ class RssUrlFinderTest {
     @Suppress("unused")
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
-    @SpyK(recordPrivateCalls = true)
-    private var response: Response = mockk()
-
-    @MockK
-    private lateinit var body: ResponseBody
-
     @MockK
     private lateinit var contentViewModel: ContentViewModel
 
@@ -80,12 +71,8 @@ class RssUrlFinderTest {
 
         every { preferenceApplier.saveNewRssReaderTargets(any()) }.just(Runs)
         every { urlValidator.invoke(any()) }.returns(false)
-        coEvery { htmlApi.invoke(any()) }.returns(response)
+        coEvery { htmlApi.invoke(any()) }.returns("test")
         coEvery { rssUrlExtractor.invoke(any()) }.returns(listOf("https://rss.yahoo.co.jp/1"))
-        coEvery { response getProperty "isSuccessful" }.returns(true)
-        coEvery { response getProperty "body" }.returns(body)
-        coEvery { body.string() }.returns("test")
-        coEvery { body.close() }.just(Runs)
 
         every { contentViewModelFactory.invoke(any()) }.returns(contentViewModel)
         every { contentViewModel.snackShort(any<Int>()) }.returns(mockk())
@@ -107,10 +94,6 @@ class RssUrlFinderTest {
         verify(atLeast = 1) { urlValidator.invoke(any()) }
         coVerify(exactly = 1) { htmlApi.invoke(any()) }
         coVerify(exactly = 1) { rssUrlExtractor.invoke(any()) }
-        coVerify(exactly = 1) { response getProperty "isSuccessful" }
-        coVerify(exactly = 1) { response getProperty "body" }
-        coVerify(exactly = 1) { body.string() }
-        coVerify(exactly = 1) { body.close() }
 
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
@@ -124,9 +107,6 @@ class RssUrlFinderTest {
         verify(exactly = 0) { urlValidator.invoke(any()) }
         coVerify(exactly = 0) { htmlApi.invoke(any()) }
         coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
-        coVerify(exactly = 0) { response getProperty "isSuccessful" }
-        coVerify(exactly = 0) { response getProperty "body" }
-        coVerify(exactly = 0) { body.string() }
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
@@ -142,9 +122,6 @@ class RssUrlFinderTest {
         verify(exactly = 1) { urlValidator.invoke(any()) }
         coVerify(exactly = 0) { htmlApi.invoke(any()) }
         coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
-        coVerify(exactly = 0) { response getProperty "isSuccessful" }
-        coVerify(exactly = 0) { response getProperty "body" }
-        coVerify(exactly = 0) { body.string() }
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 1) { contentViewModel.snackShort(any<String>()) }
@@ -161,9 +138,6 @@ class RssUrlFinderTest {
         verify(exactly = 1) { urlValidator.invoke(any()) }
         coVerify(exactly = 1) { htmlApi.invoke(any()) }
         coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
-        coVerify(exactly = 0) { response getProperty "isSuccessful" }
-        coVerify(exactly = 0) { response getProperty "body" }
-        coVerify(exactly = 0) { body.string() }
 
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
@@ -171,17 +145,12 @@ class RssUrlFinderTest {
 
     @Test
     fun testIsNotSuccessfulCase() {
-        coEvery { response getProperty "isSuccessful" }.returns(false)
-
         rssUrlFinder.invoke("https://www.yahoo.co.jp")
 
         verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
         verify(exactly = 1) { urlValidator.invoke(any()) }
         coVerify(exactly = 1) { htmlApi.invoke(any()) }
         coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
-        coVerify(exactly = 1) { response getProperty "isSuccessful" }
-        coVerify(exactly = 0) { response getProperty "body" }
-        coVerify(exactly = 0) { body.string() }
 
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }

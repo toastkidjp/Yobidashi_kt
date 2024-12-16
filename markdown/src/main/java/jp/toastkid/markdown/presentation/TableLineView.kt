@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.markdown.domain.model.data.TableLine
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifier = Modifier) {
     val viewModel = remember { TableLineViewModel() }
@@ -94,7 +93,6 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TableRow(itemRow: List<Any>, fontSize: TextUnit, textColor: Color, modifier: Modifier) {
     Column {

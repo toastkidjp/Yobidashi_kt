@@ -10,7 +10,6 @@ package jp.toastkid.todo.view.list
 
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -122,7 +121,6 @@ fun TaskListUi() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TaskList(
     flow: Flow<PagingData<TodoTask>>,

@@ -10,7 +10,6 @@ package jp.toastkid.todo.view.board
 
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
@@ -117,7 +116,6 @@ fun TaskBoardUi() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskBoard(flow: Flow<PagingData<TodoTask>>?, modify: (TodoTask) -> Unit) {
     val context = LocalContext.current

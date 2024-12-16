@@ -11,7 +11,6 @@ package jp.toastkid.yobidashi.main.ui
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.runtime.Composable
@@ -38,6 +37,7 @@ import jp.toastkid.rss.view.RssReaderListUi
 import jp.toastkid.search.favorite.FavoriteSearchListUi
 import jp.toastkid.search.history.SearchHistoryListUi
 import jp.toastkid.search.view.SearchInputUi
+import jp.toastkid.setting.presentation.screen.SettingTopUi
 import jp.toastkid.todo.view.board.TaskBoardUi
 import jp.toastkid.todo.view.list.TaskListUi
 import jp.toastkid.web.archive.view.ArchiveListUi
@@ -46,7 +46,6 @@ import jp.toastkid.web.history.view.ViewHistoryListUi
 import jp.toastkid.web.view.WebTabUi
 import jp.toastkid.world.presentation.WorldTimeView
 import jp.toastkid.yobidashi.BuildConfig
-import jp.toastkid.setting.presentation.screen.SettingTopUi
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
@@ -167,7 +166,6 @@ private fun takeScreenshot(tabs: TabAdapter, view: View) {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 private fun NavGraphBuilder.slideInComposable(route: String, content: @Composable (Bundle) -> Unit) {
     composable(
         route,
@@ -179,7 +177,6 @@ private fun NavGraphBuilder.slideInComposable(route: String, content: @Composabl
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 private fun NavGraphBuilder.tabComposable(route: String, content: @Composable (Bundle?) -> Unit) {
     composable(
         route,

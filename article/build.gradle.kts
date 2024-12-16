@@ -74,14 +74,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
 
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
-    implementation("androidx.activity:activity-compose:${LibraryVersion.activityCompose}")
-    implementation("androidx.paging:paging-compose:${LibraryVersion.paging}")
+    implementation(libraries.activityCompose)
+    implementation(libraries.pagingCompose)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
 
-    implementation("androidx.paging:paging-common:${LibraryVersion.paging}")
-    implementation("androidx.paging:paging-common-ktx:${LibraryVersion.paging}")
     implementation(libraries.workManager)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")

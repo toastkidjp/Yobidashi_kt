@@ -21,7 +21,7 @@ class GooglePlayIntentFactory {
      */
     operator fun invoke(packageName: String): Intent {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse("market://details?id=" + packageName)
+        intent.data = Uri.parse("market://details?id=$packageName")
         return intent
     }
 

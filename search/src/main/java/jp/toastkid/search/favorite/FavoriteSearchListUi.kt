@@ -62,7 +62,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.MessageFormat
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteSearchListUi() {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
