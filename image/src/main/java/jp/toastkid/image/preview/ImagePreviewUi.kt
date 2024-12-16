@@ -53,13 +53,11 @@ import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import coil3.SingletonImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import jp.toastkid.image.Image
 import jp.toastkid.image.R
-import jp.toastkid.image.factory.GifImageLoaderFactory
 import jp.toastkid.image.preview.attach.AttachToAnyAppUseCase
 import jp.toastkid.image.preview.attach.AttachToThisAppBackgroundUseCase
 import jp.toastkid.image.preview.detail.ExifInformationExtractorUseCase
@@ -96,9 +94,6 @@ internal fun ImagePreviewUi(
 
     val pagerState = rememberPagerState(initialIndex) { viewModel.pageCount() }
 
-    val gifImageLoader = remember { GifImageLoaderFactory().invoke(context) }
-    val imageLoader = remember { SingletonImageLoader.get(context) }
-
     Box {
         HorizontalPager(
             pageSize = PageSize.Fill,
@@ -112,7 +107,6 @@ internal fun ImagePreviewUi(
                         .memoryCacheKey(viewModel.getCurrentImage(pagerState.currentPage).path)
                         .crossfade(true)
                         .build(),
-                    imageLoader = if (viewModel.getCurrentImage(pagerState.currentPage).path.endsWith(".gif")) gifImageLoader else imageLoader,
                     contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
                     colorFilter = viewModel.colorFilterState.value,
                     modifier = Modifier
