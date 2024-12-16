@@ -47,7 +47,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation("androidx.exifinterface:exifinterface:${LibraryVersion.exifinterface}")
     implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
-    implementation(libraries.coilCompose)
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
 
     testImplementation("junit:junit:${property.LibraryVersion.junit}")
