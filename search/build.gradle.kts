@@ -71,9 +71,9 @@ dependencies {
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation(libraries.activityCompose)
     implementation(libraries.coilCompose)
-    implementation("io.coil-kt.coil3:coil-network-okhttp:${LibraryVersion.coilCompose}")
+    implementation(libraries.coilNetwork)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
-    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation(libraries.timber)
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     testImplementation("junit:junit:${LibraryVersion.junit}")
