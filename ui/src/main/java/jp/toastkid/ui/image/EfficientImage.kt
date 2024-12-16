@@ -17,10 +17,12 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import coil3.SingletonImageLoader
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter.State
 import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
 
 @Composable
 fun EfficientImage(
@@ -41,7 +43,10 @@ fun EfficientImage(
     clipToBounds: Boolean = true,
 ) {
     AsyncImage(
-        model,
+        ImageRequest.Builder(LocalContext.current)
+            .data(model)
+            .memoryCacheKey(model.toString())
+            .build(),
         contentDescription,
         SingletonImageLoader.get(LocalPlatformContext.current),
         modifier,
