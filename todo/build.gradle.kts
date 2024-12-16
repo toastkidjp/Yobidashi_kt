@@ -58,7 +58,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation(libraries.activityCompose)
 
-    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation(libraries.timber)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
