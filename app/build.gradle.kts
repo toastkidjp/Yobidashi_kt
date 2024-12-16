@@ -136,7 +136,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
-    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation(libraries.timber)
     implementation(libraries.kotlinSerialization)
 
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.2")
