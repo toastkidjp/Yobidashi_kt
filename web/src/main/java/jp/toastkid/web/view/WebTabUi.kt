@@ -67,6 +67,7 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.dialog.ConfirmDialog
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.web.FaviconApplier
 import jp.toastkid.web.R
 import jp.toastkid.web.WebViewContainer
@@ -432,7 +433,7 @@ private fun AppBarContent(
                         contentViewModel.webSearch()
                     }
             ) {
-                AsyncImage(
+                EfficientImage(
                     model = viewModel.icon(),
                     contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                     modifier = Modifier
