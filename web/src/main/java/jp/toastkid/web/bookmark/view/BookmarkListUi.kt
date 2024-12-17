@@ -160,7 +160,7 @@ fun BookmarkListUi() {
 
     val importRequestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (!it && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (!it) {
                 contentViewModel.snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
@@ -183,7 +183,7 @@ fun BookmarkListUi() {
 
     val exportRequestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (!it && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (!it) {
                 contentViewModel.snackShort(jp.toastkid.lib.R.string.message_requires_permission_storage)
                 return@rememberLauncherForActivityResult
             }
@@ -261,10 +261,20 @@ fun BookmarkListUi() {
                 openAddFolderDialogState.value = true
             }),
             OptionMenu(titleId = R.string.title_import_bookmark, action = {
-                importRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    importRequestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    return@OptionMenu
+                }
+
+                getContentLauncher.launch(GetContentIntentFactory()("text/html"))
             }),
             OptionMenu(titleId = R.string.title_export_bookmark, action = {
-                exportRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    exportRequestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    return@OptionMenu
+                }
+
+                exportLauncher.launch(CreateDocumentIntentFactory()("text/html", EXPORT_FILE_NAME))
             }),
             OptionMenu(titleId = R.string.title_add_default_bookmark, action = {
                 BookmarkInitializer.from(activityContext)() { viewModel.query(bookmarkRepository) }
