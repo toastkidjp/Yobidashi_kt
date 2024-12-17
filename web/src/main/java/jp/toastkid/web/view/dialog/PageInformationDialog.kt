@@ -12,7 +12,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.os.Bundle
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,6 +43,7 @@ import jp.toastkid.barcode.generator.BarcodeGenerator
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.compat.getParcelableCompat
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.web.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -82,7 +82,7 @@ internal fun PageInformationDialog(
                             modifier = Modifier.padding(16.dp)
                         ) {
                             if (favicon != null) {
-                                AsyncImage(
+                                EfficientImage(
                                     model = favicon,
                                     contentDescription = stringResource(id = R.string.title_icon),
                                     modifier = Modifier.size(44.dp).padding(end = 8.dp)
