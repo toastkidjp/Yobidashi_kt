@@ -420,7 +420,7 @@ private fun AppBarContent(
         }
 
         Box(modifier = Modifier.padding(start = 4.dp)) {
-            AsyncImage(
+            EfficientImage(
                 model = R.drawable.url_box_background,
                 contentDescription = stringResource(id = jp.toastkid.lib.R.string.search)
             )
