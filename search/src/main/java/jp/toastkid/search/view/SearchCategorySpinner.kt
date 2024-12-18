@@ -83,7 +83,7 @@ internal fun SearchCategorySpinner(
                     DropdownMenuItem(
                         text = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                AsyncImage(
+                                EfficientImage(
                                     model = searchCategory.iconId,
                                     contentDescription = stringResource(id = searchCategory.id),
                                     modifier = Modifier.width(40.dp)
