@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import coil3.compose.AsyncImage
 import jp.toastkid.barcode.generator.BarcodeGenerator
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
@@ -108,7 +107,7 @@ internal fun PageInformationDialog(
                                 modifier = Modifier.padding(top = 4.dp)
                             )
 
-                            AsyncImage(
+                            EfficientImage(
                                 barcode.value,
                                 contentDescription = stringResource(id = R.string.title_instant_barcode),
                                 modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally)
