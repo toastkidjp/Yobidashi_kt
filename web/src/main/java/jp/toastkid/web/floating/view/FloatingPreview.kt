@@ -37,9 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.web.floating.FloatingPreviewViewModel
 import jp.toastkid.web.floating.WebViewInitializer
 import jp.toastkid.web.view.TitleUrlBox
@@ -95,7 +95,7 @@ fun FloatingPreviewUi(uri: Uri) {
                     contentViewModel.open(currentUri)
                 }
         ) {
-            AsyncImage(
+            EfficientImage(
                 model = viewModel.icon(),
                 contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
                 modifier = Modifier
