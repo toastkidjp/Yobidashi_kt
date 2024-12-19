@@ -41,12 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.web.R
 import jp.toastkid.yobidashi.browser.UrlItem
@@ -207,7 +207,7 @@ private fun BindItemContent(
                     onLongClick = onLongClick
                 )
             ) {
-                AsyncImage(
+                EfficientImage(
                     iconFile,
                     contentDescription = urlItem.urlString(),
                     placeholder = painterResource(id = jp.toastkid.lib.R.drawable.ic_history_black),
