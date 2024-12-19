@@ -53,9 +53,6 @@ import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import jp.toastkid.image.Image
 import jp.toastkid.image.R
 import jp.toastkid.image.preview.attach.AttachToAnyAppUseCase
@@ -64,6 +61,7 @@ import jp.toastkid.image.preview.detail.ExifInformationExtractorUseCase
 import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.ui.dialog.ConfirmDialog
+import jp.toastkid.ui.image.EfficientImage
 import kotlinx.coroutines.launch
 import java.io.BufferedInputStream
 import java.io.File
@@ -101,12 +99,8 @@ internal fun ImagePreviewUi(
             state = pagerState
         ) {
             with(sharedTransitionScope) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(viewModel.getCurrentImage(pagerState.currentPage).path)
-                        .memoryCacheKey(viewModel.getCurrentImage(pagerState.currentPage).path)
-                        .crossfade(true)
-                        .build(),
+                EfficientImage(
+                    model = viewModel.getCurrentImage(pagerState.currentPage).path,
                     contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
                     colorFilter = viewModel.colorFilterState.value,
                     modifier = Modifier
