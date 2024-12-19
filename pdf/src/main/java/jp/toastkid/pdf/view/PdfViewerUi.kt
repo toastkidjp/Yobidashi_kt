@@ -44,10 +44,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import coil3.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.pdf.PdfImageFactory
+import jp.toastkid.ui.image.EfficientImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -134,7 +134,7 @@ private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) 
                         }
                 ) {
                     val max = images.size
-                    AsyncImage(
+                    EfficientImage(
                         model = bitmap,
                         contentDescription = "${index + 1} / $max",
                         modifier = Modifier.graphicsLayer(
