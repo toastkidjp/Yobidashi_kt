@@ -33,10 +33,10 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.clip.Clipboard
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.ui.parts.SingleLineText
 import jp.toastkid.web.R
 import jp.toastkid.web.usecase.ImageSearchUrlGenerator
@@ -64,7 +64,7 @@ internal fun AnchorLongTapDialog(
                             modifier = Modifier.padding(16.dp)
                         ) {
                             if (imageUrl != null && Urls.isValidUrl(imageUrl)) {
-                                AsyncImage(
+                                EfficientImage(
                                     imageUrl,
                                     stringResource(id = jp.toastkid.lib.R.string.image),
                                     modifier = Modifier
