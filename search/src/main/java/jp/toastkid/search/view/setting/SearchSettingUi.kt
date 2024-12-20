@@ -42,6 +42,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.R
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.view.SearchCategorySpinner
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.ui.parts.InsetDivider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -309,7 +310,7 @@ fun SearchSettingUi() {
                             selection.checked.value = selection.checked.value.not()
                         }
                 ) {
-                    AsyncImage(
+                    EfficientImage(
                         model = selection.searchCategory.iconId,
                         contentDescription = stringResource(id = selection.searchCategory.id),
                         modifier = Modifier.width(40.dp)
