@@ -52,7 +52,7 @@ dependencies {
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation(libraries.activityCompose)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
-    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation(libraries.timber)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
