@@ -59,7 +59,7 @@ dependencies {
     implementation(libraries.activityCompose)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
 
-    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation(libraries.timber)
     implementation(libraries.jsoup)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
