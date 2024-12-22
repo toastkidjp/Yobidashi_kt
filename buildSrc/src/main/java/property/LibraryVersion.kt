@@ -7,7 +7,6 @@ object LibraryVersion {
     val exifinterface = "1.3.3"
     val composeCompiler = "1.4.6"
     val composeMaterial3 = "1.3.0"
-    val navigationCompose = "2.7.7"
     val junit = "4.12"
     val robolectric = "4.8.1"
     val mockk = "1.10.6"
