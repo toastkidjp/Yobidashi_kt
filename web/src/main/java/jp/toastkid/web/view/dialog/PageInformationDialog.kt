@@ -72,7 +72,7 @@ internal fun PageInformationDialog(
             Surface(
                 shadowElevation = 4.dp
             ) {
-                Box() {
+                Box {
                     Column(
                         modifier = Modifier.padding(bottom = 40.dp)
                     ) {
