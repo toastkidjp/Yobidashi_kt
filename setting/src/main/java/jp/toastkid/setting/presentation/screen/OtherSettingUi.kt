@@ -39,7 +39,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import jp.toastkid.lib.model.tab.StartUp
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.setting.R
@@ -48,6 +47,7 @@ import jp.toastkid.setting.domain.service.PreferencesClearUseCase
 import jp.toastkid.setting.presentation.CheckableRow
 import jp.toastkid.setting.presentation.WithIcon
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.ui.parts.InsetDivider
 
 @Composable
@@ -296,7 +296,7 @@ private fun NewTabSettingItem(
                 .drawBehind { drawRect(backgroundColor) }
                 .padding(8.dp)
         ) {
-            AsyncImage(
+            EfficientImage(
                 thumbnailId,
                 contentDescription = stringResource(id = nameId)
             )
