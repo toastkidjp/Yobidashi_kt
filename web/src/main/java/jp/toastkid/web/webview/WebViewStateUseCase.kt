@@ -12,9 +12,6 @@ import android.os.Bundle
 import android.os.Parcel
 import android.webkit.WebView
 import jp.toastkid.lib.storage.CacheDir
-import okio.buffer
-import okio.sink
-import okio.source
 
 /**
  * @author toastkidjp
@@ -34,11 +31,7 @@ class WebViewStateUseCase(private val folder: CacheDir) {
 
         val parcel = Parcel.obtain()
         state.writeToParcel(parcel, 0)
-        file.sink().use { sink ->
-            sink.buffer().use {
-                it.write(parcel.marshall())
-            }
-        }
+        file.writeBytes(parcel.marshall())
         parcel.recycle()
     }
 
@@ -52,7 +45,7 @@ class WebViewStateUseCase(private val folder: CacheDir) {
             return
         }
 
-        val byteArray = file.source().use { source -> source.buffer().use { it.readByteArray() } }
+        val byteArray = file.readBytes()
         file.delete()
 
         val parcel = Parcel.obtain()
