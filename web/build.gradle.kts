@@ -57,7 +57,6 @@ dependencies {
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
     implementation(libraries.activityCompose)
     implementation("androidx.webkit:webkit:1.12.1")
-    implementation(libraries.coilCompose)
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${LibraryVersion.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation(libraries.timber)
