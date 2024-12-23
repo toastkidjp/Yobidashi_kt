@@ -50,7 +50,7 @@ dependencies {
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
     implementation(libraries.activityCompose)
-    implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
+    implementation(libraries.composeMaterial3)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
