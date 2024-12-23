@@ -22,6 +22,7 @@ dependencyResolutionManagement {
             library("coilNetwork", "io.coil-kt.coil3", "coil-network-okhttp").version("3.0.4")
             library("timber", "com.jakewharton.timber", "timber").version("5.0.1")
             library("exifinterface", "androidx.exifinterface", "exifinterface").version("1.3.3")
+            library("composeMaterial3", "androidx.compose.material3", "material3").version("1.3.0")
         }
     }
 }
