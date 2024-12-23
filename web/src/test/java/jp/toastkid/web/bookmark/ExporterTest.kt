@@ -2,12 +2,11 @@ package jp.toastkid.web.bookmark
 
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import kotlinx.serialization.json.Json
-import okio.buffer
-import okio.source
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import java.io.InputStreamReader
 
 /**
  * Test of [Exporter].
@@ -156,9 +155,9 @@ class ExporterTest {
      * Read expected html string.
      */
     private fun readExpected() =
-            classLoader?.getResourceAsStream(expectedPath)?.source()?.use { source ->
-                source.buffer().use {
-                    it.readUtf8().replace("\r\n", "")
+            classLoader?.getResourceAsStream(expectedPath)?.use { source ->
+                InputStreamReader(source).use {
+                    it.readText().replace("\r\n", "")
                 }
             }
 
