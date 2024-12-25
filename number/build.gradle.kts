@@ -61,7 +61,7 @@ dependencies {
     implementation(project(path = ":ui"))
 
     implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
+    implementation(libraries.composeMaterial3)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation(libraries.activityCompose)
     implementation(libraries.kotlinSerialization)
