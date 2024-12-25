@@ -28,10 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import jp.toastkid.lib.R
-import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.search.SearchCategory
+import jp.toastkid.ui.image.EfficientImage
+import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.history.ViewHistory
@@ -74,7 +74,7 @@ internal fun SearchItemContent(
                 )
                     .heightIn(min = 44.dp)
             ) {
-                AsyncImage(
+                EfficientImage(
                     SearchCategory.findByCategory(category).iconId,
                     contentDescription = category,
                     placeholder = painterResource(id = R.drawable.ic_history_black),
@@ -136,7 +136,7 @@ fun BindItemContent(
                     onLongClick = onLongClick
                 )
             ) {
-                AsyncImage(
+                EfficientImage(
                     when (urlItem) {
                         is Bookmark -> File(urlItem.favicon)
                         is ViewHistory -> File(urlItem.favicon)

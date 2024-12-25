@@ -59,12 +59,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
-import coil3.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.media.R
 import jp.toastkid.media.music.MediaPlayerService
 import jp.toastkid.media.music.popup.MediaPlayerPopupViewModel
 import jp.toastkid.media.music.popup.playback.speed.PlayingSpeed
+import jp.toastkid.ui.image.EfficientImage
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
 
@@ -327,7 +327,7 @@ internal fun MusicList(
                             .clickable { onClickItem(music) }
                             .padding(4.dp)
                     ) {
-                        AsyncImage(
+                        EfficientImage(
                             music.description.iconUri,
                             contentDescription = "TODO",
                             contentScale = ContentScale.FillBounds,

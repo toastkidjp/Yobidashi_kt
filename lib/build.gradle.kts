@@ -71,7 +71,7 @@ dependencies {
     implementation(libraries.composeUi)
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
 
-    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation(libraries.timber)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")

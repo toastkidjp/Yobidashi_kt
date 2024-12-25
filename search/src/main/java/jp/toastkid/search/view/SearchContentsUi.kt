@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
@@ -54,6 +53,7 @@ import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.search.R
 import jp.toastkid.search.url_suggestion.ItemDeletionUseCase
 import jp.toastkid.search.viewmodel.SearchUiViewModel
+import jp.toastkid.ui.image.EfficientImage
 
 @OptIn(
     ExperimentalFoundationApi::class,
@@ -241,7 +241,7 @@ internal fun SearchContentsUi(
                                 }
                             )
                         ) {
-                            AsyncImage(
+                            EfficientImage(
                                 model = it.image,
                                 contentDescription = it.title,
                                 modifier = Modifier.width(40.dp)

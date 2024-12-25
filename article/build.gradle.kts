@@ -70,7 +70,7 @@ dependencies {
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
-    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation(libraries.timber)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
 
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")

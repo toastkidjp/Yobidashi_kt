@@ -46,11 +46,11 @@ tasks.withType<GenerateBuildConfig> {
 
 dependencies {
     implementation(project(path = ":lib"))
+    implementation(project(path = ":ui"))
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
-    implementation(libraries.coilCompose)
     implementation(libraries.activityCompose)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")

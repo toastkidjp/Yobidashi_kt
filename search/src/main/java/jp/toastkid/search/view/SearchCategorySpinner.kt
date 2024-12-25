@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
+import jp.toastkid.ui.image.EfficientImage
 
 @Composable
 internal fun SearchCategorySpinner(
@@ -57,7 +58,7 @@ internal fun SearchCategorySpinner(
     ) {
         val category = SearchCategory.findByCategory(currentCategory)
 
-        AsyncImage(
+        EfficientImage(
             category.iconId,
             contentDescription = stringResource(id = category.id),
             contentScale = ContentScale.Fit,
@@ -82,7 +83,7 @@ internal fun SearchCategorySpinner(
                     DropdownMenuItem(
                         text = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                AsyncImage(
+                                EfficientImage(
                                     model = searchCategory.iconId,
                                     contentDescription = stringResource(id = searchCategory.id),
                                     modifier = Modifier.width(40.dp)

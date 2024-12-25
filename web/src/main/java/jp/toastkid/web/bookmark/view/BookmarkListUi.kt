@@ -64,7 +64,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.CreateDocumentIntentFactory
@@ -75,6 +74,7 @@ import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.ui.parts.SwipeToDismissItem
 import jp.toastkid.web.FaviconApplier
 import jp.toastkid.web.R
@@ -329,7 +329,7 @@ private fun BookmarkList(
                             .wrapContentHeight()
                             .animateItem()
                     ) {
-                        AsyncImage(
+                        EfficientImage(
                             bookmark.favicon,
                             bookmark.title,
                             contentScale = ContentScale.Fit,

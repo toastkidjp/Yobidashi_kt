@@ -48,18 +48,18 @@ tasks.withType<GenerateBuildConfig> {
 
 dependencies {
     implementation(project(path = ":lib"))
+    implementation(project(path = ":ui"))
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
     // Compose dependencies.
     implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
-    implementation(libraries.coilCompose)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation(libraries.activityCompose)
 
     implementation("androidx.media:media:1.3.0")
 
-    implementation("com.jakewharton.timber:timber:${LibraryVersion.timber}")
+    implementation(libraries.timber)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
