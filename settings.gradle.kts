@@ -24,6 +24,7 @@ dependencyResolutionManagement {
             library("timber", "com.jakewharton.timber", "timber").version("5.0.1")
             library("exifinterface", "androidx.exifinterface", "exifinterface").version("1.3.3")
             library("composeMaterial3", "androidx.compose.material3", "material3").version("1.3.0")
+            library("lifecycleRuntimeKtx", "androidx.lifecycle", "lifecycle-runtime-ktx").version("2.8.5")
         }
     }
 }
