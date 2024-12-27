@@ -41,7 +41,7 @@ dependencies {
     implementation(project(":search"))
     implementation(project(":editor"))
 
-    implementation("androidx.compose.material3:material3:${property.LibraryVersion.composeMaterial3}")
+    implementation(libraries.composeMaterial3)
     implementation("androidx.core:core-ktx:1.7.0")
     implementation(libraries.activityCompose)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
