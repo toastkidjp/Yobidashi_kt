@@ -53,7 +53,7 @@ dependencies {
     implementation(libraries.coilCompose)
     implementation(libraries.coilGif)
     implementation(libraries.coilNetwork)
-    implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
+    implementation(libraries.composeMaterial3)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     testImplementation("junit:junit:4.12")
 }
