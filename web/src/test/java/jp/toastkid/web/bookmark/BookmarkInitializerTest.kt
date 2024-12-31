@@ -26,8 +26,8 @@ import io.mockk.verify
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.web.FaviconFolderProviderService
-import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.web.icon.WebClipIconLoader
+import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
@@ -63,7 +63,7 @@ class BookmarkInitializerTest {
         coEvery { onComplete.invoke() }.just(Runs)
 
         val file = mockk<File>()
-        coEvery { file.getAbsolutePath() }.returns("/test/test")
+        coEvery { file.absolutePath }.returns("/test/test")
         coEvery { favicons.assignNewFile(any<String>()) }.returns(file)
 
         val uri = mockk<Uri>()
