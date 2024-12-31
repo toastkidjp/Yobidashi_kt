@@ -88,7 +88,7 @@ class WebViewPoolTest {
     }
 
     @Test
-    fun test7() {
+    fun testContainsKeyWithNull() {
         assertFalse(webViewPool.containsKey(null))
     }
 
