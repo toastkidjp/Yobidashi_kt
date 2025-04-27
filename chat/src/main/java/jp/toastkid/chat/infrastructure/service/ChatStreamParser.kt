@@ -5,7 +5,7 @@ import org.json.JSONObject
 class ChatStreamParser {
 
     operator fun invoke(line: String): String? {
-        if (line.isBlank()) {
+        if (line.isBlank() || line.startsWith("data:").not()) {
             return null
         }
 
