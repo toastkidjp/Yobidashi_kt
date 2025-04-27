@@ -11,7 +11,9 @@ package jp.toastkid.article_viewer.article.list.view
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
+import android.os.Build
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -141,10 +143,18 @@ fun ArticleListUi() {
             }
         }
 
-        context.registerReceiver(
-            progressBroadcastReceiver,
-            ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(
+                progressBroadcastReceiver,
+                ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter(),
+                RECEIVER_NOT_EXPORTED
+            )
+        } else {
+            context.registerReceiver(
+                progressBroadcastReceiver,
+                ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter(),
+            )
+        }
         onDispose {
             context.unregisterReceiver(progressBroadcastReceiver)
         }
