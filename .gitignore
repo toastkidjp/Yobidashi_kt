@@ -14,8 +14,6 @@ ic_launcher*web.png
 build/
 /captures
 .externalNativeBuild
-gradlew
-gradlew.bat
 /app/signing
 app/src/main/res/raw/
 app/release/
@@ -24,3 +22,4 @@ app/licenses.yml
 
 .idea/*
 !.idea/icon.png
+!gradle/wrapper/gradle-wrapper.jar
