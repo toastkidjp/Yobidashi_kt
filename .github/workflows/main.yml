@@ -71,11 +71,11 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Release APK
-        timeout-minutes: 6
+        timeout-minutes: 10
         run: |
           mkdir credentials
           echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 -d > ./credentials/release_keystore.jks
-          ./gradlew assembleReleaseApk
+          ./gradlew assembleRelease
           rm credentials/release_keystore.jks
         env:
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP'
