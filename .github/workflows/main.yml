@@ -128,6 +128,9 @@ jobs:
           java-version: '21'
           cache: gradle
 
+      - name: Grant permission of Gradle wrapper
+        run: chmod +x gradlew
+
       - name: Coverage
         timeout-minutes: 15
         env:
