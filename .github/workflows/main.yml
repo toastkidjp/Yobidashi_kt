@@ -68,10 +68,11 @@ jobs:
           build-tools: 35.0.0
 
       - name: Prepare credentials
+        id: prepare-credentials
         timeout-minutes: 1
         run: |
-          mkdir app/credentials
-          echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 -d > ./app/credentials/release_keystore.jks
+          echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 -d > release_keystore.jks
+          echo "store_file=$(realpath release_keystore.jks)" >> "${GITHUB_OUTPUT}"
 
       - name: Grant permission of Gradle wrapper
         timeout-minutes: 20
@@ -86,13 +87,13 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          STORE_FILE_PATH: ${{ steps.prepare-credentials.outputs.store_file }}
 
       - name: Clean up credentials
         timeout-minutes: 1
         if: ${{ always() }}
         run: |
-          rm app/credentials/release_keystore.jks
-          rm -r app/credentials
+          rm release_keystore.jks
 
       - name: Upload artifact
         timeout-minutes: 2

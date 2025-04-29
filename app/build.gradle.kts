@@ -49,7 +49,10 @@ android {
 
             keyAlias = keystoreProperties.getProperty("keyAlias") ?: System.getenv("KEY_ALIAS")
             keyPassword = keystoreProperties.getProperty("keyPassword") ?: System.getenv("KEY_PASSWORD")
-            storeFile = File("credentials/release_keystore.jks")
+            val keystoreFile = File(System.getenv("STORE_FILE_PATH"))
+            if (keystoreFile.exists()) {
+                storeFile = keystoreFile
+            }
             storePassword = keystoreProperties.getProperty("storePassword") ?: System.getenv("KEYSTORE_PASSWORD")
         }
     }
