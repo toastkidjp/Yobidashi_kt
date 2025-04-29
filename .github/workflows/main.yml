@@ -71,7 +71,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Release APK
-        timeout-minutes: 10
+        timeout-minutes: 20
         run: |
           mkdir app/credentials
           echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 -d > ./app/credentials/release_keystore.jks
