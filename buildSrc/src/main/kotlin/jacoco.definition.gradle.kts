@@ -5,7 +5,7 @@ plugins {
 repositories.mavenCentral()
 
 jacoco {
-    toolVersion = "0.8.8"
+    toolVersion = "0.8.13"
     //reportsDirectory.set(layout.buildDirectory.dir("coverage"))
 }
 
