@@ -74,9 +74,9 @@ jobs:
         timeout-minutes: 10
         run: |
           mkdir app/credentials
-          echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 -d > ./credentials/app/release_keystore.jks
+          echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 -d > ./app/credentials/release_keystore.jks
           ./gradlew assembleRelease
-          rm credentials/app/release_keystore.jks
+          rm app/credentials/release_keystore.jks
         env:
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP'
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
