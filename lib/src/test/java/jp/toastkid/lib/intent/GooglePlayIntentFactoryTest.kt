@@ -44,7 +44,7 @@ class GooglePlayIntentFactoryTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         intentFactory.invoke("jp.toastkid.yobidashi")
 
         verify(exactly = 1) { anyConstructed<Intent>().setData(any()) }

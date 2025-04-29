@@ -3,15 +3,13 @@ package jp.toastkid.setting.application.background.load
 import android.app.Activity
 import android.content.Context
 import android.net.Uri
-import coil3.imageLoader
-import coil3.request.ImageRequest
-import coil3.toBitmap
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.image.ImageStoreUseCase
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.lib.window.WindowRectCalculatorCompat
 import jp.toastkid.setting.R
+import jp.toastkid.ui.image.BitmapLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -56,10 +54,7 @@ internal class LoadedAction (
             uris.forEach { uri ->
                 val bitmap = try {
                     withContext(Dispatchers.IO) {
-                        val image = context.imageLoader
-                            .execute(ImageRequest.Builder(context).data(uri).build())
-                            .image
-                            ?.toBitmap()
+                        val image = BitmapLoader().invoke(context, uri)
 
                         val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
                         fixedImage?.let {

@@ -45,7 +45,7 @@ class UrlShareIntentFactoryTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         intentFactory.invoke("https://www.yahoo.co.jp")
 
         verify(exactly = 1) { anyConstructed<Intent>().type = any() }

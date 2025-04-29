@@ -83,7 +83,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = LibraryVersion.composeCompiler
+        kotlinCompilerExtensionVersion = libraries.versions.kotlinComposeCompilerExtension.get()
     }
     lintOptions {
         isCheckReleaseBuilds = false
@@ -129,7 +129,7 @@ dependencies {
     implementation(libraries.workManager)
 
     // Compose dependencies.
-    implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
+    implementation(libraries.composeMaterial3)
     implementation(libraries.activityCompose)
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")

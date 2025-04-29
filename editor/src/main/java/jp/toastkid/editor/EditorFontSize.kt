@@ -23,7 +23,8 @@ enum class EditorFontSize(val size: Int) {
     FONT_18(18),
     FONT_20(20),
     FONT_24(24),
-    FONT_28(28);
+    FONT_28(28),
+    FONT_32(32);
 
     companion object {
 

@@ -49,6 +49,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.ViewModelProvider
@@ -142,6 +143,7 @@ internal fun ImagePreviewUi(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .graphicsLayer { alpha = 0.75f }
+                .zIndex(0.4f)
         ) {
             Column {
                 Box(

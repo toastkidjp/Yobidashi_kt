@@ -14,7 +14,6 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +43,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
@@ -54,6 +52,7 @@ import jp.toastkid.setting.domain.service.DarkModeApplier
 import jp.toastkid.setting.presentation.SwitchRow
 import jp.toastkid.setting.presentation.WithIcon
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.ui.parts.InsetDivider
 import java.io.File
 
@@ -207,7 +206,7 @@ internal fun DisplaySettingUi() {
                                 .snackShort(R.string.message_change_background_image)
                         }) {
                             Column {
-                                AsyncImage(
+                                EfficientImage(
                                     model = imageFile,
                                     contentDescription = imageFile.name,
                                     contentScale = ContentScale.Crop,

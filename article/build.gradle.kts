@@ -47,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = LibraryVersion.composeCompiler
+        kotlinCompilerExtensionVersion = libraries.versions.kotlinComposeCompilerExtension.get()
     }
 }
 
@@ -73,7 +73,7 @@ dependencies {
     implementation(libraries.timber)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
 
-    implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
+    implementation(libraries.composeMaterial3)
     implementation(libraries.activityCompose)
     implementation(libraries.pagingCompose)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")

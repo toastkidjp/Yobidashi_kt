@@ -42,13 +42,13 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = LibraryVersion.composeCompiler
+        kotlinCompilerExtensionVersion = libraries.versions.kotlinComposeCompilerExtension.get()
     }
 }
 
 dependencies {
     implementation(project(":lib"))
-    implementation("androidx.compose.material3:material3:${LibraryVersion.composeMaterial3}")
+    implementation(libraries.composeMaterial3)
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation(libraries.activityCompose)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")

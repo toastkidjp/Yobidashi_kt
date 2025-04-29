@@ -311,7 +311,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun editorFontSize(): Int {
-        return preferences.getInt(Key.EDITOR_FONT_SIZE.name, 16)
+        return preferences.getInt(Key.EDITOR_FONT_SIZE.name, 14)
     }
 
     fun setNewCameraFabPosition(x: Float, y: Float) {

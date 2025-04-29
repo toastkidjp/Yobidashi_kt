@@ -46,7 +46,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.compose.material3:material3:${property.LibraryVersion.composeMaterial3}")
+    implementation(libraries.composeMaterial3)
     implementation("androidx.core:core-ktx:1.7.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.mockk:mockk:${property.LibraryVersion.mockk}")

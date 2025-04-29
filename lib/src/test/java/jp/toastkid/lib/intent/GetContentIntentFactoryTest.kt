@@ -41,7 +41,7 @@ class GetContentIntentFactoryTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         getContentIntentFactory.invoke("text/plain")
 
         verify(exactly = 1) { anyConstructed<Intent>().setType(any()) }

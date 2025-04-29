@@ -28,15 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import jp.toastkid.markdown.domain.model.data.CodeBlockLine
 import jp.toastkid.markdown.domain.model.data.HorizontalRule
 import jp.toastkid.markdown.domain.model.data.ImageLine
@@ -44,6 +40,7 @@ import jp.toastkid.markdown.domain.model.data.ListLine
 import jp.toastkid.markdown.domain.model.data.TableLine
 import jp.toastkid.markdown.domain.model.data.TextBlock
 import jp.toastkid.markdown.domain.model.entity.Markdown
+import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.ui.menu.context.common.CommonContextMenuToolbarFactory
 
 @Composable
@@ -115,11 +112,8 @@ fun MarkdownPreview(
                         }
 
                         is ImageLine -> {
-                            AsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(line.source)
-                                    .crossfade(true)
-                                    .build(),
+                            EfficientImage(
+                                model = line.source,
                                 contentDescription = line.source,
                                 modifier = Modifier.padding(vertical = 8.dp)
                             )

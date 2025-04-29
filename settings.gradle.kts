@@ -10,6 +10,7 @@ dependencyResolutionManagement {
         create("libraries") {
             version("kotlin", "2.0.20")
             version("room", "2.6.1")
+            version("kotlinComposeCompilerExtension", "1.4.6")
             plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").version("2.0.21")
             library("activityCompose", "androidx.activity", "activity-compose").version("1.9.0")
             library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.6.0")
@@ -22,6 +23,8 @@ dependencyResolutionManagement {
             library("coilNetwork", "io.coil-kt.coil3", "coil-network-okhttp").version("3.0.4")
             library("timber", "com.jakewharton.timber", "timber").version("5.0.1")
             library("exifinterface", "androidx.exifinterface", "exifinterface").version("1.3.3")
+            library("composeMaterial3", "androidx.compose.material3", "material3").version("1.3.0")
+            library("lifecycleRuntimeKtx", "androidx.lifecycle", "lifecycle-runtime-ktx").version("2.8.5")
         }
     }
 }

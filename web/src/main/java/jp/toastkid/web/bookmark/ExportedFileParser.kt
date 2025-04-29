@@ -1,13 +1,12 @@
 package jp.toastkid.web.bookmark
 
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import okio.buffer
-import okio.source
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import java.io.File
 import java.io.InputStream
+import java.io.InputStreamReader
 
 /**
  * Parser of exported bookmark html file.
@@ -35,11 +34,7 @@ class ExportedFileParser {
      */
     operator fun invoke(inputStream: InputStream): List<Bookmark> = read(
             Jsoup.parse(
-                    inputStream.source().use { source ->
-                        source.buffer().use { bufferedSource ->
-                            bufferedSource.readUtf8()
-                        }
-                    },
+                    InputStreamReader(inputStream).use { it.readText() },
                     ENCODE
             )
     )
