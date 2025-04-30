@@ -20,6 +20,7 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.api.lib.HttpClientFactory
 import jp.toastkid.api.lib.MultiByteCharacterInspector
 import okhttp3.Call
 import okhttp3.OkHttpClient
@@ -32,7 +33,6 @@ import java.util.concurrent.TimeUnit
 
 class SuggestionApiTest {
 
-    @InjectMockKs
     private lateinit var suggestionApi: SuggestionApi
 
     @MockK
@@ -54,10 +54,11 @@ class SuggestionApiTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        mockkConstructor(Request.Builder::class)
+        mockkConstructor(Request.Builder::class, HttpClientFactory::class)
         every { anyConstructed<Request.Builder>().url(any<String>()) }.returns(builder)
         every { builder.build() }.returns(mockk())
 
+        every { anyConstructed<HttpClientFactory>().withTimeout(any()) } returns httpClient
         every { httpClient.newCall(any()) }.returns(call)
         every { call.enqueue(any()) }.just(Runs)
 
@@ -65,6 +66,8 @@ class SuggestionApiTest {
 
         mockkStatic(Uri::class)
         every { Uri.encode(any()) }.returns("query")
+
+        suggestionApi = SuggestionApi(suggestionParser, multiByteCharacterInspector)
     }
 
     @After
