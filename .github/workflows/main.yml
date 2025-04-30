@@ -200,7 +200,7 @@ jobs:
         with:
           name: Release AAB
           path: |
-            app/build/outputs/aab/release/*.aab
+            app/build/outputs/bundle/release/*.aab
 
       - name: Upload artifact to release
         timeout-minutes: 5
@@ -210,7 +210,7 @@ jobs:
           RELEASE_TAG: ${{ needs.release.outputs.release_tag }}
         run: |
           tag_title=$RELEASE_TAG
-          gh release upload ${tag_title} app/build/outputs/aab/release/*.aab --clobber
+          gh release upload ${tag_title} app/build/outputs/bundle/release/*.aab --clobber
         shell: bash
 
       - name: Upload Kotlin build report
