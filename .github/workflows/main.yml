@@ -104,6 +104,15 @@ jobs:
           path: |
             app/build/outputs/
 
+      - name: Upload APK to artifact
+        timeout-minutes: 2
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Release APK
+          path: |
+            app/build/outputs/apk/release/*.apk
+
       - name: Upload artifact to release
         timeout-minutes: 5
         if: ${{ success() }}
