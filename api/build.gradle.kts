@@ -50,6 +50,6 @@ dependencies {
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
-    testImplementation("net.bytebuddy:byte-buddy:1.17.5")
+    testImplementation(testLibraries.bytebuddy)
 }
 
