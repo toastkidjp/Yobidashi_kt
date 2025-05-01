@@ -168,7 +168,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Release AAB
-        timeout-minutes: 20
+        timeout-minutes: 10
         run: |
           ./gradlew bundleRelease
         env:
