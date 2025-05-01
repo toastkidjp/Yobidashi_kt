@@ -167,7 +167,7 @@ jobs:
         timeout-minutes: 20
         run: chmod +x gradlew
 
-      - name: Build Release APK
+      - name: Build Release AAB
         timeout-minutes: 20
         run: |
           ./gradlew bundleRelease
@@ -193,7 +193,7 @@ jobs:
           path: |
             app/build/outputs/
 
-      - name: Upload APK to artifact
+      - name: Upload AAB to artifact
         timeout-minutes: 2
         if: ${{ success() }}
         uses: actions/upload-artifact@v4
