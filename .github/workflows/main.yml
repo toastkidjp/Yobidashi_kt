@@ -75,7 +75,7 @@ jobs:
           echo "store_file=$(realpath release_keystore.jks)" >> "${GITHUB_OUTPUT}"
 
       - name: Grant permission of Gradle wrapper
-        timeout-minutes: 20
+        timeout-minutes: 1
         run: chmod +x gradlew
 
       - name: Build Release APK
