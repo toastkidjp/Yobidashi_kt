@@ -22,7 +22,6 @@ import org.robolectric.util.ReflectionHelpers
 
 class MusicPlayerPermissionsTest {
 
-    @InjectMockKs
     private lateinit var musicPlayerPermissions: MusicPlayerPermissions
 
     @Before
@@ -37,17 +36,17 @@ class MusicPlayerPermissionsTest {
 
     @Test
     fun invoke() {
-        ReflectionHelpers.setStaticField(Build.VERSION::class.java, "SDK_INT", Build.VERSION_CODES.TIRAMISU)
+        musicPlayerPermissions = MusicPlayerPermissions(Build.VERSION_CODES.TIRAMISU)
 
         val permissions = musicPlayerPermissions.invoke()
 
-        assertTrue(permissions.contains(Manifest.permission.READ_MEDIA_IMAGES))
+        assertTrue(permissions.contains(Manifest.permission.READ_MEDIA_AUDIO))
         assertTrue(permissions.contains(Manifest.permission.POST_NOTIFICATIONS))
     }
 
     @Test
     fun invokeUnderT() {
-        ReflectionHelpers.setStaticField(Build.VERSION::class.java, "SDK_INT", Build.VERSION_CODES.S)
+        musicPlayerPermissions = MusicPlayerPermissions(Build.VERSION_CODES.S)
 
         val permissions = musicPlayerPermissions.invoke()
 
