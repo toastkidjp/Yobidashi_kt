@@ -8,6 +8,7 @@
 
 package jp.toastkid.lib.view.thumbnail
 
+import android.graphics.Bitmap
 import android.util.DisplayMetrics
 import android.view.View
 import io.mockk.MockKAnnotations
@@ -15,6 +16,8 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
@@ -39,6 +42,8 @@ class ThumbnailGeneratorTest {
 
         every { view.context.resources.displayMetrics } returns displayMetrics
         every { view.invalidate() } just Runs
+        mockkStatic(Bitmap::class)
+        every { Bitmap.createBitmap(any(), any(), any()) } returns mockk()
     }
 
     @Test
