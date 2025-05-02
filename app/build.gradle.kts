@@ -151,6 +151,7 @@ dependencies {
     testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
+    testImplementation(testLibraries.bytebuddy)
 }
 
 configurations.implementation {
