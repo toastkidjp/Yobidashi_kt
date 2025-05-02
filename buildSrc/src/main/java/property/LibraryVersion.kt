@@ -6,7 +6,7 @@ object LibraryVersion {
     val lifecycle = "2.8.5"
     val composeCompiler = "1.4.6"
     val junit = "4.12"
-    val robolectric = "4.8.1"
+    val robolectric = "4.14"
     val mockk = "1.10.6"
     val coroutinesTest = "1.5.1"
 }
