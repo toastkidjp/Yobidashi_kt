@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.main.ui
 
+import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.exponentialDecay
@@ -52,6 +53,7 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.menu.view.OptionMenuItem
+import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.ui.finder.FindInPage
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
@@ -132,12 +134,15 @@ internal fun AppBar() {
         }
     }
 
+    val bottomAppBarHeight = remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) 76.dp else 72.dp
+    }
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.primary,
         tonalElevation = 4.dp,
         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp),
         modifier = Modifier
-            .height(72.dp)
+            .height(bottomAppBarHeight)
             .offset {
                 IntOffset(
                     x = 0,
