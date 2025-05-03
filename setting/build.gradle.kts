@@ -26,6 +26,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "${property.LibraryVersion.composeCompiler}"
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 tasks.withType<com.android.build.gradle.tasks.GenerateBuildConfig> {
