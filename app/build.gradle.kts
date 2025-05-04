@@ -103,7 +103,10 @@ tasks.withType<Test> {
 }
 
 play {
-    serviceAccountCredentials.set(file("signing/Google Play Android Developer-cbf2176b721a.json"))
+    val path = System.getenv("SA_FILE_PATH")
+    if (path != null) {
+        serviceAccountCredentials.set(file(path))
+    }
     track.set("alpha")
 }
 
