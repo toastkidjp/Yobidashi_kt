@@ -160,29 +160,36 @@ jobs:
         id: prepare-credentials
         timeout-minutes: 1
         run: |
-          echo "${{ secrets.UPLOAD_KEYSTORE }}" | base64 -d > upload_keystore.jks
+          echo "${{ KEYSTORE_ENCODED }}" | base64 -d > upload_keystore.jks
           echo "upload_store_file=$(realpath upload_keystore.jks)" >> "${GITHUB_OUTPUT}"
+          echo "${{ KEY_JSON_ENCODED }}" | base64 -d > sa.json
+          echo "sa_json_file=$(realpath sa.json)" >> "${GITHUB_OUTPUT}"
+        env:
+          KEYSTORE_ENCODED: ${{ secrets.UPLOAD_KEYSTORE }}
+          KEY_JSON_ENCODED: ${{ secrets.KEY_JSON }}
 
       - name: Grant permission of Gradle wrapper
         timeout-minutes: 1
         run: chmod +x gradlew
 
       - name: Build Release AAB
-        timeout-minutes: 10
+        timeout-minutes: 12
         run: |
-          ./gradlew bundleRelease
+          ./gradlew publishReleaseBundle
         env:
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP'
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           STORE_FILE_PATH: ${{ steps.prepare-credentials.outputs.upload_store_file }}
+          SA_FILE_PATH: ${{ steps.prepare-credentials.outputs.sa_json_file }}
 
       - name: Clean up credentials
         timeout-minutes: 1
         if: ${{ always() }}
         run: |
           rm upload_keystore.jks
+          rm sa.json
 
       - name: Upload artifacts
         timeout-minutes: 2
