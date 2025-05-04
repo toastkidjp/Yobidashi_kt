@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.yobidashi.settings.color.SavedColor
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,8 +46,8 @@ class DefaultColorInsertion {
      * @param context
      */
     @SuppressLint("CheckResult")
-    fun insert(context: Context): Job =
-            CoroutineScope(Dispatchers.IO).launch {
+    fun insert(context: Context, ioDispatcher: CoroutineDispatcher = Dispatchers.IO): Job =
+            CoroutineScope(ioDispatcher).launch {
                 val repository = RepositoryFactory().savedColorRepository(context)
                 make().forEach { repository.add(it) }
             }
