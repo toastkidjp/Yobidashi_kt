@@ -56,4 +56,5 @@ dependencies {
     testImplementation("junit:junit:${property.LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${property.LibraryVersion.mockk}")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
+    testImplementation(testLibraries.bytebuddy)
 }
