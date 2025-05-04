@@ -40,14 +40,17 @@ android {
             val keystoreProperties = Properties()
 
             // Load your keystore.properties file into the keystoreProperties object.
-            BufferedInputStream(FileInputStream(rootProject.file("keystore.properties"))).use {
-                keystoreProperties.load(it)
+            val propertyFile = rootProject.file("keystore.properties")
+            if (propertyFile.exists()) {
+                BufferedInputStream(FileInputStream(propertyFile)).use {
+                    keystoreProperties.load(it)
+                }
             }
 
-            keyAlias = keystoreProperties.getProperty("keyAlias")
-            keyPassword = keystoreProperties.getProperty("keyPassword")
-            storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
-            storePassword = keystoreProperties.getProperty("storePassword")
+            keyAlias = keystoreProperties.getProperty("keyAlias") ?: System.getenv("KEY_ALIAS")
+            keyPassword = keystoreProperties.getProperty("keyPassword") ?: System.getenv("KEY_PASSWORD")
+            //storeFile = rootProject.file(keystoreProperties.getProperty("storeFile") ?: System.getenv("KEYSTORE_FILE"))
+            storePassword = keystoreProperties.getProperty("storePassword") ?: System.getenv("KEYSTORE_FILE_PASSWORD")
         }
     }
     buildTypes {
