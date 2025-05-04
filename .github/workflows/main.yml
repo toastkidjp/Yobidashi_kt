@@ -79,7 +79,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Release APK
-        timeout-minutes: 10
+        timeout-minutes: 16
         run: |
           ./gradlew assembleRelease
         env:
