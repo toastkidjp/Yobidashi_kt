@@ -1,4 +1,4 @@
-name: Run Gradle on PRs and Pushes
+name: Publish
 on: 
   workflow_dispatch:
   push:
@@ -12,7 +12,6 @@ concurrency:
 
 jobs:
   build-bundle:
-    needs: release
     strategy:
       matrix:
         os: [ubuntu-latest]
