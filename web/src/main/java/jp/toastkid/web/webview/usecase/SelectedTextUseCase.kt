@@ -12,6 +12,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.web.R
 
 class SelectedTextUseCase(
         private val stringResolver: (Int, Any) -> String,
@@ -25,10 +26,20 @@ class SelectedTextUseCase(
     }
 
     fun search(word: String) {
+        if (word.isBlank() || word === "\"\"") {
+            contentViewModel.snackShort(R.string.message_failed_query_extraction_from_web_view)
+            return
+        }
+
         contentViewModel.search(word)
     }
 
     fun searchWithPreview(word: String) {
+        if (word.isBlank() || word === "\"\"") {
+            contentViewModel.snackShort(R.string.message_failed_query_extraction_from_web_view)
+            return
+        }
+
         contentViewModel.preview(word)
     }
 
