@@ -49,13 +49,13 @@ import kotlinx.coroutines.withContext
 
 @Composable
 internal fun PageInformationDialog(
-    pageInformationBundle: Bundle,
+    pageInformationBundle: Map<String, Any?>,
     onDismissRequest: () -> Unit
 ) {
-    val favicon = pageInformationBundle.getParcelableCompat<Bitmap>("favicon")
-    val title = pageInformationBundle.getString("title") ?: return
-    val url = pageInformationBundle.getString("url") ?: return
-    val cookie = pageInformationBundle.getString("cookie") ?: ""
+    val favicon = pageInformationBundle.get("favicon") as? Bitmap
+    val title = pageInformationBundle.get("title")?.toString() ?: return
+    val url = pageInformationBundle.get("url")?.toString() ?: return
+    val cookie = pageInformationBundle.get("cookie")?.toString() ?: ""
 
     val barcode = remember { mutableStateOf<Bitmap?>(null) }
     LaunchedEffect(key1 = "generate_barcode") {

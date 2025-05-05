@@ -17,19 +17,19 @@ import androidx.core.os.bundleOf
  */
 class PageInformationExtractor {
 
-    operator fun invoke(webView: WebView?): Bundle {
+    operator fun invoke(webView: WebView?): Map<String, Any?> {
         return webView?.let {
             val url = it.url
             if (url.isNullOrBlank()) {
-                return@let Bundle.EMPTY
+                return@let emptyMap<String, Any?>()
             }
 
-            return@let bundleOf(
+            return@let mapOf(
                     "url" to url,
                     "favicon" to it.favicon,
                     "title" to it.title,
                     "cookie" to CookieManager.getInstance().getCookie(url)
             )
-        } ?: Bundle.EMPTY
+        } ?: emptyMap()
     }
 }
