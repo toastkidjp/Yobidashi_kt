@@ -1,4 +1,4 @@
-name: Run Gradle on PRs and Pushes
+name: Release
 on: 
   push:
     branches:
