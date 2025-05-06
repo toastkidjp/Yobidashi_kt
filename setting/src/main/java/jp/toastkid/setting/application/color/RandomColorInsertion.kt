@@ -10,6 +10,7 @@ package jp.toastkid.setting.application.color
 import android.graphics.Color
 import jp.toastkid.yobidashi.settings.color.SavedColor
 import jp.toastkid.yobidashi.settings.color.SavedColorRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -28,12 +29,12 @@ class RandomColorInsertion(private val repository: SavedColorRepository) {
      *
      * @param context
      */
-    operator fun invoke(afterInserted: () -> Unit): Job {
+    operator fun invoke(afterInserted: () -> Unit, ioDispatcher: CoroutineDispatcher = Dispatchers.IO): Job {
         val bg = makeRandomColor()
 
         val font = makeRandomColor()
 
-        return CoroutineScope(Dispatchers.IO).launch {
+        return CoroutineScope(ioDispatcher).launch {
             repository.add(SavedColor.make(bg, font))
             afterInserted()
         }

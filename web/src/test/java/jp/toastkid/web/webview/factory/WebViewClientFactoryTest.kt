@@ -16,6 +16,7 @@ import io.mockk.unmockkAll
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.FaviconApplier
+import jp.toastkid.web.archive.auto.AutoArchive
 import jp.toastkid.web.block.AdRemover
 import jp.toastkid.web.block.SiteNameChecker
 import jp.toastkid.web.rss.suggestion.RssAddingSuggestion
@@ -26,7 +27,6 @@ import org.junit.Test
 
 class WebViewClientFactoryTest {
 
-    @InjectMockKs
     private lateinit var webViewClientFactory: WebViewClientFactory
 
     @MockK
@@ -40,6 +40,9 @@ class WebViewClientFactoryTest {
 
     @MockK
     private lateinit var preferenceApplier: PreferenceApplier
+
+    @MockK
+    private lateinit var autoArchive: AutoArchive
 
     @MockK
     private lateinit var browserViewModel: WebTabUiViewModel
@@ -56,6 +59,8 @@ class WebViewClientFactoryTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+
+        webViewClientFactory = WebViewClientFactory(contentViewModel, adRemover, faviconApplier, preferenceApplier, autoArchive, browserViewModel, rssAddingSuggestion, currentView, siteNameChecker)
     }
 
     @After

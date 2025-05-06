@@ -49,8 +49,11 @@ android {
 
             keyAlias = keystoreProperties.getProperty("keyAlias") ?: System.getenv("KEY_ALIAS")
             keyPassword = keystoreProperties.getProperty("keyPassword") ?: System.getenv("KEY_PASSWORD")
-            //storeFile = rootProject.file(keystoreProperties.getProperty("storeFile") ?: System.getenv("KEYSTORE_FILE"))
-            storePassword = keystoreProperties.getProperty("storePassword") ?: System.getenv("KEYSTORE_FILE_PASSWORD")
+            val keystoreFile = File(System.getenv("STORE_FILE_PATH") ?: "keystore.jks")
+            if (keystoreFile.exists()) {
+                storeFile = keystoreFile
+            }
+            storePassword = keystoreProperties.getProperty("storePassword") ?: System.getenv("KEYSTORE_PASSWORD")
         }
     }
     buildTypes {
@@ -100,7 +103,10 @@ tasks.withType<Test> {
 }
 
 play {
-    serviceAccountCredentials.set(file("signing/Google Play Android Developer-cbf2176b721a.json"))
+    val path = System.getenv("SA_FILE_PATH")
+    if (path != null) {
+        serviceAccountCredentials.set(file(path))
+    }
     track.set("alpha")
 }
 
@@ -148,6 +154,7 @@ dependencies {
     testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
+    testImplementation(testLibraries.bytebuddy)
 }
 
 configurations.implementation {

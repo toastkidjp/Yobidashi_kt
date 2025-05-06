@@ -26,6 +26,10 @@ dependencyResolutionManagement {
             library("composeMaterial3", "androidx.compose.material3", "material3").version("1.3.0")
             library("lifecycleRuntimeKtx", "androidx.lifecycle", "lifecycle-runtime-ktx").version("2.8.5")
         }
+
+        create("testLibraries") {
+            library("bytebuddy", "net.bytebuddy", "byte-buddy").version("1.17.5")
+        }
     }
 }
 

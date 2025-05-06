@@ -1,9 +1,7 @@
 package jp.toastkid.web.page_information
 
-import android.os.Bundle
 import android.webkit.CookieManager
 import android.webkit.WebView
-import androidx.core.os.bundleOf
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -12,11 +10,9 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
-import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
 
 /**
  * @author toastkidjp
@@ -32,19 +28,11 @@ class PageInformationExtractorTest {
 
         every { webView.getFavicon() }.returns(mockk())
         every { webView.getTitle() }.returns("test")
-
-        val emptyField = Bundle::class.java.getField("EMPTY")
-        emptyField.isAccessible = true
-        Field::class.java.getDeclaredField("modifiers").also {
-            it.isAccessible = true
-            it.set(emptyField, emptyField.modifiers and Modifier.FINAL.inv())
-        }
-        emptyField.set(null, bundleOf())
     }
 
     @Test
     fun testNull() {
-        assertSame(Bundle.EMPTY, PageInformationExtractor().invoke(null))
+        assertTrue(PageInformationExtractor().invoke(null).isEmpty())
 
         verify(exactly = 0) { webView.getUrl() }
         verify(exactly = 0) { webView.getFavicon() }
@@ -55,7 +43,7 @@ class PageInformationExtractorTest {
     fun testUrlIsNull() {
         every { webView.getUrl() }.returns(null)
 
-        assertSame(Bundle.EMPTY, PageInformationExtractor().invoke(webView))
+        assertTrue(PageInformationExtractor().invoke(webView).isEmpty())
 
         verify(exactly = 1) { webView.getUrl() }
         verify(exactly = 0) { webView.getFavicon() }

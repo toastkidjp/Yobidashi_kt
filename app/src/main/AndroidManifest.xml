@@ -38,7 +38,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
-        android:theme="@style/Yobidashi.Theme"
+        android:theme="@android:style/Theme.Material.NoActionBar"
         >
 
         <meta-data

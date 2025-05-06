@@ -395,7 +395,7 @@ private fun AppBarContent(
 
             if (openPageInformation.value) {
                 val pageInformation = webViewContainer.makeCurrentPageInformation()
-                if (pageInformation.isEmpty.not()) {
+                if (pageInformation.isNotEmpty()) {
                     PageInformationDialog(pageInformation, { openPageInformation.value = false })
                 }
             }

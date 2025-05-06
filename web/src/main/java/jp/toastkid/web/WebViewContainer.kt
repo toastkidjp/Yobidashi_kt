@@ -301,7 +301,7 @@ class WebViewContainer(
         currentView()?.saveState(outState)
     }
 
-    fun makeCurrentPageInformation(): Bundle = PageInformationExtractor().invoke(currentView())
+    fun makeCurrentPageInformation() = PageInformationExtractor().invoke(currentView())
 
     /**
      * Resize [GlobalWebViewPool].

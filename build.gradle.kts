@@ -48,10 +48,10 @@ task("clean", Delete::class) {
 }
 
 jacoco {
-    toolVersion = "0.8.12"
+    toolVersion = "0.8.13"
 }
 
-tasks.create("jacocoMergeReport", JacocoReport::class) {
+tasks.create("jacocoMergedTestReport", JacocoReport::class) {
     group = "verification"
     gradle.afterProject { 
         if (rootProject != project && plugins.hasPlugin("jacoco.definition")) {

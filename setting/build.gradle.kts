@@ -26,6 +26,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "${property.LibraryVersion.composeCompiler}"
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 tasks.withType<com.android.build.gradle.tasks.GenerateBuildConfig> {
@@ -52,4 +56,5 @@ dependencies {
     testImplementation("junit:junit:${property.LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${property.LibraryVersion.mockk}")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
+    testImplementation(testLibraries.bytebuddy)
 }

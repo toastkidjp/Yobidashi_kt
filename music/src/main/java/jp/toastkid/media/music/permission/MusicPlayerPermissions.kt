@@ -11,10 +11,10 @@ package jp.toastkid.media.music.permission
 import android.Manifest
 import android.os.Build
 
-class MusicPlayerPermissions {
+class MusicPlayerPermissions(private val sdkInt: Int = Build.VERSION.SDK_INT) {
 
     operator fun invoke() =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        if (sdkInt >= Build.VERSION_CODES.TIRAMISU)
             arrayOf(
                 Manifest.permission.READ_MEDIA_AUDIO,
                 Manifest.permission.POST_NOTIFICATIONS

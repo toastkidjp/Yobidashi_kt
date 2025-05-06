@@ -8,6 +8,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
+import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,9 @@ class BookmarkListMenuPopupActionUseCaseTest {
 
     @InjectMockKs
     private lateinit var useCase: BookmarkListMenuPopupActionUseCase
+
+    @MockK
+    private lateinit var articleRepository: ArticleRepository
 
     @MockK
     private lateinit var bookmarkRepository: BookmarkRepository
@@ -39,6 +43,7 @@ class BookmarkListMenuPopupActionUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
         coEvery { deleted() }.just(Runs)
+        coEvery { articleRepository.findContentById(any()) } returns "test-content"
         coEvery { bookmarkRepository.delete(any()) }.just(Runs)
     }
 

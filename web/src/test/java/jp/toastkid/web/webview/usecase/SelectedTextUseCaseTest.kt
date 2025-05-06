@@ -43,8 +43,8 @@ class SelectedTextUseCaseTest {
         every { stringResolver.invoke(any(), any()) }.returns("Count: 4")
         every { contentViewModel.snackShort(any<String>()) }.just(Runs)
         every { contentViewModel.snackShort(any<Int>()) }.just(Runs)
-        every { contentViewModel.open(any()) }.just(Runs)
         every { contentViewModel.preview(any()) }.just(Runs)
+        every { contentViewModel.search(any()) }.just(Runs)
 
         mockkObject(Urls)
         every { Urls.isValidUrl(any()) }.returns(false)
@@ -70,7 +70,7 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.search("test")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 1) { contentViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.search(any()) }
         verify(exactly = 0) { contentViewModel.preview(any()) }
     }
 
@@ -79,7 +79,7 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.searchWithPreview("test")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { contentViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.search(any()) }
         verify(exactly = 1) { contentViewModel.preview(any()) }
     }
 
@@ -92,9 +92,8 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.search("https://www.yahoo.co.jp")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 1) { contentViewModel.open(any()) }
+        verify(exactly = 1) { contentViewModel.search(any()) }
         verify(exactly = 0) { contentViewModel.preview(any()) }
-        verify(exactly = 1) { Uri.parse(any()) }
     }
 
     @Test
@@ -106,9 +105,8 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.searchWithPreview("https://www.yahoo.co.jp")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { contentViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.search(any()) }
         verify(exactly = 1) { contentViewModel.preview(any()) }
-        verify(exactly = 1) { Uri.parse(any()) }
     }
 
     @Test
@@ -116,7 +114,7 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.search("")
 
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { contentViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.search(any()) }
         verify(exactly = 0) { contentViewModel.preview(any()) }
     }
 
@@ -125,7 +123,7 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.search("\"\"")
 
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { contentViewModel.open(any()) }
+        verify(exactly = 0) { contentViewModel.search(any()) }
         verify(exactly = 0) { contentViewModel.preview(any()) }
     }
 

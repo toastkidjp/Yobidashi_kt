@@ -10,6 +10,8 @@ package jp.toastkid.ui.theme
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.os.Build
+import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -76,10 +78,16 @@ fun AppTheme(
             content()
         }
 
-        val window = (LocalContext.current as? Activity)?.window
+        val current = LocalContext.current
+        val window = (current as? Activity)?.window
         LaunchedEffect(key1 = colorPair, block = {
             window?.let {
                 WindowOptionColorApplier()(it, colorPair.bgColor())
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                    (current as? Activity)?.findViewById<View>(android.R.id.content)
+                        ?.setBackgroundColor(colors.primary.toArgb())
+                }
             }
         })
     }

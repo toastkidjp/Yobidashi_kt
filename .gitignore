@@ -1,6 +1,7 @@
 keystore.properties
 *.apk
 *.jar
+*.jks
 *.iml
 *.lnk
 *.class

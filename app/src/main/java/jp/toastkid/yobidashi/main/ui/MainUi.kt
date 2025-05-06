@@ -20,10 +20,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -58,6 +60,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
+import androidx.core.view.updatePadding
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -432,6 +435,8 @@ internal fun Content() {
             contentViewModel.switchMusicListUi()
         }
 
+    val statusBarColor = MaterialTheme.colorScheme.primary
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -502,6 +507,8 @@ internal fun Content() {
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(nestedScrollConnection)
+                .drawBehind { drawRect(statusBarColor) }
+                .windowInsetsPadding(WindowInsets.safeDrawing)
         ) { _ ->
             Box {
                 NavigationalContent(navigationHostController, tabs)

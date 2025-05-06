@@ -148,9 +148,9 @@ class RssUrlFinderTest {
         rssUrlFinder.invoke("https://www.yahoo.co.jp")
 
         verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
-        verify(exactly = 1) { urlValidator.invoke(any()) }
+        verify(exactly = 1) { urlValidator.invoke("https://www.yahoo.co.jp") }
         coVerify(exactly = 1) { htmlApi.invoke(any()) }
-        coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
+        coVerify(exactly = 1) { rssUrlExtractor.invoke(any()) }
 
         verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }

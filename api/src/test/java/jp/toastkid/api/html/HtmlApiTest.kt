@@ -19,7 +19,10 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.api.lib.HttpClientFactory
 import okhttp3.Call
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
+import okhttp3.Response
+import okhttp3.ResponseBody
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -34,6 +37,12 @@ class HtmlApiTest {
     @MockK
     private lateinit var call: Call
 
+    @MockK
+    private lateinit var response: Response
+
+    @MockK
+    private lateinit var body: ResponseBody
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -41,7 +50,10 @@ class HtmlApiTest {
         mockkConstructor(HttpClientFactory::class)
         every { anyConstructed<HttpClientFactory>().withTimeout(any()) }.returns(httpClient)
         every { httpClient.newCall(any()) }.returns(call)
-        every { call.execute() }.returns(mockk())
+        every { call.execute() }.returns(response)
+        every { response.isSuccessful } returns true
+        every { response.body } returns body
+        every { body.string() } returns "test"
 
         htmlApi = HtmlApi()
 

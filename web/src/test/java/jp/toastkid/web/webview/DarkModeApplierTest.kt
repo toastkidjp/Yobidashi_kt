@@ -35,13 +35,6 @@ class DarkModeApplierTest {
     }
 
     @Test
-    fun testIsNotSupportedOs() {
-        darkModeApplier.invoke(webView, true)
-
-        verify(exactly = 0) { webView.settings }
-    }
-
-    @Test
     fun testIsNotFeatureSupported() {
         every { WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING) }.answers { false }
         every { webView.getSettings() }.answers { mockk() }

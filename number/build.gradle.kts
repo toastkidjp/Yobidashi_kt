@@ -68,4 +68,5 @@ dependencies {
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
+    testImplementation(testLibraries.bytebuddy)
 }

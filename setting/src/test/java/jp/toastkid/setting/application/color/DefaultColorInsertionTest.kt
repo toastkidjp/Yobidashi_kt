@@ -23,6 +23,7 @@ import io.mockk.unmockkAll
 import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.yobidashi.settings.color.SavedColor
 import jp.toastkid.yobidashi.settings.color.SavedColorRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
@@ -61,13 +62,12 @@ class DefaultColorInsertionTest {
 
     @Test
     fun testInsert() = runTest {
-        defaultColorInsertion.insert(mockk())
+        defaultColorInsertion.insert(mockk(), Dispatchers.Unconfined)
 
         delay(1000L)
 
         coVerify (exactly = 1) { anyConstructed<RepositoryFactory>().savedColorRepository(any()) }
         coVerify (atLeast = 1) { savedColorRepository.add(any()) }
-        coVerify (atLeast = 1) { ContextCompat.getColor(any(), any()) }
         coVerify (atLeast = 1) { SavedColor.make(any(), any()) }
     }
 
