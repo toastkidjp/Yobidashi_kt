@@ -52,7 +52,7 @@ class ShortcutUseCaseTest {
         MockKAnnotations.init(this)
         every { intentFactory.invoke(any()) }.returns(intent)
         every { intent.setAction(any()) }.returns(intent)
-        every { intent.setClass(any(), any()) }.returns(intent)
+        every { intent.setClassName(any<Context>(), any()) }.returns(intent)
         every { intent.setData(any()) }.returns(intent)
         every { intent.putExtra(any(), any<String>()) }.returns(intent)
         every { intent.putExtra(any(), any<Intent>()) }.returns(intent)
@@ -85,7 +85,7 @@ class ShortcutUseCaseTest {
         shortcutUseCase.invoke(mockk(), "test", mockk(), "TODO")
 
         verify(atLeast = 1) { intentFactory.invoke(any()) }
-        verify(exactly = 1) { intent.setClass(any(), any()) }
+        verify(exactly = 1) { intent.setClassName(any<Context>(), any()) }
         verify(exactly = 1) { intent.setData(any()) }
         verify(exactly = 1) { intent.putExtra(any(), any<String>()) }
         verify(exactly = 1) { intent.putExtra(any(), any<Intent>()) }
