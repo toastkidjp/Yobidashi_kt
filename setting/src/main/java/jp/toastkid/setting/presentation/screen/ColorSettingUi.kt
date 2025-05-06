@@ -227,11 +227,11 @@ internal fun ColorSettingUi() {
         OptionMenu(
             titleId = R.string.title_add_random,
             action = {
-                RandomColorInsertion(repository)() {
+                RandomColorInsertion(repository)({
                     coroutineScope.launch {
                         reload(repository, savedColors)
                     }
-                }
+                })
                 contentViewModel?.snackShort(jp.toastkid.lib.R.string.done_addition)
             }
         )
