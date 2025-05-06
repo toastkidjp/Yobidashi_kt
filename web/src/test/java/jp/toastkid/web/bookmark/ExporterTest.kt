@@ -157,7 +157,7 @@ class ExporterTest {
     private fun readExpected() =
             classLoader?.getResourceAsStream(expectedPath)?.use { source ->
                 InputStreamReader(source).use {
-                    it.readText().replace("\r\n", "")
+                    it.readText().replace("\n", "")
                 }
             }
 
