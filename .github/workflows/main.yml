@@ -157,7 +157,11 @@ jobs:
         env:
           TZ: 'Asia/Tokyo'
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
-        run: "./gradlew testDebugUnitTest jacocoTestReport jacocoMergedTestReport"
+        run: "./gradlew testDebugUnitTest jacocoTestReport"
+
+      - name: Merge reports
+        timeout-minutes: 5
+        run: "./gradlew jacocoMergedTestReport"
 
       - name: Upload Unit Test Results
         timeout-minutes: 3
