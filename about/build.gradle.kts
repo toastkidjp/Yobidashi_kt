@@ -36,6 +36,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libraries.versions.kotlinComposeCompilerExtension.get()
     }
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 tasks.withType<GenerateBuildConfig> {
@@ -54,4 +55,7 @@ dependencies {
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
+    testImplementation("androidx.compose.ui:ui-test-junit4-android:1.8.0")
+    testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")
+    testImplementation("androidx.compose.ui:ui-test-manifest:1.8.0")
 }
