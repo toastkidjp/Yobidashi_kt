@@ -59,6 +59,13 @@ internal fun LoadFromStorageDialogUi(
                             fontSize = 18.sp,
                             modifier = Modifier.padding(4.dp)
                         )
+                        Icon(
+                            painterResource(id = jp.toastkid.lib.R.drawable.ic_close),
+                            contentDescription = stringResource(id = jp.toastkid.lib.R.string.close),
+                            modifier = Modifier.clickable {
+                                onDismissRequest()
+                            }
+                        )
                     }
                 }
 
