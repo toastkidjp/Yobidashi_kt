@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -96,45 +97,52 @@ internal fun ImagePreviewUi(
     Box {
         HorizontalPager(
             pageSize = PageSize.Fill,
-            pageSpacing = 100.dp,
+            pageSpacing = 32.dp,
             state = pagerState
         ) {
             with(sharedTransitionScope) {
-                EfficientImage(
-                    model = viewModel.getCurrentImage(pagerState.currentPage).path,
-                    contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
-                    colorFilter = viewModel.colorFilterState.value,
+                Box(
                     modifier = Modifier
-                        .sharedElement(
-                            rememberSharedContentState("image_${viewModel.getCurrentImage(pagerState.currentPage).path}"),
-                            animatedVisibilityScope
-                        )
+                        .align(Alignment.Center)
                         .fillMaxSize()
-                        .graphicsLayer(
-                            scaleX = viewModel.scale.value,
-                            scaleY = viewModel.scale.value,
-                            rotationY = viewModel.rotationY.value,
-                            rotationZ = viewModel.rotationZ.value
-                        )
-                        .offset {
-                            IntOffset(
-                                viewModel.offset.value.x.toInt(),
-                                viewModel.offset.value.y.toInt()
+                ) {
+                    EfficientImage(
+                        model = viewModel.getCurrentImage(pagerState.currentPage).path,
+                        contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
+                        colorFilter = viewModel.colorFilterState.value,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .sharedElement(
+                                rememberSharedContentState("image_${viewModel.getCurrentImage(pagerState.currentPage).path}"),
+                                animatedVisibilityScope
                             )
-                        }
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onPress = { /* Called when the gesture starts */ },
-                                onDoubleTap = { viewModel.resetStates() },
-                                onLongPress = { viewModel.setTransformable() },
-                                onTap = { /* Called on Tap */ }
+                            .graphicsLayer(
+                                scaleX = viewModel.scale.value,
+                                scaleY = viewModel.scale.value,
+                                rotationY = viewModel.rotationY.value,
+                                rotationZ = viewModel.rotationZ.value
                             )
-                        }
-                        .transformable(
-                            state = viewModel.state,
-                            enabled = viewModel.transformable()
-                        )
-                )
+                            .offset {
+                                IntOffset(
+                                    viewModel.offset.value.x.toInt(),
+                                    viewModel.offset.value.y.toInt()
+                                )
+                            }
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onPress = { /* Called when the gesture starts */ },
+                                    onDoubleTap = { viewModel.resetStates() },
+                                    onLongPress = { viewModel.setTransformable() },
+                                    onTap = { /* Called on Tap */ }
+                                )
+                            }
+                            .transformable(
+                                state = viewModel.state,
+                                //TODO enabled = viewModel.transformable()
+                            )
+                    )
+                }
             }
         }
 
