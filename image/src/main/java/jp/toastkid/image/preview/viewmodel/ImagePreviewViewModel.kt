@@ -72,6 +72,7 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     fun unsetTransformable() {
         transformable.value = false
+        resetStates()
     }
 
     fun moveToPrevious() {
