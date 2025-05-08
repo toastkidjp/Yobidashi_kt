@@ -77,7 +77,7 @@ fun readCoverages(): MutableMap<String, String> {
     val map = mutableMapOf<String, String>()
     val buffer = StringBuffer()
 
-    val file = File("build/reports/jacoco/html/index.html")
+    val file = File("build/reports/jacoco/jacocoMergedTestReport/html/index.html")
 
     if (file.exists().not()) {
         return map
