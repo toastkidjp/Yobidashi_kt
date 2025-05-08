@@ -193,11 +193,3 @@ jobs:
           ./gradlew printCoverageSummary >> $GITHUB_STEP_SUMMARY
           cat $GITHUB_STEP_SUMMARY
         shell: bash
-
-      - name: Upload Kotlin build report
-        timeout-minutes: 2
-        uses: actions/upload-artifact@v4
-        with:
-          name: Kotlin build report-test
-          path: |
-            build/reports/kotlin-build
