@@ -180,6 +180,20 @@ jobs:
           path: |
             build/reports/jacoco
 
+      - name: Print summary
+        timeout-minutes: 1
+        if: ${{ success() }}
+        run: ./gradlew printCoverageSummary
+
+      - name: Store summary
+        timeout-minutes: 1
+        if: ${{ success() }}
+        run: |
+          echo "## Test coverage" >> $GITHUB_STEP_SUMMARY
+          ./gradlew printCoverageSummary >> $GITHUB_STEP_SUMMARY
+          cat $GITHUB_STEP_SUMMARY
+        shell: bash
+
       - name: Upload Kotlin build report
         timeout-minutes: 2
         uses: actions/upload-artifact@v4
