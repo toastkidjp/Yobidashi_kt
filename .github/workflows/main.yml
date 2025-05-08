@@ -160,6 +160,7 @@ jobs:
 
       - name: Merge reports
         timeout-minutes: 5
+        if: ${{ success() }}
         run: "./gradlew jacocoMergedTestReport"
 
       - name: Upload Unit Test Results
