@@ -97,7 +97,7 @@ internal fun ImagePreviewUi(
     Box {
         HorizontalPager(
             pageSize = PageSize.Fill,
-            pageSpacing = 32.dp,
+            pageSpacing = 4.dp,
             state = pagerState
         ) {
             with(sharedTransitionScope) {
@@ -110,9 +110,10 @@ internal fun ImagePreviewUi(
                         model = viewModel.getCurrentImage(pagerState.currentPage).path,
                         contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
                         colorFilter = viewModel.colorFilterState.value,
-                        contentScale = ContentScale.Fit,
+                        contentScale = ContentScale.FillWidth,
                         modifier = Modifier
                             .align(Alignment.Center)
+                            .fillMaxSize()
                             .sharedElement(
                                 rememberSharedContentState("image_${viewModel.getCurrentImage(pagerState.currentPage).path}"),
                                 animatedVisibilityScope
