@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 /*
  * Copyright (c) 2021 toastkidjp.
@@ -67,6 +69,54 @@ tasks.create("jacocoMergedTestReport", JacocoReport::class) {
     reports {
         xml.required.set(false)
         html.required.set(true)
+    }
+}
+
+fun readCoverages(): MutableMap<String, String> {
+    var started = false
+    val map = mutableMapOf<String, String>()
+    val buffer = StringBuffer()
+
+    val file = File("build/reports/jacoco/html/index.html")
+
+    if (file.exists().not()) {
+        return map
+    }
+
+    val lines = file.readText().split(">").map(String::trim)
+    for (i in (0 until lines.size)) {
+        val line = lines[i]
+        if (line.contains("Total</td")) {
+            started = true
+        }
+        if (!started) {
+            continue
+        }
+
+        if (line.contains("<td class=\"bar\"")) {
+            buffer.append(lines[i + 1].split("<")[0])
+            continue
+        }
+        if (line.contains("<td class=\"ctr2\"")) {
+            buffer.append()
+            val key = if (map.size == 0) "Instruction" else "Branch"
+            map.put(key, "${lines[i + 1].split("<")[0]} (${buffer.toString().replace(" of ", "/").split("<")[0]})")
+            buffer.setLength(0)
+            if (map.size == 2) {
+                break
+            }
+            continue
+        }
+    }
+    return map
+}
+
+tasks.register("printCoverageSummary") {
+    val map = readCoverages()
+
+    doLast {
+        println("| Category | Coverage(%)\n|:---|:---")
+        map.map { "| ${it.key} | ${it.value}" }.forEach(::println)
     }
 }
 
