@@ -15,7 +15,7 @@ buildscript {
         maven ( url = "https://plugins.gradle.org/m2/" ) // For Play publisher plugin
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.7.1")
+        classpath("com.android.tools.build:gradle:8.9.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.20")
         classpath("com.github.triplet.gradle:play-publisher:3.10.1")
     }
