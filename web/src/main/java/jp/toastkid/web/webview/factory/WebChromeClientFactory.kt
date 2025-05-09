@@ -68,13 +68,16 @@ class WebChromeClientFactory(
         ): Boolean {
             view?.stopLoading()
 
-            (view?.context as? ViewModelStoreOwner)?.also { fragmentActivity ->
-                ViewModelProvider(fragmentActivity)
-                        .get(ContentViewModel::class.java)
-                        .openNewWindow(resultMsg)
-            }
+            obtainContentViewModel(view)?.openNewWindow(resultMsg)
 
             return true
+        }
+
+        private fun obtainContentViewModel(view: View?): ContentViewModel? {
+            return (view?.context as? ViewModelStoreOwner)?.let { fragmentActivity ->
+                ViewModelProvider(fragmentActivity)
+                    .get(ContentViewModel::class.java)
+            }
         }
     }
 }
