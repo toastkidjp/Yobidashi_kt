@@ -67,8 +67,6 @@ class WebViewContainer(
 
     private val readerModeUseCase by lazy { ReaderModeUseCase() }
 
-    private var customViewSwitcher: CustomViewSwitcher? = null
-
     private val autoArchive = AutoArchive.make(context)
 
     private val webViewReplacementUseCase: WebViewReplacementUseCase
@@ -106,8 +104,6 @@ class WebViewContainer(
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT
         )
-
-        customViewSwitcher = CustomViewSwitcher({ context }, ::currentView)
 
         if (context is ComponentActivity) {
             val viewModelProvider = ViewModelProvider(context)
