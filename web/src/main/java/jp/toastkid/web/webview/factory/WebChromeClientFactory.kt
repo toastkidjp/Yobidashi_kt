@@ -20,6 +20,7 @@ import jp.toastkid.lib.image.BitmapCompressor
 import jp.toastkid.web.FaviconApplier
 import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.web.webview.CustomViewSwitcher
+import jp.toastkid.web.webview.GlobalWebViewPool
 import java.util.concurrent.TimeUnit
 
 class WebChromeClientFactory(
@@ -52,11 +53,17 @@ class WebChromeClientFactory(
 
         override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
             super.onShowCustomView(view, callback)
+
+            obtainContentViewModel(view)?.hideAppBar()
+
             customViewSwitcher?.onShowCustomView(view, callback)
         }
 
         override fun onHideCustomView() {
             super.onHideCustomView()
+
+            obtainContentViewModel(GlobalWebViewPool.getLatest())?.showAppBar()
+
             customViewSwitcher?.onHideCustomView()
         }
 
