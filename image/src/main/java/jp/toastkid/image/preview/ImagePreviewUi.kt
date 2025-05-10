@@ -136,16 +136,16 @@ internal fun ImagePreviewUi(
                             .sharedElement(
                                 rememberSharedContentState(
                                     "image_${
-                                        viewModel.getCurrentImage(pagerState.currentPage).path
+                                        viewModel.getCurrentImage(it).path + if (pagerState.currentPage == it) "" else "_"
                                     }"
                                 ),
                                 animatedVisibilityScope
                             )
                             .graphicsLayer(
-                                scaleX = viewModel.scale(it != pagerState.currentPage),
-                                scaleY = viewModel.scale(it != pagerState.currentPage),
-                                rotationY = viewModel.rotationY(it != pagerState.currentPage),
-                                rotationZ = viewModel.rotationZ(it != pagerState.currentPage),
+                                scaleX = viewModel.scale(it == pagerState.currentPage),
+                                scaleY = viewModel.scale(it == pagerState.currentPage),
+                                rotationY = viewModel.rotationY(it == pagerState.currentPage),
+                                rotationZ = viewModel.rotationZ(it == pagerState.currentPage),
                             )
                             .offset {
                                 if (it != pagerState.currentPage) {
