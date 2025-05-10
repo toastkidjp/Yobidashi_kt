@@ -32,11 +32,21 @@ class ImagePreviewViewModel(initialPage: Int) {
     fun getCurrentImage(currentPage: Int) =
         if (images.isNotEmpty()) images[currentPage] else Image.makeEmpty()
 
-    var scale = mutableFloatStateOf(1f)
+    private val scale = mutableFloatStateOf(1f)
 
-    var rotationY = mutableStateOf(0f)
+    fun scale(current: Boolean) = if (current) scale.value else 1f
 
-    var rotationZ = mutableStateOf(0f)
+    private val rotationY = mutableStateOf(0f)
+
+    fun rotationY(current: Boolean) = if (current) rotationY.value else 0f
+
+    fun flip() {
+        rotationY.value = if (rotationY.value == 0f) 180f else 0f
+    }
+
+    private val rotationZ = mutableStateOf(0f)
+
+    fun rotationZ(current: Boolean) = if (current) rotationZ.value else 0f
 
     var offset = mutableStateOf(Offset.Zero)
 
