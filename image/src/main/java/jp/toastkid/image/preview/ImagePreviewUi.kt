@@ -15,13 +15,16 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -42,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -99,7 +103,7 @@ internal fun ImagePreviewUi(
         HorizontalPager(
             pageSize = PageSize.Fill,
             pageSpacing = 4.dp,
-            state = pagerState
+            state = pagerState,
         ) {
             with(sharedTransitionScope) {
                 Box(
@@ -114,7 +118,7 @@ internal fun ImagePreviewUi(
                         contentScale = ContentScale.FillWidth,
                         modifier = Modifier
                             .align(Alignment.Center)
-                            .fillMaxSize()
+                            .fillMaxWidth()
                             .sharedElement(
                                 rememberSharedContentState("image_${viewModel.getCurrentImage(pagerState.currentPage).path}"),
                                 animatedVisibilityScope
@@ -123,7 +127,7 @@ internal fun ImagePreviewUi(
                                 scaleX = viewModel.scale.value,
                                 scaleY = viewModel.scale.value,
                                 rotationY = viewModel.rotationY.value,
-                                rotationZ = viewModel.rotationZ.value
+                                rotationZ = viewModel.rotationZ.value,
                             )
                             .offset {
                                 IntOffset(
