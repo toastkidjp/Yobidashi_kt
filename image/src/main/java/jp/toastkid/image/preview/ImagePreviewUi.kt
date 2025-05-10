@@ -77,11 +77,6 @@ internal fun ImagePreviewUi(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
-    val viewModel = remember { ImagePreviewViewModel(initialIndex) }
-    LaunchedEffect(key1 = Unit, block = {
-        viewModel.replaceImages(images)
-    })
-
     val context = LocalContext.current
 
     val contentViewModel = remember {
@@ -89,6 +84,12 @@ internal fun ImagePreviewUi(
             ViewModelProvider(it).get(ContentViewModel::class.java)
         }
     }
+
+    val viewModel = remember { ImagePreviewViewModel(initialIndex) }
+    LaunchedEffect(key1 = Unit, block = {
+        viewModel.replaceImages(images)
+        contentViewModel?.hideAppBar()
+    })
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -362,7 +363,4 @@ internal fun ImagePreviewUi(
     BackHandler(viewModel.openMenu.value) {
         viewModel.openMenu.value = false
     }
-
-    contentViewModel?.hideAppBar()
 }
-
