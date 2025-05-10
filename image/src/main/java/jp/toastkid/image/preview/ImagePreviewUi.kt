@@ -54,6 +54,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.consumeAllChanges
@@ -115,6 +116,7 @@ internal fun ImagePreviewUi(
             pageSize = PageSize.Fill,
             pageSpacing = 4.dp,
             state = pagerState,
+            beyondViewportPageCount = 1,
             flingBehavior = PagerDefaults.flingBehavior(pagerState, snapPositionalThreshold = 0.2f),
         ) {
             with(sharedTransitionScope) {
@@ -122,10 +124,11 @@ internal fun ImagePreviewUi(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxSize()
+                        .background(Color.White)
                 ) {
                     EfficientImage(
-                        model = viewModel.getCurrentImage(pagerState.currentPage).path,
-                        contentDescription = viewModel.getCurrentImage(pagerState.currentPage).name,
+                        model = viewModel.getCurrentImage(it).path,
+                        contentDescription = viewModel.getCurrentImage(it).name,
                         colorFilter = viewModel.colorFilterState.value,
                         contentScale = ContentScale.FillWidth,
                         modifier = Modifier
@@ -134,9 +137,7 @@ internal fun ImagePreviewUi(
                             .sharedElement(
                                 rememberSharedContentState(
                                     "image_${
-                                        viewModel.getCurrentImage(
-                                            pagerState.currentPage
-                                        ).path
+                                        viewModel.getCurrentImage(pagerState.currentPage).path
                                     }"
                                 ),
                                 animatedVisibilityScope
@@ -148,6 +149,10 @@ internal fun ImagePreviewUi(
                                 rotationZ = viewModel.rotationZ.value,
                             )
                             .offset {
+                                if (it != pagerState.currentPage) {
+                                    return@offset IntOffset.Zero
+                                }
+
                                 IntOffset(
                                     viewModel.offset.value.x.toInt(),
                                     viewModel.offset.value.y.toInt()
