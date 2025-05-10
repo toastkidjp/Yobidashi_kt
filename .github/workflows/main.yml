@@ -45,7 +45,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create ${{ steps.check_release.outputs.tag_title }} --title ${{ steps.check_release.outputs.tag_title }}
+          gh release create ${{ steps.check_release.outputs.tag_title }} --title ${{ steps.check_release.outputs.tag_title }} --draft
         shell: bash
 
   build:
