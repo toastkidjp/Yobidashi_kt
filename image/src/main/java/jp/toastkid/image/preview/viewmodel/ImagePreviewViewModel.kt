@@ -8,7 +8,6 @@
 
 package jp.toastkid.image.preview.viewmodel
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
