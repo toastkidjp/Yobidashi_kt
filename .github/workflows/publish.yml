@@ -17,6 +17,39 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check if release exists
+        id: check_release
+        env:
+          TZ: 'Asia/Tokyo'
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION_FILE=buildSrc/src/main/java/property/Version.kt
+          MAJOR=$(cat $VERSION_FILE | grep MAJOR | head -1 | awk '{print $6}')
+          MIDDLE=$(cat $VERSION_FILE | grep MIDDLE | head -1 | awk '{print $6}')
+          MINOR=$(cat $VERSION_FILE | grep MINOR | head -1 | awk '{print $6}')
+          CURRENT_VERSION=$MAJOR.$MIDDLE.$MINOR
+          echo $CURRENT_VERSION
+          tag_title="${CURRENT_VERSION}"
+          echo "tag_title=${tag_title}" >> $GITHUB_OUTPUT
+          RELEASE_EXISTS=$(curl -s -H "Authorization: token ${GH_TOKEN}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/releases/tags/${tag_title}" | jq -r '.message')
+          if [[ "$RELEASE_EXISTS" == "Not Found" ]]; then
+            echo "release_exists=false" >> $GITHUB_OUTPUT
+            echo "Release ${tag_title} does not exist. I will create it on next step."
+          else
+            echo "release_exists=true" >> $GITHUB_OUTPUT
+            echo "Release ${tag_title} already exists, skipping creation."
+          fi
+        shell: bash
+
+      - name: Create Release
+        id: create_release
+        if: steps.check_release.outputs.release_exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create ${{ steps.check_release.outputs.tag_title }} --title ${{ steps.check_release.outputs.tag_title }}
+        shell: bash
+
       - name: Install
         timeout-minutes: 3
         uses: actions/setup-java@v4
