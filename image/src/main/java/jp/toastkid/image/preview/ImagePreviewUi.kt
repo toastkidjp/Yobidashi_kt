@@ -104,6 +104,7 @@ internal fun ImagePreviewUi(
             pageSize = PageSize.Fill,
             pageSpacing = 4.dp,
             state = pagerState,
+            modifier = Modifier.zIndex(0f)
         ) {
             with(sharedTransitionScope) {
                 Box(
