@@ -13,6 +13,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -29,6 +30,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -104,13 +106,19 @@ internal fun ImagePreviewUi(
             pageSize = PageSize.Fill,
             pageSpacing = 4.dp,
             state = pagerState,
-            modifier = Modifier.zIndex(0f)
-        ) {
+            flingBehavior = PagerDefaults.flingBehavior(pagerState, snapPositionalThreshold = 0.2f)
+            ) {
             with(sharedTransitionScope) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxSize()
+                        .offset {
+                            IntOffset(
+                                viewModel.offset.value.x.toInt(),
+                                0
+                            )
+                        }
                 ) {
                     EfficientImage(
                         model = viewModel.getCurrentImage(pagerState.currentPage).path,
@@ -132,7 +140,7 @@ internal fun ImagePreviewUi(
                             )
                             .offset {
                                 IntOffset(
-                                    viewModel.offset.value.x.toInt(),
+                                    0,
                                     viewModel.offset.value.y.toInt()
                                 )
                             }
