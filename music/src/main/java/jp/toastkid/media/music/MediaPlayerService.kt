@@ -17,6 +17,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -224,8 +225,13 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
     private fun registerReceivers() {
         initializeReceiversIfNeed()
 
-        registerReceiver(audioNoisyReceiver, audioNoisyFilter)
-        registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(audioNoisyReceiver, audioNoisyFilter, RECEIVER_NOT_EXPORTED)
+            registerReceiver(playbackSpeedReceiver, audioSpeedFilter, RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(audioNoisyReceiver, audioNoisyFilter)
+            registerReceiver(playbackSpeedReceiver, audioSpeedFilter)
+        }
     }
 
     private fun initializeReceiversIfNeed() {
