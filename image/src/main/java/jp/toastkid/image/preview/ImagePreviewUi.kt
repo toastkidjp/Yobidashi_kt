@@ -15,9 +15,17 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.FlingBehavior
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +40,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -106,19 +115,13 @@ internal fun ImagePreviewUi(
             pageSize = PageSize.Fill,
             pageSpacing = 4.dp,
             state = pagerState,
-            flingBehavior = PagerDefaults.flingBehavior(pagerState, snapPositionalThreshold = 0.2f)
-            ) {
+            flingBehavior = PagerDefaults.flingBehavior(pagerState, snapPositionalThreshold = 0.2f),
+        ) {
             with(sharedTransitionScope) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxSize()
-                        .offset {
-                            IntOffset(
-                                viewModel.offset.value.x.toInt(),
-                                0
-                            )
-                        }
                 ) {
                     EfficientImage(
                         model = viewModel.getCurrentImage(pagerState.currentPage).path,
@@ -129,7 +132,13 @@ internal fun ImagePreviewUi(
                             .align(Alignment.Center)
                             .fillMaxWidth()
                             .sharedElement(
-                                rememberSharedContentState("image_${viewModel.getCurrentImage(pagerState.currentPage).path}"),
+                                rememberSharedContentState(
+                                    "image_${
+                                        viewModel.getCurrentImage(
+                                            pagerState.currentPage
+                                        ).path
+                                    }"
+                                ),
                                 animatedVisibilityScope
                             )
                             .graphicsLayer(
@@ -140,7 +149,7 @@ internal fun ImagePreviewUi(
                             )
                             .offset {
                                 IntOffset(
-                                    0,
+                                    viewModel.offset.value.x.toInt(),
                                     viewModel.offset.value.y.toInt()
                                 )
                             }
