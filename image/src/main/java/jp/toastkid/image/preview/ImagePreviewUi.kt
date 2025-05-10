@@ -124,7 +124,6 @@ internal fun ImagePreviewUi(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxSize()
-                        .background(Color.White)
                 ) {
                     EfficientImage(
                         model = viewModel.getCurrentImage(it).path,
@@ -143,10 +142,10 @@ internal fun ImagePreviewUi(
                                 animatedVisibilityScope
                             )
                             .graphicsLayer(
-                                scaleX = viewModel.scale.value,
-                                scaleY = viewModel.scale.value,
-                                rotationY = viewModel.rotationY.value,
-                                rotationZ = viewModel.rotationZ.value,
+                                scaleX = viewModel.scale(it != pagerState.currentPage),
+                                scaleY = viewModel.scale(it != pagerState.currentPage),
+                                rotationY = viewModel.rotationY(it != pagerState.currentPage),
+                                rotationZ = viewModel.rotationZ(it != pagerState.currentPage),
                             )
                             .offset {
                                 if (it != pagerState.currentPage) {
@@ -266,8 +265,7 @@ internal fun ImagePreviewUi(
                             modifier = Modifier
                                 .clickable {
                                     coroutineScope.launch {
-                                        viewModel.rotationY.value =
-                                            if (viewModel.rotationY.value == 0f) 180f else 0f
+                                        viewModel.flip()
                                     }
                                 }
                                 .padding(start = 16.dp)
