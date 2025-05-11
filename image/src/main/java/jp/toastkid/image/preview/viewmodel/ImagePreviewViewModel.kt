@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.unit.IntOffset
 import jp.toastkid.image.Image
 import kotlin.math.max
 
@@ -49,6 +50,17 @@ class ImagePreviewViewModel(initialPage: Int) {
     fun rotationZ(current: Boolean) = if (current) rotationZ.value else 0f
 
     var offset = mutableStateOf(Offset.Zero)
+
+    fun offset(current: Boolean): IntOffset {
+        if (!current) {
+            return@offset IntOffset.Zero
+        }
+
+        return IntOffset(
+            offset.value.x.toInt(),
+            offset.value.y.toInt()
+        )
+    }
 
     val state = TransformableState { zoomChange, offsetChange, rotationChange ->
         scale.value *= zoomChange
