@@ -13,6 +13,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.PlaybackParams
@@ -61,6 +62,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             registerReceivers()
 
             mediaPlayer.reset()
+
             if (uri != null) {
                 mediaPlayer.setDataSource(this@MediaPlayerService, uri)
             }
@@ -94,7 +96,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             }
 
             notificationManager.notify(NOTIFICATION_ID, notification)
-            startForeground(NOTIFICATION_ID, notificationFactory())
+            startForegroundServiceWithPlayer()
         }
 
         override fun onPlay() {
@@ -126,7 +128,21 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             }
 
             notificationManager.notify(NOTIFICATION_ID, notification)
-            startForeground(NOTIFICATION_ID, notificationFactory())
+            startForegroundServiceWithPlayer()
+        }
+
+        private fun startForegroundServiceWithPlayer() {
+            val notificationFactory = notificationFactory() ?: return
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                startForeground(NOTIFICATION_ID, notificationFactory)
+            } else {
+                startForeground(
+                    NOTIFICATION_ID,
+                    notificationFactory,
+                    FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                )
+            }
         }
 
         override fun onPause() {
