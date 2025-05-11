@@ -57,7 +57,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation(libraries.activityCompose)
 
-    implementation("androidx.media:media:1.3.0")
+    implementation("androidx.media:media:1.7.0")
 
     implementation(libraries.timber)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
