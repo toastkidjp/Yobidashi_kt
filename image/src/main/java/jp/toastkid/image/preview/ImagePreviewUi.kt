@@ -148,14 +148,7 @@ internal fun ImagePreviewUi(
                                 rotationZ = viewModel.rotationZ(it == pagerState.currentPage),
                             )
                             .offset {
-                                if (it != pagerState.currentPage) {
-                                    return@offset IntOffset.Zero
-                                }
-
-                                IntOffset(
-                                    viewModel.offset.value.x.toInt(),
-                                    viewModel.offset.value.y.toInt()
-                                )
+                                viewModel.offset(it == pagerState.currentPage)
                             }
                             .pointerInput(Unit) {
                                 detectTapGestures(
