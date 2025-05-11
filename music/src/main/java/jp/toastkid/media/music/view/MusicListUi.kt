@@ -90,10 +90,14 @@ fun MusicListUi() {
         )
     }
 
+    val mediaControllerHolder = remember { AtomicReference<MediaControllerCompat?>() }
+
     LaunchedEffect(key1 = mediaBrowser.isConnected) {
         lastSubscriber.set {
             val mediaControllerCompat =
                 MediaControllerCompat(activity, mediaBrowser.sessionToken)
+            mediaControllerHolder.set(mediaControllerCompat)
+
             mediaControllerCompat.registerCallback(
                 object : MediaControllerCompat.Callback() {
 
@@ -101,12 +105,12 @@ fun MusicListUi() {
                         when (state?.state) {
                             PlaybackStateCompat.STATE_SKIPPING_TO_PREVIOUS -> {
                                 mediaPlayerPopupViewModel.previous()?.let {
-                                    play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                                    play(it, mediaControllerHolder.get(), mediaPlayerPopupViewModel)
                                 }
                             }
                             PlaybackStateCompat.STATE_SKIPPING_TO_NEXT -> {
                                 mediaPlayerPopupViewModel.next()?.let {
-                                    play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                                    play(it, mediaControllerHolder.get(), mediaPlayerPopupViewModel)
                                 }
                             }
                             PlaybackStateCompat.STATE_PLAYING -> mediaPlayerPopupViewModel.playing = true
@@ -117,7 +121,7 @@ fun MusicListUi() {
                     }
                 }
             )
-            MediaControllerCompat.setMediaController(activity, mediaControllerCompat)
+
             mediaBrowser.subscribe(
                 mediaBrowser.root,
                 object : MediaBrowserCompat.SubscriptionCallback() {
@@ -131,7 +135,7 @@ fun MusicListUi() {
                             return
                         }
 
-                        attemptToGetMediaController(activity)?.also {
+                        mediaControllerHolder.get()?.also {
                             it.transportControls?.prepare()
                         }
 
@@ -157,7 +161,7 @@ fun MusicListUi() {
     ) {
         MusicList(
             {
-                play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                play(it, mediaControllerHolder.get(), mediaPlayerPopupViewModel)
             },
             {
                 ViewModelProvider(activity)
@@ -166,19 +170,19 @@ fun MusicListUi() {
             },
             {
                 mediaPlayerPopupViewModel.previous()?.let {
-                    play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                    play(it, mediaControllerHolder.get(), mediaPlayerPopupViewModel)
                 }
             },
             {
                 mediaPlayerPopupViewModel.next()?.let {
-                    play(it, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                    play(it, mediaControllerHolder.get(), mediaPlayerPopupViewModel)
                 }
             },
-            { stop(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
-            { switchState(attemptToGetMediaController(activity), mediaPlayerPopupViewModel) },
+            { stop(mediaControllerHolder.get(), mediaPlayerPopupViewModel) },
+            { switchState(mediaControllerHolder.get(), mediaPlayerPopupViewModel) },
             {
                 val random = mediaPlayerPopupViewModel.musics.random()
-                play(random, attemptToGetMediaController(activity), mediaPlayerPopupViewModel)
+                play(random, mediaControllerHolder.get(), mediaPlayerPopupViewModel)
             },
             {
                 coroutineScope.launch {
@@ -379,7 +383,7 @@ fun switchState(
     mediaPlayerPopupViewModel: MediaPlayerPopupViewModel
 ) {
     mediaController?.metadata ?: return
-    when (mediaController.playbackState.state) {
+    when (mediaController.playbackState?.state) {
         PlaybackStateCompat.STATE_PLAYING -> pause(mediaController, mediaPlayerPopupViewModel)
         PlaybackStateCompat.STATE_PAUSED -> play(mediaController, mediaPlayerPopupViewModel)
         else -> Unit
@@ -404,10 +408,10 @@ private fun play(
 }
 
 private fun stop(
-    mediaController: MediaControllerCompat,
+    mediaController: MediaControllerCompat?,
     mediaPlayerPopupViewModel: MediaPlayerPopupViewModel
 ) {
-    mediaController.metadata ?: return
+    mediaController?.metadata ?: return
 
     mediaController.transportControls.stop()
 
@@ -437,6 +441,3 @@ private fun pause(
 
     mediaPlayerPopupViewModel.playing = false
 }
-
-private fun attemptToGetMediaController(activity: ComponentActivity) =
-    MediaControllerCompat.getMediaController(activity)
