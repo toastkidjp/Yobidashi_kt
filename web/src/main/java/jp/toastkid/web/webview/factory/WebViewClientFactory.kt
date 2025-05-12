@@ -160,12 +160,18 @@ class WebViewClientFactory(
             browserViewModel?.setError(TlsErrorMessageGenerator().invoke(context, error))
         }
 
-        override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
-                if (preferenceApplier.adRemove) {
-                    adRemover(request.url.toString())
-                } else {
-                    super.shouldInterceptRequest(view, request)
-                }
+        override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
+            val path = request.url.path
+            if (path != null && path.contains("/litevideo/freepv/") && path.endsWith(".mp4")) {
+                contentViewModel?.hideAppBar()
+            }
+
+            return if (preferenceApplier.adRemove) {
+                adRemover(request.url.toString())
+            } else {
+                super.shouldInterceptRequest(view, request)
+            }
+        }
 
         private val approachFallbackUrlExtractor = ApproachFallbackUrlExtractor()
 
