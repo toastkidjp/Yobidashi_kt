@@ -366,7 +366,7 @@ internal fun ImagePreviewUi(
         ConfirmDialog(
             title = viewModel.getCurrentImage().name,
             message = message ?: "Not found",
-            onDismissRequest = { viewModel.openDialog.value = false }
+            onDismissRequest = { viewModel.closeDialog() }
         )
     }
 
