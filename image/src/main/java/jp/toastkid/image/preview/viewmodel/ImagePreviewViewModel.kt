@@ -94,6 +94,10 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     val openDialog = mutableStateOf(false)
 
+    fun closeDialog() {
+        openDialog.value = false
+    }
+
     private val transformable = mutableStateOf(false)
 
     fun transformable() = transformable.value
