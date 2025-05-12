@@ -9,6 +9,9 @@
 package jp.toastkid.image.preview.viewmodel
 
 import androidx.compose.foundation.gestures.TransformableState
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.carousel.CarouselState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +24,10 @@ import kotlin.math.max
 
 class ImagePreviewViewModel(initialPage: Int) {
 
+    private val pagerState = PagerState(initialPage, 0f) { pageCount() }
+
+    fun pagerState(): PagerState = pagerState
+
     private val images = mutableStateListOf<Image>()
 
     fun pageCount() = images.size
@@ -30,16 +37,19 @@ class ImagePreviewViewModel(initialPage: Int) {
         this.images.addAll(images)
     }
 
-    fun getCurrentImage(currentPage: Int) =
-        if (images.isNotEmpty()) images[currentPage] else Image.makeEmpty()
+    fun getCurrentImage() =
+        if (images.isNotEmpty()) images[pagerState.currentPage] else Image.makeEmpty()
+
+    fun getImage(page: Int) =
+        if (images.isNotEmpty()) images[page] else Image.makeEmpty()
 
     private val scale = mutableFloatStateOf(1f)
 
-    fun scale(current: Boolean) = if (current) scale.value else 1f
+    fun scale(page: Int) = if (page == pagerState.currentPage) scale.value else 1f
 
     private val rotationY = mutableStateOf(0f)
 
-    fun rotationY(current: Boolean) = if (current) rotationY.value else 0f
+    fun rotationY(page: Int) = if (page == pagerState.currentPage) rotationY.value else 0f
 
     fun flip() {
         rotationY.value = if (rotationY.value == 0f) 180f else 0f
@@ -47,12 +57,12 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     private val rotationZ = mutableStateOf(0f)
 
-    fun rotationZ(current: Boolean) = if (current) rotationZ.value else 0f
+    fun rotationZ(page: Int) = if (page == pagerState.currentPage) rotationZ.value else 0f
 
     var offset = mutableStateOf(Offset.Zero)
 
-    fun offset(current: Boolean): IntOffset {
-        if (!current) {
+    fun offset(page: Int): IntOffset {
+        if (page != pagerState.currentPage) {
             return@offset IntOffset.Zero
         }
 
