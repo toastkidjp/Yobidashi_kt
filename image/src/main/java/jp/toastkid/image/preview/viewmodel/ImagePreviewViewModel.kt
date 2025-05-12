@@ -168,4 +168,10 @@ class ImagePreviewViewModel(initialPage: Int) {
         transformable.value = false
     }
 
+    fun sharedElementKey(page: Int): String {
+        return "image_${
+            getImage(page).path + if (pagerState.currentPage == page) "" else "_"
+        }"
+    }
+
 }
