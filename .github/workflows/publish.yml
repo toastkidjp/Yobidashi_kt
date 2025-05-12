@@ -7,7 +7,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-bundle:
+  publish-bundle:
     strategy:
       matrix:
         os: [ubuntu-latest]
