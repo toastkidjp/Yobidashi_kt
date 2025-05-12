@@ -115,11 +115,3 @@ jobs:
           name: Release AAB
           path: |
             app/build/outputs/bundle/release/*.aab
-
-      - name: Upload Kotlin build report
-        timeout-minutes: 2
-        uses: actions/upload-artifact@v4
-        with:
-          name: Kotlin build report-bundle
-          path: |
-            build/reports/kotlin-build
