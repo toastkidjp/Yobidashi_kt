@@ -109,15 +109,13 @@ internal fun ImagePreviewUi(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val pagerState = rememberPagerState(initialIndex) { viewModel.pageCount() }
-
     Box {
         HorizontalPager(
             pageSize = PageSize.Fill,
             pageSpacing = 4.dp,
-            state = pagerState,
+            state = viewModel.pagerState(),
             beyondViewportPageCount = 1,
-            flingBehavior = PagerDefaults.flingBehavior(pagerState, snapPositionalThreshold = 0.2f),
+            flingBehavior = PagerDefaults.flingBehavior(viewModel.pagerState(), snapPositionalThreshold = 0.2f),
         ) {
             with(sharedTransitionScope) {
                 Box(
@@ -126,8 +124,8 @@ internal fun ImagePreviewUi(
                         .fillMaxSize()
                 ) {
                     EfficientImage(
-                        model = viewModel.getCurrentImage(it).path,
-                        contentDescription = viewModel.getCurrentImage(it).name,
+                        model = viewModel.getImage(it).path,
+                        contentDescription = viewModel.getImage(it).name,
                         colorFilter = viewModel.colorFilterState.value,
                         contentScale = ContentScale.FillWidth,
                         modifier = Modifier
@@ -136,19 +134,19 @@ internal fun ImagePreviewUi(
                             .sharedElement(
                                 rememberSharedContentState(
                                     "image_${
-                                        viewModel.getCurrentImage(it).path + if (pagerState.currentPage == it) "" else "_"
+                                        viewModel.getImage(it).path + if (viewModel.pagerState().currentPage == it) "" else "_"
                                     }"
                                 ),
                                 animatedVisibilityScope
                             )
                             .graphicsLayer(
-                                scaleX = viewModel.scale(it == pagerState.currentPage),
-                                scaleY = viewModel.scale(it == pagerState.currentPage),
-                                rotationY = viewModel.rotationY(it == pagerState.currentPage),
-                                rotationZ = viewModel.rotationZ(it == pagerState.currentPage),
+                                scaleX = viewModel.scale(it),
+                                scaleY = viewModel.scale(it),
+                                rotationY = viewModel.rotationY(it),
+                                rotationZ = viewModel.rotationZ(it),
                             )
                             .offset {
-                                viewModel.offset(it == pagerState.currentPage)
+                                viewModel.offset(it)
                             }
                             .pointerInput(Unit) {
                                 detectTapGestures(
@@ -322,7 +320,7 @@ internal fun ImagePreviewUi(
                                     onClick = {
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
-                                        val image = viewModel.getCurrentImage(pagerState.currentPage)
+                                        val image = viewModel.getCurrentImage()
                                         AttachToThisAppBackgroundUseCase(contentViewModel)
                                             .invoke(context, image.path.toUri(), BitmapFactory.decodeFile(image.path))
                                     }
@@ -338,7 +336,7 @@ internal fun ImagePreviewUi(
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
                                         AttachToAnyAppUseCase({ context.startActivity(it) })
-                                            .invoke(context, BitmapFactory.decodeFile(viewModel.getCurrentImage(pagerState.currentPage).path))
+                                            .invoke(context, BitmapFactory.decodeFile(viewModel.getCurrentImage().path))
                                     }
                                 )
                             }
@@ -362,19 +360,19 @@ internal fun ImagePreviewUi(
     }
 
     if (viewModel.openDialog.value) {
-        val message = BufferedInputStream(FileInputStream(File(viewModel.getCurrentImage(pagerState.currentPage).path))).use {
+        val message = BufferedInputStream(FileInputStream(File(viewModel.getCurrentImage().path))).use {
             val exifInterface = ExifInterface(it)
             ExifInformationExtractorUseCase().invoke(exifInterface)
         }
 
         ConfirmDialog(
-            title = viewModel.getCurrentImage(pagerState.currentPage).name,
+            title = viewModel.getCurrentImage().name,
             message = message ?: "Not found",
             onDismissRequest = { viewModel.openDialog.value = false }
         )
     }
 
-    LaunchedEffect(pagerState.currentPage) {
+    LaunchedEffect(viewModel.pagerState().currentPage) {
         viewModel.unsetTransformable()
     }
 
