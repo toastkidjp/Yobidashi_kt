@@ -115,3 +115,14 @@ jobs:
           name: Release AAB
           path: |
             app/build/outputs/bundle/release/*.aab
+
+      - name: Upload artifact to release
+        timeout-minutes: 3
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.check_release.outputs.tag_title }}
+        run: |
+          tag_title=$RELEASE_TAG
+          gh release upload ${tag_title} app/build/outputs/bundle/release/*.aab --clobber
+        shell: bash
