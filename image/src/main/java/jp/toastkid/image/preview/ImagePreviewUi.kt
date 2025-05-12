@@ -133,9 +133,7 @@ internal fun ImagePreviewUi(
                             .fillMaxWidth()
                             .sharedElement(
                                 rememberSharedContentState(
-                                    "image_${
-                                        viewModel.getImage(it).path + if (viewModel.pagerState().currentPage == it) "" else "_"
-                                    }"
+                                    viewModel.sharedElementKey(it)
                                 ),
                                 animatedVisibilityScope
                             )
