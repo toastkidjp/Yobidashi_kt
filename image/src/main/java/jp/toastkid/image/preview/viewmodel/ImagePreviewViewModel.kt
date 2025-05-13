@@ -30,7 +30,7 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     private val images = mutableStateListOf<Image>()
 
-    fun pageCount() = images.size
+    private fun pageCount() = images.size
 
     fun replaceImages(images: Collection<Image>) {
         this.images.clear()
