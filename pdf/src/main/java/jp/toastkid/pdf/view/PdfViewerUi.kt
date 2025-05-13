@@ -16,22 +16,22 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +39,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,34 +49,33 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.pdf.PdfImageFactory
 import jp.toastkid.ui.image.EfficientImage
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.FileNotFoundException
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 @Composable
 fun PdfViewerUi(uri: Uri, modifier: Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
+    val images = remember { mutableStateListOf<Bitmap>() }
 
-    val listState = rememberLazyListState()
+    val listState = rememberPagerState { images.size }
 
+    val coroutineScope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(lifecycleOwner) {
         val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
-        contentViewModel.replaceAppBarContent { AppBarUi(listState) }
+        contentViewModel.replaceAppBarContent { AppBarUi(listState.pageCount, {
+            coroutineScope.launch {
+                listState.animateScrollToPage(it)
+            }
+        }) }
         withContext(Dispatchers.IO) {
             contentViewModel?.receiveEvent(StateScrollerFactory().invoke(listState))
         }
     }
-
-    PdfPageList(uri, listState, modifier)
-}
-
-@Composable
-private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) {
-    val context = LocalContext.current
 
     val pdfRenderer =
         remember {
@@ -89,7 +89,6 @@ private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) 
         }
             ?: return
 
-    val images = remember { mutableStateListOf<Bitmap>() }
     LaunchedEffect(uri) {
         withContext(Dispatchers.IO) {
             val pdfImageFactory = PdfImageFactory()
@@ -101,79 +100,83 @@ private fun PdfPageList(uri: Uri, listState: LazyListState, modifier: Modifier) 
         }
     }
 
-    LazyColumn(state = listState, modifier = modifier) {
-        itemsIndexed(images) { index, bitmap ->
-            Surface(
-                shadowElevation = 4.dp,
-                color = Color(0xFFF0F0F0),
+    VerticalPager (
+        listState,
+        beyondViewportPageCount = 1,
+        pageSize = PageSize.Fill,
+        modifier = modifier
+    ) {
+        val bitmap = images[it]
+        Surface(
+            shadowElevation = 4.dp,
+            color = Color(0xFFF0F0F0),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+                .padding(vertical = 4.dp)
+        ) {
+            var scale by remember { mutableStateOf(1f) }
+            var offset by remember { mutableStateOf(Offset.Zero) }
+
+            val state = rememberTransformableState { zoomChange, offsetChange, _ ->
+                scale *= zoomChange
+                offset += offsetChange
+            }
+
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .padding(8.dp)
-                    .padding(vertical = 4.dp)
-                    .animateItem()
+                    .pointerInput(bitmap) {
+                        detectTapGestures(
+                            onPress = { /* Called when the gesture starts */ },
+                            onDoubleTap = {
+                                scale = 1f
+                                offset = Offset.Zero
+                            },
+                            onLongPress = { },
+                            onTap = { /* Called on Tap */ }
+                        )
+                    }
             ) {
-                var scale by remember { mutableStateOf(1f) }
-                var offset by remember { mutableStateOf(Offset.Zero) }
-
-                val state = rememberTransformableState { zoomChange, offsetChange, _ ->
-                    scale *= zoomChange
-                    offset += offsetChange
-                }
-
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                        .pointerInput(bitmap) {
-                            detectTapGestures(
-                                onPress = { /* Called when the gesture starts */ },
-                                onDoubleTap = {
-                                    scale = 1f
-                                    offset = Offset.Zero
-                                },
-                                onLongPress = {  },
-                                onTap = { /* Called on Tap */ }
-                            )
-                        }
-                ) {
-                    val max = images.size
-                    EfficientImage(
-                        model = bitmap,
-                        contentDescription = "${index + 1} / $max",
-                        modifier = Modifier.graphicsLayer(
+                val max = images.size
+                EfficientImage(
+                    model = bitmap,
+                    contentDescription = "${it + 1} / $max",
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .transformable(state = state)
+                        .graphicsLayer(
                             scaleX = scale,
                             scaleY = scale,
-                            translationX = if (scale == 1f) 0f else offset.x,
-                            translationY = if (scale == 1f) 0f else offset.y
+                            translationX = offset.x,
+                            translationY = offset.y,
                         )
-                            .transformable(state = state)
-                    )
-                    Text(
-                        text = "${index + 1} / $max",
-                        fontSize = 10.sp,
-                        modifier = Modifier.align(Alignment.BottomEnd)
-                    )
-                }
+                        .align(Alignment.Center)
+                )
+                Text(
+                    text = "${it + 1} / $max",
+                    fontSize = 10.sp,
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
             }
         }
     }
 }
 
 @Composable
-private fun AppBarUi(scrollState: LazyListState) {
+private fun AppBarUi(pageSize: Int, onValueChange: (Int) -> Unit) {
     var sliderPosition by remember { mutableStateOf(0f) }
-    val lazyListLayoutInfoState = remember { derivedStateOf { scrollState.layoutInfo } }
-    if (lazyListLayoutInfoState.value.totalItemsCount == 0) {
+    if (pageSize == 0) {
         return
     }
+
     Slider(
         value = sliderPosition,
         onValueChange = {
             sliderPosition = it
-            CoroutineScope(Dispatchers.Main).launch {
-                scrollState.scrollToItem(
-                    (scrollState.layoutInfo.totalItemsCount * it).roundToInt(),
-                    0
-                )
-            }
+            onValueChange(it.roundToInt())
         },
-        steps = lazyListLayoutInfoState.value.totalItemsCount - 1
+        valueRange = (0f..(pageSize - 1).toFloat()),
+        steps = max(1, pageSize - 2)
     )
 }
