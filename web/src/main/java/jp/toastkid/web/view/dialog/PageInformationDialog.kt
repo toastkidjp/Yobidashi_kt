@@ -96,6 +96,10 @@ internal fun PageInformationDialog(
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1,
                                 modifier = Modifier.weight(1f)
+                                    .clickable {
+                                        onDismissRequest()
+                                        clipText(context, title)
+                                    }
                             )
                         }
                         Column(
