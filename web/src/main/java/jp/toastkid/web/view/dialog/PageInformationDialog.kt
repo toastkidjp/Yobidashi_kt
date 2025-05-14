@@ -44,6 +44,7 @@ import jp.toastkid.barcode.generator.BarcodeGenerator
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.compat.getParcelableCompat
+import jp.toastkid.lib.intent.BitmapShareIntentFactory
 import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.web.R
 import kotlinx.coroutines.Dispatchers
@@ -124,6 +125,12 @@ internal fun PageInformationDialog(
                                 barcode.value,
                                 contentDescription = stringResource(id = R.string.title_instant_barcode),
                                 modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally)
+                                    .clickable {
+                                        val bitmap = barcode.value ?: return@clickable
+                                        context.startActivity(
+                                            BitmapShareIntentFactory().invoke(context, bitmap)
+                                        )
+                                    }
                             )
 
                             Text(
