@@ -11,7 +11,6 @@ package jp.toastkid.web.view.dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Bitmap
-import android.os.Bundle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,7 +42,6 @@ import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.barcode.generator.BarcodeGenerator
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
-import jp.toastkid.lib.compat.getParcelableCompat
 import jp.toastkid.lib.intent.BitmapShareIntentFactory
 import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.web.R
