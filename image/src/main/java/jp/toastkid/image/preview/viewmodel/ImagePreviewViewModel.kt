@@ -109,15 +109,6 @@ class ImagePreviewViewModel(initialPage: Int) {
         resetStates()
     }
 
-    fun moveToNext() {
-        /*if (index.value >= images.size) {
-            return
-        }
-        index.value++*/
-
-        offset.value = Offset.Zero
-    }
-
     fun updateColorFilter() {
         val v = max(contrastSliderPosition.value, 0f) + 1f * (if (reverse.value) -1 else 1)
         val o = -128 * (v - 1)
