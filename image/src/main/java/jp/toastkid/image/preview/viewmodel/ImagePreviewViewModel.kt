@@ -59,7 +59,7 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     fun rotationZ(page: Int) = if (page == pagerState.currentPage) rotationZ.value else 0f
 
-    var offset = mutableStateOf(Offset.Zero)
+    private val offset = mutableStateOf(Offset.Zero)
 
     fun offset(page: Int): IntOffset {
         if (page != pagerState.currentPage) {
