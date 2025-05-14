@@ -176,9 +176,8 @@ class WebViewClientFactory(
         private val approachFallbackUrlExtractor = ApproachFallbackUrlExtractor()
 
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
-            request?.url?.toString()?.let { url ->
+            request?.url?.let { uri ->
                     val context: Context? = view?.context
-                    val uri: Uri = Uri.parse(url)
 
                 if (siteNameChecker(uri.host)) {
                     view?.stopLoading()
@@ -203,7 +202,7 @@ class WebViewClientFactory(
                         "market", "intent" -> {
                             startOtherAppWithIntent(
                                 context,
-                                Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+                                Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME)
                             )
                             true
                         }
