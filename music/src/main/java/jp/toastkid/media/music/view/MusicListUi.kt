@@ -231,7 +231,7 @@ internal fun MusicList(
                 modifier = Modifier
                     .width(44.dp)
                     .fillMaxHeight()
-                    .clickable { stop() }
+                    .clickable(onClick = stop)
             )
             Icon(
                 painterResource(R.drawable.ic_previous_media),
