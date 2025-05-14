@@ -10,36 +10,23 @@ package jp.toastkid.image.preview.attach
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import androidx.core.content.FileProvider
-import jp.toastkid.lib.image.ImageCache
+import jp.toastkid.lib.intent.BitmapShareIntentFactory
 
 /**
  * @author toastkidjp
  */
 class AttachToAnyAppUseCase(
     private val activityStarter: (Intent) -> Unit,
-    private val intentFactory: () -> Intent = { Intent(Intent.ACTION_ATTACH_DATA) }
+    private val intentFactory: BitmapShareIntentFactory = BitmapShareIntentFactory()
 ) {
 
     operator fun invoke(context: Context, bitmap: Bitmap) {
-        val intent = intentFactory()
-        intent.addCategory(Intent.CATEGORY_DEFAULT)
-        val uri = FileProvider.getUriForFile(
-                context,
-                "${context.packageName}.fileprovider",
-                ImageCache().saveBitmap(context.cacheDir, bitmap).absoluteFile
-        )
-        intent.setDataAndType(uri, MIME_TYPE)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        val intent = intentFactory(context, bitmap)
 
         activityStarter(Intent.createChooser(intent, CHOOSER_TITLE))
     }
 
     companion object {
-        private const val AUTHORITY = "jp.toastkid.yobidashi.fileprovider"
-
-        private const val MIME_TYPE = "image/*"
-
         private const val CHOOSER_TITLE = "Set as:"
     }
 
