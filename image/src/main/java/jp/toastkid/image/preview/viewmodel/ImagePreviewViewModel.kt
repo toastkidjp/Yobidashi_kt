@@ -10,8 +10,6 @@ package jp.toastkid.image.preview.viewmodel
 
 import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.carousel.CarouselState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -109,15 +107,6 @@ class ImagePreviewViewModel(initialPage: Int) {
     fun unsetTransformable() {
         transformable.value = false
         resetStates()
-    }
-
-    fun moveToPrevious() {
-        /*if (index == 0) {
-            return
-        }
-        index.value--*/
-
-        offset.value = Offset.Zero
     }
 
     fun moveToNext() {
