@@ -43,11 +43,11 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     private val scale = mutableFloatStateOf(1f)
 
-    fun scale(page: Int) = if (page == pagerState.currentPage) scale.value else 1f
+    fun scale(page: Int) = if (isCurrentPage(page)) scale.value else 1f
 
     private val rotationY = mutableStateOf(0f)
 
-    fun rotationY(page: Int) = if (page == pagerState.currentPage) rotationY.value else 0f
+    fun rotationY(page: Int) = if (isCurrentPage(page)) rotationY.value else 0f
 
     fun flip() {
         rotationY.value = if (rotationY.value == 0f) 180f else 0f
@@ -55,7 +55,9 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     private val rotationZ = mutableStateOf(0f)
 
-    fun rotationZ(page: Int) = if (page == pagerState.currentPage) rotationZ.value else 0f
+    fun rotationZ(page: Int) = if (isCurrentPage(page)) rotationZ.value else 0f
+
+    private fun isCurrentPage(page: Int) = page == pagerState.currentPage
 
     private val offset = mutableStateOf(Offset.Zero)
 
