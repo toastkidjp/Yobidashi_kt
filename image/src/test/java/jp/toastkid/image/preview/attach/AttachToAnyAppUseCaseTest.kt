@@ -11,21 +11,18 @@ package jp.toastkid.image.preview.attach
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import androidx.core.content.FileProvider
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.image.ImageCache
+import jp.toastkid.lib.intent.BitmapShareIntentFactory
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 /**
  * @author toastkidjp
@@ -39,7 +36,7 @@ class AttachToAnyAppUseCaseTest {
     private lateinit var activityStarter: (Intent) -> Unit
 
     @MockK
-    private lateinit var intentFactory: () -> Intent
+    private lateinit var intentFactory: BitmapShareIntentFactory
 
     @MockK
     private lateinit var intent: Intent
@@ -50,29 +47,14 @@ class AttachToAnyAppUseCaseTest {
     @MockK
     private lateinit var bitmap: Bitmap
 
-    @MockK
-    private lateinit var file: File
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { activityStarter.invoke(any()) }.returns(Unit)
-        every { intentFactory.invoke() }.returns(intent)
-        every { intent.addCategory(Intent.CATEGORY_DEFAULT) }.returns(intent)
-        every { intent.setDataAndType(any(), any()) }.returns(intent)
-        every { intent.addFlags(any()) }.returns(intent)
-        every { context.getCacheDir() }.returns(mockk())
-        every { context.packageName }.returns("jp.toastkid.yobidashi.test")
-
-        mockkStatic(FileProvider::class)
-        every { FileProvider.getUriForFile(any(), any(), any()) }.returns(mockk())
+        every { intentFactory.invoke(any(), any()) }.returns(intent)
 
         mockkStatic(Intent::class)
         every { Intent.createChooser(any(), any()) }.returns(mockk())
-
-        mockkConstructor(ImageCache::class)
-        every { anyConstructed<ImageCache>().saveBitmap(any(), any()) }.returns(file)
-        every { file.getAbsoluteFile() }.returns(mockk())
     }
 
     @After
@@ -85,15 +67,8 @@ class AttachToAnyAppUseCaseTest {
         attachToAnyAppUseCase(context, bitmap)
 
         verify(exactly = 1) { activityStarter.invoke(any()) }
-        verify(exactly = 1) { intentFactory.invoke() }
-        verify(exactly = 1) { intent.addCategory(Intent.CATEGORY_DEFAULT) }
-        verify(exactly = 1) { intent.setDataAndType(any(), any()) }
-        verify(exactly = 1) { intent.addFlags(any()) }
-        verify(exactly = 1) { context.getCacheDir() }
-        verify(exactly = 1) { FileProvider.getUriForFile(any(), any(), any()) }
+        verify(exactly = 1) { intentFactory.invoke(any(), any()) }
         verify(exactly = 1) { Intent.createChooser(any(), any()) }
-        verify(exactly = 1) { anyConstructed<ImageCache>().saveBitmap(any(), any()) }
-        verify(exactly = 1) { file.getAbsoluteFile() }
     }
 
 }
