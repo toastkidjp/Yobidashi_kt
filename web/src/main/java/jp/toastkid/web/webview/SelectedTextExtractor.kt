@@ -13,7 +13,7 @@ class SelectedTextExtractor {
 
     fun withAction(webView: WebView, callback: (String) -> Unit) {
         webView.evaluateJavascript(SCRIPT) {
-            if (it.length < 2) {
+            if (it.length <= 2) {
                 (webView.context as? ViewModelStoreOwner)?.let { owner ->
                     ViewModelProvider(owner).get(ContentViewModel::class)
                         .snackShort(R.string.message_failed_query_extraction_from_web_view)
