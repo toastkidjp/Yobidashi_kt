@@ -26,6 +26,8 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     fun pagerState(): PagerState = pagerState
 
+    private fun isCurrentPage(page: Int) = page == pagerState.currentPage
+
     private val images = mutableStateListOf<Image>()
 
     private fun pageCount() = images.size
@@ -56,8 +58,6 @@ class ImagePreviewViewModel(initialPage: Int) {
     private val rotationZ = mutableStateOf(0f)
 
     fun rotationZ(page: Int) = if (isCurrentPage(page)) rotationZ.value else 0f
-
-    private fun isCurrentPage(page: Int) = page == pagerState.currentPage
 
     private val offset = mutableStateOf(Offset.Zero)
 
