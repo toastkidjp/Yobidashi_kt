@@ -45,7 +45,7 @@ allprojects {
         }
 }
 
-task("clean", Delete::class) {
+tasks.register("clean", Delete::class) {
     delete = setOf(rootProject.layout.buildDirectory.get())
 }
 
