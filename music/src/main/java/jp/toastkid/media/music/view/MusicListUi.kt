@@ -213,8 +213,6 @@ internal fun MusicList(
     var expanded by remember { mutableStateOf(false) }
     @StringRes var currentSpeed by remember { mutableIntStateOf(PlayingSpeed.getDefault().textId) }
 
-    val coroutineScope = rememberCoroutineScope()
-
     Column {
         val primaryColor = MaterialTheme.colorScheme.primary
         Row(
