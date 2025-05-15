@@ -91,8 +91,8 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libraries.versions.kotlinComposeCompilerExtension.get()
     }
-    lintOptions {
-        isCheckReleaseBuilds = false
+    lint {
+        checkReleaseBuilds = false
     }
 }
 
