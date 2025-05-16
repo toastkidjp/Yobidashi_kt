@@ -56,6 +56,7 @@ jacoco {
 tasks.register("jacocoMergedTestReport", JacocoReport::class.java) {
     group = "verification"
     if (rootProject != project && plugins.hasPlugin("jacoco.definition")) {
+        afterEvaluate {
             executionData.from += "${project.layout.buildDirectory.get()}/jacoco/testDebugUnitTest.exec"
             sourceDirectories.from += "${project.projectDir}/src/main/java"
             classDirectories.from.addAll(
@@ -63,6 +64,7 @@ tasks.register("jacocoMergedTestReport", JacocoReport::class.java) {
                     exclude("**/view/**", "**/ui/**", "**/material3/**", "**/*UiKt*", "**/*serializer**")
                 }
             )
+        }
     }
     reports {
         xml.required.set(false)
