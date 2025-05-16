@@ -53,10 +53,9 @@ jacoco {
     toolVersion = "0.8.13"
 }
 
-tasks.register("jacocoMergedTestReport", JacocoReport::class) {
+tasks.register("jacocoMergedTestReport", JacocoReport::class.java) {
     group = "verification"
-    gradle.afterProject { 
-        if (rootProject != project && plugins.hasPlugin("jacoco.definition")) {
+    if (rootProject != project && plugins.hasPlugin("jacoco.definition")) {
             executionData.from += "${project.layout.buildDirectory.get()}/jacoco/testDebugUnitTest.exec"
             sourceDirectories.from += "${project.projectDir}/src/main/java"
             classDirectories.from.addAll(
@@ -64,7 +63,6 @@ tasks.register("jacocoMergedTestReport", JacocoReport::class) {
                     exclude("**/view/**", "**/ui/**", "**/material3/**", "**/*UiKt*", "**/*serializer**")
                 }
             )
-        }
     }
     reports {
         xml.required.set(false)
