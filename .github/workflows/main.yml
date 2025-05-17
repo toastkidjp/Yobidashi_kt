@@ -162,6 +162,16 @@ jobs:
         if: ${{ success() }}
         run: "./gradlew jacocoMergedTestReport"
 
+      - name: Upload configuration cache
+        timeout-minutes: 3
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Configuration cache
+          path: |
+            build/reports/configuration-cache/
+            build/reports/problems/problems-report.html
+
       - name: Upload Unit Test Results
         timeout-minutes: 3
         if: ${{ always() }}
