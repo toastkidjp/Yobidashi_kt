@@ -29,6 +29,9 @@ class SelectedTextExtractorTest {
     @MockK
     private lateinit var contentViewModel: ContentViewModel
 
+    @MockK
+    private lateinit var callback: (String) -> Unit
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -36,6 +39,7 @@ class SelectedTextExtractorTest {
         mockkConstructor(ViewModelProvider::class)
         every { anyConstructed<ViewModelProvider>().get(ContentViewModel::class.java) }.returns(contentViewModel)
         every { contentViewModel.snackShort(any<Int>()) }.just(Runs)
+        every { callback.invoke(any()) } just Runs
     }
 
     @After
@@ -57,7 +61,7 @@ class SelectedTextExtractorTest {
         every { componentActivity.defaultViewModelCreationExtras } returns mockk()
         every { viewModelStore.get(any()) } returns contentViewModel
 
-        selectedTextExtractor.withAction(webView, {})
+        selectedTextExtractor.withAction(webView, callback)
 
         slot.captured.onReceiveValue("test")
         verify(atMost = 1) { webView.evaluateJavascript(any(), any()) }
@@ -67,6 +71,7 @@ class SelectedTextExtractorTest {
         verify(atMost = 1) { webView.evaluateJavascript(any(), any()) }
         verify { webView.context }
         verify { contentViewModel.snackShort(any<Int>()) }
+        verify { callback.invoke(any()) }
     }
 
 }
