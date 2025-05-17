@@ -12,7 +12,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.web.R
 
 class SelectedTextUseCase(
         private val stringResolver: (Int, Any) -> String,
