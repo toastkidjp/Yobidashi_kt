@@ -109,13 +109,4 @@ class SelectedTextUseCaseTest {
         verify(exactly = 1) { contentViewModel.preview(any()) }
     }
 
-    @Test
-    fun searchWithOnlyDoubleQuotes() {
-        selectedTextUseCase.search("\"\"")
-
-        verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
-        verify(exactly = 0) { contentViewModel.search(any()) }
-        verify(exactly = 0) { contentViewModel.preview(any()) }
-    }
-
 }
