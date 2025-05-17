@@ -89,8 +89,6 @@ class SelectedTextUseCaseTest {
     @Test
     fun searchUrl() {
         every { Urls.isValidUrl(any()) }.returns(true)
-        mockkStatic(Uri::class)
-        every { Uri.parse(any()) }.returns(mockk())
 
         selectedTextUseCase.search("https://www.yahoo.co.jp")
 
