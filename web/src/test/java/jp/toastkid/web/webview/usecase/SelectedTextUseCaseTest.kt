@@ -42,7 +42,7 @@ class SelectedTextUseCaseTest {
         MockKAnnotations.init(this)
         every { stringResolver.invoke(any(), any()) } returns "Count: 4"
         every { contentViewModel.snackShort(any<String>()) } just Runs
-        every { contentViewModel.snackShort(any<Int>()) }.just(Runs)
+        every { contentViewModel.snackShort(any<Int>()) } just Runs
         every { contentViewModel.preview(any()) }.just(Runs)
         every { contentViewModel.search(any()) }.just(Runs)
 
