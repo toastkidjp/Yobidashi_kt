@@ -47,7 +47,7 @@ class SelectedTextUseCaseTest {
         every { contentViewModel.search(any()) }.just(Runs)
 
         mockkObject(Urls)
-        every { Urls.isValidUrl(any()) }.returns(false)
+        every { Urls.isValidUrl(any()) } returns false
 
         mockkStatic(Uri::class)
         every { Uri.parse(any()) } returns mockk()
