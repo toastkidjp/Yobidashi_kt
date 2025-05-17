@@ -55,7 +55,7 @@ jacoco {
 
 tasks.register("jacocoMergedTestReport", JacocoReport::class.java) {
     group = "verification"
-    doLast {
+    subprojects {
         if (rootProject != project && plugins.hasPlugin("jacoco.definition")) {
             executionData.from += "${project.layout.buildDirectory.get()}/jacoco/testDebugUnitTest.exec"
             sourceDirectories.from += "${project.projectDir}/src/main/java"
