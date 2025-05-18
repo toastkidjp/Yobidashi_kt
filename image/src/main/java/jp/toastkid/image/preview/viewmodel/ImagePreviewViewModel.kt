@@ -38,7 +38,7 @@ class ImagePreviewViewModel(initialPage: Int) {
     }
 
     fun getCurrentImage() =
-        if (images.isNotEmpty()) images[pagerState.currentPage] else Image.makeEmpty()
+        images.getOrElse(pagerState.currentPage) { Image.makeEmpty() }
 
     fun getImage(page: Int) =
         if (images.isNotEmpty()) images[page] else Image.makeEmpty()
