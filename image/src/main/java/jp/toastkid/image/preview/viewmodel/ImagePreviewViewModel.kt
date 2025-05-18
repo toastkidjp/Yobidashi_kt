@@ -149,7 +149,7 @@ class ImagePreviewViewModel(initialPage: Int) {
     fun resetStates() {
         scale.floatValue = 1f
         offset.value = Offset.Zero
-        rotationY.value = 0f
+        rotationY.floatValue = 0f
         rotationZ.value = 0f
         transformable.value = false
     }
