@@ -47,6 +47,7 @@ class ImagePreviewViewModelTest {
 
     @Test
     fun getCurrentImage() {
+        assertSame(subject.getImage(0), subject.getCurrentImage())
     }
 
     @Test
