@@ -41,7 +41,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         images.getOrElse(pagerState.currentPage) { Image.makeEmpty() }
 
     fun getImage(page: Int) =
-        if (images.isNotEmpty()) images[page] else Image.makeEmpty()
+        images.getOrElse(page) { Image.makeEmpty() }
 
     private val scale = mutableFloatStateOf(1f)
 
