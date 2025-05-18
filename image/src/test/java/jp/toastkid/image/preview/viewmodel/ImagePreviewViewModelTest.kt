@@ -52,7 +52,7 @@ class ImagePreviewViewModelTest {
 
     @Test
     fun getImage() {
-
+        assertEquals(Image.makeEmpty(), subject.getImage(99))
     }
 
 }
