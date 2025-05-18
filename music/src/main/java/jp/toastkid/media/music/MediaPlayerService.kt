@@ -295,12 +295,12 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     override fun onLoadChildren(
             parentId: String,
-            result: Result<MutableList<MediaBrowserCompat.MediaItem>>
+            result: Result<List<MediaBrowserCompat.MediaItem>>
     ) {
         result.sendResult(
                 MusicFileFinder(contentResolver).invoke()
                         .map { MediaBrowserCompat.MediaItem(it.description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE) }
-                        .toMutableList()
+                        .toList()
         )
     }
 
