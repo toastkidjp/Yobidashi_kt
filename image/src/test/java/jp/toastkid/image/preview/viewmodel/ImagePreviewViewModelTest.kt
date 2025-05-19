@@ -55,4 +55,10 @@ class ImagePreviewViewModelTest {
         assertEquals(Image.makeEmpty(), subject.getImage(99))
     }
 
+    @Test
+    fun scale() {
+        assertEquals(1.0f, subject.scale(0))
+        assertEquals(1.0f, subject.scale(1))
+    }
+
 }
