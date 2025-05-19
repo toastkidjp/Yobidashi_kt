@@ -58,7 +58,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalendarUi() {
     val context = LocalContext.current as? ComponentActivity ?: return
