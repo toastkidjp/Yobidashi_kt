@@ -152,7 +152,7 @@ fun ArticleListUi() {
         } else {
             context.registerReceiver(
                 progressBroadcastReceiver,
-                ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter(),
+                ZipLoadProgressBroadcastIntentFactory.makeProgressBroadcastIntentFilter()
             )
         }
         onDispose {
@@ -231,9 +231,7 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
                 .combinedClickable(
                     true,
                     onClick = contentViewModel::switchTabList,
-                    onLongClick = {
-                        contentViewModel.openNewTab()
-                    }
+                    onLongClick = contentViewModel::openNewTab
                 )
         ) {
             Image(
