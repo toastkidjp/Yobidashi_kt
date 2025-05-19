@@ -19,6 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.calendar.model.color.CALENDAR_OFF_DAY
+import jp.toastkid.calendar.model.color.CALENDAR_SATURDAY
 import jp.toastkid.calendar.model.holiday.Holiday
 import java.util.Calendar
 
@@ -40,9 +42,9 @@ fun DayLabelView(
                 fontSize = if (labels.isEmpty()) 16.sp else 14.sp,
                 textAlign = TextAlign.Start,
                 color = when {
-                    offDay -> OFF_DAY_FG
-                    dayOfWeek == Calendar.SUNDAY -> OFF_DAY_FG
-                    dayOfWeek == Calendar.SATURDAY -> SATURDAY_FG
+                    offDay -> CALENDAR_OFF_DAY
+                    dayOfWeek == Calendar.SUNDAY -> CALENDAR_OFF_DAY
+                    dayOfWeek == Calendar.SATURDAY -> CALENDAR_SATURDAY
                     else -> if (today) Color.White else MaterialTheme.colorScheme.onSurface
                 },
                 modifier = Modifier.padding(4.dp)
@@ -51,7 +53,7 @@ fun DayLabelView(
                 Text(
                     "${it.flag} ${it.title}",
                     fontSize = 9.sp,
-                    color = OFF_DAY_FG,
+                    color = CALENDAR_OFF_DAY,
                     lineHeight = 10.sp,
                     modifier = Modifier.padding(4.dp)
                 )
@@ -63,6 +65,3 @@ fun DayLabelView(
 @Composable
 private fun getSurfaceColor(today: Boolean) =
     if (today) MaterialTheme.colorScheme.primary.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surface
-
-private val OFF_DAY_FG:  Color = Color(220, 50, 55)
-private val SATURDAY_FG:  Color = Color(95, 90, 250)
