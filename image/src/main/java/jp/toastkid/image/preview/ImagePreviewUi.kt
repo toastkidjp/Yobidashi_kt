@@ -32,6 +32,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderColors
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -184,7 +186,10 @@ internal fun ImagePreviewUi(
                                 viewModel.updateColorFilter()
                             },
                             valueRange = -5f .. 1f,
-                            steps = 600
+                            steps = 600,
+                            colors = SliderDefaults.colors().copy(
+                                activeTrackColor = MaterialTheme.colorScheme.secondary
+                            )
                         )
                     }
 
@@ -201,7 +206,10 @@ internal fun ImagePreviewUi(
                                 viewModel.updateColorFilter()
                             },
                             valueRange = 0f .. 10f,
-                            steps = 1000
+                            steps = 1000,
+                            colors = SliderDefaults.colors().copy(
+                                activeTrackColor = MaterialTheme.colorScheme.secondary
+                            )
                         )
                     }
 
