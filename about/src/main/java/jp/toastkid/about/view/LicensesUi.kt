@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -47,7 +48,7 @@ internal fun LicensesUi(licenses: List<License>) {
                     color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.clickable { viewModel?.open(license.url.toUri()) }
                 )
-                val lineCount = remember { mutableStateOf(3) }
+                val lineCount = remember { mutableIntStateOf(3) }
                 val maxLines = animateIntAsState(targetValue = lineCount.value, label = "10")
                 Text(
                     license.text,
