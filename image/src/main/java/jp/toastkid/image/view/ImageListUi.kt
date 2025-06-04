@@ -142,7 +142,6 @@ fun ImageListUi() {
     }
 
     val index = remember { mutableIntStateOf(-1) }
-    val listState = rememberLazyGridState()
 
     SharedTransitionLayout {
         AnimatedContent(
@@ -160,7 +159,6 @@ fun ImageListUi() {
                 ImageListUi(
                     imageLoaderUseCase,
                     images,
-                    listState,
                     {
                         index.intValue = it
                         preview.value = true
@@ -188,13 +186,13 @@ fun ImageListUi() {
 internal fun ImageListUi(
     imageLoaderUseCase: ImageLoaderUseCase,
     images: List<Image>,
-    listState: LazyGridState,
     showPreview: (Int) -> Unit,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val context = LocalContext.current
     val preferenceApplier = remember { PreferenceApplier(context) }
+    val listState = rememberLazyGridState()
 
     LazyVerticalGrid(
         state = listState,
