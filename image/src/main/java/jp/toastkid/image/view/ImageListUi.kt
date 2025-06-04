@@ -269,6 +269,7 @@ internal fun ImageListUi(
                         action = {
                             selectedSort.value = it
                             preferenceApplier.setImageViewerSort(it.name)
+                            imageLoaderUseCase()
                         },
                         check = {
                             selectedSort.value == it
