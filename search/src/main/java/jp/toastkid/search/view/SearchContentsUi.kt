@@ -307,7 +307,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String, setInput: (String
                 )
             }
             Icon(
-                painterResource(id = R.drawable.ic_share_black),
+                painterResource(id = jp.toastkid.lib.R.drawable.ic_share),
                 contentDescription = stringResource(id = jp.toastkid.lib.R.string.share),
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
