@@ -106,7 +106,7 @@ fun ChatTabView() {
                                 )
                                 Icon(
                                     painterResource(id = jp.toastkid.lib.R.drawable.ic_clip),
-                                    contentDescription = stringResource(id = jp.toastkid.lib.R.string.title_option_menu),
+                                    contentDescription = stringResource(id = jp.toastkid.lib.R.string.clip),
                                     tint = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier
                                         .padding(8.dp)
