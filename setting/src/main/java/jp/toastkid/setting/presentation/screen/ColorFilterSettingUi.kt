@@ -25,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -167,6 +168,9 @@ internal fun ColorFilterSettingUi() {
                     useCase.setAlpha(((255) * it).roundToInt())
                 },
                 steps = 256,
+                colors = SliderDefaults.colors().copy(
+                    activeTrackColor = MaterialTheme.colorScheme.secondary
+                ),
                 modifier = Modifier.padding(
                     top = 8.dp,
                     bottom = 8.dp,
