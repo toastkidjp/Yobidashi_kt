@@ -91,6 +91,20 @@ fun ChatTabView() {
                         ) {
                             Column(modifier = Modifier.weight(0.2f)) {
                                 Icon(
+                                    painterResource(id = jp.toastkid.lib.R.drawable.ic_share),
+                                    contentDescription = stringResource(id = jp.toastkid.lib.R.string.share),
+                                    tint = MaterialTheme.colorScheme.onPrimary,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .size(24.dp)
+                                        .align(Alignment.CenterHorizontally)
+                                        .clickable {
+                                            context.startActivity(
+                                                ShareIntentFactory().invoke(it.text, "Chat_${System.currentTimeMillis()}.txt")
+                                            )
+                                        }
+                                )
+                                Icon(
                                     painterResource(id = jp.toastkid.lib.R.drawable.ic_clip),
                                     contentDescription = stringResource(id = jp.toastkid.lib.R.string.title_option_menu),
                                     tint = MaterialTheme.colorScheme.onPrimary,
