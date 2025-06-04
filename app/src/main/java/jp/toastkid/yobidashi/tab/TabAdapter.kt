@@ -6,6 +6,7 @@ import android.os.Message
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.annotation.UiThread
+import androidx.core.net.toFile
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentViewModel
@@ -154,6 +155,7 @@ class TabAdapter(
 
     fun openNewPdfTab(uri: Uri) {
         val pdfTab = PdfTab()
+        pdfTab.setTitle(uri.toFile().name)
         pdfTab.setPath(uri.toString())
         tabList.add(pdfTab)
         setCount()
