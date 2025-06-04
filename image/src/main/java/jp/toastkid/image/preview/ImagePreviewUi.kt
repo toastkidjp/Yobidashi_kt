@@ -16,6 +16,8 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -324,7 +326,7 @@ internal fun ImagePreviewUi(
                                     onClick = {
                                         viewModel.openOtherMenu.value = false
                                         contentViewModel ?: return@DropdownMenuItem
-                                        AttachToAnyAppUseCase({ context.startActivity(it) })
+                                        AttachToAnyAppUseCase(context::startActivity)
                                             .invoke(context, BitmapFactory.decodeFile(viewModel.getCurrentImage().path))
                                     }
                                 )
