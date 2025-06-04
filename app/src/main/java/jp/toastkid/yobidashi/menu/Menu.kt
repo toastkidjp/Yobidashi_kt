@@ -23,7 +23,7 @@ enum class Menu(
 
     WEB_SEARCH(jp.toastkid.lib.R.string.title_search, R.drawable.ic_web_search),
 
-    SHARE(R.string.section_title_share, R.drawable.ic_share),
+    SHARE(R.string.section_title_share, jp.toastkid.lib.R.drawable.ic_share),
 
     VIEW_ARCHIVE(R.string.title_archives, R.drawable.ic_view_archive),
 
