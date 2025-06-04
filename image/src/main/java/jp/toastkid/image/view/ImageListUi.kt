@@ -29,6 +29,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,8 +52,10 @@ import jp.toastkid.image.list.BucketLoader
 import jp.toastkid.image.list.ImageFilterUseCase
 import jp.toastkid.image.list.ImageLoader
 import jp.toastkid.image.list.ImageLoaderUseCase
+import jp.toastkid.image.list.Sort
 import jp.toastkid.image.preview.ImagePreviewUi
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
@@ -250,12 +253,29 @@ internal fun ImageListUi(
         }
     }
 
+    val preferenceApplier = remember { PreferenceApplier(context) }
+    val selectedSort = remember { mutableStateOf(Sort.findByName(preferenceApplier.imageViewerSort())) }
+
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(lifecycleOwner) {
         withContext(Dispatchers.IO) {
             val contentViewModel = (context as? ViewModelStoreOwner)?.let {
                 ViewModelProvider(it).get(ContentViewModel::class.java)
             }
+            contentViewModel?.optionMenus(
+                *Sort.entries.map {
+                    OptionMenu(
+                        titleId = it.titleId,
+                        action = {
+                            selectedSort.value = it
+                            preferenceApplier.setImageViewerSort(it.name)
+                        },
+                        check = {
+                            selectedSort.value == it
+                        }
+                    )
+                }.toTypedArray()
+            )
             contentViewModel?.receiveEvent(StateScrollerFactory().invoke(listState))
         }
     }
