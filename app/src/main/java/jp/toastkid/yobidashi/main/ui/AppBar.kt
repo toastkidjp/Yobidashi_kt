@@ -53,7 +53,6 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.menu.view.OptionMenuItem
-import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.ui.finder.FindInPage
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
