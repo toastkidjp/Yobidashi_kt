@@ -194,6 +194,7 @@ internal fun ImageListUi(
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val context = LocalContext.current
+    val preferenceApplier = remember { PreferenceApplier(context) }
 
     LazyVerticalGrid(
         state = listState,
@@ -221,8 +222,7 @@ internal fun ImageListUi(
                                 }
                             },
                             onLongClick = {
-                                PreferenceApplier(context)
-                                    .addExcludeItem(image.path)
+                                preferenceApplier.addExcludeItem(image.path)
                                 imageLoaderUseCase()
                             }
                         )
@@ -253,7 +253,6 @@ internal fun ImageListUi(
         }
     }
 
-    val preferenceApplier = remember { PreferenceApplier(context) }
     val selectedSort = remember { mutableStateOf(Sort.findByName(preferenceApplier.imageViewerSort())) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
