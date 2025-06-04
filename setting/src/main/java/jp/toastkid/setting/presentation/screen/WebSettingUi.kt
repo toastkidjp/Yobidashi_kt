@@ -335,6 +335,9 @@ internal fun WebSettingUi() {
                             preferenceApplier.setWebViewBackgroundAlpha(it)
                         },
                         steps = 100,
+                        colors = SliderDefaults.colors().copy(
+                            activeTrackColor = MaterialTheme.colorScheme.secondary
+                        ),
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
