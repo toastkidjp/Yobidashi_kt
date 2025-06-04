@@ -22,7 +22,9 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -177,6 +179,9 @@ private fun AppBarUi(pageSize: Int, onValueChange: (Int) -> Unit) {
             onValueChange(it.roundToInt())
         },
         valueRange = (0f..(pageSize - 1).toFloat()),
-        steps = max(1, pageSize - 2)
+        steps = max(1, pageSize - 2),
+        colors = SliderDefaults.colors().copy(
+            activeTrackColor = MaterialTheme.colorScheme.secondary
+        )
     )
 }
