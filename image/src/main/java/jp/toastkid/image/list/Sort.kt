@@ -8,22 +8,30 @@
 package jp.toastkid.image.list
 
 import android.provider.MediaStore
+import jp.toastkid.image.R
 
 /**
  * @author toastkidjp
  */
-enum class Sort(val bucketSort: String, val imageSort: String) {
+enum class Sort(
+    val bucketSort: String,
+    val imageSort: String,
+    val titleId: Int
+) {
     DATE(
             "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
-            "${MediaStore.Images.Media.DATE_MODIFIED} DESC"
+            "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
+        R.string.title_sort_by_date
     ),
     NAME(
             "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} ASC",
-            "${MediaStore.Images.Media.DISPLAY_NAME} ASC"
+            "${MediaStore.Images.Media.DISPLAY_NAME} ASC",
+        R.string.title_sort_by_name
     ),
     ITEM_COUNT(
             "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
-            "${MediaStore.Images.Media.DATE_MODIFIED} DESC"
+            "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
+        R.string.title_sort_by_count
     );
 
     companion object {
