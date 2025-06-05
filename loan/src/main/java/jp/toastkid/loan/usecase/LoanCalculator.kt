@@ -33,7 +33,6 @@ class LoanCalculator {
             val monthlyInterest = currentAmount * (convertedRate / 12)
             val monthlyActualReturning = monthlyPaymentToBank - monthlyInterest
             currentAmount -= (monthlyPaymentToBank - monthlyInterest).toLong()
-            // println("monthlyPayment $monthlyPaymentToBank monthlyActualReturning $monthlyActualReturning monthlyInterest $monthlyInterest currentAmount $currentAmount")
             PaymentDetail(monthlyActualReturning, monthlyInterest, currentAmount)
         })
     }
