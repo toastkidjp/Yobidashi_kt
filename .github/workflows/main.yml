@@ -27,8 +27,7 @@ jobs:
           MINOR=$(cat $VERSION_FILE | grep MINOR | head -1 | awk '{print $6}')
           CURRENT_VERSION=$MAJOR.$MIDDLE.$MINOR
           echo $CURRENT_VERSION
-          current_date=$(date "+%Y%m%d")
-          tag_title="${CURRENT_VERSION}_${current_date}"
+          tag_title="${CURRENT_VERSION}_draft"
           echo "tag_title=${tag_title}" >> $GITHUB_OUTPUT
           RELEASE_EXISTS=$(curl -s -H "Authorization: token ${GH_TOKEN}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/releases/tags/${tag_title}" | jq -r '.message')
           if [[ "$RELEASE_EXISTS" == "Not Found" ]]; then
