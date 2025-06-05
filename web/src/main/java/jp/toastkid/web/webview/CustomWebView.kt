@@ -226,8 +226,7 @@ class CustomWebView(context: Context) : WebView(context) {
 
     private fun searchWithPreview() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
-            SelectedTextUseCase.make(context)
-                    ?.searchWithPreview(word)
+            SelectedTextUseCase.make(context)?.searchWithPreview(word)
         }
     }
 
