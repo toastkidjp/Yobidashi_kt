@@ -29,8 +29,8 @@ enum class Sort(
         R.string.title_sort_by_name
     ),
     ITEM_COUNT(
-            "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
-            "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
+        "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
+        "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
         R.string.title_sort_by_count
     );
 
