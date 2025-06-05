@@ -199,7 +199,7 @@ internal fun ImageListUi(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(8.dp)
     ) {
-        items(images, { it.path }) { image ->
+        items(images, Image::path) { image ->
             Surface(
                 shadowElevation = 4.dp,
                 modifier = Modifier
