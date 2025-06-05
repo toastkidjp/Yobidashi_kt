@@ -19,8 +19,8 @@ enum class Sort(
     val titleId: Int
 ) {
     DATE(
-            "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
-            "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
+        "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
+        "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
         R.string.title_sort_by_date
     ),
     NAME(
