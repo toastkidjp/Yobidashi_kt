@@ -24,8 +24,8 @@ enum class Sort(
         R.string.title_sort_by_date
     ),
     NAME(
-            "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} ASC",
-            "${MediaStore.Images.Media.DISPLAY_NAME} ASC",
+        "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} ASC",
+        "${MediaStore.Images.Media.DISPLAY_NAME} ASC",
         R.string.title_sort_by_name
     ),
     ITEM_COUNT(
