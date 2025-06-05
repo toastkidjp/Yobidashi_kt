@@ -16,8 +16,6 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +32,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -95,11 +92,10 @@ internal fun ImagePreviewUi(
     })
 
     val coroutineScope = rememberCoroutineScope()
-
     Box {
         HorizontalPager(
             pageSize = PageSize.Fill,
-            pageSpacing = 4.dp,
+            pageSpacing = 0.dp,
             state = viewModel.pagerState(),
             beyondViewportPageCount = 1,
             flingBehavior = PagerDefaults.flingBehavior(viewModel.pagerState(), snapPositionalThreshold = 0.2f),
