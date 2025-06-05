@@ -52,6 +52,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.calendar.R
 import jp.toastkid.calendar.model.Week
+import jp.toastkid.calendar.model.color.CALENDAR_OFF_DAY
+import jp.toastkid.calendar.model.color.CALENDAR_SATURDAY
 import jp.toastkid.calendar.model.holiday.Holiday
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -227,8 +229,8 @@ private fun MonthCalendar(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = when (dayOfWeek) {
-                                Calendar.SUNDAY -> OFF_DAY_FG
-                                Calendar.SATURDAY -> SATURDAY_FG
+                                Calendar.SUNDAY -> CALENDAR_OFF_DAY
+                                Calendar.SATURDAY -> CALENDAR_SATURDAY
                                 else -> MaterialTheme.colorScheme.onSurface
                             }
                         )
@@ -273,6 +275,3 @@ private fun MonthCalendar(
         }
     }
 }
-
-private val OFF_DAY_FG: Color = Color(190, 50, 55)
-private val SATURDAY_FG:  Color = Color(95, 90, 250)
