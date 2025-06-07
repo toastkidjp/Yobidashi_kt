@@ -51,7 +51,9 @@ class ZipLoaderWorker(
                 }
             }
 
-            context.sendBroadcast(zipLoadProgressBroadcastIntentFactory(100))
+            val intent = zipLoadProgressBroadcastIntentFactory(100)
+            intent.setPackage(context.applicationContext.packageName)
+            context.sendBroadcast(intent)
             zipLoader.dispose()
         }
 
