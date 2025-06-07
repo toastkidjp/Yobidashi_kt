@@ -117,7 +117,7 @@ fun ArticleListUi() {
         )
 
         if (viewModel.progressVisibility()) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
         }
     }
 
