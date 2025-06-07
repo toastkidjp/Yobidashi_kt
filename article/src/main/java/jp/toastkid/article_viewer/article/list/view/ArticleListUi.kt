@@ -131,7 +131,7 @@ fun ArticleListUi() {
         viewModel.search("")
     })
 
-    DisposableEffect(key1 = "unregisterReceiver", effect = {
+    DisposableEffect(key1 = LocalLifecycleOwner.current, effect = {
         val progressBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 viewModel.hideProgress()
