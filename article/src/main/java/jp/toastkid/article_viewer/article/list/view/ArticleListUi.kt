@@ -107,12 +107,6 @@ fun ArticleListUi() {
         )
     }
 
-    LaunchedEffect(key1 = LocalLifecycleOwner.current, block = {
-        contentViewModel.replaceAppBarContent {
-            AppBarContent(viewModel)
-        }
-    })
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
@@ -132,6 +126,10 @@ fun ArticleListUi() {
     })
 
     DisposableEffect(key1 = LocalLifecycleOwner.current, effect = {
+        contentViewModel.replaceAppBarContent {
+            AppBarContent(viewModel)
+        }
+
         val progressBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 viewModel.hideProgress()
