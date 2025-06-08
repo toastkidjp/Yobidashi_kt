@@ -20,10 +20,11 @@ import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerDefaults
@@ -68,6 +69,9 @@ import kotlinx.coroutines.launch
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -92,10 +96,36 @@ internal fun ImagePreviewUi(
     })
 
     val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(viewModel.state.isTransformInProgress) {
+        val currentPageOffsetFraction =
+            viewModel.pagerState().currentPageOffsetFraction
+        if (viewModel.currentScale() != 1f) {
+            return@LaunchedEffect
+        }
+        if (abs(currentPageOffsetFraction) > 0.2) {
+            val targetPage = if (currentPageOffsetFraction > 0) {
+                min(
+                    viewModel.pagerState().currentPage + 1,
+                    viewModel.pagerState().pageCount - 1
+                )
+            } else {
+                max(
+                    viewModel.pagerState().currentPage - 1,
+                    0
+                )
+            }
+            coroutineScope.launch {
+                viewModel.pagerState()
+                    .animateScrollToPage(targetPage)
+            }
+        }
+    }
+
     Box {
         HorizontalPager(
             pageSize = PageSize.Fill,
-            pageSpacing = 0.dp,
+            pageSpacing = 20.dp,
             state = viewModel.pagerState(),
             beyondViewportPageCount = 1,
             flingBehavior = PagerDefaults.flingBehavior(viewModel.pagerState(), snapPositionalThreshold = 0.2f),
@@ -104,7 +134,8 @@ internal fun ImagePreviewUi(
                 Box(
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .fillMaxSize()
+                        .fillMaxHeight()
+                        .wrapContentWidth()
                 ) {
                     EfficientImage(
                         model = viewModel.getImage(it).path,
@@ -138,8 +169,7 @@ internal fun ImagePreviewUi(
                                 )
                             }
                             .transformable(
-                                state = viewModel.state,
-                                //TODO enabled = viewModel.transformable()
+                                state = viewModel.state
                             )
                     )
                 }
