@@ -17,6 +17,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.unit.IntOffset
+import androidx.lifecycle.AtomicReference
 import jp.toastkid.image.Image
 import kotlin.math.max
 
@@ -46,6 +47,8 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     fun scale(page: Int) = if (isCurrentPage(page)) scale.floatValue else 1f
 
+    fun currentScale() = scale.floatValue
+
     private val rotationY = mutableFloatStateOf(0f)
 
     fun rotationY(page: Int) = if (isCurrentPage(page)) rotationY.value else 0f
@@ -66,7 +69,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         }
 
         return IntOffset(
-            offset.value.x.toInt(),
+            -pagerState.currentPageOffsetFraction.toInt(),//offset.value.x.toInt(),
             offset.value.y.toInt()
         )
     }
@@ -75,6 +78,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         scale.value *= zoomChange
         rotationZ.value += rotationChange
         offset.value += offsetChange
+        pagerState.dispatchRawDelta(-offsetChange.x)
     }
 
     var alphaSliderPosition = mutableStateOf(0f)
