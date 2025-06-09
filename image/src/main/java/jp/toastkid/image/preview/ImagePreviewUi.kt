@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
@@ -46,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -135,13 +137,16 @@ internal fun ImagePreviewUi(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxHeight()
-                        .wrapContentWidth()
+                        .width(viewModel.painterSize().width.dp)
                 ) {
                     EfficientImage(
                         model = viewModel.getImage(it).path,
                         contentDescription = viewModel.getImage(it).name,
                         colorFilter = viewModel.colorFilterState.value,
                         contentScale = ContentScale.FillWidth,
+                        onPainter = {
+                            viewModel.setPainterSize(it.intrinsicSize)
+                        },
                         modifier = Modifier
                             .align(Alignment.Center)
                             .fillMaxWidth()
@@ -157,6 +162,9 @@ internal fun ImagePreviewUi(
                                 rotationY = viewModel.rotationY(it),
                                 rotationZ = viewModel.rotationZ(it),
                             )
+                            .onSizeChanged {
+                                viewModel.setCurrentSize(it)
+                            }
                             .offset {
                                 viewModel.offset(it)
                             }
