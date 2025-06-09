@@ -108,7 +108,6 @@ class ImagePreviewViewModel(initialPage: Int) {
     fun transformable() = transformable.value
 
     fun unsetTransformable() {
-        transformable.value = false
         resetStates()
     }
 
@@ -152,7 +151,6 @@ class ImagePreviewViewModel(initialPage: Int) {
         offset.value = Offset.Zero
         rotationY.floatValue = 0f
         rotationZ.value = 0f
-        transformable.value = false
     }
 
     fun sharedElementKey(page: Int): String {
