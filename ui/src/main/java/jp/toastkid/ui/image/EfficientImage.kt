@@ -31,6 +31,35 @@ fun EfficientImage(
     modifier: Modifier = Modifier,
     placeholder: Painter? = null,
     error: Painter? = null,
+    onPainter: ((Painter) -> Unit)? = null,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    alpha: Float = DefaultAlpha,
+    colorFilter: ColorFilter? = null,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+    clipToBounds: Boolean = true,
+) {
+    EfficientImage(
+        model, contentDescription, modifier, placeholder, error,
+        alignment = alignment,
+        contentScale = contentScale,
+        alpha = alpha,
+        colorFilter = colorFilter,
+        filterQuality = filterQuality,
+        clipToBounds = clipToBounds,
+        onSuccess = {
+            onPainter?.invoke(it.painter)
+        }
+    )
+}
+
+@Composable
+fun EfficientImage(
+    model: Any?,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    placeholder: Painter? = null,
+    error: Painter? = null,
     fallback: Painter? = error,
     onLoading: ((State.Loading) -> Unit)? = null,
     onSuccess: ((State.Success) -> Unit)? = null,
