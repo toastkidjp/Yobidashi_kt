@@ -104,10 +104,6 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     fun transformable() = transformable.value
 
-    fun setTransformable() {
-        transformable.value = true
-    }
-
     fun unsetTransformable() {
         transformable.value = false
         resetStates()
