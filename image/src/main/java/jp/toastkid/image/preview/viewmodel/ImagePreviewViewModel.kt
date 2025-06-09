@@ -17,7 +17,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.unit.IntOffset
-import androidx.lifecycle.AtomicReference
 import jp.toastkid.image.Image
 import kotlin.math.max
 
