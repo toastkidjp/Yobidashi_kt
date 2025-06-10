@@ -53,7 +53,7 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     private val rotationY = mutableFloatStateOf(0f)
 
-    fun rotationY(page: Int) = if (isCurrentPage(page)) rotationY.value else 0f
+    fun rotationY(page: Int) = if (isCurrentPage(page)) rotationY.floatValue else 0f
 
     fun flip() {
         rotationY.value = if (rotationY.value == 0f) 180f else 0f
