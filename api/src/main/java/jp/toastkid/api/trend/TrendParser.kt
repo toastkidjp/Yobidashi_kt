@@ -29,7 +29,8 @@ class TrendParser {
                     ?: emptyList()
 
     private fun parseContent(content: String) = try {
-        Jsoup.parse(content, "", Parser.xmlParser())
+        val xmlParser = Parser.xmlParser()
+        Jsoup.parse(content, "", xmlParser)
     } catch (e: Throwable) {
         Timber.e(e)
         null
