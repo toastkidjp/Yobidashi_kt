@@ -105,7 +105,7 @@ internal fun ImagePreviewUi(
         if (viewModel.currentScale() != 1f) {
             return@LaunchedEffect
         }
-        if (abs(currentPageOffsetFraction) > 0.2) {
+        if (abs(currentPageOffsetFraction) > 0.2 && viewModel.currentScale() == 1f) {
             val targetPage = if (currentPageOffsetFraction > 0) {
                 min(
                     viewModel.pagerState().currentPage + 1,
@@ -137,7 +137,7 @@ internal fun ImagePreviewUi(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxHeight()
-                        .width(viewModel.painterSize().width.dp)
+                        .width(viewModel.currentSize().width.dp)
                 ) {
                     EfficientImage(
                         model = viewModel.getImage(it).path,
@@ -172,7 +172,7 @@ internal fun ImagePreviewUi(
                                 detectTapGestures(
                                     onPress = { /* Called when the gesture starts */ },
                                     onDoubleTap = { viewModel.resetStates() },
-                                    onLongPress = {  },
+                                    onLongPress = { },
                                     onTap = { /* Called on Tap */ }
                                 )
                             }
