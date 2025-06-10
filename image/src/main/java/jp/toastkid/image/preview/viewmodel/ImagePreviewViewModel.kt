@@ -105,8 +105,6 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     private val transformable = mutableStateOf(false)
 
-    fun transformable() = transformable.value
-
     fun updateColorFilter() {
         val v = max(contrastSliderPosition.value, 0f) + 1f * (if (reverse.value) -1 else 1)
         val o = -128 * (v - 1)
