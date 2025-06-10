@@ -83,7 +83,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         pagerState.dispatchRawDelta(-offsetChange.x)
     }
 
-    var alphaSliderPosition = mutableStateOf(0f)
+    val alphaSliderPosition = mutableStateOf(0f)
 
     var contrastSliderPosition = mutableStateOf(0f)
 
