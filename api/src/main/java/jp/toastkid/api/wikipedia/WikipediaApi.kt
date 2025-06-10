@@ -33,11 +33,12 @@ class WikipediaApi(
      */
     @WorkerThread
     operator fun invoke(): Array<Article>? {
+        val mediaType = "application/json".toMediaType()
         val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(
                     json
-                        .asConverterFactory("application/json".toMediaType())
+                        .asConverterFactory(mediaType)
                 )
                 .build()
 
