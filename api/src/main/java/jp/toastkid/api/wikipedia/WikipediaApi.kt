@@ -28,7 +28,9 @@ class WikipediaApi(
 
     private val mediaType = "application/json".toMediaType()
 
-    private val json = Json { ignoreUnknownKeys = true }.asConverterFactory(mediaType)
+    private val json = Json { ignoreUnknownKeys = true }
+
+    private val jsonConverterFactory = json.asConverterFactory(mediaType)
 
     /**
      * You should call this method on worker-thread.
@@ -38,7 +40,7 @@ class WikipediaApi(
         val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(
-                    json
+                    jsonConverterFactory
                 )
                 .build()
 
