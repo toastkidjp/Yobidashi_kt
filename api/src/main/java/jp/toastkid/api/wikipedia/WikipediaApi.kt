@@ -28,7 +28,7 @@ class WikipediaApi(
 
     private val mediaType = "application/json".toMediaType()
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = Json { ignoreUnknownKeys = true }.asConverterFactory(mediaType)
 
     /**
      * You should call this method on worker-thread.
@@ -39,7 +39,6 @@ class WikipediaApi(
                 .baseUrl(baseUrl)
                 .addConverterFactory(
                     json
-                        .asConverterFactory(mediaType)
                 )
                 .build()
 
