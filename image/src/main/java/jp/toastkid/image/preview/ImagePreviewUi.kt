@@ -398,7 +398,7 @@ internal fun ImagePreviewUi(
     }
 
     LaunchedEffect(viewModel.pagerState().currentPage) {
-        viewModel.unsetTransformable()
+        viewModel.resetStates()
     }
 
     BackHandler(viewModel.openMenu.value) {
