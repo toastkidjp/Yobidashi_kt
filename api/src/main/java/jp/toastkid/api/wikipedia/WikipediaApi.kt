@@ -26,6 +26,8 @@ class WikipediaApi(
     private val baseUrl: String
 ) {
 
+    private val mediaType = "application/json".toMediaType()
+
     private val json = Json { ignoreUnknownKeys = true }
 
     /**
@@ -33,7 +35,6 @@ class WikipediaApi(
      */
     @WorkerThread
     operator fun invoke(): Array<Article>? {
-        val mediaType = "application/json".toMediaType()
         val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(
