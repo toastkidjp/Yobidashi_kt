@@ -39,9 +39,7 @@ class WikipediaApi(
     operator fun invoke(): Array<Article>? {
         val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(
-                    jsonConverterFactory
-                )
+                .addConverterFactory(jsonConverterFactory)
                 .build()
 
         val service = retrofit.create(WikipediaService::class.java)
