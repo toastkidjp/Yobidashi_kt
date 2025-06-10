@@ -165,12 +165,18 @@ class ImagePreviewViewModel(initialPage: Int) {
         currentSize.value = it.toSize()
     }
 
+    fun currentSize(): Size {
+        return currentSize.value
+    }
+
     private val painterSize = mutableStateOf(Size.Zero)
 
     fun setPainterSize(intrinsicSize: Size) {
         this.painterSize.value = intrinsicSize
     }
 
-    fun painterSize() = painterSize.value
+    fun painterSize(): Size {
+        return painterSize.value
+    }
 
 }
