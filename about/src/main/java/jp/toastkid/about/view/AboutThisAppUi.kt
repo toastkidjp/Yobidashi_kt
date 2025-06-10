@@ -168,7 +168,7 @@ fun AboutThisAppUi(versionName: String) {
                     .clickable(onClick = {
                         context.startActivity(
                             Intent(Intent.ACTION_VIEW)
-                                .also { it.data = Uri.parse("market://search?q=pub:toastkidjp") }
+                                .also { it.data = "market://search?q=pub:toastkidjp".toUri() }
                         )
                     })
                     .padding(start = 16.dp, end = 16.dp)
