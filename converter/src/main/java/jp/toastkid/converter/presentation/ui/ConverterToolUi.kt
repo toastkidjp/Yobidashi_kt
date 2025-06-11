@@ -38,7 +38,7 @@ fun ConverterToolUi() {
                 shadowElevation = 4.dp
             ) {
                 Box(modifier = Modifier.clickable { openChooser.value = true }) {
-                    Text(converters[currentIndex.value].title())
+                    Text(converters[currentIndex.intValue].title())
                     DropdownMenu(expanded = openChooser.value, onDismissRequest = { openChooser.value = false }) {
                         converters.forEachIndexed { index, converter ->
                             DropdownMenuItem(
