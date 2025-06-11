@@ -16,6 +16,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -26,7 +27,7 @@ import jp.toastkid.converter.domain.model.UnixTimeConverter
 @Composable
 fun ConverterToolUi() {
     val converters = remember { listOf(TatamiCountConverter(), UnixTimeConverter()) }
-    val currentIndex = remember { mutableStateOf(0) }
+    val currentIndex = remember { mutableIntStateOf(0) }
     val openChooser = remember { mutableStateOf(false) }
 
     Surface(
