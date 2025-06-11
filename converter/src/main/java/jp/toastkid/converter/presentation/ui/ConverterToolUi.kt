@@ -44,7 +44,7 @@ fun ConverterToolUi() {
                             DropdownMenuItem(
                                 text = { Text(converter.title()) },
                                 onClick = {
-                                    currentIndex.value = index
+                                    currentIndex.intValue = index
                                     openChooser.value = false
                                 }
                             )
