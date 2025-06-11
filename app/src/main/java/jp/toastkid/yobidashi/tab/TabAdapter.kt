@@ -155,7 +155,7 @@ class TabAdapter(
 
     fun openNewPdfTab(uri: Uri) {
         val pdfTab = PdfTab()
-        pdfTab.setTitle(uri.toFile().name)
+        pdfTab.setTitle(uri.pathSegments.lastOrNull() ?: "PDF Viewer")
         pdfTab.setPath(uri.toString())
         tabList.add(pdfTab)
         setCount()
