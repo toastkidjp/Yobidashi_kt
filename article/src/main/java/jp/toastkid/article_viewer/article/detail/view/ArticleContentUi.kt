@@ -103,8 +103,7 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(lifecycleOwner) {
         withContext(Dispatchers.IO) {
-            ViewModelProvider(context)
-                .get(ContentViewModel::class.java)
+            contentViewModel
                 .receiveEvent(StateScrollerFactory().invoke(viewModel.scrollState()))
         }
     }
