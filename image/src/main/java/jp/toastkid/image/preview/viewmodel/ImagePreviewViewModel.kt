@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.unit.IntOffset
@@ -70,17 +71,24 @@ class ImagePreviewViewModel(initialPage: Int) {
             return@offset IntOffset.Zero
         }
 
+        val currentPainterSize = painterSize.value * scale.floatValue / 2f
         return IntOffset(
-            -pagerState.currentPageOffsetFraction.toInt(),//offset.value.x.toInt(),
-            offset.value.y.toInt()
+            offset.value.x.coerceIn(-currentPainterSize.width, currentPainterSize.width).toInt(),
+            offset.value.y.coerceIn(-currentPainterSize.height, currentPainterSize.height).toInt()
         )
     }
 
+    // TODO Delete it
     val state = TransformableState { zoomChange, offsetChange, rotationChange ->
         scale.value *= zoomChange
         rotationZ.value += rotationChange
         offset.value += offsetChange
-        pagerState.dispatchRawDelta(-offsetChange.x)
+    }
+
+    fun onGesture(offsetChange: Offset, zoomChange: Float, rotationChange: Float) {
+        rotationZ.value += rotationChange
+        scale.value *= zoomChange
+        offset.value += offsetChange
     }
 
     val alphaSliderPosition = mutableStateOf(0f)
@@ -167,8 +175,40 @@ class ImagePreviewViewModel(initialPage: Int) {
         this.painterSize.value = intrinsicSize
     }
 
-    fun painterSize(): Size {
-        return painterSize.value
+    fun zoom(newOffset: Offset) {
+        val unset = scale.floatValue != 1f
+
+        val newScale = if (unset) 1f else 3f
+
+        if (unset) {
+            rotationY.floatValue = 0f
+            rotationZ.value = 0f
+            this.offset.value = Offset.Zero
+            scale.floatValue = 1f
+            return
+        }
+
+        this.scale.floatValue = newScale
+        val newLayoutRect = this.currentSize.value / 2f
+
+        this.offset.value = Offset(
+            (-1 * (newOffset.x - newLayoutRect.width)).coerceIn(-newLayoutRect.width, newLayoutRect.width),
+            (-1 * (newOffset.y - newLayoutRect.height)).coerceIn(-newLayoutRect.height, newLayoutRect.height)
+        )
+    }
+
+    fun outOfRange(panChange: Offset): Boolean {
+        val range = painterSize.value / scale.floatValue
+        val rangeLeft = (range.width / (scale.floatValue + 1f))
+        val rangeRight = rangeLeft * -1
+        if (panChange.x < 0 && offset.value.x < 0 && rangeRight > offset.value.x) {
+            return true
+        }
+        if (panChange.x > 0 && offset.value.x > 0 && rangeLeft < offset.value.x) {
+            return true
+        }
+
+        return false
     }
 
 }
