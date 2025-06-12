@@ -401,8 +401,8 @@ internal fun Content() {
                 is WebSearchEvent -> {
                     WebSearchResultTabOpenerUseCase(
                         PreferenceApplier(activity),
-                        {
-                            tabs.openNewWebTab(it.toString())
+                        { uri ->
+                            tabs.openNewWebTab(uri.toString())
                             contentViewModel.replaceToCurrentTab()
                         }
                     ).invoke(it.query)
