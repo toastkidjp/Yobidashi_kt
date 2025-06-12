@@ -10,6 +10,7 @@
     <string name="content_description_edit_image">Edit image</string>
     <string name="title_excluding_item_setting">Excluding items</string>
     <string name="title_sort_by_date">Sort by date</string>
+    <string name="title_sort_by_date_ask">Sort by date(ASC)</string>
     <string name="title_sort_by_name">Sort by name</string>
     <string name="title_sort_by_count">Sort by count</string>
     <string name="message_audio_file_is_not_found">Files are not found.</string>
