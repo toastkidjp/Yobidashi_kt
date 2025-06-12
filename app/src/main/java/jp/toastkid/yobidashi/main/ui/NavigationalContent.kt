@@ -69,7 +69,6 @@ internal fun NavigationalContent(
         }
         tabComposable("tab/pdf/current") {
             val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
-            val view = LocalView.current
             PdfViewerUi(
                 currentTab.getUrl().toUri(),
                 Modifier//.onPlaced { takeScreenshot(tabs, view) }
