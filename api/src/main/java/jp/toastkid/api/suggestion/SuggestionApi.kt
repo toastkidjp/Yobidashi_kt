@@ -23,7 +23,6 @@ import java.util.Locale
 /**
  * Suggest Web API response fetcher.
  *
- * @param httpClient HTTP client
  * @param suggestionParser Response parser
  * @param multiByteCharacterInspector Use for specifying language
  *
