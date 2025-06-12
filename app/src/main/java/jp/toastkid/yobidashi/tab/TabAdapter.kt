@@ -156,7 +156,7 @@ class TabAdapter(
     fun openNewPdfTab(uri: Uri) {
         val pdfTab = PdfTab()
         val lastOrNull = uri.pathSegments.lastOrNull()
-        val title = if (lastOrNull == null) "PDF Viewer" else "[PDF] " + lastOrNull
+        val title = if (lastOrNull == null) "PDF Viewer" else "[PDF] $lastOrNull"
         pdfTab.setTitle(title)
         pdfTab.setPath(uri.toString())
         tabList.add(pdfTab)
