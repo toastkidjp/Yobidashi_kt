@@ -23,6 +23,11 @@ enum class Sort(
         "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
         R.string.title_sort_by_date
     ),
+    DATE_ASC(
+        "${MediaStore.Images.Media.DATE_MODIFIED} ASC",
+        "${MediaStore.Images.Media.DATE_MODIFIED} ASC",
+        R.string.title_sort_by_date_ask
+    ),
     NAME(
         "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} ASC",
         "${MediaStore.Images.Media.DISPLAY_NAME} ASC",
