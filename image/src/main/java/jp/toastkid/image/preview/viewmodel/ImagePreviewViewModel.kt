@@ -218,7 +218,7 @@ class ImagePreviewViewModel(initialPage: Int) {
             return
         }
 
-        if (abs(currentPageOffsetFraction) <= 0.2) {
+        if (abs(currentPageOffsetFraction) <= snapPositionalThreshold) {
             return
         }
 
