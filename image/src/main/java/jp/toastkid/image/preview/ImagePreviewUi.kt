@@ -111,27 +111,8 @@ internal fun ImagePreviewUi(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(viewModel.state.isTransformInProgress) {
-        val currentPageOffsetFraction =
-            viewModel.pagerState().currentPageOffsetFraction
-        if (viewModel.currentScale() != 1f) {
-            return@LaunchedEffect
-        }
-        if (abs(currentPageOffsetFraction) > 0.2 && viewModel.currentScale() == 1f) {
-            val targetPage = if (currentPageOffsetFraction > 0) {
-                min(
-                    viewModel.pagerState().currentPage + 1,
-                    viewModel.pagerState().pageCount - 1
-                )
-            } else {
-                max(
-                    viewModel.pagerState().currentPage - 1,
-                    0
-                )
-            }
-            coroutineScope.launch {
-                viewModel.pagerState()
-                    .animateScrollToPage(targetPage)
-            }
+        coroutineScope.launch {
+            viewModel.movePageWithFraction()
         }
     }
 
