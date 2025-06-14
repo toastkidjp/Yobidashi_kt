@@ -83,8 +83,6 @@ import java.io.File
 import java.io.FileInputStream
 import kotlin.math.PI
 import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
