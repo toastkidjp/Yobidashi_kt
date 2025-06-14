@@ -219,6 +219,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         }
 
         if (abs(currentPageOffsetFraction) <= snapPositionalThreshold) {
+            pagerState.animateScrollToPage(pagerState.currentPage)
             return
         }
 
