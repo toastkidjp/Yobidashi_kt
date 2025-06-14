@@ -8,6 +8,7 @@
 
 package jp.toastkid.image.preview.viewmodel
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.mutableFloatStateOf
@@ -47,11 +48,11 @@ class ImagePreviewViewModel(initialPage: Int) {
     fun getImage(page: Int) =
         images.getOrElse(page) { Image.makeEmpty() }
 
-    private val scale = mutableFloatStateOf(1f)
+    private val scale = Animatable(1f)
 
-    fun scale(page: Int) = if (isCurrentPage(page)) scale.floatValue else 1f
+    fun scale(page: Int) = if (isCurrentPage(page)) scale.value else 1f
 
-    fun currentScale() = scale.floatValue
+    fun currentScale() = scale.value
 
     private val rotationY = mutableFloatStateOf(0f)
 
@@ -72,7 +73,7 @@ class ImagePreviewViewModel(initialPage: Int) {
             return@offset IntOffset.Zero
         }
 
-        val currentPainterSize = painterSize.value * scale.floatValue / 2f
+        val currentPainterSize = painterSize.value * scale.value / 2f
         return IntOffset(
             offset.value.x.coerceIn(-currentPainterSize.width, currentPainterSize.width).toInt(),
             offset.value.y.coerceIn(-currentPainterSize.height, currentPainterSize.height).toInt()
@@ -81,14 +82,14 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     // TODO Delete it
     val state = TransformableState { zoomChange, offsetChange, rotationChange ->
-        scale.value *= zoomChange
         rotationZ.value += rotationChange
+        //scale.snapTo(scale.value * zoomChange)
         offset.value += offsetChange
     }
 
-    fun onGesture(offsetChange: Offset, zoomChange: Float, rotationChange: Float) {
+    suspend fun onGesture(offsetChange: Offset, zoomChange: Float, rotationChange: Float) {
         rotationZ.value += rotationChange
-        scale.value *= zoomChange
+        scale.snapTo(scale.value * zoomChange)
         offset.value += offsetChange
     }
 
@@ -147,8 +148,8 @@ class ImagePreviewViewModel(initialPage: Int) {
             }
     }
 
-    fun resetStates() {
-        scale.floatValue = 1f
+    suspend fun resetStates() {
+        scale.snapTo(1f)
         offset.value = Offset.Zero
         rotationY.floatValue = 0f
         rotationZ.value = 0f
@@ -176,8 +177,8 @@ class ImagePreviewViewModel(initialPage: Int) {
         this.painterSize.value = intrinsicSize
     }
 
-    fun zoom(newOffset: Offset) {
-        val unset = scale.floatValue != 1f
+    suspend fun zoom(newOffset: Offset) {
+        val unset = scale.value != 1f
 
         val newScale = if (unset) 1f else 3f
 
@@ -185,22 +186,22 @@ class ImagePreviewViewModel(initialPage: Int) {
             rotationY.floatValue = 0f
             rotationZ.value = 0f
             this.offset.value = Offset.Zero
-            scale.floatValue = 1f
+            scale.animateTo(1f)
             return
         }
 
-        this.scale.floatValue = newScale
         val newLayoutRect = this.currentSize.value / 2f
 
         this.offset.value = Offset(
             (-1 * (newOffset.x - newLayoutRect.width)).coerceIn(-newLayoutRect.width, newLayoutRect.width),
             (-1 * (newOffset.y - newLayoutRect.height)).coerceIn(-newLayoutRect.height, newLayoutRect.height)
         )
+        scale.animateTo(newScale)
     }
 
     fun outOfRange(panChange: Offset): Boolean {
-        val range = painterSize.value / scale.floatValue
-        val rangeLeft = (range.width / (scale.floatValue + 1f))
+        val range = painterSize.value / scale.value
+        val rangeLeft = (range.width / (scale.value + 1f))
         val rangeRight = rangeLeft * -1
         if (panChange.x < 0 && offset.value.x < 0 && rangeRight > offset.value.x) {
             return true
