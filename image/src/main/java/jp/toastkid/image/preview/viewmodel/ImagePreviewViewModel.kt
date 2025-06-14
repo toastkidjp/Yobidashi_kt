@@ -21,7 +21,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.toSize
 import jp.toastkid.image.Image
+import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 
 class ImagePreviewViewModel(initialPage: Int) {
 
@@ -208,6 +210,30 @@ class ImagePreviewViewModel(initialPage: Int) {
         }
 
         return false
+    }
+
+    suspend fun movePageWithFraction() {
+        val currentPageOffsetFraction = pagerState.currentPageOffsetFraction
+        if (currentScale() != 1f) {
+            return
+        }
+
+        if (abs(currentPageOffsetFraction) <= 0.2) {
+            return
+        }
+
+        val targetPage = if (currentPageOffsetFraction > 0) {
+            min(
+                pagerState.currentPage + 1,
+                pagerState.pageCount - 1
+            )
+        } else {
+            max(
+                pagerState.currentPage - 1,
+                0
+            )
+        }
+        pagerState.animateScrollToPage(targetPage)
     }
 
 }
