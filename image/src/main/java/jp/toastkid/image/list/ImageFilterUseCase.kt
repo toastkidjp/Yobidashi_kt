@@ -26,9 +26,7 @@ internal class ImageFilterUseCase(
             return
         }
 
-        val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
-
-        val newList = imageLoader.filterBy(keyword).filter { excludedItemFilter(it.path) }
+        val newList = imageLoader.filterBy(keyword)
         submitImages(newList)
 
         imageLoaderUseCase.clearCurrentBucket()
