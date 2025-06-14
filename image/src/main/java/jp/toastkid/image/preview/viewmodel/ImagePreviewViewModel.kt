@@ -236,4 +236,8 @@ class ImagePreviewViewModel(initialPage: Int) {
         pagerState.animateScrollToPage(targetPage)
     }
 
+    fun snapPositionalThreshold() = snapPositionalThreshold
+
 }
+
+private const val snapPositionalThreshold = 0.2f
