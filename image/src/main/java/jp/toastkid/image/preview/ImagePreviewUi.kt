@@ -122,7 +122,7 @@ internal fun ImagePreviewUi(
             pageSpacing = 20.dp,
             state = viewModel.pagerState(),
             beyondViewportPageCount = 1,
-            flingBehavior = PagerDefaults.flingBehavior(viewModel.pagerState(), snapPositionalThreshold = 0.2f),
+            flingBehavior = PagerDefaults.flingBehavior(viewModel.pagerState(), snapPositionalThreshold = viewModel.snapPositionalThreshold()),
         ) {
             with(sharedTransitionScope) {
                 Box(
