@@ -15,6 +15,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateRotateBy
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateCentroid
@@ -215,6 +216,9 @@ internal fun ImagePreviewUi(
                                                 event.changes.fastForEach {
                                                     if (it.positionChanged() && viewModel.outOfRange(panChange).not() && viewModel.currentScale() != 1f) {
                                                         it.consume()
+                                                        coroutineScope.launch {
+                                                            viewModel.resetPagerScrollState()
+                                                        }
                                                     }
                                                 }
                                             }
