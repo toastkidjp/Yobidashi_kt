@@ -188,9 +188,11 @@ internal fun ImagePreviewUi(
                                                 rotation += rotationChange
                                                 pan += panChange
 
-                                                val centroidSize = event.calculateCentroidSize(useCurrent = false)
+                                                val centroidSize =
+                                                    event.calculateCentroidSize(useCurrent = false)
                                                 val zoomMotion = abs(1 - zoom) * centroidSize
-                                                val rotationMotion = abs(rotation * PI.toFloat() * centroidSize / 180f)
+                                                val rotationMotion =
+                                                    abs(rotation * PI.toFloat() * centroidSize / 180f)
                                                 val panMotion = pan.getDistance()
 
                                                 if (zoomMotion > touchSlop ||
@@ -198,23 +200,33 @@ internal fun ImagePreviewUi(
                                                     panMotion > touchSlop
                                                 ) {
                                                     pastTouchSlop = true
-                                                    lockedToPanZoom = false && rotationMotion < touchSlop
+                                                    lockedToPanZoom =
+                                                        false && rotationMotion < touchSlop
                                                 }
                                             }
 
                                             if (pastTouchSlop) {
-                                                val centroid = event.calculateCentroid(useCurrent = false)
-                                                val effectiveRotation = if (lockedToPanZoom) 0f else rotationChange
+                                                val centroid =
+                                                    event.calculateCentroid(useCurrent = false)
+                                                val effectiveRotation =
+                                                    if (lockedToPanZoom) 0f else rotationChange
                                                 if (effectiveRotation != 0f ||
                                                     zoomChange != 1f ||
                                                     panChange != Offset.Zero
                                                 ) {
                                                     coroutineScope.launch {
-                                                        viewModel.onGesture(panChange, zoomChange, rotationChange)
+                                                        viewModel.onGesture(
+                                                            panChange,
+                                                            zoomChange,
+                                                            rotationChange
+                                                        )
                                                     }
                                                 }
                                                 event.changes.fastForEach {
-                                                    if (it.positionChanged() && viewModel.outOfRange(panChange).not() && viewModel.currentScale() != 1f) {
+                                                    if (it.positionChanged() && viewModel.outOfRange(
+                                                            panChange
+                                                        ).not() && viewModel.currentScale() != 1f
+                                                    ) {
                                                         it.consume()
                                                         coroutineScope.launch {
                                                             viewModel.resetPagerScrollState()
@@ -447,6 +459,7 @@ internal fun ImagePreviewUi(
     LaunchedEffect(viewModel.pagerState().currentPage) {
         coroutineScope.launch {
             viewModel.resetStates()
+            viewModel.clearPreviousState()
         }
     }
 

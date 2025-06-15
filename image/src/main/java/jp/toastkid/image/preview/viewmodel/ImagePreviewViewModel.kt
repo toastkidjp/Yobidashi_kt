@@ -57,6 +57,12 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     fun currentScale() = scale.getOrElse(pagerState.currentPage, { Animatable(1f) }).value
 
+    fun clearPreviousState() {
+        if (pagerState.currentPage != pagerState.settledPage) {
+            scale.remove(pagerState.settledPage)
+        }
+    }
+
     private val rotationY = mutableFloatStateOf(0f)
 
     fun rotationY(page: Int) = if (isCurrentPage(page)) rotationY.floatValue else 0f
