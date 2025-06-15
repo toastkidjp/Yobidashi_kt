@@ -8,13 +8,11 @@
 package jp.toastkid.image.list
 
 import jp.toastkid.image.Image
-import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
  */
 internal class ImageFilterUseCase(
-    private val preferenceApplier: PreferenceApplier,
     private val submitImages: (List<Image>) -> Unit,
     private val imageLoaderUseCase: ImageLoaderUseCase,
     private val imageLoader: ImageLoader
