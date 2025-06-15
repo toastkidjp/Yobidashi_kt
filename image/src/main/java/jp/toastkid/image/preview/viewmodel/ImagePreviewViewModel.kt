@@ -10,6 +10,7 @@ package jp.toastkid.image.preview.viewmodel
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.gestures.TransformableState
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -239,6 +240,10 @@ class ImagePreviewViewModel(initialPage: Int) {
     }
 
     fun snapPositionalThreshold() = snapPositionalThreshold
+
+    suspend fun resetPagerScrollState() {
+        pagerState.scrollBy(pagerState.currentPageOffsetFraction)
+    }
 
 }
 
