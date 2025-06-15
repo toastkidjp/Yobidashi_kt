@@ -161,7 +161,11 @@ internal fun ImagePreviewUi(
                             .pointerInput(Unit) {
                                 detectTapGestures(
                                     onPress = { /* Called when the gesture starts */ },
-                                    onDoubleTap = { viewModel.zoom(it) },
+                                    onDoubleTap = {
+                                        coroutineScope.launch {
+                                            viewModel.zoom(it)
+                                        }
+                                    },
                                     onLongPress = { },
                                     onTap = { /* Called on Tap */ }
                                 )
@@ -210,7 +214,9 @@ internal fun ImagePreviewUi(
                                                     zoomChange != 1f ||
                                                     panChange != Offset.Zero
                                                 ) {
-                                                    viewModel.onGesture(panChange, zoomChange, rotationChange)
+                                                    coroutineScope.launch {
+                                                        viewModel.onGesture(panChange, zoomChange, rotationChange)
+                                                    }
                                                 }
                                                 event.changes.fastForEach {
                                                     if (it.positionChanged() && viewModel.outOfRange(panChange).not() && viewModel.currentScale() != 1f) {
@@ -444,7 +450,9 @@ internal fun ImagePreviewUi(
     }
 
     LaunchedEffect(viewModel.pagerState().currentPage) {
-        viewModel.resetStates()
+        coroutineScope.launch {
+            viewModel.resetStates()
+        }
     }
 
     BackHandler(viewModel.openMenu.value) {
