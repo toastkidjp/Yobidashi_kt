@@ -221,9 +221,6 @@ internal fun ImagePreviewUi(
                                                 event.changes.fastForEach {
                                                     if (it.positionChanged() && viewModel.outOfRange(panChange).not() && viewModel.currentScale() != 1f) {
                                                         it.consume()
-                                                        coroutineScope.launch {
-                                                            viewModel.pagerState().scrollBy(-viewModel.pagerState().currentPageOffsetFraction)
-                                                        }
                                                     }
                                                 }
                                             }
