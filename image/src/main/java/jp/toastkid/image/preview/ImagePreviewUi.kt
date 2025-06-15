@@ -108,12 +108,6 @@ internal fun ImagePreviewUi(
 
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(viewModel.state.isTransformInProgress) {
-        coroutineScope.launch {
-            viewModel.movePageWithFraction()
-        }
-    }
-
     Box {
         HorizontalPager(
             pageSize = PageSize.Fill,
