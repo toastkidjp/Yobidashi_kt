@@ -53,13 +53,17 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     private val scale = mutableMapOf<Int, Animatable<Float, AnimationVector1D>>()
 
-    fun scale(page: Int) = if (isCurrentPage(page)) scale.getOrElse(page, { Animatable(1f) }).value else 1f
+    fun scale(page: Int) = scale.getOrElse(page, { Animatable(1f) }).value
 
     fun currentScale() = scale.getOrElse(pagerState.currentPage, { Animatable(1f) }).value
 
     fun clearPreviousState() {
-        if (pagerState.currentPage != pagerState.settledPage) {
-            scale.remove(pagerState.settledPage)
+        val iterator = scale.iterator()
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            if (entry.key != pagerState.currentPage) {
+                iterator.remove()
+            }
         }
     }
 
@@ -169,7 +173,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         /*if (currentScale() != 1f) {
             scale.snapTo(1f)
         }*/
-        scale.put(pagerState.currentPage, Animatable(1f))
+        scale.put(pagerState.targetPage, Animatable(1f))
         offset.value = Offset.Zero
         rotationY.floatValue = 0f
         rotationZ.value = 0f
