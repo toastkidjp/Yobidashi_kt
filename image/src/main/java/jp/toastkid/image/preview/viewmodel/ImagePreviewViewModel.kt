@@ -91,7 +91,14 @@ class ImagePreviewViewModel(initialPage: Int) {
     suspend fun onGesture(offsetChange: Offset, zoomChange: Float, rotationChange: Float) {
         rotationZ.value += rotationChange
         scale.snapTo(scale.value * zoomChange)
-        offset.value += offsetChange
+        val absX = abs(offsetChange.x)
+        val absY = abs(offsetChange.y)
+        offset.value += when {
+            scale.value != 1f -> offsetChange
+            absX > absY -> Offset(offsetChange.x, 0f)
+            absY > absX -> Offset(0f, offsetChange.y)
+            else -> Offset(offsetChange.x, 0f)
+        }
     }
 
     val alphaSliderPosition = mutableStateOf(0f)
