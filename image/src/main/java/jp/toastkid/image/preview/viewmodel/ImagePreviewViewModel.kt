@@ -45,19 +45,31 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     private val previewImageStateHolder = mutableMapOf<Int, PreviewImageState>()
 
-    fun getPreviewImageState(page: Int) =
-        previewImageStateHolder.getOrElse(page, { PreviewImageState() })
+    fun getPreviewImageState(page: Int): PreviewImageState {
+        val imageState = previewImageStateHolder.get(page)
+        if (imageState != null) {
+            return imageState
+        }
+
+        val newState = PreviewImageState()
+        previewImageStateHolder.put(page, newState)
+        return newState
+    }
 
     fun scale(page: Int) = getPreviewImageState(page).scale()
 
     fun currentScale() = getPreviewImageState(pagerState.currentPage).scale()
 
     fun clearPreviousState() {
-        val iterator = previewImageStateHolder.iterator()
-        while (iterator.hasNext()) {
-            val entry = iterator.next()
-            if (entry.key != pagerState.currentPage) {
-                iterator.remove()
+        val page = pagerState.currentPage
+        if (previewImageStateHolder.size > 3) {
+            val keepIndices = arrayOf(page - 1, page, page + 1)
+            val iterator = previewImageStateHolder.keys.iterator()
+            while (iterator.hasNext()) {
+                val index = iterator.next()
+                if (keepIndices.contains(index).not()) {
+                    iterator.remove()
+                }
             }
         }
     }
@@ -71,7 +83,8 @@ class ImagePreviewViewModel(initialPage: Int) {
     fun rotationZ(page: Int) = getPreviewImageState(page).rotationZ()
 
     fun offset(page: Int): IntOffset {
-        if (page != pagerState.currentPage) {
+        val range = arrayOf(pagerState.currentPage -1, pagerState.currentPage, pagerState.currentPage + 1)
+        if (range.contains(page).not()) {
             return@offset IntOffset.Zero
         }
 
@@ -182,7 +195,6 @@ class ImagePreviewViewModel(initialPage: Int) {
     private val painterSize = mutableStateOf(Size.Zero)
 
     fun setPainterSize(intrinsicSize: Size) {
-        previewImageStateHolder.set(pagerState.currentPage, PreviewImageState())
         this.painterSize.value = intrinsicSize
     }
 
