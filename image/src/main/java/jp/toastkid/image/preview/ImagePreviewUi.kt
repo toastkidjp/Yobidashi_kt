@@ -14,7 +14,6 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateCentroid
@@ -315,7 +314,7 @@ internal fun ImagePreviewUi(
                             tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.clickable {
                                 coroutineScope.launch {
-                                    viewModel.state.animateRotateBy(-90f)
+                                    viewModel.rotateLeft()
                                 }
                             }
                         )
@@ -326,7 +325,7 @@ internal fun ImagePreviewUi(
                             modifier = Modifier
                                 .clickable {
                                     coroutineScope.launch {
-                                        viewModel.state.animateRotateBy(90f)
+                                        viewModel.rotateRight()
                                     }
                                 }
                                 .padding(start = 16.dp)
