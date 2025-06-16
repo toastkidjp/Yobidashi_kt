@@ -164,18 +164,6 @@ class ImagePreviewViewModel(initialPage: Int) {
             }
     }
 
-    fun resetStates() {
-        //previewImageStateHolder.set(pagerState.targetPage, PreviewImageState())
-        /*if (currentScale() != 1f) {
-            scale.snapTo(1f)
-        }
-        scale.put(pagerState.targetPage, Animatable(1f))
-        offset.value = Offset.Zero
-        rotationY.floatValue = 0f
-        rotationZ.snapTo(0f)
-         */
-    }
-
     fun sharedElementKey(page: Int): String {
         return "image_${
             getImage(page).path + if (pagerState.currentPage == page) "" else "_"
