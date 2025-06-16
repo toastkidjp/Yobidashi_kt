@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.toSize
-import androidx.lifecycle.AtomicReference
 import jp.toastkid.image.Image
 import kotlin.math.abs
 import kotlin.math.max
