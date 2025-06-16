@@ -92,7 +92,7 @@ class ImagePreviewViewModel(initialPage: Int) {
     }
 
     suspend fun onGesture(offsetChange: Offset, zoomChange: Float, rotationChange: Float) {
-        rotationZ.animateTo(rotationZ.value + rotationChange)
+        rotationZ.snapTo(rotationZ.value + rotationChange)
         val scale = this.scale.getOrElse(pagerState.currentPage, { Animatable(1f) })
         scale.snapTo(scale.value * zoomChange)
         val absX = abs(offsetChange.x)
