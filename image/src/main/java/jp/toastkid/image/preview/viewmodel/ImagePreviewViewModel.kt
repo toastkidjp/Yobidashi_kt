@@ -31,8 +31,6 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     fun pagerState(): PagerState = pagerState
 
-    private fun isCurrentPage(page: Int) = page == pagerState.currentPage
-
     private val images = mutableStateListOf<Image>()
 
     private fun pageCount() = images.size
