@@ -453,7 +453,7 @@ internal fun ImagePreviewUi(
         )
     }
 
-    LaunchedEffect(viewModel.pagerState().currentPage) {
+    LaunchedEffect(viewModel.pagerState().targetPage) {
         coroutineScope.launch {
             viewModel.resetStates()
         }
