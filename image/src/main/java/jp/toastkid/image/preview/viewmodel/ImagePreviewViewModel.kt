@@ -10,7 +10,6 @@ package jp.toastkid.image.preview.viewmodel
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.mutableFloatStateOf
@@ -90,13 +89,6 @@ class ImagePreviewViewModel(initialPage: Int) {
             offset.value.x.coerceIn(-currentPainterSize.width, currentPainterSize.width).toInt(),
             offset.value.y.coerceIn(-currentPainterSize.height, currentPainterSize.height).toInt()
         )
-    }
-
-    // TODO Delete it
-    val state = TransformableState { zoomChange, offsetChange, rotationChange ->
-        //rotationZ.rotationZ.value + rotationChange
-        //scale.snapTo(scale.value * zoomChange)
-        offset.value += offsetChange
     }
 
     suspend fun onGesture(offsetChange: Offset, zoomChange: Float, rotationChange: Float) {
