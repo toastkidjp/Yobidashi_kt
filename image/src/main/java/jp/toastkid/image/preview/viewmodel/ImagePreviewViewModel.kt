@@ -74,7 +74,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         rotationY.value = if (rotationY.value == 0f) 180f else 0f
     }
 
-    private val rotationZ = mutableFloatStateOf(0f)
+    private val rotationZ = Animatable(0f)
 
     fun rotationZ(page: Int) = if (isCurrentPage(page)) rotationZ.value else 0f
 
@@ -94,13 +94,13 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     // TODO Delete it
     val state = TransformableState { zoomChange, offsetChange, rotationChange ->
-        rotationZ.value += rotationChange
+        //rotationZ.rotationZ.value + rotationChange
         //scale.snapTo(scale.value * zoomChange)
         offset.value += offsetChange
     }
 
     suspend fun onGesture(offsetChange: Offset, zoomChange: Float, rotationChange: Float) {
-        rotationZ.value += rotationChange
+        rotationZ.animateTo(rotationZ.value + rotationChange)
         val scale = this.scale.getOrElse(pagerState.currentPage, { Animatable(1f) })
         scale.snapTo(scale.value * zoomChange)
         val absX = abs(offsetChange.x)
@@ -131,6 +131,14 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     fun closeDialog() {
         openDialog.value = false
+    }
+
+    suspend fun rotateLeft() {
+        rotationZ.animateTo(rotationZ.value - 90f)
+    }
+
+    suspend fun rotateRight() {
+        rotationZ.animateTo(rotationZ.value + 90f)
     }
 
     fun updateColorFilter() {
@@ -175,7 +183,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         scale.put(pagerState.targetPage, Animatable(1f))
         offset.value = Offset.Zero
         rotationY.floatValue = 0f
-        rotationZ.value = 0f
+        rotationZ.snapTo(0f)
     }
 
     fun sharedElementKey(page: Int): String {
@@ -207,7 +215,7 @@ class ImagePreviewViewModel(initialPage: Int) {
 
         if (unset) {
             rotationY.floatValue = 0f
-            rotationZ.value = 0f
+            rotationZ.snapTo(0f)
             this.offset.value = Offset.Zero
             scale.get(pagerState.currentPage)?.animateTo(1f)
             return
