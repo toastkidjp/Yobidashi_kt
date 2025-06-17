@@ -72,4 +72,10 @@ class PreviewImageState {
         scale.animateTo(newScale)
     }
 
+    suspend fun reset() {
+        scale.snapTo(1f)
+        offset.value = Offset.Zero
+        rotationZ.snapTo(0f)
+    }
+
 }
