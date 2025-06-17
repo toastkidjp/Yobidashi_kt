@@ -16,7 +16,6 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.calculateCentroid
 import androidx.compose.foundation.gestures.calculateCentroidSize
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateRotation
@@ -203,8 +202,6 @@ internal fun ImagePreviewUi(
                                             }
 
                                             if (pastTouchSlop) {
-                                                val centroid =
-                                                    event.calculateCentroid(useCurrent = false)
                                                 val effectiveRotation =
                                                     if (lockedToPanZoom) 0f else rotationChange
                                                 if (effectiveRotation != 0f ||
