@@ -25,7 +25,7 @@ import kotlin.math.max
 
 class ImagePreviewViewModel(initialPage: Int) {
 
-    private val pagerState = PagerState(initialPage, 0f) { pageCount() }
+    private val pagerState = PagerState(initialPage, 0f, ::pageCount)
 
     fun pagerState(): PagerState = pagerState
 
