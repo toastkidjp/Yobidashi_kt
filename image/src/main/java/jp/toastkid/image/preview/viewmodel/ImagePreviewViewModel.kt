@@ -60,14 +60,20 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     fun currentScale() = getPreviewImageState(pagerState.currentPage).scale()
 
-    fun clearPreviousState() {
+    suspend fun clearPreviousState() {
         val page = pagerState.currentPage
         if (previewImageStateHolder.size > 3) {
+            val keepIndices = arrayOf(page - 1, page, page + 1)
             val iterator = previewImageStateHolder.entries.iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next()
-                if (entry.key != page) {
+                val index = entry.key
+                if (keepIndices.contains(index).not()) {
                     iterator.remove()
+                    continue
+                }
+                if (index != page) {
+                    entry.value.reset()
                 }
             }
         }
