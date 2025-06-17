@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -36,6 +37,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -75,12 +77,21 @@ fun ImageListUi() {
 
     val backHandlerState = remember { mutableStateOf(false) }
 
+    val index = remember { mutableIntStateOf(-1) }
+    val listState = rememberLazyGridState()
+    val coroutineScope = rememberCoroutineScope()
+
     val imageLoaderUseCase = remember {
         ImageLoaderUseCase(
             PreferenceApplier(context),
             {
                 images.clear()
                 images.addAll(it)
+                if (backHandlerState.value.not()) {
+                    coroutineScope.launch {
+                        listState.scrollToItem(0)
+                    }
+                }
             },
             BucketLoader(context.contentResolver),
             ImageLoader(context.contentResolver),
@@ -138,8 +149,6 @@ fun ImageListUi() {
         }
     }
 
-    val index = remember { mutableIntStateOf(-1) }
-
     SharedTransitionLayout {
         AnimatedContent(
             preview.value,
@@ -156,6 +165,7 @@ fun ImageListUi() {
                 ImageListUi(
                     imageLoaderUseCase,
                     images,
+                    listState,
                     {
                         index.intValue = it
                         preview.value = true
@@ -183,13 +193,13 @@ fun ImageListUi() {
 internal fun ImageListUi(
     imageLoaderUseCase: ImageLoaderUseCase,
     images: List<Image>,
+    listState: LazyGridState,
     showPreview: (Int) -> Unit,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val context = LocalContext.current
     val preferenceApplier = remember { PreferenceApplier(context) }
-    val listState = rememberLazyGridState()
 
     LazyVerticalGrid(
         state = listState,
