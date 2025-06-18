@@ -18,7 +18,7 @@ class PreviewImageState {
     fun rotationY() = rotationY.floatValue
 
     fun flip() {
-        rotationY.value = if (rotationY.value == 0f) 180f else 0f
+        rotationY.floatValue = if (rotationY.value == 0f) 180f else 0f
     }
 
     private val rotationZ = Animatable(0f)
