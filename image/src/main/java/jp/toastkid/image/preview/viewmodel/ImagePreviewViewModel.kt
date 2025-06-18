@@ -45,7 +45,7 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     private val previewImageStateHolder = mutableMapOf<Int, PreviewImageState>()
 
-    fun getPreviewImageState(page: Int): PreviewImageState {
+    private fun getPreviewImageState(page: Int): PreviewImageState {
         val imageState = previewImageStateHolder.get(page)
         if (imageState != null) {
             return imageState
