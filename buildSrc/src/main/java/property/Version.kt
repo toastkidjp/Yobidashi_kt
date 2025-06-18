@@ -3,7 +3,7 @@ package property
 object Version {
     private const val MAJOR  = 2
     private const val MIDDLE = 0
-    private const val MINOR  = 92
+    private const val MINOR  = 93
 
     init {
         if (MIDDLE >= 100 || MINOR >= 10_000) {
