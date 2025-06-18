@@ -90,7 +90,7 @@ class ImagePreviewViewModel(initialPage: Int) {
     fun offset(page: Int): IntOffset {
         val range = arrayOf(pagerState.currentPage -1, pagerState.currentPage, pagerState.currentPage + 1)
         if (range.contains(page).not()) {
-            return@offset IntOffset.Zero
+            return IntOffset.Zero
         }
 
         val currentPainterSize = painterSize.value * currentScale() / 2f
