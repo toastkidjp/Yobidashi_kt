@@ -120,6 +120,10 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     val openOtherMenu = mutableStateOf(false)
 
+    fun closeOtherMenu() {
+        openOtherMenu.value = false
+    }
+
     val openDialog = mutableStateOf(false)
 
     fun closeDialog() {
