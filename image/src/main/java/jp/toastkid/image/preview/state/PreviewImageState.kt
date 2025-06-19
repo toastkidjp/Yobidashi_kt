@@ -37,6 +37,10 @@ class PreviewImageState {
 
     fun offset() = offset.value
 
+    fun resetOffset() {
+        offset.value = Offset.Zero
+    }
+
     suspend fun onGesture(offsetChange: Offset, zoomChange: Float, rotationChange: Float) {
         rotationZ.snapTo(rotationZ.value + rotationChange)
         scale.snapTo(scale.value * zoomChange)
