@@ -391,7 +391,7 @@ internal fun ImagePreviewUi(
                                         )
                                     },
                                     onClick = {
-                                        viewModel.openOtherMenu.value = false
+                                        viewModel.closeOtherMenu()
                                         contentViewModel ?: return@DropdownMenuItem
                                         val image = viewModel.getCurrentImage()
                                         AttachToThisAppBackgroundUseCase(contentViewModel)
