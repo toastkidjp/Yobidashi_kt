@@ -381,7 +381,7 @@ internal fun ImagePreviewUi(
 
                             DropdownMenu(
                                 viewModel.openOtherMenu.value,
-                                onDismissRequest = { viewModel.openOtherMenu.value = false }
+                                onDismissRequest = { viewModel.closeOtherMenu() }
                             ) {
                                 DropdownMenuItem(
                                     text = {
