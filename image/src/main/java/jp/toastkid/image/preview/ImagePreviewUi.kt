@@ -168,7 +168,6 @@ internal fun ImagePreviewUi(
                                     var pan = Offset.Zero
                                     var pastTouchSlop = false
                                     val touchSlop = viewConfiguration.touchSlop
-                                    var lockedToPanZoom = false
 
                                     awaitFirstDown(requireUnconsumed = false)
                                     do {
@@ -196,14 +195,11 @@ internal fun ImagePreviewUi(
                                                     panMotion > touchSlop
                                                 ) {
                                                     pastTouchSlop = true
-                                                    lockedToPanZoom =
-                                                        false && rotationMotion < touchSlop
                                                 }
                                             }
 
                                             if (pastTouchSlop) {
-                                                val effectiveRotation =
-                                                    if (lockedToPanZoom) 0f else rotationChange
+                                                val effectiveRotation = rotationChange
                                                 if (effectiveRotation != 0f ||
                                                     zoomChange != 1f ||
                                                     panChange != Offset.Zero
