@@ -406,7 +406,7 @@ internal fun ImagePreviewUi(
                                         )
                                     },
                                     onClick = {
-                                        viewModel.openOtherMenu.value = false
+                                        viewModel.closeOtherMenu()
                                         contentViewModel ?: return@DropdownMenuItem
                                         AttachToAnyAppUseCase(context::startActivity)
                                             .invoke(context, BitmapFactory.decodeFile(viewModel.getCurrentImage().path))
