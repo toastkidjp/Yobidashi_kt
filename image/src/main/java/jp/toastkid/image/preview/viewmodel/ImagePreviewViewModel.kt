@@ -103,7 +103,8 @@ class ImagePreviewViewModel(initialPage: Int) {
     }
 
     suspend fun onGesture(offsetChange: Offset, zoomChange: Float, rotationChange: Float) {
-        getPreviewImageState(pagerState.currentPage).onGesture(offsetChange, zoomChange, rotationChange)
+        val newOffsetChange = if (outOfRange(offsetChange)) Offset.Zero else offsetChange
+        getPreviewImageState(pagerState.currentPage).onGesture(newOffsetChange, zoomChange, rotationChange)
     }
 
     val alphaSliderPosition = mutableStateOf(0f)
@@ -203,9 +204,10 @@ class ImagePreviewViewModel(initialPage: Int) {
     fun outOfRange(panChange: Offset): Boolean {
         val currentScale = currentScale()
         val range = painterSize.value / currentScale
-        val rangeLeft = (range.width / (currentScale + 1f))
+        val rangeLeft = (range.width)// / (currentScale + 1f))
         val rangeRight = rangeLeft * -1
         val x = getPreviewImageState(pagerState.currentPage).offset().x
+        val y = getPreviewImageState(pagerState.currentPage).offset().y
         if (panChange.x < 0 && x < 0 && rangeRight > x) {
             return true
         }
@@ -220,6 +222,10 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     suspend fun resetPagerScrollState() {
         pagerState.scrollBy(pagerState.currentPageOffsetFraction)
+    }
+
+    fun resetOffset() {
+        getPreviewImageState(pagerState.currentPage).resetOffset()
     }
 
 }
