@@ -59,7 +59,6 @@ fun RssReaderListUi() {
     val listState = rememberLazyListState()
 
     LazyColumn(state = listState) {
-        println("items ${items.size}")
         items(items, { it.title + it.link + it.source }) {
             Surface(
                 modifier = Modifier
