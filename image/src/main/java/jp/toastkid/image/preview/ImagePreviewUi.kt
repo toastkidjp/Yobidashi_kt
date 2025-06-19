@@ -199,8 +199,7 @@ internal fun ImagePreviewUi(
                                             }
 
                                             if (pastTouchSlop) {
-                                                val effectiveRotation = rotationChange
-                                                if (effectiveRotation != 0f ||
+                                                if (rotationChange != 0f ||
                                                     zoomChange != 1f ||
                                                     panChange != Offset.Zero
                                                 ) {
