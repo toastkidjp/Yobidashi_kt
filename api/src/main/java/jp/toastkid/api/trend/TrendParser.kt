@@ -16,6 +16,8 @@ import timber.log.Timber
  */
 class TrendParser {
 
+    private val xmlParser = Parser.xmlParser()
+
     operator fun invoke(content: String): List<Trend> =
             parseContent(content)
                     ?.select("channel > item")
@@ -29,7 +31,6 @@ class TrendParser {
                     ?: emptyList()
 
     private fun parseContent(content: String) = try {
-        val xmlParser = Parser.xmlParser()
         Jsoup.parse(content, "", xmlParser)
     } catch (e: Throwable) {
         Timber.e(e)
