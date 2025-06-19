@@ -54,7 +54,7 @@ fun ConverterToolUi() {
             }
 
 
-            TwoValueConverterBox(converters[currentIndex.value])
+            TwoValueConverterBox(converters[currentIndex.intValue])
         }
     }
 }
