@@ -57,7 +57,7 @@ internal fun LicensesUi(licenses: List<License>) {
                         .padding(8.dp)
                         .padding(bottom = 8.dp)
                         .clickable {
-                            lineCount.intValue = if (lineCount.value == 3) 1000 else 3
+                            lineCount.intValue = if (lineCount.intValue == 3) 1000 else 3
                         })
                 InsetDivider()
             }
