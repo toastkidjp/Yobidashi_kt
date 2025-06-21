@@ -415,6 +415,18 @@ internal fun ImagePreviewUi(
                             }
                         }
 
+
+                        Icon(
+                            painterResource(id = jp.toastkid.lib.R.drawable.ic_remove_circle),
+                            contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier
+                                .clickable {
+                                    viewModel.resetImageCondition()
+                                }
+                                .padding(start = 16.dp)
+                        )
+
                         Icon(
                             painterResource(id = R.drawable.ic_info_white),
                             contentDescription = stringResource(R.string.content_description_information),
