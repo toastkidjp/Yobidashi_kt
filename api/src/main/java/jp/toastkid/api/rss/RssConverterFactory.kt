@@ -19,9 +19,9 @@ import java.lang.reflect.Type
 class RssConverterFactory private constructor(): Converter.Factory() {
 
     override fun responseBodyConverter(
-            type: Type?,
-            annotations: Array<Annotation>?,
-            retrofit: Retrofit?
+            type: Type,
+            annotations: Array<Annotation>,
+            retrofit: Retrofit
     ): Converter<ResponseBody, *> = RssResponseConverter(Parser())
 
     companion object {
