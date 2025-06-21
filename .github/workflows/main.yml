@@ -122,7 +122,7 @@ jobs:
         if: ${{ success() }}
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ needs.release.outputs.release_tag }}
+          RELEASE_TAG: ${{ needs.draft.outputs.release_tag }}
         run: |
           tag_title=$RELEASE_TAG
           gh release upload ${tag_title} app/build/outputs/apk/release/*.apk --clobber
