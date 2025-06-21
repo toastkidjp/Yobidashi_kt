@@ -141,7 +141,7 @@ class ImagePreviewViewModel(initialPage: Int) {
     }
 
     fun updateColorFilter() {
-        val v = max(contrastSliderPosition.value, 0f) + 1f * (if (reverse.value) -1 else 1)
+        val v = max(contrastSliderPosition.floatValue, 0f) + 1f * (if (reverse.value) -1 else 1)
         val o = -128 * (v - 1)
         val colorMatrix = ColorMatrix(
             floatArrayOf(
