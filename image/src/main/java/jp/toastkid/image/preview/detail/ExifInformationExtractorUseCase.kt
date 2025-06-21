@@ -14,7 +14,7 @@ class ExifInformationExtractorUseCase(
         private val stringBuilder: StringBuilder = StringBuilder()
 ) {
     
-    operator fun invoke(exifInterface: ExifInterface): String? {
+    operator fun invoke(exifInterface: ExifInterface): String {
         stringBuilder.append("Size:")
         stringBuilder.append(exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH))
         stringBuilder.append(" x ")
