@@ -145,7 +145,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         val o = -128 * (v - 1)
         val colorMatrix = ColorMatrix(
             floatArrayOf(
-                v, 0f, 0f, alphaSliderPosition.value, o,
+                v, 0f, 0f, alphaSliderPosition.floatValue, o,
                 0f, v, 0f, alphaSliderPosition.value, o,
                 0f, 0f, v, alphaSliderPosition.value, o,
                 0f, 0f, 0f, 1f, 000f
