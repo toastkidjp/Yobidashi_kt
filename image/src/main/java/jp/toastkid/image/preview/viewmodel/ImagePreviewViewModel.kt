@@ -229,6 +229,12 @@ class ImagePreviewViewModel(initialPage: Int) {
         getPreviewImageState(pagerState.currentPage).resetOffset()
     }
 
+    fun resetImageCondition() {
+        colorFilterState.value = null
+        alphaSliderPosition.value = 0f
+        contrastSliderPosition.value = 0f
+    }
+
 }
 
 private const val snapPositionalThreshold = 0.2f
