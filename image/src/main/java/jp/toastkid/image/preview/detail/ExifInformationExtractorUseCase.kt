@@ -15,11 +15,14 @@ class ExifInformationExtractorUseCase(
 ) {
     
     operator fun invoke(exifInterface: ExifInterface): String {
-        stringBuilder.append("Size:")
-        stringBuilder.append(exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH))
-        stringBuilder.append(" x ")
-        stringBuilder.append(exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH))
-        stringBuilder.append(System.lineSeparator())
+        val widthString = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH)
+        if (widthString != null && widthString != "0") {
+            stringBuilder.append("Size:")
+            stringBuilder.append(widthString)
+            stringBuilder.append(" x ")
+            stringBuilder.append(exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH))
+            stringBuilder.append(System.lineSeparator())
+        }
 
         TARGET_TAGS.forEach { extractAttribute(exifInterface, it) }
 
