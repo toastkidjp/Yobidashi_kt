@@ -15,6 +15,12 @@ class ExifInformationExtractorUseCase(
 ) {
     
     operator fun invoke(exifInterface: ExifInterface): String? {
+        stringBuilder.append("Size:")
+        stringBuilder.append(exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH))
+        stringBuilder.append(" x ")
+        stringBuilder.append(exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH))
+        stringBuilder.append(System.lineSeparator())
+
         TARGET_TAGS.forEach { extractAttribute(exifInterface, it) }
 
         val content = stringBuilder.toString()
@@ -54,7 +60,9 @@ class ExifInformationExtractorUseCase(
                 ExifInterface.TAG_SHARPNESS,
                 ExifInterface.TAG_SOFTWARE,
                 ExifInterface.TAG_ORIENTATION,
-                ExifInterface.TAG_IMAGE_DESCRIPTION
+                ExifInterface.TAG_IMAGE_DESCRIPTION,
+            ExifInterface.TAG_DEFAULT_CROP_SIZE,
+
         )
 
     }
