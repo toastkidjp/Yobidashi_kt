@@ -48,7 +48,7 @@ jobs:
         shell: bash
 
   build:
-    needs: release
+    needs: draft
     strategy:
       matrix:
         os: [ubuntu-latest]
