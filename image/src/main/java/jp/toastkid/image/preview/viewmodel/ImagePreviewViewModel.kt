@@ -110,7 +110,7 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     val alphaSliderPosition = mutableFloatStateOf(0f)
 
-    val contrastSliderPosition = mutableStateOf(0f)
+    val contrastSliderPosition = mutableFloatStateOf(0f)
 
     val saturation = mutableStateOf(false)
 
