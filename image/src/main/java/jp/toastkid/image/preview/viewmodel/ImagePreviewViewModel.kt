@@ -205,7 +205,7 @@ class ImagePreviewViewModel(initialPage: Int) {
     fun outOfRange(panChange: Offset): Boolean {
         val currentScale = currentScale()
         val range = painterSize.value / currentScale
-        val rangeLeft = (range.width)
+        val rangeLeft = range.width
         val rangeRight = rangeLeft * -1
         val x = getPreviewImageState(pagerState.currentPage).offset().x
         val y = getPreviewImageState(pagerState.currentPage).offset().y
