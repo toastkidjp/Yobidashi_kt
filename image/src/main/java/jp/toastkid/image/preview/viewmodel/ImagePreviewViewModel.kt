@@ -10,6 +10,7 @@ package jp.toastkid.image.preview.viewmodel
 
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
@@ -107,7 +108,7 @@ class ImagePreviewViewModel(initialPage: Int) {
         getPreviewImageState(pagerState.currentPage).onGesture(newOffsetChange, zoomChange, rotationChange)
     }
 
-    val alphaSliderPosition = mutableStateOf(0f)
+    val alphaSliderPosition = mutableFloatStateOf(0f)
 
     val contrastSliderPosition = mutableStateOf(0f)
 
