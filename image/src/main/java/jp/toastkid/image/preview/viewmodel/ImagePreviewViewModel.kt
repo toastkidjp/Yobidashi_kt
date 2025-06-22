@@ -225,10 +225,6 @@ class ImagePreviewViewModel(initialPage: Int) {
         pagerState.scrollBy(pagerState.currentPageOffsetFraction)
     }
 
-    fun resetOffset() {
-        getPreviewImageState(pagerState.currentPage).resetOffset()
-    }
-
     fun resetImageCondition() {
         colorFilterState.value = null
         alphaSliderPosition.value = 0f
