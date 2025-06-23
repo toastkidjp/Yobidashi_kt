@@ -73,11 +73,6 @@ fun AboutThisAppUi(versionName: String) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .clickable(onClick = {
-                        val packageName =
-                            context.applicationContext?.packageName ?: return@clickable
-                        context.startActivity(GooglePlayIntentFactory()(packageName))
-                    })
                     .padding(start = 16.dp, end = 16.dp)
             ) {
                 WithIcon(
