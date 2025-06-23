@@ -8,9 +8,11 @@
 
 package jp.toastkid.converter.presentation.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,14 +22,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.converter.domain.model.TwoStringConverter
+import jp.toastkid.lib.clip.Clipboard
 
 @Composable
 fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverter) {
+    val context = LocalContext.current
+
     Surface(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.75f),
         shadowElevation = 4.dp
@@ -49,6 +58,15 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverter) {
                             ?.let { newValue ->
                                 secondInput.value = TextFieldValue(newValue)
                             }
+                    },
+                    trailingIcon = {
+                        Icon(
+                            painterResource(jp.toastkid.lib.R.drawable.ic_clip),
+                            contentDescription = stringResource(jp.toastkid.lib.R.string.clip),
+                            Modifier.clickable {
+                                Clipboard.clip(context, firstInput.value.text)
+                            }
+                        )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
