@@ -100,18 +100,17 @@ fun AboutThisAppUi(versionName: String) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .clickable(onClick = {
+                    .padding(start = 16.dp, end = 16.dp)
+            ) {
+                WithIcon(
+                    R.string.privacy_policy,
+                    {
                         ViewModelProvider(context).get(ContentViewModel::class.java).open(
                             context
                                 .getString(R.string.link_privacy_policy)
                                 .toUri()
                         )
-                    })
-                    .padding(start = 16.dp, end = 16.dp)
-            ) {
-                WithIcon(
-                    R.string.privacy_policy,
-                    {},
+                    },
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_privacy
                 )
