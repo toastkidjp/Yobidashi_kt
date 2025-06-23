@@ -407,7 +407,7 @@ internal fun WebSettingUi() {
             }
 
             item {
-                TextMenu(R.string.title_clear_coolie) {
+                SingleLineText(R.string.title_clear_coolie) {
                     CookieManager.getInstance().removeAllCookies {
                         contentViewModel?.snackShort(jp.toastkid.lib.R.string.done_clear)
                     }
