@@ -43,6 +43,7 @@ import jp.toastkid.lib.intent.GooglePlayIntentFactory
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.licence.usecase.LoadLicenseUseCase
 import jp.toastkid.ui.parts.InsetDivider
+import jp.toastkid.ui.parts.WithIcon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -108,14 +109,11 @@ fun AboutThisAppUi(versionName: String) {
                     })
                     .padding(start = 16.dp, end = 16.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_privacy),
-                    tint = MaterialTheme.colorScheme.secondary,
-                    contentDescription = stringResource(R.string.privacy_policy)
-                )
-                Text(
-                    text = stringResource(R.string.privacy_policy),
-                    fontSize = 16.sp
+                WithIcon(
+                    R.string.privacy_policy,
+                    {},
+                    MaterialTheme.colorScheme.secondary,
+                    R.drawable.ic_privacy
                 )
             }
 
