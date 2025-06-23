@@ -396,7 +396,7 @@ internal fun WebSettingUi() {
             }
 
             item {
-                TextMenu(R.string.title_clear_form_data) {
+                SingleLineText(R.string.title_clear_form_data) {
                     WebView(activityContext).clearFormData()
                     contentViewModel?.snackShort(jp.toastkid.lib.R.string.done_clear)
                 }
