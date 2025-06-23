@@ -49,6 +49,7 @@ import jp.toastkid.setting.R
 import jp.toastkid.setting.presentation.CheckableRow
 import jp.toastkid.setting.presentation.TextMenu
 import jp.toastkid.ui.parts.InsetDivider
+import jp.toastkid.ui.parts.SingleLineText
 import jp.toastkid.web.user_agent.UserAgentDropdown
 import kotlin.math.roundToInt
 
@@ -384,7 +385,7 @@ internal fun WebSettingUi() {
             }
 
             item {
-                TextMenu(R.string.title_clear_cache) {
+                SingleLineText(R.string.title_clear_cache) {
                     WebView(activityContext).clearCache(true)
                     contentViewModel?.snackShort(jp.toastkid.lib.R.string.done_clear)
                 }
