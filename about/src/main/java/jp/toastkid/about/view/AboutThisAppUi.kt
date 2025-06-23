@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -82,14 +80,15 @@ fun AboutThisAppUi(versionName: String) {
                     })
                     .padding(start = 16.dp, end = 16.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_store_black),
-                    tint = MaterialTheme.colorScheme.secondary,
-                    contentDescription = stringResource(R.string.title_go_google_play)
-                )
-                Text(
-                    text = stringResource(R.string.title_go_google_play),
-                    fontSize = 16.sp
+                WithIcon(
+                    R.string.title_go_google_play,
+                    {
+                        val packageName =
+                            context.applicationContext?.packageName ?: return@WithIcon
+                        context.startActivity(GooglePlayIntentFactory()(packageName))
+                    },
+                    MaterialTheme.colorScheme.secondary,
+                    R.drawable.ic_store_black
                 )
             }
 
