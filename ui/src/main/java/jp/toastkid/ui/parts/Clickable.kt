@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,15 +40,13 @@ fun SingleLineText(
 @Composable
 fun WithIcon(
     textId: Int,
-    clickable: () -> Unit,
-    iconTint: Color,
-    iconId: Int
+    iconId: Int,
+    modifier: Modifier = Modifier,
+    iconTint: Color = MaterialTheme.colorScheme.secondary,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable(onClick = clickable)
-            .padding(16.dp)
+        modifier = modifier.padding(16.dp)
     ) {
         Icon(
             painterResource(id = iconId),
