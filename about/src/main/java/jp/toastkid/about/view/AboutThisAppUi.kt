@@ -129,14 +129,13 @@ fun AboutThisAppUi(versionName: String) {
                     })
                     .padding(start = 16.dp, end = 16.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_license_black),
-                    tint = MaterialTheme.colorScheme.secondary,
-                    contentDescription = stringResource(R.string.title_licenses)
-                )
-                Text(
-                    text = stringResource(R.string.title_licenses),
-                    fontSize = 16.sp
+                WithIcon(
+                    R.string.title_licenses,
+                    {
+                        openLicense.value = true
+                    },
+                    MaterialTheme.colorScheme.secondary,
+                    R.drawable.ic_license_black
                 )
             }
 
