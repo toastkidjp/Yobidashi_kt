@@ -124,9 +124,6 @@ fun AboutThisAppUi(versionName: String) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .clickable(onClick = {
-                        openLicense.value = true
-                    })
                     .padding(start = 16.dp, end = 16.dp)
             ) {
                 WithIcon(
