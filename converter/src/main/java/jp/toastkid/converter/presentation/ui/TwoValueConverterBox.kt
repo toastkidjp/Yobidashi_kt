@@ -82,6 +82,15 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverter) {
                         unixTimeConverterService.secondInputAction(secondInput.value.text)?.let { newInput ->
                             firstInput.value = TextFieldValue(newInput)
                         }
+                    },
+                    trailingIcon = {
+                        Icon(
+                            painterResource(jp.toastkid.lib.R.drawable.ic_clip),
+                            contentDescription = stringResource(jp.toastkid.lib.R.string.clip),
+                            Modifier.clickable {
+                                Clipboard.clip(context, secondInput.value.text)
+                            }
+                        )
                     }
                 )
             }
