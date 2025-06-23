@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -68,66 +67,51 @@ fun AboutThisAppUi(versionName: String) {
 
             InsetDivider()
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
+            WithIcon(
+                R.string.title_go_google_play,
+                R.drawable.ic_store_black,
+                Modifier
                     .fillMaxWidth()
                     .height(56.dp)
                     .padding(start = 16.dp, end = 16.dp)
-            ) {
-                WithIcon(
-                    R.string.title_go_google_play,
-                    {
+                    .clickable {
                         val packageName =
-                            context.applicationContext?.packageName ?: return@WithIcon
+                            context.applicationContext?.packageName ?: return@clickable
                         context.startActivity(GooglePlayIntentFactory()(packageName))
-                    },
-                    MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_store_black
-                )
-            }
+                    }
+            )
 
             InsetDivider()
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
+            WithIcon(
+                R.string.privacy_policy,
+                R.drawable.ic_privacy,
+                Modifier
                     .fillMaxWidth()
                     .height(56.dp)
                     .padding(start = 16.dp, end = 16.dp)
-            ) {
-                WithIcon(
-                    R.string.privacy_policy,
-                    {
+                    .clickable {
                         ViewModelProvider(context).get(ContentViewModel::class.java).open(
                             context
                                 .getString(R.string.link_privacy_policy)
                                 .toUri()
                         )
-                    },
-                    MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_privacy
-                )
-            }
+                    }
+            )
 
             InsetDivider()
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
+            WithIcon(
+                R.string.title_licenses,
+                R.drawable.ic_license_black,
+                Modifier
                     .fillMaxWidth()
                     .height(56.dp)
                     .padding(start = 16.dp, end = 16.dp)
-            ) {
-                WithIcon(
-                    R.string.title_licenses,
-                    {
+                    .clickable {
                         openLicense.value = true
-                    },
-                    MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_license_black
-                )
-            }
+                    }
+            )
 
             InsetDivider()
 
