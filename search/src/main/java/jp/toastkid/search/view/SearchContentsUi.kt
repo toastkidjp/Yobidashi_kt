@@ -116,7 +116,7 @@ internal fun SearchContentsUi(
             }
         }
 
-        if (viewModel.favoriteSearchItems.isNotEmpty()) {
+        if (viewModel.enableFavoriteSearchItems()) {
             HeaderWithLink(
                 R.string.title_favorite_search,
                 jp.toastkid.lib.R.string.open
@@ -127,7 +127,7 @@ internal fun SearchContentsUi(
             val favoriteSearchRepository =
                 remember { RepositoryFactory().favoriteSearchRepository(context) }
 
-            viewModel.favoriteSearchItems.take(5).forEach { favoriteSearch ->
+            viewModel.favoriteSearchItems().forEach { favoriteSearch ->
                 SearchItemContent(
                     favoriteSearch.query,
                     favoriteSearch.category,
@@ -141,7 +141,7 @@ internal fun SearchContentsUi(
                     },
                     {
                         favoriteSearchRepository.delete(favoriteSearch)
-                        viewModel.favoriteSearchItems.remove(favoriteSearch)
+                        viewModel.removeFavoriteSearchItems(favoriteSearch)
                     }
                 )
             }
