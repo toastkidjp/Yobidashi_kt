@@ -439,6 +439,7 @@ internal fun Content() {
 
     Box(
         modifier = Modifier.fillMaxSize()
+            .drawBehind { drawRect(statusBarColor) }
     ) {
         EfficientImage(
             contentViewModel.backgroundImagePath.value,
@@ -507,7 +508,6 @@ internal fun Content() {
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(nestedScrollConnection)
-                .drawBehind { drawRect(statusBarColor) }
                 .windowInsetsPadding(WindowInsets.safeDrawing)
         ) { _ ->
             Box {
