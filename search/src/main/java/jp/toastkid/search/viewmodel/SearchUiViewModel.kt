@@ -56,7 +56,22 @@ class SearchUiViewModel(
 
     val suggestions = mutableStateListOf<String>()
 
-    val favoriteSearchItems = mutableStateListOf<FavoriteSearch>()
+    private val favoriteSearchItems = mutableStateListOf<FavoriteSearch>()
+
+    fun enableFavoriteSearchItems(): Boolean {
+        return favoriteSearchItems.isNotEmpty()
+    }
+
+    fun favoriteSearchItems() = favoriteSearchItems
+
+    fun removeFavoriteSearchItems(favoriteSearch: FavoriteSearch) {
+        favoriteSearchItems.remove(favoriteSearch)
+    }
+
+    fun replaceFavoriteSearch(newList: List<FavoriteSearch>) {
+        favoriteSearchItems.clear()
+        favoriteSearchItems.addAll(newList)
+    }
 
     val searchHistories = mutableStateListOf<SearchHistory>()
 
