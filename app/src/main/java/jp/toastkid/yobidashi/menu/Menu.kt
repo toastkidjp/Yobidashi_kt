@@ -51,7 +51,7 @@ enum class Menu(
 
     CHAT(R.string.title_chat, R.drawable.ic_chat),
 
-    WORLD_TIME(R.string.title_world_time, R.drawable.ic_time),
+    WORLD_TIME(R.string.title_world_time, R.drawable.ic_world_time),
 
     TODO_TASKS_BOARD(jp.toastkid.web.R.string.title_todo_tasks_board, R.drawable.ic_board),
 
