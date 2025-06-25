@@ -61,8 +61,7 @@ class QueryingUseCase(
 
         if (viewModel.isEnableFavoriteSearch()) {
             CoroutineScope(backgroundDispatcher).launch(disposables) {
-                viewModel.favoriteSearchItems.clear()
-                viewModel.favoriteSearchItems.addAll(
+                viewModel.replaceFavoriteSearch(
                     if (keyword.isBlank()) {
                         favoriteSearchRepository.find(5)
                     } else {
