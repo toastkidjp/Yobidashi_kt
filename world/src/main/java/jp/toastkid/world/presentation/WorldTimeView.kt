@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.world.domain.model.WorldTime
 
 @Composable
 fun WorldTimeView(modifier: Modifier = Modifier) {
@@ -35,7 +36,7 @@ fun WorldTimeView(modifier: Modifier = Modifier) {
     ) {
         Box(Modifier.padding(8.dp)) {
             LazyColumn(state = viewModel.listState()) {
-                items(viewModel.items(), { it.timeZoneId }) {
+                items(viewModel.items(), WorldTime::timeZoneId) {
                     Column(
                         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
                             .animateItem()
