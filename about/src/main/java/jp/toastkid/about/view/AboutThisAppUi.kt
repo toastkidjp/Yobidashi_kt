@@ -73,7 +73,6 @@ fun AboutThisAppUi(versionName: String) {
                 Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .padding(start = 16.dp, end = 16.dp)
                     .clickable {
                         val packageName =
                             context.applicationContext?.packageName ?: return@clickable
@@ -89,7 +88,6 @@ fun AboutThisAppUi(versionName: String) {
                 Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .padding(start = 16.dp, end = 16.dp)
                     .clickable {
                         ViewModelProvider(context).get(ContentViewModel::class.java).open(
                             context
@@ -107,7 +105,6 @@ fun AboutThisAppUi(versionName: String) {
                 Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .padding(start = 16.dp, end = 16.dp)
                     .clickable {
                         openLicense.value = true
                     }
