@@ -83,7 +83,7 @@ class QueryingUseCase(
                 }
 
                 withContext(ioDispatcher) {
-                    viewHistoryRepository.search("%$keyword%", ITEM_LIMIT).forEach { newItems.add(it) }
+                    viewHistoryRepository.search("%$keyword%", ITEM_LIMIT).forEach(newItems::add)
                 }
 
                 viewModel.urlItems.clear()
