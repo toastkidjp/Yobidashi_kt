@@ -79,7 +79,7 @@ class QueryingUseCase(
                     if (keyword.isBlank()) {
                         return@withContext
                     }
-                    bookmarkRepository.search("%$keyword%", ITEM_LIMIT).forEach { newItems.add(it) }
+                    bookmarkRepository.search("%$keyword%", ITEM_LIMIT).forEach(newItems::add)
                 }
 
                 withContext(ioDispatcher) {
