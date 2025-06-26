@@ -14,11 +14,9 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
-import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -41,6 +39,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -51,6 +50,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.pdf.PdfImageFactory
 import jp.toastkid.ui.image.EfficientImage
+import jp.toastkid.ui.modifier.onTransform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -146,13 +146,25 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
                     contentDescription = "${it + 1} / $max",
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier
-                        .transformable(state = state)
                         .graphicsLayer(
                             scaleX = scale,
                             scaleY = scale,
                             translationX = offset.x,
                             translationY = offset.y,
                         )
+                        .pointerInput(Unit) {
+                            onTransform(
+                                onGesture = { offsetChange, _, zoomChange ->
+                                    scale *= zoomChange
+                                    offset += offsetChange
+                                },
+                                onPointerInputChange = { it, _ ->
+                                    if (it.positionChanged()) {
+                                        it.consume()
+                                    }
+                                }
+                            )
+                        }
                         .align(Alignment.Center)
                 )
                 Text(
