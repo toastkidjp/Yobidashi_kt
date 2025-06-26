@@ -176,11 +176,11 @@ internal fun SearchContentsUi(
             }
         }
 
-        if (viewModel.suggestions.isNotEmpty()) {
+        if (viewModel.showSuggestions()) {
             Header(R.string.title_search_suggestion)
 
             FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
-                viewModel.suggestions.take(10).forEach {
+                viewModel.suggestions().forEach {
                     ItemCard {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
