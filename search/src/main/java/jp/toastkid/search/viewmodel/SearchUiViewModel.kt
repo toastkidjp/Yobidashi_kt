@@ -54,7 +54,20 @@ class SearchUiViewModel(
 
     val trends = mutableStateListOf<Trend>()
 
-    val suggestions = mutableStateListOf<String>()
+    private val suggestions = mutableStateListOf<String>()
+
+    fun suggestions() = suggestions
+
+    fun replaceSuggestions(newItems: List<String>) {
+        suggestions.clear()
+        suggestions.addAll(newItems.take(10))
+    }
+
+    fun clearSuggestions() {
+        suggestions.clear()
+    }
+
+    fun showSuggestions() = suggestions.isNotEmpty()
 
     private val favoriteSearchItems = mutableStateListOf<FavoriteSearch>()
 
