@@ -59,7 +59,7 @@ fun RssReaderListUi() {
     val listState = rememberLazyListState()
 
     LazyColumn(state = listState) {
-        items(items, { it.title + it.link + it.source }) {
+        items(items, Item::key) {
             Surface(
                 modifier = Modifier
                     .padding(
