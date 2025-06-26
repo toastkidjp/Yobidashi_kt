@@ -227,7 +227,7 @@ class ImagePreviewViewModel(initialPage: Int) {
 
     fun resetImageCondition() {
         colorFilterState.value = null
-        alphaSliderPosition.value = 0f
+        alphaSliderPosition.floatValue = 0f
         contrastSliderPosition.value = 0f
     }
 
