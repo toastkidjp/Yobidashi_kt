@@ -122,8 +122,7 @@ fun SearchInputUi(
                             return@rememberLauncherForActivityResult
                         }
 
-                        viewModel.suggestions.clear()
-                        viewModel.suggestions.addAll(result)
+                        viewModel.replaceSuggestions(result)
                     }
 
                 Row(
@@ -244,12 +243,8 @@ fun SearchInputUi(
                             Timber.e(e)
                             null
                         }
-                        viewModel.trends.clear()
-                        val taken = trendItems?.take(10)
-                        if (taken.isNullOrEmpty()) {
-                            return@launch
-                        }
-                        viewModel.trends.addAll(taken)
+
+                        viewModel.replaceTrends(trendItems)
                     }
 
                     val text = inputQuery ?: ""
@@ -303,7 +298,7 @@ fun SearchInputUi(
                     preferenceApplier.switchEnableSuggestion()
                     viewModel.copyFrom(preferenceApplier)
                     if (preferenceApplier.isEnableSuggestion.not()) {
-                        viewModel.suggestions.clear()
+                        viewModel.clearSuggestions()
                     }
                 },
                 check = { viewModel.isEnableSuggestion() }
