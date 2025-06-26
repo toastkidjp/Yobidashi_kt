@@ -226,7 +226,7 @@ internal fun SearchContentsUi(
             }
 
             FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
-                viewModel.trends.take(10).forEach {
+                viewModel.trends().forEach {
                     ItemCard {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
