@@ -76,6 +76,7 @@ import jp.toastkid.image.preview.viewmodel.ImagePreviewViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.image.EfficientImage
+import jp.toastkid.ui.modifier.onTransform
 import kotlinx.coroutines.launch
 import java.io.BufferedInputStream
 import java.io.File
@@ -161,6 +162,26 @@ internal fun ImagePreviewUi(
                                     },
                                     onLongPress = { },
                                     onTap = { /* Called on Tap */ }
+                                )
+                            }
+                            .pointerInput(Unit) {
+                                onTransform(
+                                    onGesture = { a, b, c ->
+                                        coroutineScope.launch {
+                                            viewModel.onGesture(a, b, c)
+                                        }
+                                    },
+                                    onPointerInputChange = { it, panChange ->
+                                        if (it.positionChanged() && viewModel.outOfRange(
+                                                panChange
+                                            ).not() && viewModel.currentScale() != 1f
+                                        ) {
+                                            it.consume()
+                                            coroutineScope.launch {
+                                                viewModel.resetPagerScrollState()
+                                            }
+                                        }
+                                    }
                                 )
                             }
                             .pointerInput(Unit) {
