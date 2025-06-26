@@ -17,4 +17,10 @@ data class Item(
         var description: String = "",
         var source: String = "",
         var content: StringBuilder = StringBuilder()
-)
+) {
+
+        private val key = title + link + source
+
+        fun key() = key
+
+}
