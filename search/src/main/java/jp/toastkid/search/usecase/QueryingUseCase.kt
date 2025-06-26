@@ -48,8 +48,7 @@ class QueryingUseCase(
 
         if (viewModel.isEnableSearchHistory()) {
             CoroutineScope(Dispatchers.IO).launch(disposables) {
-                viewModel.searchHistories.clear()
-                viewModel.searchHistories.addAll(
+                viewModel.replaceSearchHistory(
                     if (keyword.isBlank()) {
                         searchHistoryRepository.find(5)
                     } else {
