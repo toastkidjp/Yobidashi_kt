@@ -147,14 +147,14 @@ internal fun SearchContentsUi(
             }
         }
 
-        if (viewModel.searchHistories.isNotEmpty()) {
+        if (viewModel.enableShowSearchHistories()) {
             HeaderWithLink(
                 R.string.title_search_history,
                 jp.toastkid.lib.R.string.open,
                 viewModel::openSearchHistory
             )
 
-            viewModel.searchHistories.take(5).forEach { searchHistory ->
+            viewModel.searchHistories().forEach { searchHistory ->
                 SearchItemContent(
                     searchHistory.query,
                     searchHistory.category,
@@ -168,7 +168,7 @@ internal fun SearchContentsUi(
                     },
                     {
                         searchHistoryRepository.delete(searchHistory)
-                        viewModel.searchHistories.remove(searchHistory)
+                        viewModel.removeSearchHistories(searchHistory)
                     },
                     searchHistory.timestamp
                 )
