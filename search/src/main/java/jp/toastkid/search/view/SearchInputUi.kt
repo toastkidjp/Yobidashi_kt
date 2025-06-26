@@ -310,7 +310,7 @@ fun SearchInputUi(
                     preferenceApplier.switchEnableSearchHistory()
                     viewModel.copyFrom(preferenceApplier)
                     if (preferenceApplier.isEnableSearchHistory.not()) {
-                        viewModel.searchHistories.clear()
+                        viewModel.clearSearchHistories()
                     }
                 },
                 check = { viewModel.isEnableSearchHistory() }
