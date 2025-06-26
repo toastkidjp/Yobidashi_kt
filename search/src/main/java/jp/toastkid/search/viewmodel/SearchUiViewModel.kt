@@ -52,7 +52,16 @@ class SearchUiViewModel(
 
     val urlItems = mutableStateListOf<UrlItem>()
 
-    val trends = mutableStateListOf<Trend>()
+    private val trends = mutableStateListOf<Trend>()
+
+    fun trends() = trends
+
+    fun replaceTrends(newTrends: List<Trend>?) {
+        trends.clear()
+        newTrends?.let {
+            trends.addAll(it.take(10))
+        }
+    }
 
     private val suggestions = mutableStateListOf<String>()
 
