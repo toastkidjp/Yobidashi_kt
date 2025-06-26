@@ -14,12 +14,6 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.calculateCentroidSize
-import androidx.compose.foundation.gestures.calculatePan
-import androidx.compose.foundation.gestures.calculateRotation
-import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
@@ -48,7 +42,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -60,8 +53,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastAny
-import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.zIndex
 import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
@@ -81,8 +72,6 @@ import kotlinx.coroutines.launch
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
-import kotlin.math.PI
-import kotlin.math.abs
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -183,72 +172,6 @@ internal fun ImagePreviewUi(
                                         }
                                     }
                                 )
-                            }
-                            .pointerInput(Unit) {
-                                awaitEachGesture {
-                                    var rotation = 0f
-                                    var zoom = 1f
-                                    var pan = Offset.Zero
-                                    var pastTouchSlop = false
-                                    val touchSlop = viewConfiguration.touchSlop
-
-                                    awaitFirstDown(requireUnconsumed = false)
-                                    do {
-                                        val event = awaitPointerEvent()
-                                        val canceled = event.changes.fastAny { it.isConsumed }
-                                        if (!canceled) {
-                                            val zoomChange = event.calculateZoom()
-                                            val rotationChange = event.calculateRotation()
-                                            val panChange = event.calculatePan()
-
-                                            if (!pastTouchSlop) {
-                                                zoom *= zoomChange
-                                                rotation += rotationChange
-                                                pan += panChange
-
-                                                val centroidSize =
-                                                    event.calculateCentroidSize(useCurrent = false)
-                                                val zoomMotion = abs(1 - zoom) * centroidSize
-                                                val rotationMotion =
-                                                    abs(rotation * PI.toFloat() * centroidSize / 180f)
-                                                val panMotion = pan.getDistance()
-
-                                                if (zoomMotion > touchSlop ||
-                                                    rotationMotion > touchSlop ||
-                                                    panMotion > touchSlop
-                                                ) {
-                                                    pastTouchSlop = true
-                                                }
-                                            }
-
-                                            if (pastTouchSlop) {
-                                                if (rotationChange != 0f ||
-                                                    zoomChange != 1f ||
-                                                    panChange != Offset.Zero
-                                                ) {
-                                                    coroutineScope.launch {
-                                                        viewModel.onGesture(
-                                                            panChange,
-                                                            zoomChange,
-                                                            rotationChange
-                                                        )
-                                                    }
-                                                }
-                                                event.changes.fastForEach {
-                                                    if (it.positionChanged() && viewModel.outOfRange(
-                                                            panChange
-                                                        ).not() && viewModel.currentScale() != 1f
-                                                    ) {
-                                                        it.consume()
-                                                        coroutineScope.launch {
-                                                            viewModel.resetPagerScrollState()
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } while (!canceled && event.changes.fastAny { it.pressed })
-                                }
                             }
                     )
                 }
