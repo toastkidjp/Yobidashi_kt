@@ -70,6 +70,6 @@ suspend fun PointerInputScope.onTransform(
                     }
                 }
             }
-        } while (!canceled && event.changes.fastAny { it.pressed })
+        } while (!canceled && event.changes.fastAny(PointerInputChange::pressed))
     }
 }
