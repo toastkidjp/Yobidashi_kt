@@ -95,7 +95,24 @@ class SearchUiViewModel(
         favoriteSearchItems.addAll(newList)
     }
 
-    val searchHistories = mutableStateListOf<SearchHistory>()
+    private val searchHistories = mutableStateListOf<SearchHistory>()
+
+    fun enableShowSearchHistories() = searchHistories.isNotEmpty()
+
+    fun searchHistories() = searchHistories
+
+    fun replaceSearchHistory(newHistories: List<SearchHistory>) {
+        searchHistories.clear()
+        searchHistories.addAll(newHistories)
+    }
+
+    fun removeSearchHistories(target: SearchHistory) {
+        searchHistories.remove(target)
+    }
+
+    fun clearSearchHistories() {
+        searchHistories.clear()
+    }
 
     private val _search = MutableSharedFlow<WebSearchEvent>()
 
