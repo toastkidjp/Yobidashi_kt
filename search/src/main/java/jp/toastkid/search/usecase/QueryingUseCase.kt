@@ -93,18 +93,15 @@ class QueryingUseCase(
 
         if (viewModel.isEnableSuggestion()) {
             if (cache.snapshot().containsKey(keyword)) {
-                viewModel.suggestions.clear()
-                viewModel.suggestions.addAll(cache.get(keyword))
+                viewModel.replaceSuggestions(cache.get(keyword))
                 return
             }
 
             suggestionApi.fetchAsync(keyword) { suggestions ->
-                viewModel.suggestions.clear()
-                if (suggestions.isEmpty()) {
-                    return@fetchAsync
+                if (suggestions.isNotEmpty()) {
+                    cache.put(keyword, suggestions)
                 }
-                cache.put(keyword, suggestions)
-                viewModel.suggestions.addAll(suggestions)
+                viewModel.replaceSuggestions(suggestions)
             }
         }
     }
