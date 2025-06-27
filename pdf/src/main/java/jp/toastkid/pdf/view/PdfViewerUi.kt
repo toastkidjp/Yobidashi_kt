@@ -13,7 +13,6 @@ import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -119,11 +118,6 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
         ) {
             var scale by remember { mutableStateOf(1f) }
             var offset by remember { mutableStateOf(Offset.Zero) }
-
-            val state = rememberTransformableState { zoomChange, offsetChange, _ ->
-                scale *= zoomChange
-                offset += offsetChange
-            }
 
             Box(
                 contentAlignment = Alignment.Center,
