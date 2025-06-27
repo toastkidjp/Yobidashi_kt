@@ -149,7 +149,7 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
                         .pointerInput(Unit) {
                             onTransform(
                                 onGesture = { offsetChange, _, zoomChange ->
-                                    scale *= zoomChange
+                                    scale += zoomChange
                                     offset += offsetChange
                                 },
                                 onPointerInputChange = { it, _ ->
