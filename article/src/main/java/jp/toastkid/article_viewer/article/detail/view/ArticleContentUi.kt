@@ -146,7 +146,9 @@ private fun AppBarContent(title: String) {
                     unfocusedTextColor = MaterialTheme.colorScheme.onPrimary.copy(0.75f),
                     cursorColor = MaterialTheme.colorScheme.onPrimary,
                     unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                    focusedIndicatorColor = MaterialTheme.colorScheme.onPrimary
+                    focusedIndicatorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
                 ),
                 trailingIcon = {
                     Icon(
