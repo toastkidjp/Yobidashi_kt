@@ -47,7 +47,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.article_viewer.R
@@ -68,6 +67,8 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
     LaunchedEffect(key1 = title, block = {
+        viewModel.setPreference(PreferenceApplier(context))
+
         val content = withContext(Dispatchers.IO) {
             ArticleRepositoryFactory().invoke(context).findContentByTitle(title)
         }
@@ -89,12 +90,13 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
     })
 
     Surface(
-        color = MaterialTheme.colorScheme.primary,
+        color = viewModel.backgroundColor(),
         shadowElevation = 4.dp,
         modifier = modifier
     ) {
         MarkdownPreview(
             content = viewModel.content(),
+            contentColor = viewModel.fontColor(),
             scrollState = viewModel.scrollState(),
             modifier = Modifier.padding(8.dp)
         )
