@@ -10,11 +10,14 @@ package jp.toastkid.article_viewer.article.detail.viewmodel
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.markdown.domain.model.entity.Markdown
 import jp.toastkid.markdown.domain.service.MarkdownParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicReference
 
 class ArticleContentViewModel {
 
@@ -41,5 +44,18 @@ class ArticleContentViewModel {
     private val scrollState = ScrollState(0)
 
     fun scrollState() = scrollState
+
+    private val fontColor = AtomicReference(Color.Transparent)
+
+    fun fontColor(): Color = fontColor.get()
+
+    private val backgroundColor = AtomicReference(Color.Transparent)
+
+    fun backgroundColor(): Color = backgroundColor.get()
+
+    fun setPreference(preferenceApplier: PreferenceApplier) {
+        fontColor.set(Color(preferenceApplier.editorFontColor()))
+        backgroundColor.set(Color(preferenceApplier.editorBackgroundColor()))
+    }
 
 }
