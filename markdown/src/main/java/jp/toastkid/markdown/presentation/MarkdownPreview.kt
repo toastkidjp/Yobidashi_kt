@@ -19,7 +19,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -46,6 +45,7 @@ import jp.toastkid.ui.menu.context.common.CommonContextMenuToolbarFactory
 @Composable
 fun MarkdownPreview(
     content: Markdown,
+    contentColor: Color,
     scrollState: ScrollState,
     modifier: Modifier
 ) {
@@ -74,7 +74,7 @@ fun MarkdownPreview(
                                 TextLineView(
                                     line.text,
                                     TextStyle(
-                                        color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colorScheme.onSurface,
+                                        color = if (line.quote) Color(0xFFCCAAFF) else contentColor,
                                         fontSize = line.fontSize().sp,
                                         fontWeight = viewModel.makeFontWeight(line.level),
                                     ),
@@ -104,7 +104,7 @@ fun MarkdownPreview(
                                     }
                                     TextLineView(
                                         viewModel.extractText(it, line.taskList),
-                                        TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp),
+                                        TextStyle(color = contentColor, fontSize = 14.sp),
                                         Modifier.padding(bottom = 4.dp)
                                     )
                                 }
