@@ -54,12 +54,19 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
         flush()
     }
 
+    private val acceptableFileExtensions = setOf("md", "txt")
+
     private fun extract(
         zipInputStream: ZipInputStream,
         nextEntry: ZipEntry
     ) {
         // You don't use `use()` because it makes occur "java.io.IOException: Stream closed".
         zipInputStream.bufferedReader().let {
+            val extension = nextEntry.name.split(".").last()
+            if (!acceptableFileExtensions.contains(extension)) {
+                return@let
+            }
+
             val start = System.currentTimeMillis()
             val content = it.lineSequence().joinToString(System.lineSeparator())
             val title = extractFileName(nextEntry.name)
