@@ -17,8 +17,11 @@ import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.lib.preference.PreferenceApplier
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -123,6 +126,12 @@ class ArticleListViewModel(
 
     fun closeDataDialog() {
         openDateDialog.value = false
+    }
+
+    fun clearAllArticle() {
+        CoroutineScope(Dispatchers.IO).launch {
+            articleRepository.deleteAll()
+        }
     }
 
 }
