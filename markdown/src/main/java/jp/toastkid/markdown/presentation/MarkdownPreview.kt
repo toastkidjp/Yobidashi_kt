@@ -120,7 +120,7 @@ fun MarkdownPreview(
                         }
 
                         is HorizontalRule -> HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                        is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+                        is TableLine -> TableLineView(line, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
                         is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
                     }
                 }

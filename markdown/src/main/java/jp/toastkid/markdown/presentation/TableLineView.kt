@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.markdown.domain.model.data.TableLine
 
 @Composable
-fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifier = Modifier) {
+fun TableLineView(line: TableLine, modifier: Modifier = Modifier, fontSize: TextUnit = 24.sp) {
     val viewModel = remember { TableLineViewModel() }
 
     Column(modifier = modifier) {
@@ -55,8 +55,14 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
                         else surfaceColor
                     )
 
+                    val fontColor = animateColorAsState(
+                        if (viewModel.onCursorOnHeader()) MaterialTheme.colorScheme.onPrimary
+                        else MaterialTheme.colorScheme.onSurface
+                    )
+
                     Text(
                         item.toString(),
+                        color = fontColor.value,
                         fontSize = fontSize,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
