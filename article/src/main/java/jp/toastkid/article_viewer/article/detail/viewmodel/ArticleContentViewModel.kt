@@ -49,13 +49,13 @@ class ArticleContentViewModel {
 
     fun fontColor(): Color = fontColor.get()
 
-    private val backgroundColor = AtomicReference(Color.Transparent)
+    private val backgroundColor = mutableStateOf(Color.Transparent)
 
-    fun backgroundColor(): Color = backgroundColor.get()
+    fun backgroundColor(): Color = backgroundColor.value
 
     fun setPreference(preferenceApplier: PreferenceApplier) {
         fontColor.set(Color(preferenceApplier.editorFontColor()))
-        backgroundColor.set(Color(preferenceApplier.editorBackgroundColor()))
+        backgroundColor.value = Color(preferenceApplier.editorBackgroundColor())
     }
 
 }
