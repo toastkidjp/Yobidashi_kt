@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -173,7 +174,7 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
 
 @Composable
 private fun AppBarUi(pageSize: Int, onValueChange: (Int) -> Unit) {
-    var sliderPosition by remember { mutableStateOf(0f) }
+    var sliderPosition by remember { mutableFloatStateOf(0f) }
     if (pageSize == 0) {
         return
     }
