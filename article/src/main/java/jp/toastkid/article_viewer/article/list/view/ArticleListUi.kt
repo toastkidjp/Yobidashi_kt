@@ -293,6 +293,12 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
                     PreferenceApplier(activityContext).switchUseTitleFilter()
                 },
                 check = { PreferenceApplier(activityContext).useTitleFilter() }
+            ),
+            OptionMenu(
+                titleId = R.string.action_clear_all_articles,
+                action = {
+                    viewModel.clearAllArticle()
+                }
             )
         )
     })
