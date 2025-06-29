@@ -139,7 +139,7 @@ fun ArticleListUi() {
             viewModel::closeDataDialog,
             DateSelectedActionUseCase(
                 ArticleRepositoryFactory().invoke(context),
-                ViewModelProvider(context).get(ContentViewModel::class.java)
+                contentViewModel
             )::invoke
         )
     }
