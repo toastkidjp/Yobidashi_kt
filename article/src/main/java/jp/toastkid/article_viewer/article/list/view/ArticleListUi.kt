@@ -88,6 +88,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
+import jp.toastkid.ui.dialog.ConfirmDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -119,6 +120,15 @@ fun ArticleListUi() {
         if (viewModel.progressVisibility()) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
         }
+    }
+
+    if (viewModel.isOpenClearConfirmDialog()) {
+        ConfirmDialog(
+            stringResource(R.string.action_clear_all_articles),
+            stringResource(jp.toastkid.ui.R.string.message_confirmation),
+            onDismissRequest = viewModel::closeClearConfirmDialog,
+            onClickOk = viewModel::clearAllArticle
+        )
     }
 
     LaunchedEffect(key1 = "first_launch", block = {
@@ -297,7 +307,7 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
             OptionMenu(
                 titleId = R.string.action_clear_all_articles,
                 action = {
-                    viewModel.clearAllArticle()
+                    viewModel.showConfirmDialogForClearAllArticle()
                 }
             )
         )
