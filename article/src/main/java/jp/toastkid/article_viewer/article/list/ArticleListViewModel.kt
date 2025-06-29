@@ -128,6 +128,18 @@ class ArticleListViewModel(
         openDateDialog.value = false
     }
 
+    private val openClearConfirmDialog = mutableStateOf(false)
+
+    fun isOpenClearConfirmDialog() = openClearConfirmDialog.value
+
+    fun closeClearConfirmDialog() {
+        openClearConfirmDialog.value = false
+    }
+
+    fun showConfirmDialogForClearAllArticle() {
+        openClearConfirmDialog.value = true
+    }
+
     fun clearAllArticle() {
         CoroutineScope(Dispatchers.IO).launch {
             articleRepository.deleteAll()
