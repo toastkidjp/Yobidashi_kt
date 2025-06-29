@@ -134,6 +134,16 @@ fun ArticleListUi() {
         )
     }
 
+    if (viewModel.isOpenDateDialog()) {
+        DateFilterDialogUi(
+            viewModel::closeDataDialog,
+            DateSelectedActionUseCase(
+                ArticleRepositoryFactory().invoke(context),
+                ViewModelProvider(context).get(ContentViewModel::class.java)
+            )::invoke
+        )
+    }
+
     if (viewModel.isOpenClearConfirmDialog()) {
         ConfirmDialog(
             stringResource(R.string.action_clear_all_articles),
@@ -324,16 +334,6 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
             )
         )
     })
-
-    if (viewModel.isOpenDateDialog()) {
-        DateFilterDialogUi(
-            viewModel::closeDataDialog,
-            DateSelectedActionUseCase(
-                ArticleRepositoryFactory().invoke(activityContext),
-                ViewModelProvider(activityContext).get(ContentViewModel::class.java)
-            )::invoke
-        )
-    }
 }
 
 @Composable
