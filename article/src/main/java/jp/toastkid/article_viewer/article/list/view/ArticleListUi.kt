@@ -122,6 +122,18 @@ fun ArticleListUi() {
         }
     }
 
+    if (viewModel.isOpenSortDialog()) {
+        val preferenceApplier = PreferenceApplier(context)
+        SortSettingDialogUi(
+            viewModel::closeSortDialog,
+            onSelect = {
+                viewModel.sort(it)
+                preferenceApplier.setArticleSort(it.name)
+            },
+            preferenceApplier.articleSort()
+        )
+    }
+
     if (viewModel.isOpenClearConfirmDialog()) {
         ConfirmDialog(
             stringResource(R.string.action_clear_all_articles),
@@ -312,18 +324,6 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
             )
         )
     })
-
-    if (viewModel.isOpenSortDialog()) {
-        val preferenceApplier = PreferenceApplier(activityContext)
-        SortSettingDialogUi(
-            viewModel::closeSortDialog,
-            onSelect = {
-                viewModel.sort(it)
-                preferenceApplier.setArticleSort(it.name)
-            },
-            preferenceApplier.articleSort()
-        )
-    }
 
     if (viewModel.isOpenDateDialog()) {
         DateFilterDialogUi(
