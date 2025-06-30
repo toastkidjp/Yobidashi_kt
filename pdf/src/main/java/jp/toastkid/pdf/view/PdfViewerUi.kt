@@ -69,11 +69,12 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(lifecycleOwner) {
         val contentViewModel = ViewModelProvider(context).get(ContentViewModel::class.java)
-        contentViewModel.replaceAppBarContent { AppBarUi(listState.pageCount) {
-            coroutineScope.launch {
-                listState.animateScrollToPage(it)
+        contentViewModel.replaceAppBarContent {
+            AppBarUi(listState.pageCount) {
+                coroutineScope.launch {
+                    listState.animateScrollToPage(it)
+                }
             }
-        }
         }
         withContext(Dispatchers.IO) {
             contentViewModel.receiveEvent(StateScrollerFactory().invoke(listState))
