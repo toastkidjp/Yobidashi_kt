@@ -120,37 +120,37 @@ fun ArticleListUi() {
         if (viewModel.progressVisibility()) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
         }
-    }
 
-    if (viewModel.isOpenSortDialog()) {
-        val preferenceApplier = PreferenceApplier(context)
-        SortSettingDialogUi(
-            viewModel::closeSortDialog,
-            onSelect = {
-                viewModel.sort(it)
-                preferenceApplier.setArticleSort(it.name)
-            },
-            preferenceApplier.articleSort()
-        )
-    }
+        if (viewModel.isOpenSortDialog()) {
+            val preferenceApplier = PreferenceApplier(context)
+            SortSettingDialogUi(
+                viewModel::closeSortDialog,
+                onSelect = {
+                    viewModel.sort(it)
+                    preferenceApplier.setArticleSort(it.name)
+                },
+                preferenceApplier.articleSort()
+            )
+        }
 
-    if (viewModel.isOpenDateDialog()) {
-        DateFilterDialogUi(
-            viewModel::closeDataDialog,
-            DateSelectedActionUseCase(
-                ArticleRepositoryFactory().invoke(context),
-                contentViewModel
-            )::invoke
-        )
-    }
+        if (viewModel.isOpenDateDialog()) {
+            DateFilterDialogUi(
+                viewModel::closeDataDialog,
+                DateSelectedActionUseCase(
+                    ArticleRepositoryFactory().invoke(context),
+                    contentViewModel
+                )::invoke
+            )
+        }
 
-    if (viewModel.isOpenClearConfirmDialog()) {
-        ConfirmDialog(
-            stringResource(R.string.action_clear_all_articles),
-            stringResource(jp.toastkid.ui.R.string.message_confirmation),
-            onDismissRequest = viewModel::closeClearConfirmDialog,
-            onClickOk = viewModel::clearAllArticle
-        )
+        if (viewModel.isOpenClearConfirmDialog()) {
+            ConfirmDialog(
+                stringResource(R.string.action_clear_all_articles),
+                stringResource(jp.toastkid.ui.R.string.message_confirmation),
+                onDismissRequest = viewModel::closeClearConfirmDialog,
+                onClickOk = viewModel::clearAllArticle
+            )
+        }
     }
 
     LaunchedEffect(key1 = "first_launch", block = {
