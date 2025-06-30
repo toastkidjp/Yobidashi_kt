@@ -191,7 +191,7 @@ enum class SearchCategory(
     YOUTUBE(
             R.string.search_category_youtube,
             R.drawable.ic_video,
-            "https://www.youtube.com/results?search_query="
+            "https://m.youtube.com/results?search_query="
     ),
     BBC(
             R.string.search_category_bbc,
