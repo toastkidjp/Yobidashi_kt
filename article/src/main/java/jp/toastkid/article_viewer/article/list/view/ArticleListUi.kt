@@ -117,10 +117,6 @@ fun ArticleListUi() {
             contentViewModel
         )
 
-        if (viewModel.progressVisibility()) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
-        }
-
         if (viewModel.isOpenSortDialog()) {
             val preferenceApplier = PreferenceApplier(context)
             SortSettingDialogUi(
@@ -150,6 +146,10 @@ fun ArticleListUi() {
                 onDismissRequest = viewModel::closeClearConfirmDialog,
                 onClickOk = viewModel::clearAllArticle
             )
+        }
+
+        if (viewModel.progressVisibility()) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
         }
     }
 
