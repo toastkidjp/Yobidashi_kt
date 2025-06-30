@@ -75,7 +75,7 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
             }
         }) }
         withContext(Dispatchers.IO) {
-            contentViewModel?.receiveEvent(StateScrollerFactory().invoke(listState))
+            contentViewModel.receiveEvent(StateScrollerFactory().invoke(listState))
         }
     }
 
