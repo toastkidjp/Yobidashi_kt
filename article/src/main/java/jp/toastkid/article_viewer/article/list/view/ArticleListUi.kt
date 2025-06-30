@@ -328,9 +328,7 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
             ),
             OptionMenu(
                 titleId = R.string.action_clear_all_articles,
-                action = {
-                    viewModel.showConfirmDialogForClearAllArticle()
-                }
+                action = viewModel::showConfirmDialogForClearAllArticle
             )
         )
     })
