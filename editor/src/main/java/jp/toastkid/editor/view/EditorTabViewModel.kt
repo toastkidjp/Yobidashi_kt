@@ -72,7 +72,7 @@ class EditorTabViewModel {
     private fun applyStyle(it: TextFieldValue) {
         content.value = it
 
-        if (contentLength.value != content.value.text.length) {
+        if (contentLength.intValue != content.value.text.length) {
             contentLength.value = content.value.text.length
         }
     }
