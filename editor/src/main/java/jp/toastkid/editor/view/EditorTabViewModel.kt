@@ -73,7 +73,7 @@ class EditorTabViewModel {
         content.value = it
 
         if (contentLength.intValue != content.value.text.length) {
-            contentLength.value = content.value.text.length
+            contentLength.intValue = content.value.text.length
         }
     }
 
