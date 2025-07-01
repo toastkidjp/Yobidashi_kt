@@ -24,7 +24,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import jp.toastkid.editor.view.style.TextEditorVisualTransformation
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -96,12 +95,6 @@ class EditorTabViewModel {
 
             lineNumbers.value = list
         }
-
-        val lastLineHeights =
-            (0 until lineCount.intValue).associateWith { multiParagraph.getLineHeight(it) }
-        val maxHeight = lastLineHeights.values.distinct().max()
-        lineHeights.clear()
-        lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / maxHeight).em) }
     }
 
     fun lineNumberScrollState() = lineNumberScrollState
