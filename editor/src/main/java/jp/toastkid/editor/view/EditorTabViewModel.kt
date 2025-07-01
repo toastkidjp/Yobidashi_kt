@@ -74,8 +74,6 @@ class EditorTabViewModel {
         }
     }
 
-    private val lineHeights = mutableMapOf<Int, TextUnit>()
-
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
         lastParagraph = multiParagraph
         if (lineCount.intValue != multiParagraph.lineCount) {
