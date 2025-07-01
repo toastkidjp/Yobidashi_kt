@@ -319,7 +319,7 @@ class EditorTabViewModel {
     }
 
     fun setLastSaved(lastSaved: Long) {
-        this.lastSaved.value = lastSaved
+        this.lastSaved.longValue = lastSaved
     }
 
     fun selectedText(): String {
