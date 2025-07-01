@@ -269,9 +269,7 @@ fun EditorTabView(path: String?, modifier: Modifier) {
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
     DisposableEffect(key1 = path) {
-        viewModel.launchTab(
-            TextFieldValue()
-        )
+        viewModel.launchTab(TextFieldValue())
         fileActionUseCase.readCurrentFile()
         viewModel.initialScroll(coroutineScope)
 
