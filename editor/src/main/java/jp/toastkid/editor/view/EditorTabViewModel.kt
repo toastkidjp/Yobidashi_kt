@@ -28,9 +28,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import jp.toastkid.editor.view.style.TextEditorVisualTransformation
 import jp.toastkid.lib.preference.PreferenceApplier
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
@@ -137,8 +135,7 @@ class EditorTabViewModel {
     }
 
     fun launchTab(
-        content: TextFieldValue,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO
+        content: TextFieldValue
     ) {
         val newContent = content
         applyStyle(newContent)
