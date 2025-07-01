@@ -108,10 +108,6 @@ class EditorTabViewModel {
         lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / maxHeight).em) }
     }
 
-    fun getLineHeight(lineNumber: Int): TextUnit {
-        return lineHeights.getOrElse(lineNumber, { 1.55.em })
-    }
-
     fun lineNumberScrollState() = lineNumberScrollState
 
     fun onClickLineNumber(it: Int) {
