@@ -33,9 +33,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libraries.versions.kotlinComposeCompilerExtension.get()
-    }
     testOptions.unitTests.isIncludeAndroidResources = true
 }
 
