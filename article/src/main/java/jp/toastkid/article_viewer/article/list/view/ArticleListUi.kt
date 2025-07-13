@@ -228,7 +228,11 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     unfocusedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
-                    cursorColor = cursorColor
+                    cursorColor = cursorColor,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
                 ),
                 trailingIcon = {
                     Icon(
