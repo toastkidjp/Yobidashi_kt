@@ -57,7 +57,7 @@ class PreviewImageState {
     suspend fun zoom(currentSize: Size, newOffset: Offset) {
         val unset = scale.value != 1f
 
-        val newScale = if (unset) 1f else 3f
+        val newScale = if (unset) 1f else 2f
 
         if (unset) {
             rotationY.floatValue = 0f
