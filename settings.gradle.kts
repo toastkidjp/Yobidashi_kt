@@ -9,7 +9,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libraries") {
             version("kotlin", "2.2.0")
-            version("room", "2.6.1")
+            version("room", "2.7.2")
             version("kotlinComposeCompilerExtension", "1.4.6")
             plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").version("2.0.21")
             library("activityCompose", "androidx.activity", "activity-compose").version("1.9.0")
