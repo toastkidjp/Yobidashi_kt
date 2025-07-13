@@ -134,7 +134,7 @@ private fun AppBarContent(title: String) {
                 label = {
                     Text(
                         title,
-                        color = fontColor
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 singleLine = true,
