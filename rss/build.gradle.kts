@@ -35,10 +35,6 @@ android {
     buildFeatures {
         compose = true
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libraries.versions.kotlinComposeCompilerExtension.get()
-    }
 }
 
 tasks.withType<GenerateBuildConfig> {
