@@ -71,15 +71,15 @@ fun WorldTimeView(modifier: Modifier = Modifier) {
 
     LaunchedEffect(Unit) {
         contentViewModel.replaceAppBarContent {
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.clickable {
                         viewModel.openChooser()
-                    }.padding(end = 8.dp)
+                    }.padding(horizontal = 8.dp)
                 ) {
                     Text(
-                        viewModel.currentTimezoneLabel()
+                        viewModel.currentTimezoneLabel(),
                     )
                     DropdownMenu(
                         viewModel.openingChooser(),
@@ -102,7 +102,7 @@ fun WorldTimeView(modifier: Modifier = Modifier) {
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.clickable {
                         viewModel.openHourChooser()
-                    }
+                    }.padding(start = 8.dp)
                 ) {
                     Text(
                         viewModel.currentHour(),
