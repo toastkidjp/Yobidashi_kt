@@ -120,15 +120,15 @@ class WorldTimeViewModel {
     private val availableIDs = pickupTimeZone.plus(TimeZone.getAvailableIDs()).distinct()
 
     fun start() {
-        items.clear()
-
         updateItems()
     }
 
     private fun updateItems() {
+        items.clear()
         val currentTime = currentTime.get()
         val calendar = GregorianCalendar(currentTime.timeZone)
         calendar.timeInMillis = currentTime.timeInMillis
+
         availableIDs.mapNotNull {
             calendar.timeZone = TimeZone.getTimeZone(it)
             WorldTime(
@@ -140,7 +140,6 @@ class WorldTimeViewModel {
             )
         }
             .forEach { items.add(it) }
-        println(items.take(10))
     }
 
     fun label(timeZoneId: String): String {
