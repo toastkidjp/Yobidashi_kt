@@ -36,10 +36,6 @@ android {
             isMinifyEnabled = false
         }
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libraries.versions.kotlinComposeCompilerExtension.get()
-    }
 }
 
 tasks.withType<GenerateBuildConfig> {
