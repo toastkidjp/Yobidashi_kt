@@ -11,11 +11,16 @@ package jp.toastkid.world.presentation
 import android.text.format.DateFormat
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AtomicReference
 import jp.toastkid.world.domain.model.WorldTime
 import java.util.Calendar
+import java.util.GregorianCalendar
 import java.util.TimeZone
 
 class WorldTimeViewModel {
+
+    private val currentTime = AtomicReference(Calendar.getInstance(TimeZone.getTimeZone("UTC")))
 
     private val listState = LazyListState()
 
@@ -44,21 +49,98 @@ class WorldTimeViewModel {
         "IST"
     )
 
+    fun pickupTimeZone() = pickupTimeZone
+
+    private val openChooser = mutableStateOf(false)
+
+    fun openingChooser() = openChooser.value
+
+    fun openChooser() {
+        openChooser.value = true
+    }
+
+    fun closeChooser() {
+        openChooser.value = false
+    }
+
+    fun choose(value: String) {
+        val calendar = currentTime.get()
+        calendar.timeZone = TimeZone.getTimeZone(value)
+        currentTime.set(calendar)
+        updateItems()
+        closeChooser()
+    }
+
+    private val openHourChooser = mutableStateOf(false)
+
+    fun openingHourChooser() = openHourChooser.value
+
+    fun openHourChooser() {
+        openHourChooser.value = true
+    }
+
+    fun closeHourChooser() {
+        openHourChooser.value = false
+    }
+
+    fun chooseHour(value: Int) {
+        val calendar = currentTime.get()
+        calendar.set(Calendar.HOUR_OF_DAY, value)
+        currentTime.set(calendar)
+        updateItems()
+        closeHourChooser()
+    }
+
+    private val openMinutesChooser = mutableStateOf(false)
+
+    fun openingMinuteChooser() = openMinutesChooser.value
+
+    fun openMinuteChooser() {
+        openMinutesChooser.value = true
+    }
+
+    fun closeMinuteChooser() {
+        openMinutesChooser.value = false
+    }
+
+    fun chooseMinute(value: Int) {
+        val calendar = currentTime.get()
+        calendar.set(Calendar.MINUTE, value)
+        currentTime.set(calendar)
+        updateItems()
+        closeMinuteChooser()
+    }
+
+    fun currentHour() = "${currentTime.get().get(Calendar.HOUR_OF_DAY)}"
+
+    fun currentMinute() = "${currentTime.get().get(Calendar.MINUTE)}"
+
+    fun currentTimezoneLabel() = label(currentTime.get().timeZone.id)
+
     private val availableIDs = pickupTimeZone.plus(TimeZone.getAvailableIDs()).distinct()
 
     fun start() {
         items.clear()
 
+        updateItems()
+    }
+
+    private fun updateItems() {
+        val currentTime = currentTime.get()
+        val calendar = GregorianCalendar(currentTime.timeZone)
+        calendar.timeInMillis = currentTime.timeInMillis
         availableIDs.mapNotNull {
+            calendar.timeZone = TimeZone.getTimeZone(it)
             WorldTime(
                 it,
                 DateFormat.format(
                     "yyyy-MM-dd(E) HH:mm:ss",
-                    Calendar.getInstance(TimeZone.getTimeZone(it))
+                    calendar
                 ).toString()
             )
         }
             .forEach { items.add(it) }
+        println(items.take(10))
     }
 
     fun label(timeZoneId: String): String {
