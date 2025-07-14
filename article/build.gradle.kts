@@ -45,10 +45,6 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libraries.versions.kotlinComposeCompilerExtension.get()
-    }
 }
 
 tasks.withType<Test> {
