@@ -88,9 +88,6 @@ android {
         unitTests.isIncludeAndroidResources = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libraries.versions.kotlinComposeCompilerExtension.get()
-    }
     lint {
         checkReleaseBuilds = false
     }
