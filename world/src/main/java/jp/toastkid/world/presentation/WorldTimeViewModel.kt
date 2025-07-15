@@ -147,7 +147,7 @@ class WorldTimeViewModel {
         return if (emoji.isNotEmpty()) "$emoji ${timeZoneId}" else emoji
     }
 
-    fun emoji(timeZoneId: String): String {
+    private fun emoji(timeZoneId: String): String {
         return when (timeZoneId) {
             "Asia/Tokyo" ->"\uD83C\uDDEF\uD83C\uDDF5"
             "UTC" -> "UTC"
