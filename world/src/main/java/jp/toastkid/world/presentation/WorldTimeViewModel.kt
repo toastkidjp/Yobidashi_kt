@@ -21,7 +21,7 @@ import java.util.TimeZone
 
 class WorldTimeViewModel {
 
-    private val currentTime = AtomicReference(Calendar.getInstance(TimeZone.getTimeZone("UTC")))
+    private val currentTime = AtomicReference(Calendar.getInstance())
 
     private val listState = LazyListState()
 
