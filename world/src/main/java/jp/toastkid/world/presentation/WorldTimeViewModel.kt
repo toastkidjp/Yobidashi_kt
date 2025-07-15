@@ -115,7 +115,7 @@ class WorldTimeViewModel {
 
     fun currentMinute() = "${currentTime.get().get(Calendar.MINUTE)}"
 
-    fun currentTimezoneLabel() = label(currentTime.get().timeZone.id)
+    fun currentTimezoneLabel() = emoji(currentTime.get().timeZone.id)
 
     private val availableIDs = pickupTimeZone.plus(TimeZone.getAvailableIDs()).distinct()
 
@@ -143,23 +143,28 @@ class WorldTimeViewModel {
     }
 
     fun label(timeZoneId: String): String {
+        val emoji = emoji(timeZoneId)
+        return if (emoji.isNotEmpty()) "$emoji ${timeZoneId}" else emoji
+    }
+
+    fun emoji(timeZoneId: String): String {
         return when (timeZoneId) {
-            "Asia/Tokyo" ->"\uD83C\uDDEF\uD83C\uDDF5 Tokyo"
+            "Asia/Tokyo" ->"\uD83C\uDDEF\uD83C\uDDF5"
             "UTC" -> "UTC"
-            "America/New_York" -> "\uD83C\uDDFA\uD83C\uDDF8 New York"
-            "US/Pacific" -> "\uD83C\uDDFA\uD83C\uDDF8 US Pacific"
-            "US/Hawaii" -> "\uD83C\uDDFA\uD83C\uDDF8 Hawaii"
-            "Europe/Rome" -> "\uD83C\uDDEE\uD83C\uDDF9 Rome"
-            "Australia/Sydney" -> "\uD83C\uDDE6\uD83C\uDDFA Sydney"
-            "NZ" -> "\uD83C\uDDF3\uD83C\uDDFF New Zealand"
-            "Asia/Ho_Chi_Minh" -> "\uD83C\uDDFB\uD83C\uDDF3 Ho Chi Minh"
-            "Asia/Ulaanbaatar" -> "\uD83C\uDDF2\uD83C\uDDF3 Ulaanbaatar"
-            "Asia/Tbilisi" -> "\uD83C\uDDEC\uD83C\uDDEA Tbilisi"
-            "Africa/Johannesburg" -> "\uD83C\uDDFF\uD83C\uDDE6 Johannesburg"
-            "America/Asuncion" -> "\uD83C\uDDF5\uD83C\uDDFE Asuncion"
-            "America/Buenos_Aires" -> "\uD83C\uDDE6\uD83C\uDDF7 Buenos Aires"
-            "Pacific/Palau" -> "\uD83C\uDDF5\uD83C\uDDFC Palau"
-            else -> timeZoneId
+            "America/New_York" -> "\uD83C\uDDFA\uD83C\uDDF8"
+            "US/Pacific" -> "\uD83C\uDDFA\uD83C\uDDF8"
+            "US/Hawaii" -> "\uD83C\uDDFA\uD83C\uDDF8"
+            "Europe/Rome" -> "\uD83C\uDDEE\uD83C\uDDF9"
+            "Australia/Sydney" -> "\uD83C\uDDE6\uD83C\uDDFA"
+            "NZ" -> "\uD83C\uDDF3\uD83C\uDDFF"
+            "Asia/Ho_Chi_Minh" -> "\uD83C\uDDFB\uD83C\uDDF3"
+            "Asia/Ulaanbaatar" -> "\uD83C\uDDF2\uD83C\uDDF3"
+            "Asia/Tbilisi" -> "\uD83C\uDDEC\uD83C\uDDEA"
+            "Africa/Johannesburg" -> "\uD83C\uDDFF\uD83C\uDDE6"
+            "America/Asuncion" -> "\uD83C\uDDF5\uD83C\uDDFE"
+            "America/Buenos_Aires" -> "\uD83C\uDDE6\uD83C\uDDF7"
+            "Pacific/Palau" -> "\uD83C\uDDF5\uD83C\uDDFC"
+            else -> ""
         }
     }
 
