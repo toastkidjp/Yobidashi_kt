@@ -8,6 +8,7 @@
 
 package jp.toastkid.world.presentation
 
+import android.icu.text.DecimalFormat
 import android.text.format.DateFormat
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
@@ -111,7 +112,9 @@ class WorldTimeViewModel {
         closeMinuteChooser()
     }
 
-    fun currentHour() = "${currentTime.get().get(Calendar.HOUR_OF_DAY)}"
+    private val zeroPaddingFormatter = DecimalFormat("00")
+
+    fun currentHour() = "${zeroPaddingFormatter.format(currentTime.get().get(Calendar.HOUR_OF_DAY))}"
 
     fun currentMinute() = "${currentTime.get().get(Calendar.MINUTE)}"
 
