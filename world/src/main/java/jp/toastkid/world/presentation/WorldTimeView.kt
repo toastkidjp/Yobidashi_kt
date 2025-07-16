@@ -73,9 +73,7 @@ fun WorldTimeView(modifier: Modifier = Modifier) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.clickable {
-                        viewModel.openChooser()
-                    }.padding(horizontal = 8.dp)
+                    modifier = Modifier.clickable(onClick = viewModel::openChooser).padding(horizontal = 8.dp)
                 ) {
                     Text(
                         viewModel.currentTimezoneLabel(),
