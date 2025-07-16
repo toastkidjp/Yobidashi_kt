@@ -149,7 +149,7 @@ class WorldTimeViewModel {
                 ).toString()
             )
         }
-            .forEach { items.add(it) }
+            .forEach(items::add)
     }
 
     fun label(timeZoneId: String): String {
