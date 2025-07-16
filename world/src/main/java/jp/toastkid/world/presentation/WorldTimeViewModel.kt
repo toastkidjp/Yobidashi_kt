@@ -157,25 +157,23 @@ class WorldTimeViewModel {
         return "$emoji $timeZoneId"
     }
 
-    private fun emoji(timeZoneId: String): String {
-        return when (timeZoneId) {
-            "Asia/Tokyo" ->"\uD83C\uDDEF\uD83C\uDDF5"
-            "UTC" -> "UTC"
-            "America/New_York" -> "\uD83C\uDDFA\uD83C\uDDF8"
-            "US/Pacific" -> "\uD83C\uDDFA\uD83C\uDDF8"
-            "US/Hawaii" -> "\uD83C\uDDFA\uD83C\uDDF8"
-            "Europe/Rome" -> "\uD83C\uDDEE\uD83C\uDDF9"
-            "Australia/Sydney" -> "\uD83C\uDDE6\uD83C\uDDFA"
-            "NZ" -> "\uD83C\uDDF3\uD83C\uDDFF"
-            "Asia/Ho_Chi_Minh" -> "\uD83C\uDDFB\uD83C\uDDF3"
-            "Asia/Ulaanbaatar" -> "\uD83C\uDDF2\uD83C\uDDF3"
-            "Asia/Tbilisi" -> "\uD83C\uDDEC\uD83C\uDDEA"
-            "Africa/Johannesburg" -> "\uD83C\uDDFF\uD83C\uDDE6"
-            "America/Asuncion" -> "\uD83C\uDDF5\uD83C\uDDFE"
-            "America/Buenos_Aires" -> "\uD83C\uDDE6\uD83C\uDDF7"
-            "Pacific/Palau" -> "\uD83C\uDDF5\uD83C\uDDFC"
-            else -> ""
-        }
+    private fun emoji(timeZoneId: String): String = when (timeZoneId) {
+        "Asia/Tokyo" ->"\uD83C\uDDEF\uD83C\uDDF5"
+        "UTC" -> "UTC"
+        "America/New_York" -> "\uD83C\uDDFA\uD83C\uDDF8"
+        "US/Pacific" -> "\uD83C\uDDFA\uD83C\uDDF8"
+        "US/Hawaii" -> "\uD83C\uDDFA\uD83C\uDDF8"
+        "Europe/Rome" -> "\uD83C\uDDEE\uD83C\uDDF9"
+        "Australia/Sydney" -> "\uD83C\uDDE6\uD83C\uDDFA"
+        "NZ" -> "\uD83C\uDDF3\uD83C\uDDFF"
+        "Asia/Ho_Chi_Minh" -> "\uD83C\uDDFB\uD83C\uDDF3"
+        "Asia/Ulaanbaatar" -> "\uD83C\uDDF2\uD83C\uDDF3"
+        "Asia/Tbilisi" -> "\uD83C\uDDEC\uD83C\uDDEA"
+        "Africa/Johannesburg" -> "\uD83C\uDDFF\uD83C\uDDE6"
+        "America/Asuncion" -> "\uD83C\uDDF5\uD83C\uDDFE"
+        "America/Buenos_Aires" -> "\uD83C\uDDE6\uD83C\uDDF7"
+        "Pacific/Palau" -> "\uD83C\uDDF5\uD83C\uDDFC"
+        else -> ""
     }
 
 }
