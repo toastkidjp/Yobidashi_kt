@@ -11,6 +11,7 @@ dependencyResolutionManagement {
             version("kotlin", "2.2.0")
             version("room", "2.7.2")
             plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").versionRef("kotlin")
+            library("coreKtx", "androidx.core", "core-ktx").version("1.16.0")
             library("activityCompose", "androidx.activity", "activity-compose").version("1.9.0")
             library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.6.0")
             library("composeUi", "androidx.compose.ui", "ui").version("1.7.4")
