@@ -24,7 +24,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "${property.LibraryVersion.composeCompiler}"
+        kotlinCompilerExtensionVersion = "${LibraryVersion.composeCompiler}"
     }
 }
 
