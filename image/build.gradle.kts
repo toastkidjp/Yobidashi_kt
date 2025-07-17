@@ -38,10 +38,6 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = LibraryVersion.composeCompiler
-    }
 }
 
 tasks.withType<GenerateBuildConfig> {
