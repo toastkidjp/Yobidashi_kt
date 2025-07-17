@@ -9,6 +9,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libraries") {
             version("kotlin", "2.2.0")
+            version("kotlinCompilerExtension", "1.5.15")
             version("room", "2.7.2")
             plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").versionRef("kotlin")
             library("coreKtx", "androidx.core", "core-ktx").version("1.16.0")
