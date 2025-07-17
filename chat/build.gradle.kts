@@ -21,9 +21,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = property.LibraryVersion.composeCompiler
-    }
 }
 
 tasks.withType<com.android.build.gradle.tasks.GenerateBuildConfig> {
