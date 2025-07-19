@@ -97,9 +97,7 @@ fun WorldTimeView(modifier: Modifier = Modifier) {
 
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.clickable {
-                        viewModel.openHourChooser()
-                    }.padding(start = 8.dp)
+                    modifier = Modifier.clickable(onClick = viewModel::openHourChooser).padding(start = 8.dp)
                 ) {
                     Text(
                         viewModel.currentHour(),
