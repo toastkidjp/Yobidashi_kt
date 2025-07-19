@@ -176,4 +176,9 @@ class WorldTimeViewModel {
         else -> ""
     }
 
+    fun setDefault() {
+        currentTime.set(Calendar.getInstance())
+        updateItems()
+    }
+
 }
