@@ -131,7 +131,7 @@ class WorldTimeViewModel {
     private val availableIDs = pickupTimeZone.plus(TimeZone.getAvailableIDs()).distinct()
 
     fun start() {
-        setCurrentTime(Calendar.getInstance())
+        setDefault()
     }
 
     fun setDefault() {
