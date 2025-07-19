@@ -67,7 +67,7 @@ class WorldTimeViewModel {
     fun choose(value: String) {
         val calendar = currentTime.get()
         calendar.timeZone = TimeZone.getTimeZone(value)
-        currentTime.set(calendar)
+        setCurrentTime(calendar)
         updateItems()
         closeChooser()
     }
@@ -87,7 +87,7 @@ class WorldTimeViewModel {
     fun chooseHour(value: Int) {
         val calendar = currentTime.get()
         calendar.set(Calendar.HOUR_OF_DAY, value)
-        currentTime.set(calendar)
+        setCurrentTime(calendar)
         updateItems()
         closeHourChooser()
     }
@@ -107,7 +107,7 @@ class WorldTimeViewModel {
     fun chooseMinute(value: Int) {
         val calendar = currentTime.get()
         calendar.set(Calendar.MINUTE, value)
-        currentTime.set(calendar)
+        setCurrentTime(calendar)
         updateItems()
         closeMinuteChooser()
     }
@@ -177,8 +177,12 @@ class WorldTimeViewModel {
     }
 
     fun setDefault() {
-        currentTime.set(Calendar.getInstance())
+        setCurrentTime(Calendar.getInstance())
         updateItems()
+    }
+
+    private fun setCurrentTime(calendar: Calendar?) {
+        currentTime.set(calendar)
     }
 
 }
