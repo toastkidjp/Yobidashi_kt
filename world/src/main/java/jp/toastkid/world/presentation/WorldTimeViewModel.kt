@@ -134,6 +134,17 @@ class WorldTimeViewModel {
         setCurrentTime(Calendar.getInstance())
     }
 
+    fun setDefault() {
+        setCurrentTime(Calendar.getInstance())
+    }
+
+    private fun setCurrentTime(calendar: Calendar?) {
+        currentTime.set(calendar)
+        currentHour.value = zeroPaddingFormatter.format(currentTime.get().get(Calendar.HOUR_OF_DAY))
+        currentMinute.value = zeroPaddingFormatter.format(currentTime.get().get(Calendar.MINUTE))
+        updateItems()
+    }
+
     private fun updateItems() {
         items.clear()
         val currentTime = currentTime.get()
@@ -175,17 +186,6 @@ class WorldTimeViewModel {
         "America/Buenos_Aires" -> "\uD83C\uDDE6\uD83C\uDDF7"
         "Pacific/Palau" -> "\uD83C\uDDF5\uD83C\uDDFC"
         else -> ""
-    }
-
-    fun setDefault() {
-        setCurrentTime(Calendar.getInstance())
-    }
-
-    private fun setCurrentTime(calendar: Calendar?) {
-        currentTime.set(calendar)
-        currentHour.value = zeroPaddingFormatter.format(currentTime.get().get(Calendar.HOUR_OF_DAY))
-        currentMinute.value = zeroPaddingFormatter.format(currentTime.get().get(Calendar.MINUTE))
-        updateItems()
     }
 
 }
