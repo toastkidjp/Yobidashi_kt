@@ -114,7 +114,7 @@ class WorldTimeViewModel {
 
     private val zeroPaddingFormatter = DecimalFormat("00")
 
-    fun currentHour() = zeroPaddingFormatter.format(currentTime.get().get(Calendar.HOUR_OF_DAY))
+    fun currentHour(): String = zeroPaddingFormatter.format(currentTime.get().get(Calendar.HOUR_OF_DAY))
 
     fun currentMinute(): String = zeroPaddingFormatter.format(currentTime.get().get(Calendar.MINUTE))
 
