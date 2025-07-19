@@ -159,9 +159,7 @@ fun WorldTimeView(modifier: Modifier = Modifier) {
                 }
 
                 Button(
-                    onClick = {
-                        viewModel.setDefault()
-                    },
+                    onClick = viewModel::setDefault,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 ) {
                     Text("Default")
