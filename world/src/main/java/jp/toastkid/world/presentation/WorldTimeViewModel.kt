@@ -21,7 +21,7 @@ import java.util.TimeZone
 
 class WorldTimeViewModel {
 
-    private val currentTime = AtomicReference(Calendar.getInstance())
+    private val currentTime = AtomicReference<Calendar>()
 
     private val listState = LazyListState()
 
@@ -134,6 +134,7 @@ class WorldTimeViewModel {
     private val availableIDs = pickupTimeZone.plus(TimeZone.getAvailableIDs()).distinct()
 
     fun start() {
+        setCurrentTime(Calendar.getInstance())
         updateItems()
     }
 
