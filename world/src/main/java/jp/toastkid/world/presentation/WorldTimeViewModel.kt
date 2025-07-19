@@ -116,7 +116,7 @@ class WorldTimeViewModel {
 
     fun currentHour() = zeroPaddingFormatter.format(currentTime.get().get(Calendar.HOUR_OF_DAY))
 
-    fun currentMinute() = zeroPaddingFormatter.format(currentTime.get().get(Calendar.MINUTE))
+    fun currentMinute(): String = zeroPaddingFormatter.format(currentTime.get().get(Calendar.MINUTE))
 
     fun currentTimezoneLabel(): String {
         val emoji = emoji(currentTime.get().timeZone.id)
