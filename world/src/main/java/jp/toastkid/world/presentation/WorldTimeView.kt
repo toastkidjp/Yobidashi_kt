@@ -138,7 +138,7 @@ fun WorldTimeView(modifier: Modifier = Modifier) {
                     Text(
                         viewModel.currentMinute(),
                         fontSize = 24.sp
-                        )
+                    )
                     DropdownMenu(
                         viewModel.openingMinuteChooser(),
                         viewModel::closeMinuteChooser
