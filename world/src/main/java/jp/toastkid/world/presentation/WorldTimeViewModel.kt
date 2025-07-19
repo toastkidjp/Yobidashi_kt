@@ -13,11 +13,11 @@ import android.text.format.DateFormat
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AtomicReference
 import jp.toastkid.world.domain.model.WorldTime
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.TimeZone
+import java.util.concurrent.atomic.AtomicReference
 
 class WorldTimeViewModel {
 
