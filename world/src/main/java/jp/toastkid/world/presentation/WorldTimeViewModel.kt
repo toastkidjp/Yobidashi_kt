@@ -154,7 +154,7 @@ class WorldTimeViewModel {
 
     fun label(timeZoneId: String): String {
         val emoji = "${emoji(timeZoneId)} "
-        return "$emoji $timeZoneId"
+        return "$emoji$timeZoneId"
     }
 
     private fun emoji(timeZoneId: String): String = when (timeZoneId) {
