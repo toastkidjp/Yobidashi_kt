@@ -37,7 +37,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.world.domain.model.WorldTime
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorldTimeView(modifier: Modifier = Modifier) {
     val context = LocalContext.current as? ComponentActivity ?: return
