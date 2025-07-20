@@ -116,6 +116,6 @@ class WorldTimeViewModelTest {
 
     @Test
     fun label() {
-        println(subject.label("Asia/Tokyo"))
+        assertEquals("\uD83C\uDDEF\uD83C\uDDF5 Asia/Tokyo", subject.label("Asia/Tokyo"))
     }
 }
