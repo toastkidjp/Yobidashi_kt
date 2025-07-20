@@ -141,7 +141,7 @@ dependencies {
     // Compose dependencies.
     implementation(libraries.composeMaterial3)
     implementation(libraries.activityCompose)
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.navigation:navigation-compose:2.9.2")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
