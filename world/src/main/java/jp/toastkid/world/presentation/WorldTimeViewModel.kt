@@ -8,12 +8,12 @@
 
 package jp.toastkid.world.presentation
 
-import android.icu.text.DecimalFormat
 import android.text.format.DateFormat
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.world.domain.model.WorldTime
+import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.TimeZone
@@ -140,6 +140,7 @@ class WorldTimeViewModel {
 
     private fun setCurrentTime(calendar: Calendar?) {
         currentTime.set(calendar)
+        println(zeroPaddingFormatter)
         currentHour.value = zeroPaddingFormatter.format(currentTime.get().get(Calendar.HOUR_OF_DAY))
         currentMinute.value = zeroPaddingFormatter.format(currentTime.get().get(Calendar.MINUTE))
         updateItems()
