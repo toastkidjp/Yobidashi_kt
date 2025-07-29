@@ -140,7 +140,6 @@ class WorldTimeViewModel {
 
     private fun setCurrentTime(calendar: Calendar?) {
         currentTime.set(calendar)
-        println(zeroPaddingFormatter)
         currentHour.value = zeroPaddingFormatter.format(currentTime.get().get(Calendar.HOUR_OF_DAY))
         currentMinute.value = zeroPaddingFormatter.format(currentTime.get().get(Calendar.MINUTE))
         updateItems()
