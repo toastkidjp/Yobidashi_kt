@@ -50,7 +50,7 @@ class WorldTimeViewModel {
         "IST"
     )
 
-    fun pickupTimeZone() = pickupTimeZone
+    fun pickupTimeZone(): List<String> = pickupTimeZone
 
     private val openChooser = mutableStateOf(false)
 
