@@ -320,24 +320,8 @@ fun EditorTabView(path: String?, modifier: Modifier) {
 
         contentViewModel.replaceAppBarContent {
             AppBarContent(
-                {
-                    Text(
-                        text = stringResource(R.string.last_saved) + viewModel.lastSaved(),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 14.sp,
-                        maxLines = 2,
-                        modifier = it
-                    )
-                },
-                {
-                    Text(
-                        text = stringResource(jp.toastkid.lib.R.string.message_character_count, viewModel.contentLength()),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 14.sp,
-                        maxLines = 2,
-                        modifier = it
-                    )
-                },
+                viewModel.lastSaved(),
+                viewModel.contentLength(),
                 { fileActionUseCase.save(viewModel::openInputFileNameDialog) },
                 viewModel::openConfirmDialog,
                 viewModel::openInputFileNameDialog,
@@ -354,8 +338,8 @@ fun EditorTabView(path: String?, modifier: Modifier) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(
-    LastModified: @Composable (Modifier) -> Unit,
-    ContentLength: @Composable (Modifier) -> Unit,
+    lastSaved: CharSequence,
+    contentLength: Int,
     saveFile: () -> Unit,
     openConfirmDialog: () -> Unit,
     openInputFileNameDialog: () -> Unit,
@@ -424,13 +408,15 @@ private fun AppBarContent(
 
         EditorMenuItem(R.string.load_from_storage, R.drawable.ic_load, openLoadFromStorageDialog)
 
-        LastModified(
+        LastSaved(
+            lastSaved,
             Modifier
                 .padding(start = 4.dp, end = 4.dp)
                 .align(Alignment.CenterVertically)
         )
 
         ContentLength(
+            contentLength,
             Modifier
                 .padding(start = 4.dp, end = 4.dp)
                 .align(Alignment.CenterVertically)
@@ -438,6 +424,28 @@ private fun AppBarContent(
 
         EditorMenuItem(jp.toastkid.lib.R.string.clear_all, jp.toastkid.lib.R.drawable.ic_clear_form, openConfirmDialog)
     }
+}
+
+@Composable
+private fun LastSaved(lastSaved: CharSequence, modifier: Modifier) {
+    Text(
+        text = stringResource(R.string.last_saved) + lastSaved,
+        color = MaterialTheme.colorScheme.onPrimary,
+        fontSize = 14.sp,
+        maxLines = 2,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun ContentLength(contentLength: Int, modifier: Modifier) {
+    Text(
+        text = stringResource(jp.toastkid.lib.R.string.message_character_count, contentLength),
+        color = MaterialTheme.colorScheme.onPrimary,
+        fontSize = 14.sp,
+        maxLines = 2,
+        modifier = modifier
+    )
 }
 
 @Composable
