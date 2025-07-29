@@ -60,7 +60,7 @@ class WorldTimeViewModelTest {
         subject.choose("Asia/Seoul")
 
         assertFalse(subject.openingChooser())
-        println(subject.currentTimezoneLabel())
+        assertEquals("Asia/Seoul", subject.currentTimezoneLabel())
     }
 
     @Test
