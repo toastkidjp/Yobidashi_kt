@@ -20,9 +20,9 @@ class StringSurroundingUseCase {
         val text = editText.text.substring(selectionStart, selectionEnd)
 
         editText.text.replace(
-                selectionStart,
-                selectionEnd,
-                "$surrounding$text$surrounding"
+            selectionStart,
+            selectionEnd,
+            "$surrounding$text$surrounding"
         )
     }
 }
