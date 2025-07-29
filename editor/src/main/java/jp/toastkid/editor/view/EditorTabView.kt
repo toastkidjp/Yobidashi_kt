@@ -412,7 +412,11 @@ private fun AppBarContent(
             )
         }
 
-        EditorMenuItem(R.string.load_from_storage, R.drawable.ic_load, openLoadFromStorageDialog)
+        EditorMenuItem(
+            R.string.load_from_storage,
+            R.drawable.ic_load,
+            openLoadFromStorageDialog
+        )
 
         LastSaved(
             lastSaved,
