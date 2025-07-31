@@ -50,10 +50,10 @@ import jp.toastkid.setting.R
 import jp.toastkid.setting.application.background.load.LoadedAction
 import jp.toastkid.setting.domain.service.DarkModeApplier
 import jp.toastkid.setting.presentation.SwitchRow
-import jp.toastkid.setting.presentation.WithIcon
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.ui.parts.InsetDivider
+import jp.toastkid.ui.parts.WithIcon
 import java.io.File
 
 @Composable
@@ -153,12 +153,11 @@ internal fun DisplaySettingUi() {
             InsetDivider()
 
             WithIcon(
-                textId = jp.toastkid.lib.R.string.title_delete_all,
-                clickable = {
+                jp.toastkid.lib.R.string.title_delete_all,
+                jp.toastkid.lib.R.drawable.ic_clear_form,
+                Modifier.clickable {
                     openClearImagesDialog.value = true
-                },
-                iconId = jp.toastkid.lib.R.drawable.ic_clear_form,
-                iconTint = MaterialTheme.colorScheme.secondary
+                }
             )
 
             InsetDivider()
