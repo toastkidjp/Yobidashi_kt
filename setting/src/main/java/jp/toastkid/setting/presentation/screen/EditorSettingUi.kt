@@ -47,8 +47,8 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.setting.R
 import jp.toastkid.setting.presentation.ColorPaletteUi
-import jp.toastkid.setting.presentation.WithIcon
 import jp.toastkid.ui.parts.InsetDivider
+import jp.toastkid.ui.parts.WithIcon
 
 @Composable
 internal fun EditorSettingUi() {
@@ -120,7 +120,8 @@ internal fun EditorSettingUi() {
             item {
                 WithIcon(
                     R.string.title_copy_colors,
-                    {
+                    jp.toastkid.lib.R.drawable.ic_clip,
+                    Modifier.clickable {
                         preferenceApplier.setEditorBackgroundColor(preferenceApplier.color)
                         preferenceApplier.setEditorFontColor(preferenceApplier.fontColor)
 
@@ -128,9 +129,7 @@ internal fun EditorSettingUi() {
                         currentFontColor.value = Color(preferenceApplier.fontColor)
 
                         contentViewModel?.snackShort(R.string.settings_color_done_commit)
-                    },
-                    MaterialTheme.colorScheme.secondary,
-                    jp.toastkid.lib.R.drawable.ic_clip
+                    }
                 )
             }
 
