@@ -65,7 +65,6 @@ class ExifInformationExtractorUseCase(
                 ExifInterface.TAG_ORIENTATION,
                 ExifInterface.TAG_IMAGE_DESCRIPTION,
             ExifInterface.TAG_DEFAULT_CROP_SIZE,
-
         )
 
     }
