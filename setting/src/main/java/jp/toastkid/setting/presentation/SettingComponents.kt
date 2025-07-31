@@ -10,7 +10,6 @@ package jp.toastkid.setting.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
@@ -25,48 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-
-@Composable
-internal fun TextMenu(
-    textId: Int,
-    clickable: () -> Unit
-) {
-    Text(
-        stringResource(id = textId),
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = clickable)
-            .padding(16.dp)
-    )
-}
-
-@Composable
-internal fun WithIcon(
-    textId: Int,
-    clickable: () -> Unit,
-    iconTint: Color,
-    iconId: Int
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable(onClick = clickable)
-            .padding(16.dp)
-    ) {
-        Icon(
-            painterResource(id = iconId),
-            tint = iconTint,
-            contentDescription = stringResource(id = textId),
-            modifier = Modifier.padding(end = 4.dp)
-        )
-
-        Text(
-            stringResource(id = textId),
-            modifier = Modifier
-                .weight(1f)
-        )
-    }
-}
 
 @Composable
 internal fun CheckableRow(
