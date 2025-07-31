@@ -20,10 +20,6 @@ class UKOffDayFinder : OffDayFinderService {
     override fun invoke(year: Int, month: Int, useUserOffDay: Boolean): List<Holiday> {
         val holidays = mutableListOf<Holiday>()
 
-        /*if (useUserOffDay && userOffDayService(month, date)) {
-            return true
-        }*/
-
         val firstOrNull = FixedUKHoliday.find(month)
         holidays.addAll(firstOrNull)
 
