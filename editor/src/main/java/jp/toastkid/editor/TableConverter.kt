@@ -18,9 +18,9 @@ class TableConverter {
         val text = editText.text.substring(selectionStart, selectionEnd)
 
         editText.text.replace(
-                selectionStart,
-                selectionEnd,
-                "| ${text.trim().replace(" ", " | ").replace("\n", "\n| ")}"
+            selectionStart,
+            selectionEnd,
+            "| ${text.trim().replace(" ", " | ").replace("\n", "\n| ")}"
         )
     }
 
