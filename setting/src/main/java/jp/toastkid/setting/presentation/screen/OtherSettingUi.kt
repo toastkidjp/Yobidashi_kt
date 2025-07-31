@@ -45,10 +45,10 @@ import jp.toastkid.setting.R
 import jp.toastkid.setting.application.intent.SettingsIntentFactory
 import jp.toastkid.setting.domain.service.PreferencesClearUseCase
 import jp.toastkid.setting.presentation.CheckableRow
-import jp.toastkid.setting.presentation.WithIcon
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.ui.parts.InsetDivider
+import jp.toastkid.ui.parts.WithIcon
 
 @Composable
 internal fun OtherSettingUi() {
@@ -166,9 +166,10 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_settings_device,
-                    { activityContext.startActivity(SettingsIntentFactory().makeLaunch()) },
-                    MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_settings_cell_black
+                    R.drawable.ic_settings_cell_black,
+                    Modifier.clickable {
+                        activityContext.startActivity(SettingsIntentFactory().makeLaunch())
+                    }
                 )
             }
 
@@ -179,9 +180,10 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_settings_wifi,
-                    { activityContext.startActivity(SettingsIntentFactory().wifi()) },
-                    MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_wifi_black
+                    R.drawable.ic_wifi_black,
+                    Modifier.clickable {
+                        activityContext.startActivity(SettingsIntentFactory().wifi())
+                    }
                 )
             }
 
@@ -192,11 +194,10 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_settings_wireless,
-                    {
+                    R.drawable.ic_network_black,
+                    Modifier.clickable {
                         activityContext.startActivity(SettingsIntentFactory().wireless())
-                    },
-                    MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_network_black
+                    }
                 )
             }
 
@@ -207,11 +208,10 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_settings_date_and_time,
-                    {
+                    R.drawable.ic_time,
+                    Modifier.clickable {
                         activityContext.startActivity(SettingsIntentFactory().dateAndTime())
-                    },
-                    MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_time
+                    }
                 )
             }
 
@@ -222,9 +222,10 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_settings_display,
-                    { activityContext.startActivity(SettingsIntentFactory().display()) },
-                    MaterialTheme.colorScheme.secondary,
-                    R.drawable.ic_phone_android_black
+                    R.drawable.ic_phone_android_black,
+                    Modifier.clickable {
+                        activityContext.startActivity(SettingsIntentFactory().display())
+                    }
                 )
             }
 
@@ -235,9 +236,10 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_settings_all_apps,
-                    { activityContext.startActivity(SettingsIntentFactory().allApps()) },
-                    MaterialTheme.colorScheme.secondary,
-                    jp.toastkid.search.R.drawable.ic_android_developer
+                    jp.toastkid.search.R.drawable.ic_android_developer,
+                    Modifier.clickable {
+                        activityContext.startActivity(SettingsIntentFactory().allApps())
+                    }
                 )
             }
 
@@ -248,9 +250,10 @@ internal fun OtherSettingUi() {
             item {
                 WithIcon(
                     R.string.title_clear_settings,
-                    { openConfirmDialog.value = true },
-                    MaterialTheme.colorScheme.secondary,
-                    jp.toastkid.lib.R.drawable.ic_close_black
+                    jp.toastkid.lib.R.drawable.ic_close_black,
+                    Modifier.clickable {
+                        openConfirmDialog.value = true
+                    }
                 )
             }
 
