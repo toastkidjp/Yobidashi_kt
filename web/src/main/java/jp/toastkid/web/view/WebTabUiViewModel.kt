@@ -125,7 +125,7 @@ class WebTabUiViewModel {
         _longTapActionParameters.value = EMPTY_LONG_TAP_ACTION_PARAMETERS
     }
 
-    private val readerModeText = AtomicReference<String>("")
+    private val readerModeText = AtomicReference("")
 
     fun showReader(
         content: String,
