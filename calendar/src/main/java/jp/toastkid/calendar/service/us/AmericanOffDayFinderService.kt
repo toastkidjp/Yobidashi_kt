@@ -42,9 +42,5 @@ class AmericanOffDayFinderService : OffDayFinderService {
             }
         }
         return holidays
-
-        /*if (useUserOffDay && userOffDayService(month, date)) {
-            return true
-        }*/
     }
 }
