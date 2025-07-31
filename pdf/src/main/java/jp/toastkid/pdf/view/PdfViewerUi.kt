@@ -119,7 +119,7 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
                 .padding(8.dp)
                 .padding(vertical = 4.dp)
         ) {
-            var scale by remember { mutableStateOf(1f) }
+            var scale by remember { mutableFloatStateOf(1f) }
             var offset by remember { mutableStateOf(Offset.Zero) }
 
             Box(
