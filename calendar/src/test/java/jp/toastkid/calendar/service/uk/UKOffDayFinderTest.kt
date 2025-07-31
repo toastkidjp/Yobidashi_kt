@@ -1,6 +1,5 @@
 package jp.toastkid.calendar.service.uk
 
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -13,10 +12,6 @@ class UKOffDayFinderTest {
     @Before
     fun setUp() {
         subject = UKOffDayFinder()
-    }
-
-    @After
-    fun tearDown() {
     }
 
     @Test
