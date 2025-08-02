@@ -131,12 +131,8 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
                             onPress = { /* Called when the gesture starts */ },
                             onDoubleTap = {
                                 coroutineScope.launch {
-                                    if (scale.value != 1f) {
-                                        scale.animateTo(1f)
-                                        return@launch
-                                    }
-
-                                    scale.animateTo(2f)
+                                    val newScale = if (scale.value != 1f) 1f else 2f
+                                    scale.animateTo(newScale)
                                 }
                                 offset = Offset.Zero
                             },
