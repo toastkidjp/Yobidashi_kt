@@ -333,8 +333,9 @@ private fun MaskedCell(
                         )
                     },
                     onClick = {
-                    onMenuItemClick(it)
-                })
+                        onMenuItemClick(it)
+                    }
+                )
             }
         }
     }
