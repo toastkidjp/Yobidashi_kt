@@ -12,6 +12,7 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -119,7 +120,7 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
                 .padding(8.dp)
                 .padding(vertical = 4.dp)
         ) {
-            var scale by remember { mutableFloatStateOf(1f) }
+            val scale = remember { Animatable(1f) }
             var offset by remember { mutableStateOf(Offset.Zero) }
 
             Box(
@@ -129,7 +130,9 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
                         detectTapGestures(
                             onPress = { /* Called when the gesture starts */ },
                             onDoubleTap = {
-                                scale = 1f
+                                coroutineScope.launch {
+                                    scale.animateTo(1f)
+                                }
                                 offset = Offset.Zero
                             },
                             onLongPress = { },
@@ -144,15 +147,17 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier
                         .graphicsLayer(
-                            scaleX = scale,
-                            scaleY = scale,
+                            scaleX = scale.value,
+                            scaleY = scale.value,
                             translationX = offset.x,
                             translationY = offset.y,
                         )
                         .pointerInput(Unit) {
                             onTransform(
                                 onGesture = { offsetChange, zoomChange, _ ->
-                                    scale *= zoomChange
+                                    coroutineScope.launch {
+                                        scale.animateTo(scale.value * zoomChange)
+                                    }
                                     offset += offsetChange
                                 },
                                 onPointerInputChange = { it, _ ->
