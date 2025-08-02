@@ -52,7 +52,6 @@ import jp.toastkid.number.repository.GameRepositoryImplementation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NumberPlaceUi() {
     val context = LocalContext.current
