@@ -25,6 +25,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -35,6 +36,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -76,17 +78,21 @@ fun NumberPlaceUi() {
         viewModel(ContentViewModel::class.java, it)
     }
 
+    val surfaceColor = MaterialTheme.colorScheme.surface
+
     Surface(
         shadowElevation = 4.dp,
+        color = Color.Transparent,
         modifier = Modifier.fillMaxSize()
     ) {
         Box(
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Column(
                 Modifier
                     .verticalScroll(rememberScrollState())
                     .padding(8.dp)
+                    .drawBehind { drawRect(surfaceColor) }
             ) {
                 HorizontalDivider(thickness = viewModel.calculateThickness(0))
 
@@ -136,6 +142,7 @@ fun NumberPlaceUi() {
                             } else {
                                 Text(
                                     cellValue.toString(),
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     fontSize = viewModel.fontSize(),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.weight(1f)
@@ -220,6 +227,7 @@ private fun AppBarContent(
 
         Text(
             "Masking count: ",
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(start = 8.dp)
         )
@@ -233,6 +241,7 @@ private fun AppBarContent(
         ) {
             Text(
                 maskingCount.value,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 fontSize = fontSize
             )
@@ -244,6 +253,7 @@ private fun AppBarContent(
                         text = {
                             Text(
                                 text = "$it",
+                                color = MaterialTheme.colorScheme.onSurface,
                                 fontSize = fontSize,
                                 textAlign = TextAlign.Center
                             )
