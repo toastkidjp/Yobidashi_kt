@@ -78,8 +78,6 @@ fun NumberPlaceUi() {
         viewModel(ContentViewModel::class.java, it)
     }
 
-    val surfaceColor = MaterialTheme.colorScheme.surface
-
     Surface(
         shadowElevation = 4.dp,
         color = Color.Transparent,
@@ -88,77 +86,33 @@ fun NumberPlaceUi() {
         Box(
             contentAlignment = Alignment.Center,
         ) {
-            Column(
-                Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(8.dp)
-                    .drawBehind { drawRect(surfaceColor) }
-            ) {
-                HorizontalDivider(thickness = viewModel.calculateThickness(0))
-
-                viewModel.masked().rows().forEachIndexed { rowIndex, row ->
-                    Row(
-                        modifier = Modifier.height(IntrinsicSize.Min)
+            NumberPlaceBoard(viewModel,
+                { rowIndex, columnIndex, it ->
+                    viewModel.place(rowIndex, columnIndex, it) { done ->
+                        showMessageSnackbar(context, contentViewModel, done)
+                    }
+                },
+                { rowIndex, columnIndex ->
+                    viewModel.openCellOption(rowIndex, columnIndex)
+                },
+                { rowIndex, columnIndex ->
+                    contentViewModel?.snackWithAction(
+                        "Would you like to use hint?",
+                        "Use"
                     ) {
-                        VerticalDivider(thickness = viewModel.calculateThickness(0))
-
-                        row.forEachIndexed { columnIndex, cellValue ->
-                            if (cellValue == -1) {
-                                MaskedCell(
-                                    viewModel.openingCellOption(rowIndex, columnIndex),
-                                    { viewModel.closeCellOption(rowIndex, columnIndex) },
-                                    viewModel.numberLabel(rowIndex, columnIndex),
-                                    {
-                                        viewModel.place(rowIndex, columnIndex, it) { done ->
-                                            showMessageSnackbar(context, contentViewModel, done)
-                                        }
-                                    },
-                                    viewModel.fontSize(),
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .combinedClickable(
-                                            onClick = {
-                                                viewModel.openCellOption(rowIndex, columnIndex)
-                                            },
-                                            onLongClick = {
-                                                contentViewModel?.snackWithAction(
-                                                    "Would you like to use hint?",
-                                                    "Use"
-                                                ) {
-                                                    viewModel.useHint(
-                                                        rowIndex,
-                                                        columnIndex
-                                                    ) { done ->
-                                                        showMessageSnackbar(
-                                                            context,
-                                                            contentViewModel,
-                                                            done
-                                                        )
-                                                    }
-                                                }
-                                            }
-                                        )
-                                )
-                            } else {
-                                Text(
-                                    cellValue.toString(),
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    fontSize = viewModel.fontSize(),
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
-
-                            VerticalDivider(thickness = viewModel.calculateThickness(columnIndex))
+                        viewModel.useHint(
+                            rowIndex,
+                            columnIndex
+                        ) { done ->
+                            showMessageSnackbar(
+                                context,
+                                contentViewModel,
+                                done
+                            )
                         }
                     }
-                    HorizontalDivider(thickness = viewModel.calculateThickness(rowIndex))
                 }
-            }
-
-            if (viewModel.loading().value) {
-                CircularProgressIndicator()
-            }
+            )
         }
     }
 
@@ -187,6 +141,73 @@ fun NumberPlaceUi() {
             viewModel.saveCurrentGame(context)
         }
     })
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun NumberPlaceBoard(
+    viewModel: NumberPlaceViewModel,
+    onMenuItemClick: (Int, Int, Int) -> Unit,
+    onClick: (Int, Int) -> Unit,
+    onLongClick: (Int, Int) -> Unit
+) {
+    val surfaceColor = MaterialTheme.colorScheme.surface
+
+    Column(
+        Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(8.dp)
+            .drawBehind { drawRect(surfaceColor) }
+    ) {
+        HorizontalDivider(thickness = viewModel.calculateThickness(0))
+
+        viewModel.masked().rows().forEachIndexed { rowIndex, row ->
+            Row(
+                modifier = Modifier.height(IntrinsicSize.Min)
+            ) {
+                VerticalDivider(thickness = viewModel.calculateThickness(0))
+
+                row.forEachIndexed { columnIndex, cellValue ->
+                    if (cellValue == -1) {
+                        MaskedCell(
+                            viewModel.openingCellOption(rowIndex, columnIndex),
+                            { viewModel.closeCellOption(rowIndex, columnIndex) },
+                            viewModel.numberLabel(rowIndex, columnIndex),
+                            {
+                                onMenuItemClick(rowIndex, columnIndex, it)
+                            },
+                            viewModel.fontSize(),
+                            modifier = Modifier
+                                .weight(1f)
+                                .combinedClickable(
+                                    onClick = {
+                                        onClick(rowIndex, columnIndex)
+                                    },
+                                    onLongClick = {
+                                        onLongClick(rowIndex, columnIndex)
+                                    }
+                                )
+                        )
+                    } else {
+                        Text(
+                            cellValue.toString(),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = viewModel.fontSize(),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+
+                    VerticalDivider(thickness = viewModel.calculateThickness(columnIndex))
+                }
+            }
+            HorizontalDivider(thickness = viewModel.calculateThickness(rowIndex))
+        }
+    }
+
+    if (viewModel.loading().value) {
+        CircularProgressIndicator()
+    }
 }
 
 private fun deleteCurrentGame(context: Context) {
