@@ -56,6 +56,7 @@ import jp.toastkid.ui.parts.WithIcon
 @Composable
 internal fun OtherSettingUi() {
     val activityContext = LocalContext.current
+
     val preferenceApplier = remember { PreferenceApplier(activityContext) }
 
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
