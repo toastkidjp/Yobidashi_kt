@@ -11,6 +11,7 @@ dependencyResolutionManagement {
             version("kotlin", "2.2.20")
             version("kotlinCompilerExtension", "1.5.15")
             version("room", "2.7.2")
+            version("cameraX", "1.5.0")
             plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").versionRef("kotlin")
             library("coreKtx", "androidx.core", "core-ktx").version("1.16.0")
             library("activityCompose", "androidx.activity", "activity-compose").version("1.9.0")
