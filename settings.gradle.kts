@@ -8,7 +8,7 @@ pluginManagement {
 dependencyResolutionManagement {
     versionCatalogs {
         create("libraries") {
-            version("kotlin", "2.2.0")
+            version("kotlin", "2.2.20")
             version("kotlinCompilerExtension", "1.5.15")
             version("room", "2.7.2")
             plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").versionRef("kotlin")
