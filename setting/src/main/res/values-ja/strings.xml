@@ -81,6 +81,7 @@
     <string name="message_failed_image_removal">画像削除に失敗しました。</string>
     <string name="message_cannot_found_image">画像が設定されていません。</string>
     <string name="message_done_set_image">選択した画像を背景に設定しました。</string>
+    <string name="message_done_storing_key">設定しました</string>
     <string name="sample_a">あ</string>
     <string name="title_filter_color">カラーフィルターの色</string>
     <string name="title_default">デフォルト</string>
