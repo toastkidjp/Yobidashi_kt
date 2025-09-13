@@ -70,7 +70,8 @@ internal fun OtherSettingUi() {
                         onValueChange = { chatApiKeyInput.value = it },
                         label = {
                             Text(
-                            "Please input Gemini's API Key if you want to use chat function in this app."
+                            "Please input Gemini's API Key if you want to use chat function in this app.",
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         },
                         keyboardActions = KeyboardActions(
