@@ -145,12 +145,6 @@ fun ChatTabView() {
         }
     }
 
-    LaunchedEffect(key1 = viewModel.autoScrollingKey(), block = {
-        coroutineScope.launch {
-            viewModel.scrollState().animateScrollToItem(viewModel.messages().size)
-        }
-    })
-
     contentViewModel?.replaceAppBarContent {
         TextField(
             viewModel.textInput(),
