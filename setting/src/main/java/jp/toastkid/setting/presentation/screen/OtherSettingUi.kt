@@ -39,6 +39,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.tab.StartUp
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.setting.R
@@ -54,6 +57,10 @@ import jp.toastkid.ui.parts.WithIcon
 internal fun OtherSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = remember { PreferenceApplier(activityContext) }
+
+    val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let {
+        viewModel(ContentViewModel::class.java, it)
+    }
 
     val wifiOnly = remember { mutableStateOf(preferenceApplier.wifiOnly) }
 
@@ -77,6 +84,7 @@ internal fun OtherSettingUi() {
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 preferenceApplier.setChatApiKey(chatApiKeyInput.value.text)
+                                contentViewModel?.snackShort(R.string.message_done_storing_key)
                             }
                         ),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
