@@ -54,7 +54,7 @@ dependencies {
 
     implementation("androidx.camera:camera-camera2:1.0.2")
     implementation("androidx.camera:camera-lifecycle:1.0.2")
-    implementation("androidx.camera:camera-view:1.3.4")
+    implementation("androidx.camera:camera-view:1.5.0")
 
     implementation(libraries.timber)
 
