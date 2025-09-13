@@ -68,7 +68,11 @@ internal fun OtherSettingUi() {
                     TextField(
                         value = chatApiKeyInput.value,
                         onValueChange = { chatApiKeyInput.value = it },
-                        label = { Text("Please input Gemini's API Key if you want to use chat function in this app.") },
+                        label = {
+                            Text(
+                            "Please input Gemini's API Key if you want to use chat function in this app."
+                            )
+                        },
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 preferenceApplier.setChatApiKey(chatApiKeyInput.value.text)
