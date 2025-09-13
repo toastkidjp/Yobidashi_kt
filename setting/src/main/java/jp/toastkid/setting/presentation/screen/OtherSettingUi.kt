@@ -53,7 +53,7 @@ import jp.toastkid.ui.parts.WithIcon
 @Composable
 internal fun OtherSettingUi() {
     val activityContext = LocalContext.current
-    val preferenceApplier = PreferenceApplier(activityContext)
+    val preferenceApplier = remember { PreferenceApplier(activityContext) }
 
     val wifiOnly = remember { mutableStateOf(preferenceApplier.wifiOnly) }
 
