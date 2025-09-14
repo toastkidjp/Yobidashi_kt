@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.HorizontalDivider
@@ -51,7 +50,6 @@ import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.menu.context.common.CommonContextMenuToolbarFactory
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 
@@ -157,14 +155,9 @@ fun ChatTabView() {
                 unfocusedContainerColor = Color.Transparent,
                 cursorColor = MaterialTheme.colorScheme.secondary
             ),
-            keyboardActions = KeyboardActions{
-                coroutineScope.launch {
-                    viewModel.send()
-                }
-            },
             keyboardOptions = KeyboardOptions(
                 autoCorrectEnabled = true,
-                imeAction = ImeAction.Send
+                imeAction = ImeAction.Default
             ),
             modifier = Modifier
                 .focusRequester(viewModel.focusRequester())
