@@ -15,11 +15,14 @@ class ChatServiceImplementation(apiKey: String) : ChatService {
     private val repositories: Map<GenerativeAiModel, ChatRepository> =
         GenerativeAiModel.values().map { it to ChatApi(apiKey, it.url()) }.toMap()
 
-    override fun send(text: String): String? {
+    override fun send(
+        model: GenerativeAiModel,
+        text: String
+    ): String? {
         val chat = chatHolder.get()
         chat.addUserText(text)
 
-        repositories.get(GenerativeAiModel.GEMINI_2_5_FLASH_LITE)?.request(chat.makeContent()) {
+        repositories.get(model)?.request(chat.makeContent()) {
             if (it == null) {
                 return@request
             }
