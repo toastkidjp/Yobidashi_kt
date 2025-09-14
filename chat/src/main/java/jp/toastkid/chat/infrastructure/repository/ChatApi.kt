@@ -10,10 +10,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
 
-class ChatApi(private val apiKey: String) : ChatRepository {
+class ChatApi(
+    private val apiKey: String,
+    private val apiUrl: String,
+) : ChatRepository {
 
     override fun request(content: String, streamLineConsumer: (String?) -> Unit) {
-        val connection = URL("https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=$apiKey").openConnection() as? HttpURLConnection ?: return
+        val connection = URL("$apiUrl$apiKey").openConnection() as? HttpURLConnection ?: return
         connection.setRequestProperty("Content-Type", "application/json")
         connection.requestMethod = "POST"
         connection.doInput = true
