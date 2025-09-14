@@ -2,6 +2,7 @@ package jp.toastkid.chat.infrastructure.service
 
 import jp.toastkid.chat.domain.model.Chat
 import jp.toastkid.chat.domain.model.ChatMessage
+import jp.toastkid.chat.domain.model.GenerativeAiModel
 import jp.toastkid.chat.domain.repository.ChatRepository
 import jp.toastkid.chat.domain.service.ChatService
 import jp.toastkid.chat.infrastructure.repository.ChatApi
@@ -11,13 +12,14 @@ class ChatServiceImplementation(apiKey: String) : ChatService {
 
     private val chatHolder: AtomicReference<Chat> = AtomicReference(Chat())
 
-    private val repository: ChatRepository = ChatApi(apiKey)
+    private val repositories: Map<GenerativeAiModel, ChatRepository> =
+        GenerativeAiModel.values().map { it to ChatApi(apiKey, it.url()) }.toMap()
 
     override fun send(text: String): String? {
         val chat = chatHolder.get()
         chat.addUserText(text)
 
-        repository.request(chat.makeContent()) {
+        repositories.get(GenerativeAiModel.GEMINI_2_5_FLASH_LITE)?.request(chat.makeContent()) {
             if (it == null) {
                 return@request
             }
