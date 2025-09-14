@@ -37,6 +37,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
@@ -165,6 +166,17 @@ fun ChatTabView() {
                     autoCorrectEnabled = true,
                     imeAction = ImeAction.Default
                 ),
+                trailingIcon = {
+                    Icon(
+                        painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
+                        contentDescription = "clear text",
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.onValueChanged(TextFieldValue())
+                            }
+                    )
+                },
                 modifier = Modifier
                     .focusRequester(viewModel.focusRequester())
                     .weight(1f)
