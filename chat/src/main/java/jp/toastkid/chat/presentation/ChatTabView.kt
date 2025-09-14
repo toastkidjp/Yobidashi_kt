@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -50,6 +51,7 @@ import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.menu.context.common.CommonContextMenuToolbarFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 
@@ -144,26 +146,39 @@ fun ChatTabView() {
     }
 
     contentViewModel?.replaceAppBarContent {
-        TextField(
-            viewModel.textInput(),
-            label = { Text(viewModel.label(), color = MaterialTheme.colorScheme.onPrimary) },
-            maxLines = Int.MAX_VALUE,
-            onValueChange = viewModel::onValueChanged,
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-                unfocusedContainerColor = Color.Transparent,
-                cursorColor = MaterialTheme.colorScheme.secondary
-            ),
-            keyboardOptions = KeyboardOptions(
-                autoCorrectEnabled = true,
-                imeAction = ImeAction.Default
-            ),
-            modifier = Modifier
-                .focusRequester(viewModel.focusRequester())
-                .fillMaxWidth()
-                .semantics { contentDescription = "Input message box." }
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            TextField(
+                viewModel.textInput(),
+                label = { Text(viewModel.label(), color = MaterialTheme.colorScheme.onPrimary) },
+                maxLines = Int.MAX_VALUE,
+                onValueChange = viewModel::onValueChanged,
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                    unfocusedContainerColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.secondary
+                ),
+                keyboardOptions = KeyboardOptions(
+                    autoCorrectEnabled = true,
+                    imeAction = ImeAction.Default
+                ),
+                modifier = Modifier
+                    .focusRequester(viewModel.focusRequester())
+                    .weight(1f)
+                    .semantics { contentDescription = "Input message box." }
+            )
+
+            Button(onClick = {
+                coroutineScope.launch {
+                    viewModel.send()
+                }
+            }) {
+                Text("Send")
+            }
+        }
 
         LaunchedEffect(key1 = Unit, block = {
             viewModel.launch(
