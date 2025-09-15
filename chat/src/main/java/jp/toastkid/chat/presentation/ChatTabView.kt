@@ -2,6 +2,7 @@ package jp.toastkid.chat.presentation
 
 import android.text.format.DateFormat
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -43,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import jp.toastkid.chat.domain.model.GenerativeAiModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
@@ -151,6 +155,49 @@ fun ChatTabView() {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
+            Box(
+                contentAlignment = Alignment.CenterStart,
+                modifier = Modifier.padding(start = 8.dp)
+            ) {
+                DropdownMenu(
+                    viewModel.openingModelChooser(),
+                    viewModel::closeModelChooser
+                ) {
+                    GenerativeAiModel.entries.forEach { model ->
+                        DropdownMenuItem(text = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    painterResource(viewModel.modelIcon(model)),
+                                    contentDescription = model.label()
+                                )
+                                Text(model.label())
+                            }
+                        },
+                            onClick = {
+                                viewModel.chooseModel(model)
+                                viewModel.closeModelChooser()
+                            },
+                            modifier = Modifier
+                            .clickable {
+
+                            }
+                            .semantics {
+                            contentDescription = "chooserItem-${model.label()}"
+                        })
+                    }
+                }
+                Surface(
+                    shadowElevation = 4.dp,
+                    modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
+                        .semantics { contentDescription = "Model chooser" }
+                ) {
+                    Icon(
+                        painterResource(viewModel.currentModelIcon()),
+                        viewModel.currentModelLabel()
+                    )
+                }
+            }
+
             TextField(
                 viewModel.textInput(),
                 label = { Text(viewModel.label(), color = MaterialTheme.colorScheme.onPrimary) },
