@@ -6,6 +6,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.chat.domain.model.ChatMessage
+import jp.toastkid.chat.domain.model.GenerativeAiModel
 import jp.toastkid.chat.domain.service.ChatService
 import jp.toastkid.chat.infrastructure.service.ChatServiceImplementation
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,34 @@ class ChatTabViewModel(apiKey: String) {
 
     fun autoScrollingKey() = if (messages().isEmpty()) 0 else messages().last().text.length
 
+    private val openModelChooser = mutableStateOf(false)
+
+    fun openModelChooser() {
+        openModelChooser.value = true
+    }
+
+    fun closeModelChooser() {
+        openModelChooser.value = false
+    }
+
+    fun openingModelChooser(): Boolean {
+        return openModelChooser.value
+    }
+
+    private val currentModel = mutableStateOf(GenerativeAiModel.GEMINI_2_5_FLASH_LITE)
+
+    fun modelIcon(model: GenerativeAiModel) = when (model) {
+        else -> jp.toastkid.lib.R.drawable.ic_clip
+    }
+
+    fun currentModelIcon() = modelIcon(currentModel.value)
+
+    fun currentModelLabel() = currentModel.value.label()
+
+    fun chooseModel(model: GenerativeAiModel) {
+        currentModel.value = model
+    }
+
     suspend fun send() {
         val text = textInput.value.text
         if (text.isBlank()) {
@@ -37,7 +66,7 @@ class ChatTabViewModel(apiKey: String) {
 
         connecting.value = true
         withContext(Dispatchers.IO) {
-            service.send(text)
+            service.send(currentModel.value, text)
         }
         connecting.value = false
     }
