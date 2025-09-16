@@ -114,6 +114,10 @@ class ChatTabViewModel(apiKey: String) {
 
     fun exportableContent() = service.getChat().list().map { it.toString() }.toString()
 
+    fun clearChat() {
+        service.clearChat()
+    }
+
 }
 
 private const val DEFAULT_LABEL = "Would you like to ask any question?"
