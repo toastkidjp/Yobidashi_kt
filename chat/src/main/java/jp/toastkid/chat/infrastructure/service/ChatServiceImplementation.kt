@@ -47,4 +47,8 @@ class ChatServiceImplementation(apiKey: String) : ChatService {
         return chatHolder.get().list()
     }
 
+    override fun clearChat() {
+        chatHolder.set(Chat())
+    }
+
 }
