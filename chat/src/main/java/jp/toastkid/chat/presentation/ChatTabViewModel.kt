@@ -116,4 +116,4 @@ class ChatTabViewModel(apiKey: String) {
 
 }
 
-private const val DEFAULT_LABEL = "Please would you input any sentences which you know something?"
+private const val DEFAULT_LABEL = "Would you like to ask any question?"
