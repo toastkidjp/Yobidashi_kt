@@ -12,6 +12,8 @@ class ChatServiceImplementation(apiKey: String) : ChatService {
 
     private val chatHolder: AtomicReference<Chat> = AtomicReference(Chat())
 
+    private val converter: ChatRequestContentConverter = ChatRequestContentConverter()
+
     private val repositories: Map<GenerativeAiModel, ChatRepository> =
         GenerativeAiModel.values().map { it to ChatApi(apiKey, it.url()) }.toMap()
 
@@ -22,7 +24,7 @@ class ChatServiceImplementation(apiKey: String) : ChatService {
         val chat = chatHolder.get()
         chat.addUserText(text)
 
-        repositories.get(model)?.request(chat.makeContent()) {
+        repositories.get(model)?.request(converter(chat, model.image())) {
             if (it == null) {
                 return@request
             }
