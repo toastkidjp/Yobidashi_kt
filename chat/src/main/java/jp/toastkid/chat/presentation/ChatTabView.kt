@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -56,7 +55,6 @@ import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.menu.context.common.CommonContextMenuToolbarFactory
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 
@@ -214,29 +212,34 @@ fun ChatTabView() {
                     imeAction = ImeAction.Default
                 ),
                 trailingIcon = {
-                    Icon(
-                        painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
-                        contentDescription = "clear text",
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier
-                            .clickable {
-                                viewModel.onValueChanged(TextFieldValue())
-                            }
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
+                            contentDescription = "clear text",
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier
+                                .clickable {
+                                    viewModel.onValueChanged(TextFieldValue())
+                                }
+                        )
+
+                        Icon(
+                            painterResource(jp.toastkid.lib.R.drawable.ic_search),
+                            contentDescription = "Send chat",
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier
+                                .clickable {
+                                    viewModel.onValueChanged(TextFieldValue())
+                                }
+                                .padding(start = 4.dp)
+                        )
+                    }
                 },
                 modifier = Modifier
                     .focusRequester(viewModel.focusRequester())
                     .weight(1f)
                     .semantics { contentDescription = "Input message box." }
             )
-
-            Button(onClick = {
-                coroutineScope.launch {
-                    viewModel.send()
-                }
-            }) {
-                Text("Send")
-            }
         }
 
         LaunchedEffect(key1 = Unit, block = {
