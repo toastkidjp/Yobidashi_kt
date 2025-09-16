@@ -14,4 +14,6 @@ interface ChatService {
 
     fun messages(): List<ChatMessage>
 
+    fun clearChat()
+
 }
