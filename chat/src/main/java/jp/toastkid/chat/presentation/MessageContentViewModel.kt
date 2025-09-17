@@ -35,7 +35,7 @@ class MessageContentViewModel {
         val stream = ByteArrayInputStream(
             Base64.decode(base64Image, Base64.NO_WRAP)
         )
-        return stream.use { BitmapFactory.decodeStream(stream) }.asImageBitmap()
+        return stream.use(BitmapFactory::decodeStream).asImageBitmap()
     }
 
 }
