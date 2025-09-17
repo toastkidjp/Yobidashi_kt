@@ -1,10 +1,12 @@
 package jp.toastkid.chat.infrastructure.service
 
+import jp.toastkid.chat.domain.repository.ChatResponseItem
 import org.json.JSONObject
+import java.util.regex.Pattern
 
 class ChatStreamParser {
 
-    operator fun invoke(line: String): String? {
+    operator fun invoke(line: String): ChatResponseItem? {
         if (line.isBlank() || line.startsWith("data:").not()) {
             return null
         }
@@ -16,7 +18,7 @@ class ChatStreamParser {
         if (firstCandidate.has("finishReason")) {
             val finishReason = firstCandidate.getString("finishReason")
             if (finishReason == "SAFETY" || finishReason == "OTHER") {
-                return "[ERROR]"
+                return ChatResponseItem.error()
             }
         }
 
@@ -24,11 +26,30 @@ class ChatStreamParser {
             return null
         }
 
-        return firstCandidate
-            .getJSONObject("content")
-            .getJSONArray("parts")
-            .getJSONObject(0)
-            .getString("text")
+        val message =
+            firstCandidate
+                .getJSONObject("content")
+                .getJSONArray("parts")
+                .getJSONObject(0)
+                .getString("text")
+                .replace("\\n", "\n")
+                .replace("\\u003e", ">")
+                .replace("\\u003c", "<")
+
+        val imageMatcher = imagePattern.matcher(line)
+        val base64 = if (imageMatcher.find()) imageMatcher.group(2) else null
+
+        val messageText = message ?: base64 ?: ""
+        if (messageText.isEmpty()) {
+            return null
+        }
+
+        return ChatResponseItem(
+            message = messageText,
+            image = base64 != null
+        )
     }
+
+    private val imagePattern = Pattern.compile("\"inlineData\":(.+?)\"data\": \"(.+?)\"", Pattern.DOTALL)
 
 }
