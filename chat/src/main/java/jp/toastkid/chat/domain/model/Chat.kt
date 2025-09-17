@@ -1,6 +1,7 @@
 package jp.toastkid.chat.domain.model
 
 import androidx.compose.runtime.mutableStateListOf
+import jp.toastkid.chat.domain.repository.ChatResponseItem
 
 data class Chat(private val texts: MutableList<ChatMessage> = mutableStateListOf()) {
 
@@ -8,9 +9,13 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableStateListOf
         texts.add(ChatMessage("user", text))
     }
 
-    fun addModelText(text: String) {
+    fun addModelText(text: ChatResponseItem) {
         if (texts.isEmpty() || texts.last().role != "model") {
-            texts.add(ChatMessage("model", text))
+            if (text.image()) {
+                texts.add(ChatMessage("model", text = "", image = text.message()))
+                return
+            }
+            texts.add(ChatMessage("model", text.message()))
             return
         }
 
