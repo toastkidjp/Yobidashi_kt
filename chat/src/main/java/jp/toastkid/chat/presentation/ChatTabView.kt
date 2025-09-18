@@ -179,9 +179,6 @@ fun ChatTabView() {
                                 viewModel.closeModelChooser()
                             },
                             modifier = Modifier
-                            .clickable {
-
-                            }
                             .semantics {
                             contentDescription = "chooserItem-${model.label()}"
                         })
