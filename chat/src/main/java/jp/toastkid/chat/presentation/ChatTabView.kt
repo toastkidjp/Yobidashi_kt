@@ -57,6 +57,7 @@ import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.content.ShareEvent
 import jp.toastkid.ui.menu.context.common.CommonContextMenuToolbarFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 
@@ -229,7 +230,9 @@ fun ChatTabView() {
                             tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
                                 .clickable {
-                                    viewModel.onValueChanged(TextFieldValue())
+                                    coroutineScope.launch {
+                                        viewModel.send()
+                                    }
                                 }
                                 .padding(start = 4.dp)
                         )
