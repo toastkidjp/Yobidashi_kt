@@ -25,17 +25,17 @@ class MessageContentViewModel {
             return current
         }
 
-        val loadImage = loadImage(base64Image)
+        val loadImage = loadImage(base64Image) ?: ImageBitmap(1, 1)
         imageHolder.set(loadImage)
 
-        return imageHolder.get()
+        return loadImage
     }
 
-    private fun loadImage(base64Image: String): ImageBitmap {
+    private fun loadImage(base64Image: String): ImageBitmap? {
         val stream = ByteArrayInputStream(
-            Base64.decode(base64Image, Base64.NO_WRAP)
+            Base64.decode(base64Image, Base64.DEFAULT)
         )
-        return stream.use(BitmapFactory::decodeStream).asImageBitmap()
+        return stream.use(BitmapFactory::decodeStream)?.asImageBitmap()
     }
 
 }
