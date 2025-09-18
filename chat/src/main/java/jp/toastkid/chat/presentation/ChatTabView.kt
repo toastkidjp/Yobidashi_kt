@@ -47,8 +47,10 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import jp.toastkid.chat.domain.model.GenerativeAiModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.R
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
+import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.network.NetworkChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
@@ -243,6 +245,14 @@ fun ChatTabView() {
         }
 
         LaunchedEffect(key1 = Unit, block = {
+            contentViewModel.optionMenus(
+                OptionMenu(
+                    titleId = R.string.clear_all,
+                    action = {
+                        viewModel.clearChat()
+                    }
+                )
+            )
             viewModel.launch(
                 //chatTab.chat()
             )
