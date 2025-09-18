@@ -248,9 +248,7 @@ fun ChatTabView() {
             contentViewModel.optionMenus(
                 OptionMenu(
                     titleId = R.string.clear_all,
-                    action = {
-                        viewModel.clearChat()
-                    }
+                    action = viewModel::clearChat
                 )
             )
             viewModel.launch(
