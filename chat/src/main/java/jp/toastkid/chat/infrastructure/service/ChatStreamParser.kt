@@ -26,28 +26,27 @@ class ChatStreamParser {
             return null
         }
 
-        val firstPart = firstCandidate
-            .getJSONObject("content")
-            .getJSONArray("parts")
-            .getJSONObject(0)
-        val message = if (firstPart.has("text"))
+        val content = firstCandidate.getJSONObject("content")
+        val firstPart =
+            if (content.has("parts")) content.getJSONArray("parts").getJSONObject(0)
+            else null
+        val message = if (firstPart?.has("text") == true)
             firstPart
                 .getString("text")
                 .replace("\\n", "\n")
                 .replace("\\u003e", ">")
                 .replace("\\u003c", "<")
-        else ""
+        else null
 
         val imageMatcher = imagePattern.matcher(line)
         val base64 = if (imageMatcher.find()) imageMatcher.group(2) else null
 
-        val messageText = message ?: base64 ?: ""
-        if (messageText.isEmpty()) {
+        if (message.isNullOrEmpty() && base64.isNullOrEmpty()) {
             return null
         }
 
         return ChatResponseItem(
-            message = messageText,
+            message = message ?: "",
             image = base64 != null
         )
     }
