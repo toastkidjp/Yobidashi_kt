@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
+import jp.toastkid.chat.R
 import jp.toastkid.chat.domain.model.ChatMessage
 import jp.toastkid.chat.domain.model.GenerativeAiModel
 import jp.toastkid.chat.domain.service.ChatService
@@ -45,7 +46,8 @@ class ChatTabViewModel(apiKey: String) {
     private val currentModel = mutableStateOf(GenerativeAiModel.GEMINI_2_5_FLASH_LITE)
 
     fun modelIcon(model: GenerativeAiModel) = when (model) {
-        else -> jp.toastkid.lib.R.drawable.ic_clip
+        GenerativeAiModel.GEMINI_2_0_FLASH_IMAGE -> R.drawable.ic_gen_ai_image
+        else -> R.drawable.ic_agent
     }
 
     fun currentModelIcon() = modelIcon(currentModel.value)
