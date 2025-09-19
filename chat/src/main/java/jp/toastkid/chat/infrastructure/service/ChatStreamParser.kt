@@ -46,7 +46,7 @@ class ChatStreamParser {
         }
 
         return ChatResponseItem(
-            message = message ?: "",
+            message = message ?: base64 ?: "",
             image = base64 != null
         )
     }
