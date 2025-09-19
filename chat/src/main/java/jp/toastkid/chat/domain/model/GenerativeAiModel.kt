@@ -44,4 +44,6 @@ enum class GenerativeAiModel(
 
     fun image() = image
 
+    fun version() = urlParameter.split("-")[1]
+
 }
