@@ -54,6 +54,8 @@ class ChatTabViewModel(apiKey: String) {
 
     fun currentModelLabel() = currentModel.value.label()
 
+    fun currentModelVersion() = currentModel.value.version()
+
     fun chooseModel(model: GenerativeAiModel) {
         currentModel.value = model
     }
