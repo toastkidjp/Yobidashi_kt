@@ -194,6 +194,11 @@ fun ChatTabView() {
                         painterResource(viewModel.currentModelIcon()),
                         viewModel.currentModelLabel()
                     )
+                    Text(
+                        viewModel.currentModelVersion(),
+                        fontSize = 9.sp,
+                        modifier = Modifier.align(Alignment.CenterEnd)
+                    )
                 }
             }
 
