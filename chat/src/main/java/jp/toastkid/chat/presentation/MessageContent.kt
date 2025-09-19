@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MessageContent(
@@ -44,12 +48,22 @@ internal fun MessageContent(
             }
         }
 
-        if (base64Image != null) {
+        if (viewModel.showImage(base64Image)) {
             DisableSelection {
                 Image(
-                    viewModel.image(base64Image),
+                    viewModel.image(),
                     contentDescription = text,
                 )
+            }
+        }
+
+        LaunchedEffect(base64Image) {
+            if (base64Image.isNullOrEmpty()) {
+                return@LaunchedEffect
+            }
+
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.loadImage(base64Image)
             }
         }
     }
