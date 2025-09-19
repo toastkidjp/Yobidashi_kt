@@ -1,19 +1,19 @@
 package jp.toastkid.chat.presentation
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.ui.image.EfficientImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ internal fun MessageContent(
     base64Image: String? = null,
     modifier: Modifier
 ) {
-    val viewModel = MessageContentViewModel()
+    val viewModel = remember { MessageContentViewModel() }
 
     Column(modifier) {
         text.split("\n").forEach {
@@ -49,12 +49,10 @@ internal fun MessageContent(
         }
 
         if (viewModel.showImage(base64Image)) {
-            DisableSelection {
-                Image(
-                    viewModel.image(),
-                    contentDescription = text,
-                )
-            }
+            EfficientImage(
+                viewModel.image(),
+                contentDescription = text,
+            )
         }
 
         LaunchedEffect(base64Image) {
