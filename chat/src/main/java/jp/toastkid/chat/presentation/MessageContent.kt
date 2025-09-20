@@ -9,14 +9,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.ui.image.EfficientImage
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 internal fun MessageContent(
@@ -52,6 +52,7 @@ internal fun MessageContent(
             EfficientImage(
                 viewModel.image(),
                 contentDescription = text,
+                placeholder = painterResource(jp.toastkid.chat.R.drawable.ic_gen_ai_image),
             )
         }
 
@@ -60,7 +61,7 @@ internal fun MessageContent(
                 return@LaunchedEffect
             }
 
-            CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.IO) {
                 viewModel.loadImage(base64Image)
             }
         }
