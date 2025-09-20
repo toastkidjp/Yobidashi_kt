@@ -1,5 +1,6 @@
 package jp.toastkid.chat.presentation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -9,11 +10,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.lib.intent.BitmapShareIntentFactory
 import jp.toastkid.ui.image.EfficientImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,6 +28,7 @@ internal fun MessageContent(
     modifier: Modifier
 ) {
     val viewModel = remember { MessageContentViewModel() }
+    val context = LocalContext.current
 
     Column(modifier) {
         text.split("\n").forEach {
@@ -53,6 +57,9 @@ internal fun MessageContent(
                 viewModel.image(),
                 contentDescription = text,
                 placeholder = painterResource(jp.toastkid.chat.R.drawable.ic_gen_ai_image),
+                modifier = Modifier.clickable {
+                    BitmapShareIntentFactory().invoke(context, viewModel.image())
+                }
             )
         }
 
