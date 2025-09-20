@@ -236,7 +236,7 @@ fun ChatTabView() {
                         )
 
                         Icon(
-                            painterResource(jp.toastkid.lib.R.drawable.ic_search),
+                            painterResource(R.drawable.ic_search),
                             contentDescription = "Send chat",
                             tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
