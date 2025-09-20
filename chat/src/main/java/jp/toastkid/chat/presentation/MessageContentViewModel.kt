@@ -51,4 +51,16 @@ class MessageContentViewModel {
         return base64Image.isNullOrEmpty().not()
     }
 
+    private val openImageDropdownMenu = mutableStateOf(false)
+
+    fun openingImageDropdownMenu() = openImageDropdownMenu.value
+
+    fun openImageDropdownMenu() {
+        openImageDropdownMenu.value = true
+    }
+
+    fun closeImageDropdownMenu() {
+        openImageDropdownMenu.value = false
+    }
+
 }
