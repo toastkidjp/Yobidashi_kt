@@ -106,7 +106,10 @@ fun ChatTabView() {
                                         .align(Alignment.CenterHorizontally)
                                         .clickable {
                                             context.startActivity(
-                                                ShareIntentFactory().invoke(it.text, "Chat_${System.currentTimeMillis()}.txt")
+                                                ShareIntentFactory().invoke(
+                                                    it.text,
+                                                    "Chat_${System.currentTimeMillis()}.txt"
+                                                )
                                             )
                                         }
                                 )
@@ -187,18 +190,21 @@ fun ChatTabView() {
                 }
                 Surface(
                     shadowElevation = 4.dp,
-                    modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
+                    modifier = Modifier
+                        .clickable(onClick = viewModel::openModelChooser)
                         .semantics { contentDescription = "Model chooser" }
                 ) {
-                    Icon(
-                        painterResource(viewModel.currentModelIcon()),
-                        viewModel.currentModelLabel()
-                    )
-                    Text(
-                        viewModel.currentModelVersion(),
-                        fontSize = 9.sp,
-                        modifier = Modifier.align(Alignment.CenterEnd)
-                    )
+                    Column {
+                        Icon(
+                            painterResource(viewModel.currentModelIcon()),
+                            viewModel.currentModelLabel()
+                        )
+                        Text(
+                            viewModel.currentModelVersion(),
+                            fontSize = 9.sp,
+                            modifier = Modifier.align(Alignment.End)
+                        )
+                    }
                 }
             }
 
