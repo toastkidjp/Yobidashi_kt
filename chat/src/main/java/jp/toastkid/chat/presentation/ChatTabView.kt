@@ -45,9 +45,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import jp.toastkid.chat.R
 import jp.toastkid.chat.domain.model.GenerativeAiModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.R
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
 import jp.toastkid.lib.model.OptionMenu
@@ -236,7 +236,7 @@ fun ChatTabView() {
                         )
 
                         Icon(
-                            painterResource(jp.toastkid.chat.R.drawable.ic_send),
+                            painterResource(R.drawable.ic_send),
                             contentDescription = "Send chat",
                             tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
@@ -259,7 +259,7 @@ fun ChatTabView() {
         LaunchedEffect(key1 = Unit, block = {
             contentViewModel.optionMenus(
                 OptionMenu(
-                    titleId = R.string.clear_all,
+                    titleId = jp.toastkid.lib.R.string.clear_all,
                     action = viewModel::clearChat
                 )
             )
