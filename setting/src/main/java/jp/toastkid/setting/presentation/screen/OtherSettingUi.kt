@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
@@ -82,6 +83,9 @@ internal fun OtherSettingUi() {
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         },
+                        colors = TextFieldDefaults.colors(
+                            cursorColor = MaterialTheme.colorScheme.secondary
+                        ),
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 preferenceApplier.setChatApiKey(chatApiKeyInput.value.text)
