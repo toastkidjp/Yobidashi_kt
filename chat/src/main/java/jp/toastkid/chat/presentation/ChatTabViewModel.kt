@@ -27,8 +27,6 @@ class ChatTabViewModel(apiKey: String) {
 
     fun messages(): List<ChatMessage> = service.messages()
 
-    fun autoScrollingKey() = if (messages().isEmpty()) 0 else messages().last().text.length
-
     private val openModelChooser = mutableStateOf(false)
 
     fun openModelChooser() {
