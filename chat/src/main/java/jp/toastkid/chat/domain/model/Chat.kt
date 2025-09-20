@@ -20,8 +20,9 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableStateListOf
         }
 
         val image = if (text.image()) text.message() else null
+        val append = if (text.image()) "" else text.message()
         val element = texts.last()
-        texts.set(texts.lastIndex, element.copy(text = element.text + text.message(), image = image))
+        texts.set(texts.lastIndex, element.copy(text = element.text + append, image = image))
     }
 
     fun list(): List<ChatMessage> = texts
