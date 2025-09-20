@@ -27,4 +27,8 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableStateListOf
 
     fun list(): List<ChatMessage> = texts
 
+    fun clearMessages() {
+        texts.clear()
+    }
+
 }
