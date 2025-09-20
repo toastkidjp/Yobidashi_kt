@@ -72,7 +72,7 @@ internal fun MessageContent(
                     DropdownMenuItem(
                         { Text("Share") },
                         {
-                            BitmapShareIntentFactory().invoke(context, viewModel.image())
+                            context.startActivity(BitmapShareIntentFactory().invoke(context, viewModel.image()))
                             viewModel.closeImageDropdownMenu()
                         }
                     )
