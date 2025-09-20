@@ -1,6 +1,7 @@
 package jp.toastkid.chat.infrastructure.repository
 
 import jp.toastkid.chat.domain.repository.ChatRepository
+import jp.toastkid.chat.domain.repository.ChatResponseItem
 import jp.toastkid.chat.infrastructure.service.ChatStreamParser
 import java.io.BufferedReader
 import java.io.BufferedWriter
@@ -15,7 +16,7 @@ class ChatApi(
     private val apiUrl: String,
 ) : ChatRepository {
 
-    override fun request(content: String, streamLineConsumer: (String?) -> Unit) {
+    override fun request(content: String, streamLineConsumer: (ChatResponseItem?) -> Unit) {
         val connection = URL("$apiUrl$apiKey").openConnection() as? HttpURLConnection ?: return
         connection.setRequestProperty("Content-Type", "application/json")
         connection.requestMethod = "POST"
