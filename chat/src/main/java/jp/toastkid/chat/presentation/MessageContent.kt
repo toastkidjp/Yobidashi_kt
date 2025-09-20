@@ -1,9 +1,12 @@
 package jp.toastkid.chat.presentation
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,14 +56,30 @@ internal fun MessageContent(
         }
 
         if (viewModel.showImage(base64Image)) {
-            EfficientImage(
-                viewModel.image(),
-                contentDescription = text,
-                placeholder = painterResource(jp.toastkid.chat.R.drawable.ic_gen_ai_image),
-                modifier = Modifier.clickable {
-                    BitmapShareIntentFactory().invoke(context, viewModel.image())
+            Box {
+                EfficientImage(
+                    viewModel.image(),
+                    contentDescription = text,
+                    placeholder = painterResource(jp.toastkid.chat.R.drawable.ic_gen_ai_image),
+                    modifier = Modifier.clickable {
+                        viewModel.openImageDropdownMenu()
+                    }
+                )
+                DropdownMenu(
+                    viewModel.openingImageDropdownMenu(),
+                    onDismissRequest = {
+                        viewModel.closeImageDropdownMenu()
+                    }
+                ) {
+                    DropdownMenuItem(
+                        { Text("Share") },
+                        {
+                            BitmapShareIntentFactory().invoke(context, viewModel.image())
+                            viewModel.closeImageDropdownMenu()
+                        }
+                    )
                 }
-            )
+            }
         }
 
         LaunchedEffect(base64Image) {
