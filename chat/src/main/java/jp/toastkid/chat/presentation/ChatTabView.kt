@@ -245,7 +245,7 @@ fun ChatTabView() {
                                         viewModel.send()
                                     }
                                 }
-                                .padding(start = 4.dp)
+                                .padding(start = 8.dp)
                         )
                     }
                 },
@@ -263,6 +263,7 @@ fun ChatTabView() {
                     action = viewModel::clearChat
                 )
             )
+            contentViewModel.showAppBar(coroutineScope)
             viewModel.launch(
                 //chatTab.chat()
             )
