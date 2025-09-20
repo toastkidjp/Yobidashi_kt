@@ -76,7 +76,6 @@ internal fun NavigationalContent(
         }
         tabComposable("tab/article/list") {
             ArticleListUi()
-            takeScreenshot(tabs, LocalView.current)
         }
         tabComposable("tab/article/content/{title}") {
             val title = it?.getString("title") ?: return@tabComposable
