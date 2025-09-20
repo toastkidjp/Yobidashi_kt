@@ -175,7 +175,7 @@ fun ChatTabView() {
                                     painterResource(viewModel.modelIcon(model)),
                                     contentDescription = model.label()
                                 )
-                                Text(model.label())
+                                Text(model.label(), modifier = Modifier.padding(start = 4.dp))
                             }
                         },
                             onClick = {
