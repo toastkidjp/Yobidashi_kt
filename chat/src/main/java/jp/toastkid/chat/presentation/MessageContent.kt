@@ -67,9 +67,7 @@ internal fun MessageContent(
                 )
                 DropdownMenu(
                     viewModel.openingImageDropdownMenu(),
-                    onDismissRequest = {
-                        viewModel.closeImageDropdownMenu()
-                    }
+                    onDismissRequest = viewModel::closeImageDropdownMenu
                 ) {
                     DropdownMenuItem(
                         { Text("Share") },
