@@ -264,9 +264,7 @@ fun ChatTabView() {
                 )
             )
             contentViewModel.showAppBar(coroutineScope)
-            viewModel.launch(
-                //chatTab.chat()
-            )
+            viewModel.launch()
         })
     }
 
