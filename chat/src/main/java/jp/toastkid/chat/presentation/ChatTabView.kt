@@ -163,7 +163,7 @@ fun ChatTabView() {
         ) {
             Box(
                 contentAlignment = Alignment.CenterStart,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 4.dp, end = 4.dp)
             ) {
                 DropdownMenu(
                     viewModel.openingModelChooser(),
