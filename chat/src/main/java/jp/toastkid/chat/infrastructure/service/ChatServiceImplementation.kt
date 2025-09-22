@@ -15,7 +15,7 @@ class ChatServiceImplementation(apiKey: String) : ChatService {
     private val converter: ChatRequestContentConverter = ChatRequestContentConverter()
 
     private val repositories: Map<GenerativeAiModel, ChatRepository> =
-        GenerativeAiModel.values().map { it to ChatApi(apiKey, it.url()) }.toMap()
+        GenerativeAiModel.entries.map { it to ChatApi(apiKey, it.url()) }.toMap()
 
     override fun send(
         model: GenerativeAiModel,
