@@ -234,6 +234,7 @@ fun ChatTabView() {
                                 .clickable {
                                     viewModel.onValueChanged(TextFieldValue())
                                 }
+                                .padding(4.dp)
                         )
 
                         Icon(
