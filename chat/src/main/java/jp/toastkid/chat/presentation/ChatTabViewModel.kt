@@ -83,9 +83,7 @@ class ChatTabViewModel(apiKey: String) {
         return focusRequester
     }
 
-    fun launch(
-        //chat: Chat
-    ) {
+    fun launch() {
         //service.setChat(chat)
         focusRequester().requestFocus()
     }
