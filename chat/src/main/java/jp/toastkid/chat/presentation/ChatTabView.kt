@@ -241,12 +241,13 @@ fun ChatTabView() {
                             contentDescription = "Send chat",
                             tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
-                                .padding(start = 8.dp)
+                                .padding(start = 4.dp)
                                 .clickable {
                                     coroutineScope.launch {
                                         viewModel.send()
                                     }
                                 }
+                                .padding(4.dp)
                         )
                     }
                 },
