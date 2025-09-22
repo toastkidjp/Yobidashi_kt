@@ -90,10 +90,6 @@ class ChatTabViewModel(apiKey: String) {
         focusRequester().requestFocus()
     }
 
-    /*fun update(chatTab: ChatTab) {
-        mainViewModel.replaceTab(chatTab,  ChatTab(service.getChat()))
-    }*/
-
     fun label(): String {
         return if (connecting.value) "Connecting in progress..." else DEFAULT_LABEL
     }
