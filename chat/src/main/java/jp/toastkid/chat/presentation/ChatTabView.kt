@@ -86,7 +86,8 @@ fun ChatTabView() {
         modifier = Modifier.padding(8.dp)
     ) {
         CompositionLocalProvider(
-            LocalTextToolbar provides CommonContextMenuToolbarFactory().invoke(LocalView.current)
+            LocalTextToolbar provides
+                    CommonContextMenuToolbarFactory().invoke(LocalView.current)
         ) {
             SelectionContainer {
                 LazyColumn(state = viewModel.scrollState()) {
