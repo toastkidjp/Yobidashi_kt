@@ -31,12 +31,12 @@ jobs:
           echo "tag_title=${tag_title}" >> $GITHUB_OUTPUT
           releases=$(curl -s -H "Authorization: token ${GH_TOKEN}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/releases?per_page=50")
           RELEASE_EXISTS=$(echo $releases | jq --arg search_name $tag_title '[.[] | select(.draft == true and .name == $search_name)] | length > 0')
-          if [[ "$RELEASE_EXISTS" == "Not Found" ]]; then
-            echo "release_exists=false" >> $GITHUB_OUTPUT
-            echo "Release ${tag_title} does not exist. I will create it on next step."
-          else
+          if [[ $RELEASE_EXISTS ]]; then
             echo "release_exists=true" >> $GITHUB_OUTPUT
             echo "Release ${tag_title} already exists, skipping creation."
+          else
+            echo "release_exists=false" >> $GITHUB_OUTPUT
+            echo "Release ${tag_title} does not exist. I will create it on next step."
           fi
         shell: bash
       - name: Create Release
