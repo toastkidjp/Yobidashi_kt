@@ -16,5 +16,6 @@ class AmericanOffDayFinderServiceTest {
     @Test
     fun invoke() {
         assertEquals(2, subject.invoke(2025, 1).size)
+        assertEquals(1, subject.invoke(2025, 2).size)
     }
 }
