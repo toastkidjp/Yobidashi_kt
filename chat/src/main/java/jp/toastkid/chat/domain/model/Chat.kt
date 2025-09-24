@@ -12,12 +12,12 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableStateListOf
     fun addModelText(text: ChatResponseItem) {
         val imageContent = if (text.image()) text.message() else null
         val textContent = if (text.image()) "" else text.message()
-        if (texts.isEmpty() || texts.last().role != "model") {
+        val element = texts.last()
+        if (texts.isEmpty() || element.role != "model") {
             texts.add(ChatMessage("model", textContent, image = imageContent))
             return
         }
 
-        val element = texts.last()
         texts.set(
             texts.lastIndex,
             element.copy(text = element.text + textContent, image = imageContent)
