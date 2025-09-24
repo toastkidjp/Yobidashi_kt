@@ -30,13 +30,15 @@ class ChatStreamParser {
         val firstPart =
             if (content.has("parts")) content.getJSONArray("parts").getJSONObject(0)
             else null
-        val message = if (firstPart?.has("text") == true)
-            firstPart
-                .getString("text")
-                .replace("\\n", "\n")
-                .replace("\\u003e", ">")
-                .replace("\\u003c", "<")
-        else null
+        val message =
+            if (firstPart?.has("text") == true)
+                firstPart
+                    .getString("text")
+                    .replace("\\n", "\n")
+                    .replace("\\u003e", ">")
+                    .replace("\\u003c", "<")
+            else
+                null
 
         val imageMatcher = imagePattern.matcher(line)
         val base64 = if (imageMatcher.find()) imageMatcher.group(2) else null
