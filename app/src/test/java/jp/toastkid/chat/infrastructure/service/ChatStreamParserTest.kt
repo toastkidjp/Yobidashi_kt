@@ -15,7 +15,7 @@ class ChatStreamParserTest {
 
     private lateinit var subject: ChatStreamParser
 
-    private val line = "line: data: {\"candidates\": [{\"content\": {\"parts\": " +
+    private val line = "data: {\"candidates\": [{\"content\": {\"parts\": " +
             "[{\"text\": \"**材料 (1人分)**\\n\\n**スープ**\\n* 豚骨または\"}],\"role\": \"model\"},\"finishReason\": " +
             "\"STOP\",\"index\": 0,\"safetyRatings\": [{\"category\": \"HARM_CATEGORY_SEXUALLY_EXPLICIT\"," +
             "\"probability\": \"NEGLIGIBLE\"},{\"category\": \"HARM_CATEGORY_HATE_SPEECH\"," +
