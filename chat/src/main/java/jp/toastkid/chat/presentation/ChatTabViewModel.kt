@@ -107,7 +107,7 @@ class ChatTabViewModel(apiKey: String) {
         return Color(if (role == "model") 0xFF86EEC7 else 0xFFFFD54F)
     }
 
-    fun exportableContent() = service.getChat().list().map { it.toString() }.toString()
+    fun exportableContent() = service.getChat().list().map(ChatMessage::toString).toString()
 
     fun clearChat() {
         service.clearChat()
