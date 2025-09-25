@@ -27,6 +27,7 @@ class UKOffDayFinderTest {
         assertTrue(subject.invoke(2025, 9).isEmpty())
         assertTrue(subject.invoke(2025, 10).isEmpty())
         assertTrue(subject.invoke(2025, 11).isEmpty())
+        assertEquals(2, subject.invoke(2025, 12).size)
     }
 
 }
