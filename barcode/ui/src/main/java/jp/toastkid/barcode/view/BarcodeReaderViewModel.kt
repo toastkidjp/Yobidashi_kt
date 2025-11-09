@@ -57,7 +57,14 @@ class BarcodeReaderViewModel {
             .build()
 
         // Bind all use cases together so they share the same internal camera session.
-        camera.value = cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, img, imageAnalysis)
+        camera.value = cameraProvider.bindToLifecycle(
+            lifecycleOwner,
+            cameraSelector,
+            preview,
+            img,
+            imageAnalysis
+        )
+
         imageCapture.value = img
     }
 
