@@ -16,7 +16,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -124,37 +124,42 @@ private fun Result(result: String) {
                 )
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        stringResource(id = jp.toastkid.lib.R.string.clip),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 16.sp,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .clickable { clip(context, result) }
-                    )
-                    Text(
-                        stringResource(id = jp.toastkid.lib.R.string.share),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 16.sp,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .clickable {
+                    Button(
+                        onClick = {
+                            clip(context, result)
+                        }
+                    ) {
+                        Text(
+                            stringResource(id = jp.toastkid.lib.R.string.copy),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 16.sp
+                        )
+                    }
+                    Button(
+                            onClick = {
                                 context.startActivity(ShareIntentFactory()(result))
                             }
-                    )
-                    Text(
-                        stringResource(id = jp.toastkid.lib.R.string.open),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 16.sp,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .clickable {
-                                val activity = (context as? ViewModelStoreOwner) ?: return@clickable
-                                ViewModelProvider(activity)
-                                    .get(ContentViewModel::class.java)
-                                    .search(result)
-                            }
-                    )
+                            ) {
+                        Text(
+                            stringResource(id = jp.toastkid.lib.R.string.share),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 16.sp
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            val activity = (context as? ViewModelStoreOwner) ?: return@Button
+                            ViewModelProvider(activity)
+                                .get(ContentViewModel::class.java)
+                                .search(result)
+                        }
+                    ) {
+                        Text(
+                            stringResource(id = jp.toastkid.lib.R.string.open),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 16.sp
+                        )
+                    }
                 }
             }
         }
