@@ -116,6 +116,13 @@ private fun Result(result: String) {
                     .wrapContentWidth()
                     .padding(16.dp)
             ) {
+                Text(
+                    result,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(8.dp)
+                )
+
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         stringResource(id = jp.toastkid.lib.R.string.clip),
@@ -149,12 +156,6 @@ private fun Result(result: String) {
                             }
                     )
                 }
-                Text(
-                    result,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(8.dp)
-                )
             }
         }
     }
