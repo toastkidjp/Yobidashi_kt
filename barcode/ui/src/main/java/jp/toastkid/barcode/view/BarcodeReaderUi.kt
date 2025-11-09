@@ -94,61 +94,67 @@ fun BarcodeReaderUi() {
     }
 
     if (viewModel.existsResult()) {
-        val backgroundColor = MaterialTheme.colorScheme.primary
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+        Result(viewModel.result())
+    }
+}
+
+@Composable
+private fun Result(result: String) {
+    val context = LocalContext.current as? Activity ?: return
+    val backgroundColor = MaterialTheme.colorScheme.primary
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Surface(
+            shadowElevation = 4.dp,
+            modifier = Modifier.wrapContentHeight()
         ) {
-            Surface(
-                shadowElevation = 4.dp,
-                modifier = Modifier.wrapContentHeight()
+            Column(
+                modifier = Modifier
+                    .drawBehind { drawRect(backgroundColor) }
+                    .wrapContentWidth()
+                    .padding(16.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .drawBehind { drawRect(backgroundColor) }
-                        .wrapContentWidth()
-                        .padding(16.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            stringResource(id = jp.toastkid.lib.R.string.clip),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .clickable { clip(context, viewModel.result()) }
-                        )
-                        Text(
-                            stringResource(id = jp.toastkid.lib.R.string.share),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .clickable {
-                                    context.startActivity(ShareIntentFactory()(viewModel.result()))
-                                }
-                        )
-                        Text(
-                            stringResource(id = jp.toastkid.lib.R.string.open),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .clickable {
-                                    val activity = (context as? ViewModelStoreOwner) ?: return@clickable
-                                    ViewModelProvider(activity)
-                                        .get(ContentViewModel::class.java)
-                                        .search(viewModel.result())
-                                }
-                        )
-                    }
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        viewModel.result(),
+                        stringResource(id = jp.toastkid.lib.R.string.clip),
                         color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(8.dp)
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clickable { clip(context, result) }
+                    )
+                    Text(
+                        stringResource(id = jp.toastkid.lib.R.string.share),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clickable {
+                                context.startActivity(ShareIntentFactory()(result))
+                            }
+                    )
+                    Text(
+                        stringResource(id = jp.toastkid.lib.R.string.open),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clickable {
+                                val activity = (context as? ViewModelStoreOwner) ?: return@clickable
+                                ViewModelProvider(activity)
+                                    .get(ContentViewModel::class.java)
+                                    .search(result)
+                            }
                     )
                 }
+                Text(
+                    result,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(8.dp)
+                )
             }
         }
     }
