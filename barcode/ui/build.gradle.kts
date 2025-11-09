@@ -54,7 +54,7 @@ dependencies {
 
     implementation("androidx.camera:camera-camera2:${libraries.versions.cameraX.get()}")
     implementation("androidx.camera:camera-lifecycle:${libraries.versions.cameraX.get()}")
-    implementation("androidx.camera:camera-view:${libraries.versions.cameraX.get()}")
+    implementation("androidx.camera:camera-compose:${libraries.versions.cameraX.get()}")
 
     implementation(libraries.timber)
 
