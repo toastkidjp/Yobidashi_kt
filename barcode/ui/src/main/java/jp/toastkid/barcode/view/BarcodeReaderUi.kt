@@ -14,11 +14,14 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.compose.CameraXViewfinder
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
+import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +45,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -57,6 +60,10 @@ fun BarcodeReaderUi() {
     val context = LocalContext.current as? Activity ?: return
 
     val onResume = remember { mutableStateOf(isGranted(context)) }
+
+    val surfaceRequest = remember { mutableStateOf<SurfaceRequest?>(null) }
+    val camera = remember { mutableStateOf<Camera?>(null) }
+    val imageCapture = remember { mutableStateOf<ImageCapture?>(null) }
 
     val cameraPermissionRequestLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -86,48 +93,49 @@ fun BarcodeReaderUi() {
         return
     }
 
-    AndroidView(
-        modifier = Modifier.fillMaxSize(),
-        factory = {
-            val previewView = PreviewView(context)
-            val executor = ContextCompat.getMainExecutor(context)
-            cameraProviderFuture.addListener(
-                {
-                    val preview = Preview.Builder().build().also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
-                    }
+    surfaceRequest.value?.let { request ->
+        CameraXViewfinder(
+            surfaceRequest = request,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
 
-                    val cameraSelector = CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                        .build()
+    LaunchedEffect(Unit) {
+        val cameraProvider = cameraProviderFuture.get()
 
-                    val cameraProvider = cameraProviderFuture.get()
-                    cameraProvider.unbindAll()
-
-                    val imageAnalysis = ImageAnalysis.Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                        .also {
-                            it.setAnalyzer(executor, BarcodeAnalyzer { text ->
-                                if (text == result.value) {
-                                    return@BarcodeAnalyzer
-                                }
-                                result.value = text
-                            })
-                        }
-
-                    cameraProvider.bindToLifecycle(
-                        lifecycleOwner,
-                        cameraSelector,
-                        imageAnalysis,
-                        preview
-                    )
-                },
-                executor
-            )
-            previewView
+        val preview = Preview.Builder().build().apply {
+            setSurfaceProvider { req -> surfaceRequest.value = req }
         }
-    )
+
+        val img = ImageCapture.Builder()
+            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            .build()
+
+        val executor = ContextCompat.getMainExecutor(context)
+
+        val imageAnalysis = ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+            .also {
+                it.setAnalyzer(executor, BarcodeAnalyzer { text ->
+                    if (text == result.value) {
+                        return@BarcodeAnalyzer
+                    }
+                    result.value = text
+                })
+            }
+
+        cameraProvider.unbindAll()
+
+        val cameraSelector = CameraSelector.Builder()
+            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+            .build()
+
+        // Bind all use cases together so they share the same internal camera session.
+        camera.value = cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, img, imageAnalysis)
+        imageCapture.value = img
+    }
+
 
     if (result.value.isNotBlank()) {
         val backgroundColor = MaterialTheme.colorScheme.primary
