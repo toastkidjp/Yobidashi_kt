@@ -15,7 +15,9 @@ import java.util.concurrent.Executors
 class BarcodeReaderViewModel {
 
     private val surfaceRequest = mutableStateOf<SurfaceRequest?>(null)
+
     private val camera = mutableStateOf<Camera?>(null)
+
     private val imageCapture = mutableStateOf<ImageCapture?>(null)
 
     private val result = mutableStateOf("")
