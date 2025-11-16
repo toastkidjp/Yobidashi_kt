@@ -7,6 +7,7 @@
  */
 package jp.toastkid.image.list
 
+import android.net.Uri
 import androidx.compose.runtime.MutableState
 import jp.toastkid.image.Image
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -22,6 +23,7 @@ internal class ImageLoaderUseCase(
         private val backHandlerState: MutableState<Boolean>,
         private val parentExtractor: ParentExtractor = ParentExtractor()
 ) {
+    private val staticImageLoader = StaticImageLoader()
 
     private var currentBucket: String? = null
 
@@ -34,7 +36,9 @@ internal class ImageLoaderUseCase(
 
         val sort = Sort.findByName(preferenceApplier.imageViewerSort())
 
-        val newList = if (bucket.isNullOrBlank()) {
+        val newList = if (staticImageLoader.isNotEmpty()) {
+            staticImageLoader.invoke(sort)
+        } else if (bucket.isNullOrBlank()) {
             bucketLoader(sort)
                     .filter { excludedItemFilter(parentExtractor(it.path)) }
         } else {
@@ -59,6 +63,10 @@ internal class ImageLoaderUseCase(
         clearCurrentBucket()
         invoke()
         backHandlerState.value = currentBucket != null
+    }
+
+    fun addStaticImageUrls(urls: List<Uri>) {
+        staticImageLoader.replace(urls)
     }
 
 }
