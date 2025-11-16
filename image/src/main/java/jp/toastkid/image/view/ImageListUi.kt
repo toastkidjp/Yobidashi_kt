@@ -66,7 +66,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -130,10 +129,8 @@ fun ImageListUi() {
             rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(getPickImagesMaxLimit())) { uris ->
                 // Callback is invoked after the user selects media items or closes the
                 // photo picker.
-                if (uris.isNotEmpty()) {
-                    Timber.d("Number of items selected: ${uris.size}")
-                } else {
-                    Timber.d("No media selected")
+                if (uris.isNullOrEmpty()) {
+                    return@rememberLauncherForActivityResult
                 }
 
                 imageLoaderUseCase.addStaticImageUrls(uris)
