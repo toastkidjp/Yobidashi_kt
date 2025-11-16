@@ -9,8 +9,11 @@
 package jp.toastkid.image.view
 
 import android.Manifest
+import android.os.Build
+import android.provider.MediaStore.getPickImagesMaxLimit
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -63,6 +66,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -121,6 +125,22 @@ fun ImageListUi() {
             }?.snackShort(R.string.message_audio_file_is_not_found)
         }
 
+    val pickMultipleMedia =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && images.isEmpty()) {
+            rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(getPickImagesMaxLimit())) { uris ->
+                // Callback is invoked after the user selects media items or closes the
+                // photo picker.
+                if (uris.isNotEmpty()) {
+                    Timber.d("Number of items selected: ${uris.size}")
+                } else {
+                    Timber.d("No media selected")
+                }
+
+                imageLoaderUseCase.addStaticImageUrls(uris)
+                imageLoaderUseCase.invoke()
+            }
+        } else null
+
     val localLifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = localLifecycleOwner, block = {
         (context as? ViewModelStoreOwner)?.let { viewModelStoreOwner ->
@@ -139,7 +159,14 @@ fun ImageListUi() {
 
     if (preview.value.not()) {
         LaunchedEffect(key1 = "first_launch") {
-            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                return@LaunchedEffect
+            }
+
+            pickMultipleMedia?.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
     }
 
@@ -177,7 +204,11 @@ fun ImageListUi() {
             index.intValue = -1
             preview.value = false
         } else {
-            imageLoaderUseCase.back {}
+            imageLoaderUseCase.back {
+                if (backHandlerState.value) {
+                    backHandlerState.value = false
+                }
+            }
         }
     }
 }
