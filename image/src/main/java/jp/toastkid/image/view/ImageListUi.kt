@@ -11,6 +11,7 @@ package jp.toastkid.image.view
 import android.Manifest
 import android.os.Build
 import android.provider.MediaStore.getPickImagesMaxLimit
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -130,6 +131,7 @@ fun ImageListUi() {
                 // Callback is invoked after the user selects media items or closes the
                 // photo picker.
                 if (uris.isNullOrEmpty()) {
+                    (context as ComponentActivity).onBackPressedDispatcher.onBackPressed()
                     return@rememberLauncherForActivityResult
                 }
 
