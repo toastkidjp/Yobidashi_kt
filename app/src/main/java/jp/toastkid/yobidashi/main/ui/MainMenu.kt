@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi.main.ui
 
-import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
@@ -64,9 +63,6 @@ internal fun MainMenu(
             items(tooBigCount) { longIndex ->
                 val menu = Menu.entries[longIndex % menuCount]
                 if (!enableChat && menu == Menu.CHAT) {
-                    return@items
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && menu == Menu.IMAGE_VIEWER) {
                     return@items
                 }
                 Surface(
