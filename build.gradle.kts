@@ -1,6 +1,5 @@
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 /*
  * Copyright (c) 2021 toastkidjp.
@@ -26,7 +25,7 @@ buildscript {
 
 plugins {
     //id("io.gitlab.arturbosch.detekt").version("1.19.0")
-    id("com.google.devtools.ksp").version("2.0.20-1.0.25").apply(false)
+    id("com.google.devtools.ksp").version("2.2.20-2.0.4").apply(false)
     id("com.cookpad.android.plugin.license-tools").version("1.2.8")
     id("jacoco")
 }
