@@ -371,14 +371,6 @@ private fun ListItem(
     modifier: Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val items = remember {
-        listOf(
-            R.string.action_copy_title,
-            R.string.action_copy_source,
-            R.string.action_add_to_bookmark,
-            R.string.delete
-        )
-    }
 
     val context = LocalContext.current
 
@@ -462,3 +454,10 @@ private fun ListItem(
         }
     }
 }
+
+private val items = listOf(
+    R.string.action_copy_title,
+    R.string.action_copy_source,
+    R.string.action_add_to_bookmark,
+    R.string.delete
+)
