@@ -435,7 +435,7 @@ private fun ListItem(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
-                    items.forEachIndexed { index, s ->
+                    MENU_ITEM_LABEL_IDS.forEachIndexed { index, s ->
                         DropdownMenuItem(
                             text = { Text(text = stringResource(id = s)) },
                             onClick = {
@@ -455,7 +455,7 @@ private fun ListItem(
     }
 }
 
-private val items = listOf(
+private val MENU_ITEM_LABEL_IDS = listOf(
     R.string.action_copy_title,
     R.string.action_copy_source,
     R.string.action_add_to_bookmark,
