@@ -14,6 +14,8 @@ import android.content.Context
  */
 interface MenuPopupActionUseCase {
 
+    fun copyTitle(context: Context, title: String)
+
     fun copySource(context: Context, id: Int)
 
     fun addToBookmark(id: Int)
