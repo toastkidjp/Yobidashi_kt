@@ -35,6 +35,10 @@ class ArticleListMenuPopupActionUseCase(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MenuPopupActionUseCase {
 
+    override fun copyTitle(context: Context, title: String) {
+        Clipboard.clip(context, title)
+    }
+
     override fun copySource(context: Context, id: Int) {
         CoroutineScope(ioDispatcher).launch {
             val article = withContext(ioDispatcher) {
