@@ -26,7 +26,7 @@ import org.junit.Test
  */
 class BookmarkListMenuPopupActionUseCaseTest {
 
-    @InjectMockKsg
+    @InjectMockKs
     private lateinit var useCase: BookmarkListMenuPopupActionUseCase
 
     @MockK
