@@ -372,10 +372,10 @@ private fun ListItem(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(
-        stringResource(id = R.string.action_copy_title),
-        stringResource(id = R.string.action_copy_source),
-        stringResource(id = R.string.action_add_to_bookmark),
-        stringResource(id = R.string.delete)
+        R.string.action_copy_title,
+        R.string.action_copy_source,
+        R.string.action_add_to_bookmark,
+        R.string.delete
     )
 
     val context = LocalContext.current
@@ -443,7 +443,7 @@ private fun ListItem(
                 ) {
                     items.forEachIndexed { index, s ->
                         DropdownMenuItem(
-                            text = { Text(text = s) },
+                            text = { Text(text = stringResource(id = s)) },
                             onClick = {
                                 when (index) {
                                     0 -> menuPopupUseCase.copyTitle(context, article.title)
