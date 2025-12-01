@@ -12,14 +12,18 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
+import jp.toastkid.lib.clip.Clipboard
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
@@ -54,11 +58,21 @@ class ArticleListMenuPopupActionUseCaseTest {
         coEvery { articleRepository.findArticleById(any()) }.returns(mockk())
         coEvery { articleRepository.delete(any()) }.just(Runs)
         coEvery { deleted(any()) }.just(Runs)
+
+        mockkObject(Clipboard)
+        every { Clipboard.clip(any(), any()) } just Runs
     }
 
     @After
     fun tearDown() {
         unmockkAll()
+    }
+
+    @Test
+    fun copyTitle() {
+        articleListMenuPopupActionUseCase.copyTitle(mockk(), "test")
+
+        verify { Clipboard.clip(any(), any()) }
     }
 
     @Test
