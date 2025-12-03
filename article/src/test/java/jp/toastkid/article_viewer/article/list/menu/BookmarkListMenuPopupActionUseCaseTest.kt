@@ -12,6 +12,7 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 import jp.toastkid.lib.clip.Clipboard
@@ -48,6 +49,9 @@ class BookmarkListMenuPopupActionUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
         coEvery { deleted() }.just(Runs)
+        val article = mockk<Article>()
+        every { article.contentText } returns "test-content"
+        coEvery { articleRepository.findArticleById(any()) }.returns(article)
         coEvery { articleRepository.findContentById(any()) } returns "test-content"
         coEvery { bookmarkRepository.delete(any()) }.just(Runs)
 
@@ -58,6 +62,13 @@ class BookmarkListMenuPopupActionUseCaseTest {
     @Test
     fun copyTitle() {
         useCase.copyTitle(mockk(), "test")
+
+        verify { Clipboard.clip(any(), any()) }
+    }
+
+    @Test
+    fun copySource() {
+        useCase.copySource(mockk(), 1)
 
         verify { Clipboard.clip(any(), any()) }
     }
