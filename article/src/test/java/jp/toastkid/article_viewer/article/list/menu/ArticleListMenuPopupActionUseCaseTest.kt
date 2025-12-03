@@ -55,7 +55,9 @@ class ArticleListMenuPopupActionUseCaseTest {
         MockKAnnotations.init(this)
 
         coEvery { bookmarkRepository.add(any()) }.just(Runs)
-        coEvery { articleRepository.findArticleById(any()) }.returns(mockk())
+        val article = mockk<Article>()
+        every { article.contentText } returns "test-content"
+        coEvery { articleRepository.findArticleById(any()) }.returns(article)
         coEvery { articleRepository.delete(any()) }.just(Runs)
         coEvery { deleted(any()) }.just(Runs)
 
@@ -71,6 +73,13 @@ class ArticleListMenuPopupActionUseCaseTest {
     @Test
     fun copyTitle() {
         articleListMenuPopupActionUseCase.copyTitle(mockk(), "test")
+
+        verify { Clipboard.clip(any(), any()) }
+    }
+
+    @Test
+    fun copySource() {
+        articleListMenuPopupActionUseCase.copySource(mockk(), 1)
 
         verify { Clipboard.clip(any(), any()) }
     }
