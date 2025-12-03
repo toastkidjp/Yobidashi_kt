@@ -136,10 +136,10 @@ private fun Result(result: String) {
                         )
                     }
                     Button(
-                            onClick = {
-                                context.startActivity(ShareIntentFactory()(result))
-                            }
-                            ) {
+                        onClick = {
+                            context.startActivity(ShareIntentFactory()(result))
+                        }
+                    ) {
                         Text(
                             stringResource(id = jp.toastkid.lib.R.string.share),
                             color = MaterialTheme.colorScheme.onPrimary,
