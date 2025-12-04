@@ -143,7 +143,7 @@ dependencies {
     implementation(libraries.activityCompose)
     implementation("androidx.navigation:navigation-compose:2.9.2")
     implementation("androidx.navigation:navigation-runtime-ktx:2.9.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleRuntimeKtx)
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
     implementation(libraries.timber)
