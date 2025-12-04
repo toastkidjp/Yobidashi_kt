@@ -50,7 +50,7 @@ dependencies {
 
     // Compose dependencies.
     implementation(libraries.composeMaterial3)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleRuntimeKtx)
     implementation(libraries.activityCompose)
 
     implementation("androidx.media:media:1.7.0")
