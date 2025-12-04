@@ -50,7 +50,7 @@ dependencies {
 
     implementation(libraries.composeMaterial3)
     implementation(libraries.pagingCompose)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleRuntimeKtx)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation(libraries.activityCompose)
 
