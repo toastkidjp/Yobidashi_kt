@@ -49,7 +49,7 @@ dependencies {
 
     // Compose dependencies.
     implementation(libraries.composeMaterial3)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleRuntimeKtx)
     implementation(libraries.activityCompose)
 
     implementation("androidx.camera:camera-camera2:${libraries.versions.cameraX.get()}")
