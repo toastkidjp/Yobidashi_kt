@@ -62,7 +62,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${LibraryVersion.lifecycle}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleRuntimeKtx)
 
     implementation(libraries.composeUi)
     implementation(libraries.composeMaterial3)
