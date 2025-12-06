@@ -53,7 +53,7 @@ dependencies {
     implementation(libraries.composeMaterial3)
     implementation(libraries.activityCompose)
     implementation(libraries.lifecycleRuntimeKtx)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleViewModelCompose)
 
     implementation(libraries.timber)
     implementation(libraries.jsoup)
