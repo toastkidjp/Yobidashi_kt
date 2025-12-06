@@ -47,7 +47,7 @@ dependencies {
     implementation(libraries.composeMaterial3)
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation(libraries.activityCompose)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.timber)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
