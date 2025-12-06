@@ -45,7 +45,7 @@ dependencies {
     implementation(libraries.composeMaterial3)
     implementation("androidx.core:core-ktx:1.7.0")
     implementation(libraries.activityCompose)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.exifinterface)
     implementation(libraries.timber)
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
