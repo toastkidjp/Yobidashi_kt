@@ -32,7 +32,7 @@ dependencies {
     implementation(project(":ui"))
     implementation(libraries.composeMaterial3)
     implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${property.LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleRuntimeKtx)
     implementation(libraries.activityCompose)
 
     testImplementation("junit:junit:${property.LibraryVersion.junit}")
