@@ -34,7 +34,7 @@ dependencies {
     implementation(project(":ui"))
     implementation(libraries.composeMaterial3)
     implementation(libraries.coreKtx)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${property.LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleRuntimeKtx)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
     implementation(libraries.activityCompose)
 
