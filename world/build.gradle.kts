@@ -1,5 +1,3 @@
-import property.LibraryVersion
-
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -35,7 +33,7 @@ dependencies {
     implementation(libraries.composeMaterial3)
     implementation(libraries.coreKtx)
     implementation(libraries.lifecycleRuntimeKtx)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.activityCompose)
 
     testImplementation("junit:junit:${property.LibraryVersion.junit}")
