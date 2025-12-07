@@ -73,7 +73,7 @@ dependencies {
     implementation(libraries.activityCompose)
     implementation(libraries.pagingCompose)
     implementation(libraries.lifecycleRuntimeKtx)
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleRuntimeCompose)
     implementation(libraries.lifecycleViewModelCompose)
 
     implementation(libraries.workManager)
