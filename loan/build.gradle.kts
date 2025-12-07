@@ -40,7 +40,7 @@ android {
 dependencies {
     implementation(project(path = ":lib"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
+    implementation(libraries.coroutines)
 
     implementation(libraries.composeMaterial3)
 
