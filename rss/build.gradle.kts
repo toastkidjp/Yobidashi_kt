@@ -47,7 +47,7 @@ dependencies {
 
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
+    implementation(libraries.coroutines)
 
     implementation(libraries.composeMaterial3)
     implementation(libraries.activityCompose)
