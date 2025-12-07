@@ -29,6 +29,7 @@ dependencyResolutionManagement {
             library("exifinterface", "androidx.exifinterface", "exifinterface").version("1.3.3")
             library("composeMaterial3", "androidx.compose.material3", "material3").version("1.3.0")
             library("lifecycleRuntimeKtx", "androidx.lifecycle", "lifecycle-runtime-ktx").versionRef("lifecycle")
+            library("lifecycleRuntimeCompose", "androidx.lifecycle", "lifecycle-runtime-compose").versionRef("lifecycle")
             library("lifecycleViewModelCompose", "androidx.lifecycle", "lifecycle-viewmodel-compose").versionRef("lifecycle")
         }
 
