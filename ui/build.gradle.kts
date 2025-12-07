@@ -6,7 +6,6 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import property.BuildTool
-import property.LibraryVersion
 
 plugins {
     id("com.android.library")
@@ -50,6 +49,6 @@ dependencies {
     implementation(libraries.coilGif)
     implementation(libraries.coilNetwork)
     implementation(libraries.composeMaterial3)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleViewModelCompose)
     testImplementation("junit:junit:4.12")
 }
