@@ -54,7 +54,7 @@ dependencies {
     implementation(libraries.activityCompose)
     implementation("androidx.webkit:webkit:1.12.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${LibraryVersion.lifecycle}")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${LibraryVersion.lifecycle}")
+    implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.timber)
     implementation(libraries.jsoup)
     implementation(libraries.kotlinSerialization)
