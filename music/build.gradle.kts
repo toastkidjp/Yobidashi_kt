@@ -56,7 +56,7 @@ dependencies {
     implementation("androidx.media:media:1.7.0")
 
     implementation(libraries.timber)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
+    implementation(libraries.coroutines)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
