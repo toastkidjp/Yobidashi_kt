@@ -15,6 +15,7 @@ dependencyResolutionManagement {
             version("coilCompose", "3.1.0")
             version("lifecycle", "2.10.0")
             plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").versionRef("kotlin")
+            library("coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android").version("1.5.1")
             library("coreKtx", "androidx.core", "core-ktx").version("1.16.0")
             library("activityCompose", "androidx.activity", "activity-compose").version("1.9.0")
             library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.6.0")
