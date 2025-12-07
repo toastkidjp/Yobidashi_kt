@@ -59,7 +59,7 @@ tasks.withType<GenerateBuildConfig> {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${LibraryVersion.coroutines}")
+    implementation(libraries.coroutines)
     implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
     implementation(libraries.lifecycleViewModelKtx)
     implementation(libraries.lifecycleRuntimeKtx)
