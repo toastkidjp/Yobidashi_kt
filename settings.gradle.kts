@@ -31,6 +31,7 @@ dependencyResolutionManagement {
             library("lifecycleRuntimeKtx", "androidx.lifecycle", "lifecycle-runtime-ktx").versionRef("lifecycle")
             library("lifecycleRuntimeCompose", "androidx.lifecycle", "lifecycle-runtime-compose").versionRef("lifecycle")
             library("lifecycleViewModelCompose", "androidx.lifecycle", "lifecycle-viewmodel-compose").versionRef("lifecycle")
+            library("lifecycleViewModelKtx", "androidx.lifecycle", "lifecycle-viewmodel-ktx").versionRef("lifecycle")
         }
 
         create("testLibraries") {
