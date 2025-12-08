@@ -60,7 +60,7 @@ tasks.withType<GenerateBuildConfig> {
 
 dependencies {
     implementation(libraries.coroutines)
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
     implementation(libraries.lifecycleViewModelKtx)
     implementation(libraries.lifecycleRuntimeKtx)
 
