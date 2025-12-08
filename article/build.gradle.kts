@@ -64,7 +64,7 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":markdown"))
 
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
 
     implementation(libraries.timber)
     implementation(libraries.coroutines)
