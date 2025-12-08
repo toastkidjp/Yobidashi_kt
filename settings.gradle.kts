@@ -33,7 +33,7 @@ dependencyResolutionManagement {
             library("lifecycleRuntimeCompose", "androidx.lifecycle", "lifecycle-runtime-compose").versionRef("lifecycle")
             library("lifecycleViewModelCompose", "androidx.lifecycle", "lifecycle-viewmodel-compose").versionRef("lifecycle")
             library("lifecycleViewModelKtx", "androidx.lifecycle", "lifecycle-viewmodel-ktx").versionRef("lifecycle")
-            library("webkit", "androidx.webkit", "webkit").version("1.12.1")
+            library("webkit", "androidx.webkit", "webkit").version("1.14.0")
         }
 
         create("testLibraries") {
