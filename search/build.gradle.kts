@@ -70,7 +70,7 @@ dependencies {
     implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.timber)
 
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
