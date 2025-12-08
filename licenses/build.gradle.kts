@@ -40,7 +40,7 @@ tasks.withType<GenerateBuildConfig> {
 
 dependencies {
     implementation(project(path = ":lib"))
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
