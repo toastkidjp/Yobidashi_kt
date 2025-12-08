@@ -1,7 +1,6 @@
 package property
 
 object LibraryVersion {
-    val coroutines = "1.5.1"
     val ktx = "1.16.0"
     val junit = "4.12"
     val robolectric = "4.14"
