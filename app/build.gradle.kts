@@ -144,7 +144,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.2")
     implementation("androidx.navigation:navigation-runtime-ktx:2.9.2")
     implementation(libraries.lifecycleRuntimeKtx)
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
     implementation(libraries.coroutines)
     implementation(libraries.timber)
     implementation(libraries.kotlinSerialization)
