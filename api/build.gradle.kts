@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
     implementation("com.squareup.okhttp3:okhttp:5.3.2")
     implementation(libraries.timber)
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
