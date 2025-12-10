@@ -44,7 +44,7 @@ dependencies {
     implementation(project(path = ":lib"))
     implementation(project(path = ":ui"))
 
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
 
     implementation(libraries.composeMaterial3)
     implementation(libraries.activityCompose)
