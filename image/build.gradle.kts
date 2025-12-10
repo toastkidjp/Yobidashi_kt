@@ -53,7 +53,7 @@ dependencies {
     implementation(libraries.lifecycleRuntimeKtx)
     implementation(libraries.activityCompose)
 
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
     implementation(libraries.exifinterface)
 
     implementation(libraries.timber)
