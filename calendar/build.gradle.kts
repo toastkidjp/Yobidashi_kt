@@ -45,7 +45,7 @@ android {
 dependencies {
     implementation(project(":lib"))
     implementation(libraries.composeMaterial3)
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
     implementation(libraries.activityCompose)
     implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.timber)
