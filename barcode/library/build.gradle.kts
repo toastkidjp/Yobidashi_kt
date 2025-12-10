@@ -39,7 +39,7 @@ tasks.withType<GenerateBuildConfig> {
 dependencies {
     implementation(project(":lib"))
 
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
 
     implementation("com.google.zxing:core:3.5.3")
 
