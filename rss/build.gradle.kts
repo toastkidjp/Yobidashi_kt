@@ -45,7 +45,7 @@ dependencies {
     implementation(project(path = ":api"))
     implementation(project(path = ":lib"))
 
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
 
     implementation(libraries.coroutines)
 
