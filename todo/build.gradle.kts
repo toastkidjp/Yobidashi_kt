@@ -46,7 +46,7 @@ dependencies {
     implementation(project(path = ":data"))
     implementation(project(path = ":lib"))
 
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
 
     implementation(libraries.composeMaterial3)
     implementation(libraries.pagingCompose)
