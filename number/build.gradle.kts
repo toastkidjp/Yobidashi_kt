@@ -56,7 +56,7 @@ dependencies {
     implementation(project(path = ":lib"))
     implementation(project(path = ":ui"))
 
-    implementation("androidx.core:core-ktx:1.7.0")
+    implementation(libraries.coreKtx)
     implementation(libraries.composeMaterial3)
     implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.activityCompose)
