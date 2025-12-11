@@ -30,6 +30,6 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.7.0")
+    implementation(libraries.coreKtx)
     testImplementation("junit:junit:4.13.2")
 }
