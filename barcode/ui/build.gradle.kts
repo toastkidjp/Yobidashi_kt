@@ -45,7 +45,7 @@ dependencies {
     implementation(project(":lib"))
     implementation(project(":barcode:library"))
 
-    implementation("androidx.core:core-ktx:${LibraryVersion.ktx}")
+    implementation(libraries.coreKtx)
 
     // Compose dependencies.
     implementation(libraries.composeMaterial3)
