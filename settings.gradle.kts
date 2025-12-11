@@ -39,6 +39,7 @@ dependencyResolutionManagement {
 
         create("testLibraries") {
             library("bytebuddy", "net.bytebuddy", "byte-buddy").version("1.18.2")
+            library("robolectric", "org.robolectric", "robolectric").version("4.14")
         }
     }
 }
