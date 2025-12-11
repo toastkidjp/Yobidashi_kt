@@ -149,7 +149,7 @@ dependencies {
     implementation(libraries.timber)
     implementation(libraries.kotlinSerialization)
 
-    implementation("org.burnoutcrew.composereorderable:reorderable:0.9.2")
+    implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
 
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")
