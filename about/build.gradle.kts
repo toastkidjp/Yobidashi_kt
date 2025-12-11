@@ -52,6 +52,6 @@ dependencies {
     testImplementation("junit:junit:${LibraryVersion.junit}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation("androidx.compose.ui:ui-test-junit4-android:1.8.0")
-    testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")
+    testImplementation(testLibraries.robolectric)
     testImplementation("androidx.compose.ui:ui-test-manifest:1.8.0")
 }
