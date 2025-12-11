@@ -64,9 +64,3 @@ dependencies {
     testImplementation("org.robolectric:robolectric:${LibraryVersion.robolectric}")
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
 }
-
-/*ksp {
-    javacOptions {
-        option("-Xmaxerrs", 5000)
-    }
-}*/
