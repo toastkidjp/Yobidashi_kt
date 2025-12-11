@@ -15,7 +15,6 @@ plugins {
   id("jacoco.definition")
   id("com.google.devtools.ksp")
 }
-//TODO apply from: '../jacoco.gradle'
 
 android {
     namespace = "jp.toastkid.data"
