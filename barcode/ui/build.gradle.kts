@@ -58,6 +58,6 @@ dependencies {
 
     implementation(libraries.timber)
 
-    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
 }
