@@ -49,7 +49,7 @@ dependencies {
     implementation(libraries.activityCompose)
     implementation(libraries.composeMaterial3)
 
-    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation("androidx.compose.ui:ui-test-junit4-android:1.8.0")
     testImplementation(testLibraries.robolectric)
