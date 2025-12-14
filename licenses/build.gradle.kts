@@ -42,6 +42,6 @@ dependencies {
     implementation(project(path = ":lib"))
     implementation(libraries.coreKtx)
 
-    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
 }
