@@ -50,7 +50,7 @@ dependencies {
     implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.timber)
 
-    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
 }
