@@ -44,6 +44,6 @@ dependencies {
 
     implementation(libraries.composeMaterial3)
 
-    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
 }
