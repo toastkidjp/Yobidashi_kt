@@ -151,7 +151,7 @@ dependencies {
 
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
 
-    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation(testLibraries.robolectric)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
