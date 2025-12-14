@@ -69,7 +69,7 @@ dependencies {
 
     implementation(libraries.timber)
 
-    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation(testLibraries.robolectric)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation(testLibraries.bytebuddy)
