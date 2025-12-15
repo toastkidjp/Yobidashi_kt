@@ -80,7 +80,7 @@ dependencies {
 
     testImplementation(testLibraries.junit)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
+    testImplementation(testLibraries.coroutines)
     testImplementation("androidx.test.ext:junit-ktx:1.1.3")
     testImplementation("androidx.work:work-testing:2.7.1")
 }
