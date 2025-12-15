@@ -62,7 +62,7 @@ dependencies {
     implementation(libraries.activityCompose)
     implementation(libraries.kotlinSerialization)
 
-    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation(testLibraries.bytebuddy)
 }
