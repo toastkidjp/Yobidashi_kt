@@ -71,7 +71,7 @@ dependencies {
     implementation(libraries.timber)
 
     implementation(libraries.coreKtx)
-    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation(testLibraries.robolectric)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
 }
