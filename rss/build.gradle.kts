@@ -52,7 +52,7 @@ dependencies {
     implementation(libraries.composeMaterial3)
     implementation(libraries.activityCompose)
 
-    testImplementation("junit:junit:${LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
 }
