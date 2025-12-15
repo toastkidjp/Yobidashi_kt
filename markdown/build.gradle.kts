@@ -35,6 +35,6 @@ dependencies {
     implementation(libraries.lifecycleRuntimeKtx)
     implementation(libraries.activityCompose)
 
-    testImplementation("junit:junit:${property.LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation("io.mockk:mockk:${property.LibraryVersion.mockk}")
 }
