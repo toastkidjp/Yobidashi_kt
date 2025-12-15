@@ -50,7 +50,7 @@ dependencies {
     implementation(libraries.timber)
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
 
-    testImplementation("junit:junit:${property.LibraryVersion.junit}")
+    testImplementation(testLibraries.junit)
     testImplementation("io.mockk:mockk:${property.LibraryVersion.mockk}")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
     testImplementation(testLibraries.bytebuddy)
