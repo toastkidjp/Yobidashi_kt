@@ -7,7 +7,6 @@
  */
 import com.android.build.gradle.tasks.GenerateBuildConfig
 import property.BuildTool
-import property.LibraryVersion
 
 plugins {
   id("com.android.library")
@@ -50,7 +49,7 @@ dependencies {
     implementation(libraries.composeMaterial3)
 
     testImplementation(testLibraries.junit)
-    testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
+    testImplementation(testLibraries.mockK)
     testImplementation("androidx.compose.ui:ui-test-junit4-android:1.8.0")
     testImplementation(testLibraries.robolectric)
     testImplementation("androidx.compose.ui:ui-test-manifest:1.8.0")
