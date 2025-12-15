@@ -40,6 +40,7 @@ dependencyResolutionManagement {
         create("testLibraries") {
             library("junit", "junit", "junit").version("4.12")
             library("bytebuddy", "net.bytebuddy", "byte-buddy").version("1.18.2")
+            library("mockK", "io.mockk", "mockk").version("1.14.6")
             library("robolectric", "org.robolectric", "robolectric").version("4.14")
             library("coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-test").version("1.5.1")
         }
