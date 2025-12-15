@@ -6,7 +6,6 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import property.BuildTool
-import property.LibraryVersion
 
 plugins {
     id("com.android.library")
@@ -60,7 +59,7 @@ dependencies {
     implementation(libraries.kotlinSerialization)
 
     testImplementation("junit:junit:4.12")
-    testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
+    testImplementation(testLibraries.mockK)
     testImplementation(testLibraries.robolectric)
     testImplementation(testLibraries.bytebuddy)
 }
