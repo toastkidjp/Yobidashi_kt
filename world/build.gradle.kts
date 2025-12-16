@@ -37,5 +37,5 @@ dependencies {
     implementation(libraries.activityCompose)
 
     testImplementation(testLibraries.junit)
-    testImplementation("io.mockk:mockk:${property.LibraryVersion.mockk}")
+    testImplementation(testLibraries.mockK)
 }
