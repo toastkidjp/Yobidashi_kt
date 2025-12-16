@@ -60,7 +60,7 @@ dependencies {
     implementation(libraries.coroutines)
 
     testImplementation(testLibraries.junit)
-    testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
+    testImplementation(testLibraries.mockK)
     testImplementation(testLibraries.bytebuddy)
     testImplementation(testLibraries.robolectric)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
