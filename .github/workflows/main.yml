@@ -152,7 +152,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Coverage
-        timeout-minutes: 15
+        timeout-minutes: 18
         env:
           TZ: 'Asia/Tokyo'
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
