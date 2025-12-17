@@ -13,11 +13,6 @@ android {
         minSdkVersion(property.BuildTool.minSdk)
     }
 
-    buildTypes {
-        release {
-        }
-    }
-
     buildFeatures {
         compose = true
     }
