@@ -1,5 +1,3 @@
-import property.LibraryVersion
-
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -52,6 +50,6 @@ dependencies {
 
     testImplementation(testLibraries.junit)
     testImplementation(testLibraries.mockK)
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
+    testImplementation(testLibraries.coroutines)
     testImplementation(testLibraries.bytebuddy)
 }
