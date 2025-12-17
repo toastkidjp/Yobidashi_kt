@@ -58,7 +58,7 @@ dependencies {
     implementation(libraries.jsoup)
     implementation(libraries.kotlinSerialization)
 
-    testImplementation("junit:junit:4.12")
+    testImplementation(testLibraries.junit)
     testImplementation(testLibraries.mockK)
     testImplementation(testLibraries.robolectric)
     testImplementation(testLibraries.bytebuddy)
