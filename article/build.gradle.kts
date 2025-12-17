@@ -1,7 +1,6 @@
 
 import com.android.build.gradle.tasks.GenerateBuildConfig
 import property.BuildTool
-import property.LibraryVersion
 
 /*
  * Copyright (c) 2021 toastkidjp.
@@ -79,7 +78,7 @@ dependencies {
     implementation(libraries.workManager)
 
     testImplementation(testLibraries.junit)
-    testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
+    testImplementation(testLibraries.mockK)
     testImplementation(testLibraries.coroutines)
     testImplementation("androidx.test.ext:junit-ktx:1.1.3")
     testImplementation("androidx.work:work-testing:2.7.1")
