@@ -47,6 +47,6 @@ dependencies {
     implementation(libraries.composeMaterial3)
     implementation(libraries.coreKtx)
     testImplementation("junit:junit:4.13.2")
-    testImplementation("io.mockk:mockk:${property.LibraryVersion.mockk}")
+    testImplementation(testLibraries.mockK)
 }
 
