@@ -7,7 +7,6 @@
  */
 import com.android.build.gradle.tasks.GenerateBuildConfig
 import property.BuildTool
-import property.LibraryVersion
 
 plugins {
     id("com.android.library")
@@ -63,6 +62,6 @@ dependencies {
     implementation(libraries.kotlinSerialization)
 
     testImplementation(testLibraries.junit)
-    testImplementation("io.mockk:mockk:${LibraryVersion.mockk}")
+    testImplementation(testLibraries.mockK)
     testImplementation(testLibraries.bytebuddy)
 }
