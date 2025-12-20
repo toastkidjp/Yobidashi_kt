@@ -284,7 +284,7 @@ private fun format(input: String?): String {
 }
 
 private fun extractLong(editText: String) =
-    editText.replace(",", "")?.toLongOrNull() ?: 0
+    editText.replace(",", "").toLongOrNull() ?: 0
 
 private fun extractInt(editText: String) =
     editText.replace(",", "")?.toIntOrNull() ?: 0
