@@ -182,6 +182,16 @@ fun LoanCalculatorUi() {
                     managementFee = format(it)
                     onChange(inputChannel, it)
                 },
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
+                        contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.clickable {
+                            downPayment = "0"
+                        }
+                    )
+                },
                 label = { Text(text = "Management fee (Monthly)") },
                 colors = makeTextFieldColors(),
                 singleLine = true,
