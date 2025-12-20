@@ -166,7 +166,7 @@ fun LoanCalculatorUi() {
                         contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
                         tint = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.clickable {
-                            downPayment = "0"
+                            managementFee = "0"
                         }
                     )
                 },
