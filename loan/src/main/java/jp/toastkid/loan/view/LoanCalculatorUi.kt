@@ -10,7 +10,6 @@ package jp.toastkid.loan.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,9 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -88,151 +85,147 @@ fun LoanCalculatorUi() {
     val inputChannel: Channel<String> = Channel()
 
     Surface(shadowElevation = 4.dp) {
-        Column(
-            Modifier
-                .padding(8.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Text(text = result, fontSize = 18.sp, modifier = Modifier.fillMaxWidth())
-            OutlinedTextField(
-                value = loanAmount,
-                onValueChange = {
-                    loanAmount = format(it)
-                    onChange(inputChannel, it)
-                },
-                label = { Text(text = stringResource(R.string.hint_loan_amount)) },
-                colors = makeTextFieldColors(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-            Row {
-                OutlinedTextField(
-                    value = loanTerm,
-                    onValueChange = {
-                        loanTerm = format(it)
-                        onChange(inputChannel, it)
-                    },
-                    label = { Text(text = stringResource(R.string.hint_loan_term)) },
-                    colors = makeTextFieldColors(),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f)
-                )
-                OutlinedTextField(
-                    value = interestRate,
-                    onValueChange = {
-                        interestRate = it
-                        onChange(inputChannel, it)
-                    },
-                    label = { Text(text = stringResource(R.string.hint_interest_rate)) },
-                    colors = makeTextFieldColors(),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f)
-                )
-            }
-            OutlinedTextField(
-                value = downPayment,
-                onValueChange = {
-                    downPayment = format(it)
-                    onChange(inputChannel, it)
-                },
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
-                        contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.clickable {
-                            downPayment = "0"
-                        }
+        val scrollState = rememberLazyListState()
+        LazyColumn(state = scrollState,
+            modifier = Modifier
+                .padding(8.dp)) {
+            item {
+                Column {
+                    Text(text = result, fontSize = 18.sp, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(
+                        value = loanAmount,
+                        onValueChange = {
+                            loanAmount = format(it)
+                            onChange(inputChannel, it)
+                        },
+                        label = { Text(text = stringResource(R.string.hint_loan_amount)) },
+                        colors = makeTextFieldColors(),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth()
                     )
-                },
-                label = { Text(text = stringResource(R.string.hint_down_payment)) },
-                colors = makeTextFieldColors(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = managementFee,
-                onValueChange = {
-                    managementFee = format(it)
-                    onChange(inputChannel, it)
-                },
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
-                        contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.clickable {
-                            managementFee = "0"
-                        }
-                    )
-                },
-                label = { Text(text = "Management fee (Monthly)") },
-                colors = makeTextFieldColors(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = renovationReserves,
-                onValueChange = {
-                    renovationReserves = format(it)
-                    onChange(inputChannel, it)
-                },
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
-                        contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.clickable {
-                            renovationReserves = "0"
-                        }
-                    )
-                },
-                label = { Text(text = "Renovation reserves (Monthly)") },
-                colors = makeTextFieldColors(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            if (scheduleState.isNotEmpty()) {
-                Box (modifier = Modifier.weight(0.5f)) {
-                    val scrollState = rememberLazyListState()
-                    LazyColumn(state = scrollState) {
-                        stickyHeader {
-                            val surfaceColor = MaterialTheme.colorScheme.surface
-                            val backgroundColor =
-                                derivedStateOf { if (scrollState.firstVisibleItemIndex != 0) { surfaceColor } else Color.Transparent }
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.animateItem()
-                                    .drawBehind { drawRect(backgroundColor.value) }
-                            ) {
-                                Text(
-                                    stringResource(R.string.title_column_loan_payment_count),
-                                    modifier = Modifier.weight(0.4f)
-                                )
-                                Text(stringResource(R.string.title_column_principal), modifier = Modifier.weight(1f))
-                                Text(stringResource(R.string.title_column_interest), modifier = Modifier.weight(1f))
-                                Text(stringResource(R.string.title_column_balance), modifier = Modifier.weight(1f))
-                            }
-                        }
-                        itemsIndexed(scheduleState) { index, it ->
-                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItem()) {
-                                Text(
-                                    "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
-                                    modifier = Modifier.weight(0.4f)
-                                )
-                                Text(roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
-                                Text(roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
-                                Text(it.amount.toString(), modifier = Modifier.weight(1f))
-                            }
-                        }
+                    Row {
+                        OutlinedTextField(
+                            value = loanTerm,
+                            onValueChange = {
+                                loanTerm = format(it)
+                                onChange(inputChannel, it)
+                            },
+                            label = { Text(text = stringResource(R.string.hint_loan_term)) },
+                            colors = makeTextFieldColors(),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            modifier = Modifier.weight(1f)
+                        )
+                        OutlinedTextField(
+                            value = interestRate,
+                            onValueChange = {
+                                interestRate = it
+                                onChange(inputChannel, it)
+                            },
+                            label = { Text(text = stringResource(R.string.hint_interest_rate)) },
+                            colors = makeTextFieldColors(),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            modifier = Modifier.weight(1f)
+                        )
                     }
+                    OutlinedTextField(
+                        value = downPayment,
+                        onValueChange = {
+                            downPayment = format(it)
+                            onChange(inputChannel, it)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
+                                contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.clickable {
+                                    downPayment = "0"
+                                }
+                            )
+                        },
+                        label = { Text(text = stringResource(R.string.hint_down_payment)) },
+                        colors = makeTextFieldColors(),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = managementFee,
+                        onValueChange = {
+                            managementFee = format(it)
+                            onChange(inputChannel, it)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
+                                contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.clickable {
+                                    managementFee = "0"
+                                }
+                            )
+                        },
+                        label = { Text(text = "Management fee (Monthly)") },
+                        colors = makeTextFieldColors(),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = renovationReserves,
+                        onValueChange = {
+                            renovationReserves = format(it)
+                            onChange(inputChannel, it)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
+                                contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.clickable {
+                                    renovationReserves = "0"
+                                }
+                            )
+                        },
+                        label = { Text(text = "Renovation reserves (Monthly)") },
+                        colors = makeTextFieldColors(),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+
+            stickyHeader {
+                val surfaceColor = MaterialTheme.colorScheme.surface
+                val backgroundColor =
+                    derivedStateOf { if (scrollState.firstVisibleItemIndex != 0) { surfaceColor } else Color.Transparent }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.animateItem()
+                        .drawBehind { drawRect(backgroundColor.value) }
+                ) {
+                    Text(
+                        stringResource(R.string.title_column_loan_payment_count),
+                        modifier = Modifier.weight(0.4f)
+                    )
+                    Text(stringResource(R.string.title_column_principal), modifier = Modifier.weight(1f))
+                    Text(stringResource(R.string.title_column_interest), modifier = Modifier.weight(1f))
+                    Text(stringResource(R.string.title_column_balance), modifier = Modifier.weight(1f))
+                }
+            }
+            itemsIndexed(scheduleState) { index, it ->
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItem()) {
+                    Text(
+                        "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
+                        modifier = Modifier.weight(0.4f)
+                    )
+                    Text(roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
+                    Text(roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
+                    Text(it.amount.toString(), modifier = Modifier.weight(1f))
                 }
             }
         }
@@ -257,6 +250,7 @@ fun LoanCalculatorUi() {
                     it.monthlyPayment,
                     it.paymentSchedule.sumOf(PaymentDetail::interest).toLong()
                 )
+
                 scheduleState.clear()
                 scheduleState.addAll(it.paymentSchedule)
             }
