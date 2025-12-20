@@ -9,6 +9,7 @@
 package jp.toastkid.loan.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -38,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -156,6 +159,16 @@ fun LoanCalculatorUi() {
                 onValueChange = {
                     downPayment = format(it)
                     onChange(inputChannel, it)
+                },
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
+                        contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.clickable {
+                            downPayment = "0"
+                        }
+                    )
                 },
                 label = { Text(text = stringResource(R.string.hint_down_payment)) },
                 colors = makeTextFieldColors(),
