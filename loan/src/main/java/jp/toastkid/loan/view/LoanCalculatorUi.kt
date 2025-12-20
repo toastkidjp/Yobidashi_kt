@@ -28,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -85,29 +86,6 @@ fun LoanCalculatorUi() {
     val scheduleState = remember { mutableStateListOf<PaymentDetail>() }
 
     val inputChannel: Channel<String> = Channel()
-
-    DebouncedCalculatorUseCase(
-        inputChannel,
-        {
-            Factor(
-                extractLong(loanAmount),
-                extractInt(loanTerm),
-                extractDouble(interestRate),
-                extractInt(downPayment),
-                extractInt(managementFee),
-                extractInt(renovationReserves)
-            )
-        },
-        {
-            result = context.getString(
-                R.string.message_result_montly_payment,
-                it.monthlyPayment,
-                it.paymentSchedule.sumOf(PaymentDetail::interest).toLong()
-            )
-            scheduleState.clear()
-            scheduleState.addAll(it.paymentSchedule)
-        }
-    ).invoke()
 
     Surface(shadowElevation = 4.dp) {
         Column(
@@ -248,6 +226,31 @@ fun LoanCalculatorUi() {
                 }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        DebouncedCalculatorUseCase(
+            inputChannel,
+            {
+                Factor(
+                    extractLong(loanAmount),
+                    extractInt(loanTerm),
+                    extractDouble(interestRate),
+                    extractInt(downPayment),
+                    extractInt(managementFee),
+                    extractInt(renovationReserves)
+                )
+            },
+            {
+                result = context.getString(
+                    R.string.message_result_montly_payment,
+                    it.monthlyPayment,
+                    it.paymentSchedule.sumOf(PaymentDetail::interest).toLong()
+                )
+                scheduleState.clear()
+                scheduleState.addAll(it.paymentSchedule)
+            }
+        ).invoke()
     }
 }
 
