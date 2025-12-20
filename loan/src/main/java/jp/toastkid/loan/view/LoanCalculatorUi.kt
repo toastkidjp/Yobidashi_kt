@@ -182,6 +182,16 @@ fun LoanCalculatorUi() {
                     renovationReserves = format(it)
                     onChange(inputChannel, it)
                 },
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
+                        contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.clickable {
+                            renovationReserves = "0"
+                        }
+                    )
+                },
                 label = { Text(text = "Renovation reserves (Monthly)") },
                 colors = makeTextFieldColors(),
                 singleLine = true,
