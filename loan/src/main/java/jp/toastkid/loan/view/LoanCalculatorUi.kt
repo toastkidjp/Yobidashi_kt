@@ -102,7 +102,7 @@ fun LoanCalculatorUi() {
             result = context.getString(
                 R.string.message_result_montly_payment,
                 it.monthlyPayment,
-                it.paymentSchedule.sumOf { it.interest }.toLong()
+                it.paymentSchedule.sumOf(PaymentDetail::interest).toLong()
             )
             scheduleState.clear()
             scheduleState.addAll(it.paymentSchedule)
