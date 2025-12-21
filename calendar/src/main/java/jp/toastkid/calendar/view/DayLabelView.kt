@@ -9,6 +9,8 @@
 package jp.toastkid.calendar.view
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -37,7 +39,7 @@ fun DayLabelView(
         color = getSurfaceColor(today),
         modifier = modifier
     ) {
-        Column {
+        Column(modifier = Modifier.fillMaxSize().padding(start = 4.dp, end = 8.dp)) {
             Text(if (date == -1) "" else "$date",
                 fontSize = if (labels.isEmpty()) 16.sp else 14.sp,
                 textAlign = TextAlign.End,
@@ -47,15 +49,16 @@ fun DayLabelView(
                     dayOfWeek == Calendar.SATURDAY -> CALENDAR_SATURDAY
                     else -> if (today) Color.White else MaterialTheme.colorScheme.onSurface
                 },
-                modifier = Modifier.padding(4.dp)
+                modifier = Modifier.fillMaxWidth()
             )
             labels.forEach {
                 Text(
                     "${it.flag} ${it.title}",
                     fontSize = 9.sp,
+                    textAlign = TextAlign.End,
                     color = CALENDAR_OFF_DAY,
                     lineHeight = 10.sp,
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
