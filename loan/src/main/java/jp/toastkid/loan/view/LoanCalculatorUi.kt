@@ -275,8 +275,10 @@ fun LoanCalculatorUi() {
     }
 }
 
+private val DECIMAL_FORMAT = DecimalFormat("#,###.##")
+
 private fun roundToIntSafely(d: Double) =
-    if (d.isNaN()) "0" else d.roundToInt().toString()
+    if (d.isNaN()) "0" else DECIMAL_FORMAT.format(d.roundToInt())
 
 @Composable
 private fun makeTextFieldColors() = TextFieldDefaults.colors(
