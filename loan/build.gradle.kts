@@ -38,6 +38,7 @@ android {
 
 dependencies {
     implementation(project(path = ":lib"))
+    implementation(libraries.activityCompose)
 
     implementation(libraries.coroutines)
 
