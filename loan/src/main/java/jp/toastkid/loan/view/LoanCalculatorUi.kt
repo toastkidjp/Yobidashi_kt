@@ -8,6 +8,7 @@
 
 package jp.toastkid.loan.view
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.loan.R
 import jp.toastkid.loan.model.Factor
 import jp.toastkid.loan.model.PaymentDetail
@@ -51,6 +56,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
@@ -84,8 +90,9 @@ fun LoanCalculatorUi() {
 
     val inputChannel: Channel<String> = Channel()
 
+    val scrollState = rememberLazyListState()
+
     Surface(shadowElevation = 4.dp) {
-        val scrollState = rememberLazyListState()
         LazyColumn(state = scrollState,
             modifier = Modifier
                 .padding(8.dp)) {
@@ -255,6 +262,16 @@ fun LoanCalculatorUi() {
                 scheduleState.addAll(it.paymentSchedule)
             }
         ).invoke()
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(lifecycleOwner) {
+        withContext(Dispatchers.IO) {
+            (context as? ComponentActivity)
+                ?.let { ViewModelProvider(it).get(ContentViewModel::class) }
+                ?.receiveEvent(StateScrollerFactory().invoke(scrollState))
+        }
     }
 }
 
