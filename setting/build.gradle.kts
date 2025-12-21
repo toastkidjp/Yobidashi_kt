@@ -46,7 +46,7 @@ dependencies {
     implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.exifinterface)
     implementation(libraries.timber)
-    implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
+    implementation("com.godaddy.android.colorpicker:compose-color-picker:0.7.0")
 
     testImplementation(testLibraries.junit)
     testImplementation(testLibraries.mockK)
