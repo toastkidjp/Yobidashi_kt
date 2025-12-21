@@ -486,7 +486,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun usingHolidaysCalendar(): List<String> {
-        return preferences.getString(Key.HOLIDAY_CALENDARS.name, "USA")?.split("\t") ?: emptyList()
+        return preferences.getString(Key.HOLIDAY_CALENDARS.name, "USA\tUK\tJAPAN\tVIETNAM")?.split("\t") ?: emptyList()
     }
 
     fun setUsingPrimaryHolidaysCalendar(calendarNames: String) {
