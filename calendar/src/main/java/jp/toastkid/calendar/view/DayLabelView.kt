@@ -40,7 +40,7 @@ fun DayLabelView(
         Column {
             Text(if (date == -1) "" else "$date",
                 fontSize = if (labels.isEmpty()) 16.sp else 14.sp,
-                textAlign = TextAlign.Start,
+                textAlign = TextAlign.End,
                 color = when {
                     offDay -> CALENDAR_OFF_DAY
                     dayOfWeek == Calendar.SUNDAY -> CALENDAR_OFF_DAY
