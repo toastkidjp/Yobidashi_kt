@@ -228,7 +228,7 @@ fun LoanCalculatorUi() {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItem()) {
                     Text(
                         "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
-                        modifier = Modifier.weight(0.4f)
+                        modifier = Modifier.weight(0.7f)
                     )
                     Text(roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
                     Text(roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
