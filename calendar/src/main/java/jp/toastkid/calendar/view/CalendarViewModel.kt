@@ -54,7 +54,7 @@ class CalendarViewModel {
         )
 
         val weeks = mutableListOf<Week>()
-        for (i in 0..5) {
+        repeat(6) {
             val w = Week()
             week().forEach { dayOfWeek ->
                 if (hasStarted1.not() && dayOfWeek != firstDay.get(Calendar.DAY_OF_WEEK)) {
