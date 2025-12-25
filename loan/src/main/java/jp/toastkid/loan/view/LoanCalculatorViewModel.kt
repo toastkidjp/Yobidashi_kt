@@ -133,7 +133,7 @@ class LoanCalculatorViewModel {
         editText.replace(",", "").toIntOrNull() ?: 0
 
     private fun extractDouble(editText: String) =
-        editText.replace(",", "")?.toDoubleOrNull() ?: 0.0
+        editText.replace(",", "").toDoubleOrNull() ?: 0.0
 
     fun launch(stringFormatter: (Long, Long) -> String) {
         DebouncedCalculatorUseCase(
