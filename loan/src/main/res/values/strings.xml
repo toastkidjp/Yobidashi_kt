@@ -10,13 +10,9 @@
     <string name="title_loan_calculator">Loan calculator</string>
     <string name="message_result_montly_payment">Monthly payment: %,d (Amount of interest %,d)</string>
     <string name="hint_loan_amount">Loan amount</string>
-    <string name="default_value_loan_amount">35,000,000</string>
     <string name="hint_loan_term">Loan term</string>
-    <string name="default_value_loan_term">35</string>
     <string name="hint_interest_rate">Interest rate</string>
-    <string name="default_value_interest_rate">1.0</string>
     <string name="hint_down_payment">Down payment</string>
-    <string name="default_value_down_payment">1,000,000</string>
     <string name="title_column_loan_payment_count">Count</string>
     <string name="title_column_principal">Principal</string>
     <string name="title_column_interest">Interest</string>
