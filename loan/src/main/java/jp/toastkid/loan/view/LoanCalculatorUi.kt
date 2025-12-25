@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,12 +27,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -49,61 +43,27 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.loan.R
-import jp.toastkid.loan.model.Factor
-import jp.toastkid.loan.model.PaymentDetail
-import jp.toastkid.loan.usecase.DebouncedCalculatorUseCase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.DecimalFormat
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LoanCalculatorUi() {
     val context = LocalContext.current
-    var result by rememberSaveable {
-        mutableStateOf("")
-    }
-    var loanAmount by remember {
-        mutableStateOf(context.getString(R.string.default_value_loan_amount))
-    }
-    var loanTerm by remember {
-        mutableStateOf(context.getString(R.string.default_value_loan_term))
-    }
-    var interestRate by remember {
-        mutableStateOf(context.getString(R.string.default_value_interest_rate))
-    }
-    var downPayment by remember {
-        mutableStateOf(context.getString(R.string.default_value_down_payment))
-    }
-    var managementFee by remember {
-        mutableStateOf("10,000")
-    }
-    var renovationReserves by remember {
-        mutableStateOf("10,000")
-    }
 
-    val scheduleState = remember { mutableStateListOf<PaymentDetail>() }
-
-    val inputChannel: Channel<String> = Channel()
-
-    val scrollState = rememberLazyListState()
+    val viewModel = remember { LoanCalculatorViewModel() }
 
     Surface(shadowElevation = 4.dp) {
-        LazyColumn(state = scrollState,
+        LazyColumn(state = viewModel.scrollState(),
             modifier = Modifier
                 .padding(8.dp)) {
             item {
                 Column {
-                    Text(text = result, fontSize = 18.sp, modifier = Modifier.fillMaxWidth())
+                    Text(text = viewModel.result(), fontSize = 18.sp, modifier = Modifier.fillMaxWidth())
                     OutlinedTextField(
-                        value = loanAmount,
+                        value = viewModel.loanAmount(),
                         onValueChange = {
-                            loanAmount = format(it)
-                            onChange(inputChannel, it)
+                            viewModel.updateLoanAmount(it)
                         },
                         label = { Text(text = stringResource(R.string.hint_loan_amount)) },
                         colors = makeTextFieldColors(),
@@ -113,10 +73,9 @@ fun LoanCalculatorUi() {
                     )
                     Row {
                         OutlinedTextField(
-                            value = loanTerm,
+                            value = viewModel.loanTerm(),
                             onValueChange = {
-                                loanTerm = format(it)
-                                onChange(inputChannel, it)
+                                viewModel.updateLoanTerm(it)
                             },
                             label = { Text(text = stringResource(R.string.hint_loan_term)) },
                             colors = makeTextFieldColors(),
@@ -125,10 +84,9 @@ fun LoanCalculatorUi() {
                             modifier = Modifier.weight(1f)
                         )
                         OutlinedTextField(
-                            value = interestRate,
+                            value = viewModel.interestRate(),
                             onValueChange = {
-                                interestRate = it
-                                onChange(inputChannel, it)
+                                viewModel.updateInterestRate(it)
                             },
                             label = { Text(text = stringResource(R.string.hint_interest_rate)) },
                             colors = makeTextFieldColors(),
@@ -138,10 +96,9 @@ fun LoanCalculatorUi() {
                         )
                     }
                     OutlinedTextField(
-                        value = downPayment,
+                        value = viewModel.downPayment(),
                         onValueChange = {
-                            downPayment = format(it)
-                            onChange(inputChannel, it)
+                            viewModel.updateDownPayment(it)
                         },
                         trailingIcon = {
                             Icon(
@@ -149,7 +106,7 @@ fun LoanCalculatorUi() {
                                 contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
                                 tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.clickable {
-                                    downPayment = "0"
+                                    viewModel.clearDownPayment()
                                 }
                             )
                         },
@@ -160,10 +117,9 @@ fun LoanCalculatorUi() {
                         modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
-                        value = managementFee,
+                        value = viewModel.managementFee(),
                         onValueChange = {
-                            managementFee = format(it)
-                            onChange(inputChannel, it)
+                            viewModel.updateManagementFee(it)
                         },
                         trailingIcon = {
                             Icon(
@@ -171,7 +127,7 @@ fun LoanCalculatorUi() {
                                 contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
                                 tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.clickable {
-                                    managementFee = "0"
+                                    viewModel.clearManagementFee()
                                 }
                             )
                         },
@@ -182,10 +138,9 @@ fun LoanCalculatorUi() {
                         modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
-                        value = renovationReserves,
+                        value = viewModel.renovationReserves(),
                         onValueChange = {
-                            renovationReserves = format(it)
-                            onChange(inputChannel, it)
+                            viewModel.updateRenovationReserves(it)
                         },
                         trailingIcon = {
                             Icon(
@@ -193,7 +148,7 @@ fun LoanCalculatorUi() {
                                 contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
                                 tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.clickable {
-                                    renovationReserves = "0"
+                                    viewModel.clearRenovationReserves()
                                 }
                             )
                         },
@@ -209,7 +164,7 @@ fun LoanCalculatorUi() {
             stickyHeader {
                 val surfaceColor = MaterialTheme.colorScheme.surface
                 val backgroundColor =
-                    derivedStateOf { if (scrollState.firstVisibleItemIndex != 0) { surfaceColor } else Color.Transparent }
+                    derivedStateOf { if (viewModel.scrollState().firstVisibleItemIndex != 0) { surfaceColor } else Color.Transparent }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.animateItem()
@@ -224,14 +179,14 @@ fun LoanCalculatorUi() {
                     Text(stringResource(R.string.title_column_balance), modifier = Modifier.weight(1f))
                 }
             }
-            itemsIndexed(scheduleState) { index, it ->
+            itemsIndexed(viewModel.scheduleState()) { index, it ->
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItem()) {
                     Text(
                         "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
                         modifier = Modifier.weight(0.7f)
                     )
-                    Text(roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
-                    Text(roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
+                    Text(viewModel.roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
+                    Text(viewModel.roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
                     Text(it.amount.toString(), modifier = Modifier.weight(1f))
                 }
             }
@@ -239,29 +194,13 @@ fun LoanCalculatorUi() {
     }
 
     LaunchedEffect(Unit) {
-        DebouncedCalculatorUseCase(
-            inputChannel,
-            {
-                Factor(
-                    extractLong(loanAmount),
-                    extractInt(loanTerm),
-                    extractDouble(interestRate),
-                    extractInt(downPayment),
-                    extractInt(managementFee),
-                    extractInt(renovationReserves)
-                )
-            },
-            {
-                result = context.getString(
-                    R.string.message_result_montly_payment,
-                    it.monthlyPayment,
-                    it.paymentSchedule.sumOf(PaymentDetail::interest).toLong()
-                )
-
-                scheduleState.clear()
-                scheduleState.addAll(it.paymentSchedule)
-            }
-        ).invoke()
+        viewModel.launch { monthlyPayment, sum ->
+            context.getString(
+                R.string.message_result_montly_payment,
+                monthlyPayment,
+                sum
+            )
+        }
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -270,15 +209,10 @@ fun LoanCalculatorUi() {
         withContext(Dispatchers.IO) {
             (context as? ComponentActivity)
                 ?.let { ViewModelProvider(it).get(ContentViewModel::class) }
-                ?.receiveEvent(StateScrollerFactory().invoke(scrollState))
+                ?.receiveEvent(StateScrollerFactory().invoke(viewModel.scrollState()))
         }
     }
 }
-
-private val DECIMAL_FORMAT = DecimalFormat("#,###.##")
-
-private fun roundToIntSafely(d: Double) =
-    if (d.isNaN()) "0" else DECIMAL_FORMAT.format(d.roundToInt())
 
 @Composable
 private fun makeTextFieldColors() = TextFieldDefaults.colors(
@@ -287,30 +221,3 @@ private fun makeTextFieldColors() = TextFieldDefaults.colors(
     unfocusedContainerColor = Color.Transparent,
     cursorColor = MaterialTheme.colorScheme.onSurface
 )
-
-private fun onChange(inputChannel: Channel<String>, text: String) {
-    CoroutineScope(Dispatchers.IO).launch {
-        inputChannel.send(text)
-    }
-}
-
-private val formatter = DecimalFormat("#,###.##")
-
-private fun format(input: String?): String {
-    if (input.isNullOrBlank()) {
-        return "0"
-    }
-
-    return formatter.format(
-        input.filter { it.isDigit() || it == '.' }.trim()?.toBigDecimalOrNull()
-    )
-}
-
-private fun extractLong(editText: String) =
-    editText.replace(",", "").toLongOrNull() ?: 0
-
-private fun extractInt(editText: String) =
-    editText.replace(",", "")?.toIntOrNull() ?: 0
-
-private fun extractDouble(editText: String) =
-    editText.replace(",", "")?.toDoubleOrNull() ?: 0.0
