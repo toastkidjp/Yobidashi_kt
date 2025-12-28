@@ -7,7 +7,6 @@
  */
 import com.android.build.gradle.tasks.GenerateBuildConfig
 import property.BuildTool
-import property.LibraryVersion
 
 plugins {
   id("com.android.library")
@@ -54,5 +53,5 @@ dependencies {
 
     testImplementation(testLibraries.junit)
     testImplementation(testLibraries.mockK)
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${LibraryVersion.coroutinesTest}")
+    testImplementation(testLibraries.coroutines)
 }
