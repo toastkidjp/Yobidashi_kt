@@ -52,7 +52,7 @@ dependencies {
     implementation(libraries.lifecycleRuntimeKtx)
     implementation(libraries.activityCompose)
 
-    implementation("androidx.media:media:1.7.0")
+    implementation("androidx.media:media:1.7.1")
 
     implementation(libraries.timber)
     implementation(libraries.coroutines)
