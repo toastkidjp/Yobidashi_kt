@@ -1,4 +1,0 @@
-package property
-
-object LibraryVersion {
-}
