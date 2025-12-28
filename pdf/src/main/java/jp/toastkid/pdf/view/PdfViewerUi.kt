@@ -86,11 +86,11 @@ fun PdfViewerUi(uri: Uri, modifier: Modifier) {
         remember {
             try {
                 context.contentResolver.openFileDescriptor(uri, "r")
+                    ?.let { PdfRenderer(it) }
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
                 return@remember null
             }
-                ?.let { PdfRenderer(it) }
         }
             ?: return
 
