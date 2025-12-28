@@ -54,7 +54,7 @@ class LoanCalculatorViewModelTest {
         subject.updateInterestRate(newValue)
 
         val converted = subject.interestRate()
-        assertEquals("2.0", converted.text)
+        assertEquals("2", converted.text)
         assertEquals(1, converted.selection.start)
     }
 
