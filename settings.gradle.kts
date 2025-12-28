@@ -28,7 +28,7 @@ dependencyResolutionManagement {
             library("coilGif", "io.coil-kt.coil3", "coil-gif").versionRef("coilCompose")
             library("coilNetwork", "io.coil-kt.coil3", "coil-network-okhttp").versionRef("coilCompose")
             library("timber", "com.jakewharton.timber", "timber").version("5.0.1")
-            library("exifinterface", "androidx.exifinterface", "exifinterface").version("1.3.3")
+            library("exifinterface", "androidx.exifinterface", "exifinterface").version("1.4.2")
             library("composeMaterial3", "androidx.compose.material3", "material3").version("1.3.0")
             library("lifecycleRuntimeKtx", "androidx.lifecycle", "lifecycle-runtime-ktx").versionRef("lifecycle")
             library("lifecycleRuntimeCompose", "androidx.lifecycle", "lifecycle-runtime-compose").versionRef("lifecycle")
