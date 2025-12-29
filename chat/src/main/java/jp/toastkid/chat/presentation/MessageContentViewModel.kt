@@ -18,7 +18,7 @@ class MessageContentViewModel {
 
     private val defaultImage = createBitmap(1, 1)
 
-    private val imageHolder = mutableStateOf<Bitmap>(defaultImage)
+    private val imageHolder = mutableStateOf(defaultImage)
 
     fun lineText(listLine: Boolean, text: String): AnnotatedString {
         return keywordHighlighter(if (listLine) text.substring(2) else text)
