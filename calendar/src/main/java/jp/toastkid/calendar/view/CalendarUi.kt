@@ -157,7 +157,7 @@ fun CalendarUi() {
                             onDismissRequest = { openMonthChooser.value = false }) {
                             (1..12).forEach {
                                 DropdownMenuItem(
-                                    text = { Text("${it}") },
+                                    text = { Text("$it") },
                                     onClick = {
                                         coroutineScope.launch {
                                             val fromPage =
