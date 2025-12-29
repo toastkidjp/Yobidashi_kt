@@ -122,7 +122,7 @@ class LoanCalculatorViewModel {
         }
 
         return DECIMAL_FORMAT.format(
-            input.filter { it.isDigit() || it == '.' }.trim()?.toBigDecimalOrNull()
+            input.filter { it.isDigit() || it == '.' }.trim().toBigDecimalOrNull()
         )
     }
 
