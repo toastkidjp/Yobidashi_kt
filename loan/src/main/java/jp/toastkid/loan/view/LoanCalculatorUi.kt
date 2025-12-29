@@ -59,7 +59,11 @@ fun LoanCalculatorUi() {
                 .padding(8.dp)) {
             item {
                 Column {
-                    Text(text = viewModel.result(), fontSize = 18.sp, modifier = Modifier.fillMaxWidth())
+                    Text(
+                        text = viewModel.result(),
+                        fontSize = 18.sp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                     OutlinedTextField(
                         value = viewModel.loanAmount(),
                         onValueChange = {
