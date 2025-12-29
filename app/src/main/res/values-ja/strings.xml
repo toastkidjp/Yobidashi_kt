@@ -186,5 +186,6 @@
     <string name="title_converter_tool">変換ツール</string>
     <string name="title_chat">Chat</string>
     <string name="title_world_time">世界の時間</string>
+    <string name="title_sensor">センサー</string>
 
 </resources>
