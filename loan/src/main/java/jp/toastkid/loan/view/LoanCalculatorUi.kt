@@ -164,7 +164,10 @@ fun LoanCalculatorUi() {
             stickyHeader {
                 val surfaceColor = MaterialTheme.colorScheme.surface
                 val backgroundColor =
-                    derivedStateOf { if (viewModel.scrollState().firstVisibleItemIndex != 0) { surfaceColor } else Color.Transparent }
+                    derivedStateOf {
+                        if (viewModel.scrollState().firstVisibleItemIndex != 0) { surfaceColor }
+                        else Color.Transparent
+                    }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.animateItem()
