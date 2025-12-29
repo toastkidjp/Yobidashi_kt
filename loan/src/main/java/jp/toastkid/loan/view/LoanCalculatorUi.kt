@@ -187,7 +187,10 @@ fun LoanCalculatorUi() {
                 }
             }
             itemsIndexed(viewModel.scheduleState()) { index, it ->
-                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItem()) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.animateItem()
+                ) {
                     Text(
                         "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
                         modifier = Modifier.weight(0.7f)
