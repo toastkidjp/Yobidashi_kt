@@ -53,6 +53,8 @@ enum class Menu(
 
     WORLD_TIME(R.string.title_world_time, R.drawable.ic_world_time),
 
+    SENSOR(R.string.title_sensor, R.drawable.ic_board),
+
     TODO_TASKS_BOARD(jp.toastkid.web.R.string.title_todo_tasks_board, R.drawable.ic_board),
 
     TODO_TASKS(jp.toastkid.web.R.string.title_todo_tasks, R.drawable.ic_todo_task),
