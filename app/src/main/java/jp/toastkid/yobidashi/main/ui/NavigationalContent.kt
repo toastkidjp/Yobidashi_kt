@@ -37,6 +37,7 @@ import jp.toastkid.rss.view.RssReaderListUi
 import jp.toastkid.search.favorite.FavoriteSearchListUi
 import jp.toastkid.search.history.SearchHistoryListUi
 import jp.toastkid.search.view.SearchInputUi
+import jp.toastkid.sensor.presentation.view.SensorSwitcherView
 import jp.toastkid.setting.presentation.screen.SettingTopUi
 import jp.toastkid.todo.view.board.TaskBoardUi
 import jp.toastkid.todo.view.list.TaskListUi
@@ -151,6 +152,9 @@ internal fun NavigationalContent(
         }
         composable("tool/chat") {
             ChatTabView()
+        }
+        composable("tool/sensor") {
+            SensorSwitcherView()
         }
         composable("tool/world_time") {
             WorldTimeView()
