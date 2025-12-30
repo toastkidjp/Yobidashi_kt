@@ -22,6 +22,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import jp.toastkid.sensor.application.model.Destination
+import java.util.concurrent.atomic.AtomicReference
 
 @Composable
 fun SensorView(destination: Destination) {
@@ -33,6 +34,7 @@ fun SensorView(destination: Destination) {
     }
 
     val text = remember { mutableStateOf("-") }
+    val unit = remember { AtomicReference("") }
 
     val sensorListener = remember {
         object : SensorEventListener {
@@ -42,7 +44,7 @@ fun SensorView(destination: Destination) {
             }
 
             override fun onSensorChanged(sensorEvent: SensorEvent?) {
-                text.value = "${sensorEvent?.values[0]}${destination.unit}"
+                text.value = "${sensorEvent?.values[0]}${unit.get()}"
             }
 
         }
@@ -79,6 +81,7 @@ fun SensorView(destination: Destination) {
 
     LaunchedEffect(destination) {
         sensorManager?.unregisterListener(sensorListener)
+        unit.set(destination.unit)
         lifecycleOwner.lifecycle.removeObserver(observer)
         lightSensor.value = sensorManager?.getDefaultSensor(destination.sensor)
         lifecycleOwner.lifecycle.addObserver(observer)
