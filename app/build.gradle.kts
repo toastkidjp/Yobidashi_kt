@@ -133,6 +133,7 @@ dependencies {
     implementation(project(":web"))
     implementation(project(":chat"))
     implementation(project(":world"))
+    implementation(project(":sensor"))
     implementation(project(":setting"))
 
     implementation(libraries.workManager)
