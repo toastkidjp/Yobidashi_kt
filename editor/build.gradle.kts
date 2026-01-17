@@ -49,6 +49,7 @@ dependencies {
     implementation(libraries.coreKtx)
 
     // Compose dependencies.
+    implementation(libraries.composeFoundation)
     implementation(libraries.composeMaterial3)
     implementation(libraries.activityCompose)
     implementation(libraries.lifecycleRuntimeKtx)
