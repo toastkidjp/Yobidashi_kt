@@ -112,7 +112,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 state = refreshState,
                 containerColor = MaterialTheme.colorScheme.primary,
                 color = MaterialTheme.colorScheme.onPrimary,
-                threshold = 96.dp
+                maxDistance = 96.dp
             )
         },
         modifier = Modifier.nestedScroll(
