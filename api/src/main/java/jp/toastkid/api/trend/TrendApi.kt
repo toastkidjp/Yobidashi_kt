@@ -28,7 +28,7 @@ class TrendApi {
                 .build()
 
         val service = retrofit.create(TrendService::class.java)
-        val call = service.call(if (Locale.getDefault().equals(Locale.JAPAN)) "p4" else "p0")
+        val call = service.call(Locale.getDefault().country)
         return call.execute().body()
     }
 
