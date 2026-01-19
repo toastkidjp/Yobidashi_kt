@@ -9,6 +9,8 @@
 package jp.toastkid.editor.view.menu.text
 
 import android.content.Context
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.insert
 import jp.toastkid.editor.Quotation
 import jp.toastkid.editor.R
 import jp.toastkid.editor.view.EditorTabViewModel
@@ -27,7 +29,8 @@ class PasteAsQuotation(
             return
         }
 
-        val currentText = viewModel.content().copy()
+        val currentText = viewModel.content().text.toString()
+        val currentSelection = viewModel.content().selection
 
         val quotation = Quotation()(primary) ?: return
         viewModel.insertText(quotation)
@@ -37,7 +40,11 @@ class PasteAsQuotation(
                 context.getString(R.string.paste_as_quotation),
                 context.getString(jp.toastkid.lib.R.string.undo)
             ) {
-                viewModel.onValueChange(currentText)
+                viewModel.content().clearText()
+                viewModel.content().edit {
+                    insert(0, currentText)
+                    selection = currentSelection
+                }
             }
     }
 
