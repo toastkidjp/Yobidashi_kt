@@ -8,11 +8,13 @@
 
 package jp.toastkid.search.viewmodel
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.foundation.text.input.setTextAndSelectAll
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.api.trend.Trend
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
@@ -37,17 +39,24 @@ class SearchUiViewModel(
         queryingUseCase.setViewModel(this)
     }
 
-    private val _input = mutableStateOf(TextFieldValue())
+    private val _input = TextFieldState()
 
-    val input: State<TextFieldValue> = _input
+    val input = _input
 
-    fun setInput(textInputValue: TextFieldValue) {
-        _input.value = textInputValue
-        queryingUseCase.send(textInputValue.text)
+    fun clearInput() {
+        _input.clearText()
     }
 
     fun putQuery(query: String) {
-        _input.value = TextFieldValue(query, TextRange(query.length), TextRange.Zero)
+        _input.setTextAndPlaceCursorAtEnd(query)
+    }
+
+    fun putQueryAndSelectAll(query: String) {
+        _input.setTextAndSelectAll(query)
+    }
+
+    fun invokeSuggestion() {
+        queryingUseCase.send(_input.text.toString())
     }
 
     val urlItems = mutableStateListOf<UrlItem>()
