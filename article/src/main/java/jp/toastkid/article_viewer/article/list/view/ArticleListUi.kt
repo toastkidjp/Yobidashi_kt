@@ -35,8 +35,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -236,7 +234,7 @@ private fun AppBarContent(viewModel: ArticleListViewModel) {
                 ),
                 trailingIcon = {
                     Icon(
-                        Icons.Filled.Clear,
+                        painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
                         tint = MaterialTheme.colorScheme.onPrimary,
                         contentDescription = "clear text",
                         modifier = Modifier
