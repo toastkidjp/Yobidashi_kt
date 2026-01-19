@@ -10,6 +10,11 @@ package jp.toastkid.editor.view
 
 import android.text.format.DateFormat
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.delete
+import androidx.compose.foundation.text.input.insert
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -21,11 +26,9 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import jp.toastkid.editor.view.style.TextEditorVisualTransformation
+import jp.toastkid.editor.view.style.TextEditorOutputTransformation
 import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -36,7 +39,7 @@ import kotlin.math.min
 
 class EditorTabViewModel {
 
-    private val content = mutableStateOf(TextFieldValue())
+    private val content = TextFieldState()
 
     private var lastParagraph: MultiParagraph? = null
 
@@ -52,25 +55,23 @@ class EditorTabViewModel {
 
     private val nestedScrollDispatcher = NestedScrollDispatcher()
 
-    fun content() = content.value
+    fun content() = content
 
     fun onValueChange(it: TextFieldValue) {
-        applyStyle(it)
+        applyStyle()
     }
 
     fun clearText() {
-        content.value = TextFieldValue()
+        content.clearText()
     }
 
     private val contentLength = mutableIntStateOf(0)
 
     fun contentLength(): Int = contentLength.intValue
 
-    private fun applyStyle(it: TextFieldValue) {
-        content.value = it
-
-        if (contentLength.intValue != content.value.text.length) {
-            contentLength.intValue = content.value.text.length
+    private fun applyStyle() {
+        if (contentLength.intValue != content.text.length) {
+            contentLength.intValue = content.text.length
         }
     }
 
@@ -100,9 +101,9 @@ class EditorTabViewModel {
     fun onClickLineNumber(it: Int) {
         val multiParagraph = lastParagraph ?: return
 
-        content.value = content.value.copy(
+        content.edit {
             selection = TextRange(multiParagraph.getLineStart(it), multiParagraph.getLineEnd(it))
-        )
+        }
     }
 
     fun focusRequester() = focusRequester
@@ -120,16 +121,9 @@ class EditorTabViewModel {
         return lineNumbers.value
     }
 
-    fun launchTab(
-        content: TextFieldValue
-    ) {
-        val newContent = content
-        applyStyle(newContent)
-    }
-
     fun currentLineOffset(): Offset {
         val paragraph = lastParagraph ?: return Offset.Unspecified
-        val currentLine = paragraph.getLineForOffset(content.value.selection.start)
+        val currentLine = paragraph.getLineForOffset(content.selection.start)
         return Offset(
             paragraph.getLineLeft(currentLine),
             paragraph.getLineTop(currentLine) - lineNumberScrollState.value
@@ -143,49 +137,31 @@ class EditorTabViewModel {
         )
     }
 
-    private val visualTransformation = TextEditorVisualTransformation(content, darkMode.value)
+    private val visualTransformation = TextEditorOutputTransformation(content, darkMode.value)
 
-    fun visualTransformation(): VisualTransformation {
+    fun visualTransformation(): OutputTransformation {
         return visualTransformation
     }
 
     fun dispose() {
         lastParagraph = null
-        content.value = TextFieldValue()
+        content.clearText()
     }
 
     fun insertText(
         primary: CharSequence
     ) {
-        val content = content()
-        onValueChange(
-            content.copy(
-                text = StringBuilder(content.text)
-                    .replace(
-                        content.selection.start,
-                        content.selection.start,
-                        primary.toString()
-                    )
-                    .toString()
-            )
-        )
+        this.content.edit { insert(content.selection.start, primary.toString()) }
     }
 
     fun replaceText(primary: CharSequence) {
         val content = content()
         val start = min(content.selection.start, content.selection.end)
         val end = max(content.selection.start, content.selection.end)
-        onValueChange(
-            content.copy(
-                text = StringBuilder(content.text)
-                    .replace(
-                        start,
-                        end,
-                        primary.toString()
-                    )
-                    .toString()
-            )
-        )
+        content.edit {
+            replace(start, end, primary.toString())
+        }
+        applyStyle()
     }
 
     fun findUp(text: String) {
@@ -194,7 +170,9 @@ class EditorTabViewModel {
         if (index == -1) {
             return
         }
-        this.content.value = content.copy(selection = TextRange(index, index + text.length))
+        this.content.edit {
+            selection = TextRange(index, index + text.length)
+        }
     }
 
     fun findDown(text: String) {
@@ -203,7 +181,9 @@ class EditorTabViewModel {
         if (index == -1) {
             return
         }
-        this.content.value = content.copy(selection = TextRange(index, index + text.length))
+        this.content.edit {
+            selection = TextRange(index, index + text.length)
+        }
     }
 
     fun duplicateCurrentLine() {
@@ -213,10 +193,10 @@ class EditorTabViewModel {
         val lineStart = textLayoutResult.getLineStart(currentLine)
         val lineEnd = textLayoutResult.getLineEnd(currentLine)
         val safeEnd = min(currentContent.text.length, lineEnd)
-        val newText = StringBuilder(currentContent.text)
-            .insert(safeEnd, "\n${currentContent.text.substring(lineStart, safeEnd)}")
-            .toString()
-        onValueChange(currentContent.copy(text = newText))
+
+        this.content.edit {
+            insert(safeEnd, "\n${currentContent.text.substring(lineStart, safeEnd)}")
+        }
     }
 
     fun deleteCurrentLine() {
@@ -226,10 +206,10 @@ class EditorTabViewModel {
         val lineStart = textLayoutResult.getLineStart(currentLine)
         val lineEnd = textLayoutResult.getLineEnd(currentLine)
         val targetEnd = min(currentContent.text.length, lineEnd + 1)
-        val newText = StringBuilder(currentContent.text)
-            .delete(lineStart, targetEnd)
-            .toString()
-        onValueChange(currentContent.copy(text = newText))
+
+        this.content.edit {
+            delete(lineStart, targetEnd)
+        }
     }
 
     fun selectCurrentLine() {
@@ -239,7 +219,10 @@ class EditorTabViewModel {
         val lineStart = textLayoutResult.getLineStart(currentLine)
         val lineEnd = textLayoutResult.getLineEnd(currentLine)
         val targetEnd = min(currentContent.text.length, lineEnd + 1)
-        onValueChange(currentContent.copy(selection = TextRange(lineStart, targetEnd)))
+
+        this.content.edit {
+            selection = TextRange(lineStart, targetEnd)
+        }
     }
 
     fun nestedScrollDispatcher() = nestedScrollDispatcher
@@ -309,29 +292,37 @@ class EditorTabViewModel {
     }
 
     fun selectedText(): String {
-        return content.value.getSelectedText().text
+        val selection = this.content.selection
+        val start = min(selection.start, selection.end)
+        val end = max(selection.start, selection.end)
+        return content.text.substring(start, end)
     }
 
     fun selectToEnd() {
-        content.value = content.value.copy(selection = TextRange(content.value.selection.start, content.value.text.length))
+        this.content.edit {
+            selection = TextRange(selection.start, content.text.length)
+        }
     }
 
     suspend fun scrollToTop() {
-        onValueChange(content.value.copy(selection = TextRange.Zero))
+        this.content.edit {
+            selection = TextRange.Zero
+        }
 
         lineNumberScrollState.scrollTo(0)
     }
 
     suspend fun scrollToBottom() {
-        val textFieldValue = content.value
-        onValueChange(textFieldValue.copy(selection = TextRange(textFieldValue.text.length)))
+        this.content.edit {
+            selection = TextRange(content.text.length)
+        }
 
         lineNumberScrollState.scrollTo(lineNumberScrollState.maxValue)
     }
 
-    private val fontColor = AtomicReference(Color.Transparent)
+    private val fontColor = mutableStateOf(Color.Transparent)
 
-    fun fontColor(): Color = fontColor.get()
+    fun fontColor(): Color = fontColor.value
 
     private val fontSize = AtomicReference(14.sp)
 
@@ -346,11 +337,12 @@ class EditorTabViewModel {
     fun cursorColor(): Color = cursorColor.get()
 
     fun setPreference(preferenceApplier: PreferenceApplier) {
-        fontColor.set(Color(preferenceApplier.editorFontColor()))
         fontSize.set(preferenceApplier.editorFontSize().sp)
         backgroundColor.set(Color(preferenceApplier.editorBackgroundColor()))
         cursorColor.set(Color(preferenceApplier.editorCursorColor(Color.Cyan.toArgb())))
+
         darkMode.value = preferenceApplier.useDarkMode()
+        fontColor.value = Color(preferenceApplier.editorFontColor())
     }
 
 }
