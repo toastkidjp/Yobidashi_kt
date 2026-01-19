@@ -45,6 +45,7 @@ android {
 dependencies {
     implementation(project(path = ":lib"))
     implementation(libraries.composeUi)
+    implementation(libraries.composeFoundation)
     implementation(libraries.coilCompose)
     implementation(libraries.coilGif)
     implementation(libraries.coilNetwork)
