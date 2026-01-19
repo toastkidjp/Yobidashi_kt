@@ -9,6 +9,8 @@
 package jp.toastkid.editor.view.menu.text
 
 import android.content.Context
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.insert
 import jp.toastkid.editor.usecase.LinkTitleFetcherUseCase
 import jp.toastkid.editor.view.EditorTabViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -35,7 +37,8 @@ class LinkFormInsertion(
             return
         }
 
-        val currentText = viewModel.content().copy()
+        val currentText = viewModel.content().text.toString()
+        val currentSelection = viewModel.content().selection
 
         CoroutineScope(mainDispatcher).launch {
             val linkWithTitle = withContext(ioDispatcher) {
@@ -48,7 +51,11 @@ class LinkFormInsertion(
                     context.getString(jp.toastkid.lib.R.string.done_addition),
                     context.getString(jp.toastkid.lib.R.string.undo)
                 ) {
-                    viewModel.onValueChange(currentText)
+                    viewModel.content().clearText()
+                    viewModel.content().edit {
+                        insert(0, currentText)
+                        selection = currentSelection
+                    }
                 }
         }
     }
