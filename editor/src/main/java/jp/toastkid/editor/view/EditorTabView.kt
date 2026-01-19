@@ -48,6 +48,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -68,6 +69,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
@@ -98,6 +100,7 @@ import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
 import jp.toastkid.ui.menu.context.ContextMenuToolbar
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @Composable
@@ -115,8 +118,14 @@ fun EditorTabView(path: String?, modifier: Modifier) {
             context,
             contentViewModel,
             mutableStateOf(path ?: ""),
-            { viewModel.content().text },
-            { viewModel.onValueChange(viewModel.content().copy(text = it)) },
+            { viewModel.content().text.toString() },
+            {
+                viewModel.clearText()
+                viewModel.content().edit {
+                    append(it)
+                    selection = TextRange.Zero
+                }
+            },
             contentViewModel::saveEditorTab,
             viewModel::setLastSaved
         )
@@ -131,7 +140,7 @@ fun EditorTabView(path: String?, modifier: Modifier) {
                     val title =
                         if (path?.contains("/") == true) path.substring(path.lastIndexOf("/") + 1)
                         else path
-                    val content = viewModel.content().text
+                    val content = viewModel.content().text.toString()
                     if (content.isEmpty()) {
                         contentViewModel.snackShort(R.string.error_content_is_empty)
                         return@collect
@@ -150,6 +159,28 @@ fun EditorTabView(path: String?, modifier: Modifier) {
         }
     })
 
+    LaunchedEffect(key1 = Unit, block = {
+        viewModel.setPreference(PreferenceApplier(context))
+
+        contentViewModel.clearOptionMenus()
+        contentViewModel.showAppBar(coroutineScope)
+
+        contentViewModel.replaceAppBarContent {
+            AppBarContent(
+                viewModel.lastSaved(),
+                viewModel.contentLength(),
+                { fileActionUseCase.save(viewModel::openInputFileNameDialog) },
+                viewModel::openConfirmDialog,
+                viewModel::openInputFileNameDialog,
+                viewModel::openLoadFromStorageDialog,
+                fileActionUseCase,
+                contentViewModel.tabCount.value,
+                contentViewModel::switchTabList,
+                contentViewModel::openNewTab
+            )
+        }
+    })
+
     CompositionLocalProvider(
         LocalTextToolbar provides ContextMenuToolbar(
             LocalView.current,
@@ -158,13 +189,13 @@ fun EditorTabView(path: String?, modifier: Modifier) {
         )
     ) {
         BasicTextField(
-            value = viewModel.content(),
-            onValueChange = viewModel::onValueChange,
+            state = viewModel.content(),
             onTextLayout = {
-                viewModel.setMultiParagraph(it.multiParagraph)
+                val textLayoutResult = it.invoke() ?: return@BasicTextField
+                viewModel.setMultiParagraph(textLayoutResult.multiParagraph)
             },
-            visualTransformation = viewModel.visualTransformation(),
-            decorationBox = {
+            outputTransformation = viewModel.visualTransformation(),
+            decorator = {
                 Row {
                     Column(
                         modifier = Modifier
@@ -266,10 +297,21 @@ fun EditorTabView(path: String?, modifier: Modifier) {
         viewModel.openExitDialog()
     }
 
+    LaunchedEffect(path) {
+        snapshotFlow { viewModel.content().text to (viewModel.content().composition == null) }
+            .distinctUntilChanged()
+            .collect {
+                if (!it.second) {
+                    return@collect
+                }
+
+                viewModel.onValueChange(TextFieldValue())
+            }
+    }
+
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
     DisposableEffect(key1 = path) {
-        viewModel.launchTab(TextFieldValue())
         fileActionUseCase.readCurrentFile()
         viewModel.initialScroll(coroutineScope)
 
@@ -286,7 +328,6 @@ fun EditorTabView(path: String?, modifier: Modifier) {
             localLifecycle.removeObserver(observer)
             viewModel.dispose()
         }
-
     }
 
     if (viewModel.isOpenConfirmDialog()) {
@@ -311,28 +352,6 @@ fun EditorTabView(path: String?, modifier: Modifier) {
             onDismissRequest = viewModel::closeInputFileNameDialog
         )
     }
-
-    LaunchedEffect(key1 = Unit, block = {
-        viewModel.setPreference(PreferenceApplier(context))
-
-        contentViewModel.clearOptionMenus()
-        contentViewModel.showAppBar(coroutineScope)
-
-        contentViewModel.replaceAppBarContent {
-            AppBarContent(
-                viewModel.lastSaved(),
-                viewModel.contentLength(),
-                { fileActionUseCase.save(viewModel::openInputFileNameDialog) },
-                viewModel::openConfirmDialog,
-                viewModel::openInputFileNameDialog,
-                viewModel::openLoadFromStorageDialog,
-                fileActionUseCase,
-                contentViewModel.tabCount.value,
-                contentViewModel::switchTabList,
-                contentViewModel::openNewTab
-            )
-        }
-    })
 }
 
 @OptIn(ExperimentalFoundationApi::class)
