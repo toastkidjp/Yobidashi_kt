@@ -9,12 +9,11 @@
 package jp.toastkid.markdown.presentation
 
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.MultiParagraph
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -23,7 +22,7 @@ import kotlin.math.min
 
 class CodeBlockViewModel {
 
-    private val content = mutableStateOf(TextFieldValue())
+    private val content = TextFieldState()
 
     private val codeStringBuilder = CodeStringBuilder()
 
@@ -33,16 +32,9 @@ class CodeBlockViewModel {
         return min(lineCountState.value * fontSize.value * 1.55.em.value, 800f).dp
     }
 
-    fun content() = content.value
+    fun content() = content
 
-    fun transform(it: AnnotatedString): TransformedText {
-        val t = codeStringBuilder(it.text)
-        return TransformedText(t, OffsetMapping.Identity)
-    }
-
-    fun onValueChange(it: TextFieldValue) {
-        content.value = it
-    }
+    fun outputTransformation() = codeStringBuilder
 
     fun lineNumberTexts(): List<String> {
         val max = lineCountState.value
@@ -61,7 +53,11 @@ class CodeBlockViewModel {
     }
 
     fun start(code: String) {
-        content.value = TextFieldValue(code)
+        content.clearText()
+        content.edit {
+            append(code)
+            selection = TextRange.Zero
+        }
     }
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
