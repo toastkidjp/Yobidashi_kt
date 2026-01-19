@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -152,7 +150,7 @@ private fun AppBarContent(title: String) {
                 ),
                 trailingIcon = {
                     Icon(
-                        Icons.Filled.Clear,
+                        painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
                         tint = MaterialTheme.colorScheme.onPrimary,
                         contentDescription = "clear text",
                         modifier = Modifier
