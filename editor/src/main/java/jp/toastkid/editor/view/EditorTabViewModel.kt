@@ -69,7 +69,7 @@ class EditorTabViewModel {
 
     fun contentLength(): Int = contentLength.intValue
 
-    private fun applyStyle() {
+    fun applyStyle() {
         if (contentLength.intValue != content.text.length) {
             contentLength.intValue = content.text.length
         }
