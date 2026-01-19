@@ -9,7 +9,6 @@
 package jp.toastkid.editor.view.menu
 
 import android.content.Context
-import androidx.compose.ui.text.input.getSelectedText
 import androidx.core.net.toUri
 import jp.toastkid.editor.R
 import jp.toastkid.editor.view.EditorTabViewModel
@@ -90,75 +89,75 @@ class MenuActionInvoker(
                 return true
             }
             R.id.context_edit_speech -> {
-                val speechText = viewModel.content().getSelectedText().text
-                    .ifBlank { viewModel.content().text }
+                val speechText = viewModel.selectedText()
+                    .ifBlank { viewModel.content().text.toString() }
                 SpeechMaker(context).invoke(speechText)
                 return true
             }
             R.id.context_edit_add_order -> {
-                val newText = NumberedListHeadAdder().invoke(viewModel.content().getSelectedText().text) ?: return true
+                val newText = NumberedListHeadAdder().invoke(viewModel.selectedText()) ?: return true
                 viewModel.replaceText(newText)
                 return true
             }
             R.id.context_edit_unordered_list -> {
-                val newText = ListHeadAdder().invoke(viewModel.content().getSelectedText().text, "-") ?: return true
+                val newText = ListHeadAdder().invoke(viewModel.selectedText(), "-") ?: return true
                 viewModel.replaceText(newText)
                 return true
             }
             R.id.context_edit_task_list -> {
-                val newText = ListHeadAdder().invoke(viewModel.content().getSelectedText().text, "- [ ]") ?: return true
+                val newText = ListHeadAdder().invoke(viewModel.selectedText(), "- [ ]") ?: return true
                 viewModel.replaceText(newText)
                 return true
             }
             R.id.context_edit_convert_to_table -> {
-                val newText = TableFormConverter().invoke(viewModel.content().getSelectedText().text)
+                val newText = TableFormConverter().invoke(viewModel.selectedText())
                 viewModel.replaceText(newText)
                 return true
             }
             R.id.context_edit_add_quote -> {
-                val newText = ListHeadAdder().invoke(viewModel.content().getSelectedText().text, ">") ?: return true
+                val newText = ListHeadAdder().invoke(viewModel.selectedText(), ">") ?: return true
                 viewModel.replaceText(newText)
                 return true
             }
             R.id.context_edit_code_block -> {
                 val lineSeparator = System.lineSeparator()
-                viewModel.replaceText("```${lineSeparator}${viewModel.content().getSelectedText().text}${lineSeparator}```")
+                viewModel.replaceText("```${lineSeparator}${viewModel.selectedText()}${lineSeparator}```")
                 return true
             }
             R.id.context_edit_double_quote -> {
-                viewModel.replaceText("\"${viewModel.content().getSelectedText().text}\"")
+                viewModel.replaceText("\"${viewModel.selectedText()}\"")
                 return true
             }
             R.id.context_edit_bold -> {
-                viewModel.replaceText("**${viewModel.content().getSelectedText().text}**")
+                viewModel.replaceText("**${viewModel.selectedText()}**")
                 return true
             }
             R.id.context_edit_italic -> {
-                viewModel.replaceText("***${viewModel.content().getSelectedText().text}***")
+                viewModel.replaceText("***${viewModel.selectedText()}***")
                 return true
             }
             R.id.context_edit_strikethrough -> {
-                viewModel.replaceText("~~${viewModel.content().getSelectedText().text}~~")
+                viewModel.replaceText("~~${viewModel.selectedText()}~~")
                 return true
             }
             R.id.context_edit_url_open_new -> {
-                contentViewModel.open(viewModel.content().getSelectedText().text.toUri())
+                contentViewModel.open(viewModel.selectedText().toUri())
                 return true
             }
             R.id.context_edit_url_open_background -> {
-                contentViewModel.openBackground(viewModel.content().getSelectedText().text.toUri())
+                contentViewModel.openBackground(viewModel.selectedText().toUri())
                 return true
             }
             R.id.context_edit_url_preview -> {
-                contentViewModel.preview(viewModel.content().getSelectedText().text)
+                contentViewModel.preview(viewModel.selectedText())
                 return true
             }
             R.id.context_edit_preview_search -> {
-                contentViewModel.preview(viewModel.content().getSelectedText().text)
+                contentViewModel.preview(viewModel.selectedText())
                 return true
             }
             R.id.context_edit_web_search -> {
-                contentViewModel.search(viewModel.content().getSelectedText().text)
+                contentViewModel.search(viewModel.selectedText())
                 return true
             }
             R.id.context_edit_count -> {
@@ -166,11 +165,11 @@ class MenuActionInvoker(
                 return true
             }
             R.id.context_edit_translate -> {
-                contentViewModel.preview(TranslationUrlGenerator().invoke(viewModel.content().getSelectedText().text))
+                contentViewModel.preview(TranslationUrlGenerator().invoke(viewModel.selectedText()))
                 return true
             }
             R.id.context_edit_insert_thousand_separator -> {
-                val selectedText = viewModel.content().getSelectedText().text
+                val selectedText = viewModel.selectedText()
                 val converted = CommaInserter().invoke(selectedText)
                 if (converted.isNullOrBlank()) {
                     return false
