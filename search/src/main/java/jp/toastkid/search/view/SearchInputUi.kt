@@ -25,10 +25,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
+import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,6 +38,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -49,10 +49,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -72,6 +70,7 @@ import jp.toastkid.search.viewmodel.SearchUiViewModel
 import jp.toastkid.search.voice.VoiceSearchIntentFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
@@ -140,11 +139,7 @@ fun SearchInputUi(
                     )
 
                     TextField(
-                        value = viewModel.input.value,
-                        onValueChange = { text ->
-                            viewModel.setInput(text)
-                            useVoice.value = text.text.isBlank()
-                        },
+                        state = viewModel.input,
                         label = {
                             Text(
                                 stringResource(id = jp.toastkid.lib.R.string.title_search),
@@ -158,26 +153,25 @@ fun SearchInputUi(
                             focusedIndicatorColor = MaterialTheme.colorScheme.onPrimary,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        singleLine = true,
                         textStyle = TextStyle(
                             color = MaterialTheme.colorScheme.onPrimary,
                             textAlign = TextAlign.Start,
                         ),
+                        lineLimits = TextFieldLineLimits.SingleLine,
                         trailingIcon = {
                             Icon(
-                                Icons.Filled.Clear,
+                                painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
                                 contentDescription = "clear text",
                                 tint = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier
                                     .clickable {
-                                        viewModel.setInput(TextFieldValue())
+                                        viewModel.clearInput()
                                     }
                             )
                         },
-                        maxLines = 1,
-                        keyboardActions = KeyboardActions {
+                        onKeyboardAction = KeyboardActionHandler {
                             keyboardController?.hide()
-                            search(context, contentViewModel, currentUrl, viewModel.categoryName(), viewModel.input.value.text)
+                            search(context, contentViewModel, currentUrl, viewModel.categoryName(), viewModel.input.text.toString())
                         },
                         keyboardOptions = KeyboardOptions(
                             autoCorrectEnabled = true,
@@ -189,6 +183,19 @@ fun SearchInputUi(
                             .drawBehind { drawRect(Color.Transparent) }
                             .focusRequester(focusRequester)
                     )
+
+                    LaunchedEffect(viewModel.input) {
+                        snapshotFlow { viewModel.input.text to (viewModel.input.composition != null) }
+                            .distinctUntilChanged()
+                            .collect {
+                                if (it.second) {
+                                    return@collect
+                                }
+
+                                useVoice.value = it.first.isBlank()
+                                viewModel.invokeSuggestion()
+                            }
+                    }
 
                     Icon(
                         painterResource(id = if (useVoice.value) jp.toastkid.lib.R.drawable.ic_mic else R.drawable.ic_search_white),
@@ -217,7 +224,7 @@ fun SearchInputUi(
                                         contentViewModel,
                                         currentUrl,
                                         viewModel.categoryName(),
-                                        viewModel.input.value.text
+                                        viewModel.input.text.toString()
                                     )
                                 },
                                 onLongClick = {
@@ -226,7 +233,7 @@ fun SearchInputUi(
                                         contentViewModel,
                                         currentUrl,
                                         viewModel.categoryName(),
-                                        viewModel.input.value.text,
+                                        viewModel.input.text.toString(),
                                         true
                                     )
                                 }
@@ -248,7 +255,7 @@ fun SearchInputUi(
                     }
 
                     val text = inputQuery ?: ""
-                    viewModel.setInput(TextFieldValue(text, TextRange(0, text.length), TextRange(text.length)))
+                    viewModel.putQueryAndSelectAll(text)
                     focusRequester.requestFocus()
                 })
             }
@@ -276,7 +283,7 @@ fun SearchInputUi(
             OptionMenu(
                 titleId = jp.toastkid.lib.R.string.title_context_editor_double_quote,
                 action = {
-                    val queryOrEmpty = viewModel.input.value.text
+                    val queryOrEmpty = viewModel.input.text
                     if (queryOrEmpty.isNotBlank()) {
                         viewModel.putQuery("\"$queryOrEmpty\"")
                     }
