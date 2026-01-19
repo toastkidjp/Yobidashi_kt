@@ -18,8 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -38,7 +39,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -68,15 +68,14 @@ internal fun OtherSettingUi() {
 
     val openConfirmDialog = remember { mutableStateOf(false) }
 
-    val chatApiKeyInput = remember { mutableStateOf(TextFieldValue(preferenceApplier.chatApiKey() ?: "")) }
+    val chatApiKeyInput = remember { TextFieldState(preferenceApplier.chatApiKey() ?: "") }
 
     Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         LazyColumn {
             item {
                 Column {
                     TextField(
-                        value = chatApiKeyInput.value,
-                        onValueChange = { chatApiKeyInput.value = it },
+                        state = chatApiKeyInput,
                         label = {
                             Text(
                             "Please input Gemini's API Key if you want to use chat function in this app.",
@@ -86,12 +85,10 @@ internal fun OtherSettingUi() {
                         colors = TextFieldDefaults.colors(
                             cursorColor = MaterialTheme.colorScheme.secondary
                         ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                preferenceApplier.setChatApiKey(chatApiKeyInput.value.text)
-                                contentViewModel?.snackShort(R.string.message_done_storing_key)
-                            }
-                        ),
+                        onKeyboardAction = KeyboardActionHandler {
+                            preferenceApplier.setChatApiKey(chatApiKeyInput.text.toString())
+                            contentViewModel?.snackShort(R.string.message_done_storing_key)
+                        },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                     )
                     
@@ -294,7 +291,7 @@ internal fun OtherSettingUi() {
 
     DisposableEffect(Unit) {
         onDispose {
-            val newValue = chatApiKeyInput.value.text
+            val newValue = chatApiKeyInput.text.toString()
             if (newValue.isNotBlank()) {
                 preferenceApplier.setChatApiKey(newValue)
             }
