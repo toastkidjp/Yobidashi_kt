@@ -20,7 +20,7 @@ class TrendParser {
 
     operator fun invoke(content: String): List<Trend> =
             parseContent(content)
-                    ?.select("channel > item")
+                    ?.select("rss > channel > item")
                     ?.map {
                         Trend(
                                 it.getElementsByTag("title").text(),
