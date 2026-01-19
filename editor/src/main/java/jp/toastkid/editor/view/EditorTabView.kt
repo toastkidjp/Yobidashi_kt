@@ -72,7 +72,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -305,7 +304,7 @@ fun EditorTabView(path: String?, modifier: Modifier) {
                     return@collect
                 }
 
-                viewModel.onValueChange(TextFieldValue())
+                viewModel.applyStyle()
             }
     }
 
