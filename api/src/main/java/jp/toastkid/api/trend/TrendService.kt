@@ -16,7 +16,7 @@ import retrofit2.http.Query
  */
 interface TrendService {
 
-    @GET("trends/hottrends/atom/hourly")
-    fun call(@Query("pn") pn: String): Call<List<Trend>?>
+    @GET("trending/rss")
+    fun call(@Query("geo") pn: String): Call<List<Trend>?>
 
 }
