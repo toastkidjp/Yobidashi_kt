@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -39,7 +40,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
@@ -170,15 +170,16 @@ fun ChatTabView() {
                     viewModel::closeModelChooser
                 ) {
                     GenerativeAiModel.entries.forEach { model ->
-                        DropdownMenuItem(text = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    painterResource(viewModel.modelIcon(model)),
-                                    contentDescription = model.label()
-                                )
-                                Text(model.label(), modifier = Modifier.padding(start = 4.dp))
-                            }
-                        },
+                        DropdownMenuItem(
+                            text = {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        painterResource(viewModel.modelIcon(model)),
+                                        contentDescription = model.label()
+                                    )
+                                    Text(model.label(), modifier = Modifier.padding(start = 4.dp))
+                                }
+                            },
                             onClick = {
                                 viewModel.chooseModel(model)
                                 viewModel.closeModelChooser()
@@ -210,10 +211,9 @@ fun ChatTabView() {
             }
 
             TextField(
-                viewModel.textInput(),
+                state = viewModel.textInput(),
                 label = { Text(viewModel.label(), color = MaterialTheme.colorScheme.onPrimary) },
-                maxLines = Int.MAX_VALUE,
-                onValueChange = viewModel::onValueChanged,
+                lineLimits = TextFieldLineLimits.MultiLine(),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = MaterialTheme.colorScheme.onSurface,
                     unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
@@ -232,7 +232,7 @@ fun ChatTabView() {
                             tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
                                 .clickable {
-                                    viewModel.onValueChanged(TextFieldValue())
+                                    viewModel.clearInput()
                                 }
                                 .padding(4.dp)
                         )
