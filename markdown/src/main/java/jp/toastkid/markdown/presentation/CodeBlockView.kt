@@ -44,15 +44,13 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
     ) {
         val surfaceColor = MaterialTheme.colorScheme.surface
         BasicTextField(
-            value = viewModel.content(),
-            onValueChange = viewModel::onValueChange,
+            state = viewModel.content(),
             onTextLayout = {
-                viewModel.setMultiParagraph(it.multiParagraph)
+                val textLayoutResult = it.invoke() ?: return@BasicTextField
+                viewModel.setMultiParagraph(textLayoutResult.multiParagraph)
             },
-            visualTransformation = {
-                viewModel.transform(it)
-            },
-            decorationBox = {
+            outputTransformation = viewModel.outputTransformation(),
+            decorator = {
                 Row {
                     Column(
                         modifier = Modifier
