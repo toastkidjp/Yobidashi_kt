@@ -185,7 +185,10 @@ fun LoanCalculatorUi() {
                         stringResource(R.string.title_column_principal),
                         modifier = Modifier.weight(1f)
                     )
-                    Text(stringResource(R.string.title_column_interest), modifier = Modifier.weight(1f))
+                    Text(
+                        stringResource(R.string.title_column_interest),
+                        modifier = Modifier.weight(1f)
+                    )
                     Text(stringResource(R.string.title_column_balance), modifier = Modifier.weight(1f))
                 }
             }
