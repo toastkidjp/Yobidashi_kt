@@ -56,10 +56,6 @@ class EditorTabViewModel {
 
     fun content() = content
 
-    fun onValueChange() {
-        applyStyle()
-    }
-
     fun clearText() {
         content.clearText()
     }
