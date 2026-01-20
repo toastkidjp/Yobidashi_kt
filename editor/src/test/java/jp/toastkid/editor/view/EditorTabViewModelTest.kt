@@ -9,8 +9,8 @@
 package jp.toastkid.editor.view
 
 import android.widget.EditText
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -97,7 +97,11 @@ class EditorTabViewModelTest {
 
     @Test
     fun findUp() {
-        viewModel.onValueChange(TextFieldValue("abc is abc, you don't find abcd.", TextRange(31)))
+        viewModel.content().clearText()
+        viewModel.content().edit {
+            append("abc is abc, you don't find abcd.")
+            selection = TextRange(31)
+        }
 
         viewModel.findUp("abc")
         assertEquals(27, viewModel.content().selection.start)
@@ -110,7 +114,11 @@ class EditorTabViewModelTest {
 
     @Test
     fun findDown() {
-        viewModel.onValueChange(TextFieldValue("abc is abc, you don't find abcd."))
+        viewModel.content().clearText()
+        viewModel.content().edit {
+            append("abc is abc, you don't find abcd.")
+            selection = TextRange.Zero
+        }
 
         viewModel.findDown("abc")
         assertEquals(0, viewModel.content().selection.start)
