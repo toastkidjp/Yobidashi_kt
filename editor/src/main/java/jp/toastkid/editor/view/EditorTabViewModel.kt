@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import jp.toastkid.editor.view.style.TextEditorOutputTransformation
@@ -57,7 +56,7 @@ class EditorTabViewModel {
 
     fun content() = content
 
-    fun onValueChange(it: TextFieldValue) {
+    fun onValueChange() {
         applyStyle()
     }
 
