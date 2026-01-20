@@ -72,22 +72,24 @@ class EditorTabViewModel {
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
         lastParagraph = multiParagraph
-        if (lineCount.intValue != multiParagraph.lineCount) {
-            lineCount.intValue = multiParagraph.lineCount
-            val max = lineCount.intValue
-            val length = max.toString().length
-            val list = (1..max).map {
-                val fillCount = length - it.toString().length
-                return@map (it - 1 to with(StringBuilder()) {
-                    repeat(fillCount) {
-                        append(" ")
-                    }
-                    append(it)
-                }.toString())
-            }
-
-            lineNumbers.value = list
+        if (lineCount.intValue == multiParagraph.lineCount) {
+            return
         }
+
+        lineCount.intValue = multiParagraph.lineCount
+        val max = lineCount.intValue
+        val length = max.toString().length
+        val list = (1..max).map {
+            val fillCount = length - it.toString().length
+            return@map (it - 1 to with(StringBuilder()) {
+                repeat(fillCount) {
+                    append(" ")
+                }
+                append(it)
+            }.toString())
+        }
+
+        lineNumbers.value = list
     }
 
     fun lineNumberScrollState() = lineNumberScrollState
