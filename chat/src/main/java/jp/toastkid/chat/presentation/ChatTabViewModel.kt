@@ -1,10 +1,11 @@
 package jp.toastkid.chat.presentation
 
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.chat.R
 import jp.toastkid.chat.domain.model.ChatMessage
 import jp.toastkid.chat.domain.model.GenerativeAiModel
@@ -17,7 +18,7 @@ class ChatTabViewModel(apiKey: String) {
 
     private val service: ChatService = ChatServiceImplementation(apiKey)
 
-    private val textInput = mutableStateOf(TextFieldValue())
+    private val textInput = TextFieldState()
 
     private val focusRequester = FocusRequester()
 
@@ -59,12 +60,12 @@ class ChatTabViewModel(apiKey: String) {
     }
 
     suspend fun send() {
-        val text = textInput.value.text
+        val text = textInput.text.toString()
         if (text.isBlank()) {
             return
         }
 
-        textInput.value = TextFieldValue()
+        textInput.clearText()
 
         connecting.value = true
         withContext(Dispatchers.IO) {
@@ -73,10 +74,10 @@ class ChatTabViewModel(apiKey: String) {
         connecting.value = false
     }
 
-    fun textInput() = textInput.value
+    fun textInput() = textInput
 
-    fun onValueChanged(newValue: TextFieldValue) {
-        textInput.value = newValue
+    fun clearInput() {
+        textInput.clearText()
     }
 
     fun focusRequester(): FocusRequester {
