@@ -29,7 +29,7 @@ class DownloadApi {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                callback(response.body?.byteStream())
+                callback(response.body.byteStream())
             }
 
         })
