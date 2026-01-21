@@ -38,7 +38,7 @@ class HtmlApi {
             return null
         }
 
-        return response.body?.string()
+        return response.body.string()
     }
 
     private fun makeRequest(url: String): Request =
