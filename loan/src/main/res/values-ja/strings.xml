@@ -17,4 +17,6 @@
     <string name="title_column_principal">元本</string>
     <string name="title_column_interest">利息</string>
     <string name="title_column_balance">残金</string>
+    <string name="hint_management_fee_monthly">Management fee (Monthly)</string>
+    <string name="hint_renovation_reserves_monthly">Renovation reserves (Monthly)</string>
 </resources>
