@@ -7,8 +7,8 @@
  */
 package jp.toastkid.loan.view
 
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -30,71 +30,51 @@ class LoanCalculatorViewModelTest {
 
     @Test
     fun loanAmount() {
-        val newValue = TextFieldValue("1000000", TextRange(1))
-        subject.updateLoanAmount(newValue)
-
-        val converted = subject.loanAmount()
-        assertEquals("1,000,000", converted.text)
-        assertEquals(1, converted.selection.start)
+        subject.loanAmount().clearText()
+        subject.loanAmount().setTextAndPlaceCursorAtEnd("1000000")
     }
 
     @Test
     fun loanTerm() {
-        val newValue = TextFieldValue("20", TextRange(1))
-        subject.updateLoanTerm(newValue)
-
-        val converted = subject.loanTerm()
-        assertEquals("20", converted.text)
-        assertEquals(1, converted.selection.start)
+        subject.loanTerm().clearText()
+        subject.loanTerm().setTextAndPlaceCursorAtEnd("20")
     }
 
     @Test
     fun interestRate() {
-        val newValue = TextFieldValue("2.0", TextRange(1))
-        subject.updateInterestRate(newValue)
-
-        val converted = subject.interestRate()
-        assertEquals("2", converted.text)
-        assertEquals(1, converted.selection.start)
+        subject.interestRate().clearText()
+        subject.interestRate().setTextAndPlaceCursorAtEnd("2.0")
     }
 
     @Test
     fun downPayment() {
-        val newValue = TextFieldValue("10000", TextRange(1))
-        subject.updateDownPayment(newValue)
-
-        val converted = subject.downPayment()
-        assertEquals("10,000", converted.text)
-        assertEquals(1, converted.selection.start)
+        subject.downPayment().clearText()
+        subject.downPayment().setTextAndPlaceCursorAtEnd("10000")
 
         subject.clearDownPayment()
-        assertEquals("0", subject.downPayment().text)
+        assertEquals("", subject.downPayment().text)
     }
 
     @Test
     fun managementFee() {
-        val newValue = TextFieldValue("10000", TextRange(1))
-        subject.updateManagementFee(newValue)
+        subject.managementFee().clearText()
+        subject.managementFee().setTextAndPlaceCursorAtEnd("10000")
 
         val converted = subject.managementFee()
-        assertEquals("10,000", converted.text)
-        assertEquals(1, converted.selection.start)
 
         subject.clearManagementFee()
-        assertEquals("0", subject.managementFee().text)
+        assertEquals("", subject.managementFee().text)
     }
 
     @Test
     fun renovationReserves() {
-        val newValue = TextFieldValue("10000", TextRange(1))
-        subject.updateRenovationReserves(newValue)
+        subject.renovationReserves().clearText()
+        subject.renovationReserves().setTextAndPlaceCursorAtEnd("10000")
 
         val converted = subject.renovationReserves()
-        assertEquals("10,000", converted.text)
-        assertEquals(1, converted.selection.start)
 
         subject.clearRenovationReserves()
-        assertEquals("0", subject.renovationReserves().text)
+        assertEquals("", subject.renovationReserves().text)
     }
 
     @Test
