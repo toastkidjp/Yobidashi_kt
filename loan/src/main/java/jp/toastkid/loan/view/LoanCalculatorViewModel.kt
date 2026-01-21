@@ -8,7 +8,8 @@
 package jp.toastkid.loan.view
 
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.MutableState
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
@@ -28,72 +29,50 @@ class LoanCalculatorViewModel {
 
     fun result() = result.value
 
-    private val loanAmount = mutableStateOf(TextFieldValue("35,000,000"))
+    private val loanAmount = TextFieldState("35,000,000")
 
-    fun loanAmount() = loanAmount.value
+    fun loanAmount() = loanAmount
 
-    fun updateLoanAmount(newValue: TextFieldValue) {
-        updateValue(newValue, loanAmount)
-    }
+    private val loanTerm = TextFieldState("35")
 
-    private val loanTerm = mutableStateOf(TextFieldValue("35"))
+    fun loanTerm() = loanTerm
 
-    fun loanTerm() = loanTerm.value
+    private val interestRate = TextFieldState("1.0")
 
-    fun updateLoanTerm(newValue: TextFieldValue) {
-        updateValue(newValue, loanTerm)
-    }
+    fun interestRate() = interestRate
 
-    private val interestRate = mutableStateOf(TextFieldValue("1.0"))
+    private val downPayment = TextFieldState("1,000,000")
 
-    fun interestRate() = interestRate.value
-
-    fun updateInterestRate(newValue: TextFieldValue) {
-        updateValue(newValue, interestRate)
-    }
-
-    private val downPayment = mutableStateOf(TextFieldValue("1,000,000"))
-
-    fun downPayment() = downPayment.value
-
-    fun updateDownPayment(newValue: TextFieldValue) {
-        updateValue(newValue, downPayment)
-    }
+    fun downPayment() = downPayment
 
     fun clearDownPayment() {
-        updateValue(TextFieldValue("0"), downPayment)
+        downPayment.clearText()
     }
 
-    private val managementFee = mutableStateOf(TextFieldValue("10,000"))
+    private val managementFee = TextFieldState("10,000")
 
-    fun managementFee() = managementFee.value
-
-    fun updateManagementFee(newValue: TextFieldValue) {
-        updateValue(newValue, managementFee)
-    }
+    fun managementFee() = managementFee
 
     fun clearManagementFee() {
-        updateValue(TextFieldValue("0"), managementFee)
+        managementFee.clearText()
     }
 
-    private val renovationReserves = mutableStateOf(TextFieldValue("10,000"))
+    private val renovationReserves = TextFieldState("10,000")
 
-    fun renovationReserves() = renovationReserves.value
+    fun renovationReserves() = renovationReserves
 
     fun updateRenovationReserves(newValue: TextFieldValue) {
-        updateValue(newValue, renovationReserves)
+        updateValue(newValue)
     }
 
     fun clearRenovationReserves() {
-        updateValue(TextFieldValue("0"), renovationReserves)
+        renovationReserves.clearText()
     }
 
     private fun updateValue(
         newValue: TextFieldValue,
-        state: MutableState<TextFieldValue>
     ) {
         val newText = format(newValue.text)
-        state.value = newValue.copy(text = newText)
         onChange(newText)
     }
 
@@ -107,7 +86,7 @@ class LoanCalculatorViewModel {
 
     fun scrollState() = scrollState
 
-    private fun onChange(text: String) {
+    fun onChange(text: String) {
         CoroutineScope(Dispatchers.IO).launch {
             inputChannel.send(text)
         }
@@ -140,12 +119,12 @@ class LoanCalculatorViewModel {
             inputChannel,
             {
                 Factor(
-                    extractLong(loanAmount.value.text),
-                    extractInt(loanTerm.value.text),
-                    extractDouble(interestRate.value.text),
-                    extractInt(downPayment.value.text),
-                    extractInt(managementFee.value.text),
-                    extractInt(renovationReserves.value.text)
+                    extractLong(loanAmount.text.toString()),
+                    extractInt(loanTerm.text.toString()),
+                    extractDouble(interestRate.text.toString()),
+                    extractInt(downPayment.text.toString()),
+                    extractInt(managementFee.text.toString()),
+                    extractInt(renovationReserves.text.toString())
                 )
             },
             {
