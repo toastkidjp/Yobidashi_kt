@@ -17,4 +17,6 @@
     <string name="title_column_principal">Principal</string>
     <string name="title_column_interest">Interest</string>
     <string name="title_column_balance">Balance</string>
+    <string name="hint_management_fee_monthly">Management fee (Monthly)</string>
+    <string name="hint_renovation_reserves_monthly">Renovation reserves (Monthly)</string>
 </resources>
