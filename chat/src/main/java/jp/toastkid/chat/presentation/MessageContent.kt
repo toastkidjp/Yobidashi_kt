@@ -67,9 +67,7 @@ internal fun MessageContent(
                     viewModel.image(),
                     contentDescription = text,
                     placeholder = painterResource(jp.toastkid.chat.R.drawable.ic_gen_ai_image),
-                    modifier = Modifier.clickable {
-                        viewModel.openImageDropdownMenu()
-                    }
+                    modifier = Modifier.clickable(onClick = viewModel::openImageDropdownMenu)
                 )
                 DropdownMenu(
                     viewModel.openingImageDropdownMenu(),
