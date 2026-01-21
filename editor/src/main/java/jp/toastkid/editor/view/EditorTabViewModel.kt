@@ -98,7 +98,10 @@ class EditorTabViewModel {
         val multiParagraph = lastParagraph ?: return
 
         content.edit {
-            selection = TextRange(multiParagraph.getLineStart(it), multiParagraph.getLineEnd(it))
+            selection = TextRange(
+                multiParagraph.getLineStart(it),
+                multiParagraph.getLineEnd(it)
+            )
         }
     }
 
