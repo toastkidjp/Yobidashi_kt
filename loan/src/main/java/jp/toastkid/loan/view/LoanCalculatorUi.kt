@@ -8,6 +8,7 @@
 
 package jp.toastkid.loan.view
 
+import android.app.Activity
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -18,6 +19,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -26,8 +30,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -44,12 +48,13 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.loan.R
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LoanCalculatorUi() {
-    val context = LocalContext.current
+    val context = LocalContext.current as Activity
 
     val viewModel = remember { LoanCalculatorViewModel() }
 
@@ -64,103 +69,46 @@ fun LoanCalculatorUi() {
                         fontSize = 18.sp,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    OutlinedTextField(
-                        value = viewModel.loanAmount(),
-                        onValueChange = {
-                            viewModel.updateLoanAmount(it)
-                        },
-                        label = { Text(text = stringResource(R.string.hint_loan_amount)) },
-                        colors = makeTextFieldColors(),
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.fillMaxWidth()
+                    InputTextField(
+                        viewModel.loanAmount(),
+                        R.string.hint_loan_amount,
+                        viewModel::onChange,
+                        Modifier.fillMaxWidth()
                     )
                     Row {
-                        OutlinedTextField(
-                            value = viewModel.loanTerm(),
-                            onValueChange = {
-                                viewModel.updateLoanTerm(it)
-                            },
-                            label = { Text(text = stringResource(R.string.hint_loan_term)) },
-                            colors = makeTextFieldColors(),
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            modifier = Modifier.weight(1f)
+                        InputTextField(
+                            viewModel.loanTerm(),
+                            R.string.hint_loan_term,
+                            viewModel::onChange,
+                            Modifier.weight(1f)
                         )
-                        OutlinedTextField(
-                            value = viewModel.interestRate(),
-                            onValueChange = {
-                                viewModel.updateInterestRate(it)
-                            },
-                            label = { Text(text = stringResource(R.string.hint_interest_rate)) },
-                            colors = makeTextFieldColors(),
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            modifier = Modifier.weight(1f)
+                        InputTextField(
+                            viewModel.interestRate(),
+                            R.string.hint_interest_rate,
+                            viewModel::onChange,
+                            Modifier.weight(1f)
                         )
                     }
-                    OutlinedTextField(
-                        value = viewModel.downPayment(),
-                        onValueChange = {
-                            viewModel.updateDownPayment(it)
-                        },
-                        trailingIcon = {
-                            Icon(
-                                painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
-                                contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
-                                tint = MaterialTheme.colorScheme.secondary,
-                                modifier = Modifier.clickable {
-                                    viewModel.clearDownPayment()
-                                }
-                            )
-                        },
-                        label = { Text(text = stringResource(R.string.hint_down_payment)) },
-                        colors = makeTextFieldColors(),
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.fillMaxWidth()
+
+                    InputTextField(
+                        viewModel.downPayment(),
+                        R.string.hint_down_payment,
+                        viewModel::onChange,
+                        Modifier.fillMaxWidth()
                     )
-                    OutlinedTextField(
-                        value = viewModel.managementFee(),
-                        onValueChange = {
-                            viewModel.updateManagementFee(it)
-                        },
-                        trailingIcon = {
-                            Icon(
-                                painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
-                                contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
-                                tint = MaterialTheme.colorScheme.secondary,
-                                modifier = Modifier.clickable {
-                                    viewModel.clearManagementFee()
-                                }
-                            )
-                        },
-                        label = { Text(text = "Management fee (Monthly)") },
-                        colors = makeTextFieldColors(),
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.fillMaxWidth()
+
+                    InputTextField(
+                        viewModel.managementFee(),
+                        R.string.hint_management_fee_monthly,
+                        viewModel::onChange,
+                        Modifier.fillMaxWidth()
                     )
-                    OutlinedTextField(
-                        value = viewModel.renovationReserves(),
-                        onValueChange = {
-                            viewModel.updateRenovationReserves(it)
-                        },
-                        trailingIcon = {
-                            Icon(
-                                painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
-                                contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
-                                tint = MaterialTheme.colorScheme.secondary,
-                                modifier = Modifier.clickable {
-                                    viewModel.clearRenovationReserves()
-                                }
-                            )
-                        },
-                        label = { Text(text = "Renovation reserves (Monthly)") },
-                        colors = makeTextFieldColors(),
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.fillMaxWidth()
+
+                    InputTextField(
+                        viewModel.renovationReserves(),
+                        R.string.hint_renovation_reserves_monthly,
+                        viewModel::onChange,
+                        Modifier.fillMaxWidth()
                     )
                 }
             }
@@ -168,14 +116,15 @@ fun LoanCalculatorUi() {
             stickyHeader {
                 val surfaceColor = MaterialTheme.colorScheme.surface
                 val backgroundColor =
-                    derivedStateOf {
+                    remember {
                         if (viewModel.scrollState().firstVisibleItemIndex != 0) { surfaceColor }
                         else Color.Transparent
                     }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.animateItem()
-                        .drawBehind { drawRect(backgroundColor.value) }
+                    modifier = Modifier
+                        .animateItem()
+                        .drawBehind { drawRect(backgroundColor) }
                 ) {
                     Text(
                         stringResource(R.string.title_column_loan_payment_count),
@@ -209,10 +158,17 @@ fun LoanCalculatorUi() {
         }
     }
 
+    val stringResolver: (Long, Long) -> String = { monthlyPayment, sum ->
+        context.getString(
+            R.string.message_result_montly_payment,
+            monthlyPayment,
+            sum
+        )
+    }
+
     LaunchedEffect(Unit) {
         viewModel.launch { monthlyPayment, sum ->
-            context.getString(
-                R.string.message_result_montly_payment,
+            stringResolver(
                 monthlyPayment,
                 sum
             )
@@ -227,6 +183,47 @@ fun LoanCalculatorUi() {
                 ?.let { ViewModelProvider(it).get(ContentViewModel::class) }
                 ?.receiveEvent(StateScrollerFactory().invoke(viewModel.scrollState()))
         }
+    }
+}
+
+@Composable
+private fun InputTextField(
+    state: TextFieldState,
+    labelId: Int,
+    onUpdate: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    OutlinedTextField(
+        state = state,
+        label = { Text(text = stringResource(labelId)) },
+        colors = makeTextFieldColors(),
+        lineLimits = TextFieldLineLimits.SingleLine,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        trailingIcon = {
+            Icon(
+                painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
+                contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.clickable {
+                    state.clearText()
+                }
+            )
+        },
+        outputTransformation = DecimalOutputTransformation(),
+        modifier = modifier
+    )
+
+    LaunchedEffect(state) {
+        snapshotFlow { state.text to (state.composition != null) }
+            .distinctUntilChanged()
+            .collect {
+                if (it.second) {
+                    return@collect
+                }
+
+                onUpdate(it.first.toString())
+            }
+
     }
 }
 
