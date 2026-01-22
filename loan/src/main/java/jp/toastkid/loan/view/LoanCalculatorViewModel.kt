@@ -61,10 +61,6 @@ class LoanCalculatorViewModel {
 
     fun renovationReserves() = renovationReserves
 
-    fun updateRenovationReserves(newValue: TextFieldValue) {
-        updateValue(newValue)
-    }
-
     fun clearRenovationReserves() {
         renovationReserves.clearText()
     }
