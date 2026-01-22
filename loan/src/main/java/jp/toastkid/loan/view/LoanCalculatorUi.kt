@@ -59,9 +59,10 @@ fun LoanCalculatorUi() {
     val viewModel = remember { LoanCalculatorViewModel() }
 
     Surface(shadowElevation = 4.dp) {
-        LazyColumn(state = viewModel.scrollState(),
-            modifier = Modifier
-                .padding(8.dp)) {
+        LazyColumn(
+            state = viewModel.scrollState(),
+            modifier = Modifier.padding(8.dp)
+        ) {
             item {
                 Column {
                     Text(
