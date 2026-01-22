@@ -74,7 +74,7 @@ class LoanCalculatorViewModelTest {
         val converted = subject.renovationReserves()
 
         subject.clearRenovationReserves()
-        assertEquals("", subject.renovationReserves().text)
+        assertTrue(subject.renovationReserves().text.isEmpty())
     }
 
     @Test
