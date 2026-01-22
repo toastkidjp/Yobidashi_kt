@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.loan.model.Factor
 import jp.toastkid.loan.model.PaymentDetail
 import jp.toastkid.loan.usecase.DebouncedCalculatorUseCase
@@ -63,13 +62,6 @@ class LoanCalculatorViewModel {
 
     fun clearRenovationReserves() {
         renovationReserves.clearText()
-    }
-
-    private fun updateValue(
-        newValue: TextFieldValue,
-    ) {
-        val newText = format(newValue.text)
-        onChange(newText)
     }
 
     private val scheduleState = mutableStateListOf<PaymentDetail>()
