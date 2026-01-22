@@ -83,16 +83,6 @@ class LoanCalculatorViewModel {
     fun roundToIntSafely(d: Double): String =
         if (d.isNaN()) "0" else DECIMAL_FORMAT.format(d.roundToInt())
 
-    private fun format(input: String?): String {
-        if (input.isNullOrBlank()) {
-            return "0"
-        }
-
-        return DECIMAL_FORMAT.format(
-            input.filter { it.isDigit() || it == '.' }.trim().toBigDecimalOrNull()
-        )
-    }
-
     private fun extractLong(editText: String) =
         editText.replace(",", "").toLongOrNull() ?: 0
 
