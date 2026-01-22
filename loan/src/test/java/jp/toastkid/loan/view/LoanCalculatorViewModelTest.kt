@@ -71,8 +71,6 @@ class LoanCalculatorViewModelTest {
         subject.renovationReserves().clearText()
         subject.renovationReserves().setTextAndPlaceCursorAtEnd("10000")
 
-        subject.renovationReserves()
-
         subject.clearRenovationReserves()
         assertTrue(subject.renovationReserves().text.isEmpty())
     }
