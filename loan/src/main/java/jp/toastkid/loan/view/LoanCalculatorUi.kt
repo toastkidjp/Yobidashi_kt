@@ -205,9 +205,7 @@ private fun InputTextField(
                 painter = painterResource(jp.toastkid.lib.R.drawable.ic_clear_form),
                 contentDescription = stringResource(jp.toastkid.lib.R.string.reset),
                 tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.clickable {
-                    state.clearText()
-                }
+                modifier = Modifier.clickable(onClick = state::clearText)
             )
         },
         outputTransformation = DecimalOutputTransformation(),
