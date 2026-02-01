@@ -8,7 +8,6 @@
 package jp.toastkid.setting.domain.service
 
 import android.content.Context
-import android.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.ViewModelProvider
@@ -51,7 +50,7 @@ class DarkModeApplier {
             "#DD000600".toColorInt(),
             "#FFFFC107".toColorInt(),
             "#DD81D4FA".toColorInt(),
-                Color.parseColor("#DD81D4FA"),
+            "#DD81D4FA".toColorInt(),
                 true
         )
     }
