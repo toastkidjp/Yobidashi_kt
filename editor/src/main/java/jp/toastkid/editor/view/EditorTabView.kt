@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.contextmenu.modifier.appendTextContextMenuComponents
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -85,6 +86,7 @@ import jp.toastkid.editor.R
 import jp.toastkid.editor.load.LoadFromStorageDialogUi
 import jp.toastkid.editor.load.StorageFilesFinder
 import jp.toastkid.editor.usecase.FileActionUseCase
+import jp.toastkid.editor.view.menu.ContextMenuBuilder
 import jp.toastkid.editor.view.menu.EditorMenuInjector
 import jp.toastkid.editor.view.menu.MenuActionInvoker
 import jp.toastkid.lib.ContentViewModel
@@ -262,6 +264,7 @@ fun EditorTabView(path: String?, modifier: Modifier) {
                     }
                 }
                 .semantics { contentDescription = "Editor input area" }
+                .appendTextContextMenuComponents(ContextMenuBuilder(viewModel, contentViewModel).invoke())
                 .nestedScroll(
                     object : NestedScrollConnection {
                         override fun onPreScroll(
