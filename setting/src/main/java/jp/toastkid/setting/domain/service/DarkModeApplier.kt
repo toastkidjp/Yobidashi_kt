@@ -47,7 +47,7 @@ class DarkModeApplier {
     companion object {
         private val darkTheme = Theme(
             "#DD000600".toColorInt(),
-                Color.parseColor("#FFFFC107"),
+            "#FFFFC107".toColorInt(),
                 Color.parseColor("#DD000600"),
                 Color.parseColor("#FFFFC107"),
                 Color.parseColor("#DD81D4FA"),
