@@ -49,7 +49,7 @@ class DarkModeApplier {
             "#DD000600".toColorInt(),
             "#FFFFC107".toColorInt(),
             "#DD000600".toColorInt(),
-                Color.parseColor("#FFFFC107"),
+            "#FFFFC107".toColorInt(),
                 Color.parseColor("#DD81D4FA"),
                 Color.parseColor("#DD81D4FA"),
                 true
