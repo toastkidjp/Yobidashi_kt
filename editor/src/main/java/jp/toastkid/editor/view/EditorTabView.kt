@@ -43,7 +43,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -64,8 +63,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalTextToolbar
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -87,8 +84,6 @@ import jp.toastkid.editor.load.LoadFromStorageDialogUi
 import jp.toastkid.editor.load.StorageFilesFinder
 import jp.toastkid.editor.usecase.FileActionUseCase
 import jp.toastkid.editor.view.menu.ContextMenuBuilder
-import jp.toastkid.editor.view.menu.EditorMenuInjector
-import jp.toastkid.editor.view.menu.MenuActionInvoker
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.intent.GetContentIntentFactory
 import jp.toastkid.lib.intent.ShareIntentFactory
@@ -100,7 +95,6 @@ import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
-import jp.toastkid.ui.menu.context.ContextMenuToolbar
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -182,109 +176,101 @@ fun EditorTabView(path: String?, modifier: Modifier) {
         }
     })
 
-    CompositionLocalProvider(
-        LocalTextToolbar provides ContextMenuToolbar(
-            LocalView.current,
-            EditorMenuInjector(context, viewModel::selectedText),
-            MenuActionInvoker(viewModel, context, contentViewModel)
-        )
-    ) {
-        BasicTextField(
-            state = viewModel.content(),
-            onTextLayout = {
-                val textLayoutResult = it.invoke() ?: return@BasicTextField
-                viewModel.setMultiParagraph(textLayoutResult.multiParagraph)
-            },
-            outputTransformation = viewModel.visualTransformation(),
-            decorator = {
-                Row {
-                    Column(
-                        modifier = Modifier
-                            .verticalScroll(viewModel.lineNumberScrollState())
-                            .padding(horizontal = 4.dp)
-                            .wrapContentSize(unbounded = true)
-                    ) {
-                        viewModel.lineNumbers().forEach { (lineNumber, lineNumberText) ->
-                            Box(
-                                contentAlignment = Alignment.CenterEnd,
-                                modifier = Modifier
-                                    .clickable {
-                                        viewModel.onClickLineNumber(lineNumber)
-                                    }
-                                    .semantics {
-                                        contentDescription = "Line number $lineNumberText"
-                                    }
-                            ) {
-                                Text(
-                                    lineNumberText,
-                                    color = viewModel.fontColor(),
-                                    fontSize = viewModel.fontSize(),
-                                    fontFamily = FontFamily.Monospace,
-                                    textAlign = TextAlign.End,
-                                    style = TextStyle(
-                                        lineHeight = 1.5.em,
-                                        lineHeightStyle = LineHeightStyle(
-                                            alignment = LineHeightStyle.Alignment.Center,
-                                            trim = LineHeightStyle.Trim.None
-                                        )
+    BasicTextField(
+        state = viewModel.content(),
+        onTextLayout = {
+            val textLayoutResult = it.invoke() ?: return@BasicTextField
+            viewModel.setMultiParagraph(textLayoutResult.multiParagraph)
+        },
+        outputTransformation = viewModel.visualTransformation(),
+        decorator = {
+            Row {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(viewModel.lineNumberScrollState())
+                        .padding(horizontal = 4.dp)
+                        .wrapContentSize(unbounded = true)
+                ) {
+                    viewModel.lineNumbers().forEach { (lineNumber, lineNumberText) ->
+                        Box(
+                            contentAlignment = Alignment.CenterEnd,
+                            modifier = Modifier
+                                .clickable {
+                                    viewModel.onClickLineNumber(lineNumber)
+                                }
+                                .semantics {
+                                    contentDescription = "Line number $lineNumberText"
+                                }
+                        ) {
+                            Text(
+                                lineNumberText,
+                                color = viewModel.fontColor(),
+                                fontSize = viewModel.fontSize(),
+                                fontFamily = FontFamily.Monospace,
+                                textAlign = TextAlign.End,
+                                style = TextStyle(
+                                    lineHeight = 1.5.em,
+                                    lineHeightStyle = LineHeightStyle(
+                                        alignment = LineHeightStyle.Alignment.Center,
+                                        trim = LineHeightStyle.Trim.None
                                     )
                                 )
-                            }
+                            )
                         }
                     }
-                    VerticalDivider()
-                    it()
                 }
-            },
-            textStyle = TextStyle(
-                color = viewModel.fontColor(),
-                fontSize = viewModel.fontSize(),
-                fontFamily = FontFamily.Monospace,
-                lineHeight = 1.5.em,
-                lineHeightStyle = LineHeightStyle(
-                    alignment = LineHeightStyle.Alignment.Center,
-                    trim = LineHeightStyle.Trim.None
-                ),
-                background = Color.Transparent
+                VerticalDivider()
+                it()
+            }
+        },
+        textStyle = TextStyle(
+            color = viewModel.fontColor(),
+            fontSize = viewModel.fontSize(),
+            fontFamily = FontFamily.Monospace,
+            lineHeight = 1.5.em,
+            lineHeightStyle = LineHeightStyle(
+                alignment = LineHeightStyle.Alignment.Center,
+                trim = LineHeightStyle.Trim.None
             ),
-            cursorBrush = SolidColor(viewModel.cursorColor()),
-            modifier = modifier
-                .focusRequester(viewModel.focusRequester())
-                .fillMaxWidth()
-                .drawBehind {
-                    drawRect(viewModel.backgroundColor())
+            background = Color.Transparent
+        ),
+        cursorBrush = SolidColor(viewModel.cursorColor()),
+        modifier = modifier
+            .focusRequester(viewModel.focusRequester())
+            .fillMaxWidth()
+            .drawBehind {
+                drawRect(viewModel.backgroundColor())
 
-                    val currentLineOffset = viewModel.currentLineOffset()
-                    if (currentLineOffset != Offset.Unspecified) {
-                        drawRect(
-                            viewModel.currentLineHighlightColor(),
-                            topLeft = currentLineOffset,
-                            size = Size(Float.MAX_VALUE, 24.sp.toPx())
-                        )
-                    }
+                val currentLineOffset = viewModel.currentLineOffset()
+                if (currentLineOffset != Offset.Unspecified) {
+                    drawRect(
+                        viewModel.currentLineHighlightColor(),
+                        topLeft = currentLineOffset,
+                        size = Size(Float.MAX_VALUE, 24.sp.toPx())
+                    )
                 }
-                .semantics { contentDescription = "Editor input area" }
-                .appendTextContextMenuComponents(ContextMenuBuilder(viewModel, contentViewModel).invoke())
-                .nestedScroll(
-                    object : NestedScrollConnection {
-                        override fun onPreScroll(
-                            available: Offset,
-                            source: NestedScrollSource
-                        ): Offset {
-                            coroutineScope.launch {
-                                viewModel
-                                    .lineNumberScrollState()
-                                    .scrollBy(-available.y)
-                            }
-                            return super.onPreScroll(available, source)
+            }
+            .semantics { contentDescription = "Editor input area" }
+            .appendTextContextMenuComponents(ContextMenuBuilder(viewModel, contentViewModel).invoke())
+            .nestedScroll(
+                object : NestedScrollConnection {
+                    override fun onPreScroll(
+                        available: Offset,
+                        source: NestedScrollSource
+                    ): Offset {
+                        coroutineScope.launch {
+                            viewModel
+                                .lineNumberScrollState()
+                                .scrollBy(-available.y)
                         }
-                    },
-                    viewModel.nestedScrollDispatcher()
-                )
-                .padding(vertical = 2.dp)
-                .padding(start = 2.dp, end = 4.dp)
-        )
-    }
+                        return super.onPreScroll(available, source)
+                    }
+                },
+                viewModel.nestedScrollDispatcher()
+            )
+            .padding(vertical = 2.dp)
+            .padding(start = 2.dp, end = 4.dp)
+    )
 
     if (viewModel.isOpenExitDialog()) {
         ConfirmDialog(
