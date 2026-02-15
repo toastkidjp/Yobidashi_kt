@@ -34,14 +34,14 @@ data class Theme(
     }
 
     companion object {
-        fun extract(preferenceApplier: PreferenceApplier, substituteCursorColor: Int, substituteHilightColor: Int): Theme {
+        fun extract(preferenceApplier: PreferenceApplier, substituteCursorColor: Int, substituteHighlightColor: Int): Theme {
             return Theme(
                     preferenceApplier.color,
                     preferenceApplier.fontColor,
                     preferenceApplier.editorBackgroundColor(),
                     preferenceApplier.editorFontColor(),
                     preferenceApplier.editorCursorColor(substituteCursorColor),
-                    preferenceApplier.editorHighlightColor(substituteHilightColor),
+                    preferenceApplier.editorHighlightColor(substituteHighlightColor),
                     preferenceApplier.useDarkMode()
             )
         }
