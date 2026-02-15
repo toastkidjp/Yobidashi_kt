@@ -118,7 +118,7 @@ class ContextMenuBuilder(
                 item(key = "Preview search", label = "Preview search") {
                     val text = viewModel.selectedText()
                     if (text.isNotBlank()) {
-                        contentViewModel.preview(text.toString())
+                        contentViewModel.preview(text)
                     }
                     close()
                 }
