@@ -7,6 +7,7 @@
  */
 package jp.toastkid.api.trend
 
+import android.net.Uri
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
 import timber.log.Timber
@@ -22,10 +23,11 @@ class TrendParser {
             parseContent(content)
                     ?.select("rss > channel > item")
                     ?.map {
+                        val title = it.getElementsByTag("title").text()
                         Trend(
-                                it.getElementsByTag("title").text(),
-                                it.getElementsByTag("link").text(),
-                                it.getElementsByTag("ht:picture").text()
+                            title,
+                            "https://trends.google.com/trends/explore?q=${Uri.encode(title)}",
+                            it.getElementsByTag("ht:picture").text()
                         )
                     }
                     ?: emptyList()

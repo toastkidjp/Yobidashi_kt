@@ -233,10 +233,10 @@ internal fun SearchContentsUi(
                                 true,
                                 onClick = {
                                     keyboardController?.hide()
-                                    viewModel.search(it.title)
+                                    viewModel.search(it.link)
                                 },
                                 onLongClick = {
-                                    viewModel.searchOnBackground(it.title)
+                                    viewModel.searchOnBackground(it.link)
                                 }
                             )
                         ) {
