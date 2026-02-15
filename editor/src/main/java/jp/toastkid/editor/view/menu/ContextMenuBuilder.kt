@@ -125,7 +125,7 @@ class ContextMenuBuilder(
                 item(key = "Web search", label = "Web search") {
                     val text = viewModel.selectedText()
                     if (text.isNotBlank()) {
-                        contentViewModel.search(text.toString())
+                        contentViewModel.search(text)
                     }
                     close()
                 }
