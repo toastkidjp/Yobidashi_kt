@@ -12,15 +12,16 @@ import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.exponentialDecay
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.AnchoredDraggableDefaults
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
+import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,6 +50,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -289,18 +291,24 @@ private fun TabItem(
     val swipeableState = remember {
         AnchoredDraggableState(
             initialValue = Start,
-            anchors = anchors,
-            positionalThreshold = { dismissSnackbarDistance },
-            velocityThreshold = { 3000000.dp.value },
-            snapAnimationSpec = spring(),
-            decayAnimationSpec = exponentialDecay(),
-            confirmValueChange = {
-                if (it == End) {
-                    onDelete(tab)
-                }
-                true
-            }
+            anchors,
         )
+    }
+
+    val flingBehavior = AnchoredDraggableDefaults.flingBehavior(
+        state = swipeableState,
+        positionalThreshold = { distance -> distance * 0.5f },
+    )
+
+    val zeroVelocityFlingBehavior = remember(swipeableState) {
+        object : FlingBehavior {
+            override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
+                with(flingBehavior) {
+                    performFling(initialVelocity = 0f)
+                }
+                return 0f
+            }
+        }
     }
 
     AnimatedVisibility(
@@ -318,15 +326,15 @@ private fun TabItem(
                 }
                 .drawBehind { drawRect(backgroundColor) }
                 .offset {
+                    val offsetValue = if (swipeableState.offset.isNaN()) 0f else swipeableState.offset
                     IntOffset(
                         0,
-                        swipeableState
-                            .offset
-                            .roundToInt()
+                        offsetValue.roundToInt()
                     )
                 }
                 .anchoredDraggable(
                     state = swipeableState,
+                    flingBehavior = zeroVelocityFlingBehavior,
                     orientation = Orientation.Vertical
                 )
         ) {
@@ -369,6 +377,15 @@ private fun TabItem(
                 }
             }
         }
+    }
+
+    LaunchedEffect(swipeableState) {
+        snapshotFlow { swipeableState.currentValue }
+            .collect { newValue ->
+                if (newValue == End) {
+                    onDelete(tab)
+                }
+            }
     }
 }
 
