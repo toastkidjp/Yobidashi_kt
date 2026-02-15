@@ -8,16 +8,33 @@
 
 package jp.toastkid.api.trend
 
+import android.net.Uri
+import io.mockk.every
+import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import okio.buffer
 import okio.source
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
 /**
  * @author toastkidjp
  */
 class TrendParserTest {
+
+    @Before
+    fun setUp() {
+        mockkStatic(Uri::class)
+        every { Uri.encode(any()) } returns "encoded"
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
+    }
 
     @Test
     fun test() {
