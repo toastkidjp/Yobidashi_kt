@@ -284,14 +284,14 @@ private fun TabItem(
     onDelete: (Tab) -> Unit
 ) {
     val dismissSnackbarDistance = with(LocalDensity.current) { -360.dp.toPx() }
-    val anchors = DraggableAnchors {
-        Start at 0f
-        End at dismissSnackbarDistance
-    }
+
     val swipeableState = remember {
         AnchoredDraggableState(
             initialValue = Start,
-            anchors,
+            DraggableAnchors {
+                Start at 0f
+                End at dismissSnackbarDistance
+            },
         )
     }
 
