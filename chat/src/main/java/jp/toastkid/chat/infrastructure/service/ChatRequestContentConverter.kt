@@ -7,13 +7,14 @@ class ChatRequestContentConverter {
 
     operator fun invoke(
         chat: Chat,
-        useImage: Boolean = false
+        useWebGrounding: Boolean = false,
+        useImage: Boolean = false,
     ) = """
       {
         "contents": [
           ${makeContents(chat.list())}
         ],
-        ${if (useImage) "\"generationConfig\":{\"responseModalities\":[\"TEXT\",\"IMAGE\"]}," else "" }
+        ${if (useWebGrounding) "\"tools\": [ { \"google_search\": {} } ]," else "" }
         "safetySettings": [
             {
                 "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
