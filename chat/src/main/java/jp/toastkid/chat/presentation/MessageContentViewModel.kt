@@ -3,6 +3,7 @@ package jp.toastkid.chat.presentation
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import androidx.compose.foundation.ScrollState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.graphics.createBitmap
@@ -19,6 +20,8 @@ class MessageContentViewModel {
     private val defaultImage = createBitmap(1, 1)
 
     private val imageHolder = mutableStateOf(defaultImage)
+
+    private val horizontalSourceScrollState = ScrollState(0)
 
     fun lineText(listLine: Boolean, text: String): AnnotatedString {
         return keywordHighlighter(if (listLine) text.substring(2) else text)
@@ -62,5 +65,7 @@ class MessageContentViewModel {
     fun closeImageDropdownMenu() {
         openImageDropdownMenu.value = false
     }
+
+    fun horizontalSourceScrollState() = horizontalSourceScrollState
 
 }
