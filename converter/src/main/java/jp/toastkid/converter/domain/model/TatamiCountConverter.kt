@@ -8,6 +8,8 @@
 
 package jp.toastkid.converter.domain.model
 
+import java.util.Locale
+
 class TatamiCountConverter : TwoStringConverter {
 
     override fun title(): String {
@@ -32,7 +34,7 @@ class TatamiCountConverter : TwoStringConverter {
 
     override fun firstInputAction(input: String): String? {
         val d = input.toDoubleOrNull() ?: return null
-        return String.format("%.2f", d * FACTOR)
+        return String.format(Locale.JAPAN, "%.2f", d * FACTOR)
     }
 
     override fun secondInputAction(input: String): String? {
