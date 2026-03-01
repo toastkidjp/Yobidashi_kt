@@ -15,6 +15,7 @@ import jp.toastkid.editor.view.menu.text.CommaInserter
 import jp.toastkid.editor.view.menu.text.ListHeadAdder
 import jp.toastkid.editor.view.menu.text.NumberedListHeadAdder
 import jp.toastkid.editor.view.menu.text.TableFormConverter
+import jp.toastkid.editor.view.menu.text.TextCounter
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.translate.TranslationUrlGenerator
 
@@ -135,6 +136,14 @@ class ContextMenuBuilder(
                 }
                 close()
             }
+        }
+
+        separator()
+
+        item(key = "Count", label = "Count") {
+            TextCounter().invoke(viewModel, contentViewModel)
+            contentViewModel.showAppBar()
+            close()
         }
 
         separator()
