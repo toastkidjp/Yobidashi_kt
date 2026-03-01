@@ -33,7 +33,7 @@ internal class DatabaseFinder {
             AppDatabase::class.java,
             DATABASE_FILE_NAME
         )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
     }
 
