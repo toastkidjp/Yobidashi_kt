@@ -45,7 +45,7 @@ class TrendParserTest {
 
         val items = TrendParser().invoke(xmlSource)
         assertEquals(20, items.size)
-        assertTrue(items.first().link.isNotBlank())
+        assertTrue(items.first().link.startsWith("https://trends.google.com/trends/explore?q="))
     }
 
 }
