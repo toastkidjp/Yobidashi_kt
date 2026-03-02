@@ -13,7 +13,7 @@ dependencyResolutionManagement {
             version("room", "2.7.2")
             version("cameraX", "1.5.1")
             version("coilCompose", "3.1.0")
-            version("coroutines", "1.5.1")
+            version("coroutines", "1.10.2")
             version("lifecycle", "2.10.0")
             plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").versionRef("kotlin")
             library("coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android").versionRef("coroutines")
