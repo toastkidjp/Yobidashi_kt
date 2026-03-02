@@ -39,7 +39,7 @@ class TatamiCountConverter : TwoStringConverter {
 
     override fun secondInputAction(input: String): String? {
         val d = input.toDoubleOrNull() ?: return null
-        return String.format("%.2f", d / FACTOR)
+        return String.format(Locale.JAPAN, "%.2f", d / FACTOR)
     }
 
     companion object {
