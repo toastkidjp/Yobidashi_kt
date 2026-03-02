@@ -98,7 +98,7 @@ fun readCoverages(): MutableMap<String, String> {
         }
         if (line.contains("<td class=\"ctr2\"")) {
             buffer.append()
-            val key = if (map.size == 0) "Instruction" else "Branch"
+            val key = if (map.isEmpty()) "Instruction" else "Branch"
             map.put(key, "${lines[i + 1].split("<")[0]} (${buffer.toString().replace(" of ", "/").split("<")[0]})")
             buffer.setLength(0)
             if (map.size == 2) {
