@@ -37,7 +37,7 @@ class DatabaseFinderTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { roomDatabaseBuilder.fallbackToDestructiveMigration() }.returns(roomDatabaseBuilder)
+        every { roomDatabaseBuilder.fallbackToDestructiveMigration(any()) }.returns(roomDatabaseBuilder)
         every { roomDatabaseBuilder.build() }.returns(mockk())
 
         mockkStatic(Room::class)
@@ -58,7 +58,7 @@ class DatabaseFinderTest {
     fun test() {
         databaseFinder.invoke(context)
 
-        verify(atLeast = 1) { roomDatabaseBuilder.fallbackToDestructiveMigration() }
+        verify(atLeast = 1) { roomDatabaseBuilder.fallbackToDestructiveMigration(any()) }
         verify(atLeast = 1) { roomDatabaseBuilder.build() }
         verify(atLeast = 1) { Room.databaseBuilder(any(), any<Class<AppDatabase>>(), any()) }
         verify(atLeast = 1) { context.getApplicationContext() }
