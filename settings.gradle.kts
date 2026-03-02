@@ -11,7 +11,7 @@ dependencyResolutionManagement {
             version("kotlin", "2.2.20")
             version("kotlinCompilerExtension", "1.5.15")
             version("room", "2.7.2")
-            version("cameraX", "1.5.1")
+            version("cameraX", "1.5.3")
             version("coilCompose", "3.1.0")
             version("coroutines", "1.10.2")
             version("lifecycle", "2.10.0")
