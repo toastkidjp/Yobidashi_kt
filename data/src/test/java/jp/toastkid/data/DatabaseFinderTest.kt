@@ -43,7 +43,7 @@ class DatabaseFinderTest {
         mockkStatic(Room::class)
         every { Room.databaseBuilder(any(), any<Class<AppDatabase>>(), any()) }.returns(roomDatabaseBuilder)
 
-        every { context.getApplicationContext() }.returns(mockk())
+        every { context.applicationContext }.returns(mockk())
 
         databaseFinder = DatabaseFinder()
     }
