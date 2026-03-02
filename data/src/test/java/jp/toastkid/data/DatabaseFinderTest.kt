@@ -61,7 +61,7 @@ class DatabaseFinderTest {
         verify(atLeast = 1) { roomDatabaseBuilder.fallbackToDestructiveMigration(any()) }
         verify(atLeast = 1) { roomDatabaseBuilder.build() }
         verify(atLeast = 1) { Room.databaseBuilder(any(), any<Class<AppDatabase>>(), any()) }
-        verify(atLeast = 1) { context.getApplicationContext() }
+        verify(atLeast = 1) { context.applicationContext }
     }
 
 }
