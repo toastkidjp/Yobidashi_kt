@@ -8,7 +8,6 @@
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
     alias(libraries.plugins.composeCompiler)
 }
 
@@ -18,7 +17,7 @@ android {
 
     defaultConfig {
         minSdk = 24
-        targetSdk = property.BuildTool.compileSdk
+        targetSdk.set(property.BuildTool.compileSdk)
     }
 
     buildTypes {
