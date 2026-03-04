@@ -10,7 +10,6 @@ import property.BuildTool
 
 plugins {
     id("com.android.library")
-    id("kotlin-android")
 }
 
 // TODO apply from: '../jacoco.gradle'
