@@ -10,7 +10,6 @@ import property.BuildTool
 
 plugins {
   id("com.android.library")
-  id("kotlin-android")
   id("com.cookpad.android.plugin.license-tools")
   id("jacoco.definition")
 }
