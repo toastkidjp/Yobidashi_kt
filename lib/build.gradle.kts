@@ -10,7 +10,6 @@ import property.BuildTool
 
 plugins {
   id("com.android.library")
-  id("kotlin-android")
   id("jacoco.definition")
   alias(libraries.plugins.composeCompiler)
 }
