@@ -19,11 +19,6 @@ android {
 
     compileSdkVersion(BuildTool.compileSdk)
 
-    defaultConfig {
-        minSdkVersion(BuildTool.minSdk)
-        namespace = "jp.toastkid.data"
-    }
-
     buildTypes {
         release {
         }
