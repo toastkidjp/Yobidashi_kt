@@ -15,11 +15,6 @@ android {
     namespace = "jp.toastkid.converter"
     compileSdk = property.BuildTool.compileSdk
 
-    defaultConfig {
-        minSdk = 24
-        targetSdk.set(property.BuildTool.compileSdk)
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = false
