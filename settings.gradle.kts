@@ -10,7 +10,7 @@ dependencyResolutionManagement {
         create("libraries") {
             version("kotlin", "2.2.20")
             version("kotlinCompilerExtension", "1.5.15")
-            version("room", "2.7.2")
+            version("room", "2.8.4")
             version("cameraX", "1.5.3")
             version("coilCompose", "3.1.0")
             version("coroutines", "1.10.2")
