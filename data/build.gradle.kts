@@ -12,7 +12,6 @@ plugins {
   id("com.android.library")
   id("jacoco.definition")
   id("com.google.devtools.ksp")
-  kotlin("android")
 }
 
 android {
