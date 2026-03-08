@@ -36,12 +36,19 @@ allprojects {
         mavenCentral()
     }
 
+    plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinBasePluginWrapper> {
+        kotlin {
+            jvmToolchain(21)
+        }
+    }
+/*
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
         .configureEach {
             compilerOptions {
                 jvmTarget.set(JvmTarget.JVM_21)
             }
         }
+*/
 }
 
 tasks.register("clean", Delete::class) {
