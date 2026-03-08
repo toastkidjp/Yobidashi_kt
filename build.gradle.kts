@@ -1,5 +1,5 @@
-
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
 /*
  * Copyright (c) 2021 toastkidjp.
@@ -28,6 +28,7 @@ plugins {
     id("com.google.devtools.ksp").version("2.3.6").apply(false)
     id("com.cookpad.android.plugin.license-tools").version("1.2.8")
     id("jacoco")
+    kotlin("android") apply false
 }
 
 allprojects {
@@ -37,7 +38,7 @@ allprojects {
     }
 
     plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinBasePluginWrapper> {
-        kotlin {
+        configure<KotlinProjectExtension> {
             jvmToolchain(21)
         }
     }
