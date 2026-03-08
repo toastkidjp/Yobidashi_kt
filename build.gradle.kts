@@ -30,7 +30,7 @@ plugins {
     kotlin("android") apply false
 }
 
-allprojects {
+subprojects {
     repositories {
         google()
         mavenCentral()
