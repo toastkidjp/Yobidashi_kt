@@ -9,7 +9,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version(libraries.versions.kotlin.get())
     id("com.android.application")
     id("com.github.triplet.play")
-    id("com.cookpad.android.plugin.license-tools")
     id("jacoco.definition")
     alias(libraries.plugins.composeCompiler)
 }
