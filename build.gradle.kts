@@ -25,7 +25,6 @@ buildscript {
 plugins {
     //id("io.gitlab.arturbosch.detekt").version("1.19.0")
     id("com.google.devtools.ksp").version("2.3.6").apply(false)
-    id("com.cookpad.android.plugin.license-tools").version("1.2.8")
     id("jacoco")
     kotlin("android") apply false
 }
