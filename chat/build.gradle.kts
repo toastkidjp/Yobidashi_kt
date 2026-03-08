@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":lib"))
     implementation(project(":ui"))
     implementation(libraries.composeMaterial3)
+    implementation(libraries.composeFoundation)
     implementation(libraries.coreKtx)
     implementation(libraries.lifecycleRuntimeKtx)
     implementation(libraries.activityCompose)
