@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
 /*
@@ -42,14 +41,6 @@ allprojects {
             jvmToolchain(21)
         }
     }
-/*
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
-        .configureEach {
-            compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_21)
-            }
-        }
-*/
 }
 
 tasks.register("clean", Delete::class) {
