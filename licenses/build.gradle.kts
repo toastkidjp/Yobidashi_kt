@@ -17,6 +17,8 @@ plugins {
 android {
     namespace = "jp.toastkid.licence"
 
+    compileSdkVersion(BuildTool.compileSdk)
+
     buildTypes {
         release {
             isMinifyEnabled = false
