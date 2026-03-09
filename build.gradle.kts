@@ -35,6 +35,12 @@ subprojects {
         mavenCentral()
     }
 
+    plugins.withId("org.jetbrains.kotlin.android") {
+        extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension> {
+            jvmToolchain(21)
+        }
+    }
+
     plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinBasePluginWrapper> {
         configure<KotlinProjectExtension> {
             jvmToolchain(21)
@@ -114,14 +120,6 @@ tasks.register("printCoverageSummary") {
     doLast {
         println("| Category | Coverage(%)\n|:---|:---")
         map.map { "| ${it.key} | ${it.value}" }.forEach(::println)
-    }
-}
-
-subprojects {
-    plugins.withId("org.jetbrains.kotlin.android") {
-        extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension> {
-            jvmToolchain(21)
-        }
     }
 }
 
