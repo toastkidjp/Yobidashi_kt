@@ -156,7 +156,7 @@ jobs:
         env:
           TZ: 'Asia/Tokyo'
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
-        run: "./gradlew testDebugUnitTest jacocoTestReport"
+        run: "./gradlew testDebugUnitTest jacocoTestReport --no-daemon -Dkotlin.compiler.execution.strategy=\"in-process\""
 
       - name: Merge reports
         timeout-minutes: 5
