@@ -20,7 +20,6 @@ android {
 
     defaultConfig {
         minSdk = BuildTool.minSdk
-        namespace = "jp.toastkid.api"
     }
 
     buildTypes {
