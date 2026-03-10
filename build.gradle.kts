@@ -1,3 +1,5 @@
+
+import com.android.build.api.dsl.LibraryExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
 /*
@@ -44,6 +46,15 @@ subprojects {
     plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinBasePluginWrapper> {
         configure<KotlinProjectExtension> {
             jvmToolchain(21)
+        }
+    }
+
+    plugins.withId("com.android.library") {
+        configure<LibraryExtension> {
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_21
+                targetCompatibility = JavaVersion.VERSION_21
+            }
         }
     }
 }
