@@ -21,7 +21,7 @@ android {
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
-        minSdkVersion(BuildTool.minSdk)
+        minSdk = BuildTool.minSdk
         vectorDrawables.useSupportLibrary = true
     }
 
