@@ -28,6 +28,7 @@ plugins {
     //id("io.gitlab.arturbosch.detekt").version("1.19.0")
     id("com.google.devtools.ksp").version("2.3.6").apply(false)
     id("jacoco")
+    id("jacoco-report-aggregation")
     kotlin("android") apply false
 }
 
@@ -67,6 +68,15 @@ jacoco {
     toolVersion = "0.8.13"
 }
 
+reporting {
+    reports {
+        create<JacocoCoverageReport>("jacocoMergedTestReport") {
+            testType.set(TestSuiteType.UNIT_TEST)
+        }
+    }
+}
+
+/*
 tasks.register("jacocoMergedTestReport", JacocoReport::class.java) {
     group = "verification"
     subprojects {
@@ -85,6 +95,7 @@ tasks.register("jacocoMergedTestReport", JacocoReport::class.java) {
         html.required.set(true)
     }
 }
+*/
 
 fun readCoverages(): MutableMap<String, String> {
     var started = false
