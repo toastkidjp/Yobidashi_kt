@@ -76,27 +76,6 @@ reporting {
     }
 }
 
-/*
-tasks.register("jacocoMergedTestReport", JacocoReport::class.java) {
-    group = "verification"
-    subprojects {
-        if (rootProject != project && plugins.hasPlugin("jacoco.definition")) {
-            executionData.from += "${project.layout.buildDirectory.get()}/jacoco/testDebugUnitTest.exec"
-            sourceDirectories.from += "${project.projectDir}/src/main/java"
-            classDirectories.from.addAll(
-                project.fileTree("${project.layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
-                    exclude("**/view/**", "**/ui/**", "**/material3/**", "**/*UiKt*", "**/*serializer**")
-                }
-            )
-        }
-    }
-    reports {
-        xml.required.set(false)
-        html.required.set(true)
-    }
-}
-*/
-
 fun readCoverages(): MutableMap<String, String> {
     var started = false
     val map = mutableMapOf<String, String>()
