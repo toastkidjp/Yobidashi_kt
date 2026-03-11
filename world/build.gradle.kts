@@ -1,3 +1,5 @@
+import property.BuildTool
+
 plugins {
     id("com.android.library")
     alias(libraries.plugins.composeCompiler)
@@ -9,7 +11,7 @@ android {
     compileSdkVersion(property.BuildTool.compileSdk)
 
     defaultConfig {
-        minSdkVersion(property.BuildTool.minSdk)
+        minSdk = BuildTool.minSdk
     }
 
     buildFeatures {
