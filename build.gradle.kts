@@ -68,14 +68,6 @@ jacoco {
     toolVersion = "0.8.13"
 }
 
-reporting {
-    reports {
-        create<JacocoCoverageReport>("jacocoMergedTestReport") {
-            testType.set(TestSuiteType.UNIT_TEST)
-        }
-    }
-}
-
 fun readCoverages(): MutableMap<String, String> {
     var started = false
     val map = mutableMapOf<String, String>()
