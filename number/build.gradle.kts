@@ -24,7 +24,7 @@ android {
     compileSdkVersion(BuildTool.compileSdk)
 
     defaultConfig {
-        minSdkVersion(BuildTool.minSdk)
+        minSdk = BuildTool.minSdk
     }
 
     buildTypes {
