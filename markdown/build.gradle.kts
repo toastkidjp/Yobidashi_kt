@@ -9,7 +9,7 @@ android {
     compileSdkVersion(property.BuildTool.compileSdk)
 
     defaultConfig {
-        minSdkVersion(property.BuildTool.minSdk)
+        minSdk = property.BuildTool.minSdk
     }
 
     buildFeatures {
