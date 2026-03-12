@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -64,6 +65,7 @@ import java.util.Calendar
 @Composable
 fun ChatTabView() {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val contentViewModel = (LocalView.current.context as? ViewModelStoreOwner)?.let {
         ViewModelProvider(it).get(ContentViewModel::class.java)
     }
@@ -125,7 +127,7 @@ fun ChatTabView() {
                                         .clickable {
                                             Clipboard.clip(context, it.text)
                                             contentViewModel?.snackShort(
-                                                context.getString(
+                                                resources.getString(
                                                     jp.toastkid.lib.R.string.message_clip_to,
                                                     "\"${it.text}\""
                                                 )
