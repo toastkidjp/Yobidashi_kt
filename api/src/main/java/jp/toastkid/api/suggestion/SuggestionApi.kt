@@ -16,6 +16,7 @@ import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.ResponseBody
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -50,7 +51,7 @@ class SuggestionApi(
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.use { it.string() } ?: return
+                val body = response.body?.use(ResponseBody::string) ?: return
                 listCallback(suggestionParser(body))
             }
         })
@@ -73,7 +74,7 @@ class SuggestionApi(
      * @return language (ex: "ja", "en")
      */
     private fun findHl(query: String): String =
-            if (multiByteCharacterInspector(query)) "ja" else Locale.getDefault().language
+        if (multiByteCharacterInspector(query)) "ja" else Locale.getDefault().language
 
     companion object {
 
