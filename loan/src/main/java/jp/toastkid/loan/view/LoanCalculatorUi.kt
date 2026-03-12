@@ -168,12 +168,7 @@ fun LoanCalculatorUi() {
     }
 
     LaunchedEffect(Unit) {
-        viewModel.launch { monthlyPayment, sum ->
-            stringResolver(
-                monthlyPayment,
-                sum
-            )
-        }
+        viewModel.launch(stringResolver::invoke)
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
