@@ -51,7 +51,7 @@ class DarkModeApplier {
             "#FFFFC107".toColorInt(),
             "#DD81D4FA".toColorInt(),
             "#DD81D4FA".toColorInt(),
-                true
+            true
         )
     }
 }
