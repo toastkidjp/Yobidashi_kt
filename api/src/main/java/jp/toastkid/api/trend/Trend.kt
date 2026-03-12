@@ -11,7 +11,7 @@ package jp.toastkid.api.trend
  * @author toastkidjp
  */
 data class Trend(
-        val title: String,
-        val link: String,
-        val image: String
+    val title: String,
+    val link: String,
+    val image: String
 )
