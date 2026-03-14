@@ -9,7 +9,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version(libraries.versions.kotlin.get())
     id("com.android.application")
     id("com.github.triplet.play")
-    id("jacoco.definition")
+    id("org.jetbrains.kotlinx.kover")
     alias(libraries.plugins.composeCompiler)
 }
 
@@ -88,12 +88,6 @@ android {
 
     lint {
         checkReleaseBuilds = false
-    }
-}
-
-tasks.withType<Test> {
-    configure<JacocoTaskExtension> {
-        isIncludeNoLocationClasses = true
     }
 }
 
