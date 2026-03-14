@@ -27,8 +27,7 @@ buildscript {
 plugins {
     //id("io.gitlab.arturbosch.detekt").version("1.19.0")
     id("com.google.devtools.ksp").version("2.3.6").apply(false)
-    id("jacoco")
-    id("jacoco-report-aggregation")
+    id("org.jetbrains.kotlinx.kover") version libraries.versions.kover
     kotlin("android") apply false
 }
 
@@ -64,8 +63,23 @@ tasks.register("clean", Delete::class) {
     delete = setOf(rootProject.layout.buildDirectory.get())
 }
 
-jacoco {
-    toolVersion = "0.8.13"
+kover {
+    reports {
+        total {
+            // common filters for all reports of all variants
+            filters {
+                // exclusions for reports
+                excludes {
+                    // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
+                    classes("jp.toastkid.yobidashi4.infrastructure.di.*")
+                    classes("*ComposableSingletons*")
+                    classes("*\$inject\$*")
+                    packages("org.koin.ksp.generated")
+                    packages("jp.toastkid.yobidashi4.library.resources")
+                }
+            }
+        }
+    }
 }
 
 fun readCoverages(): MutableMap<String, String> {
@@ -114,6 +128,29 @@ tasks.register("printCoverageSummary") {
         println("| Category | Coverage(%)\n|:---|:---")
         map.map { "| ${it.key} | ${it.value}" }.forEach(::println)
     }
+}
+
+dependencies {
+    // Kover
+    kover(project(path = ":data"))
+    kover(project(path = ":calendar"))
+    kover(project(path = ":lib"))
+    kover(project(path = ":todo"))
+    kover(project(path = ":barcode:ui"))
+    kover(project(path = ":number"))
+    kover(project(path = ":barcode:library"))
+    kover(project(path = ":article"))
+    kover(project(path = ":about"))
+    kover(project(path = ":api"))
+    kover(project(path = ":app"))
+    kover(project(path = ":search"))
+    kover(project(path = ":rss"))
+    kover(project(path = ":image"))
+    kover(project(path = ":licenses"))
+    kover(project(path = ":loan"))
+    kover(project(path = ":pdf"))
+    kover(project(path = ":music"))
+    kover(project(path = ":editor"))
 }
 
 /*TODO
