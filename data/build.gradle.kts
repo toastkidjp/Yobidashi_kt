@@ -10,7 +10,7 @@ import property.BuildTool
 
 plugins {
   id("com.android.library")
-  id("jacoco.definition")
+  id("org.jetbrains.kotlinx.kover")
   id("com.google.devtools.ksp")
 }
 
@@ -29,12 +29,6 @@ android {
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
-    }
-}
-
-tasks.withType<Test> {
-    configure<JacocoTaskExtension> {
-        isIncludeNoLocationClasses = true
     }
 }
 
