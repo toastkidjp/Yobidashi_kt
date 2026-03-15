@@ -156,12 +156,7 @@ jobs:
         env:
           TZ: 'Asia/Tokyo'
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
-        run: "./gradlew testDebugUnitTest jacocoTestReport --no-daemon -Dkotlin.compiler.execution.strategy=\"in-process\""
-
-      - name: Merge reports
-        timeout-minutes: 5
-        if: ${{ success() }}
-        run: "./gradlew jacocoMergedTestReport"
+        run: "./gradlew koverHtmlReport"
 
       - name: Upload configuration cache
         timeout-minutes: 3
@@ -187,9 +182,9 @@ jobs:
         if: ${{ success() }}
         uses: actions/upload-artifact@v4
         with:
-          name: Coverage Results
+          name: Kover Results
           path: |
-            build/reports/jacoco
+            build/reports/kover
 
       - name: Print summary
         timeout-minutes: 1
