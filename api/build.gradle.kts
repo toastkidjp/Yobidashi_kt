@@ -10,7 +10,7 @@ import property.BuildTool
 plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version(libraries.versions.kotlin.get())
     id("com.android.library")
-    id("jacoco.definition")
+    id("org.jetbrains.kotlinx.kover")
 }
 
 android {
