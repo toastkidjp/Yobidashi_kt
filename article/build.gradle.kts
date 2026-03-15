@@ -11,7 +11,7 @@ import property.BuildTool
  */
 plugins {
     id("com.android.library")
-    id("jacoco.definition")
+    id("org.jetbrains.kotlinx.kover")
     alias(libraries.plugins.composeCompiler)
 }
 //TODO apply from: '../jacoco.gradle'
@@ -39,12 +39,6 @@ android {
     }
     testOptions {
         unitTests.isIncludeAndroidResources = true
-    }
-}
-
-tasks.withType<Test> {
-    configure<JacocoTaskExtension> {
-        isIncludeNoLocationClasses = true
     }
 }
 
