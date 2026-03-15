@@ -11,7 +11,7 @@ import property.BuildTool
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.plugin.serialization") version(libraries.versions.kotlin.get())
-    id("jacoco.definition")
+    id("org.jetbrains.kotlinx.kover")
     alias(libraries.plugins.composeCompiler)
 }
 
