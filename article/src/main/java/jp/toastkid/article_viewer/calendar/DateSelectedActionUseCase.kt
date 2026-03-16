@@ -46,7 +46,4 @@ class DateSelectedActionUseCase(
         disposables.cancel()
     }
 
-    companion object {
-
-    }
 }
