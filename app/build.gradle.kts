@@ -73,10 +73,6 @@ android {
         compose = true
         buildConfig = true
     }
-    compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_21)
-        targetCompatibility(JavaVersion.VERSION_21)
-    }
     composeOptions {
         kotlinCompilerExtensionVersion = libraries.versions.kotlinCompilerExtension.get()
     }
