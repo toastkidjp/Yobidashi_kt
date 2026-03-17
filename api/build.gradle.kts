@@ -21,11 +21,6 @@ android {
     defaultConfig {
         minSdk = BuildTool.minSdk
     }
-
-    buildTypes {
-        release {
-        }
-    }
 }
 
 dependencies {
