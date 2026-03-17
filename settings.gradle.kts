@@ -6,6 +6,12 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
+    repositories {
+        mavenCentral()
+    }
+
     versionCatalogs {
         create("libraries") {
             version("kover", "0.9.7")
