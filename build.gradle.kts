@@ -148,6 +148,59 @@ dependencies {
     kover(project(path = ":editor"))
 }
 
+fun readCoverages(): MutableMap<String, String> {
+    var started = false
+    val keys = arrayOf(
+        "Class",
+        "Method",
+        "Branch",
+        "Line",
+        "Instruction"
+    );
+    val map = mutableMapOf<String, String>()
+    val buffer = StringBuffer()
+
+    val file = File("build/reports/kover/html/index.html")
+    if (file.exists().not()) {
+        return map
+    }
+
+    val lines = file.readText().split("\n")
+    for (i in (0 until lines.size)) {
+        val line = lines[i]
+        if (line.contains("<td class=\"name\">all classes</td>")) {
+            started = true
+        }
+        if (!started) {
+            continue
+        }
+        if (line.contains("<span class=\"percent\">")) {
+            buffer.append(lines[i + 1].trim())
+            continue
+        }
+        if (line.contains("<span class=\"absValue\">")) {
+            buffer.append(" ").append(lines[i + 1].trim())
+            map.put("${keys.get(map.size)}", buffer.toString())
+            buffer.setLength(0);
+            continue
+        }
+        if (line.contains("</table>")) {
+            break
+        }
+    }
+    return map
+}
+
+tasks.register("printCoverageSummary") {
+    val map = readCoverages()
+
+    doLast {
+        println("| Category | Coverage(%)\n|:---|:---")
+        map.map { "| ${it.key} | ${it.value}" }.forEach(::println)
+    }
+}
+
+
 /*TODO
 task("mergeDetektReport", io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
     output = project.buildDir.file("reports/detekt/merge.xml")
