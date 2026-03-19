@@ -149,9 +149,3 @@ configurations.implementation {
     exclude(group = "org.jetbrains.compose.foundation", module = "foundation")
     exclude(group = "org.jetbrains.compose.material", module = "material")
 }
-
-repositories{
-    flatDir{
-        dirs("libs")
-    }
-}
