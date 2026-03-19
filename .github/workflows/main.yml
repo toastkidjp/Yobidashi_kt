@@ -68,7 +68,7 @@ jobs:
           java-version: '21'
 
       - name: Download Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3
         with:
           api-level: 35
           build-tools: 35.0.0
