@@ -29,7 +29,6 @@ android {
 
         versionCode = Version.code
         versionName = Version.name
-        vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
         create("release") {
