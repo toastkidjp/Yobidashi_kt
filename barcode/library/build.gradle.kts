@@ -23,11 +23,6 @@ android {
     defaultConfig {
         minSdk = BuildTool.minSdk
     }
-
-    buildTypes {
-        release {
-        }
-    }
 }
 
 tasks.withType<GenerateBuildConfig> {
