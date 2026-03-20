@@ -24,11 +24,6 @@ android {
         minSdk = BuildTool.minSdk
     }
 
-    buildTypes {
-        release {
-        }
-    }
-
     buildFeatures {
         compose = true
     }
