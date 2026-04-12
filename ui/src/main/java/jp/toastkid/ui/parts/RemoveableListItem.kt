@@ -10,10 +10,10 @@ package jp.toastkid.ui.parts
 
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
-import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.AnchoredDraggableDefaults
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
@@ -63,11 +63,6 @@ fun SwipeToDismissItem(
         AnchoredDraggableState(
             initialValue = Start,
             anchors = anchors,
-            positionalThreshold = { 120.dp.value },
-            velocityThreshold = { 120.dp.value },
-            snapAnimationSpec = spring(),
-            decayAnimationSpec = exponentialDecay(),
-            confirmValueChange = { true }
         )
     }
 
@@ -80,8 +75,14 @@ fun SwipeToDismissItem(
         Box(
             Modifier
                 .anchoredDraggable(
-                    anchoredDraggableState,
-                    orientation = Orientation.Horizontal
+                    state = anchoredDraggableState,
+                    orientation = Orientation.Horizontal,
+                    reverseDirection = false,
+                    flingBehavior = AnchoredDraggableDefaults.flingBehavior(
+                        anchoredDraggableState,
+                        positionalThreshold = { 120.dp.value },
+                        animationSpec = spring()
+                    ),
                 )
         ) {
             Row(
