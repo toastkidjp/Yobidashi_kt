@@ -154,7 +154,6 @@
     <string name="content_description_background">背景画像</string>
     <string name="is_center">center</string>
     <string name="reset_button_position">ボタンの位置をリセット</string>
-    <string name="title_show_app_bar">App bar を表示</string>
     <string name="title_hide_app_bar">App bar を隠す</string>
     <string name="menu_random_wikipedia">ランダム Wikipedia</string>
     <string name="message_open_random_wikipedia">Wikipedia の「%s」を開きました。</string>

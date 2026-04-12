@@ -156,7 +156,6 @@
     <string name="content_description_background">Background image</string>
     <string name="is_center">center</string>
     <string name="reset_button_position">Reset Button Position</string>
-    <string name="title_show_app_bar">Show app bar</string>
     <string name="title_hide_app_bar">Hide app bar</string>
     <string name="menu_random_wikipedia">Random Wikipedia</string>
     <string name="message_open_random_wikipedia">Open Wikipedia article "%s".</string>
