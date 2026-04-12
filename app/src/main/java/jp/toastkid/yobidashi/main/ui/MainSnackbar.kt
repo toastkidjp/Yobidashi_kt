@@ -8,14 +8,16 @@
 
 package jp.toastkid.yobidashi.main.ui
 
-import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.AnchoredDraggableDefaults
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.gestures.snapTo
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -28,8 +30,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -46,16 +51,6 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
         AnchoredDraggableState(
             initialValue = "Start",
             anchors = anchors,
-            positionalThreshold = { dismissSnackbarDistance * 0.75f },
-            velocityThreshold = { 3000.dp.value },
-            snapAnimationSpec = spring(),
-            decayAnimationSpec = exponentialDecay(),
-            confirmValueChange = {
-                if (it == "Right" || it == "Left") {
-                    onDismiss()
-                }
-                true
-            }
         )
     }
 
@@ -65,7 +60,37 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
         modifier = Modifier
             .anchoredDraggable(
                 state = anchoredDraggableState,
-                orientation = Orientation.Horizontal
+                orientation = Orientation.Horizontal,
+                reverseDirection = false,
+                flingBehavior = AnchoredDraggableDefaults.flingBehavior(
+                    anchoredDraggableState,
+                    positionalThreshold = { dismissSnackbarDistance * 0.75f },
+                    animationSpec = spring()
+                ),
+                overscrollEffect = object : OverscrollEffect {
+                    override val isInProgress: Boolean
+                        get() = anchoredDraggableState.currentValue == "Start"
+
+                    override suspend fun applyToFling(
+                        velocity: Velocity,
+                        performFling: suspend (Velocity) -> Velocity
+                    ) {
+                        when (anchoredDraggableState.currentValue) {
+                            "Right", "Left" -> onDismiss()
+                            else -> anchoredDraggableState.snapTo("Start")
+                        }
+                    }
+
+                    override fun applyToScroll(
+                        delta: Offset,
+                        source: NestedScrollSource,
+                        performScroll: (Offset) -> Offset
+                    ): Offset {
+                        anchoredDraggableState.dispatchRawDelta(delta.x)
+                        return delta
+                    }
+
+                }
             )
             .offset { IntOffset(anchoredDraggableState.requireOffset().toInt(), 0) }
     ) {
