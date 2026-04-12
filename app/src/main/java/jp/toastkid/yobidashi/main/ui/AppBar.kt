@@ -227,6 +227,11 @@ private fun OverflowMenu(
                         action = {
                             contentViewModel?.showAppBar()
                         }),
+                    OptionMenu(
+                        titleId = R.string.title_hide_app_bar,
+                        action = {
+                            contentViewModel?.hideAppBar()
+                        }),
                     OptionMenu(titleId = R.string.menu_random_wikipedia, action = {
                         if (PreferenceApplier(context).wifiOnly &&
                             NetworkChecker().isUnavailableWiFi(context)
