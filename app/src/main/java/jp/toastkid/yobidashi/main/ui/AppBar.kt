@@ -11,10 +11,10 @@ package jp.toastkid.yobidashi.main.ui
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.AnchoredDraggableDefaults
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
@@ -76,14 +76,7 @@ internal fun AppBar() {
     val swipeableState = remember {
         AnchoredDraggableState(
             initialValue = "Start",
-            anchors = anchors,
-            positionalThreshold = { sizePx * 0.5f },
-            velocityThreshold = { 120.dp.value },
-            snapAnimationSpec = spring(),
-            decayAnimationSpec = exponentialDecay(),
-            confirmValueChange = {
-                true
-            }
+            anchors = anchors
         )
     }
 
@@ -97,13 +90,6 @@ internal fun AppBar() {
         AnchoredDraggableState(
             initialValue = Center,
             anchors = horizontalAnchors,
-            positionalThreshold = { widthPx * 0.75f },
-            velocityThreshold = { 300.dp.value },
-            snapAnimationSpec = spring(),
-            decayAnimationSpec = exponentialDecay(),
-            confirmValueChange = {
-                true
-            }
         )
     }
 
@@ -154,11 +140,23 @@ internal fun AppBar() {
                 .weight(1f)
                 .anchoredDraggable(
                     state = horizontalSwipeableState,
-                    orientation = Orientation.Horizontal
+                    orientation = Orientation.Horizontal,
+                    reverseDirection = false,
+                    flingBehavior = AnchoredDraggableDefaults.flingBehavior(
+                        swipeableState,
+                        positionalThreshold = { widthPx * 0.75f },
+                        animationSpec = spring()
+                    ),
                 )
                 .anchoredDraggable(
                     state = swipeableState,
-                    orientation = Orientation.Vertical
+                    orientation = Orientation.Vertical,
+                    reverseDirection = false,
+                    flingBehavior = AnchoredDraggableDefaults.flingBehavior(
+                        swipeableState,
+                        positionalThreshold = { sizePx * 0.5f },
+                        animationSpec = spring()
+                    ),
                 )
                 .offset {
                     IntOffset(
