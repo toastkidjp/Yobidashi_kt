@@ -152,9 +152,7 @@ class WebViewContainer(
             loadUrl(uri.toString())
         } else {
             CoroutineScope(Dispatchers.IO).launch {
-                faviconApplier.load(uri)?.let {
-                    browserViewModel.newIcon(it)
-                }
+                faviconApplier.load(uri)?.let(browserViewModel::newIcon)
             }
         }
     }
