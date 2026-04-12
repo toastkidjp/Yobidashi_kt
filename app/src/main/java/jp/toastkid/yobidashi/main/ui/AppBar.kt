@@ -222,6 +222,11 @@ private fun OverflowMenu(
                             PreferenceApplier(context).clearMenuFabPosition()
                             contentViewModel?.resetMenuFabPosition()
                         }),
+                    OptionMenu(
+                        titleId = R.string.title_show_app_bar,
+                        action = {
+                            contentViewModel?.showAppBar()
+                        }),
                     OptionMenu(titleId = R.string.menu_random_wikipedia, action = {
                         if (PreferenceApplier(context).wifiOnly &&
                             NetworkChecker().isUnavailableWiFi(context)
