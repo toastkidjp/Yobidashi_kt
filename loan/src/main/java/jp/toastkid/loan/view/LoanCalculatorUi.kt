@@ -116,16 +116,16 @@ fun LoanCalculatorUi() {
 
             stickyHeader {
                 val surfaceColor = MaterialTheme.colorScheme.surface
-                val backgroundColor =
-                    remember {
-                        if (viewModel.scrollState().firstVisibleItemIndex != 0) { surfaceColor }
-                        else Color.Transparent
-                    }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .animateItem()
-                        .drawBehind { drawRect(backgroundColor) }
+                        .drawBehind {
+                            drawRect(
+                                if (viewModel.scrollState().firstVisibleItemIndex != 0) { surfaceColor }
+                                else Color.Transparent
+                            )
+                        }
                 ) {
                     Text(
                         stringResource(R.string.title_column_loan_payment_count),
