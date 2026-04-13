@@ -164,8 +164,8 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
 
         contentViewModel.replaceAppBarContent {
             AppBarContent(
-                viewModel.lastSaved(),
-                viewModel.contentLength(),
+                { viewModel.lastSaved() },
+                { viewModel.contentLength() },
                 { fileActionUseCase.save(viewModel::openInputFileNameDialog) },
                 viewModel::openConfirmDialog,
                 viewModel::openInputFileNameDialog,
@@ -353,8 +353,8 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(
-    lastSaved: CharSequence,
-    contentLength: Int,
+    lastSavedProvider: () -> CharSequence,
+    contentLengthProvider: () -> Int,
     saveFile: () -> Unit,
     openConfirmDialog: () -> Unit,
     openInputFileNameDialog: () -> Unit,
@@ -434,14 +434,14 @@ private fun AppBarContent(
         )
 
         LastSaved(
-            lastSaved,
+            lastSavedProvider,
             Modifier
                 .padding(start = 4.dp, end = 4.dp)
                 .align(Alignment.CenterVertically)
         )
 
         ContentLength(
-            contentLength,
+            contentLengthProvider,
             Modifier
                 .padding(start = 4.dp, end = 4.dp)
                 .align(Alignment.CenterVertically)
@@ -452,9 +452,9 @@ private fun AppBarContent(
 }
 
 @Composable
-private fun LastSaved(lastSaved: CharSequence, modifier: Modifier) {
+private fun LastSaved(lastSavedProvider: () -> CharSequence, modifier: Modifier) {
     Text(
-        text = stringResource(R.string.last_saved) + lastSaved,
+        text = stringResource(R.string.last_saved) + lastSavedProvider(),
         color = MaterialTheme.colorScheme.onPrimary,
         fontSize = 14.sp,
         maxLines = 2,
@@ -463,9 +463,9 @@ private fun LastSaved(lastSaved: CharSequence, modifier: Modifier) {
 }
 
 @Composable
-private fun ContentLength(contentLength: Int, modifier: Modifier) {
+private fun ContentLength(contentLengthProvider: () -> Int, modifier: Modifier) {
     Text(
-        text = stringResource(jp.toastkid.lib.R.string.message_character_count, contentLength),
+        text = stringResource(jp.toastkid.lib.R.string.message_character_count, contentLengthProvider()),
         color = MaterialTheme.colorScheme.onPrimary,
         fontSize = 14.sp,
         maxLines = 2,
