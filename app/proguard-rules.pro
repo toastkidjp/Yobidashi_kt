@@ -116,3 +116,11 @@
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 -if interface * { @retrofit2.http.* public *** *(...); }
 -keep,allowoptimization,allowshrinking,allowobfuscation class <3>
+
+# For image viewer
+-keep class androidx.compose.animation.SharedTransitionScope** { *; }
+
+-keepclassmembers class androidx.compose.animation.SharedTransitionScope {
+    *** sharedElement$default(...);
+    *** resizableSharedElement$default(...);
+}
