@@ -104,7 +104,7 @@ jobs:
       - name: Upload artifacts
         timeout-minutes: 2
         if: ${{ success() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Release artifacts
           path: |
@@ -113,7 +113,7 @@ jobs:
       - name: Upload APK to artifact
         timeout-minutes: 2
         if: ${{ success() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Release APK
           path: |
@@ -161,7 +161,7 @@ jobs:
       - name: Upload configuration cache
         timeout-minutes: 3
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Configuration cache
           path: |
@@ -171,7 +171,7 @@ jobs:
       - name: Upload Unit Test Results
         timeout-minutes: 3
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Unit Test Results
           path: |
@@ -180,7 +180,7 @@ jobs:
       - name: Upload Coverage Results
         timeout-minutes: 3
         if: ${{ success() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Kover Results
           path: |
