@@ -23,7 +23,6 @@ android {
 
     defaultConfig {
         minSdk = BuildTool.minSdk
-        vectorDrawables.useSupportLibrary = true
     }
 
     buildFeatures {
@@ -50,6 +49,7 @@ dependencies {
     implementation(libraries.composeMaterial3)
     implementation(libraries.lifecycleRuntimeKtx)
     implementation(libraries.activityCompose)
+    implementation(libraries.composeAnimation)
 
     implementation(libraries.coreKtx)
     implementation(libraries.exifinterface)
