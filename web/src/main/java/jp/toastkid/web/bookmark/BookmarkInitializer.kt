@@ -46,7 +46,7 @@ class BookmarkInitializer(
                 "Amazon" to "https://www.amazon.com/",
                 "Project Gutenberg" to "http://www.gutenberg.org/",
                 "Expedia" to "https://www.expedia.com",
-                "Slashdot" to "https://m.slashdot.org"
+                "Sakana Chat" to "https://chat.sakana.ai/"
             ),
             "Search" to mapOf(
                     "Google" to "https://www.google.com/",
