@@ -60,7 +60,7 @@ class BookmarkInitializer(
                     "Financial Times" to "https://www.ft.com/",
                     "THE WALL STREET JOURNAL" to "https://www.wsj.com"
             ),
-            "SNS" to mapOf(
+            "Social media" to mapOf(
                     "Instagram" to "https://www.instagram.com/",
                     "X" to "https://www.x.com/",
                     "Facebook" to "https://www.facebook.com/"
