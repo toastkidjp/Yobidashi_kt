@@ -165,7 +165,7 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
         contentViewModel.replaceAppBarContent {
             AppBarContent(
                 viewModel::lastSaved,
-                { viewModel.contentLength() },
+                viewModel::contentLength,
                 { fileActionUseCase.save(viewModel::openInputFileNameDialog) },
                 viewModel::openConfirmDialog,
                 viewModel::openInputFileNameDialog,
