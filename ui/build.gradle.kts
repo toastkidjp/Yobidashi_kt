@@ -41,9 +41,8 @@ dependencies {
     implementation(libraries.coilNetwork)
     implementation(libraries.composeMaterial3)
     implementation(libraries.lifecycleViewModelCompose)
-    implementation("androidx.navigation:navigation-compose:2.9.2")
-    implementation("androidx.navigation:navigation-runtime-ktx:2.9.2")
-    api("androidx.navigation:navigation-compose:2.9.2")
+    implementation(libraries.navigationCompose)
+    implementation(libraries.navigationRuntimeKts)
 
     testImplementation("junit:junit:4.12")
 }
