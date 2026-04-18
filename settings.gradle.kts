@@ -23,6 +23,7 @@ dependencyResolutionManagement {
             version("coilCompose", "3.1.0")
             version("coroutines", "1.10.2")
             version("lifecycle", "2.10.0")
+            version("navigation", "2.9.7")
             plugin("composeCompiler", "org.jetbrains.kotlin.plugin.compose").versionRef("kotlin")
             library("coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android").versionRef("coroutines")
             library("coreKtx", "androidx.core", "core-ktx").version("1.16.0")
@@ -45,6 +46,8 @@ dependencyResolutionManagement {
             library("lifecycleViewModelCompose", "androidx.lifecycle", "lifecycle-viewmodel-compose").versionRef("lifecycle")
             library("lifecycleViewModelKtx", "androidx.lifecycle", "lifecycle-viewmodel-ktx").versionRef("lifecycle")
             library("webkit", "androidx.webkit", "webkit").version("1.14.0")
+            library("navigationCompose", "androidx.navigation", "navigation-compose").versionRef("navigation")
+            library("navigationRuntimeKts", "androidx.navigation", "navigation-runtime-ktx").versionRef("navigation")
         }
 
         create("testLibraries") {
