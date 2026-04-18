@@ -11,7 +11,6 @@ package jp.toastkid.image.view
 import android.Manifest
 import android.os.Build
 import android.provider.MediaStore.getPickImagesMaxLimit
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -62,6 +61,7 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
+import jp.toastkid.ui.compose.local.LocalNavController
 import jp.toastkid.ui.image.EfficientImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -125,13 +125,15 @@ fun ImageListUi() {
             }?.snackShort(R.string.message_audio_file_is_not_found)
         }
 
+    val navController = LocalNavController.current
+
     val pickMultipleMedia =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && images.isEmpty()) {
             rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(getPickImagesMaxLimit())) { uris ->
                 // Callback is invoked after the user selects media items or closes the
                 // photo picker.
                 if (uris.isNullOrEmpty()) {
-                    (context as ComponentActivity).onBackPressedDispatcher.onBackPressed()
+                    navController.popBackStack()
                     return@rememberLauncherForActivityResult
                 }
 
