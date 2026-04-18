@@ -43,6 +43,7 @@ dependencies {
     implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.navigationCompose)
     implementation(libraries.navigationRuntimeKts)
+    api(libraries.navigationCompose)
 
     testImplementation("junit:junit:4.12")
 }
