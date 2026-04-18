@@ -32,12 +32,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -103,6 +105,7 @@ import jp.toastkid.media.music.view.MusicListUi
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.search.UrlFactory
+import jp.toastkid.ui.compose.local.LocalNavController
 import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.web.floating.view.FloatingPreviewUi
 import jp.toastkid.web.permission.DownloadPermissionRequestContract
@@ -448,114 +451,116 @@ internal fun Content() {
             modifier = Modifier.fillMaxSize()
         )
 
-        if (contentViewModel.showTabList()) {
-            TabListUi(tabs)
-        }
+        CompositionLocalProvider(LocalNavController provides navigationHostController) {
+            if (contentViewModel.showTabList()) {
+                TabListUi(tabs)
+            }
 
-        if (contentViewModel.showMusicListUi()) {
-            MusicListUi()
-        }
+            if (contentViewModel.showMusicListUi()) {
+                MusicListUi()
+            }
 
-        contentViewModel.floatingPreviewUri()?.let {
-            FloatingPreviewUi(it.toUri())
-        }
+            contentViewModel.floatingPreviewUri()?.let {
+                FloatingPreviewUi(it.toUri())
+            }
 
-        Scaffold(
-            containerColor = Color.Transparent,
-            bottomBar = {
-                AppBar()
-            },
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = contentViewModel.snackbarHostState(),
-                    snackbar = {
-                        MainSnackbar(it) { contentViewModel.dismissSnackbar() }
-                    })
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = { openMenu.value = openMenu.value.not() },
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .scale(contentViewModel.fabScale.value)
-                        .offset { contentViewModel.makeFabOffset() }
-                        .pointerInput(Unit) {
-                            detectDragGestures(
-                                onDragEnd = {
-                                    PreferenceApplier(activity)
-                                        .setNewMenuFabPosition(
-                                            contentViewModel.menuFabOffsetX.value,
-                                            contentViewModel.menuFabOffsetY.value
-                                        )
-                                },
-                                onDrag = { change, dragAmount ->
-                                    change.consume()
-                                    contentViewModel.menuFabOffsetX.value += dragAmount.x
-                                    contentViewModel.menuFabOffsetY.value += dragAmount.y
-                                }
-                            )
-                        }
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.ic_menu),
-                        stringResource(id = jp.toastkid.todo.R.string.menu),
-                        tint = MaterialTheme.colorScheme.primary
+            Scaffold(
+                containerColor = Color.Transparent,
+                bottomBar = {
+                    AppBar()
+                },
+                snackbarHost = {
+                    SnackbarHost(
+                        hostState = contentViewModel.snackbarHostState(),
+                        snackbar = {
+                            MainSnackbar(it) { contentViewModel.dismissSnackbar() }
+                        })
+                },
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = { openMenu.value = openMenu.value.not() },
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier
+                            .size(48.dp)
+                            .scale(contentViewModel.fabScale.value)
+                            .offset { contentViewModel.makeFabOffset() }
+                            .pointerInput(Unit) {
+                                detectDragGestures(
+                                    onDragEnd = {
+                                        PreferenceApplier(activity)
+                                            .setNewMenuFabPosition(
+                                                contentViewModel.menuFabOffsetX.value,
+                                                contentViewModel.menuFabOffsetY.value
+                                            )
+                                    },
+                                    onDrag = { change, dragAmount ->
+                                        change.consume()
+                                        contentViewModel.menuFabOffsetX.value += dragAmount.x
+                                        contentViewModel.menuFabOffsetY.value += dragAmount.y
+                                    }
+                                )
+                            }
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.ic_menu),
+                            stringResource(id = jp.toastkid.todo.R.string.menu),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .nestedScroll(nestedScrollConnection)
+                    .windowInsetsPadding(WindowInsets.safeDrawing)
+            ) { _ ->
+                Box {
+                    NavigationalContent(navigationHostController, tabs)
+
+                    if (contentViewModel.showSnowEffect()) {
+                        AndroidView(factory = { SnowRendererView(activity) })
+                    }
+
+                    MainBackHandler(
+                        {
+                            navigationHostController.currentBackStackEntry?.destination?.route
+                        },
+                        navigationHostController::popBackStack,
+                        tabs::closeCurrentTab,
+                        tabs::currentTabIsWebTab,
+                        tabs::isEmpty
                     )
                 }
-            },
-            modifier = Modifier
-                .fillMaxSize()
-                .nestedScroll(nestedScrollConnection)
-                .windowInsetsPadding(WindowInsets.safeDrawing)
-        ) { _ ->
-            Box {
-                NavigationalContent(navigationHostController, tabs)
 
-                if (contentViewModel.showSnowEffect()) {
-                    AndroidView(factory = { SnowRendererView(activity) })
-                }
-
-                MainBackHandler(
-                    {
-                        navigationHostController.currentBackStackEntry?.destination?.route
-                    },
-                    navigationHostController::popBackStack,
-                    tabs::closeCurrentTab,
-                    tabs::currentTabIsWebTab,
-                    tabs::isEmpty
-                )
-            }
-
-            LaunchedEffect(key1 = "first_launch", block = {
-                if (tabs.isEmpty()) {
-                    contentViewModel.openNewTab()
-                    return@LaunchedEffect
-                }
-
-                if (navigationHostController.currentDestination?.route == "empty") {
-                    replaceToCurrentTab(tabs, navigationHostController)
-                }
-            })
-
-            if (openMenu.value) {
-                MainMenu(
-                    {
-                        Inputs().hideKeyboard(localView)
-                        navigate(navigationHostController, it)
-                    },
-                    {
-                        mediaPermissionRequestLauncher.launch(MusicPlayerPermissions().invoke())
+                LaunchedEffect(key1 = "first_launch", block = {
+                    if (tabs.isEmpty()) {
+                        contentViewModel.openNewTab()
+                        return@LaunchedEffect
                     }
-                ) { openMenu.value = false }
-            }
 
-            if (contentViewModel.useScreenFilter.value) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .drawBehind { drawRect(contentViewModel.colorFilterColor()) }
-                )
+                    if (navigationHostController.currentDestination?.route == "empty") {
+                        replaceToCurrentTab(tabs, navigationHostController)
+                    }
+                })
+
+                if (openMenu.value) {
+                    MainMenu(
+                        {
+                            Inputs().hideKeyboard(localView)
+                            navigate(navigationHostController, it)
+                        },
+                        {
+                            mediaPermissionRequestLauncher.launch(MusicPlayerPermissions().invoke())
+                        }
+                    ) { openMenu.value = false }
+                }
+
+                if (contentViewModel.useScreenFilter.value) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .drawBehind { drawRect(contentViewModel.colorFilterColor()) }
+                    )
+                }
             }
         }
     }
