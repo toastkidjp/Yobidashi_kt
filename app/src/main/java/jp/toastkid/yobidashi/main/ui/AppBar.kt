@@ -178,7 +178,7 @@ internal fun AppBar() {
 
         OverflowMenu(
             contentViewModel.optionMenus,
-            { contentViewModel.switchTabList() }
+            contentViewModel::switchTabList
         ) { activity.finish() }
     }
 
