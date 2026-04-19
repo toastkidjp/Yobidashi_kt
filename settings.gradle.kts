@@ -45,7 +45,7 @@ dependencyResolutionManagement {
             library("lifecycleRuntimeCompose", "androidx.lifecycle", "lifecycle-runtime-compose").versionRef("lifecycle")
             library("lifecycleViewModelCompose", "androidx.lifecycle", "lifecycle-viewmodel-compose").versionRef("lifecycle")
             library("lifecycleViewModelKtx", "androidx.lifecycle", "lifecycle-viewmodel-ktx").versionRef("lifecycle")
-            library("webkit", "androidx.webkit", "webkit").version("1.14.0")
+            library("webkit", "androidx.webkit", "webkit").version("1.15.0")
             library("navigationCompose", "androidx.navigation", "navigation-compose").versionRef("navigation")
             library("navigationRuntimeKts", "androidx.navigation", "navigation-runtime-ktx").versionRef("navigation")
         }
