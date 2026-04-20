@@ -20,7 +20,7 @@ android {
     namespace = "jp.toastkid.yobidashi"
 
     compileSdk = (BuildTool.compileSdk)
-    buildToolsVersion(BuildTool.buildTools)
+    buildToolsVersion = (BuildTool.buildTools)
 
     defaultConfig {
         applicationId = "jp.toastkid.yobidashi"
