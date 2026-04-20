@@ -68,7 +68,7 @@ class BarcodeAnalyzerImplementation {
 
     private fun extractArray(image: Image?): ByteArray? {
         val buffer = image?.planes?.firstOrNull { it.buffer != null }?.buffer ?: return null
-        return ByteArray(buffer.capacity()).also { buffer.get(it) }
+        return ByteArray(buffer.capacity()).also(buffer::get)
     }
 
 }
