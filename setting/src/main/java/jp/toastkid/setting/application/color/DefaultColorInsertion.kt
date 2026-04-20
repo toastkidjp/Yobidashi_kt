@@ -59,7 +59,7 @@ class DefaultColorInsertion {
                 Color(it.key).toArgb(),
                 Color(it.value).toArgb()
             )
-        }.forEach { models.add(it) }
+        }.forEach(models::add)
         return models
     }
 
