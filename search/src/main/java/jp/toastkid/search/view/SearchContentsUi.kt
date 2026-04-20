@@ -89,7 +89,7 @@ internal fun SearchContentsUi(
             .verticalScroll(rememberScrollState())
     ) {
         if (viewModel.useUrlCard() && !currentUrl.isNullOrBlank()) {
-            UrlCard(currentTitle, currentUrl) { viewModel.putQuery(it) }
+            UrlCard(currentTitle, currentUrl, viewModel::putQuery)
         }
 
         if (viewModel.urlItems.isNotEmpty()) {
