@@ -30,7 +30,7 @@ class DateArticleUrlFactory {
         if (month < 0 || month >= 12) {
             return ""
         }
-        if (dayOfMonth <= 0 || dayOfMonth >= 31) {
+        if (dayOfMonth !in 1..<31) {
             return ""
         }
 
