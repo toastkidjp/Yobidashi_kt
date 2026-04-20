@@ -79,7 +79,7 @@ class Parser {
                 extractSubject(line)
             }
             line.contains("</item>") or line.contains("</entry>") -> {
-                currentItem?.let { rss.items.add(it) }
+                currentItem?.let(rss.items::add)
             }
         }
     }
