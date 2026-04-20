@@ -72,7 +72,7 @@ internal fun NavigationalContent(
             val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
             PdfViewerUi(
                 currentTab.getUrl().toUri(),
-                Modifier//.onPlaced { takeScreenshot(tabs, view) }
+                Modifier
             )
         }
         tabComposable("tab/article/list") {
@@ -81,17 +81,13 @@ internal fun NavigationalContent(
         tabComposable("tab/article/content/{title}") {
             val title = it?.getString("title") ?: return@tabComposable
             val view = LocalView.current
-            ArticleContentUi(title, Modifier
-                //.onPlaced { takeScreenshot(tabs, view) }
-            )
+            ArticleContentUi(title, Modifier)
         }
         tabComposable("tab/editor/current") {
             val currentTab = tabs.currentTab() as? EditorTab ?: return@tabComposable
             val view = LocalView.current
 
-            EditorTabView(currentTab.path, currentTab.getScrolled(), Modifier
-            //.onPlaced { takeScreenshot(tabs, view) }
-            )
+            EditorTabView(currentTab.path, currentTab.getScrolled(), Modifier)
         }
         tabComposable("web/bookmark/list") {
             BookmarkListUi()
