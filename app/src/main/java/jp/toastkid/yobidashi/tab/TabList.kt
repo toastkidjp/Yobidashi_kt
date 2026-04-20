@@ -179,7 +179,7 @@ class TabList {
                         else jsonSerializer.decodeFromString(file.readText(Charsets.UTF_8)) ?: TabList()
 
                 loadTabsFromDir()
-                        ?.forEach { it?.let { fromJson.add(it) } }
+                        ?.forEach { it?.let(fromJson::add) }
                 if (fromJson.size() <= fromJson.index) {
                     fromJson.index = fromJson.size() - 1
                 }
