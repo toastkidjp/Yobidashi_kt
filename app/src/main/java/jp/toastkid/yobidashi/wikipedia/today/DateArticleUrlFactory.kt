@@ -27,7 +27,7 @@ class DateArticleUrlFactory {
      * @return Wikipedia article's url
      */
     operator fun invoke(context: Context, month: Int, dayOfMonth: Int): String {
-        if (month < 0 || month >= 12) {
+        if (month !in 0..<12) {
             return ""
         }
         if (dayOfMonth !in 1..<31) {
