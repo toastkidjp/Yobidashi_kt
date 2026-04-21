@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.wikipedia.random
 
-import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
 import jp.toastkid.api.wikipedia.WikipediaApi
@@ -41,9 +40,6 @@ class RandomWikipedia(
     }
 
     companion object {
-
-        fun shouldUse(intent: Intent?) =
-            intent?.getBooleanExtra("random_wikipedia", false) == true
 
     }
 }
