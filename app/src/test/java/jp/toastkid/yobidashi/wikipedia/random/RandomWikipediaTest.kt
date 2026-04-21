@@ -65,7 +65,7 @@ class RandomWikipediaTest {
 
     @Test
     fun testFetchWithAction() {
-        randomWikipedia.fetchWithAction { _, uri ->  }
+        randomWikipedia.fetchWithAction { _, _ ->  }
 
         coVerify (atLeast = 1) { wikipediaApi.invoke() }
         coVerify (atLeast = 1) { urlDecider.invoke() }
