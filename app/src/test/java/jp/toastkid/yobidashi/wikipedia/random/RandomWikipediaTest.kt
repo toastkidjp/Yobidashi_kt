@@ -18,9 +18,9 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import jp.toastkid.yobidashi.wikipedia.UrlDecider
 import jp.toastkid.api.wikipedia.WikipediaApi
 import jp.toastkid.api.wikipedia.model.Article
+import jp.toastkid.yobidashi.wikipedia.UrlDecider
 import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
@@ -65,7 +65,7 @@ class RandomWikipediaTest {
 
     @Test
     fun testFetchWithAction() {
-        randomWikipedia.fetchWithAction { s, uri ->  }
+        randomWikipedia.fetchWithAction { _, uri ->  }
 
         coVerify (atLeast = 1) { wikipediaApi.invoke() }
         coVerify (atLeast = 1) { urlDecider.invoke() }
