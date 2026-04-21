@@ -55,7 +55,7 @@ class RandomWikipediaTest {
                 .answers { "https://${Locale.getDefault().language}.wikipedia.org/" }
 
         mockkStatic(Uri::class)
-        every { Uri.parse(any()) }.answers { mockk() }
+        every { Uri.parse(any()) } returns mockk()
     }
 
     @After
