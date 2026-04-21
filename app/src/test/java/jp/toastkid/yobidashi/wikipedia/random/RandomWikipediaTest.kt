@@ -51,8 +51,7 @@ class RandomWikipediaTest {
         coEvery { wikipediaApi.invoke() }
                 .answers { arrayOf(Article(1L, 0, "test")) }
 
-        coEvery { urlDecider.invoke() }
-                .answers { "https://${Locale.getDefault().language}.wikipedia.org/" }
+        coEvery { urlDecider.invoke() } returns "https://${Locale.getDefault().language}.wikipedia.org/"
 
         mockkStatic(Uri::class)
         every { Uri.parse(any()) } returns mockk()
