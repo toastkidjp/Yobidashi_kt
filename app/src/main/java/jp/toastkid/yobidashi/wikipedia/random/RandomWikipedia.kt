@@ -42,8 +42,6 @@ class RandomWikipedia(
 
     companion object {
 
-        private const val KEY_EXTRA_RANDOM_WIKIPEDIA = "random_wikipedia"
-
         fun shouldUse(intent: Intent?) =
             intent?.getBooleanExtra("random_wikipedia", false) == true
 
