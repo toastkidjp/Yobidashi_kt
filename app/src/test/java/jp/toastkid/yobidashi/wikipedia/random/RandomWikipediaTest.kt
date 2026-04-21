@@ -48,8 +48,7 @@ class RandomWikipediaTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        coEvery { wikipediaApi.invoke() }
-                .answers { arrayOf(Article(1L, 0, "test")) }
+        coEvery { wikipediaApi.invoke() } returns arrayOf(Article(1L, 0, "test"))
 
         coEvery { urlDecider.invoke() } returns "https://${Locale.getDefault().language}.wikipedia.org/"
 
