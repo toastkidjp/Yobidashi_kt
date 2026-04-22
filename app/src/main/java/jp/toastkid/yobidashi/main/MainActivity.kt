@@ -46,7 +46,6 @@ class MainActivity : ComponentActivity() {
         handleIntent(intent)
     }
 
-    // Activity が既に起動している状態で別の Intent を受け取った場合
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleIntent(intent)
