@@ -67,7 +67,6 @@ class MainActivity : ComponentActivity() {
             }
 
             "jp.toastkid.yobidashi.search", Intent.ACTION_ASSIST -> {
-                // 必要に応じてクエリなどを URL に変換
                 intent.getStringExtra(SearchManager.QUERY)?.let { "https://www.google.com/search?q=$it" }
             }
 
