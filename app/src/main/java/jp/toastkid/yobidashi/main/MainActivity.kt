@@ -67,7 +67,8 @@ class MainActivity : ComponentActivity() {
             }
 
             "jp.toastkid.yobidashi.search", Intent.ACTION_ASSIST -> {
-                intent.getStringExtra(SearchManager.QUERY)?.let { "https://www.google.com/search?q=$it" }
+                intent.getStringExtra(SearchManager.QUERY)
+                    ?.let { "https://www.google.com/search?q=$it" }
             }
 
             else -> null
