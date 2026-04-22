@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        // 起動時の Intent を処理
         handleIntent(intent)
     }
 
