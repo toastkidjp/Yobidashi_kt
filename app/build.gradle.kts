@@ -13,7 +13,6 @@ plugins {
     alias(libraries.plugins.composeCompiler)
 }
 
-// TODO apply(from = "../jacoco.gradle.kts")
 // TODO apply(from = "../detekt.gradle.kts")
 
 android {
