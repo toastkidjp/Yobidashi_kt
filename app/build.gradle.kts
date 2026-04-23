@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId = "jp.toastkid.yobidashi"
-        minSdk = BuildTool.minSdk
+        minSdk = 24
         targetSdk = 36
 
         versionCode = Version.code
