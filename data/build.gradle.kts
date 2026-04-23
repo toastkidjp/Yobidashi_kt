@@ -19,10 +19,6 @@ android {
 
     compileSdkVersion(BuildTool.compileSdk)
 
-    buildTypes {
-        release {
-        }
-    }
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
