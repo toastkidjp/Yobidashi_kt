@@ -13,6 +13,6 @@ object Version {
 
     const val code = (MAJOR * 1_000_000) + (MIDDLE * 10_000) + MINOR
 
-    val name = "${MAJOR}.${MIDDLE}.${MINOR}"
+    const val name = "${MAJOR}.${MIDDLE}.${MINOR}"
 
 }
