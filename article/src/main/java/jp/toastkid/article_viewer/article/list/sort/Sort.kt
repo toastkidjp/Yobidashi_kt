@@ -17,7 +17,7 @@ import jp.toastkid.article_viewer.article.list.SearchResult
 enum class Sort(private val sort: (ArticleRepository) -> PagingSource<Int, SearchResult>) {
 
     LAST_MODIFIED({ it.orderByLastModified() }),
-    NAME({ it.orderByName() }),
+    NAME(ArticleRepository::orderByName),
     LENGTH({ it.orderByLength() });
 
     operator fun invoke(repository: ArticleRepository) = sort(repository)
@@ -25,7 +25,7 @@ enum class Sort(private val sort: (ArticleRepository) -> PagingSource<Int, Searc
     companion object {
 
         fun titles(): Array<String> {
-            return entries.map { it.name }.toTypedArray()
+            return entries.map(Sort::name).toTypedArray()
         }
 
         fun findCurrentIndex(name: String): Int {
