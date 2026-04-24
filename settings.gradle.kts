@@ -29,7 +29,7 @@ dependencyResolutionManagement {
             library("coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android").versionRef("coroutines")
             library("coreKtx", "androidx.core", "core-ktx").version("1.16.0")
             library("activityCompose", "androidx.activity", "activity-compose").version("1.13.0")
-            library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.6.0")
+            library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.11.0")
             library("workManager", "androidx.work", "work-runtime").version("2.10.0")
             library("jsoup", "org.jsoup", "jsoup").version("1.22.1")
             library("pagingCompose", "androidx.paging", "paging-compose").version("3.3.4")
