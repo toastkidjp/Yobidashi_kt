@@ -194,7 +194,12 @@ fun ArticleListUi() {
 private fun AppBarContent(viewModel: ArticleListViewModel) {
     val activityContext = LocalContext.current as? ComponentActivity ?: return
     val contentViewModel = remember { ViewModelProvider(activityContext).get<ContentViewModel>() }
-    val cursorColor = remember { Color(PreferenceApplier(activityContext).editorCursorColor(Color(0xFFE0E0E0).toArgb())) }
+    val cursorColor = remember {
+        Color(
+            PreferenceApplier(activityContext)
+                .editorCursorColor(Color(0xFFE0E0E0).toArgb())
+        )
+    }
 
     Row {
         Column(Modifier.weight(1f)) {
