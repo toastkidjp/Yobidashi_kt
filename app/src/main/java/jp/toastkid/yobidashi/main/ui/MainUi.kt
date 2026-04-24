@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -129,7 +130,7 @@ import jp.toastkid.yobidashi.tab.tab_list.view.TabListUi
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 internal fun Content() {
-    val activity = LocalContext.current as? ComponentActivity ?: return
+    val activity = LocalActivity.current as? ComponentActivity ?: return
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
