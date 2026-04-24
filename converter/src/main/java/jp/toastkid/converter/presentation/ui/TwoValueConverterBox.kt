@@ -106,9 +106,7 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverter) {
                             }
 
                             unixTimeConverterService.secondInputAction(it.first.toString())
-                                ?.let { newValue ->
-                                    firstInput.setTextAndPlaceCursorAtEnd(newValue)
-                                }
+                                ?.let(firstInput::setTextAndPlaceCursorAtEnd)
                         }
                 }
             }
