@@ -18,7 +18,7 @@ enum class Sort(private val sort: (ArticleRepository) -> PagingSource<Int, Searc
 
     LAST_MODIFIED({ it.orderByLastModified() }),
     NAME(ArticleRepository::orderByName),
-    LENGTH({ it.orderByLength() });
+    LENGTH(ArticleRepository::orderByLength);
 
     operator fun invoke(repository: ArticleRepository) = sort(repository)
 
