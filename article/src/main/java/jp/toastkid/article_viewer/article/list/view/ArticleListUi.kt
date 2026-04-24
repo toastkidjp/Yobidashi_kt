@@ -16,6 +16,7 @@ import android.content.Intent
 import android.os.Build
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -192,7 +193,7 @@ fun ArticleListUi() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(viewModel: ArticleListViewModel) {
-    val activityContext = LocalContext.current as? ComponentActivity ?: return
+    val activityContext = LocalActivity.current as? ComponentActivity ?: return
     val contentViewModel = remember { ViewModelProvider(activityContext).get<ContentViewModel>() }
     val cursorColor = remember {
         Color(
