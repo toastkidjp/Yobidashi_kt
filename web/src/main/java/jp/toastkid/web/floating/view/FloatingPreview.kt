@@ -11,6 +11,7 @@ package jp.toastkid.web.floating.view
 import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -50,7 +51,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FloatingPreviewUi(uri: Uri) {
-    val context = LocalContext.current as? ComponentActivity ?: return
+    val context = LocalActivity.current as? ComponentActivity ?: return
 
     val viewModel = remember { FloatingPreviewViewModel() }
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
