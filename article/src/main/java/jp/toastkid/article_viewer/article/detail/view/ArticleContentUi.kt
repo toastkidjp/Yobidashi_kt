@@ -9,6 +9,7 @@
 package jp.toastkid.article_viewer.article.detail.view
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -60,7 +61,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun ArticleContentUi(title: String, modifier: Modifier) {
-    val context = LocalContext.current as? ComponentActivity ?: return
+    val context = LocalActivity.current as? ComponentActivity ?: return
     val viewModel = remember { ArticleContentViewModel() }
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
