@@ -11,6 +11,7 @@ package jp.toastkid.web.archive.view
 import android.net.Uri
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -52,7 +53,7 @@ import java.util.Locale
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArchiveListUi() {
-    val activityContext = LocalContext.current as? ComponentActivity ?: return
+    val activityContext = LocalActivity.current as? ComponentActivity ?: return
     val fullItems = remember { Archive.makeNew(activityContext).listFiles() }
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
