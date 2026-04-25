@@ -14,6 +14,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -71,7 +72,7 @@ import java.util.concurrent.atomic.AtomicReference
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MusicListUi() {
-    val activity = LocalContext.current as? ComponentActivity ?: return
+    val activity = LocalActivity.current as? ComponentActivity ?: return
 
     val mediaPlayerPopupViewModel = remember { MediaPlayerPopupViewModel() }
 
