@@ -11,6 +11,7 @@ package jp.toastkid.web.history.view
 import android.net.Uri
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
@@ -60,7 +61,7 @@ import java.io.File
 
 @Composable
 fun ViewHistoryListUi() {
-    val context = LocalContext.current as? ComponentActivity ?: return
+    val context = LocalActivity.current as? ComponentActivity ?: return
 
     val viewHistoryRepository = remember { RepositoryFactory().viewHistoryRepository(context) }
     val fullItems = remember { mutableListOf<ViewHistory>() }
