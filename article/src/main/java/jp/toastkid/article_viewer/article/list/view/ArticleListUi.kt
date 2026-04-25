@@ -95,7 +95,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun ArticleListUi() {
-    val context = LocalContext.current as? ComponentActivity ?: return
+    val context = LocalActivity.current as? ComponentActivity ?: return
 
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
