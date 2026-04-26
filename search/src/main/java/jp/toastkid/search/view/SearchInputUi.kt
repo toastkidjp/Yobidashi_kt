@@ -14,6 +14,7 @@ import android.content.Context
 import android.speech.RecognizerIntent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -82,7 +83,7 @@ fun SearchInputUi(
     currentTitle: String? = null,
     currentUrl: String? = null
 ) {
-    val context = LocalContext.current as? ComponentActivity ?: return
+    val context = LocalActivity.current as? ComponentActivity ?: return
 
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
