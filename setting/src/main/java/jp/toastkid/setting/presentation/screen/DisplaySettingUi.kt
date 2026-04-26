@@ -12,6 +12,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -58,7 +59,7 @@ import java.io.File
 
 @Composable
 internal fun DisplaySettingUi() {
-    val activityContext = LocalContext.current as? ComponentActivity ?: return
+    val activityContext = LocalActivity.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
     val files = remember { mutableStateListOf<File>().also { it.addAll(loadFileChunk(FilesDir(activityContext, BACKGROUND_DIR))) } }
