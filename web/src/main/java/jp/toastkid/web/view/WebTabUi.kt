@@ -51,7 +51,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -281,7 +280,7 @@ private fun AppBarContent(
     webViewContainer: WebViewContainer,
     openReaderMode: (String) -> Unit
 ) {
-    val activity = LocalContext.current as? ComponentActivity ?: return
+    val activity = LocalActivity.current as? ComponentActivity ?: return
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
