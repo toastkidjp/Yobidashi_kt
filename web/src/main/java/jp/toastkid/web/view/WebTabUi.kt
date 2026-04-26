@@ -119,19 +119,18 @@ fun WebTabUi(uri: Uri, tabId: String) {
             SwipeRefreshNestedScrollConnection(
                 refreshState,
                 coroutineScope,
-                refreshTriggerPx,
-                {
-                    if (browserViewModel.isRefreshing()) {
-                        return@SwipeRefreshNestedScrollConnection
-                    }
-
-                    coroutineScope.launch {
-                        browserViewModel.setRefreshing()
-                        contentViewModel.showAppBar(coroutineScope)
-                        webViewContainer.reload()
-                    }
+                refreshTriggerPx
+            ) {
+                if (browserViewModel.isRefreshing()) {
+                    return@SwipeRefreshNestedScrollConnection
                 }
-            )
+
+                coroutineScope.launch {
+                    browserViewModel.setRefreshing()
+                    contentViewModel.showAppBar(coroutineScope)
+                    webViewContainer.reload()
+                }
+            }
         )
     ) {
         AndroidView(
