@@ -10,6 +10,7 @@ package jp.toastkid.loan.view
 
 import android.app.Activity
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -54,7 +55,7 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LoanCalculatorUi() {
-    val context = LocalContext.current as Activity
+    val context = LocalActivity.current as Activity
 
     val viewModel = remember { LoanCalculatorViewModel() }
 
