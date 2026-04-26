@@ -9,6 +9,7 @@
 package jp.toastkid.search.favorite
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -62,7 +63,7 @@ import java.text.MessageFormat
 
 @Composable
 fun FavoriteSearchListUi() {
-    val activityContext = LocalContext.current as? ComponentActivity ?: return
+    val activityContext = LocalActivity.current as? ComponentActivity ?: return
 
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
