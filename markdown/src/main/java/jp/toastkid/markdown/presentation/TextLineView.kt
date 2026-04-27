@@ -15,11 +15,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.markdown.domain.service.LinkBehaviorService
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 @Composable
 fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
-    val context = LocalContext.current as? ViewModelStoreOwner ?: return
+    val context = LocalViewModelStoreOwner.current as? ViewModelStoreOwner ?: return
 
     val viewModel = remember {
         val linkBehaviorService = LinkBehaviorService(
