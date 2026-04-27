@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.main.ui
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +45,7 @@ internal fun MainMenu(
     showAudioPlayer: () -> Unit,
     hideMenu: () -> Unit
 ) {
-    val activity = LocalContext.current as? ComponentActivity ?: return
+    val activity = LocalActivity.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
     val menuCount = remember { Menu.entries.size }
     val tooBigCount = remember { Menu.entries.size * 10 }
