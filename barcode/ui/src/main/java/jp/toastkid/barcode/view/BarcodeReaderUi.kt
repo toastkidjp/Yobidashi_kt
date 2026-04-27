@@ -12,6 +12,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.compose.CameraXViewfinder
@@ -49,7 +50,7 @@ import jp.toastkid.lib.intent.ShareIntentFactory
 
 @Composable
 fun BarcodeReaderUi() {
-    val context = LocalContext.current as? Activity ?: return
+    val context = LocalActivity.current as? Activity ?: return
     val viewModel = remember { BarcodeReaderViewModel() }
 
     val onResume = remember { mutableStateOf(isGranted(context)) }
