@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.tab.tab_list.view
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
 import androidx.compose.animation.AnimatedVisibility
@@ -57,7 +58,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -91,7 +91,7 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
-    val context = LocalContext.current as? ComponentActivity ?: return
+    val context = LocalActivity.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val coroutineScope = rememberCoroutineScope()
 
