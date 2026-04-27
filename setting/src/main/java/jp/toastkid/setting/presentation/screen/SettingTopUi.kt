@@ -8,7 +8,6 @@
 
 package jp.toastkid.setting.presentation.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -30,12 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.search.view.setting.SearchSettingUi
@@ -44,7 +43,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SettingTopUi() {
-    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
+    val contentViewModel = (LocalViewModelStoreOwner.current as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, it)
     }
 
