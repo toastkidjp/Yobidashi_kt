@@ -80,7 +80,6 @@ internal fun NavigationalContent(
         }
         tabComposable("tab/article/content/{title}") {
             val title = it?.getString("title") ?: return@tabComposable
-            val view = LocalView.current
             ArticleContentUi(title, Modifier)
         }
         tabComposable("tab/editor/current") {
