@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.main.ui
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,7 +25,7 @@ internal fun MainBackHandler(
     currentTabIsWeb: () -> Boolean,
     tabsIsEmpty: () -> Boolean
 ) {
-    val activity = LocalContext.current as? ComponentActivity ?: return
+    val activity = LocalActivity.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     BackHandler(true) {
