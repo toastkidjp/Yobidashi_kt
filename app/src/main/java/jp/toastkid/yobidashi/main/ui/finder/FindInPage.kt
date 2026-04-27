@@ -42,8 +42,8 @@ import jp.toastkid.yobidashi.R
 
 @Composable
 internal fun FindInPage() {
-    val activity = LocalViewModelStoreOwner.current ?: return
-    val contentViewModel = viewModel(ContentViewModel::class.java, activity)
+    val viewModelStoreOwner = LocalViewModelStoreOwner.current ?: return
+    val contentViewModel = viewModel(ContentViewModel::class.java, viewModelStoreOwner)
     val pageSearcherInput = remember { mutableStateOf("") }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
