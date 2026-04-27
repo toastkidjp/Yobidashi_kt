@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
@@ -73,7 +74,7 @@ fun NumberPlaceUi() {
         }
     })
 
-    val contentViewModel = (LocalContext.current as? ViewModelStoreOwner)?.let {
+    val contentViewModel = (LocalViewModelStoreOwner.current as? ViewModelStoreOwner)?.let {
         viewModel(ContentViewModel::class.java, it)
     }
 
