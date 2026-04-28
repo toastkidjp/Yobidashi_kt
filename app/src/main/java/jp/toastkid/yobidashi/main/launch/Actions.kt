@@ -7,6 +7,3 @@
  */
 package jp.toastkid.yobidashi.main.launch
 
-import jp.toastkid.yobidashi.BuildConfig
-
-const val SETTING = "${BuildConfig.APPLICATION_ID}.setting"
