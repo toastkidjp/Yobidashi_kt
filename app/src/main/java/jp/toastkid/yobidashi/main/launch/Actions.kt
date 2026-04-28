@@ -9,5 +9,4 @@ package jp.toastkid.yobidashi.main.launch
 
 import jp.toastkid.yobidashi.BuildConfig
 
-const val SEARCH = "${BuildConfig.APPLICATION_ID}.search"
 const val SETTING = "${BuildConfig.APPLICATION_ID}.setting"
