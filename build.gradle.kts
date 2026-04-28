@@ -25,7 +25,6 @@ buildscript {
 }
 
 plugins {
-    //id("io.gitlab.arturbosch.detekt").version("1.19.0")
     id("com.google.devtools.ksp").version("2.3.6").apply(false)
     id("org.jetbrains.kotlinx.kover") version libraries.versions.kover
     kotlin("android") apply false
