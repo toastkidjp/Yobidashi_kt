@@ -137,7 +137,7 @@ fun readCoverages(): MutableMap<String, String> {
         }
         if (line.contains("<span class=\"absValue\">")) {
             buffer.append(" ").append(lines[i + 1].trim())
-            map.put("${keys.get(map.size)}", buffer.toString())
+            map.put(keys.get(map.size), buffer.toString())
             buffer.setLength(0);
             continue
         }
