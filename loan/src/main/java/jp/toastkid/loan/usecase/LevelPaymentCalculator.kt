@@ -14,7 +14,7 @@ import jp.toastkid.loan.model.PaymentDetail
 import kotlin.math.max
 import kotlin.math.pow
 
-class LoanCalculator {
+class LevelPaymentCalculator {
 
     operator fun invoke(factor: Factor) : LoanPayment {
         val paymentCount = (factor.term * 12).toDouble()

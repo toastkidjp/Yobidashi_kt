@@ -15,10 +15,10 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class LoanCalculatorTest {
+class LevelPaymentCalculatorTest {
 
     @InjectMockKs
-    private lateinit var calculator: LoanCalculator
+    private lateinit var calculator: LevelPaymentCalculator
 
     @Before
     fun setUp() {

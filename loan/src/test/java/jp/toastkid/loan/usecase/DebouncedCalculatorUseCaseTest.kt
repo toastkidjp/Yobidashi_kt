@@ -45,7 +45,7 @@ class DebouncedCalculatorUseCaseTest {
     private val debounceMillis = 0L
 
     @MockK
-    private lateinit var calculator: LoanCalculator
+    private lateinit var calculator: LevelPaymentCalculator
 
     @Suppress("unused")
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
