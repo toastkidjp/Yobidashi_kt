@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,7 +42,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SettingTopUi() {
-    val contentViewModel = (LocalViewModelStoreOwner.current as? ViewModelStoreOwner)?.let {
+    val contentViewModel = LocalViewModelStoreOwner.current?.let {
         viewModel(ContentViewModel::class.java, it)
     }
 
