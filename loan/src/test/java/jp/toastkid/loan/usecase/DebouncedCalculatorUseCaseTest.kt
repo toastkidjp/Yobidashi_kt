@@ -11,22 +11,28 @@ package jp.toastkid.loan.usecase
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
-import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.loan.model.Factor
 import jp.toastkid.loan.model.LoanPayment
+import jp.toastkid.loan.model.calculator.LoanPaymentCalculator
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class DebouncedCalculatorUseCaseTest {
 
@@ -34,6 +40,8 @@ class DebouncedCalculatorUseCaseTest {
     private lateinit var debouncedCalculatorUseCase: DebouncedCalculatorUseCase
 
     private val inputChannel: Channel<String> = Channel()
+
+    private val calculatorFlow = MutableStateFlow<LoanPaymentCalculator>(mockk())
 
     @MockK
     private lateinit var currentFactorProvider: () -> Factor
@@ -73,13 +81,22 @@ class DebouncedCalculatorUseCaseTest {
     fun testInvoke() {
         debouncedCalculatorUseCase.invoke()
 
-        CoroutineScope(Dispatchers.Unconfined).launch {
-            inputChannel.send("test")
-
-            coVerify { currentFactorProvider() }
-            coVerify { calculator.invoke(any()) }
-            coVerify { onResult(any()) }
+        val countDownLatch = CountDownLatch(1)
+        every { onResult(any()) } answers {
+            countDownLatch.countDown()
         }
+
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            calculatorFlow.value = (calculator)
+            inputChannel.send("test")
+        }
+
+        countDownLatch.await(5, TimeUnit.SECONDS)
+        job.cancel()
+
+        verify { currentFactorProvider() }
+        verify { calculator.invoke(any()) }
+        verify { onResult(any()) }
     }
 
 }
