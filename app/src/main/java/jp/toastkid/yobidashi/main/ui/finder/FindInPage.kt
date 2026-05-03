@@ -35,15 +35,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
 
 @Composable
 internal fun FindInPage() {
-    val viewModelStoreOwner = LocalViewModelStoreOwner.current ?: return
-    val contentViewModel = viewModel(ContentViewModel::class.java, viewModelStoreOwner)
+    val contentViewModel = viewModel(ContentViewModel::class.java)
     val pageSearcherInput = remember { mutableStateOf("") }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
