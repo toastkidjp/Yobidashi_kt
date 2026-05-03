@@ -14,10 +14,14 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.loan.model.Factor
 import jp.toastkid.loan.model.PaymentDetail
+import jp.toastkid.loan.model.calculator.LoanPaymentCalculator
+import jp.toastkid.loan.model.calculator.PrincipalEqualPaymentCalculator
 import jp.toastkid.loan.usecase.DebouncedCalculatorUseCase
+import jp.toastkid.loan.usecase.LevelPaymentCalculator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
@@ -92,6 +96,28 @@ class LoanCalculatorViewModel {
     private fun extractDouble(editText: String) =
         editText.replace(",", "").toDoubleOrNull() ?: 0.0
 
+    private val levelPaymentCalculator = LevelPaymentCalculator()
+
+    private val principalEqualPaymentCalculator = PrincipalEqualPaymentCalculator()
+
+    private val calculatorFlow = MutableStateFlow<LoanPaymentCalculator>(levelPaymentCalculator)
+
+    fun isSelectedLevel(): Boolean {
+        return calculatorFlow.value === levelPaymentCalculator
+    }
+
+    fun isSelectedPrincipal(): Boolean {
+        return calculatorFlow.value === principalEqualPaymentCalculator
+    }
+
+    fun selectLevel() {
+        calculatorFlow.value = (levelPaymentCalculator)
+    }
+
+    fun selectPrincipal() {
+        calculatorFlow.value = (principalEqualPaymentCalculator)
+    }
+
     fun launch(stringFormatter: (Long, Long) -> String) {
         DebouncedCalculatorUseCase(
             inputChannel,
@@ -113,7 +139,8 @@ class LoanCalculatorViewModel {
 
                 scheduleState.clear()
                 scheduleState.addAll(it.paymentSchedule)
-            }
+            },
+            calculatorFlow
         ).invoke()
     }
 
