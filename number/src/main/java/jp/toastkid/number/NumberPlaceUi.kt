@@ -42,7 +42,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
@@ -73,9 +72,7 @@ fun NumberPlaceUi() {
         }
     })
 
-    val contentViewModel = LocalViewModelStoreOwner.current?.let {
-        viewModel(ContentViewModel::class.java, it)
-    }
+    val contentViewModel = viewModel(ContentViewModel::class.java)
 
     Surface(
         shadowElevation = 4.dp,
