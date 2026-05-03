@@ -8,7 +8,6 @@
 
 package jp.toastkid.loan.view
 
-import android.R.attr.contentDescription
 import android.app.Activity
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
@@ -28,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -41,7 +41,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -72,6 +71,9 @@ fun LoanCalculatorUi() {
                         RadioButton(
                             viewModel.isSelectedLevel(),
                             onClick = { viewModel.selectLevel() },
+                            colors = RadioButtonDefaults.colors(
+                                selectedColor = MaterialTheme.colorScheme.secondary
+                            )
                         )
 
                         Text("Level payment")
@@ -79,6 +81,9 @@ fun LoanCalculatorUi() {
                         RadioButton(
                             viewModel.isSelectedPrincipal(),
                             onClick = { viewModel.selectPrincipal() },
+                            colors = RadioButtonDefaults.colors(
+                                selectedColor = MaterialTheme.colorScheme.secondary
+                            )
                         )
 
                         Text("Principal equal payment")
