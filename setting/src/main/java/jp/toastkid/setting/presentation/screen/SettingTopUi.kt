@@ -33,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.search.view.setting.SearchSettingUi
@@ -42,9 +41,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SettingTopUi() {
-    val contentViewModel = LocalViewModelStoreOwner.current?.let {
-        viewModel(ContentViewModel::class.java, it)
-    }
+    val contentViewModel = viewModel(ContentViewModel::class.java)
 
     val pagerState = rememberPagerState { 8 }
 
