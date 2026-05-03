@@ -11,12 +11,13 @@ package jp.toastkid.loan.usecase
 import jp.toastkid.loan.model.Factor
 import jp.toastkid.loan.model.LoanPayment
 import jp.toastkid.loan.model.PaymentDetail
+import jp.toastkid.loan.model.calculator.LoanPaymentCalculator
 import kotlin.math.max
 import kotlin.math.pow
 
-class LevelPaymentCalculator {
+class LevelPaymentCalculator : LoanPaymentCalculator {
 
-    operator fun invoke(factor: Factor) : LoanPayment {
+    override operator fun invoke(factor: Factor) : LoanPayment {
         val paymentCount = (factor.term * 12).toDouble()
         val convertedRate = factor.interestRate / 100.0
         val actualTotalAmount = factor.amount - factor.downPayment
