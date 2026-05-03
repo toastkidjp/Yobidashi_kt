@@ -8,6 +8,8 @@
 
 package jp.toastkid.setting.presentation.screen
 
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -41,7 +43,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SettingTopUi() {
-    val contentViewModel = viewModel(ContentViewModel::class.java)
+    val activity = LocalActivity.current as? ComponentActivity ?: return
+    val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     val pagerState = rememberPagerState { 8 }
 
