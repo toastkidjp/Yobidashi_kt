@@ -3,6 +3,7 @@ package jp.toastkid.loan.model.calculator
 import jp.toastkid.loan.model.Factor
 import jp.toastkid.loan.model.LoanPayment
 import jp.toastkid.loan.model.PaymentDetail
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.roundToLong
 
 class PrincipalEqualPaymentCalculator : LoanPaymentCalculator {
@@ -16,25 +17,29 @@ class PrincipalEqualPaymentCalculator : LoanPaymentCalculator {
 
         val schedule = mutableListOf<PaymentDetail>()
         var remainingbalance = loanAmount.toDouble()
+        val firstPayment = AtomicLong(-1)
 
         for (i in 1..totalMonths) {
             val interest = remainingbalance * monthlyInterestRate
 
             val totalAmount = (monthlyPrincipal + interest + factor.managementFee + factor.renovationReserves).roundToLong()
 
+            remainingbalance -= monthlyPrincipal
+            if (firstPayment.get() == -1L) {
+                firstPayment.set(totalAmount)
+            }
+
             schedule.add(
                 PaymentDetail(
-                    principal = monthlyPrincipal,
+                    principal = totalAmount.toDouble(),
                     interest = interest,
-                    amount = totalAmount
+                    amount = remainingbalance.toLong()
                 )
             )
-
-            remainingbalance -= monthlyPrincipal
         }
 
         return LoanPayment(
-            monthlyPayment = schedule.firstOrNull()?.amount ?: -1L,
+            monthlyPayment = firstPayment.get(),
             paymentSchedule = schedule
         )
     }
