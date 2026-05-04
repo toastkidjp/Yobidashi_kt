@@ -9,6 +9,8 @@
 package jp.toastkid.number
 
 import android.content.Context
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -72,7 +74,8 @@ fun NumberPlaceUi() {
         }
     })
 
-    val contentViewModel = viewModel(ContentViewModel::class.java)
+    val activity = LocalActivity.current as? ComponentActivity ?: return
+    val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     Surface(
         shadowElevation = 4.dp,
