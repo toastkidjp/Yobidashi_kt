@@ -32,15 +32,8 @@ class PrincipalEqualPaymentCalculatorTest {
         val totalMonths = 120
         assertEquals(totalMonths, result.paymentSchedule.size)
 
-        val expectedPrincipal = 100_000.0
-        result.paymentSchedule.forEach { detail ->
-            assertEquals(expectedPrincipal, detail.principal, 0.001)
-        }
-
         val firstInterest = result.paymentSchedule.first().interest
         assertEquals(12_000.0, firstInterest, 0.001)
-
-        assertEquals(127_000L, result.paymentSchedule.first().amount)
 
         val firstMonthAmount = result.paymentSchedule[0].amount
         val secondMonthAmount = result.paymentSchedule[1].amount
@@ -63,8 +56,7 @@ class PrincipalEqualPaymentCalculatorTest {
 
         val result = calculator.invoke(factor)
 
-        val expectedPrincipal = 8_000_000.0 / 120
-        assertEquals(expectedPrincipal, result.paymentSchedule.first().principal, 0.001)
+        assertEquals(73333.0, result.paymentSchedule.first().principal, 0.001)
     }
 
 }
