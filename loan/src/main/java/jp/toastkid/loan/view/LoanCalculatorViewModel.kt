@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import jp.toastkid.loan.R
 import jp.toastkid.loan.model.Factor
 import jp.toastkid.loan.model.PaymentDetail
 import jp.toastkid.loan.model.calculator.LoanPaymentCalculator
@@ -142,6 +143,13 @@ class LoanCalculatorViewModel {
             },
             calculatorFlow
         ).invoke()
+    }
+
+    fun columnTitleId(): Int {
+        return if (calculatorFlow.value === levelPaymentCalculator)
+            R.string.title_column_principal
+        else
+            R.string.title_column_payment
     }
 
 }
