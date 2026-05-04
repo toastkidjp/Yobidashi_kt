@@ -31,7 +31,7 @@ dependencyResolutionManagement {
             library("activityCompose", "androidx.activity", "activity-compose").version("1.13.0")
             library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.11.0")
             library("workManager", "androidx.work", "work-runtime").version("2.10.0")
-            library("jsoup", "org.jsoup", "jsoup").version("1.22.1")
+            library("jsoup", "org.jsoup", "jsoup").version("1.22.2")
             library("pagingCompose", "androidx.paging", "paging-compose").version("3.4.2")
             library("coilCompose", "io.coil-kt.coil3", "coil-compose").versionRef("coilCompose")
             library("coilGif", "io.coil-kt.coil3", "coil-gif").versionRef("coilCompose")
