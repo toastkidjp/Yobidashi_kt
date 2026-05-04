@@ -8,6 +8,8 @@
 
 package jp.toastkid.markdown.presentation
 
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
@@ -26,7 +28,8 @@ import java.util.concurrent.atomic.AtomicReference
 
 @Composable
 fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
-    val contentViewModel = viewModel(ContentViewModel::class.java)
+    val activity = LocalActivity.current as? ComponentActivity ?: return
+    val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
     val viewModel = remember {
         val linkBehaviorService = LinkBehaviorService(
