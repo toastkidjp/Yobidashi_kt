@@ -50,6 +50,7 @@ import jp.toastkid.data.repository.factory.RepositoryFactory
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.clip.Clipboard
 import jp.toastkid.lib.intent.ShareIntentFactory
+import jp.toastkid.navigation.Screen
 import jp.toastkid.search.R
 import jp.toastkid.search.url_suggestion.ItemDeletionUseCase
 import jp.toastkid.search.viewmodel.SearchUiViewModel
@@ -94,7 +95,7 @@ internal fun SearchContentsUi(
 
         if (viewModel.urlItems.isNotEmpty()) {
             HeaderWithLink(jp.toastkid.lib.R.string.title_view_history, R.string.link_open_history) {
-                contentViewModel.nextRoute("web/history/list")
+                contentViewModel.nextRoute(Screen.WebHistory)
             }
 
             viewModel.urlItems.forEach { urlItem ->
