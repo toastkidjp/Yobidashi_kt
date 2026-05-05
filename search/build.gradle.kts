@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":lib"))
     implementation(project(":ui"))
+    implementation(project(":navigation"))
 
     implementation(libraries.composeMaterial3)
     implementation(libraries.activityCompose)
