@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
@@ -57,6 +58,7 @@ import jp.toastkid.lib.viewmodel.event.web.OpenNewWindowEvent
 import jp.toastkid.lib.viewmodel.event.web.OpenUrlEvent
 import jp.toastkid.lib.viewmodel.event.web.PreviewEvent
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
+import jp.toastkid.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -65,6 +67,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.max
 
 /**
  * @author toastkidjp
@@ -189,7 +192,7 @@ class ContentViewModel : ViewModel() {
         floatingPreviewUrl.value = url
     }
 
-    fun nextRoute(route: String) {
+    fun nextRoute(route: Screen) {
         viewModelScope.launch {
             _event.emit(NavigationEvent(route))
         }
@@ -534,6 +537,27 @@ class ContentViewModel : ViewModel() {
 
     fun setLastCalendarPage(page: Int) {
         lastCalendarPage.set(page)
+    }
+
+    private val navigationStack =
+        mutableStateListOf<Screen>(Screen.Empty)
+
+    fun navigationStack() = navigationStack
+
+    fun popBackStack() {
+        if (navigationStack.isEmpty()) {
+            return
+        }
+        navigationStack.removeAt(max(0, navigationStack.size - 1))
+    }
+
+    fun navigateTo(screen: Screen) {
+        if ((navigationStack?.isNotEmpty() == true && navigationStack?.last()?.isTab == false)
+            || screen.isTab) {
+            popBackStack()
+        }
+
+        navigationStack?.add(screen)
     }
 
 }
