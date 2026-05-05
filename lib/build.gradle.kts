@@ -44,6 +44,8 @@ tasks.withType<GenerateBuildConfig> {
 }
 
 dependencies {
+    implementation(project(":navigation"))
+
     implementation(libraries.coroutines)
     implementation(libraries.coreKtx)
     implementation(libraries.lifecycleViewModelKtx)
