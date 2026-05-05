@@ -116,6 +116,7 @@ dependencies {
     implementation(project(":world"))
     implementation(project(":sensor"))
     implementation(project(":setting"))
+    implementation(project(":navigation"))
 
     implementation(libraries.workManager)
 
