@@ -42,8 +42,8 @@ dependencies {
     implementation(libraries.composeMaterial3)
     implementation(libraries.lifecycleViewModelCompose)
     implementation(libraries.navigationCompose)
-    implementation(libraries.navigationRuntimeKts)
     api(libraries.navigationCompose)
+    api(libraries.lifecycleViewModelCompose)
 
     testImplementation("junit:junit:4.12")
 }
