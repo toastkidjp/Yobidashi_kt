@@ -39,6 +39,7 @@ dependencies {
     implementation(project(path = ":ui"))
     implementation(project(path = ":api"))
     implementation(project(path = ":barcode:library"))
+    implementation(project(":navigation"))
     implementation(libraries.composeMaterial3)
     implementation(libraries.activityCompose)
     implementation(libraries.webkit)
