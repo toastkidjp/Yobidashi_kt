@@ -1,8 +1,8 @@
+/*
+ * Copyright (c) 2026 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
 package jp.toastkid.ui.compose.local
-
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.navigation.NavHostController
-
-val LocalNavController = staticCompositionLocalOf<NavHostController> {
-    error("No NavController provided")
-}
