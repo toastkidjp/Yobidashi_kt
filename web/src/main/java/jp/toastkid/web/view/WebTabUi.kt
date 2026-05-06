@@ -65,6 +65,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.navigation.Screen
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.web.FaviconApplier
@@ -360,12 +361,12 @@ private fun AppBarContent(
             HeaderSubButton(
                 jp.toastkid.lib.R.drawable.ic_bookmark,
                 R.string.title_bookmark
-            ) { contentViewModel.nextRoute("web/bookmark/list") }
+            ) { contentViewModel.nextRoute(Screen.WebBookmark) }
 
             HeaderSubButton(
                 R.drawable.ic_history,
                 jp.toastkid.lib.R.string.title_view_history
-            ) { contentViewModel.nextRoute("web/history/list") }
+            ) { contentViewModel.nextRoute(Screen.WebHistory) }
 
             Box {
                 val open = remember { mutableStateOf(false) }
@@ -429,9 +430,7 @@ private fun AppBarContent(
                 modifier = Modifier
                     .height(32.dp)
                     .fillMaxWidth()
-                    .clickable {
-                        contentViewModel.webSearch()
-                    }
+                    .clickable(onClick = contentViewModel::webSearch)
             ) {
                 EfficientImage(
                     model = viewModel.icon(),
