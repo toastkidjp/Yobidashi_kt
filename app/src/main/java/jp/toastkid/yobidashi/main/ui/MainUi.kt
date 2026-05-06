@@ -33,14 +33,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -53,7 +52,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -67,8 +65,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import jp.toastkid.article_viewer.article.data.ArticleRepositoryFactory
 import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.display.effect.SnowRendererView
@@ -103,10 +99,10 @@ import jp.toastkid.lib.viewmodel.event.web.PreviewEvent
 import jp.toastkid.lib.viewmodel.event.web.WebSearchEvent
 import jp.toastkid.media.music.permission.MusicPlayerPermissions
 import jp.toastkid.media.music.view.MusicListUi
+import jp.toastkid.navigation.Screen
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.search.UrlFactory
-import jp.toastkid.ui.compose.local.LocalNavController
 import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.web.floating.view.FloatingPreviewUi
 import jp.toastkid.web.permission.DownloadPermissionRequestContract
@@ -144,7 +140,7 @@ internal fun Content() {
         )
     }
 
-    val navigationHostController = rememberNavController()
+    val navigationHostController = contentViewModel.navigationStack()
 
     val activityResultLauncher: ActivityResultLauncher<Intent> =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -243,22 +239,22 @@ internal fun Content() {
                     } else {
                         tabs.moveNextTab()
                     }
-                    replaceToCurrentTab(tabs, navigationHostController)
+                    replaceToCurrentTab(tabs, contentViewModel)
                 }
                 is OpenPdfEvent -> {
                     activityResultLauncher.launch(OpenDocumentIntentFactory()("application/pdf"))
                 }
                 is OpenEditorEvent -> {
                     tabs.openNewEditorTab()
-                    replaceToCurrentTab(tabs, navigationHostController)
+                    replaceToCurrentTab(tabs, contentViewModel)
                 }
                 is SnackbarEvent -> {
                     val message = it.message ?: it.messageId?.let(activity::getString) ?: return@collect
                     contentViewModel.showSnackbar(message, it)
                 }
                 is OpenWebSearchEvent -> {
-                    when (navigationHostController.currentDestination?.route) {
-                        "tab/web/current" -> {
+                    when (navigationHostController.last()) {
+                        is Screen.Web -> {
                             val currentTabWebView = GlobalWebViewPool.getLatest() ?: return@collect
                             val currentTitle = Uri.encode(currentTabWebView.title)
                             val currentUrl = Uri.encode(currentTabWebView.url)
@@ -266,13 +262,12 @@ internal fun Content() {
                                 SearchQueryExtractor().invoke(currentTabWebView.url)
                                     ?.replace("\n", "") ?: ""
                             )
-                            navigate(
-                                navigationHostController,
-                                "search/with/?query=$query&title=$currentTitle&url=$currentUrl"
+                            contentViewModel.navigateTo(
+                                Screen.Search(query, currentTitle, currentUrl)
                             )
                         }
                         else ->
-                            navigate(navigationHostController, "search/top")
+                            contentViewModel.navigateTo(Screen.SearchTop)
                     }
                 }
                 is OpenArticleEvent -> {
@@ -291,13 +286,13 @@ internal fun Content() {
                                 actionLabel = activity.getString(jp.toastkid.lib.R.string.open)
                             ) {
                                 tabs.replace(tab)
-                                replaceToCurrentTab(tabs, navigationHostController)
+                                replaceToCurrentTab(tabs, contentViewModel)
                             }
                         )
                         return@collect
                     }
 
-                    replaceToCurrentTab(tabs, navigationHostController)
+                    replaceToCurrentTab(tabs, contentViewModel)
                 }
                 is OpenDateArticleEvent -> {
                     DateSelectedActionUseCase(
@@ -307,17 +302,17 @@ internal fun Content() {
                 }
                 is OpenArticleListEvent -> {
                     tabs.openArticleList()
-                    replaceToCurrentTab(tabs, navigationHostController)
+                    replaceToCurrentTab(tabs, contentViewModel)
                 }
                 is OpenCalendarEvent -> {
                     tabs.openCalendar()
-                    replaceToCurrentTab(tabs, navigationHostController)
+                    replaceToCurrentTab(tabs, contentViewModel)
                 }
                 is NavigationEvent -> {
-                    navigate(navigationHostController, it.route)
+                    contentViewModel.navigateTo(it.route)
                 }
                 is ReplaceToCurrentTabContentEvent -> {
-                    replaceToCurrentTab(tabs, navigationHostController)
+                    replaceToCurrentTab(tabs, contentViewModel)
                 }
                 is RefreshContentEvent -> {
                     val preferenceApplier = PreferenceApplier(activity)
@@ -339,7 +334,7 @@ internal fun Content() {
                     contentViewModel.setBackgroundImagePath(preferenceApplier.backgroundImagePath)
                 }
                 is OpenNewTabEvent -> {
-                    openNewTab(PreferenceApplier(activity), tabs, navigationHostController)
+                    openNewTab(PreferenceApplier(activity), tabs, contentViewModel)
                 }
                 is SaveEditorTabEvent -> {
                     tabs.updateEditorTab(it)
@@ -364,7 +359,7 @@ internal fun Content() {
                         return@collect
                     }
                     tabs.openNewWebTab(urlString)
-                    replaceToCurrentTab(tabs, navigationHostController)
+                    replaceToCurrentTab(tabs, contentViewModel)
                 }
                 is PreviewEvent -> {
                     val uri = if (Urls.isValidUrl(it.text)) it.text.toUri() else
@@ -398,7 +393,7 @@ internal fun Content() {
                     message.sendToTarget()
                     GlobalWebViewPool.put(newTab.id(), webView)
 
-                    replaceToCurrentTab(tabs, navigationHostController)
+                    replaceToCurrentTab(tabs, contentViewModel)
                 }
                 is WebSearchEvent -> {
                     WebSearchResultTabOpenerUseCase(
@@ -452,116 +447,114 @@ internal fun Content() {
             modifier = Modifier.fillMaxSize()
         )
 
-        CompositionLocalProvider(LocalNavController provides navigationHostController) {
-            if (contentViewModel.showTabList()) {
-                TabListUi(tabs)
-            }
+        if (contentViewModel.showTabList()) {
+            TabListUi(tabs)
+        }
 
-            if (contentViewModel.showMusicListUi()) {
-                MusicListUi()
-            }
+        if (contentViewModel.showMusicListUi()) {
+            MusicListUi()
+        }
 
-            contentViewModel.floatingPreviewUri()?.let {
-                FloatingPreviewUi(it.toUri())
-            }
+        contentViewModel.floatingPreviewUri()?.let {
+            FloatingPreviewUi(it.toUri())
+        }
 
-            Scaffold(
-                containerColor = Color.Transparent,
-                bottomBar = {
-                    AppBar()
-                },
-                snackbarHost = {
-                    SnackbarHost(
-                        hostState = contentViewModel.snackbarHostState(),
-                        snackbar = {
-                            MainSnackbar(it) { contentViewModel.dismissSnackbar() }
-                        })
-                },
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = { openMenu.value = openMenu.value.not() },
-                        containerColor = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier
-                            .size(48.dp)
-                            .scale(contentViewModel.fabScale.value)
-                            .offset { contentViewModel.makeFabOffset() }
-                            .pointerInput(Unit) {
-                                detectDragGestures(
-                                    onDragEnd = {
-                                        PreferenceApplier(activity)
-                                            .setNewMenuFabPosition(
-                                                contentViewModel.menuFabOffsetX.value,
-                                                contentViewModel.menuFabOffsetY.value
-                                            )
-                                    },
-                                    onDrag = { change, dragAmount ->
-                                        change.consume()
-                                        contentViewModel.menuFabOffsetX.value += dragAmount.x
-                                        contentViewModel.menuFabOffsetY.value += dragAmount.y
-                                    }
-                                )
-                            }
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.ic_menu),
-                            stringResource(id = jp.toastkid.todo.R.string.menu),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .nestedScroll(nestedScrollConnection)
-                    .windowInsetsPadding(WindowInsets.safeDrawing)
-            ) { _ ->
-                Box {
-                    NavigationalContent(navigationHostController, tabs)
-
-                    if (contentViewModel.showSnowEffect()) {
-                        AndroidView(factory = { SnowRendererView(activity) })
-                    }
-
-                    MainBackHandler(
-                        {
-                            navigationHostController.currentBackStackEntry?.destination?.route
-                        },
-                        navigationHostController::popBackStack,
-                        tabs::closeCurrentTab,
-                        tabs::currentTabIsWebTab,
-                        tabs::isEmpty
-                    )
-                }
-
-                LaunchedEffect(key1 = "first_launch", block = {
-                    if (tabs.isEmpty()) {
-                        contentViewModel.openNewTab()
-                        return@LaunchedEffect
-                    }
-
-                    if (navigationHostController.currentDestination?.route == "empty") {
-                        replaceToCurrentTab(tabs, navigationHostController)
-                    }
-                })
-
-                if (openMenu.value) {
-                    MainMenu(
-                        {
-                            Inputs().hideKeyboard(localView)
-                            navigate(navigationHostController, it)
-                        },
-                        {
-                            mediaPermissionRequestLauncher.launch(MusicPlayerPermissions().invoke())
+        Scaffold(
+            containerColor = Color.Transparent,
+            bottomBar = {
+                AppBar()
+            },
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = contentViewModel.snackbarHostState(),
+                    snackbar = {
+                        MainSnackbar(it) { contentViewModel.dismissSnackbar() }
+                    })
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { openMenu.value = openMenu.value.not() },
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .scale(contentViewModel.fabScale.value)
+                        .offset { contentViewModel.makeFabOffset() }
+                        .pointerInput(Unit) {
+                            detectDragGestures(
+                                onDragEnd = {
+                                    PreferenceApplier(activity)
+                                        .setNewMenuFabPosition(
+                                            contentViewModel.menuFabOffsetX.value,
+                                            contentViewModel.menuFabOffsetY.value
+                                        )
+                                },
+                                onDrag = { change, dragAmount ->
+                                    change.consume()
+                                    contentViewModel.menuFabOffsetX.value += dragAmount.x
+                                    contentViewModel.menuFabOffsetY.value += dragAmount.y
+                                }
+                            )
                         }
-                    ) { openMenu.value = false }
-                }
-
-                if (contentViewModel.useScreenFilter.value) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .drawBehind { drawRect(contentViewModel.colorFilterColor()) }
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_menu),
+                        stringResource(id = jp.toastkid.todo.R.string.menu),
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
+            },
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(nestedScrollConnection)
+                .windowInsetsPadding(WindowInsets.safeDrawing)
+        ) { _ ->
+            Box {
+                NavigationalContent(navigationHostController, tabs)
+
+                if (contentViewModel.showSnowEffect()) {
+                    AndroidView(factory = { SnowRendererView(activity) })
+                }
+
+                MainBackHandler(
+                    {
+                        navigationHostController.last()
+                    },
+                    { contentViewModel.popBackStack() },
+                    tabs::closeCurrentTab,
+                    tabs::currentTabIsWebTab,
+                    tabs::isEmpty
+                )
+            }
+
+            LaunchedEffect(key1 = "first_launch", block = {
+                if (tabs.isEmpty()) {
+                    contentViewModel.openNewTab()
+                    return@LaunchedEffect
+                }
+
+                if (navigationHostController.last() is Screen.Empty) {
+                    replaceToCurrentTab(tabs, contentViewModel)
+                }
+            })
+
+            if (openMenu.value) {
+                MainMenu(
+                    {
+                        Inputs().hideKeyboard(localView)
+                        contentViewModel.navigateTo(it)
+                    },
+                    {
+                        mediaPermissionRequestLauncher.launch(MusicPlayerPermissions().invoke())
+                    }
+                ) { openMenu.value = false }
+            }
+
+            if (contentViewModel.useScreenFilter.value) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .drawBehind { drawRect(contentViewModel.colorFilterColor()) }
+                )
             }
         }
     }
@@ -579,62 +572,48 @@ internal fun Content() {
     }
 }
 
-private fun navigate(navigationController: NavHostController?, route: String) {
-    if (navigationController?.currentDestination?.route?.startsWith("tab/") == false
-        || route.startsWith("tab/")) {
-        navigationController?.popBackStack()
-    }
-
-    navigationController?.navigate(route) {
-        launchSingleTop = true
-    }
-}
-
 /**
  * Replace visibilities for current tab.
  */
-private fun replaceToCurrentTab(tabs: TabAdapter, navigationHostController: NavHostController) {
+private fun replaceToCurrentTab(tabs: TabAdapter, contentViewModel: ContentViewModel?) {
     val route = when (val tab = tabs.currentTab()) {
         is WebTab -> {
-            "tab/web/current"
+            Screen.Web(tab.id(), true)
         }
         is PdfTab -> {
-            "tab/pdf/current"
+            Screen.Pdf(tab.id())
         }
         is ArticleListTab -> {
-            "tab/article/list"
+            Screen.ArticleList
         }
         is ArticleTab -> {
-            "tab/article/content/${tab.title()}"
+            Screen.Article(tab.title())
         }
         is CalendarTab -> {
-            "tab/calendar"
+            Screen.Calendar
         }
         is EditorTab -> {
-            "tab/editor/current"
+            Screen.Editor
         }
         else -> {
             null
         }
     } ?: return
-    navigate(navigationHostController, route)
+    contentViewModel?.navigateTo(route)
 }
 
 private fun openNewTab(
     preferenceApplier: PreferenceApplier,
     tabs: TabAdapter,
-    navigationHostController: NavHostController
+    contentViewModel: ContentViewModel?
 ) {
     when (StartUp.findByName(preferenceApplier.startUp)) {
-        StartUp.SEARCH -> {
-            navigate(navigationHostController, "search/top")
-        }
+        StartUp.SEARCH -> contentViewModel?.nextRoute(Screen.SearchTop)
         StartUp.BROWSER -> {
             tabs.openNewWebTab()
-            replaceToCurrentTab(tabs, navigationHostController)
+            replaceToCurrentTab(tabs, contentViewModel)
+            return
         }
-        StartUp.BOOKMARK -> {
-            navigate(navigationHostController, "web/bookmark/list")
-        }
+        StartUp.BOOKMARK -> contentViewModel?.nextRoute(Screen.WebBookmark)
     }
 }
