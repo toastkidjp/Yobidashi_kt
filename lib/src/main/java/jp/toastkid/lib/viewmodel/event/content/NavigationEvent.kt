@@ -9,6 +9,7 @@
 package jp.toastkid.lib.viewmodel.event.content
 
 import jp.toastkid.lib.viewmodel.event.Event
+import jp.toastkid.navigation.Screen
 
-class NavigationEvent(val route: String) : Event {
+class NavigationEvent(val route: Screen) : Event {
 }
