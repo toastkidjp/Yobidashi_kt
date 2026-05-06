@@ -8,19 +8,19 @@
 
 package jp.toastkid.yobidashi.main.ui
 
-import android.net.Uri
-import android.os.Bundle
 import android.view.View
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import jp.toastkid.about.view.AboutThisAppUi
 import jp.toastkid.article_viewer.article.detail.view.ArticleContentUi
 import jp.toastkid.article_viewer.article.list.view.ArticleListUi
@@ -31,6 +31,7 @@ import jp.toastkid.converter.presentation.ui.ConverterToolUi
 import jp.toastkid.editor.view.EditorTabView
 import jp.toastkid.image.view.ImageListUi
 import jp.toastkid.loan.view.LoanCalculatorUi
+import jp.toastkid.navigation.Screen
 import jp.toastkid.number.NumberPlaceUi
 import jp.toastkid.pdf.view.PdfViewerUi
 import jp.toastkid.rss.view.RssReaderListUi
@@ -54,105 +55,87 @@ import jp.toastkid.yobidashi.tab.model.WebTab
 
 @Composable
 internal fun NavigationalContent(
-    navigationHostController: NavHostController,
+    navigationHostController: MutableList<Screen>,
     tabs: TabAdapter
 ) {
-    NavHost(
-        navController = navigationHostController,
-        startDestination = "empty"
-    ) {
-        composable("empty")  {
+    /*
+                slideInHorizontally(initialOffsetX = { it })
+     */
+    /*
+    enterTransition = {
+            slideInVertically(initialOffsetY = { it })
+        },
+        popEnterTransition = {
+            slideInVertically(initialOffsetY = { it })
+        }
+     */
+    AnimatedContent(
+        targetState = navigationHostController.last(),
+        transitionSpec = {
+            when {
+                targetState.isTab -> {
+                    slideInVertically(initialOffsetY = { it }) togetherWith
+                            slideOutVertically { -it } + fadeOut()
+                }
+                targetState is Screen.Search
+                        || targetState is Screen.SearchTop -> {
+                    slideInHorizontally { it } + fadeIn() togetherWith
+                            slideOutHorizontally { -it } + fadeOut()
+                }
+                else -> {
+                    fadeIn() togetherWith fadeOut()
+                }
+            }
+        },
+    ) { screen ->
+        when (screen) {
+            is Screen.Empty, Screen.Home -> {
 
-        }
-        tabComposable("tab/web/current") {
-            val currentTab = tabs.currentTab() as? WebTab ?: return@tabComposable
-            WebTabUi(currentTab.getUrl().toUri(), currentTab.id())
-        }
-        tabComposable("tab/pdf/current") {
-            val currentTab = tabs.currentTab() as? PdfTab ?: return@tabComposable
-            PdfViewerUi(
-                currentTab.getUrl().toUri(),
-                Modifier
-            )
-        }
-        tabComposable("tab/article/list") {
-            ArticleListUi()
-        }
-        tabComposable("tab/article/content/{title}") {
-            val title = it?.getString("title") ?: return@tabComposable
-            ArticleContentUi(title, Modifier)
-        }
-        tabComposable("tab/editor/current") {
-            val currentTab = tabs.currentTab() as? EditorTab ?: return@tabComposable
-            val view = LocalView.current
+            }
+            is Screen.Web -> {
+                val currentTab = tabs.currentTab() as? WebTab ?: return@AnimatedContent
+                WebTabUi(currentTab.getUrl().toUri(), currentTab.id())
+            }
+            is Screen.Pdf -> {
+                val currentTab = tabs.currentTab() as? PdfTab ?: return@AnimatedContent
+                PdfViewerUi(
+                    currentTab.getUrl().toUri(),
+                    Modifier
+                )
+            }
+            is Screen.ArticleList -> ArticleListUi()
+            is Screen.Article -> {
+                ArticleContentUi(screen.title, Modifier)
+            }
+            is Screen.Editor -> {
+                val currentTab = tabs.currentTab() as? EditorTab ?: return@AnimatedContent
+                val view = LocalView.current
 
-            EditorTabView(currentTab.path, currentTab.getScrolled(), Modifier)
-        }
-        tabComposable("web/bookmark/list") {
-            BookmarkListUi()
-        }
-        tabComposable("web/history/list") {
-            ViewHistoryListUi()
-        }
-        composable("web/archive/list") {
-            ArchiveListUi()
-        }
-        composable("tool/barcode_reader") {
-            BarcodeReaderUi()
-        }
-        composable("tool/image/list") {
-            ImageListUi()
-        }
-        composable("tool/rss/list") {
-            RssReaderListUi()
-        }
-        composable("tool/number/place") {
-            NumberPlaceUi()
-        }
-        composable("tool/task/list") {
-            TaskListUi()
-        }
-        composable("tool/task/board") {
-            TaskBoardUi()
-        }
-        composable("tool/loan") {
-            LoanCalculatorUi()
-        }
-        composable("tab/calendar") {
-            CalendarUi()
-        }
-        slideInComposable("setting/top") {
-            SettingTopUi()
-        }
-        slideInComposable("search/top") {
-            SearchInputUi()
-        }
-        slideInComposable("search/with/?query={query}&title={title}&url={url}") {
-            val query = Uri.decode(it.getString("query"))
-            val title = Uri.decode(it.getString("title"))
-            val url = Uri.decode(it.getString("url"))
-            SearchInputUi(query, title, url)
-        }
-        slideInComposable("search/history/list") {
-            SearchHistoryListUi()
-        }
-        slideInComposable("search/favorite/list") {
-            FavoriteSearchListUi()
-        }
-        composable("about") {
-            AboutThisAppUi(BuildConfig.VERSION_NAME)
-        }
-        composable("tool/converter") {
-            ConverterToolUi()
-        }
-        composable("tool/chat") {
-            ChatTabView()
-        }
-        composable("tool/sensor") {
-            SensorSwitcherView()
-        }
-        composable("tool/world_time") {
-            WorldTimeView()
+                EditorTabView(currentTab.path, currentTab.getScrolled(), Modifier)
+            }
+            is Screen.WebBookmark -> BookmarkListUi()
+            is Screen.WebHistory -> ViewHistoryListUi()
+            is Screen.WebArchive -> ArchiveListUi()
+            is Screen.BarcodeReader -> BarcodeReaderUi()
+            is Screen.ImageViewer -> ImageListUi()
+            is Screen.RssReader -> RssReaderListUi()
+            is Screen.NumberPlace -> NumberPlaceUi()
+            is Screen.TaskList -> TaskListUi()
+            is Screen.TaskBoard -> TaskBoardUi()
+            is Screen.LoanCalculator -> LoanCalculatorUi()
+            is Screen.Calendar -> CalendarUi()
+            is Screen.Settings -> SettingTopUi()
+            is Screen.SearchTop -> SearchInputUi()
+            is Screen.Search -> {
+                SearchInputUi(screen.query, screen.title, screen.url)
+            }
+            is Screen.SearchHistory -> SearchHistoryListUi()
+            is Screen.FavoriteSearch -> FavoriteSearchListUi()
+            is Screen.AboutThisApp -> AboutThisAppUi(BuildConfig.VERSION_NAME)
+            is Screen.ConverterTool -> ConverterToolUi()
+            is Screen.Chat -> ChatTabView()
+            is Screen.Sensor -> SensorSwitcherView()
+            is Screen.WorldTime -> WorldTimeView()
         }
     }
 }
@@ -160,30 +143,5 @@ internal fun NavigationalContent(
 private fun takeScreenshot(tabs: TabAdapter, view: View) {
     view.post {
         tabs.saveNewThumbnail(view)
-    }
-}
-
-private fun NavGraphBuilder.slideInComposable(route: String, content: @Composable (Bundle) -> Unit) {
-    composable(
-        route,
-        enterTransition = {
-            slideInHorizontally(initialOffsetX = { it })
-        }
-    ) {
-        content(it.arguments ?: Bundle.EMPTY)
-    }
-}
-
-private fun NavGraphBuilder.tabComposable(route: String, content: @Composable (Bundle?) -> Unit) {
-    composable(
-        route,
-        enterTransition = {
-            slideInVertically(initialOffsetY = { it })
-        },
-        popEnterTransition = {
-            slideInVertically(initialOffsetY = { it })
-        }
-    ) {
-        content(it.arguments)
     }
 }
