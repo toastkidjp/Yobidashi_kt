@@ -50,8 +50,9 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.number.factory.GameFileProvider
 import jp.toastkid.number.repository.GameRepositoryImplementation
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 
 @Composable
 fun NumberPlaceUi() {
@@ -60,18 +61,7 @@ fun NumberPlaceUi() {
     val viewModel = remember { NumberPlaceViewModel() }
     LaunchedEffect(key1 = viewModel, block = {
         val preferenceApplier = PreferenceApplier(context)
-        val file = GameFileProvider().invoke(context.filesDir, preferenceApplier)
-        if (file != null) {
-            val game = GameRepositoryImplementation().load(file)
-            if (game != null) {
-                viewModel.setGame(game)
-                return@LaunchedEffect
-            }
-        }
-        withContext(Dispatchers.IO) {
-            viewModel.initialize(preferenceApplier.getMaskingCount())
-            viewModel.saveCurrentGame(context)
-        }
+        initializeGame(context, preferenceApplier, viewModel)
     })
 
     val activity = LocalActivity.current as? ComponentActivity ?: return
@@ -88,7 +78,13 @@ fun NumberPlaceUi() {
             NumberPlaceBoard(viewModel,
                 { rowIndex, columnIndex, it ->
                     viewModel.place(rowIndex, columnIndex, it) { done ->
-                        showMessageSnackbar(context, contentViewModel, done)
+                        showMessageSnackbar(context, contentViewModel, done) {
+                            initializeGame(
+                                context,
+                                PreferenceApplier(context),
+                                viewModel
+                            )
+                        }
                     }
                 },
                 { rowIndex, columnIndex ->
@@ -107,7 +103,13 @@ fun NumberPlaceUi() {
                                 context,
                                 contentViewModel,
                                 done
-                            )
+                            ) {
+                                initializeGame(
+                                    context,
+                                    PreferenceApplier(context),
+                                    viewModel
+                                )
+                            }
                         }
                     }
                 }
@@ -121,7 +123,7 @@ fun NumberPlaceUi() {
                 titleId = R.string.menu_other_board,
                 action = {
                     deleteCurrentGame(context)
-                    contentViewModel.nextRoute("tool/number/place")
+                    //contentViewModel.nextRoute(Num)
                 }),
             OptionMenu(
                 titleId = R.string.menu_set_correct_answer,
@@ -133,13 +135,34 @@ fun NumberPlaceUi() {
         )
 
         contentViewModel?.replaceAppBarContent {
-            AppBarContent(viewModel.fontSize(), contentViewModel)
+            AppBarContent(viewModel.fontSize()) {
+                initializeGame(context, PreferenceApplier(context), viewModel)
+            }
         }
 
         onDispose {
             viewModel.saveCurrentGame(context)
         }
     })
+}
+
+private fun initializeGame(
+    context: Context,
+    preferenceApplier: PreferenceApplier,
+    viewModel: NumberPlaceViewModel
+) {
+    val file = GameFileProvider().invoke(context.filesDir, preferenceApplier)
+    if (file != null) {
+        val game = GameRepositoryImplementation().load(file)
+        if (game != null) {
+            viewModel.setGame(game)
+            return
+        }
+    }
+    CoroutineScope(Dispatchers.IO).launch {
+        viewModel.initialize(preferenceApplier.getMaskingCount())
+        viewModel.saveCurrentGame(context)
+    }
 }
 
 @Composable
@@ -221,7 +244,8 @@ private fun deleteCurrentGame(context: Context) {
 private fun showMessageSnackbar(
     context: Context,
     contentViewModel: ContentViewModel?,
-    done: Boolean
+    done: Boolean,
+    newGame: () -> Unit
 ) {
     contentViewModel?.snackWithAction(
         if (done) "Well done!" else "Incorrect...",
@@ -229,7 +253,7 @@ private fun showMessageSnackbar(
     ) {
         if (done) {
             deleteCurrentGame(context)
-            contentViewModel.nextRoute("tool/number/place")
+            newGame()
         }
     }
 }
@@ -237,7 +261,7 @@ private fun showMessageSnackbar(
 @Composable
 private fun AppBarContent(
     fontSize: TextUnit,
-    contentViewModel: ContentViewModel?
+    newGame: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -281,9 +305,10 @@ private fun AppBarContent(
                         onClick = {
                             maskingCount.value = "$it"
                             openMaskingCount.value = false
-                            PreferenceApplier(context).setMaskingCount(it)
+                            val preferenceApplier = PreferenceApplier(context)
+                            preferenceApplier.setMaskingCount(it)
                             deleteCurrentGame(context)
-                            contentViewModel?.nextRoute("tool/number/place")
+                            newGame()
                     })
                 }
             }
