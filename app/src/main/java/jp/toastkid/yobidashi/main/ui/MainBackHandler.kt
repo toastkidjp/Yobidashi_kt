@@ -12,14 +12,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.navigation.Screen
 import jp.toastkid.web.webview.GlobalWebViewPool
 
 @Composable
 internal fun MainBackHandler(
-    currentRoute: () -> String?,
+    currentRoute: () -> Screen?,
     navigationPopBackStack: () -> Unit,
     closeTab: () -> Unit,
     currentTabIsWeb: () -> Boolean,
@@ -31,7 +31,7 @@ internal fun MainBackHandler(
     BackHandler(true) {
         val route = currentRoute()
 
-        if (route?.startsWith("tab/web") == true) {
+        if (route is Screen.Web) {
             val latest = GlobalWebViewPool.getLatest()
             if (latest?.canGoBack() == true) {
                 latest.goBack()
@@ -41,11 +41,11 @@ internal fun MainBackHandler(
 
         navigationPopBackStack()
 
-        if (route == "setting/top") {
+        if (route is Screen.Settings) {
             contentViewModel.refresh()
         }
 
-        if (route?.startsWith("tab/") == true) {
+        if (route?.isTab == true) {
             closeTab()
 
             if (tabsIsEmpty()) {
@@ -57,12 +57,12 @@ internal fun MainBackHandler(
             return@BackHandler
         }
 
-        if (route == "search/top" && currentTabIsWeb().not()) {
+        if (route is Screen.Search && currentTabIsWeb().not()) {
             contentViewModel.replaceToCurrentTab()
             return@BackHandler
         }
 
-        if (route == "empty" || route == null) {
+        if (route is Screen.Empty || route == null) {
             activity.finish()
         }
     }
