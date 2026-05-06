@@ -28,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,11 +36,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.navigation.Screen
 import jp.toastkid.yobidashi.menu.Menu
 
 @Composable
 internal fun MainMenu(
-    navigate: (String) -> Unit,
+    navigate: (Screen) -> Unit,
     showAudioPlayer: () -> Unit,
     hideMenu: () -> Unit
 ) {
@@ -122,7 +122,7 @@ private fun onClickMainMenuItem(
     menu: Menu,
     contentViewModel: ContentViewModel,
     showAudioPlayer: () -> Unit,
-    navigate: (String) -> Unit
+    navigate: (Screen) -> Unit
 ) {
     when (menu) {
         Menu.TOP -> {
@@ -136,25 +136,25 @@ private fun onClickMainMenuItem(
         }
         Menu.CODE_READER -> {
             navigate(
-                "tool/barcode_reader"
+                Screen.BarcodeReader
             )
         }
         Menu.LOAN_CALCULATOR -> {
             navigate(
-                "tool/loan"
+                Screen.LoanCalculator
             )
         }
         Menu.CONVERTER_TOOL -> {
-            navigate("tool/converter")
+            navigate(Screen.ConverterTool)
         }
         Menu.RSS_READER -> {
             navigate(
-                "tool/rss/list"
+                Screen.RssReader
             )
         }
         Menu.NUMBER_PLACE -> {
             navigate(
-                "tool/number/place"
+                Screen.NumberPlace
             )
         }
         Menu.AUDIO -> {
@@ -162,17 +162,17 @@ private fun onClickMainMenuItem(
         }
         Menu.BOOKMARK -> {
             navigate(
-                "web/bookmark/list"
+                Screen.WebBookmark
             )
         }
         Menu.VIEW_HISTORY -> {
             navigate(
-                "web/history/list"
+                Screen.WebHistory
             )
         }
         Menu.IMAGE_VIEWER -> {
             navigate(
-                "tool/image/list"
+                Screen.ImageViewer
             )
         }
         Menu.CALENDAR -> {
@@ -182,34 +182,34 @@ private fun onClickMainMenuItem(
             contentViewModel.webSearch()
         }
         Menu.ABOUT_THIS_APP -> {
-            navigate("about")
+            navigate(Screen.AboutThisApp)
         }
         Menu.TODO_TASKS_BOARD -> {
             navigate(
-                "tool/task/board"
+                Screen.TaskBoard
             )
         }
         Menu.TODO_TASKS -> {
             navigate(
-                "tool/task/list"
+                Screen.TaskList
             )
         }
         Menu.VIEW_ARCHIVE -> {
             navigate(
-                "web/archive/list"
+                Screen.WebArchive
             )
         }
         Menu.FIND_IN_PAGE -> {
             contentViewModel.openFindInPageState.value = true
         }
         Menu.CHAT -> {
-            navigate("tool/chat")
+            navigate(Screen.Chat)
         }
         Menu.SENSOR -> {
-            navigate("tool/sensor")
+            navigate(Screen.Sensor)
         }
         Menu.WORLD_TIME -> {
-            navigate("tool/world_time")
+            navigate(Screen.WorldTime)
         }
     }
 }
