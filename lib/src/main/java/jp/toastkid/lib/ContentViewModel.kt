@@ -552,7 +552,7 @@ class ContentViewModel : ViewModel() {
     }
 
     fun navigateTo(screen: Screen) {
-        if ((navigationStack?.isNotEmpty() == true && navigationStack?.last()?.isTab == false)
+        if ((navigationStack.isNotEmpty() == true && navigationStack?.last()?.isTab == false)
             || screen.isTab) {
             popBackStack()
         }
