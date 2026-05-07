@@ -10,6 +10,7 @@ package jp.toastkid.about.view
 
 import android.content.Intent
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,7 +47,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun AboutThisAppUi(versionName: String) {
-    val context = LocalContext.current as? ComponentActivity ?: return
+    val context = LocalActivity.current as? ComponentActivity ?: return
     val scrollState = rememberScrollState()
 
     val openLicense = remember { mutableStateOf(false) }
