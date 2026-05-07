@@ -9,6 +9,7 @@
 package jp.toastkid.rss.view
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
@@ -54,7 +55,7 @@ import kotlinx.coroutines.withContext
 fun RssReaderListUi() {
     val items = remember { mutableStateListOf<Item>() }
 
-    val activity = LocalContext.current as? ComponentActivity ?: return
+    val activity = LocalActivity.current as? ComponentActivity ?: return
 
     val listState = rememberLazyListState()
 
