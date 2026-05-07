@@ -53,7 +53,7 @@ fun SettingTopUi() {
     }
 
     LaunchedEffect(key1 = pagerState.currentPage) {
-        contentViewModel?.clearOptionMenus()
+        contentViewModel.clearOptionMenus()
     }
 
     DisposableEffect(key1 = LocalLifecycleOwner.current) {
