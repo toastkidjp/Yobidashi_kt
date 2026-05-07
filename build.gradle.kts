@@ -113,7 +113,7 @@ fun readCoverages(): MutableMap<String, String> {
         "Branch",
         "Line",
         "Instruction"
-    );
+    )
     val map = mutableMapOf<String, String>()
     val buffer = StringBuffer()
 
