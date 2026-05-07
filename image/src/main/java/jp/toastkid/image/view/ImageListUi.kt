@@ -11,7 +11,9 @@ package jp.toastkid.image.view
 import android.Manifest
 import android.os.Build
 import android.provider.MediaStore.getPickImagesMaxLimit
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -48,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.image.Image
 import jp.toastkid.image.R
 import jp.toastkid.image.list.BucketLoader
@@ -61,7 +64,6 @@ import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
-import jp.toastkid.ui.compose.local.LocalNavController
 import jp.toastkid.ui.image.EfficientImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -125,15 +127,16 @@ fun ImageListUi() {
             }?.snackShort(R.string.message_audio_file_is_not_found)
         }
 
-    val navController = LocalNavController.current
-
+    val contentViewModel = (LocalActivity.current as? ComponentActivity)?.let {
+        viewModel(ContentViewModel::class, it)
+    }
     val pickMultipleMedia =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && images.isEmpty()) {
             rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(getPickImagesMaxLimit())) { uris ->
                 // Callback is invoked after the user selects media items or closes the
                 // photo picker.
                 if (uris.isNullOrEmpty()) {
-                    navController.popBackStack()
+                    contentViewModel?.popBackStack()
                     return@rememberLauncherForActivityResult
                 }
 
