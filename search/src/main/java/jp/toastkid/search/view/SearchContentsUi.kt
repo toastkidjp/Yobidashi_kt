@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -279,6 +280,7 @@ internal fun SearchContentsUi(
 @Composable
 private fun UrlCard(currentTitle: String?, currentUrl: String, setInput: (String) -> Unit) {
     val context = LocalContext.current
+    val resources = LocalResources.current
 
     Surface(
         shadowElevation = 4.dp,
@@ -333,7 +335,7 @@ private fun UrlCard(currentTitle: String?, currentUrl: String, setInput: (String
                         ViewModelProvider(activity)
                             .get(ContentViewModel::class.java)
                             .snackShort(
-                                context.getString(
+                                resources.getString(
                                     jp.toastkid.lib.R.string.message_clip_to,
                                     currentUrl
                                 )
