@@ -12,6 +12,7 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -42,7 +43,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
@@ -61,7 +61,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun PdfViewerUi(uri: Uri, modifier: Modifier) {
-    val context = LocalContext.current as? ComponentActivity ?: return
+    val context = LocalActivity.current as? ComponentActivity ?: return
     val images = remember { mutableStateListOf<Bitmap>() }
 
     val listState = rememberPagerState { images.size }
