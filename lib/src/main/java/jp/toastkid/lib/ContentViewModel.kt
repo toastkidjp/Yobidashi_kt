@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -253,7 +254,7 @@ class ContentViewModel : ViewModel() {
         _optionMenus.clear()
     }
 
-    val bottomBarOffsetHeightPx = mutableStateOf(0f)
+    val bottomBarOffsetHeightPx = mutableFloatStateOf(0f)
 
     val fabScale = Animatable(1f)
 
