@@ -510,7 +510,7 @@ class ContentViewModel : ViewModel() {
             snackbarHostState.currentSnackbarData?.dismiss()
             val snackbarResult = snackbarHostState.showSnackbar(
                 message,
-                snackbarEvent.actionLabel ?: "",
+                snackbarEvent.actionLabel,
                 false,
                 SnackbarDuration.Long
             )
