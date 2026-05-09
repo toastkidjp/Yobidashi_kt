@@ -330,7 +330,7 @@ class ContentViewModel : ViewModel() {
 
     fun showSnowEffect() = showSnowEffect.value
 
-    val menuFabOffsetX = mutableStateOf(0f)
+    val menuFabOffsetX = mutableFloatStateOf(0f)
 
     val menuFabOffsetY = mutableStateOf(0f)
 
