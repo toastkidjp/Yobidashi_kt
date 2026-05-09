@@ -556,7 +556,7 @@ class ContentViewModel : ViewModel() {
             popBackStack()
         }
 
-        navigationStack?.add(screen)
+        navigationStack.add(screen)
     }
 
 }
