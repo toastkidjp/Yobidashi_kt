@@ -332,7 +332,7 @@ class ContentViewModel : ViewModel() {
 
     val menuFabOffsetX = mutableFloatStateOf(0f)
 
-    val menuFabOffsetY = mutableStateOf(0f)
+    val menuFabOffsetY = mutableFloatStateOf(0f)
 
     fun makeFabOffset() =
         IntOffset(menuFabOffsetX.value.toInt(), menuFabOffsetY.value.toInt())
