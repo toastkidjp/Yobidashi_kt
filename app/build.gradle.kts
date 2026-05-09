@@ -128,6 +128,7 @@ dependencies {
     implementation(libraries.coroutines)
     implementation(libraries.timber)
     implementation(libraries.kotlinSerialization)
+    implementation(libraries.navigationCompose)
 
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
 
