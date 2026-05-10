@@ -94,3 +94,40 @@ internal fun SwitchRow(
         )
     }
 }
+
+@Composable
+internal fun SwitchRow(
+    textId: Int,
+    checked: () -> Boolean,
+    onSwitch: (Boolean) -> Unit,
+    iconTint: Color? = null,
+    iconId: Int? = null
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clickable(onClick = {
+                onSwitch(checked().not())
+            })
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+    ) {
+        if (iconId != null && iconTint != null) {
+            Icon(
+                painterResource(id = iconId),
+                tint = iconTint,
+                contentDescription = stringResource(id = textId),
+                modifier = Modifier.padding(end = 4.dp)
+            )
+        }
+
+        Text(
+            stringResource(id = textId),
+            modifier = Modifier
+                .weight(1f)
+        )
+        Switch(
+            checked = checked(), onCheckedChange = { onSwitch(checked().not()) },
+            modifier = Modifier.width(44.dp)
+        )
+    }
+}
