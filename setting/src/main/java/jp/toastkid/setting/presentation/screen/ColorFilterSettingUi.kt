@@ -46,7 +46,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.setting.R
-import jp.toastkid.setting.application.OverlayColorFilterUseCase
+import jp.toastkid.setting.application.ColorFilterSettingViewModel
 import jp.toastkid.setting.presentation.SwitchRow
 import jp.toastkid.ui.parts.InsetDivider
 import kotlin.math.roundToInt
@@ -59,7 +59,7 @@ internal fun ColorFilterSettingUi() {
     val sample =
         remember { mutableIntStateOf(preferenceApplier.filterColor(Color.Transparent.toArgb())) }
     val sliderValue =
-        remember { mutableFloatStateOf(OverlayColorFilterUseCase.getDefaultAlpha().toFloat() / 255f) }
+        remember { mutableFloatStateOf(ColorFilterSettingViewModel.getDefaultAlpha().toFloat() / 255f) }
     val check = remember { mutableStateOf(preferenceApplier.useColorFilter()) }
 
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let{
@@ -67,7 +67,7 @@ internal fun ColorFilterSettingUi() {
     }
 
     val useCase = remember {
-        OverlayColorFilterUseCase(
+        ColorFilterSettingViewModel(
             preferenceApplier,
             contentViewModel
         )
@@ -120,7 +120,7 @@ internal fun ColorFilterSettingUi() {
                 Button(
                     onClick = {
                         useCase.setDefault()
-                        sliderValue.floatValue = OverlayColorFilterUseCase
+                        sliderValue.floatValue = ColorFilterSettingViewModel
                             .getDefaultAlpha()
                             .toFloat()
                     },
