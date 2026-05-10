@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -103,17 +102,13 @@ internal fun ColorFilterSettingUi() {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
+                        .drawBehind { drawRect(Color(sample.intValue)) }
                         .size(40.dp)
                 ) {
                     Text(
                         text = stringResource(id = R.string.sample_text_color_filter),
                         maxLines = 1
                     )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .drawBehind { drawRect(Color(sample.intValue)) }
-                    ) { }
                 }
 
                 Text(

@@ -47,7 +47,7 @@ fun SettingTopUi() {
     val activity = LocalActivity.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, activity)
 
-    val pagerState = rememberPagerState { 8 }
+    val pagerState = rememberPagerState { pages.size }
 
     HorizontalPager(pageSize = PageSize.Fill, state = pagerState) { page ->
         SwitchContentWithTabIndex(page)
