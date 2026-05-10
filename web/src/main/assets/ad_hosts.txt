@@ -319,6 +319,7 @@ aml.valuecommerce.com
 ams.exad.jp
 ams900.goo.ne.jp
 amz-ad.a8.net
+amzn.to
 analytics.query.yahoo.com
 analytics.yahoo.com
 analyze.yahooapis.com
@@ -560,6 +561,7 @@ clk.atdmt.com
 cm.g.doubleclick.net
 cnobi.jp
 cnt.fout.jp
+common.blogimg.jp
 competition7472.megaprizes-server76.loan
 conf.smartnews-ads.com
 connect.newzia.jp
@@ -886,6 +888,7 @@ lp.mydas.mobi
 lp.vasta.co.jp
 m.ad.adlantis.jp
 m.clickfusion.net
+m.media-amazon.com
 m.one.impact-ad.jp
 m.sancdn.net
 ma.inmobi.com
