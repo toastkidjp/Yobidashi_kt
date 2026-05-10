@@ -26,7 +26,7 @@ class AdRemover(inputStream: InputStream) {
     private var blackList: Set<String> =
             InputStreamReader(inputStream).use { reader ->
                 reader.readLines()
-                        .filter { it.isNotBlank() }
+                        .filter(String::isNotBlank)
                         .map { it.trim() }
                         .toHashSet()
             }
