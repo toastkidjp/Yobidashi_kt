@@ -59,17 +59,6 @@ fun SettingTopUi() {
 
     DisposableEffect(key1 = LocalLifecycleOwner.current) {
         contentViewModel.replaceAppBarContent {
-            val pages = arrayOf(
-                R.string.subhead_displaying,
-                R.string.title_settings_color,
-                jp.toastkid.lib.R.string.search,
-                R.string.subhead_browser,
-                R.string.subhead_editor,
-                R.string.title_calendar,
-                R.string.title_color_filter,
-                R.string.subhead_others
-            )
-
             Column(
                 modifier = Modifier.fillMaxHeight()
             ) {
@@ -136,3 +125,14 @@ private fun SwitchContentWithTabIndex(selectedIndex: Int) {
         else -> DisplaySettingUi()
     }
 }
+
+private val pages = arrayOf(
+    R.string.subhead_displaying,
+    R.string.title_settings_color,
+    jp.toastkid.lib.R.string.search,
+    R.string.subhead_browser,
+    R.string.subhead_editor,
+    R.string.title_calendar,
+    R.string.title_color_filter,
+    R.string.subhead_others
+)
