@@ -63,41 +63,6 @@ internal fun CheckableRow(
 @Composable
 internal fun SwitchRow(
     textId: Int,
-    clickable: () -> Unit,
-    booleanState: MutableState<Boolean>,
-    iconTint: Color? = null,
-    iconId: Int? = null
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable(onClick = clickable)
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-    ) {
-        if (iconId != null && iconTint != null) {
-            Icon(
-                painterResource(id = iconId),
-                tint = iconTint,
-                contentDescription = stringResource(id = textId),
-                modifier = Modifier.padding(end = 4.dp)
-            )
-        }
-
-        Text(
-            stringResource(id = textId),
-            modifier = Modifier
-                .weight(1f)
-        )
-        Switch(
-            checked = booleanState.value, onCheckedChange = { clickable() },
-            modifier = Modifier.width(44.dp)
-        )
-    }
-}
-
-@Composable
-internal fun SwitchRow(
-    textId: Int,
     checked: () -> Boolean,
     onSwitch: (Boolean) -> Unit,
     iconTint: Color? = null,
