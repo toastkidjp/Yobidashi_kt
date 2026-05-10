@@ -8,11 +8,15 @@
 package jp.toastkid.setting.application
 
 import androidx.annotation.ColorInt
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.ColorUtils
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import kotlin.math.roundToInt
 
 /**
  * @author toastkidjp
@@ -21,6 +25,14 @@ class ColorFilterSettingViewModel(
         private val preferenceApplier: PreferenceApplier,
         private val contentViewModel: ContentViewModel?
 ) {
+
+    private val sample =
+         mutableIntStateOf(preferenceApplier.filterColor(Color.Transparent.toArgb()))
+
+    private val sliderValue =
+         mutableFloatStateOf(DEFAULT_ALPHA.toFloat() / 255f)
+
+    private val check = mutableStateOf(preferenceApplier.useColorFilter())
 
     private val blueBase = Color(0xDD81D4FA).toArgb()
 
@@ -70,6 +82,7 @@ class ColorFilterSettingViewModel(
 
     fun setDefault() {
         setNewColor(DEFAULT_ALPHA, yellowBase)
+        setSliderValue(getDefaultAlpha().toFloat())
     }
 
     private fun currentAlpha(): Int = android.graphics.Color.alpha(preferenceApplier.filterColor(DEFAULT_COLOR))
@@ -78,6 +91,21 @@ class ColorFilterSettingViewModel(
         val newColor = ColorUtils.setAlphaComponent(newBaseColor, alpha)
         preferenceApplier.setFilterColor(newColor)
         contentViewModel?.refresh()
+    }
+
+    fun getSliderValue() = sliderValue.floatValue
+
+    fun getSampleValue() = sample.intValue
+
+    fun isChecked() = check.value
+
+    fun setSliderValue(it: Float) {
+        sliderValue.floatValue = it
+        setAlpha(((255) * it).roundToInt())
+    }
+
+    fun setChecked(it: Boolean) {
+        check.value = it
     }
 
     companion object {
