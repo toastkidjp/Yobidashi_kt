@@ -28,15 +28,11 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -49,18 +45,11 @@ import jp.toastkid.setting.R
 import jp.toastkid.setting.application.ColorFilterSettingViewModel
 import jp.toastkid.setting.presentation.SwitchRow
 import jp.toastkid.ui.parts.InsetDivider
-import kotlin.math.roundToInt
 
 @Composable
 internal fun ColorFilterSettingUi() {
     val activityContext = LocalContext.current
     val preferenceApplier = PreferenceApplier(activityContext)
-
-    val sample =
-        remember { mutableIntStateOf(preferenceApplier.filterColor(Color.Transparent.toArgb())) }
-    val sliderValue =
-        remember { mutableFloatStateOf(ColorFilterSettingViewModel.getDefaultAlpha().toFloat() / 255f) }
-    val check = remember { mutableStateOf(preferenceApplier.useColorFilter()) }
 
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let{
         viewModel(ContentViewModel::class.java, activityContext)
@@ -75,18 +64,17 @@ internal fun ColorFilterSettingUi() {
 
     Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         Column {
-            val onClick = {
-                val newState = !preferenceApplier.useColorFilter()
+            val onClick: (Boolean) -> Unit = { newState ->
                 preferenceApplier.setUseColorFilter(newState)
                 contentViewModel?.refresh()
 
-                check.value = preferenceApplier.useColorFilter()
+                useCase.setChecked(preferenceApplier.useColorFilter())
             }
 
             SwitchRow(
                 textId = R.string.title_color_filter,
-                clickable = onClick,
-                booleanState = check,
+                checked = { useCase.isChecked() },
+                onSwitch = onClick,
                 iconTint = MaterialTheme.colorScheme.secondary,
                 iconId = R.drawable.ic_color_filter_black
             )
@@ -102,7 +90,7 @@ internal fun ColorFilterSettingUi() {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .drawBehind { drawRect(Color(sample.intValue)) }
+                        .drawBehind { drawRect(Color(useCase.getSampleValue())) }
                         .size(40.dp)
                 ) {
                     Text(
@@ -120,9 +108,6 @@ internal fun ColorFilterSettingUi() {
                 Button(
                     onClick = {
                         useCase.setDefault()
-                        sliderValue.floatValue = ColorFilterSettingViewModel
-                            .getDefaultAlpha()
-                            .toFloat()
                     },
                     colors = ButtonDefaults.textButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
@@ -157,10 +142,9 @@ internal fun ColorFilterSettingUi() {
             }
 
             Slider(
-                value = sliderValue.floatValue,
+                value = useCase.getSliderValue(),
                 onValueChange = {
-                    sliderValue.floatValue = it
-                    useCase.setAlpha(((255) * it).roundToInt())
+                    useCase.setSliderValue(it)
                 },
                 steps = 256,
                 colors = SliderDefaults.colors().copy(
