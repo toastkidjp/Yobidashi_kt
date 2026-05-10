@@ -117,9 +117,7 @@ fun SettingTopUi() {
             }
         }
 
-        onDispose {
-            contentViewModel.refresh()
-        }
+        onDispose(contentViewModel::refresh)
     }
 }
 
