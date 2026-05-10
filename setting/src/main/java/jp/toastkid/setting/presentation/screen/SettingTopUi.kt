@@ -58,7 +58,7 @@ fun SettingTopUi() {
     }
 
     DisposableEffect(key1 = LocalLifecycleOwner.current) {
-        contentViewModel?.replaceAppBarContent {
+        contentViewModel.replaceAppBarContent {
             val pages = arrayOf(
                 R.string.subhead_displaying,
                 R.string.title_settings_color,
