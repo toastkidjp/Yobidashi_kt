@@ -37,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -117,13 +116,13 @@ internal fun DisplaySettingUi() {
 
             SwitchRow(
                 textId = R.string.title_display_effect,
-                clickable = {
+                checked = { displayEffectState.value },
+                onSwitch = {
                     val preferenceApplier = PreferenceApplier(activityContext)
                     preferenceApplier.switchShowDisplayEffect()
                     displayEffectState.value = preferenceApplier.showDisplayEffect()
                     contentViewModel.setShowDisplayEffect(displayEffectState.value)
                 },
-                booleanState = displayEffectState
             )
 
             InsetDivider()
