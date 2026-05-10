@@ -70,7 +70,7 @@ fun LoanCalculatorUi() {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(
                             viewModel.isSelectedLevel(),
-                            onClick = { viewModel.selectLevel() },
+                            onClick = viewModel::selectLevel,
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = MaterialTheme.colorScheme.secondary
                             )
