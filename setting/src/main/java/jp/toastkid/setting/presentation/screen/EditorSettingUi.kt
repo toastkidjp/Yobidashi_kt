@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.godaddy.android.colorpicker.ClassicColorPicker
+import com.godaddy.android.colorpicker.HsvColor
 import jp.toastkid.editor.EditorFontSize
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -288,7 +289,8 @@ private fun ComponentColorSettingDialog(
         },
         text = {
             ClassicColorPicker(
-                color = choosingColor.value,
+                color = HsvColor.from(choosingColor.value),
+                showAlphaBar = true,
                 onColorChanged = { hsvColor ->
                     choosingColor.value = hsvColor.toColor()
                 },
