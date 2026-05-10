@@ -50,30 +50,37 @@ class ColorFilterSettingViewModel(
 
     fun setBlue() {
         setNewColor(currentAlpha(), blueBase)
+        commitNewSliderValue()
     }
 
     fun setRed() {
         setNewColor(currentAlpha(), redBase)
+        commitNewSliderValue()
     }
 
     fun setYellow() {
         setNewColor(currentAlpha(), yellowBase)
+        commitNewSliderValue()
     }
 
     fun setOrange() {
         setNewColor(currentAlpha(), orangeBase)
+        commitNewSliderValue()
     }
 
     fun setRedYellow() {
         setNewColor(currentAlpha(), redYellowBase)
+        commitNewSliderValue()
     }
 
     fun setGreen() {
         setNewColor(currentAlpha(), greenBase)
+        commitNewSliderValue()
     }
 
     fun setDark() {
         setNewColor(currentAlpha(), darkBase)
+        commitNewSliderValue()
     }
 
     fun setAlpha(alpha: Int) {
@@ -89,8 +96,7 @@ class ColorFilterSettingViewModel(
 
     private fun setNewColor(alpha: Int, @ColorInt newBaseColor: Int) {
         val newColor = ColorUtils.setAlphaComponent(newBaseColor, alpha)
-        preferenceApplier.setFilterColor(newColor)
-        contentViewModel?.refresh()
+        sample.intValue = newColor
     }
 
     fun getSliderValue() = sliderValue.floatValue
@@ -106,6 +112,11 @@ class ColorFilterSettingViewModel(
 
     fun setChecked(it: Boolean) {
         check.value = it
+    }
+
+    fun commitNewSliderValue() {
+        preferenceApplier.setFilterColor(sample.intValue)
+        contentViewModel?.refresh()
     }
 
     companion object {
