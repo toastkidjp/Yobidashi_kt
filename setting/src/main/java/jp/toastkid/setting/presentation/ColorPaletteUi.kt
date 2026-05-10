@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.godaddy.android.colorpicker.ClassicColorPicker
+import com.godaddy.android.colorpicker.HsvColor
 import jp.toastkid.setting.R
 
 @Composable
@@ -53,7 +54,7 @@ internal fun ColorPaletteUi(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 ClassicColorPicker(
-                    color = currentBackgroundColor.value,
+                    color = HsvColor.from(currentBackgroundColor.value),
                     onColorChanged = { hsvColor ->
                         currentBackgroundColor.value = hsvColor.toColor()
                     },
@@ -83,7 +84,7 @@ internal fun ColorPaletteUi(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 ClassicColorPicker(
-                    color = currentFontColor.value,
+                    color = HsvColor.from(currentFontColor.value),
                     modifier = Modifier.height(200.dp),
                     onColorChanged = { hsvColor ->
                         currentFontColor.value = hsvColor.toColor()
