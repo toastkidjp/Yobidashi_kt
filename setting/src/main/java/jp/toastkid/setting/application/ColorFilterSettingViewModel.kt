@@ -92,7 +92,8 @@ class ColorFilterSettingViewModel(
         setSliderValue(getDefaultAlpha().toFloat())
     }
 
-    private fun currentAlpha(): Int = android.graphics.Color.alpha(preferenceApplier.filterColor(DEFAULT_COLOR))
+    private fun currentAlpha(): Int =
+        android.graphics.Color.alpha(preferenceApplier.filterColor(DEFAULT_COLOR))
 
     private fun setNewColor(alpha: Int, @ColorInt newBaseColor: Int) {
         val newColor = ColorUtils.setAlphaComponent(newBaseColor, alpha)
