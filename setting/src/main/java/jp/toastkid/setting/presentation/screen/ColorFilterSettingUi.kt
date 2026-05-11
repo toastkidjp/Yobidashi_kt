@@ -132,7 +132,7 @@ internal fun ColorFilterSettingUi() {
                     .horizontalScroll(rememberScrollState())
                     .padding(start = 16.dp, end = 16.dp, top = 4.dp)
             ) {
-                ColorFilterItem(Color(0x22777700)) { useCase.setYellow() }
+                ColorFilterItem(Color(0x22777700), useCase::setYellow)
                 ColorFilterItem(Color(0xFFFF9100)) { useCase.setRedYellow() }
                 ColorFilterItem(Color(0xDDFF5722)) { useCase.setOrange() }
                 ColorFilterItem(Color(0x66FFFFFF)) { useCase.setDark() }
