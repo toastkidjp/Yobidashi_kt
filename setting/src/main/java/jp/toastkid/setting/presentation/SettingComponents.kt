@@ -87,8 +87,7 @@ internal fun SwitchRow(
 
         Text(
             stringResource(id = textId),
-            modifier = Modifier
-                .weight(1f)
+            modifier = Modifier.weight(1f)
         )
         Switch(
             checked = checked(), onCheckedChange = { onSwitch(checked().not()) },
