@@ -134,7 +134,7 @@ internal fun ColorFilterSettingUi() {
             ) {
                 ColorFilterItem(Color(0x22777700), useCase::setYellow)
                 ColorFilterItem(Color(0xFFFF9100), useCase::setRedYellow)
-                ColorFilterItem(Color(0xDDFF5722)) { useCase.setOrange() }
+                ColorFilterItem(Color(0xDDFF5722), useCase::setOrange)
                 ColorFilterItem(Color(0x66FFFFFF)) { useCase.setDark() }
                 ColorFilterItem(Color(0xDDffcdd2)) { useCase.setRed() }
                 ColorFilterItem(Color(0xCCCDDC39)) { useCase.setGreen() }
