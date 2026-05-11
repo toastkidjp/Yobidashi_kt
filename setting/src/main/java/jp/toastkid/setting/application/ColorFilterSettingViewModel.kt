@@ -22,7 +22,7 @@ import kotlin.math.roundToInt
  * @author toastkidjp
  */
 class ColorFilterSettingViewModel(
-        private val preferenceApplier: PreferenceApplier,
+    private val preferenceApplier: PreferenceApplier,
         private val contentViewModel: ContentViewModel?
 ) {
 
