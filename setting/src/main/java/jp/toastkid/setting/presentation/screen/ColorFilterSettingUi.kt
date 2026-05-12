@@ -144,9 +144,7 @@ internal fun ColorFilterSettingUi() {
             Slider(
                 value = useCase.getSliderValue(),
                 onValueChange = useCase::setSliderValue,
-                onValueChangeFinished = {
-                    useCase.commitNewSliderValue()
-                },
+                onValueChangeFinished = useCase::commitNewSliderValue,
                 steps = 256,
                 colors = SliderDefaults.colors().copy(
                     activeTrackColor = MaterialTheme.colorScheme.secondary
