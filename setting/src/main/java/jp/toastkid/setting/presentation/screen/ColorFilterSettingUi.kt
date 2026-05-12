@@ -106,9 +106,7 @@ internal fun ColorFilterSettingUi() {
                         .padding(start = 4.dp, end = 4.dp)
                 )
                 Button(
-                    onClick = {
-                        useCase.setDefault()
-                    },
+                    onClick = useCase::setDefault,
                     colors = ButtonDefaults.textButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary,
