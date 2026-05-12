@@ -49,7 +49,6 @@ import jp.toastkid.ui.parts.InsetDivider
 @Composable
 internal fun ColorFilterSettingUi() {
     val activityContext = LocalContext.current
-    val preferenceApplier = PreferenceApplier(activityContext)
 
     val contentViewModel = (activityContext as? ViewModelStoreOwner)?.let{
         viewModel(ContentViewModel::class.java, activityContext)
@@ -57,7 +56,7 @@ internal fun ColorFilterSettingUi() {
 
     val useCase = remember {
         ColorFilterSettingViewModel(
-            preferenceApplier,
+            PreferenceApplier(activityContext),
             contentViewModel
         )
     }
@@ -68,6 +67,7 @@ internal fun ColorFilterSettingUi() {
                 textId = R.string.title_color_filter,
                 checked = useCase::isChecked,
                 onSwitch = { newState ->
+                    val preferenceApplier = PreferenceApplier(activityContext)
                     preferenceApplier.setUseColorFilter(newState)
                     contentViewModel?.refresh()
 
