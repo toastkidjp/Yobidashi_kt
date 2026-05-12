@@ -54,7 +54,7 @@ internal fun ColorFilterSettingUi() {
         viewModel(ContentViewModel::class.java, activityContext)
     }
 
-    val useCase = remember {
+    val viewModel = remember {
         ColorFilterSettingViewModel(
             PreferenceApplier(activityContext),
             contentViewModel
@@ -65,13 +65,13 @@ internal fun ColorFilterSettingUi() {
         Column {
             SwitchRow(
                 textId = R.string.title_color_filter,
-                checked = useCase::isChecked,
+                checked = viewModel::isChecked,
                 onSwitch = { newState ->
                     val preferenceApplier = PreferenceApplier(activityContext)
                     preferenceApplier.setUseColorFilter(newState)
                     contentViewModel?.refresh()
 
-                    useCase.setChecked(preferenceApplier.useColorFilter())
+                    viewModel.setChecked(preferenceApplier.useColorFilter())
                 },
                 iconTint = MaterialTheme.colorScheme.secondary,
                 iconId = R.drawable.ic_color_filter_black
@@ -88,7 +88,7 @@ internal fun ColorFilterSettingUi() {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .drawBehind { drawRect(Color(useCase.getSampleValue())) }
+                        .drawBehind { drawRect(Color(viewModel.getSampleValue())) }
                         .size(40.dp)
                 ) {
                     Text(
@@ -104,7 +104,7 @@ internal fun ColorFilterSettingUi() {
                         .padding(start = 4.dp, end = 4.dp)
                 )
                 Button(
-                    onClick = useCase::setDefault,
+                    onClick = viewModel::setDefault,
                     colors = ButtonDefaults.textButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -128,19 +128,19 @@ internal fun ColorFilterSettingUi() {
                     .horizontalScroll(rememberScrollState())
                     .padding(start = 16.dp, end = 16.dp, top = 4.dp)
             ) {
-                ColorFilterItem(Color(0x22777700), useCase::setYellow)
-                ColorFilterItem(Color(0xFFFF9100), useCase::setRedYellow)
-                ColorFilterItem(Color(0xDDFF5722), useCase::setOrange)
-                ColorFilterItem(Color(0x66FFFFFF), useCase::setDark)
-                ColorFilterItem(Color(0xDDffcdd2), useCase::setRed)
-                ColorFilterItem(Color(0xCCCDDC39), useCase::setGreen)
-                ColorFilterItem(Color(0xDD81D4FA), useCase::setBlue)
+                ColorFilterItem(Color(0x22777700), viewModel::setYellow)
+                ColorFilterItem(Color(0xFFFF9100), viewModel::setRedYellow)
+                ColorFilterItem(Color(0xDDFF5722), viewModel::setOrange)
+                ColorFilterItem(Color(0x66FFFFFF), viewModel::setDark)
+                ColorFilterItem(Color(0xDDffcdd2), viewModel::setRed)
+                ColorFilterItem(Color(0xCCCDDC39), viewModel::setGreen)
+                ColorFilterItem(Color(0xDD81D4FA), viewModel::setBlue)
             }
 
             Slider(
-                value = useCase.getSliderValue(),
-                onValueChange = useCase::setSliderValue,
-                onValueChangeFinished = useCase::commitNewSliderValue,
+                value = viewModel.getSliderValue(),
+                onValueChange = viewModel::setSliderValue,
+                onValueChangeFinished = viewModel::commitNewSliderValue,
                 steps = 256,
                 colors = SliderDefaults.colors().copy(
                     activeTrackColor = MaterialTheme.colorScheme.secondary
