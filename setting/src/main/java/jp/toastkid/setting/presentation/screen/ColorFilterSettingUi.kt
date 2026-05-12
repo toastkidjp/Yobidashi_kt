@@ -143,9 +143,7 @@ internal fun ColorFilterSettingUi() {
 
             Slider(
                 value = useCase.getSliderValue(),
-                onValueChange = {
-                    useCase.setSliderValue(it)
-                },
+                onValueChange = useCase::setSliderValue,
                 onValueChangeFinished = {
                     useCase.commitNewSliderValue()
                 },
