@@ -73,7 +73,7 @@ internal fun ColorFilterSettingUi() {
 
             SwitchRow(
                 textId = R.string.title_color_filter,
-                checked = { useCase.isChecked() },
+                checked = useCase::isChecked,
                 onSwitch = onClick,
                 iconTint = MaterialTheme.colorScheme.secondary,
                 iconId = R.drawable.ic_color_filter_black
