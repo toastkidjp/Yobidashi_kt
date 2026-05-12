@@ -64,17 +64,15 @@ internal fun ColorFilterSettingUi() {
 
     Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         Column {
-            val onClick: (Boolean) -> Unit = { newState ->
-                preferenceApplier.setUseColorFilter(newState)
-                contentViewModel?.refresh()
-
-                useCase.setChecked(preferenceApplier.useColorFilter())
-            }
-
             SwitchRow(
                 textId = R.string.title_color_filter,
                 checked = useCase::isChecked,
-                onSwitch = onClick,
+                onSwitch = { newState ->
+                    preferenceApplier.setUseColorFilter(newState)
+                    contentViewModel?.refresh()
+
+                    useCase.setChecked(preferenceApplier.useColorFilter())
+                },
                 iconTint = MaterialTheme.colorScheme.secondary,
                 iconId = R.drawable.ic_color_filter_black
             )
