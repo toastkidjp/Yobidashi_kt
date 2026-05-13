@@ -41,8 +41,6 @@ dependencies {
     implementation(libraries.coilNetwork)
     implementation(libraries.composeMaterial3)
     implementation(libraries.lifecycleViewModelCompose)
-    implementation(libraries.navigationCompose)
-    api(libraries.navigationCompose)
     api(libraries.lifecycleViewModelCompose)
 
     testImplementation("junit:junit:4.12")
