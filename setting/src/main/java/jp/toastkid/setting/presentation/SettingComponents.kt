@@ -54,7 +54,8 @@ internal fun CheckableRow(
                 .weight(1f)
         )
         Checkbox(
-            checked = booleanState.value, onCheckedChange = { clickable() },
+            checked = booleanState.value,
+            onCheckedChange = { clickable() },
             modifier = Modifier.width(44.dp)
         )
     }
