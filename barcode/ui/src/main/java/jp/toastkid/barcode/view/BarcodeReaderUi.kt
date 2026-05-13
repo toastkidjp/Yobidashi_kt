@@ -100,7 +100,7 @@ fun BarcodeReaderUi() {
 
 @Composable
 private fun Result(result: String) {
-    val context = LocalActivity.current as? Activity ?: return
+    val context = LocalActivity.current ?: return
     val backgroundColor = MaterialTheme.colorScheme.primary
     Box(
         contentAlignment = Alignment.Center,
