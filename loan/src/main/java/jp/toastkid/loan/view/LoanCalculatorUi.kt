@@ -80,7 +80,7 @@ fun LoanCalculatorUi() {
 
                         RadioButton(
                             viewModel.isSelectedPrincipal(),
-                            onClick = { viewModel.selectPrincipal() },
+                            onClick = viewModel::selectPrincipal,
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = MaterialTheme.colorScheme.secondary
                             )
