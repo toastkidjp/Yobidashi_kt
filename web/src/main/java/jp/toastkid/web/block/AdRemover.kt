@@ -27,7 +27,7 @@ class AdRemover(inputStream: InputStream) {
             InputStreamReader(inputStream).use { reader ->
                 reader.readLines()
                         .filter(String::isNotBlank)
-                        .map { it.trim() }
+                        .map(String::trim)
                         .toHashSet()
             }
 
