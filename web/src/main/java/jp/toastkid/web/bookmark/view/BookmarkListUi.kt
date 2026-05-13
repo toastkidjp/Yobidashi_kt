@@ -16,6 +16,7 @@ import android.os.Build
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.WorkerThread
@@ -97,7 +98,7 @@ private const val EXPORT_FILE_NAME = "bookmark.html"
 
 @Composable
 fun BookmarkListUi() {
-    val activityContext = LocalContext.current as? ComponentActivity ?: return
+    val activityContext = LocalActivity.current as? ComponentActivity ?: return
 
     val bookmarkRepository = remember { RepositoryFactory().bookmarkRepository(activityContext) }
 
