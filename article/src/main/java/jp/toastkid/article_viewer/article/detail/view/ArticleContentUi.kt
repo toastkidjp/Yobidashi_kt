@@ -113,7 +113,6 @@ fun ArticleContentUi(title: String, modifier: Modifier) {
 @Composable
 private fun AppBarContent(title: String) {
     val activityContext = LocalActivity.current as? ComponentActivity ?: return
-    val fontColor = remember { Color(PreferenceApplier(activityContext).editorFontColor()) }
     val contentViewModel = viewModel(ContentViewModel::class.java, activityContext)
 
     var searchInput by remember { mutableStateOf("") }
