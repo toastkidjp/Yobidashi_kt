@@ -39,7 +39,4 @@ class RandomWikipedia(
         }
     }
 
-    companion object {
-
-    }
 }
