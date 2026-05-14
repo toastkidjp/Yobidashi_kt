@@ -1,6 +1,7 @@
 package jp.toastkid.sensor.presentation.view
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +32,7 @@ import jp.toastkid.sensor.presentation.view.tab.SensorView
 
 @Composable
 fun SensorSwitcherView() {
-    val context = LocalContext.current as? ComponentActivity ?: return
+    val context = LocalActivity.current as? ComponentActivity ?: return
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
     val currentDestination = remember { mutableStateOf(Destination.HOME) }
 
