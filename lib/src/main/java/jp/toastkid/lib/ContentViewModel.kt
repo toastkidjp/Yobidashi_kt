@@ -317,7 +317,7 @@ class ContentViewModel : ViewModel() {
     }
 
     fun hideAppBar() {
-        bottomBarOffsetHeightPx.value = -maxBottomBarHeightPx.get()
+        bottomBarOffsetHeightPx.floatValue = -maxBottomBarHeightPx.get()
     }
 
     val openFindInPageState = mutableStateOf(false)
