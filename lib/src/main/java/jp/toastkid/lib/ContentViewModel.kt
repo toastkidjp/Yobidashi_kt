@@ -374,7 +374,7 @@ class ContentViewModel : ViewModel() {
     val tabCount: State<Int> = _tabCount
 
     fun tabCount(count: Int) {
-        _tabCount.value = count
+        _tabCount.intValue = count
     }
 
     fun openNewTab() {
