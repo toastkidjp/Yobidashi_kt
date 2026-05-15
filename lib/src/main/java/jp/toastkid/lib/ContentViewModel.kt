@@ -306,7 +306,7 @@ class ContentViewModel : ViewModel() {
         maxBottomBarHeightPx.set(float)
     }
 
-    fun bottomBarHeightPx() = maxBottomBarHeightPx.get()
+    fun bottomBarHeightPx(): Float = maxBottomBarHeightPx.get()
 
     fun showAppBar(coroutineScope: CoroutineScope? = null) {
         bottomBarOffsetHeightPx.value = 0f
