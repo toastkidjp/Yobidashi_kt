@@ -216,7 +216,12 @@ private fun InputTextField(
     OutlinedTextField(
         state = state,
         label = { Text(text = stringResource(labelId)) },
-        colors = makeTextFieldColors(),
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+            unfocusedContainerColor = Color.Transparent,
+            cursorColor = MaterialTheme.colorScheme.onSurface
+        ),
         lineLimits = TextFieldLineLimits.SingleLine,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         trailingIcon = {
@@ -244,11 +249,3 @@ private fun InputTextField(
 
     }
 }
-
-@Composable
-private fun makeTextFieldColors() = TextFieldDefaults.colors(
-    focusedTextColor = MaterialTheme.colorScheme.onSurface,
-    unfocusedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-    unfocusedContainerColor = Color.Transparent,
-    cursorColor = MaterialTheme.colorScheme.onSurface
-)
