@@ -106,12 +106,12 @@ internal fun OtherSettingUi() {
             item {
                 CheckableRow(
                     R.string.title_wifi_only,
+                    { wifiOnly.value },
                     {
                         val newState = !preferenceApplier.wifiOnly
                         preferenceApplier.wifiOnly = newState
                         wifiOnly.value = preferenceApplier.wifiOnly
-                    },
-                    wifiOnly
+                    }
                 )
             }
 
