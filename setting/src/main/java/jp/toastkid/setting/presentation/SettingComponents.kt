@@ -80,12 +80,20 @@ internal fun SwitchRow(
     iconTint: Color? = null,
     iconId: Int? = null
 ) {
+    val currentChecked = rememberUpdatedState(checked)
+    val currentOnSwitch = rememberUpdatedState(onSwitch)
+
+    val onClick = remember {
+        {
+            val isChecked = currentChecked.value()
+            currentOnSwitch.value(isChecked.not())
+        }
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .clickable(onClick = {
-                onSwitch(checked().not())
-            })
+            .clickable(onClick = onClick)
             .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
     ) {
         if (iconId != null && iconTint != null) {
@@ -102,7 +110,7 @@ internal fun SwitchRow(
             modifier = Modifier.weight(1f)
         )
         Switch(
-            checked = checked(), onCheckedChange = { onSwitch(checked().not()) },
+            checked = checked(), onCheckedChange = { onClick() },
             modifier = Modifier.width(44.dp)
         )
     }
