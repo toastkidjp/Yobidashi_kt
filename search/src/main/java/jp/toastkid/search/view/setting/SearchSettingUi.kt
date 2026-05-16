@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -76,13 +77,14 @@ fun SearchSettingUi() {
     val useTrendCheck = remember { mutableStateOf(preferenceApplier.isEnableTrendModule()) }
 
     val selections = remember {
+        val disableSearchCategory = preferenceApplier.readDisableSearchCategory() ?: emptySet()
+        val set = mutableStateSetOf<SearchCategory>()
         SearchCategory.entries
-            .map {
-                SearchCategorySelection(
-                    it,
-                    mutableStateOf(preferenceApplier.readDisableSearchCategory()?.contains(it.name)?.not() ?: true)
-                )
+            .filterNot { disableSearchCategory.contains(it.name) }
+            .forEach {
+                set.add(it)
             }
+        return@remember set
     }
 
     Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
@@ -276,7 +278,7 @@ fun SearchSettingUi() {
             }
 
             item {
-                val allChecked = remember { mutableStateOf(selections.all { it.checked.value }) }
+                val allChecked = remember { mutableStateOf(selections.size == SearchCategory.entries.size) }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -294,28 +296,37 @@ fun SearchSettingUi() {
                     )
                     Checkbox(checked = allChecked.value, onCheckedChange = {
                         val newState = allChecked.value.not()
-                        selections.forEach { it.checked.value = newState }
                         allChecked.value = newState
+
+                        if (newState) {
+                            selections.addAll(SearchCategory.entries)
+                            return@Checkbox
+                        }
+                        selections.clear()
                     })
                 }
             }
 
-            items(selections, { it.searchCategory.id }) { selection ->
+            items(SearchCategory.entries, { it.id }) { selection ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .clickable {
-                            selection.checked.value = selection.checked.value.not()
+                            if (selections.contains(selection)) {
+                                selections.remove(selection)
+                                return@clickable
+                            }
+                            selections.add(selection)
                         }
                 ) {
                     EfficientImage(
-                        model = selection.searchCategory.iconId,
-                        contentDescription = stringResource(id = selection.searchCategory.id),
+                        model = selection.iconId,
+                        contentDescription = stringResource(id = selection.id),
                         modifier = Modifier.width(40.dp)
                     )
                     Text(
-                        stringResource(id = selection.searchCategory.id),
+                        stringResource(id = selection.id),
                         fontSize = 20.sp,
                         modifier = Modifier
                             .weight(1f)
@@ -323,9 +334,13 @@ fun SearchSettingUi() {
                             .padding(8.dp)
                     )
                     Checkbox(
-                        checked = selection.checked.value,
+                        checked = selections.contains(selection),
                         onCheckedChange = {
-                            selection.checked.value = selection.checked.value.not()
+                            if (selections.contains(selection)) {
+                                selections.remove(selection)
+                                return@Checkbox
+                            }
+                            selections.add(selection)
                         }
                     )
                 }
@@ -338,8 +353,8 @@ fun SearchSettingUi() {
         onDispose {
             CoroutineScope(Dispatchers.IO).launch {
                 preferenceApplier.clearDisableSearchCategory()
-                selections.filter { it.checked.value.not() }
-                    .forEach { preferenceApplier.addDisableSearchCategory(it.searchCategory.name) }
+                SearchCategory.entries.filterNot { selections.contains(it) }
+                    .forEach { preferenceApplier.addDisableSearchCategory(it.name) }
             }
         }
     })
