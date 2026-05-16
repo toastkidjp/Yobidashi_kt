@@ -36,7 +36,8 @@ import jp.toastkid.setting.presentation.CheckableRow
 
 @Composable
 internal fun CalendarSettingUi() {
-    val preferenceApplier = PreferenceApplier(LocalContext.current)
+    val context = LocalContext.current
+    val preferenceApplier = PreferenceApplier(context)
 
     val holidayCalendars = remember {
         val map = mutableStateMapOf<HolidayCalendar, MutableState<Boolean>>()
