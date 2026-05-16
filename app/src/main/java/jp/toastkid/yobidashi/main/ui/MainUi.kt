@@ -256,12 +256,10 @@ internal fun Content() {
                     when (navigationHostController.last()) {
                         is Screen.Web -> {
                             val currentTabWebView = GlobalWebViewPool.getLatest() ?: return@collect
-                            val currentTitle = Uri.encode(currentTabWebView.title)
-                            val currentUrl = Uri.encode(currentTabWebView.url)
-                            val query = Uri.encode(
-                                SearchQueryExtractor().invoke(currentTabWebView.url)
-                                    ?.replace("\n", "") ?: ""
-                            )
+                            val currentTitle = currentTabWebView.title ?: ""
+                            val currentUrl = currentTabWebView.url ?: ""
+                            val query = SearchQueryExtractor().invoke(currentTabWebView.url)
+                                ?.replace("\n", "") ?: ""
                             contentViewModel.navigateTo(
                                 Screen.Search(query, currentTitle, currentUrl)
                             )
