@@ -18,6 +18,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -69,10 +71,20 @@ internal fun CheckableRow(
     iconTint: Color? = null,
     iconId: Int? = null
 ) {
+    val currentChecked = rememberUpdatedState(checked)
+    val currentOnSwitch = rememberUpdatedState(onSwitch)
+
+    val onClick = remember {
+        {
+            val isChecked = currentChecked.value()
+            currentOnSwitch.value(isChecked.not())
+        }
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .clickable(onClick = { onSwitch(checked().not()) })
+            .clickable(onClick = onClick)
             .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
     ) {
         if (iconId != null && iconTint != null) {
@@ -91,7 +103,7 @@ internal fun CheckableRow(
         )
         Checkbox(
             checked = checked(),
-            onCheckedChange = { onSwitch(checked().not()) },
+            onCheckedChange = { onClick() },
             modifier = Modifier.width(44.dp)
         )
     }
