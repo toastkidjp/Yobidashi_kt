@@ -84,10 +84,10 @@ internal fun CalendarSettingUi() {
                 val booleanState = holidayCalendars.get(holidayCalendar) ?: return@items
                 CheckableRow(
                     holidayCalendar.settingTitleId,
+                    { booleanState.value },
                     {
                         holidayCalendars.get(holidayCalendar)?.value = booleanState.value.not()
                     },
-                    booleanState,
                     MaterialTheme.colorScheme.secondary
                 )
             }
