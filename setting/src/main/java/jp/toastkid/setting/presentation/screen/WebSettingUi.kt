@@ -78,6 +78,7 @@ internal fun WebSettingUi() {
             item {
                 CheckableRow(
                     R.string.title_enable_javascript,
+                    { retainTabs.value },
                     {
                         val newState = !preferenceApplier.doesRetainTabs()
                         preferenceApplier.setRetainTabs(newState)
@@ -88,7 +89,6 @@ internal fun WebSettingUi() {
                         contentViewModel?.snackShort(messageId)
                         retainTabs.value = preferenceApplier.doesRetainTabs()
                     },
-                    retainTabs,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_tab_black
                 )
@@ -101,11 +101,11 @@ internal fun WebSettingUi() {
             item {
                 CheckableRow(
                     R.string.title_use_auto_archive,
-                    clickable = {
+                    { useAutoArchive.value },
+                    {
                         useAutoArchive.value = useAutoArchive.value.not()
                         preferenceApplier.setUseAutoArchive(useAutoArchive.value)
                     },
-                    useAutoArchive,
                     MaterialTheme.colorScheme.secondary,
                     jp.toastkid.web.R.drawable.ic_archive
                 )
@@ -173,6 +173,7 @@ internal fun WebSettingUi() {
             item {
                 CheckableRow(
                     R.string.title_enable_javascript,
+                    { useJavaScript.value },
                     {
                         val newState = !preferenceApplier.useJavaScript()
                         preferenceApplier.setUseJavaScript(newState)
@@ -182,8 +183,7 @@ internal fun WebSettingUi() {
                             R.string.message_js_disabled
                         contentViewModel?.snackShort(messageId)
                         useJavaScript.value = preferenceApplier.useJavaScript()
-                    },
-                    useJavaScript
+                    }
                 )
             }
 
@@ -194,12 +194,12 @@ internal fun WebSettingUi() {
             item {
                 CheckableRow(
                     R.string.title_load_image,
+                    { useImage.value },
                     {
                         val newState = !preferenceApplier.doesLoadImage()
                         preferenceApplier.setLoadImage(newState)
                         useImage.value = preferenceApplier.doesLoadImage()
                     },
-                    useImage,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_image
                 )
@@ -212,12 +212,12 @@ internal fun WebSettingUi() {
             item {
                 CheckableRow(
                     R.string.title_save_form_data,
+                    { saveFormData.value },
                     {
                         val newState = !preferenceApplier.doesSaveForm()
                         preferenceApplier.setSaveForm(newState)
                         saveFormData.value = preferenceApplier.doesSaveForm()
-                    },
-                    saveFormData
+                    }
                 )
             }
 
@@ -228,12 +228,12 @@ internal fun WebSettingUi() {
             item {
                 CheckableRow(
                     R.string.title_save_view_history,
+                    { saveViewHistory.value },
                     {
                         val newState = !preferenceApplier.saveViewHistory
                         preferenceApplier.saveViewHistory = newState
                         saveViewHistory.value = preferenceApplier.doesSaveForm()
                     },
-                    saveViewHistory,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_open_in_browser_black
                 )
@@ -350,12 +350,12 @@ internal fun WebSettingUi() {
             item {
                 CheckableRow(
                     R.string.title_dark_mode,
+                    { useDarkMode.value },
                     {
                         val newState = !preferenceApplier.useDarkMode()
                         preferenceApplier.setUseDarkMode(newState)
                         useDarkMode.value = preferenceApplier.useDarkMode()
                     },
-                    useDarkMode,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_dark_mode_black
                 )
@@ -368,12 +368,12 @@ internal fun WebSettingUi() {
             item {
                 CheckableRow(
                     R.string.title_remove_ad,
+                    { useAdRemover.value },
                     {
                         val newState = !preferenceApplier.adRemove
                         preferenceApplier.adRemove = newState
                         useAdRemover.value = preferenceApplier.adRemove
                     },
-                    useAdRemover,
                     MaterialTheme.colorScheme.secondary,
                     R.drawable.ic_block_black
                 )
