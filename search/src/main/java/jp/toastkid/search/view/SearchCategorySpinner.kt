@@ -28,8 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,7 +46,7 @@ internal fun SearchCategorySpinner(
     onSelect: (SearchCategory) -> Unit = {}
 ) {
     val context = LocalContext.current
-    val popupWindowHeight = (LocalConfiguration.current.screenHeightDp / 2).dp
+    val popupWindowHeight = (LocalWindowInfo.current.containerSize.height / 5).dp
 
     Box(
         modifier = Modifier
