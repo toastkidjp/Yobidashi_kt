@@ -81,9 +81,7 @@ fun SearchSettingUi() {
         val set = mutableStateSetOf<SearchCategory>()
         SearchCategory.entries
             .filterNot { disableSearchCategory.contains(it.name) }
-            .forEach {
-                set.add(it)
-            }
+            .forEach(set::add)
         return@remember set
     }
 
