@@ -471,6 +471,11 @@ enum class SearchCategory(
         R.drawable.ic_google_news,
         "https://news.google.com/search?q="
     ),
+    ROOM_CLIP(
+        R.string.search_category_room_clip,
+        R.drawable.ic_roomclip,
+        "https://roomclip.jp/tag/search?keyword="
+    ),
     JAPAN_SEARCH(
         R.string.search_category_japan_search,
         R.drawable.ic_japan_search,
