@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -123,7 +122,7 @@ fun FavoriteSearchListUi() {
                     },
                     keyboardActions = KeyboardActions {
                         addItem(
-                            input,
+                            input.value.trim(),
                             contentViewModel,
                             activityContext,
                             categoryName.value,
@@ -141,7 +140,7 @@ fun FavoriteSearchListUi() {
                 Button(
                     onClick = {
                         addItem(
-                            input,
+                            input.value.trim(),
                             contentViewModel,
                             activityContext,
                             categoryName.value,
@@ -187,14 +186,13 @@ fun FavoriteSearchListUi() {
 }
 
 private fun addItem(
-    input: MutableState<String>,
+    newWord: String,
     contentViewModel: ContentViewModel,
     activityContext: ComponentActivity,
     categoryName: String,
     repository: FavoriteSearchRepository,
     favoriteSearchItems: SnapshotStateList<FavoriteSearch>
 ) {
-    val newWord = input.value.trim()
     if (newWord.isEmpty()) {
         contentViewModel.snackShort(
             jp.toastkid.lib.R.string.favorite_search_addition_dialog_empty_message
