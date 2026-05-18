@@ -122,7 +122,14 @@ fun FavoriteSearchListUi() {
                         )
                     },
                     keyboardActions = KeyboardActions {
-                        addItem(input, contentViewModel, activityContext, categoryName, repository, favoriteSearchItems)
+                        addItem(
+                            input,
+                            contentViewModel,
+                            activityContext,
+                            categoryName.value,
+                            repository,
+                            favoriteSearchItems
+                        )
                     },
                     keyboardOptions = KeyboardOptions(
                         autoCorrectEnabled = true,
@@ -137,7 +144,7 @@ fun FavoriteSearchListUi() {
                             input,
                             contentViewModel,
                             activityContext,
-                            categoryName,
+                            categoryName.value,
                             repository,
                             favoriteSearchItems
                         )
@@ -183,7 +190,7 @@ private fun addItem(
     input: MutableState<String>,
     contentViewModel: ContentViewModel,
     activityContext: ComponentActivity,
-    categoryName: MutableState<String>,
+    categoryName: String,
     repository: FavoriteSearchRepository,
     favoriteSearchItems: SnapshotStateList<FavoriteSearch>
 ) {
@@ -197,7 +204,7 @@ private fun addItem(
 
     FavoriteSearchInsertion(
         activityContext,
-        categoryName.value,
+        categoryName,
         newWord
     ).invoke()
 
