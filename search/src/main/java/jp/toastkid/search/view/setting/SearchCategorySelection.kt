@@ -9,5 +9,4 @@
 package jp.toastkid.search.view.setting
 
 class SearchCategorySelection(
-) {
-}
+) 
