@@ -351,7 +351,8 @@ fun SearchSettingUi() {
         onDispose {
             CoroutineScope(Dispatchers.IO).launch {
                 preferenceApplier.clearDisableSearchCategory()
-                SearchCategory.entries.filterNot { selections.contains(it) }
+                SearchCategory.entries
+                    .filterNot { selections.contains(it) }
                     .forEach { preferenceApplier.addDisableSearchCategory(it.name) }
             }
         }
