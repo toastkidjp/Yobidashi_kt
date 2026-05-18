@@ -10,10 +10,8 @@ package jp.toastkid.search.view.setting
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import jp.toastkid.search.SearchCategory
 
 class SearchCategorySelection(
-        val searchCategory: SearchCategory,
         var checked: MutableState<Boolean> = mutableStateOf(true)
 ) {
 }
