@@ -8,7 +8,6 @@
 
 package jp.toastkid.image.list
 
-import androidx.compose.runtime.mutableStateOf
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -39,7 +38,8 @@ class ImageLoaderUseCaseTest {
     @MockK
     private lateinit var imageLoader: ImageLoader
 
-    private val backHandlerState = mutableStateOf(true)
+    @MockK
+    private lateinit var backHandlerState: (Boolean) -> Unit
 
     @MockK
     private lateinit var parentExtractor: ParentExtractor
@@ -54,6 +54,7 @@ class ImageLoaderUseCaseTest {
         every { preferenceApplier.excludedItems() }.returns(setOf("test"))
         every { preferenceApplier.imageViewerSort() }.returns("test")
         every { parentExtractor.invoke(any()) }.returns("to")
+        every { backHandlerState.invoke(any()) } just Runs
 
         val image = spyk(Image("/path/to/file", "name"))
         every { bucketLoader.invoke(any()) }.returns(listOf(image))
@@ -75,6 +76,7 @@ class ImageLoaderUseCaseTest {
         verify(exactly = 1) { bucketLoader.invoke(any()) }
         verify(exactly = 0) { imageLoader.invoke(any(), any()) }
         verify(exactly = 1) { submitImages(any()) }
+        verify { backHandlerState.invoke(any()) }
     }
 
     @Test
@@ -84,6 +86,7 @@ class ImageLoaderUseCaseTest {
         verify(exactly = 0) { bucketLoader.invoke(any()) }
         verify(exactly = 1) { imageLoader.invoke(any(), any()) }
         verify(exactly = 1) { submitImages(any()) }
+        verify { backHandlerState.invoke(any()) }
     }
 
     @Test
