@@ -305,7 +305,7 @@ fun SearchSettingUi() {
                 }
             }
 
-            items(SearchCategory.entries, { it.id }) { selection ->
+            items(SearchCategory.entries, SearchCategory::id) { selection ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
