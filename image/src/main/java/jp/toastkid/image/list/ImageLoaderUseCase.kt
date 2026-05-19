@@ -8,7 +8,6 @@
 package jp.toastkid.image.list
 
 import android.net.Uri
-import androidx.compose.runtime.MutableState
 import jp.toastkid.image.Image
 import jp.toastkid.lib.preference.PreferenceApplier
 
@@ -20,7 +19,7 @@ internal class ImageLoaderUseCase(
         private val submitImages: (List<Image>) -> Unit,
         private val bucketLoader: BucketLoader,
         private val imageLoader: ImageLoader,
-        private val backHandlerState: MutableState<Boolean>,
+        private val backHandlerState: (Boolean) -> Unit,
         private val parentExtractor: ParentExtractor = ParentExtractor()
 ) {
     private val staticImageLoader = StaticImageLoader()
@@ -47,7 +46,7 @@ internal class ImageLoaderUseCase(
         submitImages(newList)
 
         currentBucket = bucket
-        backHandlerState.value = currentBucket != null
+        backHandlerState(currentBucket != null)
     }
 
     fun clearCurrentBucket() {
@@ -62,7 +61,7 @@ internal class ImageLoaderUseCase(
 
         clearCurrentBucket()
         invoke()
-        backHandlerState.value = currentBucket != null
+        backHandlerState(currentBucket != null)
     }
 
     fun addStaticImageUrls(urls: List<Uri>) {
