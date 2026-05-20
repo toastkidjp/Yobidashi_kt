@@ -110,7 +110,8 @@ internal fun SwitchRow(
             modifier = Modifier.weight(1f)
         )
         Switch(
-            checked = checked(), onCheckedChange = { onClick() },
+            checked = checked(),
+            onCheckedChange = { onClick() },
             modifier = Modifier.width(44.dp)
         )
     }
