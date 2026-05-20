@@ -486,7 +486,7 @@ internal fun Content() {
                                 },
                                 onDrag = { change, dragAmount ->
                                     change.consume()
-                                    contentViewModel.menuFabOffsetX.value += dragAmount.x
+                                    contentViewModel.menuFabOffsetX.floatValue += dragAmount.x
                                     contentViewModel.menuFabOffsetY.value += dragAmount.y
                                 }
                             )
