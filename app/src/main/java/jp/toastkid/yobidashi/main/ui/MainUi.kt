@@ -481,7 +481,7 @@ internal fun Content() {
                                     PreferenceApplier(activity)
                                         .setNewMenuFabPosition(
                                             contentViewModel.menuFabOffsetX.floatValue,
-                                            contentViewModel.menuFabOffsetY.value
+                                            contentViewModel.menuFabOffsetY.floatValue
                                         )
                                 },
                                 onDrag = { change, dragAmount ->
