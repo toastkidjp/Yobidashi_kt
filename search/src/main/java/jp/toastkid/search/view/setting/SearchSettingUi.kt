@@ -111,7 +111,7 @@ fun SearchSettingUi() {
                             .padding(start = 4.dp)
                     )
                     SearchCategorySpinner(
-                        spinnerOpen.value,
+                        spinnerOpen::value,
                         { spinnerOpen.value = true },
                         { spinnerOpen.value = false },
                         categoryName.value
