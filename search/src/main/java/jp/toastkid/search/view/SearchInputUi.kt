@@ -46,7 +46,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -132,7 +131,7 @@ fun SearchInputUi(
                         .height(56.dp)
                 ) {
                     SearchCategorySpinner(
-                        spinnerOpen.value,
+                        spinnerOpen::value,
                         { spinnerOpen.value = true },
                         { spinnerOpen.value = false },
                         viewModel.categoryName(),
