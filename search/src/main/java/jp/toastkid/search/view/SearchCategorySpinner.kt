@@ -39,7 +39,7 @@ import jp.toastkid.ui.image.EfficientImage
 
 @Composable
 internal fun SearchCategorySpinner(
-    expand: Boolean,
+    expand: () -> Boolean,
     openSpinner: () -> Unit,
     closeSpinner: () -> Unit,
     currentCategory: String,
@@ -68,7 +68,7 @@ internal fun SearchCategorySpinner(
         )
 
         DropdownMenu(
-            expanded = expand,
+            expanded = expand(),
             onDismissRequest = closeSpinner
         ) {
             val searchCategories = remember {
