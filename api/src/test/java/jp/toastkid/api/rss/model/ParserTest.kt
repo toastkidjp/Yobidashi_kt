@@ -90,7 +90,6 @@ class ParserTest {
         assertEquals("http://blog.livedoor.jp/livejupiter2/archives/9541826.html", item.link)
         assertEquals("なんJ（まとめては）いかんのか？", item.source)
         assertEquals("2019-12-30T21:17:13+09:00", item.date)
-        println(item.content)
     }
 
     private fun readStream(filePath: String): InputStream =
