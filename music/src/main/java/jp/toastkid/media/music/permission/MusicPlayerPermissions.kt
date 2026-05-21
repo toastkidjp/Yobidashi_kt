@@ -9,10 +9,13 @@
 package jp.toastkid.media.music.permission
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Build
+import androidx.annotation.RequiresApi
 
 class MusicPlayerPermissions(private val sdkInt: Int = Build.VERSION.SDK_INT) {
 
+    @SuppressLint("InlinedApi")
     operator fun invoke() =
         if (sdkInt >= Build.VERSION_CODES.TIRAMISU)
             arrayOf(
