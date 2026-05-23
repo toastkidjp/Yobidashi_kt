@@ -91,7 +91,13 @@ class KeywordHighlighter {
         }
 
         if (text.contains("**")) {
-            applyStylePattern(text, end, boldingPattern, "**", SpanStyle(fontWeight = FontWeight.Bold))
+            applyStylePattern(
+                text,
+                end,
+                boldingPattern,
+                "**",
+                SpanStyle(fontWeight = FontWeight.Bold)
+            )
             return
         }
 
