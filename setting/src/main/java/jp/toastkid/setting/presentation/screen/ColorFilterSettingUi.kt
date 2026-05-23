@@ -43,8 +43,8 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.setting.R
 import jp.toastkid.setting.application.ColorFilterSettingViewModel
-import jp.toastkid.setting.presentation.SwitchRow
 import jp.toastkid.ui.parts.InsetDivider
+import jp.toastkid.ui.parts.SwitchRow
 
 @Composable
 internal fun ColorFilterSettingUi() {
