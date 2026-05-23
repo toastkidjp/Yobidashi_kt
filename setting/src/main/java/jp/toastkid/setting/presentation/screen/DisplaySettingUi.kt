@@ -49,10 +49,10 @@ import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.setting.R
 import jp.toastkid.setting.application.background.load.LoadedAction
 import jp.toastkid.setting.domain.service.DarkModeApplier
-import jp.toastkid.setting.presentation.SwitchRow
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.ui.parts.InsetDivider
+import jp.toastkid.ui.parts.SwitchRow
 import jp.toastkid.ui.parts.WithIcon
 import java.io.File
 
