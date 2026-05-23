@@ -244,7 +244,7 @@ fun SearchSettingUi() {
             item {
                 CheckableRow(
                     textId = R.string.title_url_module,
-                    checked = { useUrlModuleCheck.value },
+                    checked = useUrlModuleCheck::value,
                     onSwitch = {
                         preferenceApplier.switchEnableUrlModule()
                         useUrlModuleCheck.value = preferenceApplier.isEnableUrlModule()
