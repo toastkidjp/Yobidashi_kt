@@ -379,69 +379,65 @@ private fun TabItem(
                     )
 
                     val primaryColor = MaterialTheme.colorScheme.primary
-                    Row(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .drawBehind { drawRect(primaryColor) }
-                    ) {
-                        val placeholderId = "placeholder"
-                        val tabText = remember(tab) {
-                            buildAnnotatedString {
-                                if (tab is WebTab) {
-                                    appendInlineContent(id = "placeholder", alternateText = "[icon]")
-                                }
-                                append(tab.title())
+                    val placeholderId = "placeholder"
+                    val tabText = remember(tab) {
+                        buildAnnotatedString {
+                            if (tab is WebTab) {
+                                appendInlineContent(id = "placeholder", alternateText = "[icon]")
                             }
+                            append(tab.title())
                         }
+                    }
 
-                        val faviconIcon = remember(tab) { mutableStateOf<Bitmap?>(null) }
+                    val faviconIcon = remember(tab) { mutableStateOf<Bitmap?>(null) }
 
-                        LaunchedEffect(tab) {
-                            // バックグラウンドで画像をロードする想定（使用しているライブラリに合わせて非同期にしてください）
-                            withContext(Dispatchers.IO) {
-                                val faviconApplier = FaviconApplier(context)
-                                faviconIcon.value = faviconApplier.load(tab.getUrl().toUri())
-                            }
+                    LaunchedEffect(tab) {
+                        // バックグラウンドで画像をロードする想定（使用しているライブラリに合わせて非同期にしてください）
+                        withContext(Dispatchers.IO) {
+                            val faviconApplier = FaviconApplier(context)
+                            faviconIcon.value = faviconApplier.load(tab.getUrl().toUri())
                         }
+                    }
 
-                        val containsKey = remember(tab.id()) { GlobalWebViewPool.containsKey(tab.id()) }
+                    val containsKey = remember(tab.id()) { GlobalWebViewPool.containsKey(tab.id()) }
 
-                        val inlineContent = remember(faviconIcon.value, containsKey) {
-                            mapOf(
-                                placeholderId to InlineTextContent(
-                                    Placeholder(
-                                        width = 22.sp,
-                                        height = 22.sp,
-                                        placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
+                    val inlineContent = remember(faviconIcon.value, containsKey) {
+                        mapOf(
+                            placeholderId to InlineTextContent(
+                                Placeholder(
+                                    width = 22.sp,
+                                    height = 22.sp,
+                                    placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
+                                )
+                            ) {
+                                if (faviconIcon.value != null) {
+                                    EfficientImage(
+                                        model = faviconIcon.value,
+                                        contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
+                                        modifier = Modifier
+                                            .size(36.dp)
+                                            .padding(horizontal = 2.dp)
+                                            .alpha(if (containsKey) 1f else 0.3f)
                                     )
-                                ) {
-                                    if (faviconIcon.value != null) {
-                                        EfficientImage(
-                                            model = faviconIcon.value,
-                                            contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
-                                            modifier = Modifier
-                                                .size(36.dp)
-                                                .padding(horizontal = 2.dp)
-                                                .alpha(if (containsKey) 1f else 0.3f)
-                                        )
-                                    }
                                 }
-                            )
-                        }
-
-                        Text(
-                            text = tabText,
-                            inlineContent = inlineContent,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            maxLines = 2,
-                            fontSize = 14.sp,
-                            overflow = TextOverflow.Ellipsis,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(4.dp)
+                            }
                         )
                     }
+
+                    Text(
+                        text = tabText,
+                        inlineContent = inlineContent,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        maxLines = 2,
+                        fontSize = 14.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                            .drawBehind { drawRect(primaryColor) }
+                            .padding(4.dp)
+                    )
                 }
             }
         }
