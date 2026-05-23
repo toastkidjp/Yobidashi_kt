@@ -298,8 +298,6 @@ private fun TabItem(
     onClick: (Tab) -> Unit,
     onDelete: (Tab) -> Unit
 ) {
-    val context = LocalContext.current
-
     val dismissSnackbarDistance = with(LocalDensity.current) { -360.dp.toPx() }
 
     val swipeableState = remember {
