@@ -46,7 +46,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.setting.R
-import jp.toastkid.setting.presentation.CheckableRow
+import jp.toastkid.ui.parts.CheckableRow
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.ui.parts.SingleLineText
 import jp.toastkid.web.user_agent.UserAgentDropdown
