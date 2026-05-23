@@ -10,11 +10,12 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Required
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonDecodingException
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -191,18 +192,24 @@ class TabList {
             return TabList()
         }
 
+        @OptIn(ExperimentalSerializationApi::class)
         private fun loadTabsFromDir(): List<Tab?>? {
             return itemsDir?.list()
-                    ?.map {
+                    ?.mapNotNull {
                         val json: String = File(itemsDir, it).readText(Charsets.UTF_8)
 
-                        when {
-                            json.contains("editorTab") -> jsonSerializer.decodeFromString<EditorTab>(json)
-                            json.contains("pdfTab") -> jsonSerializer.decodeFromString<PdfTab>(json)
-                            json.contains("articleTab") -> jsonSerializer.decodeFromString<ArticleTab>(json)
-                            json.contains("articleListTab") -> jsonSerializer.decodeFromString<ArticleListTab>(json)
-                            json.contains("calendarTab") -> jsonSerializer.decodeFromString<CalendarTab>(json)
-                            else -> jsonSerializer.decodeFromString<WebTab>(json)
+                        try {
+                            when {
+                                json.contains("editorTab") -> jsonSerializer.decodeFromString<EditorTab>(json)
+                                json.contains("pdfTab") -> jsonSerializer.decodeFromString<PdfTab>(json)
+                                json.contains("articleTab") -> jsonSerializer.decodeFromString<ArticleTab>(json)
+                                json.contains("articleListTab") -> jsonSerializer.decodeFromString<ArticleListTab>(json)
+                                json.contains("calendarTab") -> jsonSerializer.decodeFromString<CalendarTab>(json)
+                                else -> jsonSerializer.decodeFromString<WebTab>(json)
+                            }
+                        } catch (e: JsonDecodingException) {
+                            Timber.w(e)
+                            null
                         }
                     }
         }
