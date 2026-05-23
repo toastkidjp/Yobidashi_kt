@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.tab.tab_list.view
 
+import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
@@ -51,6 +52,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
@@ -89,7 +91,9 @@ import jp.toastkid.yobidashi.tab.TabThumbnails
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -381,36 +385,49 @@ private fun TabItem(
                             .drawBehind { drawRect(primaryColor) }
                     ) {
                         val placeholderId = "placeholder"
-                        val tabText = buildAnnotatedString {
-                            if (tab is WebTab) {
-                                appendInlineContent(id = placeholderId, alternateText = "[icon]")
+                        val tabText = remember(tab) {
+                            buildAnnotatedString {
+                                if (tab is WebTab) {
+                                    appendInlineContent(id = "placeholder", alternateText = "[icon]")
+                                }
+                                append(tab.title())
                             }
-                            append(tab.title())
                         }
 
-                        val inlineContent = mapOf(
-                            placeholderId to InlineTextContent(
-                                Placeholder(
-                                    width = 22.sp,
-                                    height = 22.sp,
-                                    placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
-                                )
-                            ) {
+                        val faviconIcon = remember(tab) { mutableStateOf<Bitmap?>(null) }
+
+                        LaunchedEffect(tab) {
+                            // バックグラウンドで画像をロードする想定（使用しているライブラリに合わせて非同期にしてください）
+                            withContext(Dispatchers.IO) {
                                 val faviconApplier = FaviconApplier(context)
-                                val icon = faviconApplier.load(tab.getUrl().toUri())
-                                val containsKey = GlobalWebViewPool.containsKey(tab.id())
-                                if (icon != null) {
-                                    EfficientImage(
-                                        model = icon,
-                                        contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
-                                        modifier = Modifier
-                                            .size(36.dp)
-                                            .padding(horizontal = 2.dp)
-                                            .alpha(if (containsKey) 1f else 0.3f)
-                                    )
-                                }
+                                faviconIcon.value = faviconApplier.load(tab.getUrl().toUri())
                             }
-                        )
+                        }
+
+                        val containsKey = remember(tab.id()) { GlobalWebViewPool.containsKey(tab.id()) }
+
+                        val inlineContent = remember(faviconIcon.value, containsKey) {
+                            mapOf(
+                                placeholderId to InlineTextContent(
+                                    Placeholder(
+                                        width = 22.sp,
+                                        height = 22.sp,
+                                        placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
+                                    )
+                                ) {
+                                    if (faviconIcon.value != null) {
+                                        EfficientImage(
+                                            model = faviconIcon.value,
+                                            contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
+                                            modifier = Modifier
+                                                .size(36.dp)
+                                                .padding(horizontal = 2.dp)
+                                                .alpha(if (containsKey) 1f else 0.3f)
+                                        )
+                                    }
+                                }
+                            )
+                        }
 
                         Text(
                             text = tabText,
