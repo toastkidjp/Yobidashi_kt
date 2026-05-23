@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import jp.toastkid.calendar.model.holiday.HolidayCalendar
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.setting.presentation.CheckableRow
+import jp.toastkid.ui.parts.CheckableRow
 
 @Composable
 internal fun CalendarSettingUi() {
