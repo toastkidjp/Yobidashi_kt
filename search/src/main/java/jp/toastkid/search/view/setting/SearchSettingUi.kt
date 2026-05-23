@@ -28,7 +28,6 @@ import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,6 +42,7 @@ import jp.toastkid.search.R
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.view.SearchCategorySpinner
 import jp.toastkid.ui.image.EfficientImage
+import jp.toastkid.ui.parts.CheckableRow
 import jp.toastkid.ui.parts.InsetDivider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -129,13 +129,13 @@ fun SearchSettingUi() {
             item {
                 CheckableRow(
                     textId = R.string.title_use_search_query_extractor,
-                    clickable = {
+                    onSwitch = {
                         val newState = !preferenceApplier.enableSearchQueryExtract
                         preferenceApplier.enableSearchQueryExtract = newState
                         enableSearchQueryExtractCheck.value =
                             preferenceApplier.enableSearchQueryExtract
                     },
-                    booleanState = enableSearchQueryExtractCheck.value,
+                    checked = { enableSearchQueryExtractCheck.value },
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_extract
                 )
@@ -148,7 +148,7 @@ fun SearchSettingUi() {
             item {
                 CheckableRow(
                     textId = R.string.title_enable_search_with_clip,
-                    clickable = {
+                    onSwitch = {
                         val newState = !preferenceApplier.enableSearchWithClip
                         preferenceApplier.enableSearchWithClip = newState
 
@@ -162,7 +162,7 @@ fun SearchSettingUi() {
                         enableSearchWithClipCheck.value =
                             preferenceApplier.enableSearchWithClip
                     },
-                    booleanState = enableSearchWithClipCheck.value,
+                    checked = { enableSearchWithClipCheck.value },
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_clipboard_black
                 )
@@ -175,12 +175,12 @@ fun SearchSettingUi() {
             item {
                 CheckableRow(
                     textId = R.string.title_enable_suggestion,
-                    clickable = {
+                    onSwitch = {
                         preferenceApplier.switchEnableSuggestion()
                         useSuggestionCheck.value =
                             preferenceApplier.isEnableSuggestion
                     },
-                    booleanState = useSuggestionCheck.value,
+                    checked = { useSuggestionCheck.value },
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_search_black
                 )
@@ -193,11 +193,11 @@ fun SearchSettingUi() {
             item {
                 CheckableRow(
                     textId = R.string.title_use_search_history,
-                    clickable = {
+                    onSwitch = {
                         preferenceApplier.switchEnableSearchHistory()
                         useHistoryCheck.value = preferenceApplier.isEnableSearchHistory
                     },
-                    booleanState = useHistoryCheck.value,
+                    checked = { useHistoryCheck.value },
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_search_history_black
                 )
@@ -210,11 +210,11 @@ fun SearchSettingUi() {
             item {
                 CheckableRow(
                     textId = R.string.title_use_favorite_search,
-                    clickable = {
+                    onSwitch = {
                         preferenceApplier.switchEnableFavoriteSearch()
                         useFavoriteCheck.value = preferenceApplier.isEnableFavoriteSearch
                     },
-                    booleanState = useFavoriteCheck.value,
+                    checked = { useFavoriteCheck.value },
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_favorite
                 )
@@ -227,11 +227,11 @@ fun SearchSettingUi() {
             item {
                 CheckableRow(
                     textId = R.string.use_view_history,
-                    clickable = {
+                    onSwitch = {
                         preferenceApplier.switchEnableViewHistory()
                         useViewHistoryCheck.value = preferenceApplier.isEnableViewHistory
                     },
-                    booleanState = useViewHistoryCheck.value,
+                    checked = { useViewHistoryCheck.value },
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = jp.toastkid.lib.R.drawable.ic_history_black
                 )
@@ -244,11 +244,11 @@ fun SearchSettingUi() {
             item {
                 CheckableRow(
                     textId = R.string.title_url_module,
-                    clickable = {
+                    checked = { useUrlModuleCheck.value },
+                    onSwitch = {
                         preferenceApplier.switchEnableUrlModule()
                         useUrlModuleCheck.value = preferenceApplier.isEnableUrlModule()
                     },
-                    booleanState = useUrlModuleCheck.value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_web_black
                 )
@@ -261,11 +261,11 @@ fun SearchSettingUi() {
             item {
                 CheckableRow(
                     textId = R.string.title_trend_module,
-                    clickable = {
+                    onSwitch = {
                         preferenceApplier.switchEnableTrendModule()
                         useTrendCheck.value = preferenceApplier.isEnableUrlModule()
                     },
-                    booleanState = useTrendCheck.value,
+                    checked = { useTrendCheck.value },
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_trend_black
                 )
@@ -357,43 +357,4 @@ fun SearchSettingUi() {
             }
         }
     })
-}
-
-/**
- * TODO temporary
- */
-@Composable
-internal fun CheckableRow(
-    textId: Int,
-    clickable: () -> Unit,
-    booleanState: Boolean,
-    iconTint: Color? = null,
-    iconId: Int? = null
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable(onClick = clickable)
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-    ) {
-        if (iconId != null && iconTint != null) {
-            Icon(
-                painterResource(id = iconId),
-                tint = iconTint,
-                contentDescription = stringResource(id = textId),
-                modifier = Modifier.padding(end = 4.dp)
-            )
-        }
-
-        Text(
-            stringResource(id = textId),
-            modifier = Modifier
-                .weight(1f)
-        )
-        Checkbox(
-            checked = booleanState,
-            onCheckedChange = { clickable() },
-            modifier = Modifier.width(44.dp)
-        )
-    }
 }
