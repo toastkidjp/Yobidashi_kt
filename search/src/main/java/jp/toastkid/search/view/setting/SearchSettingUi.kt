@@ -231,7 +231,7 @@ fun SearchSettingUi() {
                         preferenceApplier.switchEnableViewHistory()
                         useViewHistoryCheck.value = preferenceApplier.isEnableViewHistory
                     },
-                    checked = { useViewHistoryCheck.value },
+                    checked = useViewHistoryCheck::value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = jp.toastkid.lib.R.drawable.ic_history_black
                 )
