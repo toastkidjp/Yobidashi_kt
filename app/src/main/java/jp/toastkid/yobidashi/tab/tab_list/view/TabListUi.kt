@@ -38,6 +38,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -54,14 +56,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -73,10 +81,13 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.input.Inputs
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.ui.image.EfficientImage
+import jp.toastkid.web.FaviconApplier
+import jp.toastkid.web.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.TabThumbnails
 import jp.toastkid.yobidashi.tab.model.Tab
+import jp.toastkid.yobidashi.tab.model.WebTab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.burnoutcrew.reorderable.ReorderableItem
@@ -283,6 +294,8 @@ private fun TabItem(
     onClick: (Tab) -> Unit,
     onDelete: (Tab) -> Unit
 ) {
+    val context = LocalContext.current
+
     val dismissSnackbarDistance = with(LocalDensity.current) { -360.dp.toPx() }
 
     val swipeableState = remember {
@@ -362,18 +375,56 @@ private fun TabItem(
                     )
 
                     val primaryColor = MaterialTheme.colorScheme.primary
-                    Text(
-                        text = tab.title(),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        maxLines = 2,
-                        fontSize = 14.sp,
-                        overflow = TextOverflow.Ellipsis,
+                    Row(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
-                            .fillMaxWidth()
                             .drawBehind { drawRect(primaryColor) }
-                            .padding(4.dp)
-                    )
+                    ) {
+                        val placeholderId = "placeholder"
+                        val tabText = buildAnnotatedString {
+                            if (tab is WebTab) {
+                                appendInlineContent(id = placeholderId, alternateText = "[icon]")
+                            }
+                            append(tab.title())
+                        }
+
+                        val inlineContent = mapOf(
+                            placeholderId to InlineTextContent(
+                                Placeholder(
+                                    width = 22.sp,
+                                    height = 22.sp,
+                                    placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
+                                )
+                            ) {
+                                val faviconApplier = FaviconApplier(context)
+                                val icon = faviconApplier.load(tab.getUrl().toUri())
+                                val containsKey = GlobalWebViewPool.containsKey(tab.id())
+                                if (icon != null) {
+                                    EfficientImage(
+                                        model = icon,
+                                        contentDescription = stringResource(id = jp.toastkid.lib.R.string.image),
+                                        modifier = Modifier
+                                            .size(36.dp)
+                                            .padding(horizontal = 2.dp)
+                                            .alpha(if (containsKey) 1f else 0.3f)
+                                    )
+                                }
+                            }
+                        )
+
+                        Text(
+                            text = tabText,
+                            inlineContent = inlineContent,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            maxLines = 2,
+                            fontSize = 14.sp,
+                            overflow = TextOverflow.Ellipsis,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(4.dp)
+                        )
+                    }
                 }
             }
         }
