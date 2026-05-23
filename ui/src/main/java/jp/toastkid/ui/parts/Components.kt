@@ -1,12 +1,4 @@
-/*
- * Copyright (c) 2022 toastkidjp.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompany this distribution.
- * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
- */
-
-package jp.toastkid.setting.presentation
+package jp.toastkid.ui.parts
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -27,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun CheckableRow(
+fun CheckableRow(
     textId: Int,
     checked: () -> Boolean,
     onSwitch: (Boolean) -> Unit,
@@ -73,7 +65,7 @@ internal fun CheckableRow(
 }
 
 @Composable
-internal fun SwitchRow(
+fun SwitchRow(
     textId: Int,
     checked: () -> Boolean,
     onSwitch: (Boolean) -> Unit,
