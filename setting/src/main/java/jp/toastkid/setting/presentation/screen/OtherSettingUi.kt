@@ -48,9 +48,9 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.setting.R
 import jp.toastkid.setting.application.intent.SettingsIntentFactory
 import jp.toastkid.setting.domain.service.PreferencesClearUseCase
-import jp.toastkid.setting.presentation.CheckableRow
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.image.EfficientImage
+import jp.toastkid.ui.parts.CheckableRow
 import jp.toastkid.ui.parts.InsetDivider
 import jp.toastkid.ui.parts.WithIcon
 
