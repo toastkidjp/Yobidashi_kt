@@ -214,7 +214,7 @@ fun SearchSettingUi() {
                         preferenceApplier.switchEnableFavoriteSearch()
                         useFavoriteCheck.value = preferenceApplier.isEnableFavoriteSearch
                     },
-                    checked = { useFavoriteCheck.value },
+                    checked = useFavoriteCheck::value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_favorite
                 )
