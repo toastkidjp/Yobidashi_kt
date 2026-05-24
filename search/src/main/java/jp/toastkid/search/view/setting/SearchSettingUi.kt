@@ -162,7 +162,7 @@ fun SearchSettingUi() {
                         enableSearchWithClipCheck.value =
                             preferenceApplier.enableSearchWithClip
                     },
-                    checked = { enableSearchWithClipCheck.value },
+                    checked = enableSearchWithClipCheck::value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_clipboard_black
                 )
