@@ -86,7 +86,13 @@ class KeywordHighlighter {
         }
 
         if (text.contains("***")) {
-            applyStylePattern(text, end, italicPattern, "***", SpanStyle(fontStyle = FontStyle.Italic))
+            applyStylePattern(
+                text,
+                end,
+                italicPattern,
+                "***",
+                SpanStyle(fontStyle = FontStyle.Italic)
+            )
             return
         }
 
