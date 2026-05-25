@@ -197,7 +197,7 @@ fun SearchSettingUi() {
                         preferenceApplier.switchEnableSearchHistory()
                         useHistoryCheck.value = preferenceApplier.isEnableSearchHistory
                     },
-                    checked = { useHistoryCheck.value },
+                    checked = useHistoryCheck::value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_search_history_black
                 )
