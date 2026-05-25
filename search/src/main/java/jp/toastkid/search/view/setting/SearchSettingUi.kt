@@ -180,7 +180,7 @@ fun SearchSettingUi() {
                         useSuggestionCheck.value =
                             preferenceApplier.isEnableSuggestion
                     },
-                    checked = { useSuggestionCheck.value },
+                    checked = useSuggestionCheck::value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_search_black
                 )
