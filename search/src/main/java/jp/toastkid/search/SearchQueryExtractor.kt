@@ -33,7 +33,7 @@ class SearchQueryExtractor {
                     or (host == "www.ft.com")
                     or (host == "www.startpage.com")
                     or (host == "www.imdb.com")
-                    or host.equals("duckduckgo.com")
+                    or (host == "duckduckgo.com")
                     or host.equals("lite.duckduckgo.com")
                     or host.equals("news.google.com")
                     or host.endsWith("medium.com")
