@@ -10,7 +10,7 @@
 
 You can easy web search with this app. And this app is easy customizable.
 
-## This app has many functions!
+## This app contains many features.
 1. Web Search
 2. Barcode Reader
 3. RSS Reader
