@@ -265,7 +265,7 @@ fun SearchSettingUi() {
                         preferenceApplier.switchEnableTrendModule()
                         useTrendCheck.value = preferenceApplier.isEnableUrlModule()
                     },
-                    checked = { useTrendCheck.value },
+                    checked = useTrendCheck::value,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_trend_black
                 )
