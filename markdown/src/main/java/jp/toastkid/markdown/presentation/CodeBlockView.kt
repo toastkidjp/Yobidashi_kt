@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.markdown.domain.model.data.CodeBlockLine
 
 @Composable
-internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modifier: Modifier = Modifier) {
+internal fun CodeBlockView(line: CodeBlockLine, modifier: Modifier = Modifier, fontSize: TextUnit = 28.sp) {
     val viewModel = remember { CodeBlockViewModel() }
 
     Surface(
