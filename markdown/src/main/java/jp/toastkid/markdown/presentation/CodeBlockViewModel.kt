@@ -29,7 +29,7 @@ class CodeBlockViewModel {
     private val lineCountState = mutableIntStateOf(1)
 
     fun maxHeight(fontSize: TextUnit): Dp {
-        return min(lineCountState.value * fontSize.value * 1.55.em.value, 800f).dp
+        return min(lineCountState.intValue * fontSize.value * 1.55.em.value, 800f).dp
     }
 
     fun content() = content
