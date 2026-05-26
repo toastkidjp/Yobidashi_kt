@@ -17,8 +17,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -81,7 +83,7 @@ fun FavoriteSearchListUi() {
                 )
             }
 
-            val input = remember { mutableStateOf("") }
+            val input = remember { TextFieldState("") }
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -96,10 +98,9 @@ fun FavoriteSearchListUi() {
                 )
 
                 TextField(
-                    value = input.value,
-                    onValueChange = { input.value = it },
-                    label = { stringResource(id = R.string.word) },
-                    singleLine = true,
+                    state = input,
+                    label = { Text(stringResource(id = R.string.word), color = MaterialTheme.colorScheme.onPrimary) },
+                    lineLimits = TextFieldLineLimits.SingleLine,
                     textStyle = TextStyle(
                         color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.Start,
@@ -117,13 +118,13 @@ fun FavoriteSearchListUi() {
                             tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
                                 .clickable {
-                                    input.value = ""
+                                    input.clearText()
                                 }
                         )
                     },
-                    keyboardActions = KeyboardActions {
+                    onKeyboardAction = {
                         addItem(
-                            input.value.trim(),
+                            input.text.trim().toString(),
                             contentViewModel,
                             activityContext,
                             categoryName.value,
@@ -131,7 +132,7 @@ fun FavoriteSearchListUi() {
                             favoriteSearchItems
                         )
                     },
-                    keyboardOptions = KeyboardOptions(
+                    keyboardOptions = KeyboardOptions.Default.copy(
                         autoCorrectEnabled = true,
                         imeAction = ImeAction.Done
                     ),
@@ -141,7 +142,7 @@ fun FavoriteSearchListUi() {
                 Button(
                     onClick = {
                         addItem(
-                            input.value.trim(),
+                            input.text.trim().toString(),
                             contentViewModel,
                             activityContext,
                             categoryName.value,
