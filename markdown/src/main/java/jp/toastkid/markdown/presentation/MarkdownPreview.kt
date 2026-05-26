@@ -99,7 +99,7 @@ fun MarkdownPreview(
                                         )
 
                                         else -> DisableSelection {
-                                            Text("・ ", fontSize = 14.sp)
+                                            Text("・ ", fontSize = 14.sp, color = contentColor)
                                         }
                                     }
                                     TextLineView(
