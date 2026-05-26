@@ -11,7 +11,7 @@ package jp.toastkid.markdown.presentation
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.Dp
@@ -26,7 +26,7 @@ class CodeBlockViewModel {
 
     private val codeStringBuilder = CodeStringBuilder()
 
-    private val lineCountState = mutableStateOf(1)
+    private val lineCountState = mutableIntStateOf(1)
 
     fun maxHeight(fontSize: TextUnit): Dp {
         return min(lineCountState.value * fontSize.value * 1.55.em.value, 800f).dp
