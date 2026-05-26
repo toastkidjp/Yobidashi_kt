@@ -9,6 +9,7 @@ package jp.toastkid.search
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import jp.toastkid.lib.ContentViewModel
@@ -85,7 +86,8 @@ class SearchAction(
      */
     private fun openUrl(validatedUrl: Boolean) {
         val uri =
-            if (validatedUrl) { Uri.parse(query) } else { urlFactory(category, query, currentUrl) }
+            if (validatedUrl) {
+                query.toUri() } else { urlFactory(category, query, currentUrl) }
         openUri(uri)
     }
 
