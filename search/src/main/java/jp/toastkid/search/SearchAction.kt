@@ -86,8 +86,7 @@ class SearchAction(
      */
     private fun openUrl(validatedUrl: Boolean) {
         val uri =
-            if (validatedUrl) {
-                query.toUri() } else { urlFactory(category, query, currentUrl) }
+            if (validatedUrl) { query.toUri() } else { urlFactory(category, query, currentUrl) }
         openUri(uri)
     }
 
