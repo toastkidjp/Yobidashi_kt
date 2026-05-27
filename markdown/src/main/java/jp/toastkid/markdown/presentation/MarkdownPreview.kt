@@ -55,9 +55,11 @@ fun MarkdownPreview(
         LocalTextToolbar provides CommonContextMenuToolbarFactory().invoke(LocalView.current)
     ) {
         SelectionContainer {
-            Column(modifier = modifier
-                .verticalScroll(scrollState)
-                .padding(8.dp)) {
+            Column(
+                modifier = modifier
+                    .verticalScroll(scrollState)
+                    .padding(8.dp)
+            ) {
                 content.lines().forEach { line ->
                     when (line) {
                         is TextBlock -> {
