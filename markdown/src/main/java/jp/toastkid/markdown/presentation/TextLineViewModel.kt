@@ -38,8 +38,6 @@ class TextLineViewModel(private val linkBehaviorService: LinkBehaviorService) {
     }
 
     fun onClick(it: Int) {
-        //val textLayoutResult = lastLayoutResult.value ?: return
-
         val stringRange = annotatedString
             .value
             .getStringAnnotations(tag = "URL", start = it, end = it)
