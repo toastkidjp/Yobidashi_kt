@@ -117,9 +117,7 @@ fun FavoriteSearchListUi() {
                             contentDescription = "clear text",
                             tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
-                                .clickable {
-                                    input.clearText()
-                                }
+                                .clickable(onClick = input::clearText)
                         )
                     },
                     onKeyboardAction = {
