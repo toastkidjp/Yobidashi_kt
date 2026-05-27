@@ -35,7 +35,7 @@ suspend fun PointerInputScope.onTransform(
         awaitFirstDown(requireUnconsumed = false)
         do {
             val event = awaitPointerEvent()
-            val canceled = event.changes.fastAny { it.isConsumed }
+            val canceled = event.changes.fastAny(PointerInputChange::isConsumed)
             if (!canceled) {
                 val zoomChange = event.calculateZoom()
                 val rotationChange = event.calculateRotation()
