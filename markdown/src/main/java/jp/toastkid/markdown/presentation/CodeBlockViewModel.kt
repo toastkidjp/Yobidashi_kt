@@ -37,7 +37,7 @@ class CodeBlockViewModel {
     fun outputTransformation() = codeStringBuilder
 
     fun lineNumberTexts(): List<String> {
-        val max = lineCountState.value
+        val max = lineCountState.intValue
         val length = max.toString().length
 
         return (0 until max).map {
