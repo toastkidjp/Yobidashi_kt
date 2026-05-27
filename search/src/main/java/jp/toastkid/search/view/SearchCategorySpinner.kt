@@ -78,7 +78,7 @@ internal fun SearchCategorySpinner(
             }
 
             LazyColumn(modifier = Modifier.size(popupWindowHeight)) {
-                items(searchCategories, { it.id }) { searchCategory ->
+                items(searchCategories, SearchCategory::id) { searchCategory ->
                     DropdownMenuItem(
                         text = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
