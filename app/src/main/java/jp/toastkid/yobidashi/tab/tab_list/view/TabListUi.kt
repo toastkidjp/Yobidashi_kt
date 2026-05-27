@@ -137,7 +137,7 @@ internal fun TabListUi(tabAdapter: TabAdapter, modifier: Modifier = Modifier) {
     val localView = LocalView.current
 
     ModalBottomSheet(
-        onDismissRequest = { contentViewModel.switchTabList() },
+        onDismissRequest = contentViewModel::switchTabList,
         tonalElevation = 1.dp,
         containerColor = MaterialTheme.colorScheme.primary,
     ) {
