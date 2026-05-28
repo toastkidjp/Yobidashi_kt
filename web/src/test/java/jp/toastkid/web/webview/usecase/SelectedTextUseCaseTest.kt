@@ -44,7 +44,7 @@ class SelectedTextUseCaseTest {
         every { contentViewModel.snackShort(any<String>()) } just Runs
         every { contentViewModel.snackShort(any<Int>()) } just Runs
         every { contentViewModel.preview(any()) } just Runs
-        every { contentViewModel.search(any()) }.just(Runs)
+        every { contentViewModel.search(any()) } just Runs
 
         mockkObject(Urls)
         every { Urls.isValidUrl(any()) } returns false
