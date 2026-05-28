@@ -38,7 +38,7 @@ class SelectedTextExtractorTest {
 
         mockkConstructor(ViewModelProvider::class)
         every { anyConstructed<ViewModelProvider>().get(ContentViewModel::class.java) }.returns(contentViewModel)
-        every { contentViewModel.snackShort(any<Int>()) }.just(Runs)
+        every { contentViewModel.snackShort(any<Int>()) } just Runs
         every { callback.invoke(any()) } just Runs
     }
 
