@@ -49,7 +49,7 @@ fun MarkdownPreview(
     scrollState: ScrollState,
     modifier: Modifier
 ) {
-    val viewModel = remember { MarkdownPreviewViewModel(scrollState) }
+    val viewModel = remember { MarkdownPreviewViewModel() }
 
     CompositionLocalProvider(
         LocalTextToolbar provides CommonContextMenuToolbarFactory().invoke(LocalView.current)
