@@ -46,6 +46,8 @@ class EditorTabViewModel {
 
     private val lineCount = mutableIntStateOf(0)
 
+    private val verticalScrollState = ScrollState(0)
+
     private val lineNumberScrollState = ScrollState(0)
 
     private val focusRequester = FocusRequester()
@@ -104,6 +106,8 @@ class EditorTabViewModel {
 
         lineNumbers.value = list
     }
+
+    fun verticalScrollState() = verticalScrollState
 
     fun lineNumberScrollState() = lineNumberScrollState
 
