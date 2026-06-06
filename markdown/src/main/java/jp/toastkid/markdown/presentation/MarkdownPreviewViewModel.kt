@@ -12,7 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 class MarkdownPreviewViewModel {
 
     fun extractText(it: String, taskList: Boolean): String {
-        return if (taskList) it.substring(it.indexOf("] ") + 1) else it
+        return if (taskList) it.substring(it.indexOf("] ") + 1).trimStart() else it
     }
 
     fun makeFontWeight(level: Int): FontWeight {
