@@ -63,7 +63,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -96,7 +95,11 @@ import jp.toastkid.lib.viewmodel.event.finder.FindInPageEvent
 import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.dialog.DestructiveChangeConfirmDialog
 import jp.toastkid.ui.dialog.InputFileNameDialogUi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.math.min
@@ -293,14 +296,19 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
         viewModel.openExitDialog()
     }
 
-    LaunchedEffect(path) {
-        snapshotFlow { viewModel.content().text to (viewModel.content().composition == null) }
-            .distinctUntilChanged()
-            .collect {
-                if (!it.second) {
-                    return@collect
-                }
+    /* TODO
+    LaunchedEffect(viewModel.verticalScrollState().value) {
+        viewModel.adjustLineNumberState()
+    }
+    */
 
+    LaunchedEffect(viewModel.content()) {
+        snapshotFlow(viewModel::calculateConversionTrigger)
+            .distinctUntilChanged()
+            .filter { it.third }
+            .debounce(100)
+            .flowOn(Dispatchers.Default)
+            .collect { _ ->
                 viewModel.applyStyle()
             }
     }
