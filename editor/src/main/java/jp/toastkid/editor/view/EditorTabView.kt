@@ -110,7 +110,7 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
 
     val contentViewModel = viewModel(ContentViewModel::class.java, context)
 
-    val viewModel = remember { EditorTabViewModel() }
+    val viewModel = remember(path) { EditorTabViewModel() }
 
     val coroutineScope = rememberCoroutineScope()
 
