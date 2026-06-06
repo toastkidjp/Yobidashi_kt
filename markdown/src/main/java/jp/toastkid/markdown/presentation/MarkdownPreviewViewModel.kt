@@ -9,7 +9,7 @@ package jp.toastkid.markdown.presentation
 
 import androidx.compose.ui.text.font.FontWeight
 
-class MarkdownPreviewViewModel() {
+class MarkdownPreviewViewModel {
 
     fun extractText(it: String, taskList: Boolean): String {
         return if (taskList) it.substring(it.indexOf("] ") + 1) else it
