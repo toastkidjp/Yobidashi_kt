@@ -14,24 +14,32 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import java.util.concurrent.atomic.AtomicReference
 import java.util.regex.Pattern
 
 @Immutable
-private data class EditorStylePattern(
+data class EditorStylePattern(
     val regex: Pattern,
     val lightStyle: SpanStyle,
     val darkStyle: SpanStyle
 )
 
+/**
+ * Data class for keeping calculation result.
+ */
+data class ParseResult(
+    val text: String,
+    val styles: List<Triple<Int, Int, SpanStyle>>
+)
+
 class TextEditorOutputTransformation(
     private val content: TextFieldState,
-    private val darkMode: Boolean
+    private val darkMode: Boolean,
+    private val parseResultProvider: () -> ParseResult
 ) : OutputTransformation {
 
     private val patterns = listOf(
         EditorStylePattern(
-            Pattern.compile("[0-9]*", Pattern.MULTILINE),
+            Pattern.compile("^[0-9]+\\.\\s", Pattern.MULTILINE),
             SpanStyle(Color(0xFF6897BB)),
             SpanStyle(Color(0xFFA8B7EE))
         ),
@@ -62,39 +70,89 @@ class TextEditorOutputTransformation(
         )
     )
 
-    private val styleCache = mutableListOf<Triple<Int, Int, SpanStyle>>()
-
-    private val transformedText = AtomicReference<CharSequence?>(null)
-
     override fun TextFieldBuffer.transformOutput() {
-        val last = transformedText.get()
-        if (last != null && content.composition == null && last == content.text) {
-            applyStyles(this)
-            append("[EOF]")
+        val currentText = this.asCharSequence()
+        val currentParseResult = parseResultProvider()
+        val parsedText = currentParseResult.text
+
+        if (currentText == parsedText) {
+            currentParseResult.styles.forEach { (start, end, style) ->
+                if (start <= length && end <= length) {
+                    addStyle(style, start, end)
+                }
+            }
+
+            if (content.composition == null) {
+                append(END_OF_FILE_MARKER)
+            }
+
             return
         }
 
-        transformedText.set(content.text)
-        calculateStyle(darkMode, content.text.toString())
-        applyStyles(this)
-        append("[EOF]")
-    }
+        val diffIndex = findDiffIndexFast(currentText, parsedText)
+        val realDiffLength = currentText.length - parsedText.length
 
-    private fun applyStyles(buffer: TextFieldBuffer) {
-        styleCache.forEach { triple ->
-            buffer.addStyle(triple.third, triple.first, triple.second)
-        }
-    }
+        currentParseResult.styles.forEach { (start, end, style) ->
+            var newStart = start
+            var newEnd = end
 
-    private fun calculateStyle(darkTheme: Boolean, str: String) {
-        styleCache.clear()
-        patterns.forEach { pattern ->
-            val find = pattern.regex.matcher(str)
-            while (find.find()) {
-                val spanStyle = if (darkTheme) pattern.darkStyle else pattern.lightStyle
-                styleCache.add(Triple(find.start(), find.end(), spanStyle))
+            if (start >= diffIndex) {
+                newStart = (start + realDiffLength).coerceAtLeast(0)
+                newEnd = (end + realDiffLength).coerceAtLeast(0)
+            } else if (end > diffIndex) {
+                newEnd = (end + realDiffLength).coerceAtLeast(0)
+            }
+
+            if (newStart < newEnd && newStart <= length && newEnd <= length) {
+                addStyle(style, newStart, newEnd)
             }
         }
+
+        val selectionStart = content.selection.start
+        if (selectionStart <= currentText.length) {
+            val (lineStart, lineEnd) = findCurrentLineRange(currentText, selectionStart)
+            val currentLineText = currentText.substring(lineStart, lineEnd)
+
+            patterns.forEach { pattern ->
+                val matcher = pattern.regex.matcher(currentLineText)
+                while (matcher.find()) {
+                    val style = if (darkMode) pattern.darkStyle else pattern.lightStyle
+
+                    val globalStart = lineStart + matcher.start()
+                    val globalEnd = lineStart + matcher.end()
+
+                    if (globalStart <= length && globalEnd <= length) {
+                        addStyle(style, globalStart, globalEnd)
+                    }
+                }
+            }
+        }
+
+        if (content.composition == null) {
+            append(END_OF_FILE_MARKER)
+        }
     }
 
+    private fun findDiffIndexFast(current: CharSequence, parsed: String): Int {
+        val minLen = minOf(current.length, parsed.length)
+        for (i in 0 until minLen) {
+            if (current[i] != parsed[i]) {
+                return i
+            }
+        }
+        return minLen
+    }
+
+    private fun findCurrentLineRange(text: CharSequence, selectionStart: Int): Pair<Int, Int> {
+        val start = text.lastIndexOf('\n', selectionStart - 1).coerceAtKeyAtLeast(0)
+        val end = text.indexOf('\n', selectionStart).let { if (it == -1) text.length else it }
+        return Pair(start, end)
+    }
+
+    private fun Int.coerceAtKeyAtLeast(value: Int): Int = if (this < value) value else this
+
+    fun getPatterns() = patterns
+
 }
+
+private val END_OF_FILE_MARKER = "[EOF]"
