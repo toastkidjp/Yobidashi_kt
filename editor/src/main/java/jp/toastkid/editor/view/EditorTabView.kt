@@ -241,6 +241,7 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
             background = Color.Transparent
         ),
         cursorBrush = SolidColor(viewModel.cursorColor()),
+        scrollState = viewModel.verticalScrollState(),
         modifier = modifier
             .focusRequester(viewModel.focusRequester())
             .fillMaxWidth()
