@@ -24,9 +24,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.text.MultiParagraph
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import jp.toastkid.editor.view.style.ParseResult
 import jp.toastkid.editor.view.style.TextEditorOutputTransformation
 import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
@@ -54,6 +56,12 @@ class EditorTabViewModel {
 
     private val nestedScrollDispatcher = NestedScrollDispatcher()
 
+
+    private val parseResult = mutableStateOf(ParseResult("", emptyList()))
+
+    private val transformation =
+        TextEditorOutputTransformation(content, darkMode.value, { parseResult.value })
+
     fun content() = content
 
     fun clearText() {
@@ -68,6 +76,11 @@ class EditorTabViewModel {
         if (contentLength.intValue != content.text.length) {
             contentLength.intValue = content.text.length
         }
+
+        val currentText = content.text.toString()
+        val styles = calculateStyleAsync(darkMode.value, currentText)
+
+        parseResult.value = ParseResult(currentText, styles)
     }
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
@@ -136,10 +149,8 @@ class EditorTabViewModel {
         )
     }
 
-    private val visualTransformation = TextEditorOutputTransformation(content, darkMode.value)
-
     fun visualTransformation(): OutputTransformation {
-        return visualTransformation
+        return transformation
     }
 
     fun dispose() {
@@ -343,5 +354,45 @@ class EditorTabViewModel {
         darkMode.value = preferenceApplier.useDarkMode()
         fontColor.value = Color(preferenceApplier.editorFontColor())
     }
+
+    fun calculateConversionTrigger(): Triple<Int, String, Boolean> {
+        val text = content.text
+
+        val lineCount = lineNumbers().size
+
+        val lineStarts = run {
+            if (text.isEmpty()) return@run ""
+
+            val sb = StringBuilder(lineCount)
+
+            sb.append(text[0])
+
+            var index = text.indexOf('\n')
+            while (index != -1 && index < text.lastIndex) {
+                val nextChar = text[index + 1]
+                sb.append(nextChar)
+
+                index = text.indexOf('\n', index + 1)
+            }
+
+            sb.toString()
+        }
+
+        return Triple(lineCount, lineStarts, content.composition == null)
+    }
+
+    private fun calculateStyleAsync(darkTheme: Boolean, str: String): List<Triple<Int, Int, SpanStyle>> {
+        val list = mutableListOf<Triple<Int, Int, SpanStyle>>()
+
+        transformation.getPatterns().forEach { pattern ->
+            val find = pattern.regex.matcher(str)
+            while (find.find()) {
+                val spanStyle = if (darkTheme) pattern.darkStyle else pattern.lightStyle
+                list.add(Triple(find.start(), find.end(), spanStyle))
+            }
+        }
+        return list
+    }
+
 
 }
