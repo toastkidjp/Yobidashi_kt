@@ -297,11 +297,9 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
         viewModel.openExitDialog()
     }
 
-    /* TODO
     LaunchedEffect(viewModel.verticalScrollState().value) {
         viewModel.adjustLineNumberState()
     }
-    */
 
     LaunchedEffect(viewModel.content()) {
         snapshotFlow(viewModel::calculateConversionTrigger)

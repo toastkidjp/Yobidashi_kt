@@ -111,6 +111,10 @@ class EditorTabViewModel {
 
     fun lineNumberScrollState() = lineNumberScrollState
 
+    suspend fun adjustLineNumberState() {
+        lineNumberScrollState.scrollTo(verticalScrollState.value)
+    }
+
     fun onClickLineNumber(it: Int) {
         val multiParagraph = lastParagraph ?: return
 
