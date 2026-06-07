@@ -62,7 +62,7 @@ class CodeBlockViewModel {
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
         val lineCount = multiParagraph.lineCount
-        lineCountState.value = lineCount
+        lineCountState.intValue = lineCount
     }
 
 }
