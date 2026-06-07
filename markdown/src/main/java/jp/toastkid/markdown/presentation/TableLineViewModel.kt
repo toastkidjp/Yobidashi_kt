@@ -45,10 +45,6 @@ class TableLineViewModel {
         sort(lastSortOrder, index, tableData)
     }
 
-    fun setCursorOffHeader() {
-        headerCursorOn.value = false
-    }
-
     fun onCursorOnHeader() = headerCursorOn.value
 
 }
