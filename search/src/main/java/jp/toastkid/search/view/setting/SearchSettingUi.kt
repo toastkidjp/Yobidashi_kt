@@ -23,8 +23,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,33 +57,7 @@ fun SearchSettingUi() {
         viewModel(ContentViewModel::class.java, activityContext)
     }
 
-    val spinnerOpen = remember { mutableStateOf(false) }
-    val categoryName = remember {
-        mutableStateOf(
-            preferenceApplier.getDefaultSearchEngine()
-                ?: SearchCategory.getDefaultCategoryName()
-        )
-    }
-
-    val enableSearchQueryExtractCheck =
-        remember { mutableStateOf(preferenceApplier.enableSearchQueryExtract) }
-    val enableSearchWithClipCheck =
-        remember { mutableStateOf(preferenceApplier.enableSearchWithClip) }
-    val useSuggestionCheck = remember { mutableStateOf(preferenceApplier.isEnableSuggestion) }
-    val useHistoryCheck = remember { mutableStateOf(preferenceApplier.isEnableSearchHistory) }
-    val useFavoriteCheck = remember { mutableStateOf(preferenceApplier.isEnableFavoriteSearch) }
-    val useViewHistoryCheck = remember { mutableStateOf(preferenceApplier.isEnableViewHistory) }
-    val useUrlModuleCheck = remember { mutableStateOf(preferenceApplier.isEnableUrlModule()) }
-    val useTrendCheck = remember { mutableStateOf(preferenceApplier.isEnableTrendModule()) }
-
-    val selections = remember {
-        val disableSearchCategory = preferenceApplier.readDisableSearchCategory() ?: emptySet()
-        val set = mutableStateSetOf<SearchCategory>()
-        SearchCategory.entries
-            .filterNot { disableSearchCategory.contains(it.name) }
-            .forEach(set::add)
-        return@remember set
-    }
+    val viewModel = remember { SearchSettingViewModel() }
 
     Surface(shadowElevation = 4.dp, modifier = Modifier.padding(8.dp)) {
         LazyColumn {
@@ -97,7 +71,7 @@ fun SearchSettingUi() {
                             top = 8.dp,
                             bottom = 8.dp
                         )
-                        .clickable { spinnerOpen.value = true }
+                        .clickable { viewModel.openSpinner() }
                 ) {
                     Icon(
                         painterResource(id = R.drawable.ic_search_black),
@@ -111,13 +85,13 @@ fun SearchSettingUi() {
                             .padding(start = 4.dp)
                     )
                     SearchCategorySpinner(
-                        spinnerOpen::value,
-                        { spinnerOpen.value = true },
-                        { spinnerOpen.value = false },
-                        categoryName.value
+                        viewModel::spinnerOpen,
+                        { viewModel.openSpinner() },
+                        { viewModel.closeSpinner() },
+                        viewModel.categoryName()
                     ) {
                         preferenceApplier.setDefaultSearchEngine(it.name)
-                        categoryName.value = it.name
+                        viewModel.setCategoryName(it.name)
                     }
                 }
             }
@@ -132,10 +106,9 @@ fun SearchSettingUi() {
                     onSwitch = {
                         val newState = !preferenceApplier.enableSearchQueryExtract
                         preferenceApplier.enableSearchQueryExtract = newState
-                        enableSearchQueryExtractCheck.value =
-                            preferenceApplier.enableSearchQueryExtract
+                        viewModel.setEnableSearchQueryExtractCheck(preferenceApplier.enableSearchQueryExtract)
                     },
-                    checked = { enableSearchQueryExtractCheck.value },
+                    checked = viewModel::enableSearchQueryExtractCheck,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_extract
                 )
@@ -159,10 +132,10 @@ fun SearchSettingUi() {
                         }
                         contentViewModel?.snackShort(messageId)
 
-                        enableSearchWithClipCheck.value =
-                            preferenceApplier.enableSearchWithClip
+                        viewModel.setEnableSearchWithClipCheck(preferenceApplier.enableSearchWithClip)
+
                     },
-                    checked = enableSearchWithClipCheck::value,
+                    checked = viewModel::enableSearchWithClipCheck,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_clipboard_black
                 )
@@ -177,10 +150,9 @@ fun SearchSettingUi() {
                     textId = R.string.title_enable_suggestion,
                     onSwitch = {
                         preferenceApplier.switchEnableSuggestion()
-                        useSuggestionCheck.value =
-                            preferenceApplier.isEnableSuggestion
+                        viewModel.setUseSuggestionCheck(preferenceApplier.isEnableSuggestion)
                     },
-                    checked = useSuggestionCheck::value,
+                    checked = viewModel::useSuggestionCheck,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_search_black
                 )
@@ -195,9 +167,9 @@ fun SearchSettingUi() {
                     textId = R.string.title_use_search_history,
                     onSwitch = {
                         preferenceApplier.switchEnableSearchHistory()
-                        useHistoryCheck.value = preferenceApplier.isEnableSearchHistory
+                        viewModel.setUseHistoryCheck(preferenceApplier.isEnableSearchHistory)
                     },
-                    checked = useHistoryCheck::value,
+                    checked = viewModel::useHistoryCheck,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_search_history_black
                 )
@@ -212,9 +184,9 @@ fun SearchSettingUi() {
                     textId = R.string.title_use_favorite_search,
                     onSwitch = {
                         preferenceApplier.switchEnableFavoriteSearch()
-                        useFavoriteCheck.value = preferenceApplier.isEnableFavoriteSearch
+                        viewModel.setUseFavoriteCheck(preferenceApplier.isEnableFavoriteSearch)
                     },
-                    checked = useFavoriteCheck::value,
+                    checked = viewModel::useFavoriteCheck,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_favorite
                 )
@@ -229,9 +201,9 @@ fun SearchSettingUi() {
                     textId = R.string.use_view_history,
                     onSwitch = {
                         preferenceApplier.switchEnableViewHistory()
-                        useViewHistoryCheck.value = preferenceApplier.isEnableViewHistory
+                        viewModel.setUseViewHistoryCheck(preferenceApplier.isEnableViewHistory)
                     },
-                    checked = useViewHistoryCheck::value,
+                    checked = viewModel::useViewHistoryCheck,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = jp.toastkid.lib.R.drawable.ic_history_black
                 )
@@ -244,10 +216,10 @@ fun SearchSettingUi() {
             item {
                 CheckableRow(
                     textId = R.string.title_url_module,
-                    checked = useUrlModuleCheck::value,
+                    checked = viewModel::useUrlModuleCheck,
                     onSwitch = {
                         preferenceApplier.switchEnableUrlModule()
-                        useUrlModuleCheck.value = preferenceApplier.isEnableUrlModule()
+                        viewModel.setUseUrlModuleCheck(preferenceApplier.isEnableUrlModule())
                     },
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_web_black
@@ -263,9 +235,9 @@ fun SearchSettingUi() {
                     textId = R.string.title_trend_module,
                     onSwitch = {
                         preferenceApplier.switchEnableTrendModule()
-                        useTrendCheck.value = preferenceApplier.isEnableUrlModule()
+                        viewModel.setUseTrendCheck(preferenceApplier.isEnableUrlModule())
                     },
-                    checked = useTrendCheck::value,
+                    checked = viewModel::useTrendCheck,
                     iconTint = MaterialTheme.colorScheme.secondary,
                     iconId = R.drawable.ic_trend_black
                 )
@@ -276,7 +248,7 @@ fun SearchSettingUi() {
             }
 
             item {
-                val allChecked = remember { mutableStateOf(selections.size == SearchCategory.entries.size) }
+                val allChecked = remember { mutableStateOf(viewModel.selections().size == SearchCategory.entries.size) }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -296,11 +268,7 @@ fun SearchSettingUi() {
                         val newState = allChecked.value.not()
                         allChecked.value = newState
 
-                        if (newState) {
-                            selections.addAll(SearchCategory.entries)
-                            return@Checkbox
-                        }
-                        selections.clear()
+                        viewModel.onSwitchSelectAll(newState)
                     })
                 }
             }
@@ -311,11 +279,7 @@ fun SearchSettingUi() {
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .clickable {
-                            if (selections.contains(selection)) {
-                                selections.remove(selection)
-                                return@clickable
-                            }
-                            selections.add(selection)
+                            viewModel.onSelectionChange(selection)
                         }
                 ) {
                     EfficientImage(
@@ -332,13 +296,9 @@ fun SearchSettingUi() {
                             .padding(8.dp)
                     )
                     Checkbox(
-                        checked = selections.contains(selection),
+                        checked = viewModel.selections().contains(selection),
                         onCheckedChange = {
-                            if (selections.contains(selection)) {
-                                selections.remove(selection)
-                                return@Checkbox
-                            }
-                            selections.add(selection)
+                            viewModel.onSelectionChange(selection)
                         }
                     )
                 }
@@ -352,9 +312,13 @@ fun SearchSettingUi() {
             CoroutineScope(Dispatchers.IO).launch {
                 preferenceApplier.clearDisableSearchCategory()
                 SearchCategory.entries
-                    .filterNot(selections::contains)
+                    .filterNot(viewModel.selections()::contains)
                     .forEach { preferenceApplier.addDisableSearchCategory(it.name) }
             }
         }
     })
+
+    LaunchedEffect(Unit) {
+        viewModel.launch(preferenceApplier)
+    }
 }
