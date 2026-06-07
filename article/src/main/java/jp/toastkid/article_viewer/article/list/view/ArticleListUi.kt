@@ -349,7 +349,7 @@ internal fun ArticleListUi(
 ) {
     val lazyListState = rememberLazyListState()
     LazyColumn(state = lazyListState) {
-        items(articles.itemCount, { articles[it]?.id ?: -1 }) {
+        items(articles.itemCount, { "${articles[it]?.id}_$it" }) {
             val article = articles[it] ?: return@items
             ListItem(
                 article,
