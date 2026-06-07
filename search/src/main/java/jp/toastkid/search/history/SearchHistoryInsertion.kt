@@ -25,10 +25,10 @@ import kotlinx.coroutines.launch
  * @author toastkidjp
  */
 class SearchHistoryInsertion private constructor(
-        context: Context,
-        private val category: String,
-        private val query: String,
-        private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    context: Context,
+    private val category: String,
+    private val query: String,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     private val repository = RepositoryFactory().searchHistoryRepository(context)
