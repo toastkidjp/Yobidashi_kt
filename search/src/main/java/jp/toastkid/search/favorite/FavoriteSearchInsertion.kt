@@ -21,11 +21,11 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class FavoriteSearchInsertion(
-        private val context: Context,
-        private val category: String,
-        private val query: String,
-        private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val context: Context,
+    private val category: String,
+    private val query: String,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     /**
