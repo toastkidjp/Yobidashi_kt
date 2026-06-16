@@ -85,6 +85,11 @@ class ContextMenuBuilder(
                 viewModel.replaceText(newText)
                 close()
             }
+            item(key = "Surround parenthesis", label = "Surround parenthesis") {
+                val newText = "(${viewModel.selectedText()})"
+                viewModel.replaceText(newText)
+                close()
+            }
         }
 
         item(key = "Add quote", label = "Add quote") {
