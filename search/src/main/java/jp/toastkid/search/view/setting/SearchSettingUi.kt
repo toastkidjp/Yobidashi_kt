@@ -87,7 +87,7 @@ fun SearchSettingUi() {
                     SearchCategorySpinner(
                         viewModel::spinnerOpen,
                         viewModel::openSpinner,
-                        { viewModel.closeSpinner() },
+                        viewModel::closeSpinner,
                         viewModel.categoryName()
                     ) {
                         preferenceApplier.setDefaultSearchEngine(it.name)
