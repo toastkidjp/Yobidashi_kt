@@ -17,12 +17,12 @@ android {
     namespace = "jp.toastkid.yobidashi"
 
     compileSdk = (BuildTool.compileSdk)
-    buildToolsVersion = "36.0.0"
+    buildToolsVersion = "37.0.0"
 
     defaultConfig {
         applicationId = "jp.toastkid.yobidashi"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
 
         versionCode = Version.code
         versionName = Version.name
