@@ -86,7 +86,7 @@ fun SearchSettingUi() {
                     )
                     SearchCategorySpinner(
                         viewModel::spinnerOpen,
-                        { viewModel.openSpinner() },
+                        viewModel::openSpinner,
                         { viewModel.closeSpinner() },
                         viewModel.categoryName()
                     ) {
