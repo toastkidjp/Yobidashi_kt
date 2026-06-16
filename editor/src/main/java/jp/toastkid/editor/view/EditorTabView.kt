@@ -190,7 +190,21 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
         },
         outputTransformation = viewModel.visualTransformation(),
         decorator = {
-            Row {
+            Row(
+                modifier = Modifier
+                    .drawBehind {
+                        drawRect(viewModel.backgroundColor())
+
+                        val currentLineOffset = viewModel.currentLineOffset()
+                        if (currentLineOffset != Offset.Unspecified) {
+                            drawRect(
+                                viewModel.currentLineHighlightColor(),
+                                topLeft = currentLineOffset,
+                                size = Size(Float.MAX_VALUE, 24.sp.toPx())
+                            )
+                        }
+                    }
+            ) {
                 Column(
                     modifier = Modifier
                         .verticalScroll(viewModel.lineNumberScrollState())
@@ -245,18 +259,6 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
         modifier = modifier
             .focusRequester(viewModel.focusRequester())
             .fillMaxWidth()
-            .drawBehind {
-                drawRect(viewModel.backgroundColor())
-
-                val currentLineOffset = viewModel.currentLineOffset()
-                if (currentLineOffset != Offset.Unspecified) {
-                    drawRect(
-                        viewModel.currentLineHighlightColor(),
-                        topLeft = currentLineOffset,
-                        size = Size(Float.MAX_VALUE, 24.sp.toPx())
-                    )
-                }
-            }
             .semantics { contentDescription = "Editor input area" }
             .appendTextContextMenuComponents(
                 ContextMenuBuilder(
