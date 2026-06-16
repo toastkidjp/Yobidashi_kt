@@ -8,6 +8,7 @@
 
 package jp.toastkid.search.view
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -67,39 +69,50 @@ internal fun SearchCategorySpinner(
                 .padding(4.dp)
         )
 
-        DropdownMenu(
-            expanded = expand(),
-            onDismissRequest = closeSpinner
-        ) {
-            val searchCategories = remember {
-                val initialDisables = PreferenceApplier(context).readDisableSearchCategory()
-                SearchCategory.entries
-                    .filterNot { initialDisables?.contains(it.name) ?: false }
-            }
+        SearchCategorySpinnerDropdownMenu(expand, closeSpinner, context, popupWindowHeight, onSelect)
+    }
+}
 
-            LazyColumn(modifier = Modifier.size(popupWindowHeight)) {
-                items(searchCategories, SearchCategory::id) { searchCategory ->
-                    DropdownMenuItem(
-                        text = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                EfficientImage(
-                                    model = searchCategory.iconId,
-                                    contentDescription = stringResource(id = searchCategory.id),
-                                    modifier = Modifier.width(40.dp)
-                                )
-                                Text(
-                                    stringResource(id = searchCategory.id),
-                                    fontSize = 20.sp,
-                                    modifier = Modifier.padding(8.dp)
-                                )
-                            }
-                        },
-                        onClick = {
-                            onSelect(searchCategory)
-                            closeSpinner()
+@Composable
+private fun SearchCategorySpinnerDropdownMenu(
+    expand: () -> Boolean,
+    closeSpinner: () -> Unit,
+    context: Context,
+    popupWindowHeight: Dp,
+    onSelect: (SearchCategory) -> Unit
+) {
+    DropdownMenu(
+        expanded = expand(),
+        onDismissRequest = closeSpinner
+    ) {
+        val searchCategories = remember {
+            val initialDisables = PreferenceApplier(context).readDisableSearchCategory()
+            SearchCategory.entries
+                .filterNot { initialDisables?.contains(it.name) ?: false }
+        }
+
+        LazyColumn(modifier = Modifier.size(popupWindowHeight)) {
+            items(searchCategories, SearchCategory::id) { searchCategory ->
+                DropdownMenuItem(
+                    text = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            EfficientImage(
+                                model = searchCategory.iconId,
+                                contentDescription = stringResource(id = searchCategory.id),
+                                modifier = Modifier.width(40.dp)
+                            )
+                            Text(
+                                stringResource(id = searchCategory.id),
+                                fontSize = 20.sp,
+                                modifier = Modifier.padding(8.dp)
+                            )
                         }
-                    )
-                }
+                    },
+                    onClick = {
+                        onSelect(searchCategory)
+                        closeSpinner()
+                    }
+                )
             }
         }
     }
