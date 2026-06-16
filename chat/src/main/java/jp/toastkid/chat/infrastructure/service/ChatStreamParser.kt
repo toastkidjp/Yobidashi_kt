@@ -54,8 +54,8 @@ class ChatStreamParser {
             while (sourceMatcher.find()) {
                 sources.add(
                     Source(
-                        sourceMatcher.group(2),
-                        sourceMatcher.group(1)
+                        sourceMatcher.group(2) ?: "",
+                        sourceMatcher.group(1) ?: ""
                     )
                 )
             }
