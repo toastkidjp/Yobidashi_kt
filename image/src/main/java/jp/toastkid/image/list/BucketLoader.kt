@@ -51,7 +51,7 @@ class BucketLoader(
         cursor.close()
 
         val grouped = buckets
-                .groupBy { it.name }
+                .groupBy(Image::name)
                 .map {
                     val bucket = it.value[0]
                     bucket.itemCount = it.value.size
