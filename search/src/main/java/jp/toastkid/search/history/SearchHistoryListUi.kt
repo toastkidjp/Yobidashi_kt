@@ -47,7 +47,7 @@ fun SearchHistoryListUi() {
     val openConfirmDialog = remember { mutableStateOf(false) }
 
     LazyColumn(state = listState) {
-        items(searchHistoryItems, { it.key }) { searchHistory ->
+        items(searchHistoryItems, SearchHistory::key) { searchHistory ->
             SearchItemContent(
                 searchHistory.query,
                 searchHistory.category,
