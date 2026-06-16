@@ -193,8 +193,6 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
             Row(
                 modifier = Modifier
                     .drawBehind {
-                        drawRect(viewModel.backgroundColor())
-
                         val currentLineOffset = viewModel.currentLineOffset()
                         if (currentLineOffset != Offset.Unspecified) {
                             drawRect(
@@ -208,7 +206,6 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
                 Column(
                     modifier = Modifier
                         .verticalScroll(viewModel.lineNumberScrollState())
-                        .padding(horizontal = 4.dp)
                         .wrapContentSize(unbounded = true)
                 ) {
                     viewModel.lineNumbers().forEach { (lineNumber, lineNumberText) ->
@@ -239,7 +236,9 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
                         }
                     }
                 }
-                VerticalDivider()
+                VerticalDivider(
+                    modifier = Modifier.padding(end = 1.dp)
+                )
                 it()
             }
         },
@@ -259,6 +258,10 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
         modifier = modifier
             .focusRequester(viewModel.focusRequester())
             .fillMaxWidth()
+            .drawBehind {
+                drawRect(viewModel.backgroundColor())
+            }
+            .padding(start = 2.dp, end = 2.dp)
             .semantics { contentDescription = "Editor input area" }
             .appendTextContextMenuComponents(
                 ContextMenuBuilder(
@@ -282,8 +285,6 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
                 },
                 viewModel.nestedScrollDispatcher()
             )
-            .padding(vertical = 2.dp)
-            .padding(start = 2.dp, end = 4.dp)
     )
 
     if (viewModel.isOpenExitDialog()) {
