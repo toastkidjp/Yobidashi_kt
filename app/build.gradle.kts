@@ -16,7 +16,7 @@ plugins {
 android {
     namespace = "jp.toastkid.yobidashi"
 
-    compileSdk = (BuildTool.compileSdk)
+    compileSdk = BuildTool.compileSdk
     buildToolsVersion = "37.0.0"
 
     defaultConfig {
