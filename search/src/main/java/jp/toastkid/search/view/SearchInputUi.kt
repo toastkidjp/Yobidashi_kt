@@ -164,9 +164,7 @@ fun SearchInputUi(
                                 contentDescription = "clear text",
                                 tint = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier
-                                    .clickable {
-                                        viewModel.clearInput()
-                                    }
+                                    .clickable(onClick = viewModel::clearInput)
                             )
                         },
                         onKeyboardAction = KeyboardActionHandler {
