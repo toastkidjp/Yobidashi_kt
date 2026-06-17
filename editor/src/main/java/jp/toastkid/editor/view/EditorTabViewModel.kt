@@ -62,7 +62,7 @@ class EditorTabViewModel {
     private val parseResult = mutableStateOf(ParseResult("", emptyList()))
 
     private val transformation =
-        TextEditorOutputTransformation(content, darkMode.value) { parseResult.value }
+        TextEditorOutputTransformation(content, darkMode.value, parseResult::value)
 
     fun content() = content
 
