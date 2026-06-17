@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.markdown.domain.model.data.CodeBlockLine
 import jp.toastkid.markdown.domain.model.data.HorizontalRule
 import jp.toastkid.markdown.domain.model.data.ImageLine
+import jp.toastkid.markdown.domain.model.data.Line
 import jp.toastkid.markdown.domain.model.data.ListLine
 import jp.toastkid.markdown.domain.model.data.TableLine
 import jp.toastkid.markdown.domain.model.data.TextBlock
@@ -61,72 +62,90 @@ fun MarkdownPreview(
                     .padding(8.dp)
             ) {
                 content.lines().forEach { line ->
-                    when (line) {
-                        is TextBlock -> {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                if (line.quote) {
-                                    VerticalDivider(
-                                        modifier = Modifier
-                                            .padding(start = 4.dp, end = 8.dp)
-                                            .height(36.dp),
-                                        thickness = 2.dp,
-                                        color = Color(0x88CCAAFF),
-                                    )
-                                }
-                                TextLineView(
-                                    line.text,
-                                    TextStyle(
-                                        color = if (line.quote) Color(0xFFCCAAFF) else contentColor,
-                                        fontSize = line.fontSize().sp,
-                                        fontWeight = viewModel.makeFontWeight(line.level),
-                                    ),
-                                    Modifier.padding(bottom = 8.dp, top = viewModel.makeTopMargin(line.level).dp)
-                                )
-                            }
-                        }
-
-                        is ListLine -> Column {
-                            line.list.forEachIndexed { index, it ->
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    when {
-                                        line.ordered -> DisableSelection {
-                                            Text("${index + 1}. ", fontSize = 14.sp)
-                                        }
-
-                                        line.taskList -> Checkbox(
-                                            checked = it.startsWith("[x]"),
-                                            enabled = false,
-                                            onCheckedChange = null,
-                                            modifier = Modifier.size(32.dp)
-                                        )
-
-                                        else -> DisableSelection {
-                                            Text("・ ", fontSize = 14.sp, color = contentColor)
-                                        }
-                                    }
-                                    TextLineView(
-                                        viewModel.extractText(it, line.taskList),
-                                        TextStyle(color = contentColor, fontSize = 14.sp),
-                                        Modifier.padding(bottom = 4.dp)
-                                    )
-                                }
-                            }
-                        }
-
-                        is ImageLine -> {
-                            EfficientImage(
-                                model = line.source,
-                                contentDescription = line.source,
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                        }
-
-                        is HorizontalRule -> HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                        is TableLine -> TableLineView(line, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
-                        is CodeBlockLine -> CodeBlockView(line, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
-                    }
+                    LineContent(line, contentColor, viewModel)
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun LineContent(
+    line: Line,
+    contentColor: Color,
+    viewModel: MarkdownPreviewViewModel
+) {
+    when (line) {
+        is TextBlock -> {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (line.quote) {
+                    VerticalDivider(
+                        modifier = Modifier
+                            .padding(start = 4.dp, end = 8.dp)
+                            .height(36.dp),
+                        thickness = 2.dp,
+                        color = Color(0x88CCAAFF),
+                    )
+                }
+                TextLineView(
+                    line.text,
+                    TextStyle(
+                        color = if (line.quote) Color(0xFFCCAAFF) else contentColor,
+                        fontSize = line.fontSize().sp,
+                        fontWeight = viewModel.makeFontWeight(line.level),
+                    ),
+                    Modifier.padding(bottom = 8.dp, top = viewModel.makeTopMargin(line.level).dp)
+                )
+            }
+        }
+
+        is ListLine -> Column {
+            line.list.forEachIndexed { index, it ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    when {
+                        line.ordered -> DisableSelection {
+                            Text("${index + 1}. ", fontSize = 14.sp)
+                        }
+
+                        line.taskList -> Checkbox(
+                            checked = it.startsWith("[x]"),
+                            enabled = false,
+                            onCheckedChange = null,
+                            modifier = Modifier.size(32.dp)
+                        )
+
+                        else -> DisableSelection {
+                            Text("・ ", fontSize = 14.sp, color = contentColor)
+                        }
+                    }
+                    TextLineView(
+                        viewModel.extractText(it, line.taskList),
+                        TextStyle(color = contentColor, fontSize = 14.sp),
+                        Modifier.padding(bottom = 4.dp)
+                    )
+                }
+            }
+        }
+
+        is ImageLine -> {
+            EfficientImage(
+                model = line.source,
+                contentDescription = line.source,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
+
+        is HorizontalRule -> HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+        is TableLine -> TableLineView(
+            line,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        is CodeBlockLine -> CodeBlockView(
+            line,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
     }
 }
