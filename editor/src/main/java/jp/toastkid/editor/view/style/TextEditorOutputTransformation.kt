@@ -155,4 +155,4 @@ class TextEditorOutputTransformation(
 
 }
 
-private val END_OF_FILE_MARKER = "[EOF]"
+private const val END_OF_FILE_MARKER = "[EOF]"
