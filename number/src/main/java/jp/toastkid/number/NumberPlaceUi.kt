@@ -79,6 +79,7 @@ fun NumberPlaceUi() {
                 { rowIndex, columnIndex, it ->
                     viewModel.place(rowIndex, columnIndex, it) { done ->
                         showMessageSnackbar(context, contentViewModel, done) {
+                            deleteCurrentGame(context)
                             initializeGame(
                                 context,
                                 PreferenceApplier(context),
