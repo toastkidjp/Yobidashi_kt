@@ -132,7 +132,8 @@ fun NumberPlaceUi() {
                 }),
             OptionMenu(
                 titleId = R.string.menu_set_correct_answer,
-                action = viewModel::setCorrect),
+                action = viewModel::setCorrect
+            ),
             OptionMenu(
                 titleId = jp.toastkid.lib.R.string.clear_all,
                 action = viewModel::initializeSolving
