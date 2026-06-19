@@ -128,9 +128,7 @@ class TextEditorOutputTransformation(
             }
         }
 
-        if (content.composition == null) {
-            append(END_OF_FILE_MARKER)
-        }
+        append(END_OF_FILE_MARKER)
     }
 
     private fun findDiffIndexFast(current: CharSequence, parsed: String): Int {
