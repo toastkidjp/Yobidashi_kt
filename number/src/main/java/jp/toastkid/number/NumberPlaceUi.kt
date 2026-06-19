@@ -124,7 +124,11 @@ fun NumberPlaceUi() {
                 titleId = R.string.menu_other_board,
                 action = {
                     deleteCurrentGame(context)
-                    //contentViewModel.nextRoute(Num)
+                    initializeGame(
+                        context,
+                        PreferenceApplier(context),
+                        viewModel
+                    )
                 }),
             OptionMenu(
                 titleId = R.string.menu_set_correct_answer,
