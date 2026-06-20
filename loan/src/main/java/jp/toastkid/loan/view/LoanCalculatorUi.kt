@@ -50,8 +50,8 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.scroll.StateScrollerFactory
 import jp.toastkid.loan.R
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
+import java.util.UUID
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -236,15 +236,16 @@ private fun InputTextField(
         modifier = modifier
     )
 
-    LaunchedEffect(state) {
+    LaunchedEffect(state.text) {
         snapshotFlow { state.text to (state.composition != null) }
-            .distinctUntilChanged()
             .collect {
                 if (it.second) {
                     return@collect
                 }
 
-                onUpdate(it.first.toString())
+                onUpdate(
+                    if (it.first.isNullOrBlank()) UUID.randomUUID().toString() else it.first.toString()
+                )
             }
 
     }
