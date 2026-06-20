@@ -49,6 +49,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.number.factory.GameFileProvider
+import jp.toastkid.number.model.NumberPlaceGame
 import jp.toastkid.number.repository.GameRepositoryImplementation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -165,6 +166,8 @@ private fun initializeGame(
             return
         }
     }
+
+    viewModel.setGame(NumberPlaceGame())
     CoroutineScope(Dispatchers.IO).launch {
         viewModel.initialize(preferenceApplier.getMaskingCount())
         viewModel.saveCurrentGame(context)
