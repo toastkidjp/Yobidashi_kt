@@ -72,4 +72,8 @@ class BarcodeReaderViewModel {
 
     fun result() = result.value
 
+    fun dispose(cameraProvider: ProcessCameraProvider) {
+        cameraProvider.unbindAll()
+    }
+
 }
