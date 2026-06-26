@@ -41,7 +41,7 @@ class LoanCalculatorViewModel {
 
     fun loanTerm() = loanTerm
 
-    private val interestRate = TextFieldState("1.0")
+    private val interestRate = TextFieldState("1.5")
 
     fun interestRate() = interestRate
 
