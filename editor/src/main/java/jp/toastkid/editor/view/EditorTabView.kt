@@ -300,8 +300,11 @@ fun EditorTabView(path: String?, initialScrolled: Int, modifier: Modifier) {
         viewModel.openExitDialog()
     }
 
-    LaunchedEffect(viewModel.verticalScrollState().value) {
-        viewModel.adjustLineNumberState()
+    LaunchedEffect(Unit) {
+        snapshotFlow { viewModel.verticalScrollState().value }
+            .collect { _ ->
+                viewModel.adjustLineNumberState()
+            }
     }
 
     LaunchedEffect(viewModel.content()) {
@@ -392,9 +395,7 @@ private fun AppBarContent(
         modifier = Modifier
             .height(72.dp)
             .fillMaxWidth()
-            .horizontalScroll(
-                rememberScrollState()
-            )
+            .horizontalScroll(rememberScrollState())
     ) {
         EditorMenuItem(jp.toastkid.lib.R.string.load, R.drawable.ic_load) {
             loadAs.launch(GetContentIntentFactory()("text/plain"))
