@@ -13,7 +13,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.webkit.SafeBrowsingResponse
@@ -135,6 +134,50 @@ class WebViewClientFactory(
 
             if (preferenceApplier.useAutoArchive()) {
                 autoArchive.save(view, idGenerator.from(view.url))
+            }
+
+            if (urlStr.startsWith("https://chat.sakana.ai")) {
+                view.evaluateJavascript("""
+    (function() {
+        if (window.__scrollObserverInstalled) return "already installed";
+        window.__scrollObserverInstalled = true;
+
+        function attachScrollListener() {
+            const container = document.querySelector('section[data-chat-scroll]');
+            if (!container) return false;
+            if (container.dataset.scrollHooked === "true") return true;
+
+            container.dataset.scrollHooked = "true";
+            let lastScrollTop = 0;
+
+            container.addEventListener('scroll', function() {
+                const st = container.scrollTop;
+                if (st < lastScrollTop) {
+                    Android.onScroll("up");
+                } else if (st > lastScrollTop) {
+                    Android.onScroll("down");
+                }
+                lastScrollTop = st;
+            });
+            return true;
+        }
+
+        if (attachScrollListener()) return "attached immediately";
+
+        const observer = new MutationObserver(function(mutations) {
+            if (attachScrollListener()) {
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        return "observing";
+    })();
+            """.trimIndent(), {  })
             }
         }
 
