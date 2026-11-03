@@ -7,6 +7,7 @@ class ScrollEventHandlerAttachment(
     private val hideAppBar: () -> Unit
 ) {
 
+    @Suppress("unused")
     @JavascriptInterface
     fun onScroll(direction: String) {
         if (direction == "up") {
