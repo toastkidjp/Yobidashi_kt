@@ -18,7 +18,7 @@ class ScrollEventHandlerAttachment(
 
     companion object {
 
-        private const val script = """
+        private const val SCRIPT = """
     (function() {
         if (window.__scrollObserverInstalled) return "already installed";
         window.__scrollObserverInstalled = true;
@@ -60,7 +60,7 @@ class ScrollEventHandlerAttachment(
     })();
             """
 
-        fun script() = script
+        fun script() = SCRIPT
 
     }
 }
