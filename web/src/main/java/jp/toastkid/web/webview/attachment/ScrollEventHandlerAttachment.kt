@@ -35,9 +35,9 @@ class ScrollEventHandlerAttachment(
             container.addEventListener('scroll', function() {
                 const st = container.scrollTop;
                 if (st < lastScrollTop) {
-                    Android.onScroll("up");
+                    ScrollEventHandlerAttachment.onScroll("up");
                 } else if (st > lastScrollTop) {
-                    Android.onScroll("down");
+                    ScrollEventHandlerAttachment.onScroll("down");
                 }
                 lastScrollTop = st;
             });
