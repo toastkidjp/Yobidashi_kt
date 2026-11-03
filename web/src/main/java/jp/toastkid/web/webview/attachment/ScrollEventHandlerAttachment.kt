@@ -18,7 +18,7 @@ class ScrollEventHandlerAttachment(
 
     companion object {
 
-        private val script = """
+        private const val script = """
     (function() {
         if (window.__scrollObserverInstalled) return "already installed";
         window.__scrollObserverInstalled = true;
