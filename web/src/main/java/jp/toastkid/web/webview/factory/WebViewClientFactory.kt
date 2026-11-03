@@ -38,6 +38,7 @@ import jp.toastkid.web.tls.TlsErrorMessageGenerator
 import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.web.webview.CustomWebView
 import jp.toastkid.web.webview.GlobalWebViewPool
+import jp.toastkid.web.webview.attachment.ScrollEventHandlerAttachment
 import jp.toastkid.web.webview.usecase.ApproachFallbackUrlExtractor
 import jp.toastkid.web.webview.usecase.RedirectionUseCase
 import kotlinx.coroutines.CoroutineScope
@@ -137,48 +138,7 @@ class WebViewClientFactory(
             }
 
             if (urlStr.startsWith("https://chat.sakana.ai")) {
-                val script = """
-    (function() {
-        if (window.__scrollObserverInstalled) return "already installed";
-        window.__scrollObserverInstalled = true;
-
-        function attachScrollListener() {
-            const container = document.querySelector('section[data-chat-scroll]');
-            if (!container) return false;
-            if (container.dataset.scrollHooked === "true") return true;
-
-            container.dataset.scrollHooked = "true";
-            let lastScrollTop = 0;
-
-            container.addEventListener('scroll', function() {
-                const st = container.scrollTop;
-                if (st < lastScrollTop) {
-                    Android.onScroll("up");
-                } else if (st > lastScrollTop) {
-                    Android.onScroll("down");
-                }
-                lastScrollTop = st;
-            });
-            return true;
-        }
-
-        if (attachScrollListener()) return "attached immediately";
-
-        const observer = new MutationObserver(function(mutations) {
-            if (attachScrollListener()) {
-                observer.disconnect();
-            }
-        });
-
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-
-        return "observing";
-    })();
-            """
-                view.evaluateJavascript(script, {  })
+                view.evaluateJavascript(ScrollEventHandlerAttachment.script(), {  })
             }
         }
 
