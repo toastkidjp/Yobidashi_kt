@@ -137,7 +137,7 @@ class WebViewClientFactory(
             }
 
             if (urlStr.startsWith("https://chat.sakana.ai")) {
-                view.evaluateJavascript("""
+                val script = """
     (function() {
         if (window.__scrollObserverInstalled) return "already installed";
         window.__scrollObserverInstalled = true;
@@ -177,7 +177,8 @@ class WebViewClientFactory(
 
         return "observing";
     })();
-            """.trimIndent(), {  })
+            """
+                view.evaluateJavascript(script, {  })
             }
         }
 
