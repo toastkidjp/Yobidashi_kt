@@ -25,6 +25,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.webview.AlphaConverter
 import jp.toastkid.web.webview.CustomWebView
 import jp.toastkid.web.webview.WebSettingApplier
+import jp.toastkid.web.webview.attachment.ScrollEventHandlerAttachment
 import timber.log.Timber
 
 /**
@@ -83,6 +84,14 @@ class WebViewFactory {
                     Timber.d("Unable to initialize Safe Browsing!")
                 }
             }
+        }
+
+        (context as? ViewModelStoreOwner)?.also {
+            val contentViewModel = ViewModelProvider(it).get(ContentViewModel::class.java)
+            webView.addJavascriptInterface(ScrollEventHandlerAttachment(
+                contentViewModel::showAppBar,
+                contentViewModel::hideAppBar
+            ), "Android")
         }
 
         return webView
