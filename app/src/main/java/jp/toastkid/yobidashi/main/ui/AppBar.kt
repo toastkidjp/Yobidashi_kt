@@ -134,7 +134,7 @@ internal fun AppBar() {
             .offset {
                 IntOffset(
                     x = 0,
-                    y = -1 * contentViewModel.bottomBarOffsetHeightPx.value.roundToInt()
+                    y = -1 * contentViewModel.bottomBarOffsetHeightPx.floatValue.roundToInt()
                 )
             }
     ) {
