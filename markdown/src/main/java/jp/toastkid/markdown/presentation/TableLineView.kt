@@ -80,22 +80,30 @@ fun TableLineView(line: TableLine, modifier: Modifier = Modifier, fontSize: Text
         HorizontalDivider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
         viewModel.tableData().forEach { itemRow ->
-            val cursorOn = remember { mutableStateOf(false) }
-            val backgroundColor = animateColorAsState(
-                if (cursorOn.value) MaterialTheme.colorScheme.primary
-                else Color.Transparent
-            )
-            val textColor =
-                if (cursorOn.value) MaterialTheme.colorScheme.onPrimary
-                else MaterialTheme.colorScheme.onSurface
-
-            TableRow(itemRow, fontSize, textColor, Modifier.drawBehind { drawRect(backgroundColor.value) })
+            TableRow(itemRow, fontSize)
         }
     }
 
     LaunchedEffect(line.table) {
         viewModel.start(line.table)
     }
+}
+
+@Composable
+private fun TableRow(
+    itemRow: List<Any>,
+    fontSize: TextUnit
+) {
+    val cursorOn = remember { mutableStateOf(false) }
+    val backgroundColor = animateColorAsState(
+        if (cursorOn.value) MaterialTheme.colorScheme.primary
+        else Color.Transparent
+    )
+    val textColor =
+        if (cursorOn.value) MaterialTheme.colorScheme.onPrimary
+        else MaterialTheme.colorScheme.onSurface
+
+    TableRow(itemRow, fontSize, textColor, Modifier.drawBehind { drawRect(backgroundColor.value) })
 }
 
 @Composable
