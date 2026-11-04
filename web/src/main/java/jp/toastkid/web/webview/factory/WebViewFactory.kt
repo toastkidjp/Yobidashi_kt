@@ -91,7 +91,7 @@ class WebViewFactory {
             webView.addJavascriptInterface(ScrollEventHandlerAttachment(
                 contentViewModel::showAppBar,
                 contentViewModel::hideAppBar
-            ), "ScrollEventHandlerAttachment")
+            ), ScrollEventHandlerAttachment.interfaceName())
         }
 
         return webView
