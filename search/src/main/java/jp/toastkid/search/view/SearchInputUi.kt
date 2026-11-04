@@ -326,9 +326,7 @@ fun SearchInputUi(
             ),
             OptionMenu(
                 titleId = R.string.title_search_history,
-                action = {
-                    viewModel.openSearchHistory()
-                }
+                action = viewModel::openSearchHistory
             )
         )
 
