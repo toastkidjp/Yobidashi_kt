@@ -63,5 +63,7 @@ class ScrollEventHandlerAttachment(
 
         fun script() = SCRIPT
 
+        fun interfaceName() = "ScrollEventHandlerAttachment"
+
     }
 }
