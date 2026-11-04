@@ -318,7 +318,7 @@ fun SearchInputUi(
                         viewModel.clearSearchHistories()
                     }
                 },
-                check = { viewModel.isEnableSearchHistory() }
+                check = viewModel::isEnableSearchHistory
             ),
             OptionMenu(
                 titleId = R.string.title_favorite_search,
