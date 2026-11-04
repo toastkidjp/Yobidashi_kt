@@ -15,7 +15,7 @@ import androidx.collection.LruCache
 /**
  * [WebView] pool.
  *
- * @param poolSize (Optional) Count of containing [WebView] instance. If you don't passed it,
+ * @param poolSize (Optional) Count of containing [WebView] instance. If you don't pass it,
  * it use default size.
  *
  * @author toastkidjp
