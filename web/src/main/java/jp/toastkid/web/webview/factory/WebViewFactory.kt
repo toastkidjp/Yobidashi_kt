@@ -88,10 +88,13 @@ class WebViewFactory {
 
         (context as? ViewModelStoreOwner)?.also {
             val contentViewModel = ViewModelProvider(it).get(ContentViewModel::class.java)
-            webView.addJavascriptInterface(ScrollEventHandlerAttachment(
-                contentViewModel::showAppBar,
-                contentViewModel::hideAppBar
-            ), ScrollEventHandlerAttachment.interfaceName())
+            webView.addJavascriptInterface(
+                ScrollEventHandlerAttachment(
+                    contentViewModel::showAppBar,
+                    contentViewModel::hideAppBar
+                ),
+                ScrollEventHandlerAttachment.interfaceName()
+            )
         }
 
         return webView
