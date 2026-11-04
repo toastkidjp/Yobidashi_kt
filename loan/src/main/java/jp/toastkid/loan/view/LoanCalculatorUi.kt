@@ -244,7 +244,7 @@ private fun InputTextField(
                 }
 
                 onUpdate(
-                    if (it.first.isNullOrBlank()) UUID.randomUUID().toString() else it.first.toString()
+                    if (it.first.isBlank()) UUID.randomUUID().toString() else it.first.toString()
                 )
             }
 
