@@ -54,7 +54,7 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
      *
      * @return [WebView] (Nullable)
      */
-    fun getLatest(): WebView? = latestTabId?.let { return@let pool.get(it) }
+    fun getLatest(): WebView? = latestTabId?.let { pool.get(it) }
 
     fun put(tabId: String, webView: WebView) {
         pool.put(tabId, webView)
