@@ -322,9 +322,7 @@ fun SearchInputUi(
             ),
             OptionMenu(
                 titleId = R.string.title_favorite_search,
-                action = {
-                    viewModel.openFavoriteSearch()
-                }
+                action = viewModel::openFavoriteSearch
             ),
             OptionMenu(
                 titleId = R.string.title_search_history,
