@@ -353,7 +353,7 @@ fun SearchInputUi(
     })
 }
 
-private inline fun search(
+private fun search(
     context: Context,
     contentViewModel: ContentViewModel?,
     currentUrl: String?,
