@@ -18,15 +18,12 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.webkit.WebViewCompat
-import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.web.webview.AlphaConverter
 import jp.toastkid.web.webview.CustomWebView
 import jp.toastkid.web.webview.WebSettingApplier
 import jp.toastkid.web.webview.attachment.ScrollEventHandlerAttachment
-import timber.log.Timber
 
 /**
  * [WebView] factory.
@@ -74,14 +71,6 @@ class WebViewFactory {
                     (context as? ViewModelStoreOwner)?.let {
                         ViewModelProvider(it).get(ContentViewModel::class.java).download(url)
                     }
-                }
-            }
-        }
-
-        if (WebViewFeature.isFeatureSupported(WebViewFeature.START_SAFE_BROWSING)) {
-            WebViewCompat.startSafeBrowsing(context) { success ->
-                if (!success) {
-                    Timber.d("Unable to initialize Safe Browsing!")
                 }
             }
         }
