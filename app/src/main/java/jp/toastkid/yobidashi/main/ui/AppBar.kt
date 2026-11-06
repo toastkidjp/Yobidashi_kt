@@ -12,6 +12,7 @@ import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -125,6 +126,9 @@ internal fun AppBar() {
     val bottomAppBarHeight = remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) 76.dp else 72.dp
     }
+
+    val offset = animateIntAsState(-1 * contentViewModel.bottomBarOffsetHeightPx.floatValue.roundToInt())
+
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.primary,
         tonalElevation = 4.dp,
@@ -134,7 +138,7 @@ internal fun AppBar() {
             .offset {
                 IntOffset(
                     x = 0,
-                    y = -1 * contentViewModel.bottomBarOffsetHeightPx.floatValue.roundToInt()
+                    y = offset.value
                 )
             }
     ) {
