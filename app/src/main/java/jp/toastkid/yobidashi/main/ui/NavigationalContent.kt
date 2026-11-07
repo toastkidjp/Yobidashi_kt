@@ -98,7 +98,6 @@ internal fun NavigationalContent(
             }
             is Screen.Editor -> {
                 val currentTab = tabs.currentTab() as? EditorTab ?: return@AnimatedContent
-                val view = LocalView.current
 
                 EditorTabView(currentTab.path, currentTab.getScrolled(), Modifier)
             }
