@@ -19,7 +19,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
 import jp.toastkid.about.view.AboutThisAppUi
 import jp.toastkid.article_viewer.article.detail.view.ArticleContentUi
