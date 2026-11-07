@@ -12,7 +12,7 @@ import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -123,11 +123,21 @@ internal fun AppBar() {
         }
     }
 
-    val bottomAppBarHeight = remember {
+    val bottomAppBarHeight = with(LocalDensity.current) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) 76.dp else 72.dp
     }
 
-    val offset = animateFloatAsState(-1 * contentViewModel.bottomBarOffsetHeightPx.floatValue)
+    val bottomAppBarOffsetY = remember { Animatable(0f) }
+
+    LaunchedEffect(Unit) {
+        contentViewModel.showHideEventFlow().collect {
+            bottomAppBarOffsetY.animateTo(if (it) 0f else bottomAppBarHeight.value)
+        }
+    }
+
+    LaunchedEffect(contentViewModel.bottomBarOffsetHeightPx.floatValue) {
+        bottomAppBarOffsetY.snapTo(-contentViewModel.bottomBarOffsetHeightPx.floatValue)
+    }
 
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -138,7 +148,7 @@ internal fun AppBar() {
             .offset {
                 IntOffset(
                     x = 0,
-                    y = offset.value.roundToInt()
+                    y = bottomAppBarOffsetY.value.roundToInt()
                 )
             }
     ) {
