@@ -64,6 +64,7 @@ import jp.toastkid.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.io.File
@@ -309,8 +310,12 @@ class ContentViewModel : ViewModel() {
 
     fun bottomBarHeightPx(): Float = maxBottomBarHeightPx.get()
 
+    private val showHideEventFlow: MutableSharedFlow<Boolean> = MutableSharedFlow(extraBufferCapacity = 1)
+
+    fun showHideEventFlow(): SharedFlow<Boolean> = showHideEventFlow
+
     fun showAppBar(coroutineScope: CoroutineScope? = null) {
-        bottomBarOffsetHeightPx.floatValue = 0f
+        showHideEventFlow.tryEmit(true)
 
         coroutineScope?.let {
             showFab(coroutineScope)
@@ -318,7 +323,7 @@ class ContentViewModel : ViewModel() {
     }
 
     fun hideAppBar() {
-        bottomBarOffsetHeightPx.floatValue = -maxBottomBarHeightPx.get()
+        showHideEventFlow.tryEmit(false)
     }
 
     val openFindInPageState = mutableStateOf(false)
