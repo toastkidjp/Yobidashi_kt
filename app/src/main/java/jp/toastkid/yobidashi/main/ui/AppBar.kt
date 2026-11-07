@@ -123,15 +123,19 @@ internal fun AppBar() {
         }
     }
 
-    val bottomAppBarHeight = with(LocalDensity.current) {
+    val bottomAppBarHeight = remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) 76.dp else 72.dp
+    }
+
+    val bottomAppBarHeight2 = with(LocalDensity.current) {
+        bottomAppBarHeight.toPx()
     }
 
     val bottomAppBarOffsetY = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
         contentViewModel.showHideEventFlow().collect {
-            bottomAppBarOffsetY.animateTo(if (it) 0f else bottomAppBarHeight.value)
+            bottomAppBarOffsetY.animateTo(if (it) 0f else bottomAppBarHeight2)
         }
     }
 
