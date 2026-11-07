@@ -58,17 +58,6 @@ internal fun NavigationalContent(
     navigationHostController: MutableList<Screen>,
     tabs: TabAdapter
 ) {
-    /*
-                slideInHorizontally(initialOffsetX = { it })
-     */
-    /*
-    enterTransition = {
-            slideInVertically(initialOffsetY = { it })
-        },
-        popEnterTransition = {
-            slideInVertically(initialOffsetY = { it })
-        }
-     */
     AnimatedContent(
         targetState = navigationHostController.last(),
         transitionSpec = {
