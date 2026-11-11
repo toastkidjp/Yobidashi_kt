@@ -8,7 +8,6 @@
 
 package jp.toastkid.web.history.view
 
-import android.net.Uri
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
@@ -91,7 +90,7 @@ fun ViewHistoryListUi() {
     List(viewHistoryItems, listState, { viewHistory, isLongClick ->
         when (isLongClick) {
             true -> {
-                contentViewModel.openBackground(viewHistory.title, Uri.parse(viewHistory.url))
+                contentViewModel.openBackground(viewHistory.title, viewHistory.url.toUri())
             }
             false -> {
                 contentViewModel.open(viewHistory.url.toUri())
