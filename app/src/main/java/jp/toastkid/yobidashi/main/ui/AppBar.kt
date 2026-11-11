@@ -270,7 +270,8 @@ private fun OverflowMenu(
                     }),
                     OptionMenu(
                         titleId = R.string.title_tab_list,
-                        action = switchTabList),
+                        action = switchTabList
+                    ),
                     OptionMenu(
                         titleId = R.string.action_settings,
                         action = { contentViewModel?.nextRoute(Screen.Settings(0)) }),
