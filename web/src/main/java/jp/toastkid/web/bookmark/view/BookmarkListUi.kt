@@ -115,7 +115,7 @@ fun BookmarkListUi() {
                 contentViewModel1
                     .openBackground(
                         bookmark.title,
-                        Uri.parse(bookmark.url)
+                        bookmark.url.toUri()
                     )
             }
             bookmark.folder -> {
