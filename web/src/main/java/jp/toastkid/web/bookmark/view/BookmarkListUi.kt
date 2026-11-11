@@ -63,6 +63,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.toastkid.data.repository.factory.RepositoryFactory
@@ -122,7 +123,7 @@ fun BookmarkListUi() {
                 viewModel.query(bookmarkRepository, bookmark.title)
             }
             else -> {
-                contentViewModel1.open(Uri.parse(bookmark.url))
+                contentViewModel1.open(bookmark.url.toUri())
             }
         }
     }
