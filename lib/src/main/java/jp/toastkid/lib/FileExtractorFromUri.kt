@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import androidx.core.net.toUri
 import java.io.File
 
 
@@ -60,7 +61,7 @@ class FileExtractorFromUri {
             "com.android.providers.downloads.documents" -> {// DownloadsProvider
                 val id = DocumentsContract.getDocumentId(uri)
                 val contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
+                    "content://downloads/public_downloads".toUri(), java.lang.Long.valueOf(id))
                 return getDataColumn(context, contentUri, null, null)
             }
             "com.android.providers.media.documents" -> {// MediaProvider
