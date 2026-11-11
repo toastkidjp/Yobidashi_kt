@@ -51,7 +51,6 @@ class RecentAppColoringUseCase(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun taskDescription(opaqueColor: Int): ActivityManager.TaskDescription? {
         val resources = resourcesSupplier() ?: return null
         return ActivityManager.TaskDescription(
