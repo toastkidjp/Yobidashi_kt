@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.main.usecase
 
 import android.net.Uri
+import androidx.core.net.toUri
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.UrlFactory
@@ -22,7 +23,7 @@ class WebSearchResultTabOpenerUseCase(
     operator fun invoke(query: String) {
         val validatedUrl = Urls.isValidUrl(query)
         if (validatedUrl) {
-            openNewWebTab(Uri.parse(query))
+            openNewWebTab(query.toUri())
             return
         }
 
