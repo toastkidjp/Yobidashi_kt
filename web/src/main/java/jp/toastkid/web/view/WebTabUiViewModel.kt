@@ -12,12 +12,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.web.video.seek.BackwardSeek
 import java.util.concurrent.atomic.AtomicReference
 
 /**
  * @author toastkidjp
  */
 class WebTabUiViewModel {
+
+    private val backwardSeek = BackwardSeek()
 
     fun stopProgress() {
         resetRefreshing()
@@ -169,6 +172,9 @@ class WebTabUiViewModel {
     private fun resetRefreshing() {
         refreshing.value = false
     }
+
+    fun isBackwardSeekTarget(urlString: String?) =
+        backwardSeek.isTarget(urlString)
 
 }
 
