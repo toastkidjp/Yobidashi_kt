@@ -1,0 +1,109 @@
+package jp.toastkid.web.view.component
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+@Composable
+fun BackwardSeekControl(
+    onSeek: (SeekEvent) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val viewModel = remember { BackwardSeekControlViewModel() }
+
+    Surface(
+        shadowElevation = 4.dp,
+        modifier = modifier
+    ) {
+        Row() {
+            Box {
+                Text(
+                    "${viewModel.hour()}",
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(8.dp).clickable {
+                        viewModel.openHourChooser()
+                    }
+                )
+
+                DropdownMenu(
+                    viewModel.openingHourChooser().collectAsState().value,
+                    {
+                        viewModel.closeHourChooser()
+                    }
+                ) {
+                    (0..8).forEach { hour ->
+                        DropdownMenuItem(
+                            {
+                                Text(
+                                    "$hour",
+                                    fontSize = 18.sp,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            },
+                            onClick = {
+                                viewModel.setHour(hour)
+                            }
+                        )
+                    }
+                }
+            }
+
+            Text(":", modifier = Modifier.padding(4.dp))
+
+            Box {
+                Text(
+                    "${viewModel.minute()}",
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(8.dp).clickable {
+                        viewModel.openMinuteChooser()
+                    }
+                )
+
+                DropdownMenu(
+                    viewModel.openingMinuteChooser().collectAsState().value,
+                    {
+                        viewModel.closeMinuteChooser()
+                    }
+                ) {
+                    (0..59).forEach { minute ->
+                        DropdownMenuItem(
+                            {
+                                Text(
+                                    "$minute",
+                                    fontSize = 18.sp,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            },
+                            onClick = {
+                                viewModel.setMinute(minute)
+                            }
+                        )
+                    }
+                }
+            }
+
+            Button(
+                {
+                    onSeek(viewModel.seekEvent())
+                }
+            ) {
+                Text(
+                    "Seek",
+                    fontSize = 16.sp
+                )
+            }
+        }
+    }
+}
