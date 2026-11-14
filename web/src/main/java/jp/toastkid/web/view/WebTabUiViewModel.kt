@@ -18,9 +18,9 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * @author toastkidjp
  */
-class WebTabUiViewModel {
-
-    private val backwardSeek = BackwardSeek()
+class WebTabUiViewModel(
+    private val backwardSeek: BackwardSeek = BackwardSeek()
+) {
 
     fun stopProgress() {
         resetRefreshing()
