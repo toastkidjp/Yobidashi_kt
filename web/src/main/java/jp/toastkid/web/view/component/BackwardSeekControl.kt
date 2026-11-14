@@ -7,14 +7,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.lib.R
 
 @Composable
 fun BackwardSeekControl(
@@ -32,9 +36,11 @@ fun BackwardSeekControl(
                 Text(
                     "${viewModel.hour()}",
                     fontSize = 18.sp,
-                    modifier = Modifier.padding(8.dp).clickable {
-                        viewModel.openHourChooser()
-                    }
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            viewModel.openHourChooser()
+                        }
                 )
 
                 DropdownMenu(
@@ -66,9 +72,11 @@ fun BackwardSeekControl(
                 Text(
                     "${viewModel.minute()}",
                     fontSize = 18.sp,
-                    modifier = Modifier.padding(8.dp).clickable {
-                        viewModel.openMinuteChooser()
-                    }
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            viewModel.openMinuteChooser()
+                        }
                 )
 
                 DropdownMenu(
@@ -103,6 +111,48 @@ fun BackwardSeekControl(
                     "Seek",
                     fontSize = 16.sp
                 )
+            }
+
+            Box(
+                modifier = Modifier.padding(horizontal = 8.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_option_menu),
+                    tint = MaterialTheme.colorScheme.secondary,
+                    contentDescription = "Option",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            viewModel.openPresetChooser()
+                        }
+                )
+
+                DropdownMenu(
+                    viewModel.openingPresetChooser().collectAsState().value,
+                    {
+                        viewModel.closePresetChooser()
+                    }
+                ) {
+                    Text("Preset seek", modifier = Modifier.padding(4.dp))
+
+                    viewModel.presetSeekTargets().forEach { preset ->
+                        DropdownMenuItem(
+                            {
+                                Text(
+                                    "${preset.text}",
+                                    fontSize = 18.sp,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            },
+                            onClick = {
+                                preset.calculateOffset()?.let {
+                                    onSeek(it)
+                                }
+                                viewModel.closePresetChooser()
+                            }
+                        )
+                    }
+                }
             }
         }
     }
