@@ -147,7 +147,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
                 )
         )
 
-        if (webViewContainer.currentUrl()?.contains("stockvoice.tv") == true) {
+        if (browserViewModel.isBackwardSeekTarget(webViewContainer.currentUrl())) {
             BackwardSeekControl(
                 modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp).padding(bottom = 80.dp),
                 onSeek = {
