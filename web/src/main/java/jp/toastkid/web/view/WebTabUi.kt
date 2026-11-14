@@ -76,6 +76,7 @@ import jp.toastkid.web.rss.extractor.RssUrlFinder
 import jp.toastkid.web.shortcut.ShortcutUseCase
 import jp.toastkid.web.usecase.PrintCurrentPageUseCase
 import jp.toastkid.web.user_agent.UserAgentDropdown
+import jp.toastkid.web.view.component.BackwardSeekControl
 import jp.toastkid.web.view.dialog.AnchorLongTapDialog
 import jp.toastkid.web.view.dialog.PageInformationDialog
 import jp.toastkid.web.view.reader.ReaderModeUi
@@ -145,6 +146,15 @@ fun WebTabUi(uri: Uri, tabId: String) {
                     dispatcher = webViewContainer.nestedScrollDispatcher()
                 )
         )
+
+        if (webViewContainer.currentUrl()?.contains("stockvoice.tv") == true) {
+            BackwardSeekControl(
+                modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp).padding(bottom = 80.dp),
+                onSeek = {
+                    webViewContainer.seek(it)
+                }
+            )
+        }
     }
 
     if (browserViewModel.isOpenReaderMode()) {
