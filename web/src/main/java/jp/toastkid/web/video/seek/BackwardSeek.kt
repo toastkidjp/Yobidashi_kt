@@ -13,7 +13,6 @@ class BackwardSeek {
                 }
             }
             
-            // seekable レンジを取得（Video.js または HTML5 videoタグ）
             var seekableRange = null;
             if (player && typeof player.seekable === 'function') {
                 seekableRange = player.seekable();
@@ -28,19 +27,15 @@ class BackwardSeek {
                 return 'ERROR: NO_SEEKABLE_RANGE';
             }
             
-            // ストリーミングのシーク可能範囲の端を取得
-            var startTime = seekableRange.start(0); // シーク可能な最も古い時間（バッファの起点）
-            var endTime = seekableRange.end(0);     // シーク可能な最も新しい時間（現在のライブ端）
+            var startTime = seekableRange.start(0);
+            var endTime = seekableRange.end(0);
             
-            // ライブ端から指定秒数巻き戻した位置を算出
             var targetTime = endTime - $offsetFromLiveEdge;
             
-            // 範囲内にクランプ（起点より古くならないようにする）
             if (targetTime < startTime) {
                 targetTime = startTime;
             }
             
-            // シークを実行
             if (player) {
                 player.currentTime(targetTime);
             } else {
