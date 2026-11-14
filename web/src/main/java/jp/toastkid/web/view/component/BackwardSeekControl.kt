@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -31,7 +32,7 @@ fun BackwardSeekControl(
         shadowElevation = 4.dp,
         modifier = modifier
     ) {
-        Row() {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Box {
                 Text(
                     "${viewModel.hour()}",
