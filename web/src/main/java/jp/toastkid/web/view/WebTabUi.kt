@@ -150,9 +150,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
         if (browserViewModel.isBackwardSeekTarget(webViewContainer.currentUrl())) {
             BackwardSeekControl(
                 modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp).padding(bottom = 80.dp),
-                onSeek = {
-                    webViewContainer.seek(it)
-                }
+                onSeek = webViewContainer::seek
             )
         }
     }
