@@ -507,6 +507,8 @@ cdn.caprofitx.com
 cdn.contents-search-windows.com
 cdn.cxense.com
 cdn.fivecdm.com
+cdn.getallmedia.com
+cdn.jp1media.com
 cdn.js.tapone.jp
 cdn.kixer.com
 cdn.loka.jp
@@ -565,7 +567,7 @@ common.blogimg.jp
 competition7472.megaprizes-server76.loan
 conf.smartnews-ads.com
 connect.newzia.jp
-content-loader.com
+#_content-loader.com
 content1.avplayer.com
 contents.7gogo.jp
 contents.adingo.jp.eimg.jp
@@ -630,6 +632,7 @@ doubleclick.ne.jp
 dp.g.doubleclick.net
 dr-heaven-49.shinobi.jp
 ds.advg.jp
+ds.uncn.jp
 dsg.hgigs.info
 dsp.send.microad.jp
 e.admob.com
@@ -1214,6 +1217,7 @@ static.sp-adroute.focas.jp
 static.zucks.net.zimg.jp
 stats.g.doubleclick.net
 statsp.fpop.net
+stg.html-load.com
 stimg.iand2ch.net
 stimg.thench.net
 stimgc.iand2ch.net
@@ -1291,6 +1295,7 @@ vinushka.xsrv.jp
 vsc.send.microad.jp
 w.inmobi.com
 w.zenback.jp
+web-banner.ads.aps.amazon-adsystem.com
 web-jp.ad-v.jp
 web.adblade.com
 webtracker.jp
