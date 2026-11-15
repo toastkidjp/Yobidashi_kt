@@ -140,7 +140,7 @@ fun BackwardSeekControl(
                         DropdownMenuItem(
                             {
                                 Text(
-                                    "${preset.text}",
+                                    preset.text,
                                     fontSize = 18.sp,
                                     modifier = Modifier.padding(8.dp)
                                 )
