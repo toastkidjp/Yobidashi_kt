@@ -22,7 +22,7 @@ class AllImageDownloaderUseCase(private val downloadAction: DownloadAction) {
                 return@evaluateJavascript
             }
 
-            downloadAction.invoke(result.split(DELIMITER).filter { Urls.isValidUrl(it) })
+            downloadAction.invoke(result.split(DELIMITER).filter(Urls::isValidUrl))
         }
     }
 
