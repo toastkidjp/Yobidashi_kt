@@ -108,9 +108,8 @@ fun ViewHistoryListUi() {
                 .receiveEvent(
                     StateScrollerFactory().invoke(listState),
                     viewHistoryItems,
-                    fullItems.toList(),
-                    { item, word -> item.title.contains(word) || item.url.contains(word) }
-                )
+                    fullItems.toList()
+                ) { item, word -> item.title.contains(word) || item.url.contains(word) }
         }
     }
 
