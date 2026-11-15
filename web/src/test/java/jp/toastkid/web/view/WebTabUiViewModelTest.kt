@@ -3,10 +3,16 @@ package jp.toastkid.web.view
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.web.video.seek.BackwardSeek
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -31,123 +37,133 @@ class WebTabUiViewModelTest {
     }
 
     @Test
-    fun stopProgress() {
-    }
-
-    @Test
     fun icon() {
-    }
+        assertNull(subject.icon())
 
-    @Test
-    fun newIcon() {
-    }
+        subject.newIcon(mockk())
 
-    @Test
-    fun resetIcon() {
+        assertNotNull(subject.icon())
+
+        subject.resetIcon()
+
+        assertNull(subject.icon())
     }
 
     @Test
     fun title() {
-    }
+        assertTrue(subject.title().isEmpty())
 
-    @Test
-    fun nextTitle() {
+        subject.nextTitle(null)
+
+        assertTrue(subject.title().isEmpty())
+
+        subject.nextTitle("test")
+
+        assertEquals("test", subject.title())
     }
 
     @Test
     fun url() {
-    }
+        assertTrue(subject.url().isEmpty())
 
-    @Test
-    fun nextUrl() {
+        subject.nextUrl(null)
+
+        assertTrue(subject.url().isEmpty())
+
+        subject.nextUrl("test")
+
+        assertEquals("test", subject.url())
     }
 
     @Test
     fun enableForward() {
-    }
+        assertFalse(subject.enableForward())
 
-    @Test
-    fun setForwardButtonIsEnabled() {
+        subject.setForwardButtonIsEnabled(true)
+
+        assertTrue(subject.enableForward())
     }
 
     @Test
     fun enableBack() {
-    }
+        assertFalse(subject.enableBack())
 
-    @Test
-    fun setBackButtonIsEnabled() {
+        subject.setBackButtonIsEnabled(true)
+
+        assertTrue(subject.enableBack())
     }
 
     @Test
     fun progress() {
-    }
+        assertEquals(100, subject.progress())
+        assertFalse(subject.shouldShowProgressIndicator())
 
-    @Test
-    fun updateProgress() {
-    }
+        subject.updateProgress(10)
 
-    @Test
-    fun shouldShowProgressIndicator() {
+        assertEquals(10, subject.progress())
+        assertTrue(subject.shouldShowProgressIndicator())
     }
 
     @Test
     fun openErrorDialog() {
-    }
+        assertFalse(subject.openErrorDialog())
+        assertTrue(subject.error().isEmpty())
 
-    @Test
-    fun closeErrorDialog() {
-    }
+        subject.setError("test")
 
-    @Test
-    fun error() {
-    }
+        assertTrue(subject.openErrorDialog())
+        assertEquals("test", subject.error())
 
-    @Test
-    fun setError() {
-    }
+        subject.closeErrorDialog()
+        subject.clearError()
 
-    @Test
-    fun clearError() {
+        assertFalse(subject.openErrorDialog())
+        assertTrue(subject.error().isEmpty())
     }
 
     @Test
     fun getLongTapActionParameters() {
-    }
+        assertFalse(subject.isOpenLongTapDialog())
 
-    @Test
-    fun setLongTapParameters() {
-    }
+        subject.setLongTapParameters("", "", "")
 
-    @Test
-    fun isOpenLongTapDialog() {
-    }
+        assertTrue(subject.isOpenLongTapDialog())
 
-    @Test
-    fun clearLongTapParameters() {
-    }
+        val (first, second, third) = subject.longTapActionParameters.value
+        assertTrue(first!!.isEmpty())
+        assertTrue(second!!.isEmpty())
+        assertTrue(third!!.isEmpty())
 
-    @Test
-    fun readerModeText() {
+        subject.clearLongTapParameters()
+
+        assertFalse(subject.isOpenLongTapDialog())
     }
 
     @Test
     fun showReader() {
-    }
+        assertFalse(subject.isOpenReaderMode())
 
-    @Test
-    fun isOpenReaderMode() {
-    }
+        subject.showReader("test", mockk())
 
-    @Test
-    fun closeReaderMode() {
-    }
+        assertTrue(subject.isOpenReaderMode())
+        assertEquals("test", subject.readerModeText())
 
-    @Test
-    fun isRefreshing() {
+        subject.closeReaderMode()
+
+        assertFalse(subject.isOpenReaderMode())
     }
 
     @Test
     fun setRefreshing() {
+        assertFalse(subject.isRefreshing())
+
+        subject.setRefreshing()
+
+        assertTrue(subject.isRefreshing())
+
+        subject.stopProgress()
+
+        assertFalse(subject.isRefreshing())
     }
 
     @Test
