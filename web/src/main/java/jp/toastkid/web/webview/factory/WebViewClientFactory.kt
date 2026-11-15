@@ -138,7 +138,7 @@ class WebViewClientFactory(
             }
 
             if (urlStr.startsWith("https://chat.sakana.ai")) {
-                view.evaluateJavascript(ScrollEventHandlerAttachment.script(), {  })
+                view.evaluateJavascript(ScrollEventHandlerAttachment.script()) { }
             }
         }
 
