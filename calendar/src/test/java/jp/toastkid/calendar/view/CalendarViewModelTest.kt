@@ -45,7 +45,7 @@ class CalendarViewModelTest {
         val week = subject.week()
         assertEquals(
             week.size,
-            week.map { subject.getDayOfWeekLabel(it) }.filter { it.length != 0 }.size
+            week.map { subject.getDayOfWeekLabel(it) }.filter { it.isNotEmpty() }.size
         )
         assertTrue(subject.getDayOfWeekLabel(22).isEmpty())
     }
