@@ -144,9 +144,7 @@ fun BackwardSeekControl(
                                 )
                             },
                             onClick = {
-                                preset.calculateOffset()?.let {
-                                    onSeek(it)
-                                }
+                                preset.calculateOffset()?.let(onSeek::invoke)
                                 viewModel.closePresetChooser()
                             }
                         )
