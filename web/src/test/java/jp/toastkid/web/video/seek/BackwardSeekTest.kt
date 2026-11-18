@@ -23,7 +23,7 @@ class BackwardSeekTest {
 
     @Test
     fun makeScript() {
-        val script = subject.makeScript(1)
+        val script = subject.makeBackwardSeekScript(1)
 
         assertTrue(script.contains("var targetTime = endTime - 1"))
     }
