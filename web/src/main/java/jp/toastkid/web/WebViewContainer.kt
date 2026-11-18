@@ -39,6 +39,8 @@ import jp.toastkid.web.usecase.HtmlSourceExtractionUseCase
 import jp.toastkid.web.usecase.WebViewReplacementUseCase
 import jp.toastkid.web.video.seek.BackwardSeek
 import jp.toastkid.web.view.WebTabUiViewModel
+import jp.toastkid.web.view.component.BackwardSeekEvent
+import jp.toastkid.web.view.component.RelativeSeekEvent
 import jp.toastkid.web.view.component.SeekEvent
 import jp.toastkid.web.webview.AlphaConverter
 import jp.toastkid.web.webview.CustomViewSwitcher
@@ -382,9 +384,18 @@ class WebViewContainer(
     }
 
     private fun makeSeekScript(seekEvent: SeekEvent): String {
-        val offsetFromLiveEdge = seekEvent.toOffsetSeconds()
+        val script = when (seekEvent) {
+            is BackwardSeekEvent -> {
+                val offsetFromLiveEdge = seekEvent.toOffsetSeconds()
+                backwardSeek.makeBackwardSeekScript(offsetFromLiveEdge)
+            }
+            is RelativeSeekEvent -> {
+                val offsetFromLiveEdge = seekEvent.toOffsetSeconds()
+                backwardSeek.makeRelativeSeekScript(offsetFromLiveEdge)
+            }
+            else -> ""
+        }
 
-        val script = backwardSeek.makeBackwardSeekScript(offsetFromLiveEdge)
         return script
     }
 
