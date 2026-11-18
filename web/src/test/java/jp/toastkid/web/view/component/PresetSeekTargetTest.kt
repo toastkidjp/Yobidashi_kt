@@ -17,7 +17,9 @@ class PresetSeekTargetTest {
     @Test
     fun test() {
         val preset = PresetSeekTarget.fromText("12:00")
-        val offset = preset.calculateOffset(GregorianCalendar(2026, 10, 13, 13, 12, 0))
+        val offset = preset.calculateOffset(
+            GregorianCalendar(2026, 10, 13, 13, 12, 0)
+        )
         assertEquals("SeekEvent(hour=1, minute=11)", offset.toString())
     }
 
