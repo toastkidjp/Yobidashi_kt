@@ -179,6 +179,20 @@ fun BackwardSeekControl(
                             viewModel.closePresetChooser()
                         }
                     )
+
+                    DropdownMenuItem(
+                        {
+                            Text(
+                                "Back 1 hour",
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(8.dp)
+                            )
+                        },
+                        onClick = {
+                            onSeek(RelativeSeekEvent(hour = -1, minute = 0))
+                            viewModel.closePresetChooser()
+                        }
+                    )
                 }
             }
         }
