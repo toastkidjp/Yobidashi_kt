@@ -30,7 +30,7 @@ data class PresetSeekTarget(
 
         val hours: Long = TimeUnit.MILLISECONDS.toHours(offsetMs)
         val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(offsetMs) % 60
-        return SeekEvent(hours.toInt(), minutes.toInt())
+        return BackwardSeekEvent(hours.toInt(), minutes.toInt())
     }
 
     companion object {
