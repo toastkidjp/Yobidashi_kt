@@ -13,7 +13,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.web.video.seek.BackwardSeek
+import jp.toastkid.web.video.seek.SeekScriptFactory
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -28,14 +28,14 @@ class WebTabUiViewModelTest {
     private lateinit var subject: WebTabUiViewModel
 
     @MockK
-    private lateinit var backwardSeek: BackwardSeek
+    private lateinit var seekScriptFactory: SeekScriptFactory
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { backwardSeek.isTarget(any()) } returns false
+        every { seekScriptFactory.isTarget(any()) } returns false
 
-        subject = WebTabUiViewModel(backwardSeek)
+        subject = WebTabUiViewModel(seekScriptFactory)
     }
 
     @After
@@ -177,7 +177,7 @@ class WebTabUiViewModelTest {
     fun isBackwardSeekTarget() {
         subject.isBackwardSeekTarget("test")
 
-        verify { backwardSeek.isTarget(any()) }
+        verify { seekScriptFactory.isTarget(any()) }
     }
 
 }

@@ -37,7 +37,7 @@ import jp.toastkid.web.reader.ReaderModeUseCase
 import jp.toastkid.web.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.web.usecase.HtmlSourceExtractionUseCase
 import jp.toastkid.web.usecase.WebViewReplacementUseCase
-import jp.toastkid.web.video.seek.BackwardSeek
+import jp.toastkid.web.video.seek.SeekScriptFactory
 import jp.toastkid.web.view.WebTabUiViewModel
 import jp.toastkid.web.view.component.BackwardSeekEvent
 import jp.toastkid.web.view.component.RelativeSeekEvent
@@ -372,7 +372,7 @@ class WebViewContainer(
 
     fun nestedScrollDispatcher() = nestedScrollDispatcher
 
-    private val backwardSeek = BackwardSeek()
+    private val seekScriptFactory = SeekScriptFactory()
 
     fun seek(seekEvent: SeekEvent) {
         val webView = currentView() ?: return
@@ -387,11 +387,11 @@ class WebViewContainer(
         val script = when (seekEvent) {
             is BackwardSeekEvent -> {
                 val offsetFromLiveEdge = seekEvent.toOffsetSeconds()
-                backwardSeek.makeBackwardSeekScript(offsetFromLiveEdge)
+                seekScriptFactory.makeBackwardSeekScript(offsetFromLiveEdge)
             }
             is RelativeSeekEvent -> {
                 val offsetFromLiveEdge = seekEvent.toOffsetSeconds()
-                backwardSeek.makeRelativeSeekScript(offsetFromLiveEdge)
+                seekScriptFactory.makeRelativeSeekScript(offsetFromLiveEdge)
             }
             else -> ""
         }

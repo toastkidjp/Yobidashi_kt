@@ -1,6 +1,6 @@
 package jp.toastkid.web.video.seek
 
-class BackwardSeek {
+class SeekScriptFactory {
 
     fun makeRelativeSeekScript(offset: Int) = makeScript(makeRelativeSeekSnippet(offset))
 

@@ -12,13 +12,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class BackwardSeekTest {
+class SeekScriptFactoryTest {
 
-    private lateinit var subject: BackwardSeek
+    private lateinit var subject: SeekScriptFactory
 
     @Before
     fun setUp() {
-        subject = BackwardSeek()
+        subject = SeekScriptFactory()
     }
 
     @Test
