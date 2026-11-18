@@ -377,7 +377,7 @@ class WebViewContainer(
 
         val offsetFromLiveEdge = seekEvent.toOffsetSeconds()
 
-        webView.evaluateJavascript(backwardSeek.makeScript(offsetFromLiveEdge)) {
+        webView.evaluateJavascript(backwardSeek.makeBackwardSeekScript(offsetFromLiveEdge)) {
             Timber.d("Player: $it")
         }
     }
