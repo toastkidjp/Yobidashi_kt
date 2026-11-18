@@ -40,7 +40,7 @@ class BackwardSeek {
                 return 'ERROR: NO_SEEKABLE_RANGE';
             }
             
-            ${seekTimeSnippet}
+            $seekTimeSnippet
             
             if (player) {
                 player.currentTime(targetTime);
