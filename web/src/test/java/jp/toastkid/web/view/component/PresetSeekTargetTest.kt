@@ -26,7 +26,9 @@ class PresetSeekTargetTest {
     @Test
     fun futureCase() {
         val preset = PresetSeekTarget.fromText("12:00")
-        val offset = preset.calculateOffset(GregorianCalendar(2026, 10, 13, 11, 12, 0))
+        val offset = preset.calculateOffset(
+            GregorianCalendar(2026, 10, 13, 11, 12, 0)
+        )
 
         assertNull(offset)
     }
