@@ -130,9 +130,7 @@ fun BackwardSeekControl(
 
                 DropdownMenu(
                     viewModel.openingPresetChooser().collectAsState().value,
-                    {
-                        viewModel.closePresetChooser()
-                    }
+                    viewModel::closePresetChooser
                 ) {
                     Text("Preset seek", modifier = Modifier.padding(4.dp))
 
