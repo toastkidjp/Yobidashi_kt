@@ -2,7 +2,20 @@ package jp.toastkid.web.video.seek
 
 class BackwardSeek {
 
-    fun makeScript(offsetFromLiveEdge: Int) = """
+    fun makeBackwardSeekScript(offsetFromLiveEdge: Int) = makeScript(makeBackwardSeekSnippet(offsetFromLiveEdge))
+
+    private fun makeBackwardSeekSnippet(offsetFromLiveEdge: Int) = """
+            var startTime = seekableRange.start(0);
+            var endTime = seekableRange.end(0);
+            
+            var targetTime = endTime - $offsetFromLiveEdge;
+            
+            if (targetTime < startTime) {
+                targetTime = startTime;
+            }        
+    """.trimIndent()
+
+    private fun makeScript(seekTimeSnippet: String) = """
         (function() {
             var player = videojs.getPlayer(document.querySelector('.video-js'));
             if (!player && typeof videojs !== 'undefined' && videojs.getPlayers) {
@@ -27,14 +40,7 @@ class BackwardSeek {
                 return 'ERROR: NO_SEEKABLE_RANGE';
             }
             
-            var startTime = seekableRange.start(0);
-            var endTime = seekableRange.end(0);
-            
-            var targetTime = endTime - $offsetFromLiveEdge;
-            
-            if (targetTime < startTime) {
-                targetTime = startTime;
-            }
+            ${seekTimeSnippet}
             
             if (player) {
                 player.currentTime(targetTime);
@@ -42,7 +48,7 @@ class BackwardSeek {
                 document.querySelector('video').currentTime = targetTime;
             }
             
-            return 'SUCCESS_SEEK: target=' + targetTime + ' (range: ' + startTime + ' ~ ' + endTime + ')';
+            return 'SUCCESS_SEEK: target=' + targetTime;
         })();
     """.trimIndent()
 
