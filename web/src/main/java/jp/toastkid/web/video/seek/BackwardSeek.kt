@@ -2,6 +2,22 @@ package jp.toastkid.web.video.seek
 
 class BackwardSeek {
 
+    fun makeRelativeSeekScript(offset: Int) = makeScript(makeRelativeSeekSnippet(offset))
+
+    private fun makeRelativeSeekSnippet(offset: Int) = """
+            var startTime = seekableRange.start(0);
+            var current = player ? player.currentTime() : mediaEl.currentTime;
+            if (typeof current !== 'number' || isNaN(current)) {
+                return 'ERROR: UNABLE_TO_GET_CURRENT_TIME';
+            }
+
+            var targetTime = current + $offset;
+
+            if (targetTime < startTime) {
+                targetTime = startTime;
+            }        
+    """.trimIndent()
+
     fun makeBackwardSeekScript(offsetFromLiveEdge: Int) = makeScript(makeBackwardSeekSnippet(offsetFromLiveEdge))
 
     private fun makeBackwardSeekSnippet(offsetFromLiveEdge: Int) = """
@@ -53,7 +69,7 @@ class BackwardSeek {
     """.trimIndent()
 
     fun isTarget(urlString: String?): Boolean {
-        return urlString == "https://www.stockvoice.tv"
+        return urlString == "https://www.stockvoice.tv/"
     }
 
 }
