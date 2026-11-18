@@ -53,7 +53,7 @@ class BackwardSeek {
     """.trimIndent()
 
     fun isTarget(urlString: String?): Boolean {
-        return urlString == "https://stockvoice.tv"
+        return urlString == "https://www.stockvoice.tv"
     }
 
 }
