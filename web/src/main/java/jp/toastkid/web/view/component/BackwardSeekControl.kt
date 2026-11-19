@@ -150,61 +150,21 @@ fun BackwardSeekControl(
                         )
                     }
 
-                    DropdownMenuItem(
-                        {
-                            Text(
-                                "Back 1 minute",
-                                fontSize = 18.sp,
-                                modifier = Modifier.padding(8.dp)
-                            )
-                        },
-                        onClick = {
-                            onSeek(RelativeSeekEvent(hour = 0, minute = -1))
-                            viewModel.closePresetChooser()
-                        }
-                    )
-
-                    DropdownMenuItem(
-                        {
-                            Text(
-                                "Forward 1 minute",
-                                fontSize = 18.sp,
-                                modifier = Modifier.padding(8.dp)
-                            )
-                        },
-                        onClick = {
-                            onSeek(RelativeSeekEvent(hour = 0, minute = 1))
-                            viewModel.closePresetChooser()
-                        }
-                    )
-
-                    DropdownMenuItem(
-                        {
-                            Text(
-                                "Back 1 hour",
-                                fontSize = 18.sp,
-                                modifier = Modifier.padding(8.dp)
-                            )
-                        },
-                        onClick = {
-                            onSeek(RelativeSeekEvent(hour = -1, minute = 0))
-                            viewModel.closePresetChooser()
-                        }
-                    )
-
-                    DropdownMenuItem(
-                        {
-                            Text(
-                                "Forward 1 hour",
-                                fontSize = 18.sp,
-                                modifier = Modifier.padding(8.dp)
-                            )
-                        },
-                        onClick = {
-                            onSeek(RelativeSeekEvent(hour = 1, minute = 0))
-                            viewModel.closePresetChooser()
-                        }
-                    )
+                    viewModel.relativeSeekEvents().forEach {
+                        DropdownMenuItem(
+                            {
+                                Text(
+                                    it.first,
+                                    fontSize = 18.sp,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            },
+                            onClick = {
+                                onSeek(it.second)
+                                viewModel.closePresetChooser()
+                            }
+                        )
+                    }
                 }
             }
         }
