@@ -26,7 +26,7 @@ fun SeekControl(
     onSeek: (SeekEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel = remember { BackwardSeekControlViewModel() }
+    val viewModel = remember { SeekControlViewModel() }
 
     Surface(
         shadowElevation = 4.dp,

@@ -10,7 +10,7 @@ package jp.toastkid.web.view.component
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class BackwardSeekControlViewModel {
+class SeekControlViewModel {
 
     private val openHourChooser = MutableStateFlow(false)
 
