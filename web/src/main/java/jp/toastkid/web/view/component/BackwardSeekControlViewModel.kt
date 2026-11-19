@@ -54,8 +54,8 @@ class BackwardSeekControlViewModel {
         closeMinuteChooser()
     }
 
-    fun seekEvent(): SeekEvent {
-        return BackwardSeekEvent(hour.value, minute.value)
+    fun seekEvent(): SeekEvent? {
+        return PresetSeekTarget.with(hour.value, minute.value).calculateOffset()
     }
 
     private val openPresetChooser = MutableStateFlow(false)
