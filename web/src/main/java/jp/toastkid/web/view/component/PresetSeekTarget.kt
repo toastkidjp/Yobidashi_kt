@@ -35,6 +35,10 @@ data class PresetSeekTarget(
 
     companion object {
 
+        fun with(hour: Int, minute: Int): PresetSeekTarget {
+            return PresetSeekTarget("", hour, minute)
+        }
+
         fun fromText(text: String): PresetSeekTarget {
             if (text.contains(":").not()) {
                 return PresetSeekTarget(text, 0, 0)
