@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.lib.R
 
 @Composable
-fun BackwardSeekControl(
+fun SeekControl(
     onSeek: (SeekEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
