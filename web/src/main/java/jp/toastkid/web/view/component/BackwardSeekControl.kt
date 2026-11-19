@@ -50,7 +50,7 @@ fun BackwardSeekControl(
                         viewModel.closeHourChooser()
                     }
                 ) {
-                    (0..8).forEach { hour ->
+                    (8..22).forEach { hour ->
                         DropdownMenuItem(
                             {
                                 Text(
