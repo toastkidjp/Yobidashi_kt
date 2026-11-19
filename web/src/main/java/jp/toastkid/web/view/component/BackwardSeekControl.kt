@@ -105,7 +105,7 @@ fun BackwardSeekControl(
 
             Button(
                 {
-                    onSeek(viewModel.seekEvent())
+                    viewModel.seekEvent()?.let { onSeek(it) }
                 }
             ) {
                 Text(
