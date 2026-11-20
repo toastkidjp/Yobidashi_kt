@@ -73,7 +73,8 @@ class SeekControlViewModel {
     private val presetSeekTargets = listOf(
         PresetSeekTarget.fromText("11:17"),
             PresetSeekTarget.fromText("13:17"),
-            PresetSeekTarget.fromText("15:20")
+            PresetSeekTarget.fromText("15:20"),
+            PresetSeekTarget.fromText("15:45")
     )
 
     fun presetSeekTargets() = presetSeekTargets
