@@ -166,7 +166,6 @@ fun SeekControl(
                             },
                             onClick = {
                                 onSeek(it.second)
-                                viewModel.closePresetChooser()
                             }
                         )
                     }
