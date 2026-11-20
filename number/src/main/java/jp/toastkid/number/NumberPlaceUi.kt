@@ -51,6 +51,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.number.factory.GameFileProvider
 import jp.toastkid.number.model.NumberPlaceGame
 import jp.toastkid.number.repository.GameRepositoryImplementation
+import jp.toastkid.ui.screen.KeepScreenOn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -151,6 +152,8 @@ fun NumberPlaceUi() {
             viewModel.saveCurrentGame(context)
         }
     })
+
+    KeepScreenOn()
 }
 
 private fun initializeGame(
