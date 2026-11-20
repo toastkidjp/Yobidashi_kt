@@ -81,6 +81,8 @@ class SeekControlViewModel {
     private val relativeSeekEvents = listOf(
         "Back 1 minute" to RelativeSeekEvent(hour = 0, minute = -1),
         "Forward 1 minute" to RelativeSeekEvent(hour = 0, minute = 1),
+        "-10 min" to RelativeSeekEvent(hour = 0, minute = -10),
+        "+10 min" to RelativeSeekEvent(hour = 0, minute = 10),
         "Back 1 hour" to RelativeSeekEvent(hour = -1, minute = 0),
         "Forward 1 hour" to RelativeSeekEvent(hour = 1, minute = 0),
     )
