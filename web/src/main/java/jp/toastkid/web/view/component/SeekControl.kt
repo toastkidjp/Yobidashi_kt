@@ -110,7 +110,7 @@ fun SeekControl(
 
             Button(
                 {
-                    viewModel.seekEvent()?.let { onSeek(it) }
+                    viewModel.seekEvent()?.let(onSeek::invoke)
                 }
             ) {
                 Text(
