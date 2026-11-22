@@ -10,6 +10,7 @@ package jp.toastkid.editor.view.menu
 import androidx.compose.foundation.text.contextmenu.builder.TextContextMenuBuilderScope
 import androidx.compose.foundation.text.contextmenu.builder.item
 import androidx.core.net.toUri
+import jp.toastkid.editor.usecase.ExpressionTextCalculatorUseCase
 import jp.toastkid.editor.view.EditorTabViewModel
 import jp.toastkid.editor.view.menu.text.CommaInserter
 import jp.toastkid.editor.view.menu.text.ListHeadAdder
@@ -58,6 +59,12 @@ class ContextMenuBuilder(
                 viewModel.replaceText("***${viewModel.selectedText()}***")
                 close()
             }
+
+            item(key = "Calculate", label = "Calculate") {
+                viewModel.replaceText(ExpressionTextCalculatorUseCase().invoke(viewModel.selectedText()))
+                close()
+            }
+
             item(key = "Strikethrough", label = "Strikethrough") {
                 viewModel.replaceText("~~${viewModel.selectedText()}~~")
                 close()
