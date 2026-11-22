@@ -13,6 +13,11 @@ import org.junit.Test
 class SeekEventTest {
 
     @Test
+    fun toOffsetSecondsRelativeCase() {
+        assertEquals(4800, RelativeSeekEvent(1, 20).toOffsetSeconds())
+    }
+
+    @Test
     fun toOffsetSeconds() {
         assertEquals(4800, BackwardSeekEvent(1, 20).toOffsetSeconds())
     }
