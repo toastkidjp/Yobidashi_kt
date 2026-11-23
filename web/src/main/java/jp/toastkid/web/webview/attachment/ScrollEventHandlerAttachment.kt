@@ -28,9 +28,6 @@ class ScrollEventHandlerAttachment(
 
         private const val SCRIPT = """
     (function() {
-        if (window.__scrollObserverInstalled) return "already installed";
-        window.__scrollObserverInstalled = true;
-
         function attachScrollListener() {
             const container = document.querySelector('section[data-chat-scroll]');
             if (!container) return false;
