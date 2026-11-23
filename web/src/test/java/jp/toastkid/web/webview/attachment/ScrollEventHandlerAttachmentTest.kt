@@ -10,6 +10,9 @@ package jp.toastkid.web.webview.attachment
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -37,6 +40,12 @@ class ScrollEventHandlerAttachmentTest {
 
         subject.onScroll("down")
         verify { hideAppBar.invoke() }
+    }
+
+    @Test
+    fun isTarget() {
+        assertFalse(ScrollEventHandlerAttachment.isTarget("https://www.yahoo.co.jp"))
+        assertTrue(ScrollEventHandlerAttachment.isTarget("https://chat.sakana.ai"))
     }
 
 }
