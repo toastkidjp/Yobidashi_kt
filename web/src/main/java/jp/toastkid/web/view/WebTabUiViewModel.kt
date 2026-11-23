@@ -96,10 +96,6 @@ class WebTabUiViewModel(
 
     fun openErrorDialog() = _error.value.isNotEmpty()
 
-    fun closeErrorDialog() {
-        _error.value = ""
-    }
-
     fun error() = _error.value
 
     fun setError(text: String) {
