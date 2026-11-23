@@ -69,5 +69,8 @@ class ScrollEventHandlerAttachment(
 
         fun interfaceName() = "ScrollEventHandlerAttachment"
 
+        fun isTarget(urlString: String): Boolean =
+            urlString.startsWith("https://chat.sakana.ai")
+
     }
 }
