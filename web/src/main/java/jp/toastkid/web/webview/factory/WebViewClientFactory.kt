@@ -94,7 +94,7 @@ class WebViewClientFactory(
             super.onPageFinished(view, url)
 
             val urlStr = url ?: ""
-            if (urlStr.startsWith("https://chat.sakana.ai")) {
+            if (ScrollEventHandlerAttachment.isTarget(urlStr)) {
                 view.evaluateJavascript(ScrollEventHandlerAttachment.script()) { }
             }
 
