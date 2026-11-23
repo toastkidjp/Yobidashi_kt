@@ -121,7 +121,6 @@ class WebTabUiViewModelTest {
         assertTrue(subject.openErrorDialog())
         assertEquals("test", subject.error())
 
-        subject.closeErrorDialog()
         subject.clearError()
 
         assertFalse(subject.openErrorDialog())
