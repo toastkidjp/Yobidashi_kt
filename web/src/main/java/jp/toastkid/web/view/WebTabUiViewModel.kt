@@ -94,24 +94,20 @@ class WebTabUiViewModel(
 
     private val _error = mutableStateOf("")
 
-    private val openErrorDialog = mutableStateOf(false)
-
-    fun openErrorDialog() = openErrorDialog.value
+    fun openErrorDialog() = _error.value.isNotEmpty()
 
     fun closeErrorDialog() {
-        openErrorDialog.value = false
+        _error.value = ""
     }
 
     fun error() = _error.value
 
     fun setError(text: String) {
         _error.value = text
-        openErrorDialog.value = true
     }
 
     fun clearError() {
         _error.value = ""
-        openErrorDialog.value = false
     }
 
     private val _longTapActionParameters = mutableStateOf(EMPTY_LONG_TAP_ACTION_PARAMETERS)
