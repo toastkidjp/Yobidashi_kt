@@ -165,7 +165,7 @@ fun WebTabUi(uri: Uri, tabId: String) {
         }
     }
 
-    LaunchedEffect(browserViewModel.openErrorDialog()) {
+    LaunchedEffect(browserViewModel.error()) {
         contentViewModel.snackShort(
             "TLS Error!\n${browserViewModel.error()}"
         )
