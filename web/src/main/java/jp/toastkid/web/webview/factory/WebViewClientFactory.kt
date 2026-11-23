@@ -93,13 +93,17 @@ class WebViewClientFactory(
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
 
+            val urlStr = url ?: ""
+            if (urlStr.startsWith("https://chat.sakana.ai")) {
+                view.evaluateJavascript(ScrollEventHandlerAttachment.script()) { }
+            }
+
             if (!lastStartedMs) {
                 return
             }
             lastStartedMs = false
 
             val title = view.title ?: ""
-            val urlStr = url ?: ""
 
             val tabId = GlobalWebViewPool.getTabId(view)
             if (tabId?.isNotBlank() == true) {
@@ -135,10 +139,6 @@ class WebViewClientFactory(
 
             if (preferenceApplier.useAutoArchive()) {
                 autoArchive.save(view, idGenerator.from(view.url))
-            }
-
-            if (urlStr.startsWith("https://chat.sakana.ai")) {
-                view.evaluateJavascript(ScrollEventHandlerAttachment.script()) { }
             }
         }
 
