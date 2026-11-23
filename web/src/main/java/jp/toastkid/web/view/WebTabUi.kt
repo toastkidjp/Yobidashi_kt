@@ -66,7 +66,6 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.lib.model.OptionMenu
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.navigation.Screen
-import jp.toastkid.ui.dialog.ConfirmDialog
 import jp.toastkid.ui.image.EfficientImage
 import jp.toastkid.web.FaviconApplier
 import jp.toastkid.web.R
@@ -166,12 +165,9 @@ fun WebTabUi(uri: Uri, tabId: String) {
         }
     }
 
-    if (browserViewModel.openErrorDialog()) {
-        ConfirmDialog(
-            stringResource(id = R.string.title_ssl_connection_error),
-            browserViewModel.error(),
-            onDismissRequest = browserViewModel::closeErrorDialog,
-            onClickOk = browserViewModel::clearError
+    LaunchedEffect(browserViewModel.openErrorDialog()) {
+        contentViewModel.snackShort(
+            "TLS Error!\n${browserViewModel.error()}"
         )
     }
 
