@@ -8,7 +8,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.editor.view.EditorTabViewModel
 import jp.toastkid.lib.ContentViewModel
 import org.junit.After
 import org.junit.Before
@@ -20,16 +19,12 @@ class TextCounterTest {
     private lateinit var subject: TextCounter
 
     @MockK
-    private lateinit var viewModel: EditorTabViewModel
-
-    @MockK
     private lateinit var contentViewModel: ContentViewModel
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { viewModel.selectedText() } returns "test"
         every { contentViewModel.snackShort(any<String>()) } just Runs
     }
 
@@ -40,9 +35,8 @@ class TextCounterTest {
 
     @Test
     fun invoke() {
-        subject.invoke(viewModel, contentViewModel)
+        subject.invoke("test", contentViewModel)
 
-        verify { viewModel.selectedText() }
         verify { contentViewModel.snackShort(any<String>()) }
     }
 
