@@ -8,16 +8,15 @@
 
 package jp.toastkid.editor.view.menu.text
 
-import jp.toastkid.editor.view.EditorTabViewModel
 import jp.toastkid.lib.ContentViewModel
 
 class TextCounter {
 
     operator fun invoke(
-        viewModel: EditorTabViewModel,
+        text: String,
         contentViewModel: ContentViewModel
     ) {
-        val count = viewModel.selectedText().length
+        val count = text.length
         contentViewModel.snackShort("Characters: $count")
     }
 
