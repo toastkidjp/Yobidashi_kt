@@ -153,7 +153,7 @@ class ContextMenuBuilder(
         separator()
 
         item(key = "Count", label = "Count") {
-            TextCounter().invoke(viewModel, contentViewModel)
+            TextCounter().invoke(viewModel.selectedText(), contentViewModel)
             contentViewModel.showAppBar()
             close()
         }
