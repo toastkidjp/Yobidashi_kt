@@ -29,6 +29,13 @@ class SeekScriptFactoryTest {
     }
 
     @Test
+    fun makeRelativeSeekScript() {
+        val script = subject.makeRelativeSeekScript(10)
+
+        assertTrue(script.contains("var targetTime = current + 10;"))
+    }
+
+    @Test
     fun isTarget() {
         assertFalse(subject.isTarget(null))
         assertFalse(subject.isTarget(""))
