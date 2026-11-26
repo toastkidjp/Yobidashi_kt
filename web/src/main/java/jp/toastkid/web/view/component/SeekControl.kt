@@ -123,9 +123,7 @@ fun SeekControl(
                     contentDescription = "Option",
                     modifier = Modifier
                         .padding(8.dp)
-                        .clickable {
-                            viewModel.openPresetChooser()
-                        }
+                        .clickable(onClick = viewModel::openPresetChooser)
                 )
 
                 DropdownMenu(
