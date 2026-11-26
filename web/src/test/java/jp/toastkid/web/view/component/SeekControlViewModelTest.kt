@@ -85,12 +85,25 @@ class SeekControlViewModelTest {
         assertTrue(subject.relativeSeekEvents().isNotEmpty())
     }
 
+    private data class TestData(
+        val hour: Int,
+        val minute: Int,
+        val expectedHour: Int,
+        val expectedMinute: Int,
+    )
+
     @Test
     fun setCurrentTime() {
-        subject.setCurrentTime(GregorianCalendar(2026, Calendar.NOVEMBER, 26, 7, 31, 0))
+        val testData = listOf(
+            TestData(7, 31, 8, 30)
+        )
 
-        assertEquals(8, subject.hour())
-        assertEquals(30, subject.minute())
+        testData.forEach {
+            subject.setCurrentTime(GregorianCalendar(2026, Calendar.NOVEMBER, 26, it.hour, it.minute, 0))
+
+            assertEquals(it.expectedHour, subject.hour())
+            assertEquals(it.expectedMinute, subject.minute())
+        }
     }
 
 }
