@@ -43,6 +43,11 @@ class ScrollEventHandlerAttachmentTest {
     }
 
     @Test
+    fun interfaceName() {
+        assertEquals("ScrollEventHandlerAttachment", ScrollEventHandlerAttachment.interfaceName())
+    }
+
+    @Test
     fun isTarget() {
         assertFalse(ScrollEventHandlerAttachment.isTarget("https://www.yahoo.co.jp"))
         assertTrue(ScrollEventHandlerAttachment.isTarget("https://chat.sakana.ai"))
