@@ -95,7 +95,7 @@ class SeekControlViewModel {
         val hourValue = current.get(Calendar.HOUR_OF_DAY)
         val minuteValue = current.get(Calendar.MINUTE)
         hour.value = if (8 <= hourValue) hourValue else 8
-        minute.value = if (hourValue <= 8 && minuteValue <= 29) 30 else minuteValue
+        minute.value = if (hourValue < 8 || hourValue == 8 && minuteValue <= 29) 30 else minuteValue
     }
 
 }
