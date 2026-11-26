@@ -95,7 +95,11 @@ class SeekControlViewModelTest {
     @Test
     fun setCurrentTime() {
         val testData = listOf(
-            TestData(7, 31, 8, 30)
+            TestData(7, 31, 8, 30),
+            TestData(8, 29, 8, 30),
+            TestData(8, 30, 8, 30),
+            TestData(8, 31, 8, 31),
+            TestData(9, 31, 9, 31)
         )
 
         testData.forEach {
