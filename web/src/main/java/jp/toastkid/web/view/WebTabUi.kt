@@ -84,7 +84,6 @@ import jp.toastkid.web.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WebTabUi(uri: Uri, tabId: String) {
     val activityContext = LocalActivity.current as? ComponentActivity ?: return
