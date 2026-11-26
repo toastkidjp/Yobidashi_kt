@@ -278,7 +278,6 @@ fun WebTabUi(uri: Uri, tabId: String) {
     })
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppBarContent(
     viewModel: WebTabUiViewModel,
