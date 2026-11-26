@@ -367,7 +367,6 @@ internal fun ArticleListUi(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListItem(
     article: SearchResult,
