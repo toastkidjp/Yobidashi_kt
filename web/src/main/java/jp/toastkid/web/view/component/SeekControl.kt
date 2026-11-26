@@ -52,9 +52,7 @@ fun SeekControl(
 
                 DropdownMenu(
                     viewModel.openingHourChooser().collectAsState().value,
-                    {
-                        viewModel.closeHourChooser()
-                    }
+                    viewModel::closeHourChooser
                 ) {
                     (8..22).forEach { hour ->
                         DropdownMenuItem(
