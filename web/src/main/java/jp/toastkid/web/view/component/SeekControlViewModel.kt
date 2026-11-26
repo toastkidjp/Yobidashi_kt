@@ -9,6 +9,7 @@ package jp.toastkid.web.view.component
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Calendar
 
 class SeekControlViewModel {
 
@@ -89,5 +90,12 @@ class SeekControlViewModel {
     )
 
     fun relativeSeekEvents() = relativeSeekEvents
+
+    fun setCurrentTime(current: Calendar = Calendar.getInstance()) {
+        val hourValue = current.get(Calendar.HOUR_OF_DAY)
+        val minuteValue = current.get(Calendar.MINUTE)
+        hour.value = if (8 <= hourValue) hourValue else 8
+        minute.value = if (hourValue <= 8 && minuteValue <= 29) 30 else minuteValue
+    }
 
 }
