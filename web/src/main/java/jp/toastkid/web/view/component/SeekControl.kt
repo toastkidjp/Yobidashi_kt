@@ -79,9 +79,7 @@ fun SeekControl(
                     fontSize = 18.sp,
                     modifier = Modifier
                         .padding(8.dp)
-                        .clickable {
-                            viewModel.openMinuteChooser()
-                        }
+                        .clickable(onClick = viewModel::openMinuteChooser)
                 )
 
                 DropdownMenu(
