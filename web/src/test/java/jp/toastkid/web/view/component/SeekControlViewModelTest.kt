@@ -103,7 +103,9 @@ class SeekControlViewModelTest {
         )
 
         testData.forEach {
-            subject.setCurrentTime(GregorianCalendar(2026, Calendar.NOVEMBER, 26, it.hour, it.minute, 0))
+            subject.setCurrentTime(
+                GregorianCalendar(2026, Calendar.NOVEMBER, 26, it.hour, it.minute, 0)
+            )
 
             assertEquals(it.expectedHour, subject.hour())
             assertEquals(it.expectedMinute, subject.minute())
