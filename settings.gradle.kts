@@ -16,7 +16,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libraries") {
             version("kover", "0.9.11")
-            version("kotlin", "2.2.20")
+            version("kotlin", "2.4.0")
             version("kotlinCompilerExtension", "1.5.15")
             version("room", "2.8.4")
             version("cameraX", "1.6.0")
