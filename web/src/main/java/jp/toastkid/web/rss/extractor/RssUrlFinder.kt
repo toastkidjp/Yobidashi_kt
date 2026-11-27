@@ -55,7 +55,7 @@ class RssUrlFinder(
     }
 
     private fun storeToPreferences(urls: List<String>?) {
-        urls?.firstOrNull { urlValidator(it) }
+        urls?.firstOrNull(urlValidator::invoke)
                 ?.let {
                     preferenceApplier.saveNewRssReaderTargets(it)
                     contentViewModel.snackShort("Added $it")
