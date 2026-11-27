@@ -30,6 +30,6 @@ class RssUrlValidator {
 
         private val RSS_FILE_EXTENSIONS = setOf(".xml", ".atom", ".rdf")
 
-        private fun isRssUrl(url: String) = RSS_FILE_EXTENSIONS.any { url.contains(it) }
+        private fun isRssUrl(url: String) = RSS_FILE_EXTENSIONS.any(url::contains)
     }
 }
