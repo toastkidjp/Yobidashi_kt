@@ -545,7 +545,7 @@ private fun importBookmark(
                     it.favicon = faviconApplier.makePath(it.url)
                     it
                 }
-                .forEach { bookmarkRepository.add(it) }
+                .forEach(bookmarkRepository::add)
         }
 
         showRoot()
