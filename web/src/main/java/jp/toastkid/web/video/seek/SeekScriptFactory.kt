@@ -25,7 +25,8 @@ class SeekScriptFactory {
             }        
     """.trimIndent()
 
-    fun makeBackwardSeekScript(offsetFromLiveEdge: Int) = makeScript(makeBackwardSeekSnippet(offsetFromLiveEdge))
+    fun makeBackwardSeekScript(offsetFromLiveEdge: Int) =
+        makeScript(makeBackwardSeekSnippet(offsetFromLiveEdge))
 
     private fun makeBackwardSeekSnippet(offsetFromLiveEdge: Int) = """
             var startTime = seekableRange.start(0);
